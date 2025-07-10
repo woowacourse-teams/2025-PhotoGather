@@ -16,6 +16,7 @@
     "@babel/preset-env": "^7.28.0",
     "@babel/preset-react": "^7.27.1",
     "@babel/preset-typescript": "^7.27.1",
+    "@biomejs/biome": "2.1.1",
     "@types/react": "^19.1.8",
     "@types/react-dom": "^19.1.6",
     "babel-loader": "^10.0.0",
