@@ -1,3 +1,4 @@
+import type { TransformOptions } from '@babel/core';
 import type { StorybookConfig } from '@storybook/react-webpack5';
 
 const config: StorybookConfig = {
@@ -7,7 +8,7 @@ const config: StorybookConfig = {
     name: '@storybook/react-webpack5',
     options: {},
   },
-  babel: async (options) => ({
+  babel: async (options: TransformOptions) => ({
     ...options,
     presets: [
       ...(options.presets || []),
