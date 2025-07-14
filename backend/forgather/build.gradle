@@ -23,8 +23,6 @@ dependencies {
 	runtimeOnly 'com.h2database:h2'
 	runtimeOnly 'com.mysql:mysql-connector-j'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-//	testImplementation 'io.rest-assured:rest-assured'
-//	testImplementation 'io.rest-assured:mock-mvc'
 	testImplementation 'io.rest-assured:spring-mock-mvc'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 	// lombok
