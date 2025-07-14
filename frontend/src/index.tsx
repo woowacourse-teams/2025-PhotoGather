@@ -1,9 +1,10 @@
+import React from 'react';
 import ReactDOM from 'react-dom/client';
-import * as S from './index.styles';
-
-const App = () => (
-  <div className={S.style}>Hello Emotion + React + TypeScript!</div>
-);
+import App from './App';
 
 const root = ReactDOM.createRoot(document.getElementById('root')!);
-root.render(<App />);
+root.render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>,
+);
