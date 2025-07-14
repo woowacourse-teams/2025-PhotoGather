@@ -7,8 +7,8 @@ import org.junit.jupiter.api.Test;
 
 class RandomCodeGeneratorTest {
 
-    @DisplayName("랜덤으로 생성된 코드의 길이가 10이어야 한다.")
     @Test
+    @DisplayName("랜덤으로 생성된 코드의 길이가 10이어야 한다.")
     void generate() {
         // given
         RandomCodeGenerator generator = new RandomCodeGenerator();
