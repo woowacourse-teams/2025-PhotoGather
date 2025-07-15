@@ -1,4 +1,5 @@
 import defaultImage from '../../../../@assets/images/img_default.png';
+import { createImageErrorHandler } from '../../../../utils/createImageErrorHandler';
 import * as S from './ImageElement.styles';
 
 interface ImageElementProps {
@@ -14,12 +15,7 @@ interface ImageElementProps {
   alt?: string;
 }
 
-const handleError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
-  const target = e.target as HTMLImageElement;
-  target.onerror = null;
-  target.style.background = 'none';
-  target.src = defaultImage;
-};
+const handleError = createImageErrorHandler(defaultImage);
 
 const ImageElement = ({
   width,
