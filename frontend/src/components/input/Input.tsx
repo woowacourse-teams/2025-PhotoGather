@@ -1,28 +1,15 @@
-import { useState } from 'react';
+import useInputLength from '../../hooks/useInputLength';
 import * as S from './Input.styles';
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   errorMessage?: string;
-  maxCount?: number;
+  maxCount: number;
 }
 
 const Input = ({ errorMessage, maxCount, ...inputProps }: InputProps) => {
-  const [_isComposition, setIsComposition] = useState(false);
-  const handleCompositionStart = () => {
-    setIsComposition(true);
-  };
-  const handleCompositionEnd = (
-    e: React.CompositionEvent<HTMLInputElement>,
-  ) => {
-    if (!inputProps.value || !maxCount) return;
+  const { splicedValue, handleCompositionEnd, handleCompositionStart } =
+    useInputLength({ maxCount, value: String(inputProps.value) });
 
-    const currentValue = e.currentTarget.value;
-    if (currentValue.length > maxCount) {
-      e.currentTarget.value = currentValue.slice(0, maxCount);
-    }
-    setIsComposition(false);
-  };
-  const splicedValue = String(inputProps.value).slice(0, maxCount);
   return (
     <S.Wrapper>
       <S.InputField
@@ -32,6 +19,7 @@ const Input = ({ errorMessage, maxCount, ...inputProps }: InputProps) => {
         value={splicedValue}
         onCompositionStart={handleCompositionStart}
         onCompositionEnd={handleCompositionEnd}
+        $isError={!!errorMessage}
       />
       <S.InputFooterContainer>
         <S.ErrorMessage>{errorMessage ? errorMessage : ''}</S.ErrorMessage>

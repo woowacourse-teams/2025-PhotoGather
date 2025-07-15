@@ -8,14 +8,14 @@ export const Wrapper = styled.div`
   max-width: 320px;
 `;
 
-export const InputField = styled.input`
+export const InputField = styled.input<{ $isError: boolean }>`
   width: 100%;
   padding: 8px 12px;
-  border: 1px solid ${({ theme }) => theme.colors.gray02};
+  border: 1px solid ${({ $isError, theme }) => ($isError ? theme.colors.error : theme.colors.gray02)};
   border-radius: 12px;
   box-sizing: border-box;
   &:focus{
-    border: 1px solid ${({ theme }) => theme.colors.primary};
+    border: 1px solid ${({ $isError, theme }) => ($isError ? theme.colors.error : theme.colors.primary)};
   }
   &::placeholder {
     color: ${({ theme }) => theme.colors.gray04};
