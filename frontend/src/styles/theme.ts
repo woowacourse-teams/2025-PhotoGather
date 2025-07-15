@@ -20,7 +20,7 @@ export const theme: Theme = {
   },
   typography: {
     header01: {
-      fontWeight: 'bold',
+      fontWeight: 700,
       fontSize: '28px',
       lineHeight: '130%',
     },
@@ -35,17 +35,17 @@ export const theme: Theme = {
       lineHeight: '140%',
     },
     bodyLarge: {
-      fontWeight: 'bold',
+      fontWeight: 500,
       fontSize: '16px',
       lineHeight: '150%',
     },
     bodyRegular: {
-      fontWeight: 'bold',
+      fontWeight: 400,
       fontSize: '16px',
       lineHeight: '160%',
     },
     captionSmall: {
-      fontWeight: 'normal',
+      fontWeight: 400,
       fontSize: '14px',
       lineHeight: '160%',
     },
@@ -63,11 +63,6 @@ export const theme: Theme = {
       fontWeight: 500,
       fontSize: '12px',
       lineHeight: '120%',
-    },
-    labelInput: {
-      fontWeight: 'normal',
-      fontSize: '14px',
-      lineHeight: '140%',
     },
   },
 };

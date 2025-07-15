@@ -14,7 +14,7 @@ const App = () => {
 
 const Test = styled.div`
   color: ${({ theme }) => theme.colors.primary};
-  ${({ theme }) => ({ ...theme.typography.buttonPrimary })}
+  ${({ theme }) => ({ ...theme.typography.captionSmall })}
 `;
 
 export default App;
