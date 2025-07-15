@@ -7,11 +7,18 @@ const color = {
   filled: css`
     background-color: ${theme.colors.gray06};
     color: ${theme.colors.white};
+    &:active{
+      background-color: ${theme.colors.gray05};
+    }
   `,
   outlined: css`
     background-color: ${theme.colors.white};
     border: 1px solid ${theme.colors.gray06};
     color: ${theme.colors.gray06};
+    &:active{
+      background-color: ${theme.colors.gray01};
+      //TODO: 버튼 색상 변경 필요 (gray-bg)
+    }
   `,
 };
 
@@ -25,6 +32,8 @@ export const Wrapper = styled.button<{ $variant: CopyButtonVariant }>`
   border-radius: 50px;
   width: 100%;
   cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+
   ${({ $variant }) => color[$variant]}
   ${({ theme }) => ({ ...theme.typography.buttonPrimary })}
 `;
