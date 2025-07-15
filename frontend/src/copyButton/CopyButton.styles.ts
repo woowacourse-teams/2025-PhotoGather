@@ -37,7 +37,7 @@ export const Wrapper = styled.button<{ $variant: CopyButtonType }>`
 
   ${({ theme, $variant }) => color(theme)[$variant]}
   ${({ theme }) => ({ ...theme.typography.buttonPrimary })}
-  &:active{
+  &:active {
     ${({ theme, $variant }) => active(theme)[$variant]}
   }
 `;
