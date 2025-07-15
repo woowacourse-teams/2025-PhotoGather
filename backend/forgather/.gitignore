@@ -34,3 +34,7 @@ out/
 
 ### VS Code ###
 .vscode/
+
+# Sensitive configuration file
+src/main/resources/application.yml
+src/test/resources/application.yml
