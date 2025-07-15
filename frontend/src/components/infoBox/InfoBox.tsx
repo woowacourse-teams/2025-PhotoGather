@@ -5,18 +5,22 @@ interface InfoBoxProps {
   /** 설명 문장 */
   description: string;
   /** 강조할 부분 문자열 */
-  highlightText: string;
+  highlightText?: string;
 }
 
 const InfoBox = ({ description, highlightText }: InfoBoxProps) => {
   return (
     <S.Wrapper>
       <S.InfoIcon />
-      <HighlightText
-        text={description}
-        highlightText={highlightText}
-        fontStyle="bodyLarge"
-      />
+      {highlightText ? (
+        <HighlightText
+          text={description}
+          highlightText={highlightText}
+          fontStyle="bodyLarge"
+        />
+      ) : (
+        <S.Description>{description}</S.Description>
+      )}
     </S.Wrapper>
   );
 };
