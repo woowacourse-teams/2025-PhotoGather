@@ -1,8 +1,7 @@
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 import { theme } from '../../styles/theme';
-
-type Variant = 'default' | 'disabled';
+import type { FloatingActionButtonType } from './variant';
 
 const color = {
   default: css`
@@ -30,7 +29,7 @@ const font = css`
   line-height: ${theme.typography.buttonPrimary.lineHeight};
 `;
 
-export const Wrapper = styled.button<{ $variant: Variant }>`
+export const Wrapper = styled.button<{ $variant: FloatingActionButtonType }>`
   display: flex;
   align-items: center;
   justify-content: center;
