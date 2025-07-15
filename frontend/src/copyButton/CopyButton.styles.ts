@@ -1,26 +1,28 @@
+import type { Theme } from '@emotion/react';
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
-import { theme } from '../styles/theme';
 import type { CopyButtonType } from './variant';
 
-const color = {
+const color = (theme: Theme) => ({
   filled: css`
     background-color: ${theme.colors.gray06};
     color: ${theme.colors.white};
-    &:active {
-      background-color: ${theme.colors.gray05};
-    }
   `,
   outlined: css`
     background-color: ${theme.colors.white};
     border: 1px solid ${theme.colors.gray06};
     color: ${theme.colors.gray06};
-    &:active {
-      background-color: ${theme.colors.gray01};
-      //TODO: 버튼 색상 변경 필요 (gray-bg)
-    }
   `,
-};
+});
+
+const active = (theme: Theme) => ({
+  filled: css`
+    background-color: ${theme.colors.gray05};
+  `,
+  outlined: css`
+    background-color: ${theme.colors.gray01};
+  `,
+});
 
 export const Wrapper = styled.button<{ $variant: CopyButtonType }>`
   display: flex;
@@ -33,8 +35,11 @@ export const Wrapper = styled.button<{ $variant: CopyButtonType }>`
   width: 100%;
   cursor: pointer;
 
-  ${({ $variant }) => color[$variant]}
+  ${({ theme, $variant }) => color(theme)[$variant]}
   ${({ theme }) => ({ ...theme.typography.buttonPrimary })}
+  &:active{
+    ${({ theme, $variant }) => active(theme)[$variant]}
+  }
 `;
 
 export const Container = styled.div`
