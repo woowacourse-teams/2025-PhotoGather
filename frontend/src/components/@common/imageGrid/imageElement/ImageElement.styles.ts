@@ -21,7 +21,12 @@ export const Image = styled.img<{ width: number; height: number }>`
   width: 100%;
   height: 100%;
   object-fit: cover;
-  background: linear-gradient(150deg, ${({ theme }) => theme.colors.grayBg} 40%, ${({ theme }) => theme.colors.white} 50%, ${({ theme }) => theme.colors.grayBg} 60%);
+  background: linear-gradient(
+    150deg,
+    ${({ theme }) => theme.colors.grayBg} 40%,
+    ${({ theme }) => theme.colors.white} 50%,
+    ${({ theme }) => theme.colors.grayBg} 60%
+  );
   background-size: 300%;
   animation: ${glow} 3s infinite linear;
 `;
