@@ -10,6 +10,8 @@ interface ImageElementProps {
   src: string;
   /** 사진을 눌렀을 때 실행할 함수 */
   onImageClick?: () => void;
+  /** 사진의 alt 태그 */
+  alt?: string;
 }
 
 const handleError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
@@ -24,6 +26,7 @@ const ImageElement = ({
   height,
   src,
   onImageClick,
+  alt = '스페이스 이미지',
 }: ImageElementProps) => {
   return (
     <S.Wrapper width={width} height={height} onClick={onImageClick}>
@@ -31,7 +34,7 @@ const ImageElement = ({
         width={width}
         height={height}
         src={src}
-        alt="스페이스 이미지"
+        alt={alt}
         onError={handleError}
       />
     </S.Wrapper>
