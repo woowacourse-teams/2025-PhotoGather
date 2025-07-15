@@ -1,13 +1,13 @@
 import * as S from './FloatingActionButton.styles';
 
 interface FloatingActionButtonProps {
-    /** FAB 버튼 라벨 */
+  /** FAB 버튼 라벨 */
   label: string;
-   /** FAB 버튼 아이콘*/
+  /** FAB 버튼 아이콘*/
   icon?: React.ReactNode;
   /** 버튼 클릭했을 때 실행할 함수*/
   onClick?: () => void;
-  /** 버튼 클릭했을 때 실행할 함수*/
+  /** 버튼 활성화 여부*/
   disabled?: boolean;
 }
 
