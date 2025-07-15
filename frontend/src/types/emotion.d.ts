@@ -30,7 +30,6 @@ declare module '@emotion/react' {
       buttonPrimary: TypographyStyle;
       buttonSecondary: TypographyStyle;
       buttonTertiary: TypographyStyle;
-      labelInput: TypographyStyle;
     };
   }
 
