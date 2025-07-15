@@ -11,9 +11,7 @@ export const StyledButton = styled.button<{
   align-items: center;
   gap: 10px;
 
-  font-weight: ${({ theme }) => theme.typography.buttonPrimary.fontWeight};
-  font-size: ${({ theme }) => theme.typography.buttonPrimary.fontSize};
-  line-height: ${({ theme }) => theme.typography.buttonPrimary.lineHeight};
+  ${({ theme }) => ({ ...theme.typography.buttonPrimary })}
 
   ${({ variant, theme, disabled }) =>
     variant === 'primary' &&
