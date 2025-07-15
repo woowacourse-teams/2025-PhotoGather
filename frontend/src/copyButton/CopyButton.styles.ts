@@ -32,9 +32,6 @@ export const Wrapper = styled.button<{ $variant: CopyButtonVariant }>`
   border-radius: 50px;
   width: 100%;
   cursor: pointer;
-  transition:
-    background-color 0.15s ease,
-    color 0.15s ease;
 
   ${({ $variant }) => color[$variant]}
   ${({ theme }) => ({ ...theme.typography.buttonPrimary })}
