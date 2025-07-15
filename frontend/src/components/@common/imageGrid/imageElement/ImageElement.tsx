@@ -12,6 +12,13 @@ interface ImageElementProps {
   onImageClick?: () => void;
 }
 
+const handleError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
+  const target = e.target as HTMLImageElement;
+  target.onerror = null;
+  target.style.background = 'none';
+  target.src = defaultImage;
+};
+
 const ImageElement = ({
   width,
   height,
@@ -25,11 +32,7 @@ const ImageElement = ({
         height={height}
         src={src}
         alt="스페이스 이미지"
-        onError={(e) => {
-          const target = e.target as HTMLImageElement;
-          target.onerror = null;
-          target.src = defaultImage;
-        }}
+        onError={handleError}
       />
     </S.Wrapper>
   );

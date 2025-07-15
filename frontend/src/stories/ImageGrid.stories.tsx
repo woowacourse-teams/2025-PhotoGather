@@ -17,6 +17,7 @@ export const Default: Story = {
       'https://avatars.githubusercontent.com/ShinjungOh',
       'https://avatars.githubusercontent.com/hanheel',
       'https://avatars.githubusercontent.com/H0ngJu',
+      'https://velog.velcdn.com/images/minsungje/post/e84b8e68-0f4b-4d5c-a9ab-f2c9a6a48c3se/image.jpg',
     ],
   },
 };
