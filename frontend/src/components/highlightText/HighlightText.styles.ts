@@ -9,6 +9,7 @@ export const Wrapper = styled.div<{ $fontStyle: keyof Theme['typography'] }>`
 export const Text = styled.span`
   color: ${({ theme }) => theme.colors.gray06};
 `;
+
 export const HighLight = styled.span`
   color: ${({ theme }) => theme.colors.primary};
 `;
