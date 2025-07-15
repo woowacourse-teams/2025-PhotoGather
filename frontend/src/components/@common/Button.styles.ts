@@ -26,7 +26,7 @@ export const StyledButton = styled.button<{
     &:active {
       border-radius: 12px;
       background: ${theme.colors.primary};
-      box-shadow: 0px 2px 3px 0px rgba(0, 0, 0, 0.30) inset;
+      box-shadow: 0px 2px 3px 0px rgba(0, 0, 0, 0.60) inset;
     }
   `}
 
