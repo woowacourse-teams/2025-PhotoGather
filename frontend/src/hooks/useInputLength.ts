@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef } from 'react';
 
 interface useInputLengthProps {
   value: string;
@@ -6,9 +6,10 @@ interface useInputLengthProps {
 }
 
 const useInputLength = ({ value, maxCount }: useInputLengthProps) => {
-  const [_isComposition, setIsComposition] = useState(false);
+  const isComposingRef = useRef<boolean>(false);
+
   const handleCompositionStart = () => {
-    setIsComposition(true);
+    isComposingRef.current = true;
   };
   const handleCompositionEnd = (
     e: React.CompositionEvent<HTMLInputElement>,
@@ -19,7 +20,7 @@ const useInputLength = ({ value, maxCount }: useInputLengthProps) => {
     if (currentValue.length > maxCount) {
       e.currentTarget.value = currentValue.slice(0, maxCount);
     }
-    setIsComposition(false);
+    isComposingRef.current = false;
   };
   const splicedValue = String(value).slice(0, maxCount);
 
