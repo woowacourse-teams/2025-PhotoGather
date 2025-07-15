@@ -24,6 +24,12 @@ const color = {
   `,
 };
 
+const font = css`
+  font-weight: ${theme.typography.buttonPrimary.fontWeight};
+  font-size: ${theme.typography.buttonPrimary.fontSize};
+  line-height: ${theme.typography.buttonPrimary.lineHeight};
+`;
+
 export const Wrapper = styled.button<{ $variant: Variant }>`
   display: flex;
   align-items: center;
@@ -32,14 +38,12 @@ export const Wrapper = styled.button<{ $variant: Variant }>`
   padding: 12px 20px;
   border: none;
   border-radius: 50px;
-
-  font-weight: ${theme.typography.buttonPrimary.fontWeight};
-  font-size: ${theme.typography.buttonPrimary.fontSize};
-  line-height: ${theme.typography.buttonPrimary.lineHeight};
+  width: 100%;
 
   box-shadow:
     1px 1px 3px 0px #fff inset,
     5px 5px 5px 0px rgba(0, 0, 0, 0.25);
 
-    ${({ $variant }) => color[$variant]}
+  ${({ $variant }) => color[$variant]}
+  ${font};
 `;
