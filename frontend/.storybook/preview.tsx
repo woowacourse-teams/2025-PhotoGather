@@ -10,6 +10,7 @@ const withGlobalStyle: Decorator = (Story) => (
 
 const preview: Preview = {
   decorators: [withGlobalStyle],
+  tags: ['autodocs'],
   parameters: {
     controls: {
       matchers: {
