@@ -8,7 +8,7 @@ export const Wrapper = styled.div`
   gap: 4px;
 `;
 
-export const IconContainer = styled.div`
+export const IconContainer = styled.button`
   width: 44px;
   height: 44px;
   display: flex;
@@ -19,6 +19,7 @@ export const IconContainer = styled.div`
   border-radius: 50%;
   border: 1px solid ${({ theme }) => theme.colors.gray02};
   background: ${({ theme }) => theme.colors.white};
+  cursor: pointer;
 `;
 
 export const IconWrapper = styled.div`
