@@ -1,4 +1,5 @@
 import { ReactComponent as CopyIcon } from '../@assets/icons/clipboard.svg';
+import { copyLinkToClipboard } from '../utils/copyLinkToClipboard';
 import * as S from './CopyButton.styles';
 import type { CopyButtonType } from './variant';
 
@@ -27,14 +28,6 @@ const CopyButton = ({
       </S.Container>
     </S.Wrapper>
   );
-};
-
-const copyLinkToClipboard = async (copyText: string) => {
-  try {
-    await navigator.clipboard.writeText(copyText);
-  } catch (error) {
-    console.log(error);
-  }
 };
 
 export default CopyButton;
