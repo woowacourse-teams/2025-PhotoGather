@@ -44,8 +44,8 @@ export const Wrapper = styled.button<{ $variant: FloatingActionButtonType }>`
   ${({ theme, $variant }) =>
     $variant !== 'disabled' &&
     css`
-    &:active {
-      ${active(theme)}
-    }
-  `}
+      &:active {
+        ${active(theme)}
+      }
+    `}
 `;
