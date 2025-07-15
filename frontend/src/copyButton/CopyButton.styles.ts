@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 import { theme } from '../styles/theme';
-import type { CopyButtonVariant } from './variant';
+import type { CopyButtonType } from './variant';
 
 const color = {
   filled: css`
@@ -22,7 +22,7 @@ const color = {
   `,
 };
 
-export const Wrapper = styled.button<{ $variant: CopyButtonVariant }>`
+export const Wrapper = styled.button<{ $variant: CopyButtonType }>`
   display: flex;
   align-items: center;
   justify-content: center;

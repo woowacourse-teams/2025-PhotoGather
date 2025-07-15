@@ -1,6 +1,6 @@
 import { ReactComponent as CopyIcon } from '../@assets/icons/clipboard.svg';
 import * as S from './CopyButton.styles';
-import type { CopyButtonVariant } from './variant';
+import type { CopyButtonType } from './variant';
 
 interface CopyButtonProps {
   /** 복사 버튼 라벨 */
@@ -8,7 +8,7 @@ interface CopyButtonProps {
   /** 복사할 문자열 */
   copyText: string;
   /** 복사 버튼 variant */
-  variant?: CopyButtonVariant;
+  variant?: CopyButtonType;
   /** 복사 아이콘 표시 여부 */
   showIcon?: boolean;
 }

@@ -1,1 +1,1 @@
-export type CopyButtonVariant = 'filled' | 'outlined';
+export type CopyButtonType = 'filled' | 'outlined';
