@@ -1,8 +1,9 @@
 import * as S from './Button.styles';
+import type { ButtonVariant } from './variant';
 
 interface ButtonProps {
   /** 버튼의 variant */
-  variant?: 'primary' | 'secondary' | 'tertiary';
+  variant?: ButtonVariant;
   /** 버튼 내부 텍스트 */
   text: string;
   /** 버튼 클릭했을 때 실행할 함수*/

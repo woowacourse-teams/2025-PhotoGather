@@ -1,7 +1,8 @@
 import styled from '@emotion/styled';
+import type { ButtonVariant } from './variant';
 
 export const StyledButton = styled.button<{
-  variant: 'primary' | 'secondary' | 'tertiary';
+  variant: ButtonVariant;
   disabled: boolean;
 }>`
   display: flex;
