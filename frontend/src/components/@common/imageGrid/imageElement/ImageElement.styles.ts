@@ -23,9 +23,9 @@ export const Image = styled.img<{ width: number; height: number }>`
   object-fit: cover;
   background: linear-gradient(
     150deg,
-    ${({ theme }) => theme.colors.grayBg} 40%,
+    ${({ theme }) => theme.colors.grayBackground} 40%,
     ${({ theme }) => theme.colors.white} 50%,
-    ${({ theme }) => theme.colors.grayBg} 60%
+    ${({ theme }) => theme.colors.grayBackground} 60%
   );
   background-size: 300%;
   animation: ${glow} 3s infinite linear;
