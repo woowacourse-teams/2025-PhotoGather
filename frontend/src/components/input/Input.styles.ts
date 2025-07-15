@@ -4,8 +4,6 @@ export const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: 4px;
-  // TODO : 삭제
-  max-width: 320px;
 `;
 
 export const InputField = styled.input<{ $isError: boolean }>`
