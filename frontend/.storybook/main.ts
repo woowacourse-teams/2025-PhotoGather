@@ -15,6 +15,5 @@ const config: StorybookConfig = {
       ['@babel/preset-react', { runtime: 'automatic' }],
     ],
   }),
-  
 };
 export default config;
