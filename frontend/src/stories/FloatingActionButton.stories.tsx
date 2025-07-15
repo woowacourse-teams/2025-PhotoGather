@@ -1,27 +1,18 @@
 import type { Meta, StoryObj } from '@storybook/react';
-// import { ReactComponent as DownloadIcon } from './assets/download.svg';
-import FloatingButton from '../components/floatingActionButton/FloatingActionButton';
+import DownloadIcon from '../@assets/icons/download.svg';
+import FloatingActionButton from '../components/floatingActionButton/FloatingActionButton';
 
-const meta: Meta<typeof FloatingButton> = {
-  title: 'Components/FloatingButton',
-  component: FloatingButton,
+const meta: Meta<typeof FloatingActionButton> = {
+  title: 'Components/FloatingActionButton',
+  component: FloatingActionButton,
 };
-
 export default meta;
-type Story = StoryObj<typeof FloatingButton>;
+
+type Story = StoryObj<typeof FloatingActionButton>;
 
 export const Default: Story = {
   args: {
-    label: 'Floating Button',
-    onClick: () => {},
-  },
-};
-
-export const WithIcon: Story = {
-  args: {
-    label: 'With Icon',
-    onClick: () => {},
-    icon: <img src="/icons/download.svg" alt="download icon" />,
+    label: 'Floating Action Button',
   },
 };
 
@@ -29,5 +20,12 @@ export const Disabled: Story = {
   args: {
     label: 'Disabled',
     disabled: true,
+  },
+};
+
+export const WithIcon: Story = {
+  args: {
+    label: 'With Icon',
+    icon: <img src={DownloadIcon} alt="" />,
   },
 };
