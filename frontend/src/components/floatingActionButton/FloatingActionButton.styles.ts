@@ -20,14 +20,9 @@ const color = {
   disabled: css`
     background-color: ${theme.colors.gray01};
     color: ${theme.colors.gray04};
+    cursor: default;
   `,
 };
-
-const font = css`
-  font-weight: ${theme.typography.buttonPrimary.fontWeight};
-  font-size: ${theme.typography.buttonPrimary.fontSize};
-  line-height: ${theme.typography.buttonPrimary.lineHeight};
-`;
 
 export const Wrapper = styled.button<{ $variant: FloatingActionButtonType }>`
   display: flex;
@@ -38,11 +33,12 @@ export const Wrapper = styled.button<{ $variant: FloatingActionButtonType }>`
   border: none;
   border-radius: 50px;
   width: 100%;
+  cursor: pointer;
 
   box-shadow:
     1px 1px 3px 0px #fff inset,
     5px 5px 5px 0px rgba(0, 0, 0, 0.25);
 
   ${({ $variant }) => color[$variant]}
-  ${font};
+  ${({ theme }) => ({ ...theme.typography.buttonPrimary })}
 `;
