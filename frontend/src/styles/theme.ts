@@ -17,6 +17,8 @@ export const theme: Theme = {
     accent: '#CEF763',
     lightAccent: '#F4FFBE',
     darkAccent: '#BAD84F',
+    error: '#FF5A5A',
+    lightError: '#FFB3B3',
   },
   typography: {
     header01: {
