@@ -2,7 +2,9 @@ import HighlightText from '../highlightText/HighlightText';
 import * as S from './InfoBox.styles';
 
 interface InfoBoxProps {
+  /** 설명 문장 */
   description: string;
+  /** 강조할 부분 문자열 */
   highlightText: string;
 }
 

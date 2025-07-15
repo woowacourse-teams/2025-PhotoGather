@@ -6,6 +6,7 @@ export const Wrapper = styled.div<{ $fontStyle: keyof Theme['typography'] }>`
   white-space: pre-line;
   text-align: center;
 `;
+
 export const Text = styled.span`
   color: ${({ theme }) => theme.colors.gray06};
 `;
