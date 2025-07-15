@@ -9,11 +9,13 @@ export const Wrapper = styled.div`
 export const InputField = styled.input<{ $isError: boolean }>`
   width: 100%;
   padding: 8px 12px;
-  border: 1px solid ${({ $isError, theme }) => ($isError ? theme.colors.error : theme.colors.gray02)};
+  border: 1px solid
+    ${({ $isError, theme }) => ($isError ? theme.colors.error : theme.colors.gray02)};
   border-radius: 12px;
   box-sizing: border-box;
-  &:focus{
-    border: 1px solid ${({ $isError, theme }) => ($isError ? theme.colors.error : theme.colors.primary)};
+  &:focus {
+    border: 1px solid
+      ${({ $isError, theme }) => ($isError ? theme.colors.error : theme.colors.primary)};
   }
   &::placeholder {
     color: ${({ theme }) => theme.colors.gray04};
@@ -21,7 +23,7 @@ export const InputField = styled.input<{ $isError: boolean }>`
 `;
 
 export const InputFooterContainer = styled.div`
-width: 100%;
+  width: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
