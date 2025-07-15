@@ -20,6 +20,33 @@ module.exports = {
         use: 'babel-loader',
         exclude: /node_modules/,
       },
+      {
+        test: /\.(woff|woff2)$/i,
+        type: 'asset/resource',
+        generator: {
+          filename: 'static/fonts/[name][hash][ext]',
+        },
+      },
+      {
+        test: /\.svg$/i,
+        issuer: /\.[jt]sx?$/,
+        use: [
+          {
+            loader: '@svgr/webpack',
+            options: {
+              svgo: true,
+              titleProp: true,
+              ref: true,
+            },
+          },
+          {
+            loader: 'file-loader',
+            options: {
+              name: 'static/media/[name].[hash].[ext]',
+            },
+          },
+        ],
+      },
     ],
   },
   plugins: [
