@@ -9,7 +9,7 @@ export const global = css`
   }
   body {
     font-family: 'SUIT', 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;
-    width: 100vw;
+    // height: 100dvh;
   }
   input {
     &:focus {
