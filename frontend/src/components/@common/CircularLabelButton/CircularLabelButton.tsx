@@ -11,7 +11,7 @@ const CircularLabelButton = ({ icon, text }: CircularLabelButtonProps) => {
   return (
     <S.Wrapper>
       <S.IconContainer>
-        <S.IconWrapper>{icon}</S.IconWrapper>
+        <S.Icon>{icon}</S.Icon>
       </S.IconContainer>
       <S.Text>{text}</S.Text>
     </S.Wrapper>

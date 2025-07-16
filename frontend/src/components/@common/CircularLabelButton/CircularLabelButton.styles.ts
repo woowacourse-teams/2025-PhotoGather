@@ -22,7 +22,7 @@ export const IconContainer = styled.button`
   cursor: pointer;
 `;
 
-export const IconWrapper = styled.div`
+export const Icon = styled.div`
   width: 24px;
   height: 24px;
   display: flex;
