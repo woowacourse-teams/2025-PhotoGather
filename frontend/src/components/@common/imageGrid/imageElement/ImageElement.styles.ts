@@ -10,14 +10,14 @@ const glow = keyframes`
   }
 `;
 
-export const Wrapper = styled.div<{ width: number; height: number }>`
-  width: ${({ width }) => width}px;
-  height: ${({ height }) => height}px;
+export const Wrapper = styled.div<{ $size: number; $ratio: number }>`
+  width: ${({ $size }) => $size}px;
+  aspect-ratio: ${({ $ratio }) => $ratio};
   background-size: cover;
   overflow: hidden;
 `;
 
-export const Image = styled.img<{ width: number; height: number }>`
+export const Image = styled.img`
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -29,4 +29,8 @@ export const Image = styled.img<{ width: number; height: number }>`
   );
   background-size: 300%;
   animation: ${glow} 3s infinite linear;
+  -webkit-user-drag: none;
+  -khtml-user-drag: none;
+  -moz-user-drag: none;
+  -o-user-drag: none;
 `;

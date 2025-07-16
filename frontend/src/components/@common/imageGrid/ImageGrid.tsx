@@ -6,18 +6,9 @@ interface ImageGridProps {
   imageUrlList: string[];
   /** 한 줄당 이미지 개수 */
   rowImageAmount: number;
-  /** 그리드 속 이미지 width */
-  imageWidth?: number;
-  /** 그리드 속 이미지 height */
-  imageHeight?: number;
 }
 
-const ImageGrid = ({
-  imageUrlList,
-  rowImageAmount,
-  imageWidth = 200,
-  imageHeight = 200,
-}: ImageGridProps) => {
+const ImageGrid = ({ imageUrlList, rowImageAmount }: ImageGridProps) => {
   return (
     <S.Wrapper rowImageAmount={rowImageAmount}>
       {imageUrlList.map((url, i) => (
@@ -25,8 +16,7 @@ const ImageGrid = ({
           // biome-ignore lint/suspicious/noArrayIndexKey: using index as key is acceptable here
           key={i}
           src={url}
-          width={imageWidth}
-          height={imageHeight}
+          size={200}
         />
       ))}
     </S.Wrapper>
