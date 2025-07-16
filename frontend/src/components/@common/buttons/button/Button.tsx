@@ -1,5 +1,5 @@
+import type { ButtonVariant } from '../../../../types/buttonTypes';
 import * as S from './Button.styles';
-import type { ButtonVariant } from './variant';
 
 interface ButtonProps {
   /** 버튼의 variant */

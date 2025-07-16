@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-webpack5';
-import CircularLabelButton from '../components/@common/CircularLabelButton/CircularLabelButton';
+import CircularLabelButton from '../components/@common/buttons/circularLabelButton/CircularLabelButton';
 
 const meta: Meta<typeof CircularLabelButton> = {
   title: 'Components/CircularLabelButton',
