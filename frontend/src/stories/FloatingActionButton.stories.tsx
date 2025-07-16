@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import DownloadIcon from '../@assets/icons/download.svg';
-import FloatingActionButton from '../components/floatingActionButton/FloatingActionButton';
+import FloatingActionButton from '../components/@common/buttons/floatingActionButton/FloatingActionButton';
 
 const meta: Meta<typeof FloatingActionButton> = {
   title: 'Components/FloatingActionButton',

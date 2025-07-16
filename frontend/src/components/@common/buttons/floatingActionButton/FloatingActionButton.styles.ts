@@ -1,7 +1,7 @@
 import type { Theme } from '@emotion/react';
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
-import type { FloatingActionButtonType } from './variant';
+import type { FloatingActionButtonVariant } from '../../../../types/buttonTypes';
 
 const color = (theme: Theme) => ({
   default: css`
@@ -23,7 +23,7 @@ const active = (theme: Theme) => css`
     5px 5px 5px 0px rgba(0, 0, 0, 0.25);
 `;
 
-export const Wrapper = styled.button<{ $variant: FloatingActionButtonType }>`
+export const Wrapper = styled.button<{ $variant: FloatingActionButtonVariant }>`
   display: flex;
   align-items: center;
   justify-content: center;

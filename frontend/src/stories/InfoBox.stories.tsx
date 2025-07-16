@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import InfoBox from '../components/infoBox/InfoBox';
+import InfoBox from '../components/@common/infoBox/InfoBox';
 import { INFO } from '../constants/messages';
 
 const meta: Meta<typeof InfoBox> = {
