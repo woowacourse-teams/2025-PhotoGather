@@ -14,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.forgather.domain.space.model.Photo;
 import com.forgather.domain.space.model.Space;
-import com.forgather.domain.space.model.SpaceContent;
 import com.forgather.domain.space.repository.PhotoRepository;
 import com.forgather.domain.space.repository.SpaceContentRepository;
 import com.forgather.domain.space.repository.SpaceRepository;
@@ -49,9 +48,8 @@ class HostPhotoAcceptanceTest extends AcceptanceTest {
         // given
         var space = spaceRepository.save(
             new Space("host-code", "guest-code", "1234", "test-space", LocalDateTime.now()));
-        var spaceContent = spaceContentRepository.save(new SpaceContent(null, "photo", space));
         var photo = photoRepository.save(
-            new Photo(spaceContent, "path", "originalName", LocalDateTime.now(), LocalDateTime.now()));
+            new Photo(space, /*"PHOTO",*/ "path", "originalName", LocalDateTime.now()));
 
         // when
         var response = RestAssuredMockMvc.given()

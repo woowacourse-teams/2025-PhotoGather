@@ -22,8 +22,9 @@ public class PhotoService {
     private final SpaceRepository spaceRepository;
 
     public PhotoResponse get(String hostCode, Long photoId) {
+        Space space = spaceRepository.getByHostCode(hostCode);
         Photo photo = photoRepository.getById(photoId);
-        photo.validateHostCode(hostCode);
+        photo.validateSpace(space);
         return PhotoResponse.from(photo);
     }
 
