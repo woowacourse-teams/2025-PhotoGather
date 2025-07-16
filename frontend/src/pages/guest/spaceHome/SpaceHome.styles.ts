@@ -8,7 +8,6 @@ export const Wrapper = styled.div`
     height: 100%;
     background-color: ${({ theme }) => theme.colors.primary};
     position: relative;
-    overflow: hidden;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -81,6 +80,7 @@ export const ImagesContainer = styled.div`
   border-radius: 12px 12px 0 0;
   min-height: 340px;
   height: 100%;
+  z-index: 10;
 `;
 
 export const ButtonContainer = styled.div`
@@ -88,11 +88,11 @@ export const ButtonContainer = styled.div`
   bottom: 20px;
   left: 50%;
   transform: translateX(-50%);
-  z-index: 1;
+  z-index: 20;
 `;
 
 export const ScrollableArea = styled.div`
-  max-width: 400px;
+  max-width: 366px;
   width: 100%;
   position: fixed;
   bottom: 0;
@@ -100,4 +100,5 @@ export const ScrollableArea = styled.div`
   transform: translateX(-50%);
   height: 60px;
   background: linear-gradient(to bottom, transparent, white);
+  z-index: 15;
 `;

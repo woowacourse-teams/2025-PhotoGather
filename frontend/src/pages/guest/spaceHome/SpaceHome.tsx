@@ -13,7 +13,7 @@ const mockSpaceData = {
 };
 
 const SpaceHome = () => {
-  // 상수 분리 필요
+  // TODO :상수 분리 필요
   const template = (participantsCount: number, photosCount: number) =>
     `지금까지 ${participantsCount}명의 게스트가\n ${photosCount}장의 사진을 올렸어요!`;
   const highlightTextArray = [
