@@ -35,7 +35,7 @@ public class HostPhotoController {
     @GetMapping
     public ResponseEntity<PhotosResponse> getAll(
         @PathVariable(name = "hostCode") String hostCode,
-        @PageableDefault(size = 20, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable
+        @PageableDefault(size = 15, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable
     ) {
         var response = photoService.getAll(hostCode, pageable);
         return ResponseEntity.ok(response);
