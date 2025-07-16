@@ -8,9 +8,8 @@ export const global = css`
     font-display: swap;
   }
   body {
-    width: 100%;
     font-family: 'SUIT', 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;
-    margin: 0 auto;
+    width: 100vw;
   }
   input {
     &:focus {
