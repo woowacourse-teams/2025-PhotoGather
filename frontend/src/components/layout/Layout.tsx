@@ -1,7 +1,12 @@
 import styled from '@emotion/styled';
+import { Outlet } from 'react-router-dom';
 
 const Layout = () => {
-  return <Container>{/* <Outlet /> */}</Container>;
+  return (
+    <Container>
+      <Outlet />
+    </Container>
+  );
 };
 
 const Container = styled.div`
