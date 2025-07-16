@@ -10,7 +10,7 @@ const Layout = () => {
 };
 
 const Container = styled.div`
-    /* margin: 0 auto; */
+    margin: 0 auto;
     min-width: 340px;
     max-width: 400px;
     width: 100%;
