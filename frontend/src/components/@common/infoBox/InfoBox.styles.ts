@@ -1,5 +1,5 @@
+import { ReactComponent as InfoSvg } from '@assets/icons/info.svg';
 import styled from '@emotion/styled';
-import { ReactComponent as InfoSvg } from '../../@assets/icons/info.svg';
 
 export const Wrapper = styled.div`
   display: flex;

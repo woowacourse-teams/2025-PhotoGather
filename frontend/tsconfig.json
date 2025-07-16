@@ -8,7 +8,7 @@
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true,
-    "typeRoots": ["./src/types"]
+    "types": ["node"]
   },
-  "include": ["src"]
+  "include": ["src", ".storybook"]
 }
