@@ -10,7 +10,7 @@ interface ImageGridProps {
 
 const ImageGrid = ({ imageUrlList, rowImageAmount }: ImageGridProps) => {
   return (
-    <S.Wrapper rowImageAmount={rowImageAmount}>
+    <S.Wrapper $rowImageAmount={rowImageAmount}>
       {imageUrlList.map((url, i) => (
         <ImageElement
           // biome-ignore lint/suspicious/noArrayIndexKey: using index as key is acceptable here
