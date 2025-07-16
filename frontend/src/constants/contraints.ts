@@ -1,0 +1,1 @@
+const _NAME_MAX_LENGTH = 10;

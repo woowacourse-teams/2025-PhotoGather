@@ -19,6 +19,8 @@ declare module '@emotion/react' {
       accent: string;
       lightAccent: string;
       darkAccent: string;
+      error: string;
+      lightError: string;
     };
     typography: {
       header01: TypographyStyle;
