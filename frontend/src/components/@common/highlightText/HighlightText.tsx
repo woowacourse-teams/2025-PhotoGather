@@ -18,16 +18,16 @@ const HighlightText = ({
   const normalTextArray = text.split(highlightText);
 
   return (
-    <S.Wrapper key={text} $fontStyle={fontStyle}>
+    <>
       {normalTextArray.map((text, index) => (
-        <span key={text + String(index)}>
+        <S.Wrapper key={text} $fontStyle={fontStyle}>
           <S.Text>{text}</S.Text>
           {index !== normalTextArray.length - 1 && (
             <S.HighLight>{highlightText}</S.HighLight>
           )}
-        </span>
+        </S.Wrapper>
       ))}
-    </S.Wrapper>
+    </>
   );
 };
 
