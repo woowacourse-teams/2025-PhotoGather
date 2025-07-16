@@ -1,8 +1,6 @@
 import styled from '@emotion/styled';
 import { ReactComponent as SettingSvg } from '../../../@assets/icons/setting.svg';
 
-// TODO : z-index 변수 처리
-// TODO : max-width 상수 처리
 export const Wrapper = styled.div`
     width: 100%;
     height: 100%;
@@ -50,7 +48,7 @@ export const SettingButton = styled.button`
 
 export const SettingIcon = styled(SettingSvg)`
     position: relative;
-    z-index: 2;
+    z-index: ${({ theme }) => theme.zIndex.settingButton};
 `;
 
 export const CirclePattern = styled.div<{
@@ -62,7 +60,7 @@ export const CirclePattern = styled.div<{
     background-color: ${({ theme }) => theme.colors.white};
     border-radius: 50%;
     background-color: ${({ theme }) => theme.colors.lightAccent};
-    z-index: 0;
+    z-index: ${({ theme }) => theme.zIndex.circlePattern};
 
     position: absolute;
     top: ${({ $position }) => $position?.top}px;
@@ -80,7 +78,7 @@ export const ImagesContainer = styled.div`
   border-radius: 12px 12px 0 0;
   min-height: 340px;
   height: 100%;
-  z-index: 10;
+  z-index: ${({ theme }) => theme.zIndex.imageGrid};
 `;
 
 export const ButtonContainer = styled.div`
@@ -88,7 +86,7 @@ export const ButtonContainer = styled.div`
   bottom: 20px;
   left: 50%;
   transform: translateX(-50%);
-  z-index: 20;
+  z-index: ${({ theme }) => theme.zIndex.floatingActionButton};
 `;
 
 export const ScrollableArea = styled.div`
@@ -100,5 +98,5 @@ export const ScrollableArea = styled.div`
   transform: translateX(-50%);
   height: 60px;
   background: linear-gradient(to bottom, transparent, white);
-  z-index: 15;
+  z-index: ${({ theme }) => theme.zIndex.scrollableArea};
 `;

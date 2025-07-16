@@ -68,4 +68,14 @@ export const theme: Theme = {
       lineHeight: '120%',
     },
   },
+  zIndex: {
+    circlePattern: 1,
+    imageGrid: 2,
+    settingButton: 2,
+    scrollableArea: 3,
+    floatingActionButton: 4,
+  },
+  layout: {
+    ImageGridWidth: '366px',
+  },
 };

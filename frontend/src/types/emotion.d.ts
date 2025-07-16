@@ -34,6 +34,16 @@ declare module '@emotion/react' {
       buttonSecondary: TypographyStyle;
       buttonTertiary: TypographyStyle;
     };
+    zIndex: {
+      circlePattern: number;
+      imageGrid: number;
+      settingButton: number;
+      floatingActionButton: number;
+      scrollableArea: number;
+    };
+    layout: {
+      ImageGridWidth: string;
+    };
   }
 
   interface TypographyStyle {
