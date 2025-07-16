@@ -1,6 +1,6 @@
+import path from 'node:path';
 import type { TransformOptions } from '@babel/core';
 import type { StorybookConfig } from '@storybook/react-webpack5';
-import path from 'path';
 
 const config: StorybookConfig = {
   stories: ['../src/**/*.mdx', '../src/**/*.stories.@(js|jsx|mjs|ts|tsx)'],
