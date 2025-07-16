@@ -1,6 +1,7 @@
 import { createBrowserRouter } from 'react-router-dom';
 import Layout from '../components/layout/Layout';
 import ImageUploadPage from '../pages/guest/ImageUploadPage/ImageUploadPage';
+import SharePage from '../pages/guest/sharePage/SharePage';
 
 const router = createBrowserRouter([
   {
@@ -14,6 +15,10 @@ const router = createBrowserRouter([
           {
             path: 'image-upload',
             element: <ImageUploadPage />,
+          },
+          {
+            path: 'share',
+            element: <SharePage />,
           },
         ],
       },
