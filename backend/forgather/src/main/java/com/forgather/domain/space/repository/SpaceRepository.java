@@ -12,6 +12,6 @@ public interface SpaceRepository extends JpaRepository<Space, Long> {
 
     default Space getByHostCode(String hostCode) {
         return findByHostCode(hostCode)
-            .orElseThrow(() -> new IllegalArgumentException("Space not found for host code: " + hostCode));
+            .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 스페이스입니다. 호스트 코드: " + hostCode));
     }
 }

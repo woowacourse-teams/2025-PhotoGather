@@ -44,7 +44,7 @@ public class Photo extends SpaceContent{
 
     public void validateSpace(Space space) {
         if (!this.space.equals(space)) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("스페이스에 속하지 않는 사진입니다. 스페이스 ID: " + space.getId() + ", 사진 ID: " + this.getId());
         }
     }
 }
