@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-webpack5';
-import Button from '../components/@common/Button';
+import Button from '../components/@common/buttons/button/Button';
 
 const meta: Meta<typeof Button> = {
   title: 'Components/Button',

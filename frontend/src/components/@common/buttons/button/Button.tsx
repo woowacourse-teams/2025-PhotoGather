@@ -1,5 +1,5 @@
+import type { ButtonVariant } from '../../../../types/buttonTypes';
 import * as S from './Button.styles';
-import type { ButtonVariant } from './variant';
 
 interface ButtonProps {
   /** 버튼의 variant */
@@ -19,7 +19,7 @@ const Button = ({
   disabled = false,
 }: ButtonProps) => {
   return (
-    <S.StyledButton $variant={variant} $disabled={disabled} onClick={onClick}>
+    <S.StyledButton $variant={variant} onClick={onClick} disabled={disabled}>
       {text}
     </S.StyledButton>
   );

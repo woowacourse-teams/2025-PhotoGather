@@ -1,7 +1,7 @@
 import type { Theme } from '@emotion/react';
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
-import type { CopyButtonType } from './variant';
+import type { CopyButtonVariant } from '../../../../types/buttonTypes';
 
 const color = (theme: Theme) => ({
   filled: css`
@@ -20,20 +20,18 @@ const active = (theme: Theme) => ({
     background-color: ${theme.colors.gray05};
   `,
   outlined: css`
-    background-color: ${theme.colors.gray01};
+    background-color: ${theme.colors.grayBackground};
   `,
 });
 
-export const Wrapper = styled.button<{ $variant: CopyButtonType }>`
+export const Wrapper = styled.button<{ $variant: CopyButtonVariant }>`
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
   padding: 12px 20px;
-  border: none;
   border-radius: 50px;
   width: 100%;
-  cursor: pointer;
 
   ${({ theme, $variant }) => color(theme)[$variant]}
   ${({ theme }) => ({ ...theme.typography.buttonPrimary })}

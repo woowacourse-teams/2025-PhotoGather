@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import CopyButton from '../copyButton/CopyButton';
+import CopyButton from '../components/@common/buttons/copyButton/CopyButton';
 
 const meta: Meta<typeof CopyButton> = {
   title: 'Components/CopyButton',
