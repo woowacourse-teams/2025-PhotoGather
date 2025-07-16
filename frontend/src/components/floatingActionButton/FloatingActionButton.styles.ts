@@ -9,9 +9,8 @@ const color = (theme: Theme) => ({
     color: ${theme.colors.gray06};
   `,
   disabled: css`
-    background-color: ${theme.colors.gray01};
+    background-color: ${theme.colors.grayBackground};
     color: ${theme.colors.gray04};
-    cursor: default;
   `,
 });
 
@@ -30,10 +29,7 @@ export const Wrapper = styled.button<{ $variant: FloatingActionButtonType }>`
   justify-content: center;
   gap: 8px;
   padding: 12px 20px;
-  border: none;
   border-radius: 50px;
-  width: 100%;
-  cursor: pointer;
 
   box-shadow:
     1px 1px 3px 0px #fff inset,

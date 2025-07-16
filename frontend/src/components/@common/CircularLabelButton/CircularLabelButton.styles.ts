@@ -19,8 +19,7 @@ export const IconContainer = styled.button`
   gap: 10px;
   border-radius: 50%;
   border: 1px solid ${({ theme }) => theme.colors.gray02};
-  background: ${({ theme }) => theme.colors.white};
-  cursor: pointer;
+  background-color: ${({ theme }) => theme.colors.white};
 `;
 
 export const Icon = styled.div`

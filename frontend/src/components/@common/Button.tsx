@@ -19,7 +19,7 @@ const Button = ({
   disabled = false,
 }: ButtonProps) => {
   return (
-    <S.StyledButton $variant={variant} $disabled={disabled} onClick={onClick}>
+    <S.StyledButton $variant={variant} onClick={onClick} disabled={disabled}>
       {text}
     </S.StyledButton>
   );
