@@ -20,7 +20,7 @@ const active = (theme: Theme) => ({
     background-color: ${theme.colors.gray05};
   `,
   outlined: css`
-    background-color: ${theme.colors.gray01};
+    background-color: ${theme.colors.grayBackground};
   `,
 });
 

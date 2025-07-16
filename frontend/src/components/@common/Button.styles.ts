@@ -17,7 +17,7 @@ const buttonStyles = {
       &:disabled{
         pointer-events: none;
         border-radius: 12px;
-        background: ${theme.colors.gray01};
+        background: ${theme.colors.grayBackground};
         color: ${theme.colors.gray04};
       }
     `,
@@ -33,7 +33,7 @@ const buttonStyles = {
         border-radius: 12px;
         pointer-events: none;
         color: ${theme.colors.gray04};
-        background: ${theme.colors.gray01};
+        background: ${theme.colors.grayBackground};
         border: 1px solid ${theme.colors.gray03};}
       
       &:active {

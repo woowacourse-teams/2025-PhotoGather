@@ -9,7 +9,7 @@ const color = (theme: Theme) => ({
     color: ${theme.colors.gray06};
   `,
   disabled: css`
-    background-color: ${theme.colors.gray01};
+    background-color: ${theme.colors.grayBackground};
     color: ${theme.colors.gray04};
   `,
 });
