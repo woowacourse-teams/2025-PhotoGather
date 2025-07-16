@@ -16,4 +16,11 @@ export const global = css`
       outline: none;
     }
   }
+  button {
+    cursor: pointer;
+    border: none;
+    &:disabled {
+      cursor: default;
+    }
+  }
 `;

@@ -30,10 +30,8 @@ export const Wrapper = styled.button<{ $variant: CopyButtonType }>`
   justify-content: center;
   gap: 8px;
   padding: 12px 20px;
-  border: none;
   border-radius: 50px;
   width: 100%;
-  cursor: pointer;
 
   ${({ theme, $variant }) => color(theme)[$variant]}
   ${({ theme }) => ({ ...theme.typography.buttonPrimary })}

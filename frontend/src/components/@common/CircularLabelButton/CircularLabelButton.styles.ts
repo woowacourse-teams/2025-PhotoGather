@@ -20,7 +20,6 @@ export const IconContainer = styled.button`
   border-radius: 50%;
   border: 1px solid ${({ theme }) => theme.colors.gray02};
   background: ${({ theme }) => theme.colors.white};
-  cursor: pointer;
 `;
 
 export const Icon = styled.div`
