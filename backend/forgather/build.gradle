@@ -25,9 +25,14 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'io.rest-assured:spring-mock-mvc'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
 	// lombok
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
+
+	// AWS
+	implementation platform("software.amazon.awssdk:bom:2.27.21")
+	implementation 'software.amazon.awssdk:s3'
 }
 
 tasks.named('test') {
