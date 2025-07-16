@@ -14,27 +14,27 @@ type Story = StoryObj<typeof InfoBox>;
 export const Default: Story = {
   args: {
     description: INFO.LINK_WARNING.description,
-    highlightText: INFO.LINK_WARNING.highlightText,
+    highlightTextArray: [INFO.LINK_WARNING.highlightText],
   },
 };
 
 export const WithNewlines: Story = {
   args: {
     description: `${INFO.LINK_WARNING.description}\n하이라이트`,
-    highlightText: '하이라이트',
+    highlightTextArray: ['하이라이트'],
   },
 };
 
 export const NoHighlight: Story = {
   args: {
     description: INFO.LINK_WARNING.description,
-    highlightText: '',
+    highlightTextArray: [],
   },
 };
 
 export const HighlightNotFound: Story = {
   args: {
     description: INFO.LINK_WARNING.description,
-    highlightText: '존재하지않음',
+    highlightTextArray: ['존재하지않음'],
   },
 };
