@@ -20,6 +20,7 @@ CREATE TABLE space_content
     space_id     BIGINT      NOT NULL,
     FOREIGN KEY (space_id) REFERENCES space (id)
 );
+
 -- 3. photo
 CREATE TABLE photo
 (
@@ -30,4 +31,4 @@ CREATE TABLE photo
     created_at    timestamp    NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (id),
     CONSTRAINT photo_space_content_fk FOREIGN KEY (id) REFERENCES space_content (id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+)
