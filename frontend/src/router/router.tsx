@@ -1,6 +1,7 @@
 import { createBrowserRouter } from 'react-router-dom';
 import Layout from '../components/layout/Layout';
 import ImageUploadPage from '../pages/guest/ImageUploadPage/ImageUploadPage';
+import SpaceHome from '../pages/guest/spaceHome/SpaceHome';
 
 const router = createBrowserRouter([
   {
@@ -14,6 +15,10 @@ const router = createBrowserRouter([
           {
             path: 'image-upload',
             element: <ImageUploadPage />,
+          },
+          {
+            path: 'space-home',
+            element: <SpaceHome />,
           },
         ],
       },
