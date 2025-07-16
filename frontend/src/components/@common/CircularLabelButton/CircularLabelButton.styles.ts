@@ -12,6 +12,7 @@ export const IconContainer = styled.button`
   width: 44px;
   height: 44px;
   display: flex;
+  padding: 10px;
   flex-direction: row;
   justify-content: center;
   align-items: center;

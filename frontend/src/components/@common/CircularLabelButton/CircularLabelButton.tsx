@@ -10,9 +10,7 @@ interface CircularLabelButtonProps {
 const CircularLabelButton = ({ icon, text }: CircularLabelButtonProps) => {
   return (
     <S.Wrapper>
-      <S.IconContainer>
-        <S.Icon>{icon}</S.Icon>
-      </S.IconContainer>
+      <S.IconContainer>{icon}</S.IconContainer>
       <S.Text>{text}</S.Text>
     </S.Wrapper>
   );
