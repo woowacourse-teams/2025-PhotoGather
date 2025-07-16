@@ -5,19 +5,19 @@ import type { ButtonVariant } from './variant';
 const buttonStyles = {
   primary: (theme: Theme) => `
       border-radius: 12px;
-      background: ${theme.colors.primary};
+      background-color: ${theme.colors.primary};
       color: ${theme.colors.white};
 
       &:active {
         border-radius: 12px;
-        background: ${theme.colors.primary};
+        background-color: ${theme.colors.primary};
         box-shadow: 0px 2px 3px 0px rgba(0, 0, 0, 0.60) inset;
       }
 
       &:disabled{
         pointer-events: none;
         border-radius: 12px;
-        background: ${theme.colors.grayBackground};
+        background-color: ${theme.colors.grayBackground};
         color: ${theme.colors.gray04};
       }
     `,
@@ -25,7 +25,7 @@ const buttonStyles = {
   secondary: (theme: Theme) => `
       border-radius: 12px;
       color: ${theme.colors.primary};
-      background: ${theme.colors.white};
+      background-color: ${theme.colors.white};
       border: 1px solid ${theme.colors.primary};
       ${theme.typography.buttonSecondary}
 
@@ -33,19 +33,19 @@ const buttonStyles = {
         border-radius: 12px;
         pointer-events: none;
         color: ${theme.colors.gray04};
-        background: ${theme.colors.grayBackground};
+        background-color: ${theme.colors.grayBackground};
         border: 1px solid ${theme.colors.gray03};}
       
       &:active {
         border-radius: 12px;
-        background: ${theme.colors.primary10};
+        background-color: ${theme.colors.primary10};
         border: 1px solid ${theme.colors.primary};
       }
 
     `,
 
   tertiary: (theme: Theme) => `
-      background: transparent;
+      background-color: transparent;
       color: ${theme.colors.gray03};
       ${theme.typography.buttonTertiary}
 
@@ -55,7 +55,7 @@ const buttonStyles = {
 
       &:disabled{
         pointer-events: none;
-        background: transparent;
+        background-color: transparent;
         color: ${theme.colors.gray01};
       }
     `,
