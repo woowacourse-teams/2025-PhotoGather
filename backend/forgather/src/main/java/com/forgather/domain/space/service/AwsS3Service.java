@@ -21,18 +21,18 @@ public class AwsS3Service {
     private final S3Client s3Client;
     private final S3Properties s3Properties;
 
-    public void upload(String hostCode, MultipartFile file) throws IOException {
+    public void upload(String spaceCode, MultipartFile file) throws IOException {
         PutObjectRequest putObjectRequest = PutObjectRequest.builder()
             .bucket(s3Properties.getBucketName())
-            .key(generateFilePath(hostCode, file))
+            .key(generateFilePath(spaceCode, file))
             .tagging(s3Properties.getTagging())
             .build();
         s3Client.putObject(putObjectRequest, RequestBody.fromBytes(file.getBytes()));
     }
 
-    private String generateFilePath(String hostCode, MultipartFile file) {
+    private String generateFilePath(String spaceCode, MultipartFile file) {
         String extension = StringUtils.getFilenameExtension(file.getOriginalFilename());
         String uuid = UUID.randomUUID().toString();
-        return String.format("/%s/%s/%s.%s", s3Properties.getRootDirectory(), hostCode, uuid, extension);
+        return String.format("/%s/%s/%s.%s", s3Properties.getRootDirectory(), spaceCode, uuid, extension);
     }
 }

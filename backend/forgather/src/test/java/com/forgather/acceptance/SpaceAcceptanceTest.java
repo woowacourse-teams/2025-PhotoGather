@@ -45,7 +45,6 @@ class SpaceAcceptanceTest extends AcceptanceTest {
 
         // then
         assertThat(response.statusCode()).isEqualTo(201);
-        assertThat(response.body().jsonPath().getString("guestCode")).isNotNull();
-        assertThat(response.body().jsonPath().getString("hostCode")).isNotNull();
+        assertThat(response.body().jsonPath().getString("spaceCode")).isNotNull();
     }
 }

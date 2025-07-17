@@ -21,15 +21,15 @@ public class PhotoService {
     private final PhotoRepository photoRepository;
     private final SpaceRepository spaceRepository;
 
-    public PhotoResponse get(String hostCode, Long photoId) {
-        Space space = spaceRepository.getByHostCode(hostCode);
+    public PhotoResponse get(String spaceCode, Long photoId) {
+        Space space = spaceRepository.getBySpaceCode(spaceCode);
         Photo photo = photoRepository.getById(photoId);
         photo.validateSpace(space);
         return PhotoResponse.from(photo);
     }
 
-    public PhotosResponse getAll(String hostCode, Pageable pageable) {
-        Space space = spaceRepository.getByHostCode(hostCode);
+    public PhotosResponse getAll(String spaceCode, Pageable pageable) {
+        Space space = spaceRepository.getBySpaceCode(spaceCode);
         Page<Photo> photos = photoRepository.findAllBySpace(space, pageable);
         return PhotosResponse.from(photos);
     }

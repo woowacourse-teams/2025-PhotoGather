@@ -18,9 +18,8 @@ public class SpaceService {
     private final RandomCodeGenerator codeGenerator;
 
     public CreateSpaceResponse create(CreateSpaceRequest request) {
-        String guestCode = codeGenerator.generate();
-        String hostCode = codeGenerator.generate();
-        Space space = spaceRepository.save(request.toEntity(hostCode, guestCode));
+        String spaceCode = codeGenerator.generate();
+        Space space = spaceRepository.save(request.toEntity(spaceCode));
         return CreateSpaceResponse.from(space);
     }
 }

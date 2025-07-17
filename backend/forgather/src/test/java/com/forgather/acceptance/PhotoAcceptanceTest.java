@@ -20,9 +20,9 @@ import com.forgather.domain.space.repository.SpaceRepository;
 
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
 
-@DisplayName("인수 테스트: HostPhoto")
+@DisplayName("인수 테스트: Photo")
 @AutoConfigureMockMvc
-class HostPhotoAcceptanceTest extends AcceptanceTest {
+class PhotoAcceptanceTest extends AcceptanceTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -43,18 +43,18 @@ class HostPhotoAcceptanceTest extends AcceptanceTest {
 
     @Test
     @Transactional
-    @DisplayName("Host가 사진을 조회한다.")
+    @DisplayName("스페이스 호스트가 사진을 조회한다.")
     void getPhoto() {
         // given
         var space = spaceRepository.save(
-            new Space("host-code", "guest-code", "1234", "test-space", LocalDateTime.now()));
+            new Space("space-code", "1234", "test-space", LocalDateTime.now()));
         var photo = photoRepository.save(
             new Photo(space, /*"PHOTO",*/ "path", "originalName", LocalDateTime.now()));
 
         // when
         var response = RestAssuredMockMvc.given()
             .when()
-            .get("/spaces/host/{hostCode}/photos/{photoId}", space.getHostCode(), photo.getId())
+            .get("/spaces/{spaceCode}/photos/{photoId}", space.getSpaceCode(), photo.getId())
             .then()
             .extract();
 
