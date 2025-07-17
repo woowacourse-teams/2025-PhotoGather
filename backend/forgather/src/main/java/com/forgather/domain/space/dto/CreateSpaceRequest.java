@@ -10,7 +10,7 @@ public record CreateSpaceRequest(
     String password
 ) {
 
-    public Space toEntity(String hostCode, String guestCode) {
-        return new Space(hostCode, guestCode, password, name, openedAt);
+    public Space toEntity(String spaceCode) {
+        return new Space(spaceCode, password, name, openedAt);
     }
 }

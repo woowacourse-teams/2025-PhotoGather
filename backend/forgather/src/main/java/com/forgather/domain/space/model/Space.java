@@ -24,11 +24,8 @@ public class Space extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "host_code", nullable = false, length = 64)
-    private String hostCode;
-
-    @Column(name = "guest_code", nullable = false, length = 64)
-    private String guestCode;
+    @Column(name = "space_code", nullable = false, length = 64)
+    private String spaceCode;
 
     @Column(name = "password", length = 64)
     private String password;
@@ -42,9 +39,8 @@ public class Space extends BaseTimeEntity {
     @Column(name = "expired_at", nullable = false)
     private LocalDateTime expiredAt;
 
-    public Space(String hostCode, String guestCode, String password, String name, LocalDateTime openedAt) {
-        this.hostCode = hostCode;
-        this.guestCode = guestCode;
+    public Space(String spaceCode, String password, String name, LocalDateTime openedAt) {
+        this.spaceCode = spaceCode;
         this.password = password;
         this.name = name;
         this.openedAt = openedAt;

@@ -2,8 +2,7 @@
 CREATE TABLE space
 (
     id         BIGINT AUTO_INCREMENT PRIMARY KEY,
-    guest_code VARCHAR(64)                        NOT NULL,
-    host_code  VARCHAR(64)                        NOT NULL,
+    space_code VARCHAR(64)                        NOT NULL,
     password   VARCHAR(64),
     name       VARCHAR(255) CHARACTER SET utf8mb4 NOT NULL,
     opened_at  TIMESTAMP                          NOT NULL,

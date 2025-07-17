@@ -18,26 +18,26 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/spaces/host/{hostCode}/photos")
-public class HostPhotoController {
+@RequestMapping("/spaces/{spaceCode}/photos")
+public class PhotoController {
 
     private final PhotoService photoService;
 
     @GetMapping("/{photoId}")
     public ResponseEntity<PhotoResponse> get(
-        @PathVariable(name = "hostCode") String hostCode,
+        @PathVariable(name = "spaceCode") String spaceCode,
         @PathVariable(name = "photoId") Long photoId
     ) {
-        var response = photoService.get(hostCode, photoId);
+        var response = photoService.get(spaceCode, photoId);
         return ResponseEntity.ok(response);
     }
 
     @GetMapping
     public ResponseEntity<PhotosResponse> getAll(
-        @PathVariable(name = "hostCode") String hostCode,
+        @PathVariable(name = "spaceCode") String spaceCode,
         @PageableDefault(size = 15, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable
     ) {
-        var response = photoService.getAll(hostCode, pageable);
+        var response = photoService.getAll(spaceCode, pageable);
         return ResponseEntity.ok(response);
     }
 }
