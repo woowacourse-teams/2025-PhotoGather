@@ -33,6 +33,9 @@ dependencies {
 	// AWS
 	implementation platform("software.amazon.awssdk:bom:2.27.21")
 	implementation 'software.amazon.awssdk:s3'
+
+	// Swagger
+	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.7.0'
 }
 
 tasks.named('test') {
