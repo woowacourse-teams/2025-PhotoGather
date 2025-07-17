@@ -6,6 +6,7 @@ import CircularLabelButton from '../../../components/@common/buttons/circularLab
 import CopyButton from '../../../components/@common/buttons/copyButton/CopyButton';
 import HighlightText from '../../../components/@common/highlightText/HighlightText';
 import InfoBox from '../../../components/@common/infoBox/InfoBox';
+import { INFORMATION } from '../../../constants/messages';
 import * as S from './SharePage.styles';
 
 const SharePage = () => {
@@ -18,15 +19,14 @@ const SharePage = () => {
       <S.TopContainer>
         <S.Image src={LinkImage} alt="링크 이미지" />
         <HighlightText
-          text="스페이스 링크를 공유해 보세요"
-          highlightTextArray={['스페이스 링크']}
+          text={INFORMATION.SUGGEST_SHARE.DESCRIPTION}
+          highlightTextArray={[INFORMATION.SUGGEST_SHARE.HIGHLIGHT_TEXT]}
           fontStyle="header02"
           highlightColorStyle="primary"
         />
         <InfoBox
-          description={`내 스페이스 관리 페이지에서도
-            스페이스 링크를 확인할 수 있어요`}
-          highlightTextArray={['스페이스 링크']}
+          description={INFORMATION.SHARE_WARNING.DESCRIPTION}
+          highlightTextArray={[INFORMATION.SHARE_WARNING.HIGHLIGHT_TEXT]}
         />
 
         <CopyButton label="친구에게 공유하기" copyText="예시" />
@@ -36,7 +36,7 @@ const SharePage = () => {
           <CircularLabelButton
             icon={<KakaoTalkIcon />}
             label="카카오톡"
-            style={{ backgroundColor: '#ffeb00' }}
+            style={{ backgroundColor: '#ffeb00' }} // 카카오톡 고정색깔
           />
         </S.CircularLabelButtonContainer>
       </S.TopContainer>
