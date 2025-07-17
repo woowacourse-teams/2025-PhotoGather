@@ -1,8 +1,8 @@
 import { createBrowserRouter } from 'react-router-dom';
 import Layout from '../components/layout/Layout';
 import ImageUploadPage from '../pages/guest/ImageUploadPage/ImageUploadPage';
-import SpaceHome from '../pages/guest/spaceHome/SpaceHome';
 import SharePage from '../pages/guest/sharePage/SharePage';
+import SpaceHome from '../pages/guest/spaceHome/SpaceHome';
 
 const router = createBrowserRouter([
   {
