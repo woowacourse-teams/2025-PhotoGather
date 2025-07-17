@@ -19,6 +19,7 @@ import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 public class AwsS3Service {
 
     private static final String CONTENTS_DIRECTORY = "contents";
+
     private final S3Client s3Client;
     private final S3Properties s3Properties;
 
