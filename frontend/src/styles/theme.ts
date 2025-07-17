@@ -1,6 +1,4 @@
-import type { Theme } from '@emotion/react';
-
-export const theme: Theme = {
+export const theme = {
   colors: {
     white: '#FFFFFF',
     grayBackground: '#F5F5F5',
@@ -67,5 +65,16 @@ export const theme: Theme = {
       fontSize: '12px',
       lineHeight: '120%',
     },
+  },
+  zIndex: {
+    circlePattern: 1,
+    imageGrid: 2,
+    settingButton: 2,
+    text: 3,
+    scrollableArea: 3,
+    floatingActionButton: 4,
+  },
+  layout: {
+    ImageGridWidth: '366px',
   },
 };
