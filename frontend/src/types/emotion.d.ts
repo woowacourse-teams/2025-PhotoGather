@@ -38,6 +38,7 @@ declare module '@emotion/react' {
       circlePattern: number;
       imageGrid: number;
       settingButton: number;
+      text: number;
       floatingActionButton: number;
       scrollableArea: number;
     };

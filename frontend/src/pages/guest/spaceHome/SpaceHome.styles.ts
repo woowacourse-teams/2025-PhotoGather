@@ -22,6 +22,7 @@ export const InfoContainer = styled.div`
     display: flex;
     flex-direction: column;
     gap: 60px;
+    z-index: ${({ theme }) => theme.zIndex.text};
 `;
 
 export const InfoHeaderContainer = styled.div`
@@ -44,6 +45,7 @@ export const SettingButton = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
+  background: none;
 `;
 
 export const SettingIcon = styled(SettingSvg)`
