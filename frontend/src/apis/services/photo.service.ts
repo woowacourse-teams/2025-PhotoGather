@@ -4,7 +4,7 @@ import type {
   Photo,
   PhotoWithContent,
 } from '../../types/photo.type';
-import { http } from '../http';
+import { http, uploadFile } from '../http';
 
 export const photoService = {
   getAll: (params?: { page?: number; pageSize?: number }) =>
