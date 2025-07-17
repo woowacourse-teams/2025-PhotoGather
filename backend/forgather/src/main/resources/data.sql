@@ -1,7 +1,7 @@
-INSERT INTO `forgather`.`space` (`host_code`, `guest_code`, `password`, `name`, `opened_at`, `expired_at`, `created_at`,
+INSERT INTO `forgather`.`space` (`space_code`, `password`, `name`, `opened_at`, `expired_at`, `created_at`,
                                  `updated_at`)
-VALUES ('1234567890', '0987654321', '1234', 'spaceName', now(), now(), now(), now()),
-       ('1234567891', '0987654321', '1234', 'spaceName', now(), now(), now(), now());
+VALUES ('1234567890', '1234', 'spaceName', now(), now(), now(), now()),
+       ('1234567891', '1234', 'spaceName', now(), now(), now(), now());
 
 
 INSERT INTO `forgather`.`space_content` (`content_type`, `space_id`)
