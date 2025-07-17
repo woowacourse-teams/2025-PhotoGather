@@ -25,20 +25,22 @@ const ImageUploadPage = () => {
       </S.UploadContainer>
 
       {hasImages && (
-        <ImageGrid imageUrlList={mockImageList} rowImageAmount={3} />
-      )}
-      <S.ButtonContainer>
-        <FloatingActionButton
-          label={
-            <HighlightText
-              text={`사진 ${mockImageList.length}장 업로드하기`}
-              fontStyle="buttonPrimary"
-              highlightColorStyle="gray04"
-              highlightTextArray={[`사진 ${mockImageList.length}장`]}
+        <>
+          <ImageGrid imageUrlList={mockImageList} rowImageAmount={3} />
+          <S.ButtonContainer>
+            <FloatingActionButton
+              label={
+                <HighlightText
+                  text={`사진 ${mockImageList.length}장 업로드하기`}
+                  fontStyle="buttonPrimary"
+                  highlightColorStyle="gray04"
+                  highlightTextArray={[`사진 ${mockImageList.length}장`]}
+                />
+              }
             />
-          }
-        />
-      </S.ButtonContainer>
+          </S.ButtonContainer>
+        </>
+      )}
     </S.Wrapper>
   );
 };
