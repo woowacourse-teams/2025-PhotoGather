@@ -2,7 +2,7 @@ import { ReactComponent as SaveIcon } from '../../../@assets/icons/download.svg'
 import FloatingActionButton from '../../../components/@common/buttons/floatingActionButton/FloatingActionButton';
 import HighlightText from '../../../components/@common/highlightText/HighlightText';
 import ImageGrid from '../../../components/@common/imageGrid/ImageGrid';
-import { spaceHomeInfo } from '../../../constants/messages';
+import { createSpaceHomeInfoMessage } from '../../../constants/messages';
 import { mockImageList, mockSpaceData } from './mockSpaceData';
 import * as S from './SpaceHome.styles';
 
@@ -17,7 +17,7 @@ const SpaceHome = () => {
     `${String(mockSpaceData.participantsCount)}명`,
     `${String(mockSpaceData.photosCount)}장`,
   ];
-  const description = spaceHomeInfo(
+  const description = createSpaceHomeInfoMessage(
     mockSpaceData.participantsCount,
     mockSpaceData.photosCount,
   );

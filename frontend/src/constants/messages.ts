@@ -5,5 +5,8 @@ export const INFO = {
   },
 } as const;
 
-export const spaceHomeInfo = (participantsCount: number, photosCount: number) =>
+export const createSpaceHomeInfoMessage = (
+  participantsCount: number,
+  photosCount: number,
+) =>
   `지금까지 ${participantsCount}명의 게스트가\n ${photosCount}장의 사진을 올렸어요!`;
