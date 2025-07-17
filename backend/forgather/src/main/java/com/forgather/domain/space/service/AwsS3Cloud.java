@@ -16,20 +16,22 @@ import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
 @Component
 @RequiredArgsConstructor
-public class AwsS3Service {
+public class AwsS3Cloud {
 
     private static final String CONTENTS_DIRECTORY = "contents";
 
     private final S3Client s3Client;
     private final S3Properties s3Properties;
 
-    public void upload(String spaceCode, MultipartFile file) throws IOException {
+    public String upload(String spaceCode, MultipartFile file) throws IOException {
+        String path = generateFilePath(spaceCode, file);
         PutObjectRequest putObjectRequest = PutObjectRequest.builder()
             .bucket(s3Properties.getBucketName())
-            .key(generateFilePath(spaceCode, file))
+            .key(path)
             .tagging(s3Properties.getTagging())
             .build();
         s3Client.putObject(putObjectRequest, RequestBody.fromBytes(file.getBytes()));
+        return path;
     }
 
     private String generateFilePath(String spaceCode, MultipartFile file) {

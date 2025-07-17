@@ -36,6 +36,9 @@ dependencies {
 
 	// Swagger
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.7.0'
+
+	// metadata-extractor
+	implementation("com.drewnoakes:metadata-extractor:2.19.0")
 }
 
 tasks.named('test') {
