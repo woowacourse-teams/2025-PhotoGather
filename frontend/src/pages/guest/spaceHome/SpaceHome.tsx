@@ -1,19 +1,10 @@
 import { ReactComponent as SaveIcon } from '../../../@assets/icons/download.svg';
-import image1 from '../../../@assets/images/example_image.png';
 import FloatingActionButton from '../../../components/@common/buttons/floatingActionButton/FloatingActionButton';
 import HighlightText from '../../../components/@common/highlightText/HighlightText';
 import ImageGrid from '../../../components/@common/imageGrid/ImageGrid';
 import { spaceHomeInfo } from '../../../constants/messages';
+import { mockImageList, mockSpaceData } from './mockSpaceData';
 import * as S from './SpaceHome.styles';
-
-const mockSpaceData = {
-  name: '8월 버스킹',
-  startDate: '2025-08-01',
-  participantsCount: 80,
-  photosCount: 6,
-};
-
-const mockImageList = Array.from({ length: 10 }, () => image1);
 
 // TODO : 배경색에 따른 글자색 변경
 const SpaceHome = () => {
