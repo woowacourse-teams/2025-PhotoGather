@@ -12,7 +12,6 @@ export const InputField = styled.input<{ $isError: boolean }>`
   border: 1px solid
     ${({ $isError, theme }) => ($isError ? theme.colors.error : theme.colors.gray02)};
   border-radius: 12px;
-  box-sizing: border-box;
   &:focus {
     border: 1px solid
       ${({ $isError, theme }) => ($isError ? theme.colors.error : theme.colors.primary)};

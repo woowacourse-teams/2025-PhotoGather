@@ -11,7 +11,6 @@ export const Container = styled.div<{ $isHighlightPage: boolean }>`
     border: 1px solid #000;
     height: 100dvh;
     overflow: hidden;
-    box-sizing: border-box;
     background-color: ${({ theme, $isHighlightPage }) =>
       $isHighlightPage ? theme.colors.primary : theme.colors.white};
 `;
