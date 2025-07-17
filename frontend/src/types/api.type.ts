@@ -1,3 +1,5 @@
+import type { Photo } from './photo.type';
+
 export interface ApiResponse<T> {
   success: boolean;
   data?: T;
@@ -5,6 +7,9 @@ export interface ApiResponse<T> {
   message?: string;
 }
 
-// TODO: 페이지네이션 응답 타입 추가
-// 저장하면 자동으로 type 되는데 interface로 수정하기
-export type PhotoListResponse<T> = {};
+export interface PhotoListResponse {
+  photos: Photo[];
+  currentPage: number;
+  pageSize: number;
+  totalPages: number;
+}

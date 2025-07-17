@@ -81,3 +81,49 @@ export const http = {
 
   delete: <T>(endpoint: string) => request<T>(endpoint, { method: 'DELETE' }),
 };
+
+export const uploadFile = async <T>(
+  endpoint: string,
+  file: File,
+  additionalData?: Record<string, unknown>,
+): Promise<ApiResponse<T>> => {
+  const formData = new FormData();
+  formData.append('file', file);
+
+  if (additionalData) {
+    Object.entries(additionalData).forEach(([key, value]) => {
+      formData.append(key, String(value));
+    });
+  }
+
+  try {
+    const response = await fetch(`${BASE_URL}${endpoint}`, {
+      method: 'POST',
+      headers: {
+        ...(defaultHeaders.Authorization && {
+          Authorization: defaultHeaders.Authorization,
+        }),
+      },
+      body: formData,
+    });
+
+    const data = await response.json();
+
+    if (response.ok) {
+      return {
+        success: true,
+        data: data as T,
+      };
+    }
+
+    return {
+      success: false,
+      error: data?.message || `Upload failed: ${response.status}`,
+    };
+  } catch (error) {
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Upload failed',
+    };
+  }
+};
