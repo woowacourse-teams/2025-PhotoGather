@@ -33,6 +33,9 @@ dependencies {
 	// AWS
 	implementation platform("software.amazon.awssdk:bom:2.27.21")
 	implementation 'software.amazon.awssdk:s3'
+
+	// metadata-extractor
+	implementation("com.drewnoakes:metadata-extractor:2.19.0")
 }
 
 tasks.named('test') {

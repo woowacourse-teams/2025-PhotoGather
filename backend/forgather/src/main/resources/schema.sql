@@ -1,3 +1,7 @@
+DROP TABLE IF EXISTS photo;
+DROP TABLE IF EXISTS space_content;
+DROP TABLE IF EXISTS space;
+
 -- 1. space
 CREATE TABLE space
 (

@@ -1,5 +1,6 @@
 package com.forgather.domain.space.controller;
 
+import java.util.List;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -7,8 +8,11 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.forgather.domain.space.dto.PhotoResponse;
 import com.forgather.domain.space.dto.PhotosResponse;
@@ -22,6 +26,15 @@ import lombok.RequiredArgsConstructor;
 public class PhotoController {
 
     private final PhotoService photoService;
+
+    @PostMapping
+    public ResponseEntity<Void> saveAll(
+        @PathVariable(name = "spaceCode") String spaceCode,
+        @RequestPart(name = "files") List<MultipartFile> files
+    ) {
+        photoService.saveAll(spaceCode, files);
+        return ResponseEntity.ok().build();
+    }
 
     @GetMapping("/{photoId}")
     public ResponseEntity<PhotoResponse> get(
