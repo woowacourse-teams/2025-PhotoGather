@@ -17,7 +17,6 @@ export const TopContainer = styled.div`
 export const Image = styled.img`
   width: 100px;
   height: 100px;
-  border: 1px solid black;
   margin: 0 auto;
 `;
 

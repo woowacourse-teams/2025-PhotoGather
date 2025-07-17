@@ -1,4 +1,6 @@
+import { ReactComponent as KakaoTalkIcon } from '@assets/icons/kakaotalk.svg';
 import { ReactComponent as QrIcon } from '@assets/icons/qrCode.svg';
+import LinkImage from '@assets/images/link.png';
 import Button from '../../../components/@common/buttons/button/Button';
 import CircularLabelButton from '../../../components/@common/buttons/circularLabelButton/CircularLabelButton';
 import CopyButton from '../../../components/@common/buttons/copyButton/CopyButton';
@@ -14,7 +16,7 @@ const SharePage = () => {
   return (
     <S.Wrapper>
       <S.TopContainer>
-        <S.Image src="" alt="링크 이미지" />
+        <S.Image src={LinkImage} alt="링크 이미지" />
         <HighlightText
           text="스페이스 링크를 공유해 보세요"
           highlightTextArray={['스페이스 링크']}
@@ -31,7 +33,11 @@ const SharePage = () => {
 
         <S.CircularLabelButtonContainer>
           <CircularLabelButton icon={<QrIcon />} label="QR생성" />
-          <CircularLabelButton icon={<p>카톡</p>} label="카카오톡" />
+          <CircularLabelButton
+            icon={<KakaoTalkIcon />}
+            label="카카오톡"
+            style={{ backgroundColor: '#ffeb00' }}
+          />
         </S.CircularLabelButtonContainer>
       </S.TopContainer>
       <Button text="저장했어요" onClick={handleSpaceHomeButton} />
