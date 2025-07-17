@@ -34,6 +34,7 @@ export const InfoHeaderContainer = styled.div`
 export const Title = styled.p`
     ${({ theme }) => ({ ...theme.typography.header01 })};
     color: ${({ theme }) => theme.colors.white};
+    mix-blend-mode: difference;
 `;
 
 export const StartDate = styled.p`
@@ -46,6 +47,7 @@ export const SettingButton = styled.button`
   justify-content: center;
   align-items: center;
   background: none;
+  mix-blend-mode: overlay;
 `;
 
 export const SettingIcon = styled(SettingSvg)`

@@ -1,10 +1,13 @@
-import { Outlet } from 'react-router-dom';
+import { Outlet, useLocation } from 'react-router-dom';
 import { ROUTES } from '../../constants/routes';
 import * as S from './Layout.styles';
 
 const Layout = () => {
-  const highlightPage = [ROUTES.GUEST.SPACE_HOME];
-  const isHighlightPage = highlightPage.includes(location.pathname);
+  const { pathname } = useLocation();
+
+  const highlightPages: string[] = [ROUTES.GUEST.SPACE_HOME];
+  const isHighlightPage = highlightPages.includes(pathname);
+
   return (
     <S.Container $isHighlightPage={isHighlightPage}>
       <Outlet />
