@@ -3,5 +3,6 @@ export const ROUTES = {
   GUEST: {
     SPACE_HOME: '/guest/space-home',
     IMAGE_UPLOAD: '/guest/image-upload',
+    SHARE: '/guest/share',
   },
 } as const;
