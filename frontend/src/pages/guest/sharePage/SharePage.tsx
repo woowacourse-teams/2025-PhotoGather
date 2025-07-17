@@ -1,4 +1,5 @@
 import { ReactComponent as QrIcon } from '@assets/icons/qrCode.svg';
+import { useNavigate } from 'react-router-dom';
 import Button from '../../../components/@common/buttons/button/Button';
 import CircularLabelButton from '../../../components/@common/buttons/circularLabelButton/CircularLabelButton';
 import CopyButton from '../../../components/@common/buttons/copyButton/CopyButton';
@@ -7,6 +8,11 @@ import InfoBox from '../../../components/@common/infoBox/InfoBox';
 import * as S from './SharePage.styles';
 
 const SharePage = () => {
+  const navigate = useNavigate();
+  const handleSpaceHomeButton = () => {
+    navigate('/guest/space-home');
+  };
+
   return (
     <S.Wrapper>
       <S.TopContainer>
@@ -29,12 +35,7 @@ const SharePage = () => {
           <CircularLabelButton icon={<p>카톡</p>} label="카카오톡" />
         </S.CircularLabelButtonContainer>
       </S.TopContainer>
-      <Button
-        text="저장했어요"
-        onClick={() => {
-          alert('클릭');
-        }}
-      />
+      <Button text="저장했어요" onClick={handleSpaceHomeButton} />
     </S.Wrapper>
   );
 };
