@@ -1,7 +1,14 @@
 export const ROUTES = {
   MAIN: '/',
+  MANAGER: {
+    SPACE_HOME: '/manager/space-home',
+  },
   GUEST: {
-    SPACE_HOME: '/guest/space-home',
     IMAGE_UPLOAD: '/guest/image-upload',
   },
 } as const;
+
+export const HIGHLIGHT_PAGES: readonly string[] = [
+  ROUTES.MANAGER.SPACE_HOME,
+  ROUTES.GUEST.IMAGE_UPLOAD,
+];
