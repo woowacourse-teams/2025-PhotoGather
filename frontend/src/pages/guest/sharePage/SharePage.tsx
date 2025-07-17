@@ -10,6 +10,8 @@ import { INFORMATION } from '../../../constants/messages';
 import * as S from './SharePage.styles';
 
 const SharePage = () => {
+  const KAKAOTALK_COLOR = '#ffeb00'; // 카카오톡 고정색깔
+
   const handleSpaceHomeButton = () => {
     console.log('클릭');
   };
@@ -36,7 +38,7 @@ const SharePage = () => {
           <CircularLabelButton
             icon={<KakaoTalkIcon />}
             label="카카오톡"
-            style={{ backgroundColor: '#ffeb00' }} // 카카오톡 고정색깔
+            style={{ backgroundColor: KAKAOTALK_COLOR }}
           />
         </S.CircularLabelButtonContainer>
       </S.TopContainer>
