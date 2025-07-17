@@ -18,6 +18,7 @@ import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 @RequiredArgsConstructor
 public class AwsS3Service {
 
+    private static final String CONTENTS_DIRECTORY = "contents";
     private final S3Client s3Client;
     private final S3Properties s3Properties;
 
@@ -33,6 +34,7 @@ public class AwsS3Service {
     private String generateFilePath(String spaceCode, MultipartFile file) {
         String extension = StringUtils.getFilenameExtension(file.getOriginalFilename());
         String uuid = UUID.randomUUID().toString();
-        return String.format("/%s/%s/%s.%s", s3Properties.getRootDirectory(), spaceCode, uuid, extension);
+        return String.format("/%s/%s/%s/%s.%s", s3Properties.getRootDirectory(), CONTENTS_DIRECTORY, spaceCode, uuid,
+            extension);
     }
 }
