@@ -16,7 +16,6 @@ const ImageGrid = ({ imageUrlList, rowImageAmount }: ImageGridProps) => {
           // biome-ignore lint/suspicious/noArrayIndexKey: using index as key is acceptable here
           key={i}
           src={url}
-          size={200}
         />
       ))}
     </S.Wrapper>

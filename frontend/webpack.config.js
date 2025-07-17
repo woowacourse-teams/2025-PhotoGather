@@ -37,6 +37,13 @@ module.exports = {
         },
       },
       {
+        test: /\.(png|jpe?g|gif)$/i,
+        type: 'asset/resource',
+        generator: {
+          filename: 'static/images/[name].[hash][ext]',
+        },
+      },
+      {
         test: /\.svg$/i,
         issuer: /\.[jt]sx?$/,
         use: [

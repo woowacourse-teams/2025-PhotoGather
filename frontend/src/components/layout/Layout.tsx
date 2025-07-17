@@ -1,23 +1,18 @@
-import styled from '@emotion/styled';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useLocation } from 'react-router-dom';
+import { ROUTES } from '../../constants/routes';
+import * as S from './Layout.styles';
 
 const Layout = () => {
+  const { pathname } = useLocation();
+
+  const highlightPages: string[] = [ROUTES.GUEST.SPACE_HOME];
+  const isHighlightPage = highlightPages.includes(pathname);
+
   return (
-    <Container>
+    <S.Container $isHighlightPage={isHighlightPage}>
       <Outlet />
-    </Container>
+    </S.Container>
   );
 };
-
-const Container = styled.div`
-    margin: 0 auto;
-    max-width: 400px;
-    width: 100%;
-    padding: 32px 16px;
-    padding-bottom: 16px;
-    border: 1px solid #000;
-    height: 100dvh;
-    box-sizing: border-box;
-`;
 
 export default Layout;

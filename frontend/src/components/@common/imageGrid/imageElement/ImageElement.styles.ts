@@ -10,11 +10,11 @@ const glow = keyframes`
   }
 `;
 
-export const Wrapper = styled.div<{ $size: number; $ratio: number }>`
-  width: ${({ $size }) => $size}px;
+export const Wrapper = styled.div<{ $ratio: number }>`
   aspect-ratio: ${({ $ratio }) => $ratio};
   background-size: cover;
   overflow: hidden;
+  background-color: ${({ theme }) => theme.colors.white};
 `;
 
 export const Image = styled.img`
