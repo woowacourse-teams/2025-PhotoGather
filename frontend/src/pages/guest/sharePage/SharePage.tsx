@@ -9,7 +9,7 @@ import * as S from './SharePage.styles';
 const SharePage = () => {
   return (
     <S.Wrapper>
-      <S.InfoContainer>
+      <S.TopContainer>
         <S.Image src="" alt="링크 이미지" />
         <HighlightText
           text="스페이스 링크를 공유해 보세요"
@@ -21,17 +21,14 @@ const SharePage = () => {
             스페이스 링크를 확인할 수 있어요`}
           highlightText="스페이스 링크"
         />
-      </S.InfoContainer>
 
-      <S.ShareContainer>
         <CopyButton label="친구에게 공유하기" copyText="예시" />
 
         <S.CircularLabelButtonContainer>
           <CircularLabelButton icon={<QrIcon />} label="QR생성" />
           <CircularLabelButton icon={<p>카톡</p>} label="카카오톡" />
         </S.CircularLabelButtonContainer>
-      </S.ShareContainer>
-
+      </S.TopContainer>
       <Button
         text="저장했어요"
         onClick={() => {

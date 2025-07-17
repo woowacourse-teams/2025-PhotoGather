@@ -7,14 +7,7 @@ export const Wrapper = styled.div`
   justify-content: space-between;
 `;
 
-export const InfoContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  gap: 32px;
-`;
-
-export const ShareContainer = styled.div`
+export const TopContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
