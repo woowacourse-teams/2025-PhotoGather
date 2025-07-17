@@ -40,7 +40,7 @@ const SharePage = () => {
           />
         </S.CircularLabelButtonContainer>
       </S.TopContainer>
-      <Button text="저장했어요" onClick={handleSpaceHomeButton} />
+      <Button text="나의 스페이스로 이동" onClick={handleSpaceHomeButton} />
     </S.Wrapper>
   );
 };
