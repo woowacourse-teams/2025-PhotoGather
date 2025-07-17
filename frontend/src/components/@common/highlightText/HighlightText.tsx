@@ -36,8 +36,7 @@ const HighlightText = ({
       {tokens.map((token, index) =>
         highlightTextArray.includes(token) ? (
           <S.HighLight
-            // biome-ignore lint/suspicious/noArrayIndexKey: index가 고유 키가 되어야 함
-            key={index}
+            key={token + String(index)}
             $highlightColorStyle={highlightColorStyle}
           >
             {token}
