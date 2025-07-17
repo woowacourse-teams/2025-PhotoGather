@@ -4,6 +4,7 @@ import SUITVariable from '../@assets/fonts/SUIT-Variable.woff2';
 export const global = css`
   * {
     box-sizing: border-box;
+    font-family: inherit;
   }
   @font-face {
     font-family: 'SUIT';
