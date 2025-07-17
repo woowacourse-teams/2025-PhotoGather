@@ -19,8 +19,8 @@ public class SwaggerConfig {
 
     private Info apiInfo() {
         return new Info()
-                .title("API Test")
-                .description("Let's practice Swagger UI")
+                .title("Forgather API")
+                .description("당신을 위한 순간, 흩어지지 않게. Forgather")
                 .version("1.0.0");
     }
 }
