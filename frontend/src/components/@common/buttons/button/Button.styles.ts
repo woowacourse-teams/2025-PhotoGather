@@ -1,6 +1,6 @@
 import type { Theme } from '@emotion/react';
 import styled from '@emotion/styled';
-import type { ButtonVariant } from '../../../../types/buttonTypes';
+import type { ButtonVariant } from '../../../../types/button.type';
 
 const buttonStyles = {
   primary: (theme: Theme) => `

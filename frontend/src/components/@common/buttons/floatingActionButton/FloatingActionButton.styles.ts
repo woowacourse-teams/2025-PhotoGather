@@ -1,7 +1,7 @@
 import type { Theme } from '@emotion/react';
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
-import type { FloatingActionButtonVariant } from '../../../../types/buttonTypes';
+import type { FloatingActionButtonVariant } from '../../../../types/button.type';
 
 const color = (theme: Theme) => ({
   default: css`

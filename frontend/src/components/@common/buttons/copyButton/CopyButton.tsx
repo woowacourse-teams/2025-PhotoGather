@@ -1,5 +1,5 @@
 import { ReactComponent as CopyIcon } from '@assets/icons/clipboard.svg';
-import type { CopyButtonVariant } from '../../../../types/buttonTypes';
+import type { CopyButtonVariant } from '../../../../types/button.type';
 import { copyLinkToClipboard } from '../../../../utils/copyLinkToClipboard';
 import * as S from './CopyButton.styles';
 

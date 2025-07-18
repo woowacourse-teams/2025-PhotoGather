@@ -1,4 +1,4 @@
-import type { SpaceContent } from './space-content.type';
+import type { SpaceContent } from './spaceContent.type';
 
 export interface Space {
   id: number;
