@@ -10,15 +10,17 @@ interface ImageGridProps {
 
 const ImageGrid = ({ imageUrlList, rowImageAmount }: ImageGridProps) => {
   return (
-    <S.Wrapper $rowImageAmount={rowImageAmount}>
-      {imageUrlList.map((url, index) => (
-        <ImageElement
-          // biome-ignore lint/suspicious/noArrayIndexKey: using index as key is acceptable here
-          key={index}
-          src={url}
-        />
-      ))}
-    </S.Wrapper>
+    <S.BorderSection>
+      <S.Wrapper $rowImageAmount={rowImageAmount}>
+        {imageUrlList.map((url, index) => (
+          <ImageElement
+            // biome-ignore lint/suspicious/noArrayIndexKey: using index as key is acceptable here
+            key={index}
+            src={url}
+          />
+        ))}
+      </S.Wrapper>
+    </S.BorderSection>
   );
 };
 

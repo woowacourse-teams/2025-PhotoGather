@@ -11,8 +11,14 @@ export const Wrapper = styled.div<{ $rowImageAmount: number }>`
   border-top-left-radius: 12px;
   border-top-right-radius: 12px;
   overflow: hidden;
-  gap: 2px;
+  gap: 1px;
   background-color: ${({ theme }) => theme.colors.gray06};
-  padding: 1px;
   border-radius: 12px;
+`;
+
+export const BorderSection = styled.div`
+  background-color: ${({ theme }) => theme.colors.gray06};
+  width: 100%;
+  padding: 1px;
+  border-radius: 13px;
 `;
