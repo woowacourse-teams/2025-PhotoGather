@@ -1,24 +1,21 @@
 import FloatingActionButton from '../../../components/@common/buttons/floatingActionButton/FloatingActionButton';
 import HighlightText from '../../../components/@common/highlightText/HighlightText';
 import ImageGrid from '../../../components/@common/imageGrid/ImageGrid';
+import SpaceHeader from '../../../components/spaceHeader/SpaceHeader';
 import UploadBox from '../../../components/uploadBox/UploadBox';
 import * as S from './ImageUploadPage.styles';
 import { mockImageList, mockSpaceData } from './mockSpaceData';
 
 const ImageUploadPage = () => {
   const hasImages = Array.isArray(mockImageList) && mockImageList.length > 0;
-  const uploadBoxText = hasImages ? '이어 올리기' : '함께한 순간을 올려주세요';
+  const uploadBoxText = '함께한 순간을 올려주세요';
 
   return (
     <S.Wrapper $hasImages={hasImages}>
-      <S.TitleContainer>
-        <S.Title>{mockSpaceData.name}</S.Title>
-        {!hasImages && (
-          <S.Description>
-            {'끌어다 놓거나,\n클릭해서 불러올 수 있어요'}
-          </S.Description>
-        )}
-      </S.TitleContainer>
+      <SpaceHeader
+        title={`${mockSpaceData.name}`}
+        description="클릭해서 불러올 수 있어요"
+      />
 
       <S.UploadContainer $hasImages={hasImages}>
         <UploadBox text={uploadBoxText} />
