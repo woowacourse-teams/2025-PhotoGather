@@ -13,7 +13,6 @@ export const Wrapper = styled.div<{ $rowImageAmount: number }>`
   overflow: hidden;
   gap: 1px;
   background-color: ${({ theme }) => theme.colors.gray06};
-  border-radius: 12px;
 `;
 
 export const BorderSection = styled.div`

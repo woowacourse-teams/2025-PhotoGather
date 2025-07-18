@@ -15,7 +15,9 @@ const SpaceHome = () => {
         <SpaceHeader
           title={mockSpaceData.name}
           description={mockSpaceData.startDate}
-          icon={<SettingSvg fill={theme.colors.white} />}
+          icon={
+            <SettingSvg fill={theme.colors.white} width="24px" height="24px" />
+          }
         />
       </S.InfoContainer>
 
