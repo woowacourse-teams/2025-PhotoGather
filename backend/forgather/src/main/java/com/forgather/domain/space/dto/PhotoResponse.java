@@ -11,7 +11,7 @@ public record PhotoResponse(
     @Schema(description = "사진 ID", example = "1")
     Long id,
 
-    @Schema(description = "사진 경로", example = "/photos/space123/photo1.jpg")
+    @Schema(description = "사진 경로", example = "contents/fqvtn394y0/photo1.jpg")
     String path,
 
     @Schema(description = "원본 사진 이름", example = "photo1.jpg")
