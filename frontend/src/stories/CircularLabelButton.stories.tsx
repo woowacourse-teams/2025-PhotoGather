@@ -11,7 +11,7 @@ const meta: Meta<typeof CircularLabelButton> = {
     icon: {
       control: false,
     },
-    text: {
+    label: {
       control: 'text',
     },
   },
@@ -23,6 +23,6 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   args: {
     // icon: <Icon />,
-    text: 'QR 코드',
+    label: 'QR 코드',
   },
 };

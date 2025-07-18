@@ -64,6 +64,7 @@ const buttonStyles = {
 export const StyledButton = styled.button<{
   $variant: ButtonVariant;
 }>`
+  width: 100%;
   display: flex;
   padding: 12px 20px;
   justify-content: center;
