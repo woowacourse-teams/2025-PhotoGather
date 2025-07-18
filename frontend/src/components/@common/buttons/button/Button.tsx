@@ -1,7 +1,7 @@
-import type { ButtonVariant } from '../../../../types/buttonTypes';
+import type { ButtonVariant } from '../../../../types/button.type';
 import * as S from './Button.styles';
 
-interface ButtonProps {
+interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   /** 버튼의 variant */
   variant?: ButtonVariant;
   /** 버튼 내부 텍스트 */
@@ -17,9 +17,15 @@ const Button = ({
   text,
   onClick,
   disabled = false,
+  ...buttonProps
 }: ButtonProps) => {
   return (
-    <S.StyledButton $variant={variant} onClick={onClick} disabled={disabled}>
+    <S.StyledButton
+      {...buttonProps}
+      $variant={variant}
+      onClick={onClick}
+      disabled={disabled}
+    >
       {text}
     </S.StyledButton>
   );

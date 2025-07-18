@@ -1,6 +1,6 @@
 import type { Theme } from '@emotion/react';
 import styled from '@emotion/styled';
-import type { ButtonVariant } from '../../../../types/buttonTypes';
+import type { ButtonVariant } from '../../../../types/button.type';
 
 const buttonStyles = {
   primary: (theme: Theme) => `
@@ -64,6 +64,7 @@ const buttonStyles = {
 export const StyledButton = styled.button<{
   $variant: ButtonVariant;
 }>`
+  width: 100%;
   display: flex;
   padding: 12px 20px;
   justify-content: center;

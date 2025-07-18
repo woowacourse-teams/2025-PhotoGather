@@ -1,7 +1,7 @@
 import type { Theme } from '@emotion/react';
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
-import type { CopyButtonVariant } from '../../../../types/buttonTypes';
+import type { CopyButtonVariant } from '../../../../types/button.type';
 
 const color = (theme: Theme) => ({
   filled: css`
@@ -30,7 +30,7 @@ export const Wrapper = styled.button<{ $variant: CopyButtonVariant }>`
   justify-content: center;
   gap: 8px;
   padding: 12px 20px;
-  border-radius: 50px;
+  border-radius: 12px;
   width: 100%;
 
   ${({ theme, $variant }) => color(theme)[$variant]}
