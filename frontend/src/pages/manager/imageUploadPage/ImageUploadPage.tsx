@@ -7,7 +7,7 @@ import { mockImageList, mockSpaceData } from './mockSpaceData';
 
 const ImageUploadPage = () => {
   const hasImages = Array.isArray(mockImageList) && mockImageList.length > 0;
-  const uploadBoxText = hasImages ? '이어 올리기' : '함게한 순간을 올려주세요';
+  const uploadBoxText = hasImages ? '이어 올리기' : '함께한 순간을 올려주세요';
 
   return (
     <S.Wrapper $hasImages={hasImages}>
