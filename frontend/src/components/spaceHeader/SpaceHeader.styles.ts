@@ -19,7 +19,7 @@ export const Description = styled.p`
 `;
 
 export const Icon = styled.button`
-  display: flex;
+  display: inline-flex;
   justify-content: center;
   align-items: center;
 `;

@@ -27,6 +27,9 @@ export const global = css`
     cursor: pointer;
     border: none;
     background: none;
+    padding: 0;
+    box-shadow: none;
+    border-radius: 0;
     &:disabled {
       cursor: default;
     }
