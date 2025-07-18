@@ -1,4 +1,4 @@
-import type { ButtonVariant } from '../../../../types/buttonTypes';
+import type { ButtonVariant } from '../../../../types/button.type';
 import * as S from './Button.styles';
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {

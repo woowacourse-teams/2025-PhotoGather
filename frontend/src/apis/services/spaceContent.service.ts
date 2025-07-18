@@ -1,7 +1,7 @@
 import type {
   CreateSpaceContentInput,
   SpaceContent,
-} from '../../types/space-content.type';
+} from '../../types/spaceContent.type';
 import { http } from '../http';
 
 export const spaceContentService = {
