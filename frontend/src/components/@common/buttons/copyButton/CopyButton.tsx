@@ -3,7 +3,8 @@ import type { CopyButtonVariant } from '../../../../types/button.type';
 import { copyLinkToClipboard } from '../../../../utils/copyLinkToClipboard';
 import * as S from './CopyButton.styles';
 
-interface CopyButtonProps {
+interface CopyButtonProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   /** 복사 버튼 라벨 */
   label: string;
   /** 복사할 문자열 */
@@ -18,9 +19,14 @@ const CopyButton = ({
   copyText,
   variant = 'filled',
   showIcon = true,
+  ...buttonProps
 }: CopyButtonProps) => {
   return (
-    <S.Wrapper $variant={variant} onClick={() => copyLinkToClipboard(copyText)}>
+    <S.Wrapper
+      {...buttonProps}
+      $variant={variant}
+      onClick={() => copyLinkToClipboard(copyText)}
+    >
       <S.Container>
         {label}
         {showIcon && <CopyIcon />}
