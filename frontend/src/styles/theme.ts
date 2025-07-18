@@ -19,7 +19,7 @@ export const theme = {
     error: '#FF5A5A',
     lightError: '#FFB3B3',
     gradient: {
-      start: '#361C7D',
+      start: '#5833BC',
       end: '#120929',
     },
   },

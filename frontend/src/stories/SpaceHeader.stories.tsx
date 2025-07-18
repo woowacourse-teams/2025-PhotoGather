@@ -1,3 +1,4 @@
+import { ReactComponent as SaveIcon } from '@assets/icons/download.svg';
 import type { Meta, StoryObj } from '@storybook/react-webpack5';
 import SpaceHeader from '../components/spaceHeader/SpaceHeader';
 
@@ -9,4 +10,10 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {};
+export const Default: Story = {
+  args: {
+    title: '제목임',
+    description: '설명임',
+    icon: <SaveIcon />,
+  },
+};
