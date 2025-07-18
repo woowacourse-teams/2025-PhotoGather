@@ -1,8 +1,9 @@
 import * as S from './FloatingActionButton.styles';
 
-interface FloatingActionButtonProps {
+interface FloatingActionButtonProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   /** FAB 버튼 라벨 */
-  label: string;
+  label: string | React.ReactNode;
   /** FAB 버튼 아이콘*/
   icon?: React.ReactNode;
   /** 버튼 클릭했을 때 실행할 함수*/
@@ -16,9 +17,11 @@ const FloatingActionButton = ({
   onClick,
   icon,
   disabled = false,
+  ...buttonProps
 }: FloatingActionButtonProps) => {
   return (
     <S.Wrapper
+      {...buttonProps}
       $variant={disabled ? 'disabled' : 'default'}
       onClick={onClick}
       aria-disabled={disabled}
