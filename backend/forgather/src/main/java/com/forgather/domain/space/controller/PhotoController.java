@@ -30,7 +30,8 @@ public class PhotoController {
 
     private final PhotoService photoService;
 
-    @PostMapping
+    @PostMapping(consumes = {"multipart/form-data"})
+    @Operation(summary = "사진 일괄 업로드", description = "사진을 전부 업로드합니다.")
     public ResponseEntity<Void> saveAll(
         @PathVariable(name = "spaceCode") String spaceCode,
         @RequestPart(name = "files") List<MultipartFile> files
