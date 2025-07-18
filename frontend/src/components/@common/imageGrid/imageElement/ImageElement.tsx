@@ -11,6 +11,8 @@ interface ImageElementProps {
   onImageClick?: () => void;
   /** 사진의 alt 태그 */
   alt?: string;
+  /** 사진 하나의 너비 */
+  width?: string;
 }
 
 const handleError = createImageErrorHandler(defaultImage);
@@ -20,9 +22,10 @@ const ImageElement = ({
   ratio = 1,
   onImageClick,
   alt = '스페이스 이미지',
+  width = '100%',
 }: ImageElementProps) => {
   return (
-    <S.Wrapper $ratio={ratio} onClick={onImageClick}>
+    <S.Wrapper $ratio={ratio} onClick={onImageClick} $width={width}>
       <S.Image src={src} alt={alt} onError={handleError} />
     </S.Wrapper>
   );

@@ -1,4 +1,7 @@
 import image1 from '../../../@assets/images/example_image.png';
+import image2 from '../../../@assets/images/test.jpg';
+import image3 from '../../../@assets/images/test2.jpg';
+import image4 from '../../../@assets/images/test3.jpeg';
 
 export const mockSpaceData = {
   name: '8월 버스킹',
@@ -7,4 +10,53 @@ export const mockSpaceData = {
   photosCount: 6,
 };
 
-export const mockImageList = Array.from({ length: 10 }, () => image1);
+export const mockImageList = [
+  image1,
+  image2,
+  image3,
+  image4,
+  image1,
+  image2,
+  image3,
+  image4,
+  image1,
+  image2,
+  image3,
+  image4,
+  image1,
+  image2,
+  image3,
+  image4,
+  image1,
+  image2,
+  image3,
+  image4,
+  image1,
+  image2,
+  image3,
+  image4,
+  image1,
+  image2,
+  image3,
+  image4,
+  image1,
+  image2,
+  image3,
+  image4,
+  image1,
+  image2,
+  image3,
+  image4,
+  image1,
+  image2,
+  image3,
+  image4,
+  image1,
+  image2,
+  image3,
+  image4,
+  image1,
+  image2,
+  image3,
+  image4,
+];

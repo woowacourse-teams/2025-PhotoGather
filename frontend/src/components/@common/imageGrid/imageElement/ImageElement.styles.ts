@@ -10,8 +10,9 @@ const glow = keyframes`
   }
 `;
 
-export const Wrapper = styled.div<{ $ratio: number }>`
+export const Wrapper = styled.div<{ $ratio: number; $width: string }>`
   aspect-ratio: ${({ $ratio }) => $ratio};
+  width: ${({ $width }) => $width};
   background-size: cover;
   overflow: hidden;
   background-color: ${({ theme }) => theme.colors.white};
@@ -20,6 +21,7 @@ export const Wrapper = styled.div<{ $ratio: number }>`
 export const Image = styled.img`
   width: 100%;
   height: 100%;
+  display: block;
   object-fit: cover;
   background: linear-gradient(
     150deg,
@@ -33,4 +35,5 @@ export const Image = styled.img`
   -khtml-user-drag: none;
   -moz-user-drag: none;
   -o-user-drag: none;
+  overflow: hidden;
 `;
