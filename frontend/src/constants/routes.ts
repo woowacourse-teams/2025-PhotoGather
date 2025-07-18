@@ -5,6 +5,7 @@ export const ROUTES = {
   },
   GUEST: {
     IMAGE_UPLOAD: '/guest/image-upload',
+    SHARE: '/guest/share',
   },
 } as const;
 
