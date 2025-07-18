@@ -18,6 +18,10 @@ export const theme = {
     darkAccent: '#BAD84F',
     error: '#FF5A5A',
     lightError: '#FFB3B3',
+    gradient: {
+      start: '#361C7D',
+      end: '#120929',
+    },
   },
   typography: {
     header01: {

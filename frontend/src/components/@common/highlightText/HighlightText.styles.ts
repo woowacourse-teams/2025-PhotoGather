@@ -19,6 +19,5 @@ export const Text = styled.span<{ $textColorStyle: keyof Theme['colors'] }>`
 export const HighLight = styled.span<{
   $highlightColorStyle: keyof Theme['colors'];
 }>`
-  color: ${({ theme, $highlightColorStyle }) =>
-    theme.colors[$highlightColorStyle]};
+  color: ${({ theme, $highlightColorStyle }) => theme.colors[$highlightColorStyle]};
 `;
