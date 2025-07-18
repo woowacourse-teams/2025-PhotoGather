@@ -28,10 +28,6 @@ const router = createBrowserRouter([
             element: <ImageUploadPage />,
           },
           {
-            path: 'space-home',
-            element: <SpaceHome />,
-          },
-          {
             path: 'share',
             element: <SharePage />,
           },
