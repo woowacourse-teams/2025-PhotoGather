@@ -79,6 +79,6 @@ export const theme = {
     floatingActionButton: 4,
   },
   layout: {
-    ImageGridWidth: '366px',
+    width: '400px',
   },
 };

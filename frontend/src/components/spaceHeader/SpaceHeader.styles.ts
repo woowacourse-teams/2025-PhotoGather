@@ -15,7 +15,7 @@ export const Title = styled.p`
 
 export const Description = styled.p`
   ${({ theme }) => ({ ...theme.typography.bodyLarge })};
-  color: ${({ theme }) => theme.colors.gray02};
+  color: ${({ theme }) => theme.colors.white};
 `;
 
 export const Icon = styled.button`

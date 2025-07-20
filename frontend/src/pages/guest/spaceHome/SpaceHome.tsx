@@ -7,7 +7,6 @@ import { theme } from '../../../styles/theme';
 import { mockImageList, mockSpaceData } from './mockSpaceData';
 import * as S from './SpaceHome.styles';
 
-// TODO : 배경색에 따른 글자색 변경
 const SpaceHome = () => {
   return (
     <S.Wrapper>
@@ -26,6 +25,8 @@ const SpaceHome = () => {
       <S.ButtonContainer>
         <FloatingActionButton label="모두 저장하기" icon={<SaveIcon />} />
       </S.ButtonContainer>
+
+      <S.ScrollableArea />
     </S.Wrapper>
   );
 };
