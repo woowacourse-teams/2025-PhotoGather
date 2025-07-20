@@ -4,8 +4,7 @@ export const Container = styled.div<{ $isHighlightPage: boolean }>`
   margin: 0 auto;
   max-width: 400px;
   width: 100%;
-  //TODO: theme으로 추출하는 것은?
-  padding: 32px 16px;
+  padding: ${({ theme }) => theme.layout.padding.topBottom} ${({ theme }) => theme.layout.padding.leftRight};
   border: 1px solid #000;
   min-height: 100dvh;
   overflow: hidden;

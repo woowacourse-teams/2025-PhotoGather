@@ -4,8 +4,8 @@ export const Wrapper = styled.div<{ $hasImages: boolean }>`
   ${({ theme }) => theme.typography.header03}
   width: 100%;
   height: 100%;
-  //TODO: height 고정 값 때문에 의도적으로 top,bottom padding을 빼준 값 사용
-  min-height: calc(100dvh - 64px);
+  min-height: ${({ theme }) =>
+    `calc(100dvh - ${parseInt(theme.layout.padding.topBottom) * 2}px)`};
   border-radius: 12px;
   display: flex;
   flex-direction: column;

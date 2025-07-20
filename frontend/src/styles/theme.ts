@@ -80,5 +80,9 @@ export const theme = {
   },
   layout: {
     ImageGridWidth: '366px',
+    padding: {
+      topBottom: '32px',
+      leftRight: '16px',
+    },
   },
 };
