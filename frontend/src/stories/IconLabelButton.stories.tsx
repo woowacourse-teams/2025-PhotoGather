@@ -1,3 +1,4 @@
+import { ReactComponent as LinkIcon } from '@assets/icons/link.svg';
 import type { Meta, StoryObj } from '@storybook/react-webpack5';
 import IconLabelButton from '../components/@common/buttons/iconLabelButton/IconLabelButton';
 
@@ -22,7 +23,13 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
-    // icon: <Icon />,
-    label: 'QR 코드',
+    icon: <LinkIcon />,
+    label: '링크 복사',
+  },
+};
+
+export const NoLabel: Story = {
+  args: {
+    icon: <LinkIcon />,
   },
 };

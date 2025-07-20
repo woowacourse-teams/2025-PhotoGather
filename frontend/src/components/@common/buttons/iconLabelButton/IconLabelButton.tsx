@@ -5,7 +5,7 @@ interface IconLabelButtonProps
   /** 아이콘 React Node */
   icon: React.ReactNode;
   /** 아이콘 텍스트 */
-  label: string;
+  label?: string;
 }
 
 const IconLabelButton = ({
