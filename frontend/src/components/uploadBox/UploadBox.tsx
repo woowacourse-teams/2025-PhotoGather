@@ -16,7 +16,7 @@ const UploadBox = ({ text, iconSize = 100, onChange }: UploadBoxProps) => {
         <S.Icon iconSize={iconSize} />
         {text}
       </S.Container>
-      <input id="file-input" type="file" hidden onChange={onChange} />
+      <input id="file-input" type="file" multiple hidden onChange={onChange} />
     </S.Wrapper>
   );
 };
