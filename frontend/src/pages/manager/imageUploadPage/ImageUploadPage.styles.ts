@@ -33,7 +33,6 @@ export const UploadContainer = styled.div<{ $hasImages: boolean }>`
   flex: ${({ $hasImages }) => ($hasImages ? 0 : 1)};
   height: 100%;
   display: flex;
-  margin-bottom: 16px;
 `;
 
 export const ButtonContainer = styled.div`
