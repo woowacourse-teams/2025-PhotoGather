@@ -18,7 +18,7 @@ const ImageUploadPage = () => {
       />
 
       <S.UploadContainer $hasImages={hasImages}>
-        <UploadBox text={uploadBoxText} />
+        <UploadBox text={uploadBoxText} iconSize={hasImages ? 60 : 100} />
       </S.UploadContainer>
 
       {hasImages && (
