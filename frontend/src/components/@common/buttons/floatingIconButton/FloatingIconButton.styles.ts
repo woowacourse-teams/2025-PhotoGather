@@ -7,7 +7,6 @@ export const Wrapper = styled.button`
     align-items: center;
     width: 30px;
     height: 30px;
-    flex-shrink: 0;
     
     border-radius: 50%;
     border: 1px solid ${({ theme }) => theme.colors.gray03};
