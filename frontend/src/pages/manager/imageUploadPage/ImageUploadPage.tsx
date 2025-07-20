@@ -14,11 +14,18 @@ const ImageUploadPage = () => {
   const uploadBoxText = '함께한 순간을 올려주세요';
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    //TODO: 파일 업로드 최대 용량 제한 | 업로드 최대 개수 제한?
     const files = Array.from(e.target.files || []);
-    setImageFiles([...imageFiles, ...files]);
+    setImageFiles((prev) => [...prev, ...files]);
 
     const urls = files.map((file) => URL.createObjectURL(file));
-    setPreviewUrls([...previewUrls, ...urls]);
+    setPreviewUrls((prev) => [...prev, ...urls]);
+  };
+
+  const clearImageFiles = () => {
+    previewUrls.forEach((url) => URL.revokeObjectURL(url));
+    setImageFiles([]);
+    setPreviewUrls([]);
   };
 
   return (
@@ -49,6 +56,7 @@ const ImageUploadPage = () => {
                   highlightTextArray={[`사진 ${previewUrls.length}장`]}
                 />
               }
+              onClick={clearImageFiles}
             />
           </S.ButtonContainer>
         </>
