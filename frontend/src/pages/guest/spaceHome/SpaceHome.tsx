@@ -3,11 +3,16 @@ import { ReactComponent as SettingSvg } from '../../../@assets/icons/setting.svg
 import FloatingActionButton from '../../../components/@common/buttons/floatingActionButton/FloatingActionButton';
 import ImageGrid from '../../../components/@common/imageGrid/ImageGrid';
 import SpaceHeader from '../../../components/spaceHeader/SpaceHeader';
+import useIntersectionObserver from '../../../hooks/useIntersectionObserver';
 import { theme } from '../../../styles/theme';
 import { mockImageList, mockSpaceData } from './mockSpaceData';
 import * as S from './SpaceHome.styles';
 
 const SpaceHome = () => {
+  const { targetRef, isIntersecting } = useIntersectionObserver({
+    threshold: 0.5,
+  });
+
   return (
     <S.Wrapper>
       <S.InfoContainer>
@@ -26,7 +31,9 @@ const SpaceHome = () => {
         <FloatingActionButton label="모두 저장하기" icon={<SaveIcon />} />
       </S.ButtonContainer>
 
-      <S.ScrollableArea />
+      <S.IntersectionArea ref={targetRef} />
+
+      {!isIntersecting && <S.ScrollableArea />}
     </S.Wrapper>
   );
 };

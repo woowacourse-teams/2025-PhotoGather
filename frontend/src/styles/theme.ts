@@ -80,5 +80,9 @@ export const theme = {
   },
   layout: {
     width: '400px',
+    padding: {
+      topBottom: '32px',
+      leftRight: '16px',
+    },
   },
 };
