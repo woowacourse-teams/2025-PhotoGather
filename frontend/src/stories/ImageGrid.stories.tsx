@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-webpack5';
 import ImageGrid from '../components/@common/imageGrid/ImageGrid';
 
 const meta: Meta<typeof ImageGrid> = {
-  title: 'Component/ImageGrid',
+  title: 'Components/ImageGrid',
   component: ImageGrid,
 };
 export default meta;
