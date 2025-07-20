@@ -1,6 +1,6 @@
-import * as S from './CircularLabelButton.styles';
+import * as S from './IconLabelButton.styles';
 
-interface CircularLabelButtonProps
+interface IconLabelButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   /** 아이콘 React Node */
   icon: React.ReactNode;
@@ -8,11 +8,11 @@ interface CircularLabelButtonProps
   label: string;
 }
 
-const CircularLabelButton = ({
+const IconLabelButton = ({
   icon,
   label,
   ...buttonProps
-}: CircularLabelButtonProps) => {
+}: IconLabelButtonProps) => {
   return (
     <S.Wrapper>
       <S.IconContainer {...buttonProps}>{icon}</S.IconContainer>
@@ -21,4 +21,4 @@ const CircularLabelButton = ({
   );
 };
 
-export default CircularLabelButton;
+export default IconLabelButton;

@@ -20,7 +20,7 @@ export const Image = styled.img`
   margin: 0 auto;
 `;
 
-export const CircularLabelButtonContainer = styled.div`
+export const IconLabelButtonContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;

@@ -2,8 +2,8 @@ import { ReactComponent as KakaoTalkIcon } from '@assets/icons/kakaotalk.svg';
 import { ReactComponent as QrIcon } from '@assets/icons/qrCode.svg';
 import LinkImage from '@assets/images/link.png';
 import Button from '../../../components/@common/buttons/button/Button';
-import CircularLabelButton from '../../../components/@common/buttons/circularLabelButton/CircularLabelButton';
 import CopyButton from '../../../components/@common/buttons/copyButton/CopyButton';
+import IconLabelButton from '../../../components/@common/buttons/iconLabelButton/IconLabelButton';
 import HighlightText from '../../../components/@common/highlightText/HighlightText';
 import InfoBox from '../../../components/@common/infoBox/InfoBox';
 import { INFORMATION } from '../../../constants/messages';
@@ -33,14 +33,14 @@ const SharePage = () => {
 
         <CopyButton label="친구에게 공유하기" copyText="예시" />
 
-        <S.CircularLabelButtonContainer>
-          <CircularLabelButton icon={<QrIcon />} label="QR생성" />
-          <CircularLabelButton
+        <S.IconLabelButtonContainer>
+          <IconLabelButton icon={<QrIcon />} label="QR생성" />
+          <IconLabelButton
             icon={<KakaoTalkIcon />}
             label="카카오톡"
             style={{ backgroundColor: KAKAOTALK_COLOR }}
           />
-        </S.CircularLabelButtonContainer>
+        </S.IconLabelButtonContainer>
       </S.TopContainer>
       <Button text="나의 스페이스로 이동" onClick={handleSpaceHomeButton} />
     </S.Wrapper>
