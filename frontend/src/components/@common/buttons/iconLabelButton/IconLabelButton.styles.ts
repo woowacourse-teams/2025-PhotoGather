@@ -18,7 +18,7 @@ export const IconContainer = styled.button`
   justify-content: center;
   align-items: center;
   gap: 10px;
-  border-radius: 50%;
+  border-radius: 12px;
   border: 1px solid ${({ theme }) => theme.colors.gray02};
   background-color: ${({ theme }) => theme.colors.white};
 `;
