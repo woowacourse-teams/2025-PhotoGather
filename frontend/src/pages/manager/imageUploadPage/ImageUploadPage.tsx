@@ -17,6 +17,13 @@ const ImageUploadPage = () => {
     //TODO: 파일 업로드 최대 용량 제한 | 업로드 최대 개수 제한?
     const files = Array.from(e.target.files || []);
     setImageFiles((prev) => [...prev, ...files]);
+    const urls = files.map((file) => URL.createObjectURL(file));
+    setPreviewUrls((prev) => [...prev, ...urls]);
+  };
+
+  const handleImageDrop = (e: React.DragEvent<HTMLLabelElement>) => {
+    const files = Array.from(e.dataTransfer.files || []);
+    setImageFiles((prev) => [...prev, ...files]);
 
     const urls = files.map((file) => URL.createObjectURL(file));
     setPreviewUrls((prev) => [...prev, ...urls]);
@@ -40,6 +47,7 @@ const ImageUploadPage = () => {
           text={uploadBoxText}
           iconSize={hasImages ? 60 : 100}
           onChange={handleImageUpload}
+          onDrop={handleImageDrop}
         />
       </S.UploadContainer>
 
