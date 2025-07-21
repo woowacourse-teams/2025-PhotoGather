@@ -1,5 +1,7 @@
 package com.forgather.domain.space.service;
 
+import java.io.File;
+import java.io.IOException;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,6 +22,7 @@ public class PhotoService {
 
     private final PhotoRepository photoRepository;
     private final SpaceRepository spaceRepository;
+    private final AwsS3Cloud awsS3Cloud;
 
     public PhotoResponse get(String spaceCode, Long photoId) {
         Space space = spaceRepository.getBySpaceCode(spaceCode);
@@ -32,5 +35,10 @@ public class PhotoService {
         Space space = spaceRepository.getBySpaceCode(spaceCode);
         Page<Photo> photos = photoRepository.findAllBySpace(space, pageable);
         return PhotosResponse.from(photos);
+    }
+
+    public File downloadAll(String spaceCode) throws IOException {
+        Space space = spaceRepository.getBySpaceCode(spaceCode);
+        return awsS3Cloud.download(space.getSpaceCode());
     }
 }

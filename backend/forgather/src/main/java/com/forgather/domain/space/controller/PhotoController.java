@@ -1,14 +1,23 @@
 package com.forgather.domain.space.controller;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.util.UriUtils;
 
 import com.forgather.domain.space.dto.PhotoResponse;
 import com.forgather.domain.space.dto.PhotosResponse;
@@ -23,6 +32,8 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/spaces/{spaceCode}/photos")
 @Tag(name = "Photo: 사진", description = "사진 관련 API")
 public class PhotoController {
+
+    private static final String APPLICATION_ZIP = "application/zip";
 
     private final PhotoService photoService;
 
@@ -44,5 +55,22 @@ public class PhotoController {
     ) {
         var response = photoService.getAll(spaceCode, pageable);
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/download")
+    public ResponseEntity<Resource> downloadAll(@PathVariable(name = "spaceCode") String spaceCode) throws IOException {
+        File zipFile = photoService.downloadAll(spaceCode);
+
+        Resource resource = new FileSystemResource(zipFile);
+        if (!resource.exists()) {
+            throw new FileNotFoundException(zipFile.getAbsolutePath());
+        }
+
+        String encodedFileName = UriUtils.encode(zipFile.getName(), StandardCharsets.UTF_8);
+        return ResponseEntity.ok()
+            .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + encodedFileName + "\"")
+            .header(HttpHeaders.CONTENT_LENGTH, String.valueOf(zipFile.length()))
+            .contentType(MediaType.valueOf(APPLICATION_ZIP))
+            .body(resource);
     }
 }
