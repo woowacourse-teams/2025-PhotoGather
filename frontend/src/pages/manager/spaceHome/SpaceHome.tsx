@@ -21,6 +21,14 @@ const SpaceHome = () => {
       threshold: 0.5,
     });
 
+  // useEffect(() => {
+  //   photoService
+  //     .getBySpaceId(1234567890, { page: 1, pageSize: 10 })
+  //     .then((res) => {
+  //       console.log(res);
+  //     });
+  // }, []);
+
   return (
     <S.Wrapper>
       <S.InfoContainer ref={topBoundaryRef}>
