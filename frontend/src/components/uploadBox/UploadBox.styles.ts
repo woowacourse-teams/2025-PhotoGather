@@ -3,6 +3,7 @@ import styled from '@emotion/styled';
 
 export const Wrapper = styled.label<{ $active: boolean }>`
   width: 100%;
+  cursor: pointer;
 `;
 
 export const Container = styled.div<{ $active: boolean }>`
@@ -18,7 +19,6 @@ export const Container = styled.div<{ $active: boolean }>`
   align-items: center;
   gap: 20px;
   padding: 25px;
-  cursor: pointer;
 `;
 
 export const Icon = styled(CameraIcon)<{ $iconSize: number }>`
