@@ -1,4 +1,4 @@
-export const hexToRgba = (hex: string, alpha: number) => {
+export const hexToRgba = (hex: string, alpha = 1) => {
   const rawHex = hex.replace('#', '');
 
   const r = parseInt(rawHex.slice(0, 2), 16);
