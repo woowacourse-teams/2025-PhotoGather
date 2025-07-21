@@ -1,17 +1,16 @@
 import { ReactComponent as CameraIcon } from '@assets/icons/camera.svg';
 import styled from '@emotion/styled';
 
-export const Wrapper = styled.label`
+export const Wrapper = styled.label<{ $active: boolean }>`
   width: 100%;
 `;
 
-export const Container = styled.div`
+export const Container = styled.div<{ $active: boolean }>`
   width: 100%;
   height: 100%;
-  color: ${({ theme }) => theme.colors.primary60};
-  background-color: ${({ theme }) => theme.colors.white};
+  color: ${({ theme }) => theme.colors.primary20};
+  background-color: ${({ $active }) => ($active ? '#F0EBFCB3' : '#F0EBFC66')};
   ${({ theme }) => ({ ...theme.typography.header03 })}
-  opacity: 0.7;
   border-radius: 12px;
   display: flex;
   flex-direction: column;
@@ -22,7 +21,8 @@ export const Container = styled.div`
   cursor: pointer;
 `;
 
-export const Icon = styled(CameraIcon)<{ iconSize: number }>`
-  width: ${({ iconSize }) => `${iconSize}px`};
+export const Icon = styled(CameraIcon)<{ $iconSize: number }>`
+  width: ${({ $iconSize }) => `${$iconSize}px`};
+  color: ${({ theme }) => theme.colors.primary20};
   height: auto;
 `;
