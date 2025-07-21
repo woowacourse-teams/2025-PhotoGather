@@ -22,6 +22,10 @@ export const theme = {
       start: '#5833BC',
       end: '#120929',
     },
+    uploadBox: {
+      active: '#F0EBFCB3',
+      default: '#F0EBFC66',
+    },
   },
   typography: {
     header01: {

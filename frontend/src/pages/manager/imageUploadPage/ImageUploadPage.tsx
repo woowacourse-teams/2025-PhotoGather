@@ -3,11 +3,14 @@ import HighlightText from '../../../components/@common/highlightText/HighlightTe
 import ImageGrid from '../../../components/@common/imageGrid/ImageGrid';
 import SpaceHeader from '../../../components/spaceHeader/SpaceHeader';
 import UploadBox from '../../../components/uploadBox/UploadBox';
+import { useFileUpload } from '../../../hooks/useFileUpload';
 import * as S from './ImageUploadPage.styles';
-import { mockImageList, mockSpaceData } from './mockSpaceData';
+import { mockSpaceData } from './mockSpaceData';
 
 const ImageUploadPage = () => {
-  const hasImages = Array.isArray(mockImageList) && mockImageList.length > 0;
+  const { previewUrls, handleFilesUpload, handleFilesDrop, clearFiles } =
+    useFileUpload();
+  const hasImages = Array.isArray(previewUrls) && previewUrls.length > 0;
   const uploadBoxText = '함께한 순간을 올려주세요';
 
   return (
@@ -18,22 +21,28 @@ const ImageUploadPage = () => {
       />
 
       <S.UploadContainer $hasImages={hasImages}>
-        <UploadBox text={uploadBoxText} iconSize={hasImages ? 60 : 100} />
+        <UploadBox
+          text={uploadBoxText}
+          iconSize={hasImages ? 60 : 100}
+          onChange={handleFilesUpload}
+          onDrop={handleFilesDrop}
+        />
       </S.UploadContainer>
 
       {hasImages && (
         <>
-          <ImageGrid imageUrlList={mockImageList} rowImageAmount={3} />
+          <ImageGrid imageUrlList={previewUrls} rowImageAmount={3} />
           <S.ButtonContainer>
             <FloatingActionButton
               label={
                 <HighlightText
-                  text={`사진 ${mockImageList.length}장 업로드하기`}
+                  text={`사진 ${previewUrls.length}장 업로드하기`}
                   fontStyle="buttonPrimary"
                   highlightColorStyle="gray04"
-                  highlightTextArray={[`사진 ${mockImageList.length}장`]}
+                  highlightTextArray={[`사진 ${previewUrls.length}장`]}
                 />
               }
+              onClick={clearFiles}
             />
           </S.ButtonContainer>
         </>
