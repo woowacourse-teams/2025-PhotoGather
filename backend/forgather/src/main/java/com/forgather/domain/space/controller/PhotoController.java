@@ -57,11 +57,11 @@ public class PhotoController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/download")
+    @GetMapping(value = "/zip", produces = APPLICATION_ZIP)
     public ResponseEntity<Resource> downloadAll(@PathVariable(name = "spaceCode") String spaceCode) throws IOException {
         File zipFile = photoService.downloadAll(spaceCode);
 
-        Resource resource = new FileSystemResource(zipFile);
+        var resource = new FileSystemResource(zipFile);
         if (!resource.exists()) {
             throw new FileNotFoundException();
         }
