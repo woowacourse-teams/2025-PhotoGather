@@ -12,6 +12,6 @@ export const mockSpaceData = {
 
 const images = [image1, image2, image3, image4];
 export const mockImageList = Array.from(
-  { length: 48 },
+  { length: 23 },
   (_, i) => images[i % 4],
 );

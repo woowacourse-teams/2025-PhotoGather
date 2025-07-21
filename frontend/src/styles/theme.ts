@@ -79,7 +79,7 @@ export const theme = {
     floatingActionButton: 4,
   },
   layout: {
-    ImageGridWidth: '366px',
+    width: '400px',
     padding: {
       topBottom: '32px',
       leftRight: '16px',
