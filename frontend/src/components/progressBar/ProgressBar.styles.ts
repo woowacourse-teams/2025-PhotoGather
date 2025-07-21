@@ -1,4 +1,4 @@
-import { keyframes } from '@emotion/react';
+import { css, keyframes } from '@emotion/react';
 import styled from '@emotion/styled';
 
 // 왼쪽에서 오른쪽으로 scale 증가
@@ -29,7 +29,10 @@ export const Wrapper = styled.div`
   align-items: center;
 `;
 
-export const ProgressElement = styled.div<{ $isFilled: boolean }>`
+export const ProgressElement = styled.div<{
+  $isFilled: boolean;
+  $shouldAnimate: boolean;
+}>`
   position: relative;
   flex: 1;
   height: 5px;
@@ -37,7 +40,7 @@ export const ProgressElement = styled.div<{ $isFilled: boolean }>`
   background-color: ${({ theme }) => theme.colors.gray01};
   overflow: hidden;
 
-  &::before {
+  &::after {
     content: '';
     position: absolute;
     top: 0;
@@ -48,6 +51,9 @@ export const ProgressElement = styled.div<{ $isFilled: boolean }>`
     border-radius: 20px;
     transform: scaleX(${({ $isFilled }) => ($isFilled ? 1 : 0)});
     transform-origin: left;
-    animation: ${({ $isFilled }) => ($isFilled ? fillAnimation : emptyAnimation)} 0.5s forwards;
+    animation: ${({ $shouldAnimate, $isFilled }) =>
+      $shouldAnimate
+        ? css`${$isFilled ? fillAnimation : emptyAnimation} 0.5s forwards`
+        : 'none'};
   }
 `;
