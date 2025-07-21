@@ -7,28 +7,29 @@ interface useDragProps {
 export const useDrag = ({ onDrop }: useDragProps) => {
   const [isActive, setActive] = useState(false);
 
-  const handleDragEnter = (e: React.DragEvent<HTMLLabelElement>) => {
-    e.preventDefault();
-    e.stopPropagation();
+  const stopEvent = (event: React.DragEvent<HTMLLabelElement>) => {
+    event.preventDefault();
+    event.stopPropagation();
+  };
+
+  const handleDragEnter = (event: React.DragEvent<HTMLLabelElement>) => {
+    stopEvent(event);
     setActive(true);
   };
 
-  const handleDragOver = (e: React.DragEvent<HTMLLabelElement>) => {
-    e.preventDefault();
-    e.stopPropagation();
+  const handleDragOver = (event: React.DragEvent<HTMLLabelElement>) => {
+    stopEvent(event);
   };
 
-  const handleDragLeave = (e: React.DragEvent<HTMLLabelElement>) => {
-    e.preventDefault();
-    e.stopPropagation();
+  const handleDragLeave = (event: React.DragEvent<HTMLLabelElement>) => {
+    stopEvent(event);
     setActive(false);
   };
 
-  const handleDrop = (e: React.DragEvent<HTMLLabelElement>) => {
-    e.preventDefault();
-    e.stopPropagation();
+  const handleDrop = (event: React.DragEvent<HTMLLabelElement>) => {
+    stopEvent(event);
     setActive(false);
-    onDrop?.(e);
+    onDrop?.(event);
   };
 
   return {

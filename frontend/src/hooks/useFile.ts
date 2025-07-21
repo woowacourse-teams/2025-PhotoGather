@@ -9,15 +9,15 @@ export const useFile = () => {
     setPreviewUrls((prev) => [...prev, ...urls]);
   };
 
-  const handleFilesUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFilesUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     //TODO: 파일 업로드 최대 용량 제한 | 업로드 최대 개수 제한?
-    const files = Array.from(e.target.files || []);
+    const files = Array.from(event.target.files || []);
     setImageFiles((prev) => [...prev, ...files]);
     addPreviewUrlsFromFiles(files);
   };
 
-  const handleFilesDrop = (e: React.DragEvent<HTMLLabelElement>) => {
-    const files = Array.from(e.dataTransfer.files || []);
+  const handleFilesDrop = (event: React.DragEvent<HTMLLabelElement>) => {
+    const files = Array.from(event.dataTransfer.files || []);
     setImageFiles((prev) => [...prev, ...files]);
     addPreviewUrlsFromFiles(files);
   };
