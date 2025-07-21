@@ -10,6 +10,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.ContentDisposition;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +18,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.util.UriUtils;
 
 import com.forgather.domain.space.dto.PhotoResponse;
 import com.forgather.domain.space.dto.PhotosResponse;
@@ -63,14 +63,18 @@ public class PhotoController {
 
         Resource resource = new FileSystemResource(zipFile);
         if (!resource.exists()) {
-            throw new FileNotFoundException(zipFile.getAbsolutePath());
+            throw new FileNotFoundException();
         }
 
-        String encodedFileName = UriUtils.encode(zipFile.getName(), StandardCharsets.UTF_8);
+        ContentDisposition contentDisposition = ContentDisposition.attachment()
+            .filename(zipFile.getName(), StandardCharsets.UTF_8)
+            .build();
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setContentDisposition(contentDisposition);
+        httpHeaders.setContentType(MediaType.valueOf(APPLICATION_ZIP));
+
         return ResponseEntity.ok()
-            .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + encodedFileName + "\"")
-            .header(HttpHeaders.CONTENT_LENGTH, String.valueOf(zipFile.length()))
-            .contentType(MediaType.valueOf(APPLICATION_ZIP))
+            .headers(httpHeaders)
             .body(resource);
     }
 }
