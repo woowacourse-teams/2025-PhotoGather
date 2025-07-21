@@ -19,9 +19,11 @@ import com.drew.metadata.exif.ExifSubIFDDirectory;
 import com.forgather.domain.space.dto.PhotoResponse;
 import com.forgather.domain.space.dto.PhotosResponse;
 import com.forgather.domain.space.model.Photo;
+import com.forgather.domain.space.model.PhotoMetaData;
 import com.forgather.domain.space.model.Space;
 import com.forgather.domain.space.repository.PhotoRepository;
 import com.forgather.domain.space.repository.SpaceRepository;
+import com.forgather.domain.space.util.MetaDataExtractor;
 
 import lombok.RequiredArgsConstructor;
 
@@ -55,39 +57,18 @@ public class PhotoService {
     public void saveAll(String spaceCode, List<MultipartFile> multipartFiles) {
         Space space = spaceRepository.getBySpaceCode(spaceCode);
         for (MultipartFile multipartFile : multipartFiles) {
-            LocalDateTime capturedAt = extractCapturedAt(multipartFile);
+            PhotoMetaData metaData = MetaDataExtractor.extractPhotoMetaData(multipartFile);
             String uploadedPath = upload(spaceCode, multipartFile);
-            photoRepository.save(new Photo(space, uploadedPath, multipartFile.getOriginalFilename(), capturedAt));
+            photoRepository.save(new Photo(space, uploadedPath, multipartFile.getOriginalFilename(), metaData));
         }
-    }
-
-    private LocalDateTime extractCapturedAt(MultipartFile file) {
-        Metadata metadata = extractMetaData(file);
-        ExifSubIFDDirectory directory = metadata.getFirstDirectoryOfType(ExifSubIFDDirectory.class);
-        if (directory == null) { // TODO ExifSubIFDDirectory가 존재하지 않을 때 고려
-            throw new IllegalArgumentException();
-        }
-        return extractLocalDateTime(directory);
-    }
-
-    private Metadata extractMetaData(MultipartFile file) {
-        try {
-            return ImageMetadataReader.readMetadata(file.getInputStream());
-        } catch (ImageProcessingException | IOException e) {
-            throw new IllegalArgumentException(e);
-        }
-    }
-
-    private LocalDateTime extractLocalDateTime(ExifSubIFDDirectory directory) {
-        Date date = directory.getDateOriginal();
-        return LocalDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault());
     }
 
     private String upload(String spaceCode, MultipartFile multipartFile) {
         try {
             return awsS3Cloud.upload(spaceCode, multipartFile);
         } catch (IOException e) {
-            throw new IllegalArgumentException(e);
+            throw new IllegalArgumentException(
+                "파일 업로드에 실패했습니다. 파일 이름: " + multipartFile.getOriginalFilename(), e);
         }
     }
 }
