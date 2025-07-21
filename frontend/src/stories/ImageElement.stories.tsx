@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-webpack5';
 import ImageElement from '../components/@common/imageGrid/imageElement/ImageElement';
 
 const meta: Meta<typeof ImageElement> = {
-  title: 'Component/ImageElement',
+  title: 'Components/ImageElement',
   component: ImageElement,
 };
 export default meta;
