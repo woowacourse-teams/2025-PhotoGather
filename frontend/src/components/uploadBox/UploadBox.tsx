@@ -29,13 +29,13 @@ const UploadBox = ({
   return (
     <S.Wrapper
       htmlFor="file-input"
-      $active={isActive}
+      $isActive={isActive}
       onDragEnter={handleDragEnter}
       onDragOver={handleDragOver}
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}
     >
-      <S.Container $active={isActive}>
+      <S.Container $isActive={isActive}>
         <S.Icon $iconSize={iconSize} />
         {text}
       </S.Container>
