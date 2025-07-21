@@ -1,39 +1,17 @@
-import { useState } from 'react';
 import FloatingActionButton from '../../../components/@common/buttons/floatingActionButton/FloatingActionButton';
 import HighlightText from '../../../components/@common/highlightText/HighlightText';
 import ImageGrid from '../../../components/@common/imageGrid/ImageGrid';
 import SpaceHeader from '../../../components/spaceHeader/SpaceHeader';
 import UploadBox from '../../../components/uploadBox/UploadBox';
+import { useFile } from '../../../hooks/useFile';
 import * as S from './ImageUploadPage.styles';
 import { mockSpaceData } from './mockSpaceData';
 
 const ImageUploadPage = () => {
-  const [imageFiles, setImageFiles] = useState<File[]>([]);
-  const [previewUrls, setPreviewUrls] = useState<string[]>([]);
+  const { previewUrls, handleFilesUpload, handleFilesDrop, clearFiles } =
+    useFile();
   const hasImages = Array.isArray(previewUrls) && previewUrls.length > 0;
   const uploadBoxText = '함께한 순간을 올려주세요';
-
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    //TODO: 파일 업로드 최대 용량 제한 | 업로드 최대 개수 제한?
-    const files = Array.from(e.target.files || []);
-    setImageFiles((prev) => [...prev, ...files]);
-    const urls = files.map((file) => URL.createObjectURL(file));
-    setPreviewUrls((prev) => [...prev, ...urls]);
-  };
-
-  const handleImageDrop = (e: React.DragEvent<HTMLLabelElement>) => {
-    const files = Array.from(e.dataTransfer.files || []);
-    setImageFiles((prev) => [...prev, ...files]);
-
-    const urls = files.map((file) => URL.createObjectURL(file));
-    setPreviewUrls((prev) => [...prev, ...urls]);
-  };
-
-  const clearImageFiles = () => {
-    previewUrls.forEach((url) => URL.revokeObjectURL(url));
-    setImageFiles([]);
-    setPreviewUrls([]);
-  };
 
   return (
     <S.Wrapper $hasImages={hasImages}>
@@ -46,8 +24,8 @@ const ImageUploadPage = () => {
         <UploadBox
           text={uploadBoxText}
           iconSize={hasImages ? 60 : 100}
-          onChange={handleImageUpload}
-          onDrop={handleImageDrop}
+          onChange={handleFilesUpload}
+          onDrop={handleFilesDrop}
         />
       </S.UploadContainer>
 
@@ -64,7 +42,7 @@ const ImageUploadPage = () => {
                   highlightTextArray={[`사진 ${previewUrls.length}장`]}
                 />
               }
-              onClick={clearImageFiles}
+              onClick={clearFiles}
             />
           </S.ButtonContainer>
         </>
