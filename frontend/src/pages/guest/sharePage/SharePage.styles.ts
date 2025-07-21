@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 
 export const Wrapper = styled.div`
-  height: calc(100dvh - 64px); // TODO: theme padding 분리 시 변경 필요
+  height: ${({ theme }) => `calc(100dvh - ${parseInt(theme.layout.padding.topBottom) * 2}px)`};
   display: flex;
   flex-direction: column;
   justify-content: space-between;
