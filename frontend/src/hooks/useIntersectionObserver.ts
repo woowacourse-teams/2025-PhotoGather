@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { DEBUG_MESSAGES } from '../constants/debugMessages';
 
 interface UseIntersectionObserverProps {
   threshold?: number;
@@ -12,6 +13,11 @@ const useIntersectionObserver = ({
   const [isIntersecting, setIsIntersecting] = useState(false);
 
   useEffect(() => {
+    if (!('IntersectionObserver' in window)) {
+      console.warn(DEBUG_MESSAGES.INTERSECTION_OBSERVER);
+      return;
+    }
+
     if (!targetRef.current) return;
 
     observer.current = new IntersectionObserver(
