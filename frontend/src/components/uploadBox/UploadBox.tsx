@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useDrag } from '../../hooks/useDrag';
 import * as S from './UploadBox.styles';
 
 interface UploadBoxProps {
@@ -18,38 +18,21 @@ const UploadBox = ({
   onChange,
   onDrop,
 }: UploadBoxProps) => {
-  const [isActive, setActive] = useState(false);
-  const onDragEnter = (e: React.DragEvent<HTMLLabelElement>) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setActive(true);
-  };
-
-  const onDragOver = (e: React.DragEvent<HTMLLabelElement>) => {
-    e.preventDefault();
-    e.stopPropagation();
-  };
-
-  const onDragLeave = (e: React.DragEvent<HTMLLabelElement>) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setActive(false);
-  };
-
-  const handleDrop = (e: React.DragEvent<HTMLLabelElement>) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setActive(false);
-    onDrop?.(e);
-  };
+  const {
+    isActive,
+    handleDragEnter,
+    handleDragOver,
+    handleDragLeave,
+    handleDrop,
+  } = useDrag({ onDrop });
 
   return (
     <S.Wrapper
       htmlFor="file-input"
       $active={isActive}
-      onDragEnter={onDragEnter}
-      onDragOver={onDragOver}
-      onDragLeave={onDragLeave}
+      onDragEnter={handleDragEnter}
+      onDragOver={handleDragOver}
+      onDragLeave={handleDragLeave}
       onDrop={handleDrop}
     >
       <S.Container $active={isActive}>
