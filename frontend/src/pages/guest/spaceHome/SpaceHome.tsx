@@ -1,6 +1,8 @@
+import { useEffect } from 'react';
 import { ReactComponent as SaveIcon } from '../../../@assets/icons/download.svg';
 import { ReactComponent as SettingSvg } from '../../../@assets/icons/setting.svg';
 import { ReactComponent as ArrowUpSvg } from '../../../@assets/icons/upwardArrow.svg';
+import { photoService } from '../../../apis/services/photo.service';
 import FloatingActionButton from '../../../components/@common/buttons/floatingActionButton/FloatingActionButton';
 import FloatingIconButton from '../../../components/@common/buttons/floatingIconButton/FloatingIconButton';
 import ImageGrid from '../../../components/@common/imageGrid/ImageGrid';
@@ -20,6 +22,17 @@ const SpaceHome = () => {
     useIntersectionObserver({
       threshold: 0.5,
     });
+
+  useEffect(() => {
+    photoService
+      .getAll({
+        page: 1,
+        pageSize: 10,
+      })
+      .then((res) => {
+        console.log(res);
+      });
+  }, []);
 
   return (
     <S.Wrapper>

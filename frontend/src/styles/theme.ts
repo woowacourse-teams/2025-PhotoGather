@@ -19,8 +19,8 @@ export const theme = {
     error: '#FF5A5A',
     lightError: '#FFB3B3',
     gradient: {
-      start: '#5833BC',
-      end: '#120929',
+      start: '#472998',
+      end: '#19132A',
     },
   },
   typography: {
