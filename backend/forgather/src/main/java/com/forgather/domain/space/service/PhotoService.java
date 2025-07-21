@@ -6,6 +6,7 @@ import java.io.IOException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.util.FileSystemUtils;
 
 import com.forgather.domain.space.dto.PhotoResponse;
 import com.forgather.domain.space.dto.PhotosResponse;
@@ -13,9 +14,12 @@ import com.forgather.domain.space.model.Photo;
 import com.forgather.domain.space.model.Space;
 import com.forgather.domain.space.repository.PhotoRepository;
 import com.forgather.domain.space.repository.SpaceRepository;
+import com.forgather.domain.space.util.ZipPathGenerator;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class PhotoService {
@@ -39,6 +43,10 @@ public class PhotoService {
 
     public File downloadAll(String spaceCode) throws IOException {
         Space space = spaceRepository.getBySpaceCode(spaceCode);
-        return awsS3Cloud.download(space.getSpaceCode());
+
+        File originalFile = awsS3Cloud.downloadAll(space.getSpaceCode());
+        File zipFile = ZipPathGenerator.generate(originalFile, spaceCode).toFile();
+        FileSystemUtils.deleteRecursively(originalFile);
+        return zipFile;
     }
 }

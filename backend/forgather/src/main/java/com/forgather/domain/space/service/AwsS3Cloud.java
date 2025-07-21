@@ -2,16 +2,11 @@ package com.forgather.domain.space.service;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.UUID;
 
 import org.springframework.stereotype.Component;
-import org.springframework.util.FileSystemUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
-
-import net.lingala.zip4j.ZipFile;
 
 import com.forgather.global.config.S3Properties;
 
@@ -51,21 +46,8 @@ public class AwsS3Cloud {
             extension);
     }
 
-    public File download(String spaceCode) throws IOException {
-        Path dir = downloadFromS3(spaceCode);
-
-        Path zipPath = Files.createTempFile("images-" + spaceCode + "-", ".zip");
-
-        try (ZipFile zipFile = new ZipFile(zipPath.toFile())) {
-            zipFile.addFolder(dir.toFile());
-        }
-        FileSystemUtils.deleteRecursively(dir);
-
-        return zipPath.toFile();
-    }
-
-    private Path downloadFromS3(String spaceCode) {
-        File localDownloadDirectory = new File("image-download-" + spaceCode);
+    public File downloadAll(String spaceCode) {
+        File localDownloadDirectory = new File("images-" + spaceCode);
         String s3Prefix = String.format("%s/%s/%s", s3Properties.getRootDirectory(), CONTENTS_DIRECTORY, spaceCode);
 
         DownloadDirectoryRequest request = DownloadDirectoryRequest.builder()
@@ -76,6 +58,6 @@ public class AwsS3Cloud {
 
         DirectoryDownload directoryDownload = transferManager.downloadDirectory(request);
         directoryDownload.completionFuture().join();
-        return localDownloadDirectory.toPath();
+        return localDownloadDirectory;
     }
 }
