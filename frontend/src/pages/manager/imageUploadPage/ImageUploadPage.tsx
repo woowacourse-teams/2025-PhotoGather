@@ -3,13 +3,13 @@ import HighlightText from '../../../components/@common/highlightText/HighlightTe
 import ImageGrid from '../../../components/@common/imageGrid/ImageGrid';
 import SpaceHeader from '../../../components/spaceHeader/SpaceHeader';
 import UploadBox from '../../../components/uploadBox/UploadBox';
-import { useFile } from '../../../hooks/useFile';
+import { useFileUpload } from '../../../hooks/useFileUpload';
 import * as S from './ImageUploadPage.styles';
 import { mockSpaceData } from './mockSpaceData';
 
 const ImageUploadPage = () => {
   const { previewUrls, handleFilesUpload, handleFilesDrop, clearFiles } =
-    useFile();
+    useFileUpload();
   const hasImages = Array.isArray(previewUrls) && previewUrls.length > 0;
   const uploadBoxText = '함께한 순간을 올려주세요';
 

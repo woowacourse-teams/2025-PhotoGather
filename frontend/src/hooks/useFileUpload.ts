@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-export const useFile = () => {
+export const useFileUpload = () => {
   const [imageFiles, setImageFiles] = useState<File[]>([]);
   const [previewUrls, setPreviewUrls] = useState<string[]>([]);
 
