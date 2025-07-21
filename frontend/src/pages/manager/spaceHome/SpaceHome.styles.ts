@@ -26,6 +26,12 @@ export const DownloadButtonContainer = styled.div`
   z-index: ${({ theme }) => theme.zIndex.floatingActionButton};
 `;
 
+export const ImageGridContainer = styled.div`
+  position: relative;
+  width: 100%;
+  height: 100%;
+`;
+
 export const ScrollableArea = styled.div<{ $isVisible: boolean }>`
   position: fixed;
   bottom: 0;
@@ -49,6 +55,14 @@ export const IntersectionArea = styled.div`
   width: 0;
   height: 0;
   overflow: hidden;
+`;
+
+export const LazyFetchSection = styled(IntersectionArea)`
+  position: absolute;
+  bottom: 15%;
+  width: 100%;
+  left: 50%;
+  transform: translateX(-50%);
 `;
 
 export const TopButtonContainer = styled.div<{ $isVisible: boolean }>`
