@@ -18,7 +18,7 @@ export const InfoContainer = styled.div`
   z-index: ${({ theme }) => theme.zIndex.text};
 `;
 
-export const ButtonContainer = styled.div`
+export const DownloadButtonContainer = styled.div`
   position: fixed;
   bottom: 20px;
   left: 50%;
@@ -26,7 +26,7 @@ export const ButtonContainer = styled.div`
   z-index: ${({ theme }) => theme.zIndex.floatingActionButton};
 `;
 
-export const ScrollableArea = styled.div`
+export const ScrollableArea = styled.div<{ $isVisible: boolean }>`
   position: fixed;
   bottom: 0;
   left: 50%;
@@ -41,10 +41,22 @@ export const ScrollableArea = styled.div`
     ${({ theme }) => hexToRgba(theme.colors.gradient.end, 0.6)} 100%
   );
   z-index: ${({ theme }) => theme.zIndex.scrollableArea};
+  opacity: ${({ $isVisible }) => ($isVisible ? 1 : 0)};
+  transition: opacity 0.3s ease-in-out;
 `;
 
 export const IntersectionArea = styled.div`
   width: 0;
   height: 0;
   overflow: hidden;
+`;
+
+export const TopButtonContainer = styled.div<{ $isVisible: boolean }>`
+  position: fixed;
+  bottom: 25px;
+  left: 50%;
+  transform: translateX(calc(-50% - 114px));
+  z-index: ${({ theme }) => theme.zIndex.floatingActionButton};
+  opacity: ${({ $isVisible }) => ($isVisible ? 1 : 0)};
+  transition: opacity 0.1s ease-in-out;
 `;
