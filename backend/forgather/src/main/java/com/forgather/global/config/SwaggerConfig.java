@@ -19,7 +19,7 @@ public class SwaggerConfig {
             .info(apiInfo())
             .components(new Components())
             .servers(List.of(
-                new Server().url("https://api.forgather.com").description("Production Server")
+                new Server().url("https://api.forgather.me").description("Production Server")
             ));
     }
 
