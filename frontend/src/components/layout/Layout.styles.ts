@@ -4,7 +4,8 @@ export const Container = styled.div<{ $isHighlightPage: boolean }>`
   margin: 0 auto;
   max-width: 400px;
   width: 100%;
-  padding: ${({ theme }) => theme.layout.padding.topBottom} ${({ theme }) => theme.layout.padding.leftRight};
+  padding: ${({ theme }) => theme.layout.padding.topBottom}
+    ${({ theme }) => theme.layout.padding.leftRight};
   border: 1px solid #000;
   min-height: 100dvh;
   overflow: hidden;
