@@ -7,9 +7,9 @@ interface UploadBoxProps {
   /** 박스 내 아이콘 크기 */
   iconSize?: number;
   /** 파일 선택 시이벤트 핸들러 */
-  onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   /** 드롭 이벤트 핸들러 */
-  onDrop?: (event: React.DragEvent<HTMLLabelElement>) => void;
+  onDrop: (event: React.DragEvent<HTMLLabelElement>) => void;
 }
 
 const UploadBox = ({
