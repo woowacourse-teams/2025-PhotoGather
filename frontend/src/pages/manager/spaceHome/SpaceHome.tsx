@@ -6,6 +6,7 @@ import FloatingActionButton from '../../../components/@common/buttons/floatingAc
 import FloatingIconButton from '../../../components/@common/buttons/floatingIconButton/FloatingIconButton';
 import ImageGrid from '../../../components/@common/imageGrid/ImageGrid';
 import SpaceHeader from '../../../components/spaceHeader/SpaceHeader';
+import { INFORMATION } from '../../../constants/messages';
 import useIntersectionObserver from '../../../hooks/useIntersectionObserver';
 import usePhotosBySpaceId from '../../../hooks/usePhotosBySpaceId';
 import { theme } from '../../../styles/theme';
@@ -22,7 +23,7 @@ const SpaceHome = () => {
     targetRef: lazyFetchRef,
     isIntersecting: isFetchSectionVisible,
     reObserve,
-  } = useIntersectionObserver({ isInitialInView: true });
+  } = useIntersectionObserver({ isInitialInView: true, rootMargin: '200px' });
 
   const { thumbnailList, isLoading, isEndPage, fetchPhotosList } =
     usePhotosBySpaceId({
@@ -68,10 +69,7 @@ const SpaceHome = () => {
         ) : (
           <S.NoImageContainer>
             <S.GiftIcon />
-            <S.NoImageText>
-              아직 촬영된 사진이 없어요.
-              <br />
-            </S.NoImageText>
+            <S.NoImageText>{INFORMATION.NO_IMAGE}</S.NoImageText>
           </S.NoImageContainer>
         ))}
 
