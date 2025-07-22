@@ -21,6 +21,11 @@ public class MetaDataExtractor {
 
     private static LocalDateTime extractCapturedAt(MultipartFile file) {
         Metadata metadata = extractMetaData(file);
+
+        /**
+         * 사진 메타데이터 표준 포맷은 EXIF(Exchangeable Image File Format) 다.
+         * ExifSubIFDDirectory 는 EXIF 메타데이터의 서브 디렉토리로, 사진의 촬영 날짜와 시간 정보를 포함한다.
+         */
         ExifSubIFDDirectory directory = metadata.getFirstDirectoryOfType(ExifSubIFDDirectory.class);
         if (directory == null) {
             throw new IllegalArgumentException("ExifSubIFDDirectory 를 메타데이터에서 찾을 수 없습니다.");
