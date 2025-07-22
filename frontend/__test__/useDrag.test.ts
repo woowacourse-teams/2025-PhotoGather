@@ -16,6 +16,7 @@ describe('useDrag 훅 테스트', () => {
     act(() => {
       result.current.handleDragEnter(stopEvent);
     });
+
     expect(result.current.isActive).toBe(true);
   });
 
@@ -27,6 +28,7 @@ describe('useDrag 훅 테스트', () => {
     act(() => {
       result.current.handleDragOver(stopEvent);
     });
+
     expect(stopEvent.preventDefault).toHaveBeenCalled();
     expect(stopEvent.stopPropagation).toHaveBeenCalled();
   });
@@ -39,6 +41,7 @@ describe('useDrag 훅 테스트', () => {
     act(() => {
       result.current.handleDragLeave(stopEvent);
     });
+
     expect(result.current.isActive).toBe(false);
   });
 
