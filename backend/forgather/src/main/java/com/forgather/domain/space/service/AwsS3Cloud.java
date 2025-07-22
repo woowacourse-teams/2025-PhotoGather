@@ -37,7 +37,7 @@ public class AwsS3Cloud {
     private String generateFilePath(String spaceCode, MultipartFile file) {
         String extension = StringUtils.getFilenameExtension(file.getOriginalFilename());
         String uploadFileName = UUID.randomUUID().toString();
-        return String.format("/%s/%s/%s/%s.%s", s3Properties.getRootDirectory(), CONTENTS_INNER_PATH, spaceCode, uploadFileName,
+        return String.format("%s/%s/%s/%s.%s", s3Properties.getRootDirectory(), CONTENTS_INNER_PATH, spaceCode, uploadFileName,
             extension);
     }
 }
