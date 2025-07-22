@@ -1,4 +1,3 @@
-import useHasMountedRef from '../../hooks/useHasMountedRef';
 import * as S from './ProgressBar.styles';
 
 interface ProgressBarProps {
@@ -9,8 +8,6 @@ interface ProgressBarProps {
 }
 
 const ProgressBar = ({ step, maxStep }: ProgressBarProps) => {
-  const { current } = useHasMountedRef();
-
   return (
     <S.Wrapper>
       {Array.from({ length: maxStep }).map((_, index) => {
@@ -20,7 +17,6 @@ const ProgressBar = ({ step, maxStep }: ProgressBarProps) => {
             // biome-ignore lint/suspicious/noArrayIndexKey: false positive
             key={index}
             $isFilled={isFilled}
-            $shouldAnimate={current}
           />
         );
       })}
