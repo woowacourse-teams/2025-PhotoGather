@@ -13,6 +13,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.forgather.domain.space.model.Photo;
+import com.forgather.domain.space.model.PhotoMetaData;
 import com.forgather.domain.space.model.Space;
 import com.forgather.domain.space.repository.PhotoRepository;
 import com.forgather.domain.space.repository.SpaceContentRepository;
@@ -49,7 +50,7 @@ class PhotoAcceptanceTest extends AcceptanceTest {
         var space = spaceRepository.save(
             new Space("space-code", "1234", "test-space", LocalDateTime.now()));
         var photo = photoRepository.save(
-            new Photo(space, /*"PHOTO",*/ "path", "originalName", LocalDateTime.now()));
+            new Photo(space, /*"PHOTO",*/ "path", "originalName", new PhotoMetaData(LocalDateTime.now())));
 
         // when
         var response = RestAssuredMockMvc.given()

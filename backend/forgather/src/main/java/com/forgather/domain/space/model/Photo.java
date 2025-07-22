@@ -7,6 +7,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.PrimaryKeyJoinColumn;
@@ -28,23 +29,27 @@ public class Photo extends SpaceContent{
     @Column(name = "original_name", nullable = false)
     private String originalName;
 
-    @Column(name = "captured_at")
-    private LocalDateTime capturedAt;
+    @Embedded
+    private PhotoMetaData metaData;
 
     @CreatedDate
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    public Photo(Space space, String path, String originalName, LocalDateTime capturedAt) {
+    public Photo(Space space, String path, String originalName, PhotoMetaData metaData) {
         super(space);
         this.path = path;
         this.originalName = originalName;
-        this.capturedAt = capturedAt;
+        this.metaData = metaData;
     }
 
     public void validateSpace(Space space) {
         if (!this.space.equals(space)) {
             throw new IllegalArgumentException("스페이스에 속하지 않는 사진입니다. 스페이스 ID: " + space.getId() + ", 사진 ID: " + this.getId());
         }
+    }
+
+    public LocalDateTime getCapturedAt() {
+        return metaData.getCapturedAt();
     }
 }
