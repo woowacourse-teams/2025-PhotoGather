@@ -37,7 +37,7 @@ import lombok.RequiredArgsConstructor;
 @Tag(name = "Photo: 사진", description = "사진 관련 API")
 public class PhotoController {
 
-    private static final String APPLICATION_ZIP = "application/zip";
+    private static final String ZIP_CONTENT_TYPE = "application/zip";
 
     private final PhotoService photoService;
 
@@ -71,10 +71,10 @@ public class PhotoController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping(value = "/download", produces = APPLICATION_ZIP)
+    @GetMapping(value = "/download", produces = ZIP_CONTENT_TYPE)
     @Operation(summary = "사진 zip 일괄 다운로드", description = "특정 공간의 사진 목록을 zip 파일로 다운로드합니다.")
     public ResponseEntity<Resource> downloadAll(@PathVariable(name = "spaceCode") String spaceCode) throws IOException {
-        File zipFile = photoService.downloadAll(spaceCode);
+        File zipFile = photoService.compressAll(spaceCode);
 
         var resource = new FileSystemResource(zipFile);
         if (!resource.exists()) {
@@ -86,7 +86,7 @@ public class PhotoController {
             .build();
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentDisposition(contentDisposition);
-        httpHeaders.setContentType(MediaType.valueOf(APPLICATION_ZIP));
+        httpHeaders.setContentType(MediaType.valueOf(ZIP_CONTENT_TYPE));
 
         return ResponseEntity.ok()
             .headers(httpHeaders)

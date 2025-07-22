@@ -68,7 +68,7 @@ public class PhotoService {
         }
     }
 
-    public File downloadAll(String spaceCode) throws IOException {
+    public File compressAll(String spaceCode) throws IOException {
         Space space = spaceRepository.getBySpaceCode(spaceCode);
 
         File originalFile = awsS3Cloud.downloadAll(space.getSpaceCode());
