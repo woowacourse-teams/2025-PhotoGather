@@ -10,7 +10,7 @@ export const ROUTES = {
   COMPLETE: {
     UPLOAD: '/complete/upload',
     DOWNLOAD: '/complete/download',
-    SPACE_CREATED: 'complete/space-created',
+    SPACE_CREATED: '/complete/space-created',
   },
 } as const;
 
