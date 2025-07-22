@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { ReactComponent as SaveIcon } from '../../../@assets/icons/download.svg';
 import { ReactComponent as SettingSvg } from '../../../@assets/icons/setting.svg';
 import { ReactComponent as ArrowUpSvg } from '../../../@assets/icons/upwardArrow.svg';
@@ -23,10 +24,16 @@ const SpaceHome = () => {
     reObserve,
   } = useIntersectionObserver({ isInitialInView: true });
 
-  const { thumbnailList, isLoading } = usePhotosBySpaceId({
-    isFetchSectionVisible,
-    reObserve,
-  });
+  const { thumbnailList, isLoading, isEndPage, fetchPhotosList } =
+    usePhotosBySpaceId({
+      reObserve,
+    });
+
+  //biome-ignore lint/correctness/useExhaustiveDependencies: isFetchSectionVisible 변경 시 호출
+  useEffect(() => {
+    if (!isFetchSectionVisible || isEndPage || isLoading) return;
+    fetchPhotosList();
+  }, [isFetchSectionVisible, isEndPage]);
 
   return (
     <S.Wrapper>
@@ -40,24 +47,36 @@ const SpaceHome = () => {
         />
       </S.InfoContainer>
 
-      <S.ImageGridContainer>
-        <ImageGrid imageUrlList={thumbnailList} rowImageAmount={3} />
-      </S.ImageGridContainer>
+      {thumbnailList &&
+        (thumbnailList.length > 0 ? (
+          <>
+            <S.ImageGridContainer>
+              <ImageGrid imageUrlList={thumbnailList} rowImageAmount={3} />
+            </S.ImageGridContainer>
 
-      <S.DownloadButtonContainer>
-        <FloatingActionButton label="모두 저장하기" icon={<SaveIcon />} />
-      </S.DownloadButtonContainer>
+            <S.DownloadButtonContainer>
+              <FloatingActionButton label="모두 저장하기" icon={<SaveIcon />} />
+            </S.DownloadButtonContainer>
+
+            <S.TopButtonContainer $isVisible={!isTopVisible}>
+              <FloatingIconButton
+                icon={<ArrowUpSvg fill={theme.colors.white} />}
+                onClick={goToTop}
+              />
+            </S.TopButtonContainer>
+          </>
+        ) : (
+          <S.NoImageContainer>
+            <S.GiftIcon />
+            <S.NoImageText>
+              아직 촬영된 사진이 없어요.
+              <br />
+            </S.NoImageText>
+          </S.NoImageContainer>
+        ))}
 
       <S.IntersectionArea ref={scrollEndRef} />
       <S.IntersectionArea ref={lazyFetchRef} />
-
-      <S.TopButtonContainer $isVisible={!isTopVisible}>
-        <FloatingIconButton
-          icon={<ArrowUpSvg fill={theme.colors.white} />}
-          onClick={goToTop}
-        />
-      </S.TopButtonContainer>
-
       <S.ScrollableArea $isVisible={!isScrollEnd} />
     </S.Wrapper>
   );
