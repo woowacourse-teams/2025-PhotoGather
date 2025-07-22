@@ -13,12 +13,14 @@ import { theme } from '../../../styles/theme';
 import type { PhotoListResponse } from '../../../types/api.type';
 import type { Photo } from '../../../types/photo.type';
 import { goToTop } from '../../../utils/goToTop';
+import { parsedImagePath } from '../../../utils/parsedThumbnailPath';
 import { mockSpaceData } from './mockSpaceData';
 import * as S from './SpaceHome.styles';
 
 const SpaceHome = () => {
   const PAGE_SIZE = 21;
   const MOCK_SPACE_ID = 1234567890;
+  const PRESET = 'x800';
 
   const [isLoading, setIsLoading] = useState(false);
   const [photoResponse, setPhotoResponse] = useState<PhotoListResponse | null>(
@@ -26,21 +28,11 @@ const SpaceHome = () => {
   );
   const { photos, currentPage = 1, totalPages = 1 } = photoResponse ?? {};
 
-  const parsedThumbnailPath = (path: string) => {
-    const reg = /(.*)(.png|.jpg|.jpeg)/;
-    const splitPath = path.split(reg);
-    return splitPath[1];
-  };
   const photoList = photos?.map((photo) => {
-    const parsedPath = parsedThumbnailPath(photo.path);
     // TODO : service 분리
-    return process.env.IMAGE_BASE_URL + '/' + parsedPath + '_x1080.webp';
+    return `${process.env.IMAGE_BASE_URL}/photogather/contents/${MOCK_SPACE_ID}/thumbnails/${parsedImagePath(photo.path)}_${PRESET}.webp`;
   });
 
-  // const photoList = photos?.map((photo) => {
-  //   const path = photo.path.split('.')[0];
-  //   return process.env.IMAGE_BASE_URL + '/' + path + '_x1080.webp';
-  // });
   const isEndPage = currentPage > totalPages;
 
   // TODO : 깜빡이는 문제 해결
@@ -71,18 +63,21 @@ const SpaceHome = () => {
     });
   };
 
+  //biome-ignore lint/correctness/useExhaustiveDependencies: isFetchSectionVisible 변경 시 호출
   useEffect(() => {
     if (!isFetchSectionVisible || isEndPage || isLoading) return;
 
     setIsLoading(true);
 
     photoService
-      .getBySpaceId(MOCK_SPACE_ID, { page: currentPage, pageSize: 21 })
+      .getBySpaceId(MOCK_SPACE_ID, { page: currentPage, size: 30 })
       .then((res) => {
         if (!res.data) {
           console.warn(DEBUG_MESSAGES.NO_RESPONSE);
           return;
         }
+        console.log(res);
+        console.log(res.data.photos.length);
         const { photos, totalPages } = res.data;
         updateShowPhotos(photos, totalPages);
         requestAnimationFrame(() => {
