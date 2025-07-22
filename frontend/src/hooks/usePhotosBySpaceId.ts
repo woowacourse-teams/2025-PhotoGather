@@ -31,7 +31,7 @@ const usePhotosBySpaceId = ({
     );
   });
 
-  const isEndPage = currentPage > totalPages;
+  const isEndPage = currentPage.current > totalPages.current;
 
   //biome-ignore lint/correctness/useExhaustiveDependencies: isFetchSectionVisible 변경 시 호출
   useEffect(() => {
@@ -52,11 +52,13 @@ const usePhotosBySpaceId = ({
         }
         const { photos } = data;
         setPhotosList((prev) => {
-          if (!prev) {
+          if (prev.length === 0) {
+            console.log('초기 fetch');
             currentPage.current = 1;
             totalPages.current = data.totalPages;
             return photos;
           }
+          console.log('재fetch');
           currentPage.current += 1;
           return [...prev, ...photos];
         });
