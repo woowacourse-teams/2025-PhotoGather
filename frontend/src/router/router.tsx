@@ -1,4 +1,5 @@
 import { createBrowserRouter } from 'react-router-dom';
+import CompletePage from '../components/@common/completePage/CompletePage';
 import Layout from '../components/layout/Layout';
 import ImageUploadPage from '../pages/guest/imageUploadPage/ImageUploadPage';
 import SharePage from '../pages/guest/sharePage/SharePage';
@@ -32,6 +33,18 @@ const router = createBrowserRouter([
             element: <SharePage />,
           },
         ],
+      },
+      {
+        path: 'complete/upload',
+        element: <CompletePage type="upload" />,
+      },
+      {
+        path: 'complete/download',
+        element: <CompletePage type="download" />,
+      },
+      {
+        path: 'complete/space-created',
+        element: <CompletePage type="spaceCreated" />,
       },
     ],
   },
