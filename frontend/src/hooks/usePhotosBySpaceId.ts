@@ -3,7 +3,7 @@ import { photoService } from '../apis/services/photo.service';
 import { DEBUG_MESSAGES } from '../constants/debugMessages';
 import type { Photo } from '../types/photo.type';
 import { buildThumbnailUrl } from '../utils/buildImageUrl';
-import { parsedImagePath } from '../utils/parsedThumbnailPath';
+import { parsedImagePath } from '../utils/parsedImagePath';
 
 interface UsePhotosBySpaceIdProps {
   reObserve: () => void;
