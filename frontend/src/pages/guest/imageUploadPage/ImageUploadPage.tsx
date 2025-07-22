@@ -1,3 +1,4 @@
+import { photoService } from '../../../apis/services/photo.service';
 import FloatingActionButton from '../../../components/@common/buttons/floatingActionButton/FloatingActionButton';
 import HighlightText from '../../../components/@common/highlightText/HighlightText';
 import ImageGrid from '../../../components/@common/imageGrid/ImageGrid';
@@ -8,10 +9,27 @@ import * as S from './ImageUploadPage.styles';
 import { mockSpaceData } from './mockSpaceData';
 
 const ImageUploadPage = () => {
-  const { previewUrls, handleFilesUpload, handleFilesDrop, clearFiles } =
-    useFileUpload();
+  const {
+    imageFiles,
+    previewUrls,
+    handleFilesUpload,
+    handleFilesDrop,
+    clearFiles,
+  } = useFileUpload();
   const hasImages = Array.isArray(previewUrls) && previewUrls.length > 0;
   const uploadBoxText = '함께한 순간을 올려주세요';
+
+  const handleUpload = async () => {
+    try {
+      await photoService.uploadFiles('1234567891', imageFiles);
+      //TODO: 완성 페이지로 이동
+      alert('사진 업로드가 완료되었습니다.');
+      clearFiles();
+    } catch (error) {
+      console.error('업로드 실패:', error);
+      alert('사진 업로드에 실패했습니다.');
+    }
+  };
 
   return (
     <S.Wrapper $hasImages={hasImages}>
@@ -42,7 +60,7 @@ const ImageUploadPage = () => {
                   highlightTextArray={[`사진 ${previewUrls.length}장`]}
                 />
               }
-              onClick={clearFiles}
+              onClick={handleUpload}
             />
           </S.ButtonContainer>
         </>

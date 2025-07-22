@@ -1,9 +1,7 @@
 import type { ApiResponse } from '../types/api.type';
 import { BASE_URL } from './config';
 
-const defaultHeaders: Record<string, string> = {
-  'Content-Type': 'application/json',
-};
+const defaultHeaders: Record<string, string> = {};
 
 export const setAuthToken = (token: string | null) => {
   if (token) {
@@ -38,11 +36,20 @@ const request = async <T>(
   const { method, body, params } = options;
   const url = `${BASE_URL}${endpoint}${buildQueryString(params)}`;
 
+  const isFormData = body instanceof FormData;
+
+  const headers: HeadersInit = {
+    ...(defaultHeaders.Authorization && {
+      Authorization: defaultHeaders.Authorization,
+    }),
+    ...(!isFormData && { 'Content-Type': 'application/json' }),
+  };
+
   try {
     const response = await fetch(url, {
       method,
-      headers: defaultHeaders,
-      body: body ? JSON.stringify(body) : undefined,
+      headers,
+      body: isFormData ? body : body ? JSON.stringify(body) : undefined,
     });
 
     const data = await response.json();
