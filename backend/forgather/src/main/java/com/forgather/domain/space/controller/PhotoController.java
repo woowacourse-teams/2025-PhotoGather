@@ -57,7 +57,7 @@ public class PhotoController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping(value = "/all", produces = APPLICATION_ZIP)
+    @GetMapping(value = "/download", produces = APPLICATION_ZIP)
     @Operation(summary = "사진 zip 일괄 다운로드", description = "특정 공간의 사진 목록을 zip 파일로 다운로드합니다.")
     public ResponseEntity<Resource> downloadAll(@PathVariable(name = "spaceCode") String spaceCode) throws IOException {
         File zipFile = photoService.downloadAll(spaceCode);
