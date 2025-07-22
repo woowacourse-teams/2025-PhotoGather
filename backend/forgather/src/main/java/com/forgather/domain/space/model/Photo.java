@@ -21,7 +21,7 @@ import lombok.NoArgsConstructor;
 @DiscriminatorValue("PHOTO")
 @EntityListeners(AuditingEntityListener.class)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Photo extends SpaceContent{
+public class Photo extends SpaceContent {
 
     @Column(name = "path", nullable = false)
     private String path;
@@ -43,9 +43,9 @@ public class Photo extends SpaceContent{
         this.metaData = metaData;
     }
 
-    public void validateSpace(Space space) {
-        if (!this.space.equals(space)) {
-            throw new IllegalArgumentException("스페이스에 속하지 않는 사진입니다. 스페이스 ID: " + space.getId() + ", 사진 ID: " + this.getId());
+    public void validateSpace(Space other) {
+        if (!space.equals(other)) {
+            throw new IllegalArgumentException("스페이스에 속하지 않는 사진입니다. 스페이스 ID: " + space.getId() + ", 사진 ID: " + id);
         }
     }
 

@@ -1,6 +1,7 @@
 package com.forgather.domain.space.model;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 import com.forgather.domain.model.BaseTimeEntity;
 
@@ -45,5 +46,18 @@ public class Space extends BaseTimeEntity {
         this.name = name;
         this.openedAt = openedAt;
         this.expiredAt = openedAt.plusDays(3L);
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if (object == null || getClass() != object.getClass())
+            return false;
+        Space space = (Space)object;
+        return Objects.equals(id, space.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
     }
 }
