@@ -8,7 +8,6 @@ export const Wrapper = styled.div`
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  position: relative;
 `;
 
 export const ContentWrapper = styled.div`
@@ -16,11 +15,7 @@ export const ContentWrapper = styled.div`
   flex-direction: column;
   align-items: center;
   gap: 20px;
-  position: absolute;
-  top: 40%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 100%;
+  margin: auto 0;
 `;
 
 export const Icon = styled.img`
@@ -41,9 +36,6 @@ export const Description = styled.p`
 `;
 
 export const BottomContainer = styled.div`
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
   width: 100%;
+  margin-top: auto;
 `;
