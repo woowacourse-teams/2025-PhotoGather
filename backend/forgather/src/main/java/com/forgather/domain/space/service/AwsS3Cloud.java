@@ -11,7 +11,6 @@ import org.springframework.web.multipart.MultipartFile;
 import com.forgather.global.config.S3Properties;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
@@ -19,7 +18,6 @@ import software.amazon.awssdk.transfer.s3.S3TransferManager;
 import software.amazon.awssdk.transfer.s3.model.DirectoryDownload;
 import software.amazon.awssdk.transfer.s3.model.DownloadDirectoryRequest;
 
-@Slf4j
 @Component
 @RequiredArgsConstructor
 public class AwsS3Cloud {
