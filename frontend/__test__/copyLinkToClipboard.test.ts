@@ -1,6 +1,6 @@
-import { copyLinkToClipboard } from "../src/utils/copyLinkToClipboard";
+import { copyLinkToClipboard } from '../src/utils/copyLinkToClipboard';
 
-describe('copyLinkToClipboard 테스트', () => {
+describe('copyLinkToClipboard 유틸 함수 테스트', () => {
   const originalClipboard = { ...global.navigator.clipboard };
 
   const consoleLogSpy = jest.spyOn(console, 'log').mockImplementation();
