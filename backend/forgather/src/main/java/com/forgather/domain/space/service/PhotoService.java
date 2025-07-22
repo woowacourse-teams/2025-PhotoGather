@@ -19,7 +19,7 @@ import com.forgather.domain.space.model.Space;
 import com.forgather.domain.space.repository.PhotoRepository;
 import com.forgather.domain.space.repository.SpaceRepository;
 import com.forgather.domain.space.util.MetaDataExtractor;
-import com.forgather.domain.space.util.ZipPathGenerator;
+import com.forgather.domain.space.util.ZipGenerator;
 
 import lombok.RequiredArgsConstructor;
 
@@ -72,7 +72,7 @@ public class PhotoService {
         Space space = spaceRepository.getBySpaceCode(spaceCode);
 
         File originalFile = awsS3Cloud.downloadAll(space.getSpaceCode());
-        File zipFile = ZipPathGenerator.generate(originalFile, spaceCode).toFile();
+        File zipFile = ZipGenerator.generate(originalFile, spaceCode);
         FileSystemUtils.deleteRecursively(originalFile);
         return zipFile;
     }

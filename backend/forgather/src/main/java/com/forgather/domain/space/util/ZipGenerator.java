@@ -7,16 +7,16 @@ import java.nio.file.Path;
 
 import net.lingala.zip4j.ZipFile;
 
-public class ZipPathGenerator {
+public class ZipGenerator {
 
-    private ZipPathGenerator() {
+    private ZipGenerator() {
     }
 
-    public static Path generate(File originalFile, String fileName) throws IOException {
+    public static File generate(File originalFile, String fileName) throws IOException {
         Path zipPath = Files.createTempFile(fileName + "-", ".zip");
         try (ZipFile zipFile = new ZipFile(zipPath.toFile())) {
             zipFile.addFolder(originalFile);
         }
-        return zipPath;
+        return zipPath.toFile();
     }
 }
