@@ -3,14 +3,16 @@ import { DEBUG_MESSAGES } from '../constants/debugMessages';
 
 interface UseIntersectionObserverProps {
   threshold?: number;
+  isInitialInView?: boolean;
 }
 
 const useIntersectionObserver = ({
   threshold = 0.5,
+  isInitialInView = false,
 }: UseIntersectionObserverProps) => {
   const observer = useRef<IntersectionObserver | null>(null);
   const targetRef = useRef<HTMLDivElement | null>(null);
-  const [isIntersecting, setIsIntersecting] = useState(false);
+  const [isIntersecting, setIsIntersecting] = useState(isInitialInView);
 
   const reObserve = () => {
     if (!targetRef.current) return;

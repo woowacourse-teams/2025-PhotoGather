@@ -13,16 +13,15 @@ import { mockSpaceData } from './mockSpaceData';
 import * as S from './SpaceHome.styles';
 
 const SpaceHome = () => {
-  // TODO : 깜빡이는 문제 해결
   const { targetRef: scrollEndRef, isIntersecting: isScrollEnd } =
-    useIntersectionObserver({});
+    useIntersectionObserver({ isInitialInView: true });
   const { targetRef: topBoundaryRef, isIntersecting: isTopVisible } =
-    useIntersectionObserver({});
+    useIntersectionObserver({ isInitialInView: true });
   const {
     targetRef: lazyFetchRef,
     isIntersecting: isFetchSectionVisible,
     reObserve,
-  } = useIntersectionObserver({});
+  } = useIntersectionObserver({ isInitialInView: true });
 
   const { thumbnailList, isLoading } = usePhotosBySpaceId({
     isFetchSectionVisible,
