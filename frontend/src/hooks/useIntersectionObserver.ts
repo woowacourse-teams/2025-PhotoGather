@@ -12,6 +12,13 @@ const useIntersectionObserver = ({
   const targetRef = useRef<HTMLDivElement | null>(null);
   const [isIntersecting, setIsIntersecting] = useState(false);
 
+  const reObserve = () => {
+    if (!targetRef.current) return;
+    observer.current?.unobserve(targetRef.current);
+    setIsIntersecting(false);
+    observer.current?.observe(targetRef.current);
+  };
+
   useEffect(() => {
     if (!('IntersectionObserver' in window)) {
       console.warn(DEBUG_MESSAGES.INTERSECTION_OBSERVER);
@@ -33,7 +40,7 @@ const useIntersectionObserver = ({
     };
   }, [threshold]);
 
-  return { targetRef, isIntersecting };
+  return { targetRef, isIntersecting, reObserve };
 };
 
 export default useIntersectionObserver;

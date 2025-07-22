@@ -57,14 +57,6 @@ export const IntersectionArea = styled.div`
   overflow: hidden;
 `;
 
-export const LazyFetchSection = styled(IntersectionArea)`
-  position: absolute;
-  bottom: 15%;
-  width: 100%;
-  left: 50%;
-  transform: translateX(-50%);
-`;
-
 export const TopButtonContainer = styled.div<{ $isVisible: boolean }>`
   position: fixed;
   bottom: 25px;
