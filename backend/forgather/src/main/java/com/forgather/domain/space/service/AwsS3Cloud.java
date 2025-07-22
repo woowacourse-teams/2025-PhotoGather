@@ -15,6 +15,7 @@ import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 import software.amazon.awssdk.transfer.s3.S3TransferManager;
+import software.amazon.awssdk.transfer.s3.config.DownloadFilter;
 import software.amazon.awssdk.transfer.s3.model.DirectoryDownload;
 import software.amazon.awssdk.transfer.s3.model.DownloadDirectoryRequest;
 
@@ -23,6 +24,7 @@ import software.amazon.awssdk.transfer.s3.model.DownloadDirectoryRequest;
 public class AwsS3Cloud {
 
     private static final String CONTENTS_INNER_PATH = "contents";
+    private static final String THUMBNAILS_INNER_PATH = "thumbnails";
 
     private final S3Client s3Client;
     private final S3Properties s3Properties;
@@ -53,11 +55,16 @@ public class AwsS3Cloud {
         DownloadDirectoryRequest request = DownloadDirectoryRequest.builder()
             .bucket(s3Properties.getBucketName())
             .listObjectsV2RequestTransformer(builder -> builder.prefix(s3Prefix))
+            .filter(excludeThumbnails())
             .destination(localDownloadDirectory.toPath())
             .build();
 
         DirectoryDownload directoryDownload = transferManager.downloadDirectory(request);
         directoryDownload.completionFuture().join();
         return localDownloadDirectory;
+    }
+
+    private DownloadFilter excludeThumbnails() {
+        return object -> !object.key().contains(THUMBNAILS_INNER_PATH);
     }
 }
