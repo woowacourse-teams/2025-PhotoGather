@@ -24,25 +24,27 @@ import software.amazon.awssdk.transfer.s3.model.DownloadDirectoryRequest;
 @RequiredArgsConstructor
 public class AwsS3Cloud {
 
-    private static final String CONTENTS_DIRECTORY = "contents";
+    private static final String CONTENTS_INNER_PATH = "contents";
 
     private final S3Client s3Client;
     private final S3Properties s3Properties;
     private final S3TransferManager transferManager;
 
-    public void upload(String spaceCode, MultipartFile file) throws IOException {
+    public String upload(String spaceCode, MultipartFile file) throws IOException {
+        String path = generateFilePath(spaceCode, file);
         PutObjectRequest putObjectRequest = PutObjectRequest.builder()
             .bucket(s3Properties.getBucketName())
-            .key(generateFilePath(spaceCode, file))
+            .key(path)
             .tagging(s3Properties.getTagging())
             .build();
         s3Client.putObject(putObjectRequest, RequestBody.fromBytes(file.getBytes()));
+        return path;
     }
 
     private String generateFilePath(String spaceCode, MultipartFile file) {
         String extension = StringUtils.getFilenameExtension(file.getOriginalFilename());
-        String uuid = UUID.randomUUID().toString();
-        return String.format("/%s/%s/%s/%s.%s", s3Properties.getRootDirectory(), CONTENTS_DIRECTORY, spaceCode, uuid,
+        String uploadFileName = UUID.randomUUID().toString();
+        return String.format("/%s/%s/%s/%s.%s", s3Properties.getRootDirectory(), CONTENTS_INNER_PATH, spaceCode, uploadFileName,
             extension);
     }
 
