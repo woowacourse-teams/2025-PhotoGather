@@ -1,21 +1,16 @@
 package com.forgather.domain.space.service;
 
+import java.io.File;
 import java.io.IOException;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.FileSystemUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.drew.imaging.ImageMetadataReader;
-import com.drew.imaging.ImageProcessingException;
-import com.drew.metadata.Metadata;
-import com.drew.metadata.exif.ExifSubIFDDirectory;
 import com.forgather.domain.space.dto.PhotoResponse;
 import com.forgather.domain.space.dto.PhotosResponse;
 import com.forgather.domain.space.model.Photo;
@@ -24,6 +19,7 @@ import com.forgather.domain.space.model.Space;
 import com.forgather.domain.space.repository.PhotoRepository;
 import com.forgather.domain.space.repository.SpaceRepository;
 import com.forgather.domain.space.util.MetaDataExtractor;
+import com.forgather.domain.space.util.ZipGenerator;
 
 import lombok.RequiredArgsConstructor;
 
@@ -70,5 +66,14 @@ public class PhotoService {
             throw new IllegalArgumentException(
                 "파일 업로드에 실패했습니다. 파일 이름: " + multipartFile.getOriginalFilename(), e);
         }
+    }
+
+    public File compressAll(String spaceCode) throws IOException {
+        Space space = spaceRepository.getBySpaceCode(spaceCode);
+
+        File originalFile = awsS3Cloud.downloadAll(space.getSpaceCode());
+        File zipFile = ZipGenerator.generate(originalFile, spaceCode);
+        FileSystemUtils.deleteRecursively(originalFile);
+        return zipFile;
     }
 }
