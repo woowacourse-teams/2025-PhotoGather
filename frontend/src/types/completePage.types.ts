@@ -1,1 +1,1 @@
-export type CompletePageVariant = 'upload' | 'download' | 'spaceCreated';
+export type CompletePageVariant = 'UPLOAD' | 'DOWNLOAD' | 'SPACE_CREATED';
