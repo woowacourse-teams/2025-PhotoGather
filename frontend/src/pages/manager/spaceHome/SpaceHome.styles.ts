@@ -34,6 +34,7 @@ export const ImageGridContainer = styled.div`
   height: 100%;
 `;
 
+
 export const ScrollableArea = styled.div<{ $isVisible: boolean }>`
   position: fixed;
   bottom: 0;
