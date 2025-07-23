@@ -15,12 +15,12 @@ import { mockSpaceData } from './mockSpaceData';
 import * as S from './SpaceHome.styles';
 
 const SpaceHome = () => {
-  const { targetRef: scrollEndRef, isIntersecting: isScrollEnd } =
-    useIntersectionObserver({ isInitialInView: true });
-  const { targetRef: topBoundaryRef, isIntersecting: isTopVisible } =
+  const { targetRef: scrollEndTriggerArea, isIntersecting: hasReachedBottom } =
+    useIntersectionObserver({});
+  const { targetRef: scrollTopTriggerArea, isIntersecting: isAtPageTop } =
     useIntersectionObserver({ isInitialInView: true });
   const {
-    targetRef: lazyFetchRef,
+    targetRef: fetchTriggerArea,
     isIntersecting: isFetchSectionVisible,
     reObserve,
   } = useIntersectionObserver({ isInitialInView: true, rootMargin: '200px' });
@@ -38,7 +38,7 @@ const SpaceHome = () => {
 
   return (
     <S.Wrapper>
-      <S.InfoContainer ref={topBoundaryRef}>
+      <S.InfoContainer ref={scrollTopTriggerArea}>
         <SpaceHeader
           title={mockSpaceData.name}
           description={mockSpaceData.startDate}
@@ -59,7 +59,7 @@ const SpaceHome = () => {
               <FloatingActionButton label="모두 저장하기" icon={<SaveIcon />} />
             </S.DownloadButtonContainer>
 
-            <S.TopButtonContainer $isVisible={!isTopVisible}>
+            <S.TopButtonContainer $isVisible={!isAtPageTop}>
               <FloatingIconButton
                 icon={<ArrowUpSvg fill={theme.colors.white} />}
                 onClick={goToTop}
@@ -73,9 +73,9 @@ const SpaceHome = () => {
           </S.NoImageContainer>
         ))}
 
-      <S.IntersectionArea ref={scrollEndRef} />
-      <S.IntersectionArea ref={lazyFetchRef} />
-      <S.ScrollableArea $isVisible={!isScrollEnd} />
+      <S.IntersectionArea ref={scrollEndTriggerArea} />
+      <S.IntersectionArea ref={fetchTriggerArea} />
+      <S.ScrollableArea $isHide={hasReachedBottom} />
     </S.Wrapper>
   );
 };

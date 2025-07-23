@@ -34,7 +34,7 @@ export const ImageGridContainer = styled.div`
   height: 100%;
 `;
 
-export const ScrollableArea = styled.div<{ $isVisible: boolean }>`
+export const ScrollableArea = styled.div<{ $isHide: boolean }>`
   position: fixed;
   bottom: 0;
   left: 50%;
@@ -49,7 +49,7 @@ export const ScrollableArea = styled.div<{ $isVisible: boolean }>`
     ${({ theme }) => hexToRgba(theme.colors.gradient.end, 0.6)} 100%
   );
   z-index: ${({ theme }) => theme.zIndex.scrollableArea};
-  opacity: ${({ $isVisible }) => ($isVisible ? 1 : 0)};
+  opacity: ${({ $isHide }) => ($isHide ? 0 : 1)};
   transition: opacity 0.3s ease-in-out;
 `;
 

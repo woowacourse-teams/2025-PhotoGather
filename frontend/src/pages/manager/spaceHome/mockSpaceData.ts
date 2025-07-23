@@ -37,7 +37,7 @@ export const mockGetPhotos = async (
   const slicedPhotos = mockImageList.slice(start, end);
   const totalPages = Math.ceil(mockImageList.length / params.pageSize);
 
-  await new Promise((r) => setTimeout(r, 500));
+  await new Promise((resolve) => setTimeout(resolve, 500));
 
   return {
     photos: slicedPhotos,
