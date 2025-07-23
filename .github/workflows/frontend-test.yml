@@ -16,13 +16,13 @@ on:
       - 'frontend/**'
 
 jobs:
-  defaults:
-    run:
-      working-directory: frontend
-
   frontend-test:
     name: Frontend Test
     runs-on: ubuntu-latest
+    
+    defaults:
+      run:
+        working-directory: frontend
 
     steps:
       - name: Checkout
