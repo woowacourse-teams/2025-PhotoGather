@@ -33,7 +33,7 @@ export const ImageGridContainer = styled.div`
   height: 100%;
 `;
 
-export const BlurArea = styled.div<{ $isHide: boolean }>`
+export const BottomBlurArea = styled.div<{ $isHide: boolean }>`
   position: fixed;
   bottom: 0;
   left: 50%;

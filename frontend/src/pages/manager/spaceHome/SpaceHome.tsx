@@ -75,7 +75,7 @@ const SpaceHome = () => {
 
       <S.IntersectionArea ref={hideBlurAreaTriggerRef} />
       <S.IntersectionArea ref={fetchTriggerRef} />
-      <S.BlurArea $isHide={isAtPageBottom} />
+      <S.BottomBlurArea $isHide={isAtPageBottom} />
     </S.Wrapper>
   );
 };
