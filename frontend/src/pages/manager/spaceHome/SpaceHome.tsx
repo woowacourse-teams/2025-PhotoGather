@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { ReactComponent as SaveIcon } from '../../../@assets/icons/download.svg';
 import { ReactComponent as SettingSvg } from '../../../@assets/icons/setting.svg';
 import { ReactComponent as ArrowUpSvg } from '../../../@assets/icons/upwardArrow.svg';
+import { http } from '../../../apis/http';
 import FloatingActionButton from '../../../components/@common/buttons/floatingActionButton/FloatingActionButton';
 import FloatingIconButton from '../../../components/@common/buttons/floatingIconButton/FloatingIconButton';
 import ImageGrid from '../../../components/@common/imageGrid/ImageGrid';
@@ -36,8 +37,20 @@ const SpaceHome = () => {
     fetchPhotosList();
   }, [isFetchSectionVisible, isEndPage]);
 
-  const handleDownload = () => {
-    console.log('download');
+  const handleDownload = async () => {
+    // TODO : 실제 API 호출로 변경
+    const response = await fetch('/sample.zip');
+
+    const blob = await response.blob();
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'sample.zip';
+    a.click();
+
+    document.body.removeChild(a);
+    window.URL.revokeObjectURL(url);
   };
 
   return (
