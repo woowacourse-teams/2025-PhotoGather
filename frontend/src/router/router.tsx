@@ -35,16 +35,21 @@ const router = createBrowserRouter([
         ],
       },
       {
-        path: 'complete/upload',
-        element: <CompletePage variant="UPLOAD" />,
-      },
-      {
-        path: 'complete/download',
-        element: <CompletePage variant="DOWNLOAD" />,
-      },
-      {
-        path: 'complete/space-created',
-        element: <CompletePage variant="SPACE_CREATED" />,
+        path: 'complete',
+        children: [
+          {
+            path: 'upload',
+            element: <CompletePage variant="UPLOAD" />,
+          },
+          {
+            path: 'download',
+            element: <CompletePage variant="DOWNLOAD" />,
+          },
+          {
+            path: 'space-created',
+            element: <CompletePage variant="SPACE_CREATED" />,
+          },
+        ],
       },
     ],
   },
