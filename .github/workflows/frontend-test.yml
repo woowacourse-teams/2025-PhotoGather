@@ -1,4 +1,4 @@
-name: 'Frontend CI'
+name: 'Frontend Test'
 
 on:
   push:
@@ -7,10 +7,6 @@ on:
       - develop
     paths:
       - 'frontend/**'
-    paths-ignore:
-      - 'backend/**'
-      - 'README.md'
-      - '.gitignore'
     
   pull_request:
     branches:
@@ -22,10 +18,10 @@ on:
 jobs:
   defaults:
     run:
-      working-directory: ./frontend
+      working-directory: frontend
 
-  frontend-ci:
-    name: Frontend CI
+  frontend-test:
+    name: Frontend Test
     runs-on: ubuntu-latest
 
   steps:
