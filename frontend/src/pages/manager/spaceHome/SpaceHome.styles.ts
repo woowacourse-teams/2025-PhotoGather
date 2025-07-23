@@ -4,7 +4,7 @@ import { hexToRgba } from '../../../utils/hexToRgba';
 
 export const Wrapper = styled.div`
   width: 100%;
-  height: ${({ theme }) =>
+  min-height: ${({ theme }) =>
     `calc(100vh - ${parseInt(theme.layout.padding.topBottom)}*2px)`};
   position: relative;
   display: flex;
@@ -33,7 +33,6 @@ export const ImageGridContainer = styled.div`
   width: 100%;
   height: 100%;
 `;
-
 
 export const ScrollableArea = styled.div<{ $isVisible: boolean }>`
   position: fixed;
