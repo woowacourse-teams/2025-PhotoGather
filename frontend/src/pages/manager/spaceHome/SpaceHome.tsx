@@ -15,7 +15,7 @@ import { mockSpaceData } from './mockSpaceData';
 import * as S from './SpaceHome.styles';
 
 const SpaceHome = () => {
-  const { targetRef: scrollEndTriggerArea, isIntersecting: isAtPageBottom } =
+  const { targetRef: pageBottomArea, isIntersecting: isAtPageBottom } =
     useIntersectionObserver({});
   const { targetRef: scrollTopTriggerArea, isIntersecting: isAtPageTop } =
     useIntersectionObserver({ isInitialInView: true });
@@ -73,7 +73,7 @@ const SpaceHome = () => {
           </S.NoImageContainer>
         ))}
 
-      <S.IntersectionArea ref={scrollEndTriggerArea} />
+      <S.IntersectionArea ref={pageBottomArea} />
       <S.IntersectionArea ref={fetchTriggerArea} />
       <S.ScrollableArea $isHide={isAtPageBottom} />
     </S.Wrapper>
