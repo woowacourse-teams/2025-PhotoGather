@@ -57,13 +57,14 @@ const usePhotosBySpaceId = ({ reObserve }: UsePhotosBySpaceIdProps) => {
         }
         const { photos } = data;
         updatePhotosList(photos, data.totalPages);
-        setIsLoading(false);
         requestAnimationFrame(() => {
           reObserve();
         });
       })
       .catch((err) => {
         console.error(err);
+      })
+      .finally(() => {
         setIsLoading(false);
       });
   };
