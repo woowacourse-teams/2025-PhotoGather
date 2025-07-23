@@ -61,6 +61,10 @@ const usePhotosBySpaceId = ({ reObserve }: UsePhotosBySpaceIdProps) => {
         requestAnimationFrame(() => {
           reObserve();
         });
+      })
+      .catch((err) => {
+        console.error(err);
+        setIsLoading(false);
       });
   };
 
