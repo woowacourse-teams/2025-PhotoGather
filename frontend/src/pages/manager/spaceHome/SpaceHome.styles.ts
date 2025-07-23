@@ -33,7 +33,7 @@ export const ImageGridContainer = styled.div`
   height: 100%;
 `;
 
-export const ScrollableArea = styled.div<{ $isHide: boolean }>`
+export const BlurArea = styled.div<{ $isHide: boolean }>`
   position: fixed;
   bottom: 0;
   left: 50%;
