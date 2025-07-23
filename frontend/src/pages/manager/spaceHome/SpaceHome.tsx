@@ -23,7 +23,7 @@ const SpaceHome = () => {
     targetRef: fetchTriggerArea,
     isIntersecting: isFetchSectionVisible,
     reObserve,
-  } = useIntersectionObserver({ isInitialInView: true, rootMargin: '200px' });
+  } = useIntersectionObserver({ rootMargin: '200px' });
 
   const { isLoading, thumbnailList, isEndPage, fetchPhotosList } =
     usePhotosBySpaceId({
