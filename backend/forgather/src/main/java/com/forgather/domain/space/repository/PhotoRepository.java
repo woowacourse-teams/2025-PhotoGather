@@ -1,6 +1,8 @@
 package com.forgather.domain.space.repository;
 
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -16,4 +18,6 @@ public interface PhotoRepository extends JpaRepository<Photo, Long> {
     }
 
     Page<Photo> findAllBySpace(Space space, Pageable pageable);
+
+    List<Photo> findAllBySpace(Space space);
 }
