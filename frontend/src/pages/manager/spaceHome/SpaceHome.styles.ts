@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { ReactComponent as GiftSvg } from '../../../@assets/icons/gift.svg';
+import { ReactComponent as GiftIcon } from '../../../@assets/icons/gift.svg';
 import { hexToRgba } from '../../../utils/hexToRgba';
 
 export const Wrapper = styled.div`
@@ -83,7 +83,7 @@ export const NoImageText = styled.p`
   color: ${({ theme }) => theme.colors.white};
 `;
 
-export const GiftIcon = styled(GiftSvg)`
+export const Icon = styled(GiftIcon)`
   width: 120px;
   aspect-ratio: 1/1;
 `;

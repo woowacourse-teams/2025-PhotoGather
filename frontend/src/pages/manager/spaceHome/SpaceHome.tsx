@@ -68,7 +68,7 @@ const SpaceHome = () => {
           </>
         ) : (
           <S.NoImageContainer>
-            <S.GiftIcon />
+            <S.Icon />
             <S.NoImageText>{INFORMATION.NO_IMAGE}</S.NoImageText>
           </S.NoImageContainer>
         ))}

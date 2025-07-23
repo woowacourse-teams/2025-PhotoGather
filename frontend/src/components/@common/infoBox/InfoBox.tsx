@@ -11,7 +11,7 @@ interface InfoBoxProps {
 const InfoBox = ({ description, highlightTextArray }: InfoBoxProps) => {
   return (
     <S.Wrapper>
-      <S.InfoIcon />
+      <S.Icon />
       {highlightTextArray && highlightTextArray.length > 0 ? (
         <HighlightText
           text={description}
