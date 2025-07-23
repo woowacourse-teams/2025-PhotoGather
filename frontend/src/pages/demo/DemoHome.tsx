@@ -10,7 +10,7 @@ const DemoHome = () => {
   return (
     <S.Wrapper>
       <S.Icon src={rocketImage} alt="데모 페이지 아이콘"></S.Icon>
-      <S.Title>Forgather 데모</S.Title>
+      <S.Title>Forgather DEMO</S.Title>
       <Button
         text="(GUEST) 스페이스 업로드 페이지"
         onClick={() => navigate(ROUTES.GUEST.IMAGE_UPLOAD)}
