@@ -21,7 +21,7 @@ const ImageUploadPage = () => {
 
   const handleUpload = async () => {
     try {
-      await photoService.uploadFiles('1234567891', imageFiles);
+      await photoService.uploadFiles('1234567890', imageFiles);
       //TODO: 완성 페이지로 이동
       alert('사진 업로드가 완료되었습니다.');
       clearFiles();
