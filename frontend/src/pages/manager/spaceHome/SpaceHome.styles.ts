@@ -54,9 +54,8 @@ export const ScrollableArea = styled.div<{ $isVisible: boolean }>`
 `;
 
 export const IntersectionArea = styled.div`
-  width: 0;
-  height: 0;
-  overflow: hidden;
+  position: absolute;
+  bottom: ${({ theme }) => theme.layout.padding.topBottom};
 `;
 
 export const TopButtonContainer = styled.div<{ $isVisible: boolean }>`
