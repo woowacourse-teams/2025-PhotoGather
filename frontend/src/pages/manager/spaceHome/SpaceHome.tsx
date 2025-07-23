@@ -36,6 +36,10 @@ const SpaceHome = () => {
     fetchPhotosList();
   }, [isFetchSectionVisible, isEndPage]);
 
+  const handleDownload = () => {
+    console.log('download');
+  };
+
   return (
     <S.Wrapper>
       <S.InfoContainer ref={scrollTopTriggerRef}>
@@ -56,7 +60,11 @@ const SpaceHome = () => {
             </S.ImageGridContainer>
 
             <S.DownloadButtonContainer>
-              <FloatingActionButton label="모두 저장하기" icon={<SaveIcon />} />
+              <FloatingActionButton
+                label="모두 저장하기"
+                icon={<SaveIcon />}
+                onClick={handleDownload}
+              />
             </S.DownloadButtonContainer>
 
             <S.TopButtonContainer $isVisible={!isAtPageTop}>
