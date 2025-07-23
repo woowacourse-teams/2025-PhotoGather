@@ -7,6 +7,8 @@
     "start": "webpack serve --mode development",
     "build": "webpack --mode production",
     "format:styles": "prettier --write 'src/styles/**/*.{ts,tsx,js,jsx}' 'src/**/*.styles.{ts,tsx,js,jsx}'",
+    "lint:biome": "biome check src",
+    "lint:styles": "prettier --check 'src/styles/**/*.{ts,tsx,js,jsx}' 'src/**/*.styles.{ts,tsx,js,jsx}'",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build"
   },

@@ -1,4 +1,5 @@
 export const INFORMATION = {
+  NO_IMAGE: '곧 스페이스가 채워질 예정이에요',
   LINK_WARNING: {
     DESCRIPTION: `이 화면을 지나면 링크를 볼 수 없어요.\n지금 꼭 복사하거나 저장해 주세요!`,
     HIGHLIGHT_TEXT: '지금 꼭 복사하거나 저장해 주세요!',

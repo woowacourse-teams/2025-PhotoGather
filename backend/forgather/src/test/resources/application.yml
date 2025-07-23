@@ -1,0 +1,56 @@
+spring:
+  application:
+    name: forgather
+
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+  sql:
+    init:
+      mode: never
+
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 1000MB
+
+aws:
+  s3:
+    region: ap-northeast-2
+    access-key: YOUR_AWS_ACCESS_KEY
+    secret-key: YOUR_AWS_SECRET_KEY
+
+    bucket-name: BUCKET_NAME_PLACEHOLDER
+    root-directory: ROOT_DIRECTORY_PLACEHOLDER
+    tagging: MOKO_IS_N8N_MASTER
+
+cors:
+  allowed-origins:
+    - http://localhost:8080
+  allowed-methods:
+    - GET
+    - POST
+    - PUT
+    - DELETE
+    - PATCH
+    - OPTIONS
+  allowed-headers:
+    - Authorization
+    - Content-Type
+    - X-Requested-With
+  allow-credentials: true
+  max-age: 999999
+
+api:
+  base-url: http://localhost:8080
