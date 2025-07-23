@@ -25,10 +25,10 @@ const SpaceHome = () => {
     reObserve,
   } = useIntersectionObserver({ isInitialInView: true, rootMargin: '200px' });
 
-  const { thumbnailList, isLoading, isEndPage, fetchPhotosList } =
-    usePhotosBySpaceId({
-      reObserve,
-    });
+  const { isLoading, isEndPage, fetchPhotosList } = usePhotosBySpaceId({
+    reObserve,
+  });
+  const thumbnailList: string[] = [];
 
   //biome-ignore lint/correctness/useExhaustiveDependencies: isFetchSectionVisible 변경 시 호출
   useEffect(() => {

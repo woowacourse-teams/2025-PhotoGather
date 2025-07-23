@@ -4,7 +4,8 @@ import { hexToRgba } from '../../../utils/hexToRgba';
 
 export const Wrapper = styled.div`
   width: 100%;
-  height: 100%;
+  height: ${({ theme }) =>
+    `calc(100vh - ${parseInt(theme.layout.padding.topBottom)}*2px)`};
   position: relative;
   display: flex;
   flex-direction: column;
@@ -72,8 +73,11 @@ export const NoImageContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   gap: 20px;
   flex-grow: 1;
+  border-radius: 12px;
+  background: ${({ theme }) => hexToRgba(theme.colors.gray06, 0.3)};
 `;
 
 export const NoImageText = styled.p`
