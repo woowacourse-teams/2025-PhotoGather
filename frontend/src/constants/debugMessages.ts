@@ -5,4 +5,5 @@ export const DEBUG_MESSAGES = {
   NO_RESPONSE: 'response가 없습니다.',
   NO_FILE_NAME: '파일 이름이 없습니다.',
   NO_BLOB: 'blob이 없습니다. (다운로드 실패)',
+  NO_BLOB_INSTANCE: '응답 데이터가 Blob 인스턴스가 아닙니다.',
 } as const;

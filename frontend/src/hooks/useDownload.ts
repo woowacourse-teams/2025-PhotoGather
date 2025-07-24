@@ -33,6 +33,9 @@ const useDownload = ({ spaceName }: UseDownloadProps) => {
         if (!blob) {
           throw new Error(DEBUG_MESSAGES.NO_BLOB);
         }
+        if (!(blob instanceof Blob)) {
+          throw new Error(DEBUG_MESSAGES.NO_BLOB_INSTANCE);
+        }
         downloadBlob(blob);
       },
       () => {
