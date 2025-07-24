@@ -8,10 +8,10 @@ import FloatingIconButton from '../../../components/@common/buttons/floatingIcon
 import ImageGrid from '../../../components/@common/imageGrid/ImageGrid';
 import SpaceHeader from '../../../components/spaceHeader/SpaceHeader';
 import { INFORMATION } from '../../../constants/messages';
-import { ScrollableBlurArea } from '../../../styles/@common/ScrollableBlurArea';
-import useIntersectionObserver from '../../../hooks/@common/useIntersectionObserver'; 
+import useIntersectionObserver from '../../../hooks/@common/useIntersectionObserver';
 import useDownload from '../../../hooks/useDownload';
 import usePhotosBySpaceCode from '../../../hooks/usePhotosBySpaceCode';
+import { ScrollableBlurArea } from '../../../styles/@common/ScrollableBlurArea';
 import { theme } from '../../../styles/theme';
 import { goToTop } from '../../../utils/goToTop';
 import { mockSpaceData } from './mockSpaceData';
