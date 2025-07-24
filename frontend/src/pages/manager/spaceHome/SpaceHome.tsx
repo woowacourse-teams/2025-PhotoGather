@@ -48,9 +48,7 @@ const SpaceHome = () => {
     tryAsync(
       async () => {
         setIsDownloading(true);
-        const response = await photoService.downloadZip(
-          String(mockSpaceData.code),
-        );
+        const response = await photoService.downloadZip(mockSpaceData.code);
         const blob = response.data;
         if (!blob) {
           throw new Error(DEBUG_MESSAGES.NO_BLOB);

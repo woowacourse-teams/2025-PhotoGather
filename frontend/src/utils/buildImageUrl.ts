@@ -1,7 +1,7 @@
 export const buildThumbnailUrl = (
-  spaceId: number,
+  spaceCode: string,
   fileName: string,
   preset: string,
 ) => {
-  return `${process.env.IMAGE_BASE_URL}/photogather/contents/${spaceId}/thumbnails/${fileName}_${preset}.webp`;
+  return `${process.env.IMAGE_BASE_URL}/photogather/contents/${spaceCode}/thumbnails/${fileName}_${preset}.webp`;
 };

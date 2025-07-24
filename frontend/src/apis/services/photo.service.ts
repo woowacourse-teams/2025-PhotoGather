@@ -12,8 +12,10 @@ export const photoService = {
 
   getById: (id: number) => http.get<Photo>(`/photos/${id}`),
 
-  getBySpaceId: (spaceId: number, params?: { page?: number; size?: number }) =>
-    http.get<PhotoListResponse>(`/spaces/${spaceId}/photos`, params),
+  getBySpaceCode: (
+    spaceCode: string,
+    params?: { page?: number; size?: number },
+  ) => http.get<PhotoListResponse>(`/spaces/${spaceCode}/photos`, params),
 
   create: (data: CreatePhotoInput) => http.post<Photo>('/photos', data),
 

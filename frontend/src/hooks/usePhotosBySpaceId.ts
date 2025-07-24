@@ -7,7 +7,7 @@ import { parsedImagePath } from '../utils/parsedImagePath';
 
 interface UsePhotosBySpaceIdProps {
   reObserve: () => void;
-  spaceCode: number;
+  spaceCode: string;
 }
 
 const usePhotosBySpaceId = ({
@@ -44,7 +44,7 @@ const usePhotosBySpaceId = ({
     setIsLoading(true);
 
     photoService
-      .getBySpaceId(spaceCode, {
+      .getBySpaceCode(spaceCode, {
         page: currentPage.current,
         size: PAGE_SIZE,
       })
