@@ -75,6 +75,10 @@ public class PhotoService {
         }
     }
 
+    /**
+     * TODO
+     * 파일 삭제 트랜잭션 분리
+     */
     public File compressAll(String spaceCode) throws IOException {
         Space space = spaceRepository.getBySpaceCode(spaceCode);
 
@@ -108,17 +112,22 @@ public class PhotoService {
     }
 
     private void renameFile(Path targetPath, String originalName, int count) {
-        String downloadedName = originalName;
-        if (count != 1) {
-            String[] downloadedNameTokens = originalName.split("\\.");
-            downloadedName =
-                downloadedNameTokens[0] + "(" + count + ")." + downloadedNameTokens[downloadedNameTokens.length - 1];
-        }
+        String downloadedName = generateDownloadedName(originalName, count);
         Path newPath = targetPath.resolveSibling(downloadedName).normalize();
         try {
             Files.move(targetPath, newPath, StandardCopyOption.ATOMIC_MOVE);
         } catch (IOException e) {
             throw new IllegalStateException();
         }
+    }
+
+    private String generateDownloadedName(String originalName, int count) {
+        String downloadedName = originalName;
+        if (count != 1) {
+            String[] downloadedNameTokens = originalName.split("\\.");
+            downloadedName =
+                downloadedNameTokens[0] + "(" + count + ")." + downloadedNameTokens[downloadedNameTokens.length - 1];
+        }
+        return downloadedName;
     }
 }
