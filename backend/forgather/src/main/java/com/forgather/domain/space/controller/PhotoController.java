@@ -1,13 +1,12 @@
 package com.forgather.domain.space.controller;
 
 import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
-import org.springframework.core.io.FileSystemResource;
-import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -22,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
 import com.forgather.domain.space.dto.PhotoResponse;
 import com.forgather.domain.space.dto.PhotosResponse;
@@ -30,7 +30,9 @@ import com.forgather.domain.space.service.PhotoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/spaces/{spaceCode}/photos")
@@ -73,13 +75,9 @@ public class PhotoController {
 
     @GetMapping(value = "/download", produces = ZIP_CONTENT_TYPE)
     @Operation(summary = "사진 zip 일괄 다운로드", description = "특정 공간의 사진 목록을 zip 파일로 다운로드합니다.")
-    public ResponseEntity<Resource> downloadAll(@PathVariable(name = "spaceCode") String spaceCode) throws IOException {
+    public ResponseEntity<StreamingResponseBody> downloadAll(@PathVariable(name = "spaceCode") String spaceCode)
+        throws IOException {
         File zipFile = photoService.compressAll(spaceCode);
-
-        var resource = new FileSystemResource(zipFile);
-        if (!resource.exists()) {
-            throw new FileNotFoundException();
-        }
 
         ContentDisposition contentDisposition = ContentDisposition.attachment()
             .filename(zipFile.getName(), StandardCharsets.UTF_8)
@@ -88,8 +86,23 @@ public class PhotoController {
         httpHeaders.setContentDisposition(contentDisposition);
         httpHeaders.setContentType(MediaType.valueOf(ZIP_CONTENT_TYPE));
 
+        StreamingResponseBody responseBody = outputStream -> {
+            try (InputStream inputStream = new FileInputStream(zipFile)) {
+                byte[] buffer = new byte[4096];
+                int bytesRead;
+                while ((bytesRead = inputStream.read(buffer)) != -1) {
+                    outputStream.write(buffer, 0, bytesRead);
+                }
+                outputStream.flush();
+            } finally {
+                if (zipFile.exists() && !zipFile.delete()) {
+                    log.info("파일 삭제 실패: {}", zipFile.getAbsolutePath());
+                }
+            }
+        };
+
         return ResponseEntity.ok()
             .headers(httpHeaders)
-            .body(resource);
+            .body(responseBody);
     }
 }

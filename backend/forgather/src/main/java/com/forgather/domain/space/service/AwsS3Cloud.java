@@ -15,6 +15,7 @@ import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 import software.amazon.awssdk.transfer.s3.S3TransferManager;
+import software.amazon.awssdk.transfer.s3.config.DownloadFilter;
 import software.amazon.awssdk.transfer.s3.model.DirectoryDownload;
 import software.amazon.awssdk.transfer.s3.model.DownloadDirectoryRequest;
 
@@ -23,6 +24,7 @@ import software.amazon.awssdk.transfer.s3.model.DownloadDirectoryRequest;
 public class AwsS3Cloud {
 
     private static final String CONTENTS_INNER_PATH = "contents";
+    private static final String THUMBNAILS_INNER_PATH = "thumbnails";
 
     private final S3Client s3Client;
     private final S3Properties s3Properties;
@@ -46,18 +48,33 @@ public class AwsS3Cloud {
             extension);
     }
 
-    public File downloadAll(String spaceCode) {
-        File localDownloadDirectory = new File("images-" + spaceCode);
+    public File downloadAll(String tempPath, String spaceCode) {
+        File localDownloadDirectory = new File(tempPath,"images-" + spaceCode);
+        createLocalDownloadDirectory(localDownloadDirectory);
         String s3Prefix = String.format("%s/%s/%s", s3Properties.getRootDirectory(), CONTENTS_INNER_PATH, spaceCode);
 
         DownloadDirectoryRequest request = DownloadDirectoryRequest.builder()
             .bucket(s3Properties.getBucketName())
             .listObjectsV2RequestTransformer(builder -> builder.prefix(s3Prefix))
+            .filter(excludeThumbnails())
             .destination(localDownloadDirectory.toPath())
             .build();
 
         DirectoryDownload directoryDownload = transferManager.downloadDirectory(request);
         directoryDownload.completionFuture().join();
         return localDownloadDirectory;
+    }
+
+    private void createLocalDownloadDirectory(File localDownloadDirectory) {
+        if (!localDownloadDirectory.exists()) {
+            boolean created = localDownloadDirectory.mkdirs();
+            if (!created) {
+                throw new IllegalStateException("다운로드 디렉토리 생성 실패: " + localDownloadDirectory.getAbsolutePath());
+            }
+        }
+    }
+
+    private DownloadFilter excludeThumbnails() {
+        return object -> !object.key().contains(THUMBNAILS_INNER_PATH);
     }
 }
