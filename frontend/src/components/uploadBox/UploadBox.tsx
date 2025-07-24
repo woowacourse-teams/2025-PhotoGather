@@ -1,4 +1,6 @@
-import { useDrag } from '../../hooks/useDrag';
+import { ReactComponent as CameraIcon } from '@assets/icons/camera.svg';
+import useDrag from '../../hooks/@common/useDrag';
+import { theme } from '../../styles/theme';
 import * as S from './UploadBox.styles';
 
 interface UploadBoxProps {
@@ -14,7 +16,7 @@ interface UploadBoxProps {
 
 const UploadBox = ({
   text,
-  iconSize = 100,
+  iconSize = 60,
   onChange,
   onDrop,
 }: UploadBoxProps) => {
@@ -36,7 +38,7 @@ const UploadBox = ({
       onDrop={handleDrop}
     >
       <S.Container $isActive={isActive}>
-        <S.Icon $iconSize={iconSize} />
+        <CameraIcon fill={theme.colors.white} width={iconSize} />
         {text}
       </S.Container>
       <input

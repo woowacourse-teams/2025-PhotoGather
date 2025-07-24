@@ -1,6 +1,6 @@
 import { renderHook } from '@testing-library/react';
 import { act } from 'react';
-import useInputLength from '../src/hooks/useInputLength';
+import useInputLength from '../src/hooks/@common/useInputLength';
 
 describe('useInputLength 훅 테스트', () => {
   it('value가 maxCount보다 길면 splicedValue는 maxCount만큼 잘린다.', () => {

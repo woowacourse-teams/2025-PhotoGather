@@ -7,6 +7,11 @@ export const ROUTES = {
     IMAGE_UPLOAD: '/guest/image-upload',
     SHARE: '/guest/share',
   },
+  COMPLETE: {
+    UPLOAD: '/complete/upload',
+    DOWNLOAD: '/complete/download',
+    SPACE_CREATED: '/complete/space-created',
+  },
 } as const;
 
 export const HIGHLIGHT_PAGES: readonly string[] = [

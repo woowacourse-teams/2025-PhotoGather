@@ -1,4 +1,3 @@
-import { ReactComponent as CameraIcon } from '@assets/icons/camera.svg';
 import styled from '@emotion/styled';
 
 export const Wrapper = styled.label<{ $isActive: boolean }>`
@@ -20,10 +19,4 @@ export const Container = styled.div<{ $isActive: boolean }>`
   align-items: center;
   gap: 20px;
   padding: 25px;
-`;
-
-export const Icon = styled(CameraIcon)<{ $iconSize: number }>`
-  width: ${({ $iconSize }) => `${$iconSize}px`};
-  color: ${({ theme }) => theme.colors.primary20};
-  height: auto;
 `;

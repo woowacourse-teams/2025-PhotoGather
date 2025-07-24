@@ -1,0 +1,29 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      java: corretto21
+    commands:
+      - echo "[install] 압축 해제 준비 및 디렉토리 생성"
+      - cd backend/forgather/
+      - mkdir -p src/main/resources/
+
+  pre_build:
+    commands:
+      - echo "[pre_build] environment.zip 압축 해제 및 application.yml 복사"
+      - echo -e $yml > src/main/resources/application.yml
+      - ls -l src/main/resources/
+
+  build:
+    commands:
+      - echo "[build] Gradle 빌드 (테스트 생략)"
+      - chmod +x ./gradlew
+      - ./gradlew build -x test
+      - echo "[build] JAR, deploy 파일을 하나의 ZIP으로 압축"
+      - cd ../..
+      - zip -j forgather-deploy.zip backend/forgather/build/libs/*.jar backend/forgather/deploy/appspec.yml backend/forgather/deploy/deploy.sh
+
+artifacts:
+  files:
+    - forgather-deploy.zip

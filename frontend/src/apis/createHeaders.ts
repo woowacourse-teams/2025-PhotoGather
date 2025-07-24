@@ -1,17 +1,17 @@
-import type { BodyType } from '../types/api.type';
+import type { BodyContentType } from '../types/api.type';
 
 export const createHeaders = (
-  bodyType: BodyType,
+  bodyContentType: BodyContentType,
   token?: string,
 ): HeadersInit => {
-  //TODO: 저장된 토큰을 들고오기
+  // TODO : 저장된 토큰 들고오기
   const headers: HeadersInit = {};
 
   if (token) {
     headers.Authorization = `Bearer ${token}`;
   }
 
-  switch (bodyType) {
+  switch (bodyContentType) {
     case 'json':
       headers['Content-Type'] = 'application/json';
       break;
