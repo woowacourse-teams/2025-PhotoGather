@@ -6,7 +6,7 @@ export const Wrapper = styled.div<{ $rowImageAmount: number }>`
   height: 100%;
   display: grid;
   align-items: start;
-  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
   max-height: 100%;
   border-top-left-radius: 12px;
   border-top-right-radius: 12px;
