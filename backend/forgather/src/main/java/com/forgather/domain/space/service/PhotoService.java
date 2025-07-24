@@ -84,14 +84,14 @@ public class PhotoService {
         Space space = spaceRepository.getBySpaceCode(spaceCode);
 
         File originalFile = awsS3Cloud.downloadAll(space.getSpaceCode());
-        renameOriginalFIle(space, originalFile);
+        renameOriginalFile(space, originalFile);
 
         File zipFile = ZipGenerator.generate(originalFile, spaceCode);
         FileSystemUtils.deleteRecursively(originalFile);
         return zipFile;
     }
 
-    private void renameOriginalFIle(Space space, File originalFile) {
+    private void renameOriginalFile(Space space, File originalFile) {
         Map<String, String> originalNames = getOriginalFileNames(space);
         Map<String, Integer> originalNamesCount = new HashMap<>();
         try (Stream<Path> paths = Files.walk(originalFile.toPath())) {
