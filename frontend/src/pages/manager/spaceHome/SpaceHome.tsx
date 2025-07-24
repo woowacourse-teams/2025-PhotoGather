@@ -1,8 +1,8 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { ReactComponent as SaveIcon } from '../../../@assets/icons/download.svg';
 import { ReactComponent as SettingSvg } from '../../../@assets/icons/setting.svg';
 import { ReactComponent as ArrowUpSvg } from '../../../@assets/icons/upwardArrow.svg';
-import { http } from '../../../apis/http';
+import { photoService } from '../../../apis/services/photo.service';
 import FloatingActionButton from '../../../components/@common/buttons/floatingActionButton/FloatingActionButton';
 import FloatingIconButton from '../../../components/@common/buttons/floatingIconButton/FloatingIconButton';
 import ImageGrid from '../../../components/@common/imageGrid/ImageGrid';
@@ -29,7 +29,10 @@ const SpaceHome = () => {
   const { isLoading, thumbnailList, isEndPage, fetchPhotosList } =
     usePhotosBySpaceId({
       reObserve,
+      spaceCode: mockSpaceData.code,
     });
+
+  const [isDownloading, setIsDownloading] = useState(false);
 
   //biome-ignore lint/correctness/useExhaustiveDependencies: isFetchSectionVisible 변경 시 호출
   useEffect(() => {
@@ -37,20 +40,24 @@ const SpaceHome = () => {
     fetchPhotosList();
   }, [isFetchSectionVisible, isEndPage]);
 
+  console.log(isDownloading);
   const handleDownload = async () => {
+    setIsDownloading(true);
     // TODO : 실제 API 호출로 변경
-    const response = await fetch('/sample.zip');
+    console.log('눌림');
+    const response = await photoService.downloadZip(String(mockSpaceData.code));
+    console.log(response);
+    setIsDownloading(false);
+    // const blob =  response();
+    // const url = URL.createObjectURL(blob);
 
-    const blob = await response.blob();
-    const url = URL.createObjectURL(blob);
+    // const a = document.createElement('a');
+    // a.href = url;
+    // a.download = 'sample.zip';
+    // a.click();
 
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'sample.zip';
-    a.click();
-
-    document.body.removeChild(a);
-    window.URL.revokeObjectURL(url);
+    // document.body.removeChild(a);
+    // window.URL.revokeObjectURL(url);
   };
 
   return (
@@ -77,6 +84,7 @@ const SpaceHome = () => {
                 label="모두 저장하기"
                 icon={<SaveIcon />}
                 onClick={handleDownload}
+                disabled={isDownloading}
               />
             </S.DownloadButtonContainer>
 

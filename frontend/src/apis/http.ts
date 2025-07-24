@@ -39,6 +39,7 @@ const request = async <T>(
   const headers = createHeaders(bodyType, token);
   const requestBody = createBody(body, bodyType);
 
+  // TODO : try catch 유틸 분리
   try {
     const response = await fetch(url, {
       method,
@@ -49,6 +50,7 @@ const request = async <T>(
     // zip 파일로 받고, 응답이 blob으로 오는 경우
     if (bodyType === 'blob') {
       const blob = await response.blob();
+      console.log(blob);
       return {
         success: response.ok,
         data: blob as unknown as T,

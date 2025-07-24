@@ -7,11 +7,14 @@ import { parsedImagePath } from '../utils/parsedImagePath';
 
 interface UsePhotosBySpaceIdProps {
   reObserve: () => void;
+  spaceCode: number;
 }
 
-const usePhotosBySpaceId = ({ reObserve }: UsePhotosBySpaceIdProps) => {
+const usePhotosBySpaceId = ({
+  reObserve,
+  spaceCode,
+}: UsePhotosBySpaceIdProps) => {
   const PAGE_SIZE = 21;
-  const MOCK_SPACE_ID = 1234567890;
   const PRESET = 'x800';
 
   const [isLoading, setIsLoading] = useState(false);
@@ -20,11 +23,7 @@ const usePhotosBySpaceId = ({ reObserve }: UsePhotosBySpaceIdProps) => {
   const totalPages = useRef(1);
 
   const thumbnailList = photosList?.map((photo) => {
-    return buildThumbnailUrl(
-      MOCK_SPACE_ID,
-      parsedImagePath(photo.path),
-      PRESET,
-    );
+    return buildThumbnailUrl(spaceCode, parsedImagePath(photo.path), PRESET);
   });
 
   const isEndPage = currentPage.current > totalPages.current;
@@ -45,7 +44,7 @@ const usePhotosBySpaceId = ({ reObserve }: UsePhotosBySpaceIdProps) => {
     setIsLoading(true);
 
     photoService
-      .getBySpaceId(MOCK_SPACE_ID, {
+      .getBySpaceId(spaceCode, {
         page: currentPage.current,
         size: PAGE_SIZE,
       })

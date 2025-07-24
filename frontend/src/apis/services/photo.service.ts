@@ -23,6 +23,11 @@ export const photoService = {
     return http.post(`/spaces/${spaceCode}/photos/upload`, formData);
   },
 
+  downloadZip: (spaceCode: string) =>
+    http.get(`/spaces/${spaceCode}/photos/download`, {
+      bodyType: 'blob',
+    }),
+
   delete: (id: number) => http.delete<void>(`/photos/${id}`),
 
   getWithContent: (id: number) =>
