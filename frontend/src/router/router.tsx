@@ -1,5 +1,5 @@
 import { createBrowserRouter } from 'react-router-dom';
-import CompletePage from '../components/@common/completePage/CompletePage';
+import CompletePage from '../components/layout/completePage/CompletePage';
 import Layout from '../components/layout/Layout';
 import ImageUploadPage from '../pages/guest/imageUploadPage/ImageUploadPage';
 import SharePage from '../pages/guest/sharePage/SharePage';

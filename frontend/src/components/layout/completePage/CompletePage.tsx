@@ -1,7 +1,7 @@
 import { COMPLETE_PAGE_VARIANTS } from '../../../constants/messages';
 import type { CompletePageVariant } from '../../../types/completePage.types';
-import Button from '../buttons/button/Button';
-import HighlightText from '../highlightText/HighlightText';
+import Button from '../../@common/buttons/button/Button';
+import HighlightText from '../../@common/highlightText/HighlightText';
 import * as S from './CompletePage.styles';
 
 interface CompletePageProps {
