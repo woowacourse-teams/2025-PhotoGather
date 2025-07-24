@@ -13,6 +13,8 @@ interface CompletePageProps {
   buttonText: string;
   /** 완료 페이지에서 강조할 텍스트 */
   highlightWords: string[];
+  /** 버튼 클릭했을 때 실행할 함수*/
+  onButtonClick: () => void;
 }
 
 const CompletePage = ({
@@ -21,6 +23,7 @@ const CompletePage = ({
   description,
   buttonText,
   highlightWords,
+  onButtonClick,
 }: CompletePageProps) => {
   return (
     <S.Wrapper>
@@ -38,7 +41,7 @@ const CompletePage = ({
       </S.ContentWrapper>
 
       <S.BottomContainer>
-        <Button text={buttonText} onClick={() => console.log(1)} />
+        <Button text={buttonText} onClick={onButtonClick} />
       </S.BottomContainer>
     </S.Wrapper>
   );

@@ -50,6 +50,7 @@ const router = createBrowserRouter([
                 description={COMPLETE.UPLOAD.DESCRIPTION}
                 buttonText={COMPLETE.UPLOAD.BUTTON_TEXT}
                 highlightWords={COMPLETE.UPLOAD.HIGHLIGHT_WORDS}
+                onButtonClick={() => console.log(1)}
               />
             ),
           },
@@ -62,6 +63,7 @@ const router = createBrowserRouter([
                 description={COMPLETE.DOWNLOAD.DESCRIPTION}
                 buttonText={COMPLETE.DOWNLOAD.BUTTON_TEXT}
                 highlightWords={COMPLETE.DOWNLOAD.HIGHLIGHT_WORDS}
+                onButtonClick={() => console.log(1)}
               />
             ),
           },
@@ -74,6 +76,7 @@ const router = createBrowserRouter([
                 description={COMPLETE.SPACE_CREATED.DESCRIPTION}
                 buttonText={COMPLETE.SPACE_CREATED.BUTTON_TEXT}
                 highlightWords={COMPLETE.SPACE_CREATED.HIGHLIGHT_WORDS}
+                onButtonClick={() => console.log(1)}
               />
             ),
           },
