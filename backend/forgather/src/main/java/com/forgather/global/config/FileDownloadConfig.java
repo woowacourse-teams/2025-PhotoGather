@@ -5,23 +5,24 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import lombok.RequiredArgsConstructor;
+
 @Configuration
+@RequiredArgsConstructor
 public class FileDownloadConfig {
 
-    @Value("${app.download.temp.dir}")
-    private String downloadTempPath;
+    private final FileDownloadProperties fileDownloadProperties;
 
     @Bean
     public Path downloadTempPath() {
-        Path tempDir = Paths.get(downloadTempPath);
+        Path tempDir = Paths.get(fileDownloadProperties.getPath());
         try {
             Files.createDirectories(tempDir);
         } catch (IOException e) {
-            throw new IllegalStateException("임시 다운로드 디렉토리 생성 실패: " + downloadTempPath, e);
+            throw new IllegalStateException("임시 다운로드 디렉토리 생성 실패: " + tempDir, e);
         }
         return tempDir;
     }
