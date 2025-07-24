@@ -22,7 +22,11 @@ export const photoService = {
   uploadFiles: (spaceCode: string, files: File[]) => {
     const formData = new FormData();
     files.forEach((file) => formData.append('files', file));
-    return http.post(`/spaces/${spaceCode}/photos/upload`, formData);
+    return http.post(
+      `/spaces/${spaceCode}/photos/upload`,
+      formData,
+      'form-data',
+    );
   },
 
   downloadZip: (spaceCode: string) =>
