@@ -1,6 +1,8 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { photoService } from '../apis/services/photo.service';
 import { DEBUG_MESSAGES } from '../constants/debugMessages';
+import { ROUTES } from '../constants/routes';
 import { mockSpaceData } from '../pages/manager/spaceHome/mockSpaceData';
 import { tryAsync } from '../utils/tryAsync';
 
@@ -10,6 +12,7 @@ interface UseDownloadProps {
 
 const useDownload = ({ spaceName }: UseDownloadProps) => {
   const [isDownloading, setIsDownloading] = useState(false);
+  const navigate = useNavigate();
 
   const downloadBlob = (blob: Blob) => {
     const url = URL.createObjectURL(blob);
@@ -40,6 +43,7 @@ const useDownload = ({ spaceName }: UseDownloadProps) => {
       },
       () => {
         setIsDownloading(false);
+        navigate(ROUTES.COMPLETE.DOWNLOAD);
       },
     );
   };
