@@ -11,6 +11,7 @@ import { INFORMATION } from '../../../constants/messages';
 import useIntersectionObserver from '../../../hooks/@common/useIntersectionObserver';
 import useDownload from '../../../hooks/useDownload';
 import usePhotosBySpaceCode from '../../../hooks/usePhotosBySpaceCode';
+import { ScrollableBlurArea } from '../../../styles/@common/ScrollableBlurArea';
 import { theme } from '../../../styles/theme';
 import { goToTop } from '../../../utils/goToTop';
 import { mockSpaceData } from './mockSpaceData';
@@ -96,7 +97,7 @@ const SpaceHome = () => {
 
       <S.IntersectionArea ref={hideBlurAreaTriggerRef} />
       <S.IntersectionArea ref={fetchTriggerRef} />
-      <S.BottomBlurArea $isHide={isAtPageBottom} />
+      <ScrollableBlurArea $isHide={isAtPageBottom} />
     </S.Wrapper>
   );
 };

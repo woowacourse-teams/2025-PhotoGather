@@ -9,6 +9,7 @@ export const Wrapper = styled.div<{ $hasImages: boolean }>`
   display: flex;
   flex-direction: column;
   gap: 16px;
+  position: relative;
 `;
 
 export const TitleContainer = styled.div`
@@ -41,4 +42,19 @@ export const ButtonContainer = styled.div`
   left: 50%;
   transform: translateX(-50%);
   z-index: ${({ theme }) => theme.zIndex.floatingActionButton};
+`;
+
+export const IntersectionArea = styled.div`
+  position: absolute;
+  bottom: ${({ theme }) => theme.layout.padding.topBottom};
+`;
+
+export const TopButtonContainer = styled.div<{ $isVisible: boolean }>`
+  position: fixed;
+  bottom: 25px;
+  left: 50%;
+  transform: translateX(calc(-50% + 114px));
+  z-index: ${({ theme }) => theme.zIndex.floatingActionButton};
+  opacity: ${({ $isVisible }) => ($isVisible ? 1 : 0)};
+  transition: opacity 0.1s ease-in-out;
 `;

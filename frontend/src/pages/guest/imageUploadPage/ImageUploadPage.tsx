@@ -1,10 +1,16 @@
+import { ReactComponent as ArrowUpSvg } from '../../../@assets/icons/upwardArrow.svg';
 import { photoService } from '../../../apis/services/photo.service';
 import FloatingActionButton from '../../../components/@common/buttons/floatingActionButton/FloatingActionButton';
+import FloatingIconButton from '../../../components/@common/buttons/floatingIconButton/FloatingIconButton';
 import HighlightText from '../../../components/@common/highlightText/HighlightText';
 import ImageGrid from '../../../components/@common/imageGrid/ImageGrid';
 import SpaceHeader from '../../../components/spaceHeader/SpaceHeader';
 import UploadBox from '../../../components/uploadBox/UploadBox';
-import useFileUpload from '../../../hooks/@common/useFileUpload';
+import { useFileUpload } from '../../../hooks/useFileUpload';
+import useIntersectionObserver from '../../../hooks/useIntersectionObserver';
+import { ScrollableBlurArea } from '../../../styles/@common/ScrollableBlurArea';
+import { theme } from '../../../styles/theme';
+import { goToTop } from '../../../utils/goToTop';
 import * as S from './ImageUploadPage.styles';
 import { mockSpaceData } from './mockSpaceData';
 
@@ -18,6 +24,10 @@ const ImageUploadPage = () => {
   } = useFileUpload();
   const hasImages = Array.isArray(previewUrls) && previewUrls.length > 0;
   const uploadBoxText = '함께한 순간을 올려주세요';
+  const { targetRef: hideBlurAreaTriggerRef, isIntersecting: isAtPageBottom } =
+    useIntersectionObserver({});
+  const { targetRef: scrollTopTriggerRef, isIntersecting: isAtPageTop } =
+    useIntersectionObserver({ isInitialInView: true });
 
   const handleUpload = async () => {
     try {
@@ -33,6 +43,7 @@ const ImageUploadPage = () => {
 
   return (
     <S.Wrapper $hasImages={hasImages}>
+      <div ref={scrollTopTriggerRef} />
       <SpaceHeader
         title={`${mockSpaceData.name}`}
         description="클릭해서 불러올 수 있어요"
@@ -63,8 +74,16 @@ const ImageUploadPage = () => {
               onClick={handleUpload}
             />
           </S.ButtonContainer>
+          <S.TopButtonContainer $isVisible={!isAtPageTop}>
+            <FloatingIconButton
+              icon={<ArrowUpSvg fill={theme.colors.white} />}
+              onClick={goToTop}
+            />
+          </S.TopButtonContainer>
         </>
       )}
+      <S.IntersectionArea ref={hideBlurAreaTriggerRef} />
+      <ScrollableBlurArea $isHide={isAtPageBottom} />
     </S.Wrapper>
   );
 };
