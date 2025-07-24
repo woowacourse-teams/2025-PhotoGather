@@ -12,7 +12,7 @@ interface CompletePageProps {
   /** 완료 페이지 버튼 텍스트 */
   buttonText: string;
   /** 완료 페이지에서 강조할 텍스트 */
-  highlightWords: string;
+  highlightWords: string[];
 }
 
 const CompletePage = ({
@@ -30,7 +30,7 @@ const CompletePage = ({
           <HighlightText
             text={title}
             fontStyle="header02"
-            highlightTextArray={[highlightWords]}
+            highlightTextArray={highlightWords}
             highlightColorStyle="primary"
           />
           <S.Description>{description}</S.Description>
