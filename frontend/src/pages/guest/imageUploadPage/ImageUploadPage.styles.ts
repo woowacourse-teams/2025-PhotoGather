@@ -12,6 +12,10 @@ export const Wrapper = styled.div<{ $hasImages: boolean }>`
   position: relative;
 `;
 
+export const ScrollTopAnchor = styled.div`
+  position: absolute;
+`;
+
 export const TitleContainer = styled.div`
   display: flex;
   flex-direction: column;
