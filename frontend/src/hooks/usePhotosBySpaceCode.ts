@@ -31,25 +31,25 @@ const usePhotosBySpaceCode = ({
   const updatePhotosList = (photos: Photo[], updatedTotalPages: number) => {
     setPhotosList((prev) => {
       if (!prev) {
-        currentPage.current = 1;
         totalPages.current = updatedTotalPages;
         return photos;
       }
-      currentPage.current += 1;
       return [...prev, ...photos];
     });
   };
 
   const fetchPhotosList = () => {
     setIsLoading(true);
+    const pageToFetch = currentPage.current;
 
     photoService
       .getBySpaceCode(spaceCode, {
-        page: currentPage.current,
+        page: pageToFetch,
         size: PAGE_SIZE,
       })
       .then((res) => {
         const data = res.data;
+        currentPage.current += 1;
         if (!data) {
           console.warn(DEBUG_MESSAGES.NO_RESPONSE);
           return;
