@@ -1,7 +1,11 @@
 import { useState } from 'react';
 
-const useFileUpload = () => {
-  const [imageFiles, setImageFiles] = useState<File[]>([]);
+interface FileUploadProps {
+  fileType: string;
+}
+
+const useFileUpload = ({ fileType }: FileUploadProps) => {
+  const [files, setFiles] = useState<File[]>([]);
   const [previewUrls, setPreviewUrls] = useState<string[]>([]);
 
   const addPreviewUrlsFromFiles = (files: File[]) => {
@@ -9,7 +13,7 @@ const useFileUpload = () => {
     setPreviewUrls((prev) => [...prev, ...urls]);
   };
 
-  const isImageFile = (file: File) => file.type.startsWith('image/');
+  const isImageFile = (file: File) => file.type.startsWith(`${fileType}/`);
 
   const handleFilesUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     //TODO: 파일 업로드 최대 용량 제한 | 업로드 최대 개수 제한?
@@ -21,24 +25,24 @@ const useFileUpload = () => {
         `이미지 파일만 업로드 가능해요. 파일을 다시 확인해주세요.\n${invalidFiles.map((file) => file.name).join('\n')}`,
       );
     }
-    setImageFiles((prev) => [...prev, ...validFiles]);
+    setFiles((prev) => [...prev, ...validFiles]);
     addPreviewUrlsFromFiles(validFiles);
   };
 
   const handleFilesDrop = (event: React.DragEvent<HTMLLabelElement>) => {
     const files = Array.from(event.dataTransfer.files || []);
-    setImageFiles((prev) => [...prev, ...files]);
+    setFiles((prev) => [...prev, ...files]);
     addPreviewUrlsFromFiles(files);
   };
 
   const clearFiles = () => {
     previewUrls.forEach((url) => URL.revokeObjectURL(url));
-    setImageFiles([]);
+    setFiles([]);
     setPreviewUrls([]);
   };
 
   return {
-    imageFiles,
+    files,
     previewUrls,
     handleFilesUpload,
     handleFilesDrop,
