@@ -43,7 +43,7 @@ const ImageUploadPage = () => {
 
   return (
     <S.Wrapper $hasImages={hasImages}>
-      <div ref={scrollTopTriggerRef} />
+      <S.ScrollTopAnchor ref={scrollTopTriggerRef} />
       <SpaceHeader
         title={`${mockSpaceData.name}`}
         description="클릭해서 불러올 수 있어요"
