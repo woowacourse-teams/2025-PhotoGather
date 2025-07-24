@@ -4,8 +4,25 @@ import { DEBUG_MESSAGES } from '../constants/debugMessages';
 import { mockSpaceData } from '../pages/manager/spaceHome/mockSpaceData';
 import { tryAsync } from '../utils/tryAsync';
 
-const useDownload = () => {
+interface UseDownloadProps {
+  spaceName: string;
+}
+
+const useDownload = ({ spaceName }: UseDownloadProps) => {
   const [isDownloading, setIsDownloading] = useState(false);
+
+  const downloadBlob = (blob: Blob) => {
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement('a');
+    document.body.appendChild(a);
+    a.href = url;
+    a.download = `${spaceName}.zip`;
+    a.click();
+
+    document.body.removeChild(a);
+    window.URL.revokeObjectURL(url);
+  };
 
   const handleDownload = () => {
     setIsDownloading(true);
@@ -17,16 +34,7 @@ const useDownload = () => {
         if (!blob) {
           throw new Error(DEBUG_MESSAGES.NO_BLOB);
         }
-        const url = URL.createObjectURL(blob);
-
-        const a = document.createElement('a');
-        document.body.appendChild(a);
-        a.href = url;
-        a.download = 'sample.zip';
-        a.click();
-
-        document.body.removeChild(a);
-        window.URL.revokeObjectURL(url);
+        downloadBlob(blob);
       },
       () => {
         setIsDownloading(false);

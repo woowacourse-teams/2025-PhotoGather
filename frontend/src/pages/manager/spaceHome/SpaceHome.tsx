@@ -33,7 +33,9 @@ const SpaceHome = () => {
       spaceCode: mockSpaceData.code,
     });
 
-  const { isDownloading, handleDownload } = useDownload();
+  const { isDownloading, handleDownload } = useDownload({
+    spaceName: mockSpaceData.name,
+  });
 
   //biome-ignore lint/correctness/useExhaustiveDependencies: isFetchSectionVisible 변경 시 호출
   useEffect(() => {
