@@ -1,7 +1,7 @@
-import type { BodyType } from '../types/api.type';
+import type { BodyContentType } from '../types/api.type';
 
 export const createHeaders = (
-  bodyType: BodyType,
+  bodyContentType: BodyContentType,
   token?: string,
 ): HeadersInit => {
   const headers: HeadersInit = {};
@@ -10,7 +10,7 @@ export const createHeaders = (
     headers.Authorization = `Bearer ${token}`;
   }
 
-  switch (bodyType) {
+  switch (bodyContentType) {
     case 'json':
       headers['Content-Type'] = 'application/json';
       break;

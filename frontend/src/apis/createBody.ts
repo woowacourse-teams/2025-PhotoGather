@@ -1,10 +1,10 @@
-import type { BodyType } from '../types/api.type';
+import type { BodyContentType } from '../types/api.type';
 
 export const createBody = (
   body: unknown,
-  bodyType: BodyType,
+  bodyContentType: BodyContentType,
 ): BodyInit | undefined => {
-  switch (bodyType) {
+  switch (bodyContentType) {
     case 'json':
       return body ? JSON.stringify(body) : undefined;
     case 'form-data':

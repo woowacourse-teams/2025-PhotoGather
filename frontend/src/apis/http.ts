@@ -1,6 +1,6 @@
 import type {
   ApiResponse,
-  BodyType,
+  BodyContentType,
   requestOptionsType,
 } from '../types/api.type';
 import { BASE_URL } from './config';
@@ -33,11 +33,11 @@ const buildQueryString = (params?: Record<string, unknown>): string => {
 
 const request = async <T>(
   endpoint: string,
-  { method, body, params, bodyType = 'json', token }: requestOptionsType,
+  { method, body, params, bodyContentType = 'json', token }: requestOptionsType,
 ): Promise<ApiResponse<T>> => {
   const url = `${BASE_URL}${endpoint}${buildQueryString(params)}`;
-  const headers = createHeaders(bodyType, token);
-  const requestBody = createBody(body, bodyType);
+  const headers = createHeaders(bodyContentType, token);
+  const requestBody = createBody(body, bodyContentType);
 
   // TODO : try catch 유틸 분리
   try {
@@ -48,7 +48,7 @@ const request = async <T>(
     });
 
     // zip 파일로 받고, 응답이 blob으로 오는 경우
-    if (bodyType === 'blob') {
+    if (bodyContentType === 'blob') {
       const blob = await response.blob();
       return {
         success: response.ok,
@@ -82,30 +82,30 @@ export const http = {
   get: <T>(
     endpoint: string,
     params?: Record<string, unknown>,
-    bodyType?: BodyType,
+    bodyContentType?: BodyContentType,
     token?: string,
-  ) => request<T>(endpoint, { method: 'GET', params, bodyType, token }),
+  ) => request<T>(endpoint, { method: 'GET', params, bodyContentType, token }),
 
   post: <T>(
     endpoint: string,
     body?: unknown,
-    bodyType: BodyType = 'json',
+    bodyContentType: BodyContentType = 'json',
     token?: string,
-  ) => request<T>(endpoint, { method: 'POST', body, bodyType, token }),
+  ) => request<T>(endpoint, { method: 'POST', body, bodyContentType, token }),
 
   put: <T>(
     endpoint: string,
     body?: unknown,
-    bodyType: BodyType = 'json',
+    bodyContentType: BodyContentType = 'json',
     token?: string,
-  ) => request<T>(endpoint, { method: 'PUT', body, bodyType, token }),
+  ) => request<T>(endpoint, { method: 'PUT', body, bodyContentType, token }),
 
   patch: <T>(
     endpoint: string,
     body?: unknown,
-    bodyType: BodyType = 'json',
+    bodyContentType: BodyContentType = 'json',
     token?: string,
-  ) => request<T>(endpoint, { method: 'PATCH', body, bodyType, token }),
+  ) => request<T>(endpoint, { method: 'PATCH', body, bodyContentType, token }),
 
   delete: <T>(endpoint: string, token?: string) =>
     request<T>(endpoint, { method: 'DELETE', token }),
