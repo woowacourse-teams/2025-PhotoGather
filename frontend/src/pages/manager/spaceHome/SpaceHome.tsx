@@ -45,14 +45,12 @@ const SpaceHome = () => {
 
   const handleDownload = () => {
     setIsDownloading(true);
-    console.log('눌림');
     tryAsync(
       async () => {
         setIsDownloading(true);
         const response = await photoService.downloadZip(
           String(mockSpaceData.code),
         );
-        console.log(response);
         const blob = response.data;
         if (!blob) {
           throw new Error(DEBUG_MESSAGES.NO_BLOB);
