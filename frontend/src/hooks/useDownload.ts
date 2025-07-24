@@ -29,6 +29,7 @@ const useDownload = ({ spaceName }: UseDownloadProps) => {
     tryAsync(
       async () => {
         const response = await photoService.downloadZip(mockSpaceData.code);
+        console.log(response);
         const blob = response.data;
         if (!blob) {
           throw new Error(DEBUG_MESSAGES.NO_BLOB);
