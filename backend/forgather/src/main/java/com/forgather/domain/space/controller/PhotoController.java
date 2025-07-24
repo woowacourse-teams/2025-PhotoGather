@@ -1,10 +1,19 @@
 package com.forgather.domain.space.controller;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.ContentDisposition;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,6 +36,8 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/spaces/{spaceCode}/photos")
 @Tag(name = "Photo: 사진", description = "사진 관련 API")
 public class PhotoController {
+
+    private static final String ZIP_CONTENT_TYPE = "application/zip";
 
     private final PhotoService photoService;
 
@@ -58,5 +69,27 @@ public class PhotoController {
     ) {
         var response = photoService.getAll(spaceCode, pageable);
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping(value = "/download", produces = ZIP_CONTENT_TYPE)
+    @Operation(summary = "사진 zip 일괄 다운로드", description = "특정 공간의 사진 목록을 zip 파일로 다운로드합니다.")
+    public ResponseEntity<Resource> downloadAll(@PathVariable(name = "spaceCode") String spaceCode) throws IOException {
+        File zipFile = photoService.compressAll(spaceCode);
+
+        var resource = new FileSystemResource(zipFile);
+        if (!resource.exists()) {
+            throw new FileNotFoundException();
+        }
+
+        ContentDisposition contentDisposition = ContentDisposition.attachment()
+            .filename(zipFile.getName(), StandardCharsets.UTF_8)
+            .build();
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setContentDisposition(contentDisposition);
+        httpHeaders.setContentType(MediaType.valueOf(ZIP_CONTENT_TYPE));
+
+        return ResponseEntity.ok()
+            .headers(httpHeaders)
+            .body(resource);
     }
 }

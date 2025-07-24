@@ -5,4 +5,4 @@ const config = {
   testPathIgnorePatterns: ['/node_modules/', '/dist/'],
 };
 
-export default config;
+module.exports = config;

@@ -24,6 +24,7 @@ export const Title = styled.p`
 
 export const Description = styled.p`
   ${({ theme }) => theme.typography.bodyLarge}
+
   color: ${({ theme }) => theme.colors.gray01};
   white-space: pre-line;
 `;

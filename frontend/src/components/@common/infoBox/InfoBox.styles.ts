@@ -1,4 +1,4 @@
-import { ReactComponent as InfoSvg } from '@assets/icons/info.svg';
+import { ReactComponent as InfoIcon } from '@assets/icons/info.svg';
 import styled from '@emotion/styled';
 
 export const Wrapper = styled.div`
@@ -12,7 +12,7 @@ export const Wrapper = styled.div`
   background-color: ${({ theme }) => theme.colors.primary10};
 `;
 
-export const InfoIcon = styled(InfoSvg)`
+export const Icon = styled(InfoIcon)`
   width: 20px;
   aspect-ratio: 1;
   color: ${({ theme }) => theme.colors.primary60};

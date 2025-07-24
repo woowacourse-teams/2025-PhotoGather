@@ -1,5 +1,6 @@
 package com.forgather.domain.space.service;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.UUID;
 
@@ -13,6 +14,9 @@ import lombok.RequiredArgsConstructor;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
+import software.amazon.awssdk.transfer.s3.S3TransferManager;
+import software.amazon.awssdk.transfer.s3.model.DirectoryDownload;
+import software.amazon.awssdk.transfer.s3.model.DownloadDirectoryRequest;
 
 @Component
 @RequiredArgsConstructor
@@ -22,6 +26,7 @@ public class AwsS3Cloud {
 
     private final S3Client s3Client;
     private final S3Properties s3Properties;
+    private final S3TransferManager transferManager;
 
     public String upload(String spaceCode, MultipartFile file) throws IOException {
         String path = generateFilePath(spaceCode, file);
@@ -39,5 +44,20 @@ public class AwsS3Cloud {
         String uploadFileName = UUID.randomUUID().toString();
         return String.format("%s/%s/%s/%s.%s", s3Properties.getRootDirectory(), CONTENTS_INNER_PATH, spaceCode, uploadFileName,
             extension);
+    }
+
+    public File downloadAll(String spaceCode) {
+        File localDownloadDirectory = new File("images-" + spaceCode);
+        String s3Prefix = String.format("%s/%s/%s", s3Properties.getRootDirectory(), CONTENTS_INNER_PATH, spaceCode);
+
+        DownloadDirectoryRequest request = DownloadDirectoryRequest.builder()
+            .bucket(s3Properties.getBucketName())
+            .listObjectsV2RequestTransformer(builder -> builder.prefix(s3Prefix))
+            .destination(localDownloadDirectory.toPath())
+            .build();
+
+        DirectoryDownload directoryDownload = transferManager.downloadDirectory(request);
+        directoryDownload.completionFuture().join();
+        return localDownloadDirectory;
     }
 }
