@@ -50,6 +50,7 @@ public class AwsS3Cloud {
 
     public File downloadAll(String spaceCode) {
         File localDownloadDirectory = new File("images-" + spaceCode);
+        createLocalDownloadDirectory(localDownloadDirectory);
         String s3Prefix = String.format("%s/%s/%s", s3Properties.getRootDirectory(), CONTENTS_INNER_PATH, spaceCode);
 
         DownloadDirectoryRequest request = DownloadDirectoryRequest.builder()
@@ -62,6 +63,15 @@ public class AwsS3Cloud {
         DirectoryDownload directoryDownload = transferManager.downloadDirectory(request);
         directoryDownload.completionFuture().join();
         return localDownloadDirectory;
+    }
+
+    private void createLocalDownloadDirectory(File localDownloadDirectory) {
+        if (!localDownloadDirectory.exists()) {
+            boolean created = localDownloadDirectory.mkdirs();
+            if (!created) {
+                throw new IllegalStateException("다운로드 디렉토리 생성 실패: " + localDownloadDirectory.getAbsolutePath());
+            }
+        }
     }
 
     private DownloadFilter excludeThumbnails() {
