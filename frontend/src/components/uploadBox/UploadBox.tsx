@@ -38,11 +38,7 @@ const UploadBox = ({
       onDrop={handleDrop}
     >
       <S.Container $isActive={isActive}>
-        <CameraIcon
-          fill={theme.colors.white}
-          width={iconSize}
-          height={'auto'}
-        />
+        <CameraIcon fill={theme.colors.white} width={iconSize} />
         {text}
       </S.Container>
       <input
