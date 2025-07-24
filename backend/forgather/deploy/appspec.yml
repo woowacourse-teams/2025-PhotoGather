@@ -1,0 +1,9 @@
+version: 0.0
+os: linux
+files:
+  - source: /Forgather 0.0.1.jar
+    destination: /home/ubuntu/2025-PhotoGather
+hooks:
+  AfterInstall:
+    - location: /deploy.sh
+      runas: ubuntu
