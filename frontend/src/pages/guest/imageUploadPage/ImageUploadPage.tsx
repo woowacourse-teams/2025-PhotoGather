@@ -1,6 +1,6 @@
 import downloadLoadingSpinner from '@assets/loading-spinner.gif';
-import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { ReactComponent as ArrowUpSvg } from '../../../@assets/icons/upwardArrow.svg';
 import FloatingActionButton from '../../../components/@common/buttons/floatingActionButton/FloatingActionButton';
 import FloatingIconButton from '../../../components/@common/buttons/floatingIconButton/FloatingIconButton';
@@ -25,7 +25,7 @@ const ImageUploadPage = () => {
     handleFilesUploadClick,
     handleFilesDrop,
     handleUpload,
-  } = useFileUpload();
+  } = useFileUpload({ fileType: 'image' });
   const hasImages = Array.isArray(previewUrls) && previewUrls.length > 0;
   const uploadBoxText = '함께한 순간을 올려주세요';
   const { targetRef: hideBlurAreaTriggerRef, isIntersecting: isAtPageBottom } =

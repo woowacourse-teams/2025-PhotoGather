@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { photoService } from '../../apis/services/photo.service';
+import { isValidFileType } from '../../utils/isValidFileType';
 
 interface FileUploadProps {
   fileType: string;
@@ -69,7 +70,7 @@ const useFileUpload = ({ fileType }: FileUploadProps) => {
   const handleUpload = async () => {
     try {
       setIsUploading(true);
-      await photoService.uploadFiles('1234567890', imageFiles);
+      await photoService.uploadFiles('1234567890', files);
       clearFiles();
     } catch (error) {
       console.error('업로드 실패:', error);
