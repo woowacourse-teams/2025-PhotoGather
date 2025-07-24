@@ -38,6 +38,7 @@ public class PhotoService {
     private final PhotoRepository photoRepository;
     private final SpaceRepository spaceRepository;
     private final AwsS3Cloud awsS3Cloud;
+    private final Path downloadTempPath;
 
     public PhotoResponse get(String spaceCode, Long photoId) {
         Space space = spaceRepository.getBySpaceCode(spaceCode);
@@ -86,7 +87,7 @@ public class PhotoService {
         File originalFile = awsS3Cloud.downloadAll(space.getSpaceCode());
         renameOriginalFile(space, originalFile);
 
-        File zipFile = ZipGenerator.generate(originalFile, spaceCode);
+        File zipFile = ZipGenerator.generate(downloadTempPath, originalFile, spaceCode);
         FileSystemUtils.deleteRecursively(originalFile);
         return zipFile;
     }

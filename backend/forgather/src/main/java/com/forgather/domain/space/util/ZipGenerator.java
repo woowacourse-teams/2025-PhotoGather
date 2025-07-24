@@ -12,8 +12,8 @@ public class ZipGenerator {
     private ZipGenerator() {
     }
 
-    public static File generate(File originalFile, String fileName) throws IOException {
-        Path zipPath = Files.createTempFile(fileName + "-", ".zip");
+    public static File generate(Path tempDir, File originalFile, String fileName) throws IOException {
+        Path zipPath = Files.createTempFile(tempDir, fileName + "-", ".zip");
         try (ZipFile zipFile = new ZipFile(zipPath.toFile())) {
             zipFile.addFolder(originalFile);
         }
