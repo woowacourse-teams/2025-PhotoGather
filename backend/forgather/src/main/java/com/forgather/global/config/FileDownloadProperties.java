@@ -10,5 +10,5 @@ import lombok.RequiredArgsConstructor;
 @ConfigurationProperties(prefix = "app.download.temp")
 public class FileDownloadProperties {
 
-    private final String path;
+    private String path = System.getProperty("java.io.tmpdir");
 }
