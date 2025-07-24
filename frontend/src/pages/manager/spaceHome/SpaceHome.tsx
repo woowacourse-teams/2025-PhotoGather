@@ -54,6 +54,7 @@ const SpaceHome = () => {
         const response = await photoService.downloadZip(
           String(mockSpaceData.code),
         );
+        console.log(response);
         const blob = response.data;
         if (!blob) {
           throw new Error(DEBUG_MESSAGES.NO_BLOB);
@@ -61,6 +62,7 @@ const SpaceHome = () => {
         const url = URL.createObjectURL(blob);
 
         const a = document.createElement('a');
+        document.body.appendChild(a);
         a.href = url;
         a.download = 'sample.zip';
         a.click();
