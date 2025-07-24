@@ -30,7 +30,7 @@ const CompletePage = ({
           <HighlightText
             text={title}
             fontStyle="header02"
-            highlightTextArray={highlightWords}
+            highlightTextArray={[...highlightWords]}
             highlightColorStyle="primary"
           />
           <S.Description>{description}</S.Description>

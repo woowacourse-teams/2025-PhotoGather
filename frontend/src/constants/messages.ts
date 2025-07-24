@@ -38,4 +38,4 @@ export const COMPLETE = {
     BUTTON_TEXT: '나의 스페이스로 이동',
     HIGHLIGHT_WORDS: ['스페이스'],
   },
-} as const;
+};
