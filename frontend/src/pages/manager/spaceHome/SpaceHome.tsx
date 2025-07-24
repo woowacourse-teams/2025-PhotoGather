@@ -1,3 +1,4 @@
+import downloadLoadingSpinner from '@assets/loading-spinner.gif';
 import { useEffect, useState } from 'react';
 import { ReactComponent as SaveIcon } from '../../../@assets/icons/download.svg';
 import { ReactComponent as SettingSvg } from '../../../@assets/icons/setting.svg';
@@ -13,6 +14,7 @@ import useIntersectionObserver from '../../../hooks/useIntersectionObserver';
 import usePhotosBySpaceId from '../../../hooks/usePhotosBySpaceId';
 import { theme } from '../../../styles/theme';
 import { goToTop } from '../../../utils/goToTop';
+import { tryAsync } from '../../../utils/tryAsync';
 import { mockSpaceData } from './mockSpaceData';
 import * as S from './SpaceHome.styles';
 
@@ -41,19 +43,20 @@ const SpaceHome = () => {
     fetchPhotosList();
   }, [isFetchSectionVisible, isEndPage]);
 
+  // tryAsync 유틸 사용
   const handleDownload = () => {
     setIsDownloading(true);
     // TODO : 실제 API 호출로 변경
     console.log('눌림');
-    photoService
-      .downloadZip(String(mockSpaceData.code))
-      .then((response) => {
+    tryAsync(
+      async () => {
+        setIsDownloading(true);
+        const response = await photoService.downloadZip(
+          String(mockSpaceData.code),
+        );
         const blob = response.data;
-        console.log(blob);
-        setIsDownloading(false);
         if (!blob) {
-          console.warn(DEBUG_MESSAGES.NO_BLOB);
-          return;
+          throw new Error(DEBUG_MESSAGES.NO_BLOB);
         }
         const url = URL.createObjectURL(blob);
 
@@ -64,17 +67,20 @@ const SpaceHome = () => {
 
         document.body.removeChild(a);
         window.URL.revokeObjectURL(url);
-      })
-      .catch((error) => {
-        console.warn(error);
-      })
-      .finally(() => {
+      },
+      () => {
         setIsDownloading(false);
-      });
+      },
+    );
   };
 
   return (
     <S.Wrapper>
+      {isDownloading && (
+        <S.LoadingSpinnerContainer>
+          <img src={downloadLoadingSpinner} alt="loading" />
+        </S.LoadingSpinnerContainer>
+      )}
       <S.InfoContainer ref={scrollTopTriggerRef}>
         <SpaceHeader
           title={mockSpaceData.name}
