@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
-import { hexToRgba } from '../../../utils/hexToRgba';
+import { hexToRgba } from '../../utils/hexToRgba';
 
-export const BottomBlurArea = styled.div<{ $isHide: boolean }>`
+export const ScrollableBlurArea = styled.div<{ $isHide: boolean }>`
   position: fixed;
   bottom: 0;
   left: 50%;

@@ -4,11 +4,11 @@ import FloatingActionButton from '../../../components/@common/buttons/floatingAc
 import FloatingIconButton from '../../../components/@common/buttons/floatingIconButton/FloatingIconButton';
 import HighlightText from '../../../components/@common/highlightText/HighlightText';
 import ImageGrid from '../../../components/@common/imageGrid/ImageGrid';
-import ScrollableBlurArea from '../../../components/@common/scrollableBlurArea/ScrollableBlurArea';
 import SpaceHeader from '../../../components/spaceHeader/SpaceHeader';
 import UploadBox from '../../../components/uploadBox/UploadBox';
 import { useFileUpload } from '../../../hooks/useFileUpload';
 import useIntersectionObserver from '../../../hooks/useIntersectionObserver';
+import { ScrollableBlurArea } from '../../../styles/@common/ScrollableBlurArea';
 import { theme } from '../../../styles/theme';
 import { goToTop } from '../../../utils/goToTop';
 import * as S from './ImageUploadPage.styles';
@@ -83,7 +83,7 @@ const ImageUploadPage = () => {
         </>
       )}
       <S.IntersectionArea ref={hideBlurAreaTriggerRef} />
-      <ScrollableBlurArea isAtPageBottom={isAtPageBottom} />
+      <ScrollableBlurArea $isHide={isAtPageBottom} />
     </S.Wrapper>
   );
 };

@@ -5,11 +5,11 @@ import { ReactComponent as ArrowUpSvg } from '../../../@assets/icons/upwardArrow
 import FloatingActionButton from '../../../components/@common/buttons/floatingActionButton/FloatingActionButton';
 import FloatingIconButton from '../../../components/@common/buttons/floatingIconButton/FloatingIconButton';
 import ImageGrid from '../../../components/@common/imageGrid/ImageGrid';
-import ScrollableBlurArea from '../../../components/@common/scrollableBlurArea/ScrollableBlurArea';
 import SpaceHeader from '../../../components/spaceHeader/SpaceHeader';
 import { INFORMATION } from '../../../constants/messages';
 import useIntersectionObserver from '../../../hooks/useIntersectionObserver';
 import usePhotosBySpaceId from '../../../hooks/usePhotosBySpaceId';
+import { ScrollableBlurArea } from '../../../styles/@common/ScrollableBlurArea';
 import { theme } from '../../../styles/theme';
 import { goToTop } from '../../../utils/goToTop';
 import { mockSpaceData } from './mockSpaceData';
@@ -76,7 +76,7 @@ const SpaceHome = () => {
 
       <S.IntersectionArea ref={hideBlurAreaTriggerRef} />
       <S.IntersectionArea ref={fetchTriggerRef} />
-      <ScrollableBlurArea isAtPageBottom={isAtPageBottom} />
+      <ScrollableBlurArea $isHide={isAtPageBottom} />
     </S.Wrapper>
   );
 };
