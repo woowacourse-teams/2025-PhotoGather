@@ -15,7 +15,7 @@ export const Wrapper = styled.div<{ $ratio: number; $width: string }>`
   width: ${({ $width }) => $width};
   background-size: cover;
   overflow: hidden;
-  background: none;
+  background-color: ${({ theme }) => theme.colors.white};
 `;
 
 export const Image = styled.img`
