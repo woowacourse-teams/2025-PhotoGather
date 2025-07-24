@@ -18,12 +18,12 @@ public class FileDownloadConfig {
 
     @Bean
     public Path downloadTempPath() {
-        Path tempDir = Paths.get(fileDownloadProperties.getPath());
+        Path tempPath = Paths.get(fileDownloadProperties.getPath());
         try {
-            Files.createDirectories(tempDir);
+            Files.createDirectories(tempPath);
         } catch (IOException e) {
-            throw new IllegalStateException("임시 다운로드 디렉토리 생성 실패: " + tempDir, e);
+            throw new IllegalStateException("임시 다운로드 디렉토리 생성 실패: " + tempPath, e);
         }
-        return tempDir;
+        return tempPath;
     }
 }

@@ -35,6 +35,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class PhotoService {
 
+    private static final long ROOT_DIRECTORY_DEPTH = 1L;
+
     private final PhotoRepository photoRepository;
     private final SpaceRepository spaceRepository;
     private final AwsS3Cloud awsS3Cloud;
@@ -84,19 +86,19 @@ public class PhotoService {
     public File compressAll(String spaceCode) throws IOException {
         Space space = spaceRepository.getBySpaceCode(spaceCode);
 
-        File originalFile = awsS3Cloud.downloadAll(space.getSpaceCode());
-        renameOriginalFile(space, originalFile);
+        File spaceContents = awsS3Cloud.downloadAll(space.getSpaceCode());
+        renameOriginalFile(space, spaceContents);
 
-        File zipFile = ZipGenerator.generate(downloadTempPath, originalFile, spaceCode);
-        FileSystemUtils.deleteRecursively(originalFile);
+        File zipFile = ZipGenerator.generate(downloadTempPath, spaceContents, spaceCode);
+        FileSystemUtils.deleteRecursively(spaceContents);
         return zipFile;
     }
 
     private void renameOriginalFile(Space space, File originalFile) {
         Map<String, String> originalNames = getOriginalFileNames(space);
         Map<String, Integer> originalNamesCount = new HashMap<>();
-        try (Stream<Path> paths = Files.walk(originalFile.toPath())) {
-            paths.skip(1L).forEach(path -> {
+        try (Stream<Path> paths = Files.walk(originalFile.toPath()).skip(ROOT_DIRECTORY_DEPTH)) {
+            paths.forEach(path -> {
                 String originalName = originalNames.get(path.getFileName().toString());
                 originalNamesCount.put(originalName, originalNamesCount.getOrDefault(originalName, 0) + 1);
                 renameFile(path, originalName, originalNamesCount.get(originalName));
@@ -107,8 +109,7 @@ public class PhotoService {
     }
 
     private Map<String, String> getOriginalFileNames(Space space) {
-        List<Photo> photos = photoRepository.findAllBySpace(space);
-        return photos
+        return photoRepository.findAllBySpace(space)
             .stream()
             .collect(Collectors.toMap(photo -> Paths.get(photo.getPath()).getFileName().toString(),
                 Photo::getOriginalName));
