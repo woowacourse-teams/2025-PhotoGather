@@ -12,6 +12,6 @@ export const Wrapper = styled.button`
   border-radius: 50%;
   border: 1px solid ${({ theme }) => theme.colors.gray03};
   background-color: ${({ theme }) => theme.colors.white};
-  filter: drop-shadow(5px 5px 5px rgba(0, 0, 0, 0.25));
+  box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.25);
   overflow: hidden;
 `;
