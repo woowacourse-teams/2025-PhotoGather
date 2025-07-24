@@ -4,6 +4,7 @@ export const createHeaders = (
   bodyType: BodyType,
   token?: string,
 ): HeadersInit => {
+  //TODO: 저장된 토큰을 들고오기
   const headers: HeadersInit = {};
 
   if (token) {
