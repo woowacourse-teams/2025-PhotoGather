@@ -1,20 +1,18 @@
 import downloadLoadingSpinner from '@assets/loading-spinner.gif';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { ReactComponent as SaveIcon } from '../../../@assets/icons/download.svg';
 import { ReactComponent as SettingSvg } from '../../../@assets/icons/setting.svg';
 import { ReactComponent as ArrowUpSvg } from '../../../@assets/icons/upwardArrow.svg';
-import { photoService } from '../../../apis/services/photo.service';
 import FloatingActionButton from '../../../components/@common/buttons/floatingActionButton/FloatingActionButton';
 import FloatingIconButton from '../../../components/@common/buttons/floatingIconButton/FloatingIconButton';
 import ImageGrid from '../../../components/@common/imageGrid/ImageGrid';
 import SpaceHeader from '../../../components/spaceHeader/SpaceHeader';
-import { DEBUG_MESSAGES } from '../../../constants/debugMessages';
 import { INFORMATION } from '../../../constants/messages';
+import useDownload from '../../../hooks/useDownload';
 import useIntersectionObserver from '../../../hooks/useIntersectionObserver';
 import usePhotosBySpaceId from '../../../hooks/usePhotosBySpaceId';
 import { theme } from '../../../styles/theme';
 import { goToTop } from '../../../utils/goToTop';
-import { tryAsync } from '../../../utils/tryAsync';
 import { mockSpaceData } from './mockSpaceData';
 import * as S from './SpaceHome.styles';
 
@@ -35,40 +33,13 @@ const SpaceHome = () => {
       spaceCode: mockSpaceData.code,
     });
 
-  const [isDownloading, setIsDownloading] = useState(false);
+  const { isDownloading, handleDownload } = useDownload();
 
   //biome-ignore lint/correctness/useExhaustiveDependencies: isFetchSectionVisible 변경 시 호출
   useEffect(() => {
     if (!isFetchSectionVisible || isEndPage || isLoading) return;
     fetchPhotosList();
   }, [isFetchSectionVisible, isEndPage]);
-
-  const handleDownload = () => {
-    setIsDownloading(true);
-    tryAsync(
-      async () => {
-        setIsDownloading(true);
-        const response = await photoService.downloadZip(mockSpaceData.code);
-        const blob = response.data;
-        if (!blob) {
-          throw new Error(DEBUG_MESSAGES.NO_BLOB);
-        }
-        const url = URL.createObjectURL(blob);
-
-        const a = document.createElement('a');
-        document.body.appendChild(a);
-        a.href = url;
-        a.download = 'sample.zip';
-        a.click();
-
-        document.body.removeChild(a);
-        window.URL.revokeObjectURL(url);
-      },
-      () => {
-        setIsDownloading(false);
-      },
-    );
-  };
 
   return (
     <S.Wrapper>
