@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { ReactComponent as ArrowUpSvg } from '../../../@assets/icons/upwardArrow.svg';
 import { photoService } from '../../../apis/services/photo.service';
 import FloatingActionButton from '../../../components/@common/buttons/floatingActionButton/FloatingActionButton';
@@ -15,8 +16,14 @@ import * as S from './ImageUploadPage.styles';
 import { mockSpaceData } from './mockSpaceData';
 
 const ImageUploadPage = () => {
-  const { files, previewUrls, handleFilesUpload, handleFilesDrop, clearFiles } =
-    useFileUpload({ fileType: 'image' });
+  const {
+    files,
+    previewUrls,
+    errorMessage,
+    handleFilesUpload,
+    handleFilesDrop,
+    clearFiles,
+  } = useFileUpload({ fileType: 'image' });
   const hasImages = Array.isArray(previewUrls) && previewUrls.length > 0;
   const uploadBoxText = '함께한 순간을 올려주세요';
   const { targetRef: hideBlurAreaTriggerRef, isIntersecting: isAtPageBottom } =
@@ -36,6 +43,13 @@ const ImageUploadPage = () => {
     }
   };
 
+  //TODO: 에러 토스트 구현 후 사라질 로직
+  useEffect(() => {
+    if (errorMessage) {
+      alert(errorMessage);
+    }
+  }, [errorMessage]);
+
   return (
     <S.Wrapper $hasImages={hasImages}>
       <div ref={scrollTopTriggerRef} />
@@ -43,7 +57,6 @@ const ImageUploadPage = () => {
         title={`${mockSpaceData.name}`}
         description="클릭해서 불러올 수 있어요"
       />
-
       <S.UploadContainer $hasImages={hasImages}>
         <UploadBox
           text={uploadBoxText}
