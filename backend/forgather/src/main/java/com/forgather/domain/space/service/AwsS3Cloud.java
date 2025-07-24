@@ -48,8 +48,8 @@ public class AwsS3Cloud {
             extension);
     }
 
-    public File downloadAll(String spaceCode) {
-        File localDownloadDirectory = new File("images-" + spaceCode);
+    public File downloadAll(String tempPath, String spaceCode) {
+        File localDownloadDirectory = new File(tempPath,"images-" + spaceCode);
         createLocalDownloadDirectory(localDownloadDirectory);
         String s3Prefix = String.format("%s/%s/%s", s3Properties.getRootDirectory(), CONTENTS_INNER_PATH, spaceCode);
 

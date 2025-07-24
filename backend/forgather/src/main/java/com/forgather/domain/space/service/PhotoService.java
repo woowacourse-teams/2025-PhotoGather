@@ -86,7 +86,7 @@ public class PhotoService {
     public File compressAll(String spaceCode) throws IOException {
         Space space = spaceRepository.getBySpaceCode(spaceCode);
 
-        File spaceContents = awsS3Cloud.downloadAll(space.getSpaceCode());
+        File spaceContents = awsS3Cloud.downloadAll(downloadTempPath.toString(), space.getSpaceCode());
         renameOriginalFile(space, spaceContents);
 
         File zipFile = ZipGenerator.generate(downloadTempPath, spaceContents, spaceCode);
