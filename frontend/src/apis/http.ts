@@ -1,17 +1,21 @@
-import type { ApiResponse } from '../types/api.type';
+import type {
+  ApiResponse,
+  BodyContentType,
+  requestOptionsType,
+} from '../types/api.type';
 import { BASE_URL } from './config';
+import { createBody } from './createBody';
+import { createHeaders } from './createHeaders';
 
-const defaultHeaders: Record<string, string> = {
-  'Content-Type': 'application/json',
-};
+// const defaultHeaders: Record<string, string> = {};
 
-export const setAuthToken = (token: string | null) => {
-  if (token) {
-    defaultHeaders.Authorization = `Bearer ${token}`;
-  } else {
-    delete defaultHeaders.Authorization;
-  }
-};
+// export const setAuthToken = (token: string | null) => {
+//   if (token) {
+//     defaultHeaders.Authorization = `Bearer ${token}`;
+//   } else {
+//     delete defaultHeaders.Authorization;
+//   }
+// };
 
 const buildQueryString = (params?: Record<string, unknown>): string => {
   if (!params) return '';
@@ -29,21 +33,29 @@ const buildQueryString = (params?: Record<string, unknown>): string => {
 
 const request = async <T>(
   endpoint: string,
-  options: {
-    method: string;
-    body?: unknown;
-    params?: Record<string, unknown>;
-  },
+  { method, body, params, bodyContentType = 'json', token }: requestOptionsType,
 ): Promise<ApiResponse<T>> => {
-  const { method, body, params } = options;
   const url = `${BASE_URL}${endpoint}${buildQueryString(params)}`;
+  const headers = createHeaders(bodyContentType, token);
+  const requestBody = createBody(body, bodyContentType);
 
+  // TODO : try catch 유틸 분리
   try {
     const response = await fetch(url, {
       method,
-      headers: defaultHeaders,
-      body: body ? JSON.stringify(body) : undefined,
+      headers,
+      body: requestBody,
     });
+
+    // zip 파일로 받고, 응답이 blob으로 오는 경우
+    if (bodyContentType === 'blob') {
+      const blob = await response.blob();
+      return {
+        success: response.ok,
+        data: blob as unknown as T,
+        error: !response.ok ? `Error: ${response.status}` : undefined,
+      };
+    }
 
     const data = await response.json();
 
@@ -67,63 +79,34 @@ const request = async <T>(
 };
 
 export const http = {
-  get: <T>(endpoint: string, params?: Record<string, unknown>) =>
-    request<T>(endpoint, { method: 'GET', params }),
+  get: <T>(
+    endpoint: string,
+    params?: Record<string, unknown>,
+    bodyContentType?: BodyContentType,
+    token?: string,
+  ) => request<T>(endpoint, { method: 'GET', params, bodyContentType, token }),
 
-  post: <T>(endpoint: string, body?: unknown) =>
-    request<T>(endpoint, { method: 'POST', body }),
+  post: <T>(
+    endpoint: string,
+    body?: unknown,
+    bodyContentType: BodyContentType = 'json',
+    token?: string,
+  ) => request<T>(endpoint, { method: 'POST', body, bodyContentType, token }),
 
-  put: <T>(endpoint: string, body?: unknown) =>
-    request<T>(endpoint, { method: 'PUT', body }),
+  put: <T>(
+    endpoint: string,
+    body?: unknown,
+    bodyContentType: BodyContentType = 'json',
+    token?: string,
+  ) => request<T>(endpoint, { method: 'PUT', body, bodyContentType, token }),
 
-  patch: <T>(endpoint: string, body?: unknown) =>
-    request<T>(endpoint, { method: 'PATCH', body }),
+  patch: <T>(
+    endpoint: string,
+    body?: unknown,
+    bodyContentType: BodyContentType = 'json',
+    token?: string,
+  ) => request<T>(endpoint, { method: 'PATCH', body, bodyContentType, token }),
 
-  delete: <T>(endpoint: string) => request<T>(endpoint, { method: 'DELETE' }),
-};
-
-export const uploadFile = async <T>(
-  endpoint: string,
-  file: File,
-  additionalData?: Record<string, unknown>,
-): Promise<ApiResponse<T>> => {
-  const formData = new FormData();
-  formData.append('file', file);
-
-  if (additionalData) {
-    Object.entries(additionalData).forEach(([key, value]) => {
-      formData.append(key, String(value));
-    });
-  }
-
-  try {
-    const response = await fetch(`${BASE_URL}${endpoint}`, {
-      method: 'POST',
-      headers: {
-        ...(defaultHeaders.Authorization && {
-          Authorization: defaultHeaders.Authorization,
-        }),
-      },
-      body: formData,
-    });
-
-    const data = await response.json();
-
-    if (response.ok) {
-      return {
-        success: true,
-        data: data as T,
-      };
-    }
-
-    return {
-      success: false,
-      error: data?.message || `Upload failed: ${response.status}`,
-    };
-  } catch (error) {
-    return {
-      success: false,
-      error: error instanceof Error ? error.message : 'Upload failed',
-    };
-  }
+  delete: <T>(endpoint: string, token?: string) =>
+    request<T>(endpoint, { method: 'DELETE', token }),
 };

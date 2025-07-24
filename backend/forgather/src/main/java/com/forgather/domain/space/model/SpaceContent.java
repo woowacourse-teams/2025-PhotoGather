@@ -1,5 +1,7 @@
 package com.forgather.domain.space.model;
 
+import java.util.Objects;
+
 import jakarta.persistence.DiscriminatorColumn;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -31,5 +33,18 @@ public abstract class SpaceContent {
 
     protected SpaceContent(Space space) {
         this.space = space;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if (object == null || getClass() != object.getClass())
+            return false;
+        SpaceContent that = (SpaceContent)object;
+        return Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
     }
 }

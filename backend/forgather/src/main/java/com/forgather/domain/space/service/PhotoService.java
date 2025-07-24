@@ -58,7 +58,7 @@ public class PhotoService {
     /**
      * TODO
      * S3 업로드 이후 실패 시 롤백 고려
-     * (MVP 아님)
+     * (MVP아님)
      */
     @Transactional
     public void saveAll(String spaceCode, List<MultipartFile> multipartFiles) {

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-export const useFileUpload = () => {
+const useFileUpload = () => {
   const [imageFiles, setImageFiles] = useState<File[]>([]);
   const [previewUrls, setPreviewUrls] = useState<string[]>([]);
 
@@ -36,3 +36,5 @@ export const useFileUpload = () => {
     clearFiles,
   };
 };
+
+export default useFileUpload;

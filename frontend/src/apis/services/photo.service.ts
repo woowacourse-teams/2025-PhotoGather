@@ -4,7 +4,7 @@ import type {
   Photo,
   PhotoWithContent,
 } from '../../types/photo.type';
-import { http, uploadFile } from '../http';
+import { http } from '../http';
 
 export const photoService = {
   getAll: (params?: { page?: number; pageSize?: number }) =>
@@ -12,15 +12,25 @@ export const photoService = {
 
   getById: (id: number) => http.get<Photo>(`/photos/${id}`),
 
-  getBySpaceId: (
-    spaceId: number,
-    params?: { page?: number; pageSize?: number },
-  ) => http.get<PhotoListResponse>(`/spaces/${spaceId}/photos`, params),
+  getBySpaceCode: (
+    spaceCode: string,
+    params?: { page?: number; size?: number },
+  ) => http.get<PhotoListResponse>(`/spaces/${spaceCode}/photos`, params),
 
   create: (data: CreatePhotoInput) => http.post<Photo>('/photos', data),
 
-  upload: (file: File, spaceContentId: number) =>
-    uploadFile<Photo>('/photos/upload', file, { spaceContentId }),
+  uploadFiles: (spaceCode: string, files: File[]) => {
+    const formData = new FormData();
+    files.forEach((file) => formData.append('files', file));
+    return http.post(
+      `/spaces/${spaceCode}/photos/upload`,
+      formData,
+      'form-data',
+    );
+  },
+
+  downloadZip: (spaceCode: string) =>
+    http.get<Blob>(`/spaces/${spaceCode}/photos/download`, undefined, 'blob'),
 
   delete: (id: number) => http.delete<void>(`/photos/${id}`),
 

@@ -5,6 +5,7 @@ export const global = css`
   * {
     box-sizing: border-box;
     font-family: inherit;
+    font-synthesis: none;
   }
   @font-face {
     font-family: 'SUIT';

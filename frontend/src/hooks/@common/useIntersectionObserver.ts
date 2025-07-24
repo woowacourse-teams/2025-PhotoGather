@@ -1,16 +1,27 @@
 import { useEffect, useRef, useState } from 'react';
-import { DEBUG_MESSAGES } from '../constants/debugMessages';
+import { DEBUG_MESSAGES } from '../../constants/debugMessages';
 
 interface UseIntersectionObserverProps {
   threshold?: number;
+  isInitialInView?: boolean;
+  rootMargin?: string;
 }
 
 const useIntersectionObserver = ({
   threshold = 0.5,
+  isInitialInView = false,
+  rootMargin = '100px',
 }: UseIntersectionObserverProps) => {
   const observer = useRef<IntersectionObserver | null>(null);
   const targetRef = useRef<HTMLDivElement | null>(null);
-  const [isIntersecting, setIsIntersecting] = useState(false);
+  const [isIntersecting, setIsIntersecting] = useState(isInitialInView);
+
+  const reObserve = () => {
+    if (!targetRef.current) return;
+    observer.current?.unobserve(targetRef.current);
+    setIsIntersecting(false);
+    observer.current?.observe(targetRef.current);
+  };
 
   useEffect(() => {
     if (!('IntersectionObserver' in window)) {
@@ -24,16 +35,16 @@ const useIntersectionObserver = ({
       ([entry]) => {
         setIsIntersecting(entry.isIntersecting);
       },
-      { threshold },
+      { threshold, rootMargin },
     );
     observer.current.observe(targetRef.current);
 
     return () => {
       observer.current?.disconnect();
     };
-  }, [threshold]);
+  }, [threshold, rootMargin]);
 
-  return { targetRef, isIntersecting };
+  return { targetRef, isIntersecting, reObserve };
 };
 
 export default useIntersectionObserver;
