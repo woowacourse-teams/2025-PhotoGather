@@ -4,7 +4,6 @@ export const createHeaders = (
   bodyType: BodyType,
   token?: string,
 ): HeadersInit => {
-
   const headers: HeadersInit = {};
 
   if (token) {
