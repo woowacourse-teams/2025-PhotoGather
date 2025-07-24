@@ -12,7 +12,7 @@ export const parsedImagePath = (path: string): string => {
 
   const parts = lastSegment.split('.');
   const ext = parts.pop()?.toLowerCase();
-  const supportedExtensions = ['jpg', 'jpeg', 'png'];
+  const supportedExtensions = ['jpg', 'jpeg', 'png', 'heic', 'webp', 'heif'];
   if (!ext || !supportedExtensions.includes(ext)) {
     console.warn(DEBUG_MESSAGES.NO_FILE_NAME);
     return '';
