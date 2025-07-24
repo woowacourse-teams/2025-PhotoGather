@@ -50,7 +50,6 @@ export const ButtonContainer = styled.div`
 
 export const IntersectionArea = styled.div`
   position: absolute;
-  background-color: red;
   bottom: ${({ theme }) => theme.layout.padding.topBottom};
 `;
 
