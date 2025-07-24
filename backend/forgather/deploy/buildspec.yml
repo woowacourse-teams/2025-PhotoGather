@@ -22,8 +22,12 @@ phases:
       - ./gradlew build -x test
       - echo "[build] JAR, deploy 파일을 하나의 ZIP으로 압축"
       - cd ../..
-      - zip -j forgather-deploy.zip backend/forgather/build/libs/*.jar backend/forgather/deploy/appspec.yml backend/forgather/deploy/deploy.sh
+      - cp backend/forgather/build/libs/forgather-0.0.1-SNAPSHOT.jar .
+      - cp backend/forgather/deploy/appspec.yml .
+      - cp backend/forgather/deploy/deploy.sh .
 
 artifacts:
   files:
-    - forgather-deploy.zip
+    - forgather-0.0.1-SNAPSHOT.jar
+    - appspec.yml
+    - deploy.sh

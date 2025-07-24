@@ -1,6 +1,6 @@
 #!/bin/bash
 
-JAR_NAME="Forgather 0.0.1.jar"
+JAR_NAME="forgather-0.0.1-SNAPSHOT.jar"
 LOG_DIR="/home/ubuntu/2025-PhotoGather/logs"
 JAR_PATH="/home/ubuntu/2025-PhotoGather/$JAR_NAME"
 
