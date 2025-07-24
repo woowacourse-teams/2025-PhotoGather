@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.HashMap;
 import java.util.List;
@@ -108,7 +109,8 @@ public class PhotoService {
         List<Photo> photos = photoRepository.findAllBySpace(space);
         return photos
             .stream()
-            .collect(Collectors.toMap(photo -> photo.getPath().split("/")[3], Photo::getOriginalName));
+            .collect(Collectors.toMap(photo -> Paths.get(photo.getPath()).getFileName().toString(),
+                Photo::getOriginalName));
     }
 
     private void renameFile(Path targetPath, String originalName, int count) {
@@ -117,7 +119,7 @@ public class PhotoService {
         try {
             Files.move(targetPath, newPath, StandardCopyOption.ATOMIC_MOVE);
         } catch (IOException e) {
-            throw new IllegalStateException();
+            throw new IllegalStateException(String.format("파일 이동 실패: %s -> %s", targetPath, newPath), e);
         }
     }
 
