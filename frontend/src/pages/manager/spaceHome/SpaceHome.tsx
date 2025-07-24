@@ -43,10 +43,8 @@ const SpaceHome = () => {
     fetchPhotosList();
   }, [isFetchSectionVisible, isEndPage]);
 
-  // tryAsync 유틸 사용
   const handleDownload = () => {
     setIsDownloading(true);
-    // TODO : 실제 API 호출로 변경
     console.log('눌림');
     tryAsync(
       async () => {
