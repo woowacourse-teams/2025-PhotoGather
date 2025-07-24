@@ -1,34 +1,44 @@
-import { COMPLETE_PAGE_VARIANTS } from '../../../constants/messages';
-import type { CompletePageVariant } from '../../../types/completePage.types';
 import Button from '../../@common/buttons/button/Button';
 import HighlightText from '../../@common/highlightText/HighlightText';
 import * as S from './CompletePage.styles';
 
 interface CompletePageProps {
-  /** 완료 페이지 타입 */
-  variant: CompletePageVariant;
+  /** 완료 페이지 아이콘 */
+  image: string;
+  /** 완료 페이지 제목 */
+  title: string;
+  /** 완료 페이지 설명 */
+  description: string;
+  /** 완료 페이지 버튼 텍스트 */
+  buttonText: string;
+  /** 완료 페이지에서 강조할 텍스트 */
+  highlightWords: string;
 }
 
-const CompletePage = ({ variant }: CompletePageProps) => {
-  const mappedType = COMPLETE_PAGE_VARIANTS[variant];
-
+const CompletePage = ({
+  image,
+  title,
+  description,
+  buttonText,
+  highlightWords,
+}: CompletePageProps) => {
   return (
     <S.Wrapper>
       <S.ContentWrapper>
-        <S.Icon src={mappedType.IMAGE} alt={mappedType.TITLE} />
+        <S.Icon src={image} alt={title} />
         <S.TextContainer>
           <HighlightText
-            text={mappedType.TITLE}
+            text={title}
             fontStyle="header02"
-            highlightTextArray={[mappedType.HIGHLIGHT_WORDS]}
+            highlightTextArray={[highlightWords]}
             highlightColorStyle="primary"
           />
-          <S.Description>{mappedType.DESCRIPTION}</S.Description>
+          <S.Description>{description}</S.Description>
         </S.TextContainer>
       </S.ContentWrapper>
 
       <S.BottomContainer>
-        <Button text={mappedType.BUTTON_TEXT} onClick={() => console.log(1)} />
+        <Button text={buttonText} onClick={() => console.log(1)} />
       </S.BottomContainer>
     </S.Wrapper>
   );
