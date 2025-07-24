@@ -4,7 +4,7 @@ import type {
   Photo,
   PhotoWithContent,
 } from '../../types/photo.type';
-import { http, uploadFile } from '../http';
+import { http } from '../http';
 
 export const photoService = {
   getAll: (params?: { page?: number; pageSize?: number }) =>
@@ -17,8 +17,15 @@ export const photoService = {
 
   create: (data: CreatePhotoInput) => http.post<Photo>('/photos', data),
 
-  upload: (file: File, spaceContentId: number) =>
-    uploadFile<Photo>('/photos/upload', file, { spaceContentId }),
+  uploadFiles: (spaceCode: string, files: File[]) => {
+    const formData = new FormData();
+    files.forEach((file) => formData.append('files', file));
+    return http.post(
+      `/spaces/${spaceCode}/photos/upload`,
+      formData,
+      'form-data',
+    );
+  },
 
   delete: (id: number) => http.delete<void>(`/photos/${id}`),
 
