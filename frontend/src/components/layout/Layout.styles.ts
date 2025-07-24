@@ -5,7 +5,7 @@ export const Container = styled.div<{ $isHighlightPage: boolean }>`
   max-width: ${({ theme }) => theme.layout.width};
   width: 100%;
   padding: ${({ theme }) => `${theme.layout.padding.topBottom} ${theme.layout.padding.leftRight}`};
-  border: 1px solid #000; // TODO: border 제거 필요
+  //border: 1px solid #000; // TODO: 개발 시 border 살리기 
   min-height: 100dvh;
   overflow: hidden;
   background: ${({ theme, $isHighlightPage }) =>
