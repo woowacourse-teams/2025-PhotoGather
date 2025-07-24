@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { isValidFileType } from '../../utils/isValidFileType';
+import { photoService } from '../../apis/services/photo.service';
 
 interface FileUploadProps {
   fileType: string;
@@ -8,6 +8,7 @@ interface FileUploadProps {
 const useFileUpload = ({ fileType }: FileUploadProps) => {
   const [files, setFiles] = useState<File[]>([]);
   const [previewUrls, setPreviewUrls] = useState<string[]>([]);
+  const [isUploading, setIsUploading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const addPreviewUrlsFromFiles = (files: File[]) => {
@@ -27,7 +28,9 @@ const useFileUpload = ({ fileType }: FileUploadProps) => {
     );
   };
 
-  const handleFilesUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFilesUploadClick = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
     //TODO: 파일 업로드 최대 용량 제한 | 업로드 최대 개수 제한?
     const files = Array.from(event.target.files || []);
     const { validFiles, invalidFiles } = partitionValidFilesByType(
@@ -63,13 +66,27 @@ const useFileUpload = ({ fileType }: FileUploadProps) => {
     setPreviewUrls([]);
   };
 
+  const handleUpload = async () => {
+    try {
+      setIsUploading(true);
+      await photoService.uploadFiles('1234567890', imageFiles);
+      clearFiles();
+    } catch (error) {
+      console.error('업로드 실패:', error);
+      alert('사진 업로드에 실패했습니다.');
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
   return {
     files,
     previewUrls,
+    isUploading,
     errorMessage,
-    handleFilesUpload,
+    handleUpload,
+    handleFilesUploadClick,
     handleFilesDrop,
-    clearFiles,
   };
 };
 

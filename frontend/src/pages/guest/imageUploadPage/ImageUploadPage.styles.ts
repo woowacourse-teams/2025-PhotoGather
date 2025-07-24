@@ -62,3 +62,11 @@ export const TopButtonContainer = styled.div<{ $isVisible: boolean }>`
   opacity: ${({ $isVisible }) => ($isVisible ? 1 : 0)};
   transition: opacity 0.1s ease-in-out;
 `;
+
+export const LoadingSpinnerContainer = styled.div`
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: ${({ theme }) => theme.zIndex.loadingSpinner};
+`;

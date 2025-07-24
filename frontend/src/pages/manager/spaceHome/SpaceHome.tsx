@@ -1,5 +1,6 @@
 import downloadLoadingSpinner from '@assets/loading-spinner.gif';
 import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { ReactComponent as SaveIcon } from '../../../@assets/icons/download.svg';
 import { ReactComponent as SettingSvg } from '../../../@assets/icons/setting.svg';
 import { ReactComponent as ArrowUpSvg } from '../../../@assets/icons/upwardArrow.svg';
@@ -37,12 +38,17 @@ const SpaceHome = () => {
   const { isDownloading, handleDownload } = useDownload({
     spaceName: mockSpaceData.name,
   });
-
   //biome-ignore lint/correctness/useExhaustiveDependencies: isFetchSectionVisible 변경 시 호출
   useEffect(() => {
     if (!isFetchSectionVisible || isEndPage || isLoading) return;
     fetchPhotosList();
   }, [isFetchSectionVisible, isEndPage]);
+
+  //TODO: useDownload 훅에서 navigate 분리
+  // const handleUploadClick = () => {
+  //   handleDownload();
+  //   navigate(ROUTES.COMPLETE.DOWNLOAD);
+  // };
 
   return (
     <S.Wrapper>
