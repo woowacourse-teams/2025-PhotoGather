@@ -4,7 +4,7 @@ import HighlightText from '../../../components/@common/highlightText/HighlightTe
 import ImageGrid from '../../../components/@common/imageGrid/ImageGrid';
 import SpaceHeader from '../../../components/spaceHeader/SpaceHeader';
 import UploadBox from '../../../components/uploadBox/UploadBox';
-import useFileUpload from '../../../hooks/useFileUpload';
+import useFileUpload from '../../../hooks/@common/useFileUpload';
 import * as S from './ImageUploadPage.styles';
 import { mockSpaceData } from './mockSpaceData';
 
