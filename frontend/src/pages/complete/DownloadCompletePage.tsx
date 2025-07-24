@@ -9,7 +9,6 @@ const DownloadCompletePage = () => {
 
   const handleButtonClick = () => {
     // TODO: 실제 매니저 스페이스 홈 경로로 변경 필요
-    navigate('/manager/space-home');
     navigate(ROUTES.MANAGER.SPACE_HOME);
   };
 

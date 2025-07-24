@@ -9,7 +9,6 @@ const UploadCompletePage = () => {
 
   const handleButtonClick = () => {
     // TODO: 실제 업로드 페이지 경로로 변경 필요
-    navigate('/guest/image-upload');
     navigate(ROUTES.GUEST.IMAGE_UPLOAD);
   };
 
