@@ -54,3 +54,8 @@ cors:
 
 api:
   base-url: http://localhost:8080
+
+app:
+  download:
+    temp:
+      path: ./temp
