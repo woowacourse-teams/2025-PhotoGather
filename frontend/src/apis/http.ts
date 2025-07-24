@@ -50,7 +50,6 @@ const request = async <T>(
     // zip 파일로 받고, 응답이 blob으로 오는 경우
     if (bodyType === 'blob') {
       const blob = await response.blob();
-      console.log(blob);
       return {
         success: response.ok,
         data: blob as unknown as T,
@@ -83,8 +82,9 @@ export const http = {
   get: <T>(
     endpoint: string,
     params?: Record<string, unknown>,
+    bodyType?: BodyType,
     token?: string,
-  ) => request<T>(endpoint, { method: 'GET', params, token }),
+  ) => request<T>(endpoint, { method: 'GET', params, bodyType, token }),
 
   post: <T>(
     endpoint: string,

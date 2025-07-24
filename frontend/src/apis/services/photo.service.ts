@@ -24,9 +24,7 @@ export const photoService = {
   },
 
   downloadZip: (spaceCode: string) =>
-    http.get(`/spaces/${spaceCode}/photos/download`, {
-      bodyType: 'blob',
-    }),
+    http.get<Blob>(`/spaces/${spaceCode}/photos/download`, undefined, 'blob'),
 
   delete: (id: number) => http.delete<void>(`/photos/${id}`),
 

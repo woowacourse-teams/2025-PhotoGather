@@ -7,6 +7,7 @@ import FloatingActionButton from '../../../components/@common/buttons/floatingAc
 import FloatingIconButton from '../../../components/@common/buttons/floatingIconButton/FloatingIconButton';
 import ImageGrid from '../../../components/@common/imageGrid/ImageGrid';
 import SpaceHeader from '../../../components/spaceHeader/SpaceHeader';
+import { DEBUG_MESSAGES } from '../../../constants/debugMessages';
 import { INFORMATION } from '../../../constants/messages';
 import useIntersectionObserver from '../../../hooks/useIntersectionObserver';
 import usePhotosBySpaceId from '../../../hooks/usePhotosBySpaceId';
@@ -40,24 +41,36 @@ const SpaceHome = () => {
     fetchPhotosList();
   }, [isFetchSectionVisible, isEndPage]);
 
-  console.log(isDownloading);
-  const handleDownload = async () => {
+  const handleDownload = () => {
     setIsDownloading(true);
     // TODO : 실제 API 호출로 변경
     console.log('눌림');
-    const response = await photoService.downloadZip(String(mockSpaceData.code));
-    console.log(response);
-    setIsDownloading(false);
-    // const blob =  response();
-    // const url = URL.createObjectURL(blob);
+    photoService
+      .downloadZip(String(mockSpaceData.code))
+      .then((response) => {
+        const blob = response.data;
+        console.log(blob);
+        setIsDownloading(false);
+        if (!blob) {
+          console.warn(DEBUG_MESSAGES.NO_BLOB);
+          return;
+        }
+        const url = URL.createObjectURL(blob);
 
-    // const a = document.createElement('a');
-    // a.href = url;
-    // a.download = 'sample.zip';
-    // a.click();
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'sample.zip';
+        a.click();
 
-    // document.body.removeChild(a);
-    // window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);
+      })
+      .catch((error) => {
+        console.warn(error);
+      })
+      .finally(() => {
+        setIsDownloading(false);
+      });
   };
 
   return (
