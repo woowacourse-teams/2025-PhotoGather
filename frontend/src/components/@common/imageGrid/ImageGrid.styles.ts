@@ -12,12 +12,5 @@ export const Wrapper = styled.div<{ $rowImageAmount: number }>`
   border-top-right-radius: 12px;
   overflow: hidden;
   gap: 1px;
-  background: ${({ theme }) => hexToRgba(theme.colors.gray06, 0.3)};
-`;
-
-export const BorderSection = styled.div`
-  background-color: ${({ theme }) => hexToRgba(theme.colors.gray06, 0.3)};
-  width: 100%;
-  padding: 1px;
-  border-radius: 13px;
+  box-shadow: 0 0 10px 0 ${({ theme }) => hexToRgba(theme.colors.gray06, 0.4)};
 `;
