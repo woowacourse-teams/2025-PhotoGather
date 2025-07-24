@@ -1,11 +1,13 @@
+import downloadLoadingSpinner from '@assets/loading-spinner.gif';
+import { useNavigate } from 'react-router-dom';
 import { ReactComponent as ArrowUpSvg } from '../../../@assets/icons/upwardArrow.svg';
-import { photoService } from '../../../apis/services/photo.service';
 import FloatingActionButton from '../../../components/@common/buttons/floatingActionButton/FloatingActionButton';
 import FloatingIconButton from '../../../components/@common/buttons/floatingIconButton/FloatingIconButton';
 import HighlightText from '../../../components/@common/highlightText/HighlightText';
 import ImageGrid from '../../../components/@common/imageGrid/ImageGrid';
 import SpaceHeader from '../../../components/spaceHeader/SpaceHeader';
 import UploadBox from '../../../components/uploadBox/UploadBox';
+import { ROUTES } from '../../../constants/routes';
 import useFileUpload from '../../../hooks/@common/useFileUpload';
 import useIntersectionObserver from '../../../hooks/@common/useIntersectionObserver';
 import { ScrollableBlurArea } from '../../../styles/@common/ScrollableBlurArea';
@@ -16,11 +18,11 @@ import { mockSpaceData } from './mockSpaceData';
 
 const ImageUploadPage = () => {
   const {
-    imageFiles,
     previewUrls,
-    handleFilesUpload,
+    isUploading,
+    handleFilesUploadClick,
     handleFilesDrop,
-    clearFiles,
+    handleUpload,
   } = useFileUpload();
   const hasImages = Array.isArray(previewUrls) && previewUrls.length > 0;
   const uploadBoxText = '함께한 순간을 올려주세요';
@@ -28,21 +30,21 @@ const ImageUploadPage = () => {
     useIntersectionObserver({});
   const { targetRef: scrollTopTriggerRef, isIntersecting: isAtPageTop } =
     useIntersectionObserver({ isInitialInView: true });
+  const navigate = useNavigate();
 
-  const handleUpload = async () => {
-    try {
-      await photoService.uploadFiles('1234567890', imageFiles);
-      //TODO: 완성 페이지로 이동
-      alert('사진 업로드가 완료되었습니다.');
-      clearFiles();
-    } catch (error) {
-      console.error('업로드 실패:', error);
-      alert('사진 업로드에 실패했습니다.');
-    }
+  const handleUploadClick = async () => {
+    await handleUpload();
+    navigate(ROUTES.COMPLETE.UPLOAD);
   };
 
   return (
     <S.Wrapper $hasImages={hasImages}>
+      {isUploading && (
+        <S.LoadingSpinnerContainer>
+          <img src={downloadLoadingSpinner} alt="loading" />
+        </S.LoadingSpinnerContainer>
+      )}
+
       <S.ScrollTopAnchor ref={scrollTopTriggerRef} />
       <SpaceHeader
         title={`${mockSpaceData.name}`}
@@ -53,7 +55,7 @@ const ImageUploadPage = () => {
         <UploadBox
           text={uploadBoxText}
           iconSize={hasImages ? 60 : 100}
-          onChange={handleFilesUpload}
+          onChange={handleFilesUploadClick}
           onDrop={handleFilesDrop}
         />
       </S.UploadContainer>
@@ -71,7 +73,8 @@ const ImageUploadPage = () => {
                   highlightTextArray={[`사진 ${previewUrls.length}장`]}
                 />
               }
-              onClick={handleUpload}
+              onClick={handleUploadClick}
+              disabled={isUploading}
             />
           </S.ButtonContainer>
           <S.TopButtonContainer $isVisible={!isAtPageTop}>
