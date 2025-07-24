@@ -6,8 +6,8 @@ import HighlightText from '../../../components/@common/highlightText/HighlightTe
 import ImageGrid from '../../../components/@common/imageGrid/ImageGrid';
 import SpaceHeader from '../../../components/spaceHeader/SpaceHeader';
 import UploadBox from '../../../components/uploadBox/UploadBox';
-import { useFileUpload } from '../../../hooks/useFileUpload';
-import useIntersectionObserver from '../../../hooks/useIntersectionObserver';
+import useFileUpload from '../../../hooks/@common/useFileUpload';
+import useIntersectionObserver from '../../../hooks/@common/useIntersectionObserver';
 import { ScrollableBlurArea } from '../../../styles/@common/ScrollableBlurArea';
 import { theme } from '../../../styles/theme';
 import { goToTop } from '../../../utils/goToTop';
