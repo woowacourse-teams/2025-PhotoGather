@@ -87,3 +87,11 @@ export const Icon = styled(GiftIcon)`
   width: 120px;
   aspect-ratio: 1/1;
 `;
+
+export const LoadingSpinnerContainer = styled.div`
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: ${({ theme }) => theme.zIndex.loadingSpinner};
+`;

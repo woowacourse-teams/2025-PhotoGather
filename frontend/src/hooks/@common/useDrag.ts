@@ -4,7 +4,7 @@ interface useDragProps {
   onDrop?: (event: React.DragEvent<HTMLLabelElement>) => void;
 }
 
-export const useDrag = ({ onDrop }: useDragProps) => {
+const useDrag = ({ onDrop }: useDragProps) => {
   const [isActive, setActive] = useState(false);
 
   const stopEvent = (event: React.DragEvent<HTMLLabelElement>) => {
@@ -40,3 +40,5 @@ export const useDrag = ({ onDrop }: useDragProps) => {
     handleDrop,
   };
 };
+
+export default useDrag;

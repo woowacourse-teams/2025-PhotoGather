@@ -1,4 +1,4 @@
-import { useDrag } from '../../hooks/useDrag';
+import useDrag from '../../hooks/@common/useDrag';
 import * as S from './UploadBox.styles';
 
 interface UploadBoxProps {

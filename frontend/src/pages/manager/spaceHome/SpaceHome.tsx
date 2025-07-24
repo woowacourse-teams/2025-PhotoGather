@@ -1,3 +1,4 @@
+import downloadLoadingSpinner from '@assets/loading-spinner.gif';
 import { useEffect } from 'react';
 import { ReactComponent as SaveIcon } from '../../../@assets/icons/download.svg';
 import { ReactComponent as SettingSvg } from '../../../@assets/icons/setting.svg';
@@ -7,8 +8,9 @@ import FloatingIconButton from '../../../components/@common/buttons/floatingIcon
 import ImageGrid from '../../../components/@common/imageGrid/ImageGrid';
 import SpaceHeader from '../../../components/spaceHeader/SpaceHeader';
 import { INFORMATION } from '../../../constants/messages';
-import useIntersectionObserver from '../../../hooks/useIntersectionObserver';
-import usePhotosBySpaceId from '../../../hooks/usePhotosBySpaceId';
+import useIntersectionObserver from '../../../hooks/@common/useIntersectionObserver';
+import useDownload from '../../../hooks/useDownload';
+import usePhotosBySpaceCode from '../../../hooks/usePhotosBySpaceCode';
 import { theme } from '../../../styles/theme';
 import { goToTop } from '../../../utils/goToTop';
 import { mockSpaceData } from './mockSpaceData';
@@ -26,9 +28,14 @@ const SpaceHome = () => {
   } = useIntersectionObserver({ rootMargin: '200px' });
 
   const { isLoading, thumbnailList, isEndPage, fetchPhotosList } =
-    usePhotosBySpaceId({
+    usePhotosBySpaceCode({
       reObserve,
+      spaceCode: mockSpaceData.code,
     });
+
+  const { isDownloading, handleDownload } = useDownload({
+    spaceName: mockSpaceData.name,
+  });
 
   //biome-ignore lint/correctness/useExhaustiveDependencies: isFetchSectionVisible 변경 시 호출
   useEffect(() => {
@@ -38,6 +45,11 @@ const SpaceHome = () => {
 
   return (
     <S.Wrapper>
+      {isDownloading && (
+        <S.LoadingSpinnerContainer>
+          <img src={downloadLoadingSpinner} alt="loading" />
+        </S.LoadingSpinnerContainer>
+      )}
       <S.InfoContainer ref={scrollTopTriggerRef}>
         <SpaceHeader
           title={mockSpaceData.name}
@@ -56,7 +68,12 @@ const SpaceHome = () => {
             </S.ImageGridContainer>
 
             <S.DownloadButtonContainer>
-              <FloatingActionButton label="모두 저장하기" icon={<SaveIcon />} />
+              <FloatingActionButton
+                label="모두 저장하기"
+                icon={<SaveIcon />}
+                onClick={handleDownload}
+                disabled={isDownloading}
+              />
             </S.DownloadButtonContainer>
 
             <S.TopButtonContainer $isVisible={!isAtPageTop}>

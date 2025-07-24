@@ -1,4 +1,4 @@
-import useInputLength from '../../../hooks/useInputLength';
+import useInputLength from '../../../hooks/@common/useInputLength';
 import * as S from './Input.styles';
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {

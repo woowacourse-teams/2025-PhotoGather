@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { DEBUG_MESSAGES } from '../constants/debugMessages';
+import { DEBUG_MESSAGES } from '../../constants/debugMessages';
 
 interface UseIntersectionObserverProps {
   threshold?: number;
