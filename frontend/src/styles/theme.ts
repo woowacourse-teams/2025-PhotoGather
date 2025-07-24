@@ -80,6 +80,7 @@ export const theme = {
     settingButton: 2,
     text: 3,
     scrollableArea: 3,
+    loadingSpinner: 4,
     floatingActionButton: 4,
   },
   layout: {
