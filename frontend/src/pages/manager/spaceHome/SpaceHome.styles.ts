@@ -42,7 +42,7 @@ export const TopButtonContainer = styled.div<{ $isVisible: boolean }>`
   position: fixed;
   bottom: 25px;
   left: 50%;
-  transform: translateX(calc(-50% + 114px));
+  transform: translateX(calc(-50% + 140px));
   z-index: ${({ theme }) => theme.zIndex.floatingActionButton};
   opacity: ${({ $isVisible }) => ($isVisible ? 1 : 0)};
   transition: opacity 0.1s ease-in-out;
