@@ -10,7 +10,7 @@ interface UsePhotosBySpaceIdProps {
   spaceCode: string;
 }
 
-const usePhotosBySpaceId = ({
+const usePhotosBySpaceCode = ({
   reObserve,
   spaceCode,
 }: UsePhotosBySpaceIdProps) => {
@@ -76,4 +76,4 @@ const usePhotosBySpaceId = ({
   };
 };
 
-export default usePhotosBySpaceId;
+export default usePhotosBySpaceCode;

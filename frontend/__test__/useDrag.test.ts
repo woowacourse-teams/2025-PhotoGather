@@ -1,5 +1,5 @@
 import { act, renderHook } from '@testing-library/react';
-import { useDrag } from '../src/hooks/useDrag';
+import useDrag from '../src/hooks/useDrag';
 
 describe('useDrag 훅 테스트', () => {
   const mockEvent = (): React.DragEvent<HTMLLabelElement> =>

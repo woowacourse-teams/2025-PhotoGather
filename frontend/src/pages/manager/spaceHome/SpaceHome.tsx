@@ -10,7 +10,7 @@ import SpaceHeader from '../../../components/spaceHeader/SpaceHeader';
 import { INFORMATION } from '../../../constants/messages';
 import useDownload from '../../../hooks/useDownload';
 import useIntersectionObserver from '../../../hooks/useIntersectionObserver';
-import usePhotosBySpaceId from '../../../hooks/usePhotosBySpaceId';
+import usePhotosBySpaceCode from '../../../hooks/usePhotosBySpaceCode';
 import { theme } from '../../../styles/theme';
 import { goToTop } from '../../../utils/goToTop';
 import { mockSpaceData } from './mockSpaceData';
@@ -28,7 +28,7 @@ const SpaceHome = () => {
   } = useIntersectionObserver({ rootMargin: '200px' });
 
   const { isLoading, thumbnailList, isEndPage, fetchPhotosList } =
-    usePhotosBySpaceId({
+    usePhotosBySpaceCode({
       reObserve,
       spaceCode: mockSpaceData.code,
     });
