@@ -1,4 +1,4 @@
-import defaultImage from '../../../../@assets/images/img_default.png';
+import defaultImage from '../../../../@assets/images/default_image.png';
 import { createImageErrorHandler } from '../../../../utils/createImageErrorHandler';
 import * as S from './ImageElement.styles';
 
