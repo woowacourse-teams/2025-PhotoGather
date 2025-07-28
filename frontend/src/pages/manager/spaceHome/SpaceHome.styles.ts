@@ -39,12 +39,16 @@ export const IntersectionArea = styled.div`
 
 export const TopButtonContainer = styled.div<{ $isVisible: boolean }>`
   position: fixed;
-  bottom: 25px;
+  bottom: 21px;
   left: 50%;
-  transform: translateX(calc(-50% + 140px));
+  transform: translateX(calc(-50% + 150px));
   z-index: ${({ theme }) => theme.zIndex.floatingActionButton};
   opacity: ${({ $isVisible }) => ($isVisible ? 1 : 0)};
   transition: opacity 0.1s ease-in-out;
+
+  @media screen and (max-width: 375px) {
+    transform: translateX(calc(-50% + 140px));
+  }
 `;
 
 export const NoImageContainer = styled.div`
