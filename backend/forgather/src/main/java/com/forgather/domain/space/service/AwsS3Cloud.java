@@ -44,12 +44,14 @@ public class AwsS3Cloud {
     private String generateFilePath(String spaceCode, MultipartFile file) {
         String extension = StringUtils.getFilenameExtension(file.getOriginalFilename());
         String uploadFileName = UUID.randomUUID().toString();
-        return String.format("%s/%s/%s/%s.%s", s3Properties.getRootDirectory(), CONTENTS_INNER_PATH, spaceCode, uploadFileName,
+        return String.format("%s/%s/%s/%s.%s", s3Properties.getRootDirectory(), CONTENTS_INNER_PATH, spaceCode,
+            uploadFileName,
             extension);
     }
 
     public File downloadAll(String tempPath, String spaceCode) {
-        File localDownloadDirectory = new File(tempPath,"images-" + spaceCode);
+        File localDownloadDirectory = new File(tempPath,
+            "images-" + spaceCode + "-" + UUID.randomUUID().toString().substring(0, 10));
         createLocalDownloadDirectory(localDownloadDirectory);
         String s3Prefix = String.format("%s/%s/%s", s3Properties.getRootDirectory(), CONTENTS_INNER_PATH, spaceCode);
 
