@@ -25,14 +25,20 @@ const InformationConfirmBox = ({
   const minutes = date.getMinutes();
   const formattedTime = `${hours}시 ${minutes}분`;
 
-  const dDay = '00:00:00';
+  const timeDiff = date.getTime() - today.getTime();
+  const totalSeconds = Math.floor(Math.abs(timeDiff) / 1000);
+  const totalHours = Math.floor(totalSeconds / (60 * 60)); // 1시간 = 3600초
+  const minutesLeft = Math.floor((totalSeconds % (60 * 60)) / 60);
+  const secondsLeft = totalSeconds % 60;
+
+  const dDay = `${totalHours.toString().padStart(2, '0')}:${minutesLeft.toString().padStart(2, '0')}:${secondsLeft.toString().padStart(2, '0')}`;
 
   return (
     <S.Wrapper>
       <S.Title>{title}</S.Title>
       <HighlightText
         text={`열리기까지 ${dDay}`}
-        highlightTextArray={[dDay]}
+        highlightTextArray={[dDay || '']}
         highlightColorStyle="primary"
         fontStyle="header03"
       />
