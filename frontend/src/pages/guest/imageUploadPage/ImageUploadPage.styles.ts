@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import { theme } from '../../../styles/theme';
 
 export const Wrapper = styled.div<{ $hasImages: boolean }>`
   ${({ theme }) => theme.typography.header03}
@@ -62,7 +63,7 @@ export const TopButtonContainer = styled.div<{ $isVisible: boolean }>`
   opacity: ${({ $isVisible }) => ($isVisible ? 1 : 0)};
   transition: opacity 0.1s ease-in-out;
 
-  @media screen and (max-width: 375px) {
+  @media screen and (max-width: ${theme.breakpoints.mobile}) {
     transform: translateX(calc(-50% + 140px));
   }
 `;
