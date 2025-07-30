@@ -13,13 +13,6 @@ const useInputLength = ({
 }: useInputLengthProps) => {
   const isComposingRef = useRef<boolean>(false);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const rawValue = e.currentTarget.value;
-    const shouldSlice = isComposingRef.current && rawValue.length <= maxCount;
-    const patchedValue = shouldSlice ? rawValue : rawValue.slice(0, maxCount);
-    updateValue(patchedValue);
-  };
-
   const handleCompositionStart = () => {
     isComposingRef.current = true;
   };
@@ -39,21 +32,19 @@ const useInputLength = ({
     if (shouldSlice) {
       currentTarget.blur();
       setTimeout(() => {
-        currentTarget.focus();
-        currentTarget.setSelectionRange(
-          patchedValue.length,
-          patchedValue.length,
-        );
+        currentTarget.blur();
       }, 0);
     }
 
     isComposingRef.current = false;
   };
 
+  const splicedValue = value.slice(0, maxCount);
+
   return {
     handleCompositionEnd,
     handleCompositionStart,
-    handleChange,
+    splicedValue,
   };
 };
 

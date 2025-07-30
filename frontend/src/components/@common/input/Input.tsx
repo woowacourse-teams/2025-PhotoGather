@@ -15,7 +15,7 @@ const Input = ({
   updateValue,
   ...inputProps
 }: InputProps) => {
-  const { handleCompositionEnd, handleCompositionStart, handleChange } =
+  const { splicedValue, handleCompositionEnd, handleCompositionStart } =
     useInputLength({
       maxCount,
       value: String(inputProps.value),
@@ -28,16 +28,15 @@ const Input = ({
         {...inputProps}
         id={inputProps.id}
         aria-label={inputProps['aria-label']}
-        value={inputProps.value}
+        value={splicedValue}
         onCompositionStart={handleCompositionStart}
         onCompositionEnd={handleCompositionEnd}
-        onChange={handleChange}
         $isError={!!errorMessage}
       />
       <S.InputFooterContainer>
         <S.ErrorMessage>{errorMessage ? errorMessage : ''}</S.ErrorMessage>
         <S.InputCount>
-          {maxCount && `${inputProps.value.length} / ${maxCount}`}
+          {maxCount && `${splicedValue.length} / ${maxCount}`}
         </S.InputCount>
       </S.InputFooterContainer>
     </S.Wrapper>
