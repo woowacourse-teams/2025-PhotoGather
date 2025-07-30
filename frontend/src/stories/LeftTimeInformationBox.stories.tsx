@@ -1,16 +1,16 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import InformationConfirmBox from '../components/informationConfirmBox/InformationConfirmBox';
+import LeftTimeInformationBox from '../components/leftTimeInformationBox/LeftTimeInformationBox';
 
-const meta: Meta<typeof InformationConfirmBox> = {
+const meta: Meta<typeof LeftTimeInformationBox> = {
   title: 'components/InformationConfirmBox',
-  component: InformationConfirmBox,
+  component: LeftTimeInformationBox,
   parameters: {
     layout: 'centered',
   },
 };
 
 export default meta;
-type Story = StoryObj<typeof InformationConfirmBox>;
+type Story = StoryObj<typeof LeftTimeInformationBox>;
 
 export const Default: Story = {
   args: {

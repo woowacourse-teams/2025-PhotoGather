@@ -1,6 +1,6 @@
 import loadingImage from '@assets/images/loading.png';
 import HighlightText from '../@common/highlightText/HighlightText';
-import * as S from './InformationConfirmBox.styles';
+import * as S from './LeftTimeInformationBox.styles';
 
 interface InformationConfirmBoxProps {
   /** 스페이스 타이틀 */
@@ -9,7 +9,7 @@ interface InformationConfirmBoxProps {
   openedAt: string;
 }
 
-const InformationConfirmBox = ({
+const LeftTimeInformationBox = ({
   title,
   openedAt,
 }: InformationConfirmBoxProps) => {
@@ -59,4 +59,4 @@ const InformationConfirmBox = ({
   );
 };
 
-export default InformationConfirmBox;
+export default LeftTimeInformationBox;
