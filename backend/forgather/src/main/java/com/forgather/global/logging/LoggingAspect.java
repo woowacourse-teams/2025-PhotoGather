@@ -15,13 +15,13 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class LoggingAspect {
 
-    private final HttpServletRequest httpServletRequest;
     private final LogFormatter logFormatter;
 
-    @Around("@within(org.springframework.stereotype.Service)")
+    @Around("@within(org.springframework.stereotype.Service) || "
+        + "execution(* com.forgather.domain.space.service.AwsS3Cloud.*(..))")
     public Object logging(final ProceedingJoinPoint joinPoint) throws Throwable {
         String methodInformation = logFormatter.formatMethodInformation(joinPoint);
-        String requestInformation = logFormatter.formatRequestInformation(httpServletRequest);
+        String requestInformation = logFormatter.formatRequestInformation();
 
         final long startMillis = System.currentTimeMillis();
         final Object result = joinPoint.proceed();

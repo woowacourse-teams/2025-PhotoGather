@@ -7,11 +7,15 @@ import org.aspectj.lang.JoinPoint;
 import org.springframework.stereotype.Component;
 
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
 
 @Component
+@RequiredArgsConstructor
 public class LogFormatter {
 
-    public String formatRequestInformation(HttpServletRequest httpServletRequest) {
+    private final HttpServletRequest httpServletRequest;
+
+    public String formatRequestInformation() {
         final String ip = httpServletRequest.getRemoteAddr();
         final int port = httpServletRequest.getRemotePort();
         final String formattedAddress = formatWithBrackets("IP", ip, port);
