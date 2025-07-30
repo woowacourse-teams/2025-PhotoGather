@@ -12,6 +12,8 @@ interface UploadBoxProps {
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   /** 드롭 이벤트 핸들러 */
   onDrop: (event: React.DragEvent<HTMLLabelElement>) => void;
+  /** 업로드 박스 비활성화 여부 */
+  disabled: boolean;
 }
 
 const UploadBox = ({
@@ -19,6 +21,7 @@ const UploadBox = ({
   iconSize = 60,
   onChange,
   onDrop,
+  disabled = false,
 }: UploadBoxProps) => {
   const {
     isActive,
@@ -32,10 +35,10 @@ const UploadBox = ({
     <S.Wrapper
       htmlFor="file-input"
       $isActive={isActive}
-      onDragEnter={handleDragEnter}
-      onDragOver={handleDragOver}
-      onDragLeave={handleDragLeave}
-      onDrop={handleDrop}
+      onDragEnter={disabled ? undefined : handleDragEnter}
+      onDragOver={disabled ? undefined : handleDragOver}
+      onDragLeave={disabled ? undefined : handleDragLeave}
+      onDrop={disabled ? undefined : handleDrop}
     >
       <S.Container $isActive={isActive}>
         <CameraIcon fill={theme.colors.white} width={iconSize} />
@@ -48,6 +51,7 @@ const UploadBox = ({
         hidden
         onChange={onChange}
         accept="image/*"
+        disabled={disabled}
       />
     </S.Wrapper>
   );
