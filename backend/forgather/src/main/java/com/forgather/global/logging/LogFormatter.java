@@ -16,9 +16,8 @@ public class LogFormatter {
     private final HttpServletRequest httpServletRequest;
 
     public String formatRequestInformation() {
-        final String ip = httpServletRequest.getRemoteAddr();
-        final int port = httpServletRequest.getRemotePort();
-        final String formattedAddress = formatWithBrackets("IP", ip, port);
+        final String ip = getClientIp();
+        final String formattedAddress = formatWithBrackets("IP", ip);
 
         final String requestURI = httpServletRequest.getRequestURI();
         final String formattedRequestURI = formatWithBrackets("URI", requestURI);
@@ -40,6 +39,14 @@ public class LogFormatter {
 
     public String formatDurationMillis(long durationMillis) {
         return formatWithBrackets("DurationMillis", durationMillis);
+    }
+
+    private String getClientIp() {
+        String forwarded = httpServletRequest.getHeader("X-Forwarded-For");
+        if (forwarded != null) {
+            return forwarded.split(",")[0]; // 여러 프록시 거친 경우 첫 IP가 실제 클라이언트
+        }
+        return httpServletRequest.getRemoteAddr();
     }
 
     private String formatWithBrackets(String key, Object... values) {
