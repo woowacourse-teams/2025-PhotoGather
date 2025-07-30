@@ -40,3 +40,12 @@ export const COMPLETE = {
     HIGHLIGHT_WORDS: ['스페이스'],
   },
 };
+
+export const ERROR = {
+  NETWORK: {
+    TITLE: '스페이스를 불러오지 못했어요',
+    DESCRIPTION: '잠시후 재시도 해주세요.',
+    BUTTON_TEXT: '재시도',
+    HIGHLIGHT_WORDS: [''],
+  },
+};
