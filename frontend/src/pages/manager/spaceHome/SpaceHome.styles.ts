@@ -1,5 +1,6 @@
 import styled from '@emotion/styled';
 import { ReactComponent as GiftIcon } from '../../../@assets/icons/gift.svg';
+import { theme } from '../../../styles/theme';
 import { hexToRgba } from '../../../utils/hexToRgba';
 
 export const Wrapper = styled.div`
@@ -39,12 +40,16 @@ export const IntersectionArea = styled.div`
 
 export const TopButtonContainer = styled.div<{ $isVisible: boolean }>`
   position: fixed;
-  bottom: 25px;
+  bottom: 21px;
   left: 50%;
-  transform: translateX(calc(-50% + 140px));
+  transform: translateX(calc(-50% + 150px));
   z-index: ${({ theme }) => theme.zIndex.floatingActionButton};
   opacity: ${({ $isVisible }) => ($isVisible ? 1 : 0)};
   transition: opacity 0.1s ease-in-out;
+
+  @media screen and (max-width: ${theme.breakpoints.mobile}) {
+    transform: translateX(calc(-50% + 140px));
+  }
 `;
 
 export const NoImageContainer = styled.div`
