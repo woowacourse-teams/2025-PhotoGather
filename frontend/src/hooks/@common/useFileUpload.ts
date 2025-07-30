@@ -29,21 +29,36 @@ const useFileUpload = ({ fileType }: FileUploadProps) => {
     );
   };
 
+  const checkValidFilesLength = (validFiles: File[], maxCount: number) => {
+    if (validFiles.length > maxCount) {
+      setErrorMessage(`한 번에 ${maxCount}장까지 올릴 수 있어요`);
+    }
+  };
+
+  const checkInvalidFiles = (invalidFiles: File[]) => {
+    if (invalidFiles.length > 0) {
+      setErrorMessage(
+        `이미지 파일만 업로드 가능해요. 파일을 다시 확인해주세요.\n${invalidFiles
+          .map((file) => file.name)
+          .join('\n')}`,
+      );
+    }
+  };
+
   const handleFilesUploadClick = (
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
-    //TODO: 파일 업로드 최대 용량 제한 | 업로드 최대 개수 제한?
     const files = Array.from(event.target.files || []);
     const { validFiles, invalidFiles } = partitionValidFilesByType(
       files,
       fileType,
     );
-    if (invalidFiles.length > 0)
-      setErrorMessage(
-        `이미지 파일만 업로드 가능해요. 파일을 다시 확인해주세요.\n${invalidFiles.map((file) => file.name).join('\n')}`,
-      );
-    setFiles((prev) => [...prev, ...validFiles]);
-    addPreviewUrlsFromFiles(validFiles);
+
+    checkValidFilesLength(validFiles, 10);
+    checkInvalidFiles(invalidFiles);
+    const limitedValidFiles = validFiles.slice(0, 10);
+    setFiles((prev) => [...prev, ...limitedValidFiles]);
+    addPreviewUrlsFromFiles(limitedValidFiles);
   };
 
   const handleFilesDrop = (event: React.DragEvent<HTMLLabelElement>) => {
@@ -52,13 +67,11 @@ const useFileUpload = ({ fileType }: FileUploadProps) => {
       files,
       fileType,
     );
-    if (invalidFiles.length > 0)
-      setErrorMessage(
-        `이미지 파일만 업로드 가능해요. 파일을 다시 확인해주세요.\n${invalidFiles.map((file) => file.name).join('\n')}`,
-      );
-
-    setFiles((prev) => [...prev, ...validFiles]);
-    addPreviewUrlsFromFiles(validFiles);
+    checkValidFilesLength(validFiles, 10);
+    checkInvalidFiles(invalidFiles);
+    const limitedValidFiles = validFiles.slice(0, 10);
+    setFiles((prev) => [...prev, ...limitedValidFiles]);
+    addPreviewUrlsFromFiles(limitedValidFiles);
   };
 
   const clearFiles = () => {
