@@ -14,9 +14,6 @@ public record PhotoResponse(
     @Schema(description = "사진 경로", example = "contents/fqvtn394y0/photo1.jpg")
     String path,
 
-    @Schema(description = "원본 사진 이름", example = "photo1.jpg")
-    String originalName,
-
     @Schema(description = "사진 촬영 시간", example = "2023-10-01T12:00:00")
     LocalDateTime capturedAt,
 
@@ -28,7 +25,6 @@ public record PhotoResponse(
         return new PhotoResponse(
             photo.getId(),
             photo.getPath(),
-            photo.getOriginalName(),
             photo.getCapturedAt(),
             photo.getCreatedAt()
         );

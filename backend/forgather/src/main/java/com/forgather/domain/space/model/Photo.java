@@ -26,9 +26,6 @@ public class Photo extends SpaceContent {
     @Column(name = "path", nullable = false)
     private String path;
 
-    @Column(name = "original_name", nullable = false)
-    private String originalName;
-
     @Embedded
     private PhotoMetaData metaData;
 
@@ -36,10 +33,9 @@ public class Photo extends SpaceContent {
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    public Photo(Space space, String path, String originalName, PhotoMetaData metaData) {
+    public Photo(Space space, String path, PhotoMetaData metaData) {
         super(space);
         this.path = path;
-        this.originalName = originalName;
         this.metaData = metaData;
     }
 
