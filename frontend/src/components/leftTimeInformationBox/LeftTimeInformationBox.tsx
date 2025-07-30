@@ -37,10 +37,15 @@ const LeftTimeInformationBox = ({
   const timeDiff = date.getTime() - today.getTime();
   const totalSeconds = Math.floor(Math.abs(timeDiff) / 1000);
   const totalHours = Math.floor(totalSeconds / (60 * 60)); // 1시간 = 3600초
+  const totalDays = Math.floor(totalHours / 24);
+  const hoursLeft = totalHours % 24;
   const minutesLeft = Math.floor((totalSeconds % (60 * 60)) / 60);
   const secondsLeft = totalSeconds % 60;
 
-  const dDay = `${totalHours.toString().padStart(2, '0')}:${minutesLeft.toString().padStart(2, '0')}:${secondsLeft.toString().padStart(2, '0')}`;
+  const dDay =
+    totalHours < 24
+      ? `${hoursLeft.toString().padStart(2, '0')}:${minutesLeft.toString().padStart(2, '0')}:${secondsLeft.toString().padStart(2, '0')}`
+      : `${totalDays}일`;
 
   return (
     <S.Wrapper>
