@@ -28,8 +28,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class PhotoService {
 
-    private static final long ROOT_DIRECTORY_DEPTH = 1L;
-
     private final PhotoRepository photoRepository;
     private final SpaceRepository spaceRepository;
     private final AwsS3Cloud awsS3Cloud;
