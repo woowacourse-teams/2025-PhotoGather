@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import type { SpaceCreateInfo } from '../../types/space.type';
-import DateInputPage from './date/DateInputPage';
-import NameInputPage from './name/NameInputPage';
-import TimeInputPage from './time/TimeInputPage';
+import DateInput from './date/DateInput';
+import NameInput from './name/NameInput';
+import TimeInput from './time/TimeInput';
 
 type STEP = 'name' | 'date' | 'time' | 'check' | 'complete';
 
@@ -16,7 +16,7 @@ const SpaceCreateFunnel = () => {
   return (
     <div>
       {step === 'name' && (
-        <NameInputPage
+        <NameInput
           onNext={(data) => {
             setStep('date');
             setSpaceInfo((prev) => ({ ...prev, name: data }));
@@ -24,7 +24,7 @@ const SpaceCreateFunnel = () => {
         />
       )}
       {step === 'date' && (
-        <DateInputPage
+        <DateInput
           onNext={(data) => {
             setStep('time');
             setSpaceInfo((prev) => ({ ...prev, date: data }));
@@ -32,7 +32,7 @@ const SpaceCreateFunnel = () => {
         />
       )}
       {step === 'time' && (
-        <TimeInputPage
+        <TimeInput
           onNext={(data) => {
             setStep('check');
             setSpaceInfo((prev) => ({ ...prev, time: data }));
