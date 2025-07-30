@@ -1,5 +1,11 @@
 import type { SpaceContent } from './spaceContent.type';
 
+export interface SpaceCreateInfo {
+  name: string;
+  openedAt: string;
+  password?: string;
+}
+
 export interface Space {
   id: number;
   spaceCode: string;
