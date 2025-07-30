@@ -1,20 +1,11 @@
 import rocketImage from '@assets/images/rocket.png';
-import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Button from '../../components/@common/buttons/button/Button';
-import Input from '../../components/@common/input/Input';
 import { ROUTES } from '../../constants/routes';
 import * as S from './DemoHome.styles';
 
 const DemoHome = () => {
   const navigate = useNavigate();
-  const [value, setValue] = useState('');
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setValue(e.target.value);
-  };
-  const updateValue = (value: string) => {
-    setValue(value);
-  };
 
   return (
     <S.Wrapper>
@@ -27,12 +18,6 @@ const DemoHome = () => {
       <Button
         text="(MANAGER) 스페이스 관리 페이지 이동"
         onClick={() => navigate(ROUTES.MANAGER.SPACE_HOME)}
-      />
-      <Input
-        maxCount={10}
-        value={value}
-        onChange={handleChange}
-        updateValue={updateValue}
       />
     </S.Wrapper>
   );
