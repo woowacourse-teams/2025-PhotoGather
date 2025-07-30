@@ -38,6 +38,10 @@ public class LogFormatter {
         );
     }
 
+    public String formatDurationMillis(long durationMillis) {
+        return formatWithBrackets("DurationMillis", durationMillis);
+    }
+
     private String formatWithBrackets(String key, Object... values) {
         String joinedValue = Arrays.stream(values)
             .map(String::valueOf) // null-safe toString
@@ -50,9 +54,5 @@ public class LogFormatter {
         return Arrays.stream(args)
             .map(Object::toString)
             .collect(Collectors.joining(", "));
-    }
-
-    public String formatDurationMillis(long durationMillis) {
-        return formatWithBrackets("DurationMillis", durationMillis);
     }
 }
