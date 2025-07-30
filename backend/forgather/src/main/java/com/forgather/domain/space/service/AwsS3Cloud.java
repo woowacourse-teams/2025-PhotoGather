@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.forgather.domain.space.util.RandomCodeGenerator;
 import com.forgather.global.config.S3Properties;
 
 import lombok.RequiredArgsConstructor;
@@ -29,6 +30,7 @@ public class AwsS3Cloud {
     private final S3Client s3Client;
     private final S3Properties s3Properties;
     private final S3TransferManager transferManager;
+    private final RandomCodeGenerator randomCodeGenerator;
 
     public String upload(String spaceCode, MultipartFile file) throws IOException {
         String path = generateFilePath(spaceCode, file);
@@ -50,8 +52,7 @@ public class AwsS3Cloud {
     }
 
     public File downloadAll(String tempPath, String spaceCode) {
-        File localDownloadDirectory = new File(tempPath,
-            "images-" + spaceCode + "-" + UUID.randomUUID().toString().substring(0, 10));
+        File localDownloadDirectory = new File(tempPath, "images-" + spaceCode + "-" + randomCodeGenerator.generate());
         createLocalDownloadDirectory(localDownloadDirectory);
         String s3Prefix = String.format("%s/%s/%s", s3Properties.getRootDirectory(), CONTENTS_INNER_PATH, spaceCode);
 
