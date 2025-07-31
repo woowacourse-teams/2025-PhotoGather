@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 
 export const Wrapper = styled.label<{ $isActive: boolean }>`
   width: 100%;
-  cursor: pointer;
+  cursor: ${({ $isActive }) => ($isActive ? 'pointer' : 'default')};
   position: relative;
 `;
 
