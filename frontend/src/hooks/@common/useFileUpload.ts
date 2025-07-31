@@ -79,13 +79,19 @@ const useFileUpload = ({ fileType }: FileUploadProps) => {
       if (response.success) {
         clearFiles();
       } else {
-        if (!response.error?.toLowerCase().includes('network error')) {
+        // JSON 파싱 에러는 업로드 성공으로 간주 (서버가 빈 응답 반환)
+        // TODO: 이 부분 다듬기 필요
+        if (
+          response.error ===
+          "Failed to execute 'json' on 'Response': Unexpected end of JSON input"
+        ) {
+          clearFiles();
+        } else if (!response.error?.toLowerCase().includes('network error')) {
           alert('사진 업로드에 실패했습니다.');
         }
       }
     } catch (error) {
       console.error('사진 업로드 실패:', error);
-      alert('사진 업로드에 실패했습니다.');
     } finally {
       setIsUploading(false);
     }
