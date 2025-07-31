@@ -5,8 +5,9 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.forgather.global.auth.domain.Host;
+import com.forgather.global.auth.domain.KakaoHost;
 
-public interface HostRepository extends JpaRepository<Host, Long> {
+public interface KakaoHostRepository extends JpaRepository<KakaoHost, Long> {
 
     Optional<Host> findByAccessToken(String accessToken);
 
@@ -14,4 +15,6 @@ public interface HostRepository extends JpaRepository<Host, Long> {
         return findByAccessToken(accessToken)
             .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 호스트입니다. Access Token: " + accessToken));
     }
+
+    Optional<KakaoHost> findByUserId(String userId);
 }
