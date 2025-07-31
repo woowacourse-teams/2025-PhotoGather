@@ -12,6 +12,7 @@ const useFileUpload = ({ fileType }: FileUploadProps) => {
   const [isUploading, setIsUploading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const MAX_FILE_COUNT = 500;
+  const DISALLOWED_FILE_TYPES = ['image/gif'];
 
   const addPreviewUrlsFromFiles = (files: File[]) => {
     const urls = files.map((file) => URL.createObjectURL(file));
@@ -21,7 +22,7 @@ const useFileUpload = ({ fileType }: FileUploadProps) => {
   const partitionValidFilesByType = (files: File[], type: string) => {
     return files.reduce(
       (acc, file) => {
-        isValidFileType(file, type)
+        isValidFileType(file, type, DISALLOWED_FILE_TYPES)
           ? acc.validFiles.push(file)
           : acc.invalidFiles.push(file);
         return acc;
@@ -30,19 +31,10 @@ const useFileUpload = ({ fileType }: FileUploadProps) => {
     );
   };
 
-  const isUnderUploadLimit = (validFiles: File[]) => {
-    if (validFiles.length > MAX_FILE_COUNT) {
-      return false;
-    }
-    return true;
-  };
+  const isUnderUploadLimit = (validFiles: File[]) =>
+    validFiles.length <= MAX_FILE_COUNT;
 
-  const isInvalidFiles = (invalidFiles: File[]) => {
-    if (invalidFiles.length > 0) {
-      return false;
-    }
-    return true;
-  };
+  const isInvalidFiles = (invalidFiles: File[]) => invalidFiles.length > 0;
 
   const updateFiles = (rawFiles: File[]) => {
     const { validFiles, invalidFiles } = partitionValidFilesByType(
