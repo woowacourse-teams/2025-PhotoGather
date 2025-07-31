@@ -2,11 +2,11 @@ import { useState } from 'react';
 import { photoService } from '../../apis/services/photo.service';
 import { isValidFileType } from '../../utils/isValidFileType';
 
-interface FileUploadProps {
+interface UseFileUploadProps {
   fileType: string;
 }
 
-const useFileUpload = ({ fileType }: FileUploadProps) => {
+const useFileUpload = ({ fileType }: UseFileUploadProps) => {
   const [files, setFiles] = useState<File[]>([]);
   const [previewUrls, setPreviewUrls] = useState<string[]>([]);
   const [isUploading, setIsUploading] = useState(false);
