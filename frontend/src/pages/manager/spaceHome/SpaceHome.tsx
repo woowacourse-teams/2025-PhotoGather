@@ -5,7 +5,7 @@ import { ReactComponent as SettingSvg } from '../../../@assets/icons/setting.svg
 import { ReactComponent as ArrowUpSvg } from '../../../@assets/icons/upwardArrow.svg';
 import FloatingActionButton from '../../../components/@common/buttons/floatingActionButton/FloatingActionButton';
 import FloatingIconButton from '../../../components/@common/buttons/floatingIconButton/FloatingIconButton';
-import ImageGrid from '../../../components/@common/imageGrid/ImageGrid';
+import ImageGrid from '../../../components/@common/imageLayout/imageGrid/ImageGrid';
 import SpaceHeader from '../../../components/spaceHeader/SpaceHeader';
 import { INFORMATION } from '../../../constants/messages';
 import useIntersectionObserver from '../../../hooks/@common/useIntersectionObserver';

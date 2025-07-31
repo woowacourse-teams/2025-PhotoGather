@@ -24,8 +24,6 @@ export const Wrapper = styled.div<{ $ratio: number; $width: string }>`
     position: absolute;
     opacity: 0.5;
   }
-  /**삭제 예정 */
-  max-width: 94px;
 `;
 
 export const Image = styled.img`

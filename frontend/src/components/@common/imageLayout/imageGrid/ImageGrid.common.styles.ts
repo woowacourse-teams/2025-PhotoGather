@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { hexToRgba } from '../../../utils/hexToRgba';
+import { hexToRgba } from '../../../../utils/hexToRgba';
 
 export const Wrapper = styled.div<{ $rowImageAmount: number }>`
   width: 100%;

@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-webpack5';
-import GuestImageElement from '../components/@common/imageGrid/imageElement/guestImageElement/GuestImageElement';
+import GuestImageElement from '../components/@common/imageLayout/imageElement/guestImageElement/GuestImageElement';
 
 const meta: Meta<typeof GuestImageElement> = {
   title: 'Components/GuestImageElement',

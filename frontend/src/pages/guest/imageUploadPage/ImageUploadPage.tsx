@@ -5,7 +5,7 @@ import { ReactComponent as ArrowUpSvg } from '../../../@assets/icons/upwardArrow
 import FloatingActionButton from '../../../components/@common/buttons/floatingActionButton/FloatingActionButton';
 import FloatingIconButton from '../../../components/@common/buttons/floatingIconButton/FloatingIconButton';
 import HighlightText from '../../../components/@common/highlightText/HighlightText';
-import ImageGrid from '../../../components/@common/imageGrid/ImageGrid';
+import ImageGrid from '../../../components/@common/imageLayout/imageGrid/ImageGrid';
 import SpaceHeader from '../../../components/spaceHeader/SpaceHeader';
 import UploadBox from '../../../components/uploadBox/UploadBox';
 import { ROUTES } from '../../../constants/routes';
