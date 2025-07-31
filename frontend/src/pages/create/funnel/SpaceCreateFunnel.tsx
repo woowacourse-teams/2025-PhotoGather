@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import ProgressBar from '../../../components/progressBar/ProgressBar';
 import type { SpaceCreateInfo } from '../../../types/space.type';
-import DateInput from '../date/DateInput';
-import NameInput from '../name/NameInput';
-import TimeInput from '../time/TimeInput';
+import DateInput from '../funnelElements/DateInput';
+import NameInput from '../funnelElements/NameInput';
+import TimeInput from '../funnelElements/TimeInput';
 import * as S from './SpaceCreateFunnel.styles';
 
 const STEP_LIST = ['name', 'date', 'time', 'check', 'complete'] as const;

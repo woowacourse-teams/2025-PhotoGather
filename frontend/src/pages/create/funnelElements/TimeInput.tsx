@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import type { BaseFunnelPageProps } from '../../../types/funnel.type';
+import type { FunnelElementProps } from '../../../types/funnel.type';
 
-const TimeInput = ({ onNext }: BaseFunnelPageProps) => {
+const TimeInput = ({ onNext }: FunnelElementProps) => {
   const [time, setTime] = useState<string>('');
 
   return (

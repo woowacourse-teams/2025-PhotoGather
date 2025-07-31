@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import type { BaseFunnelPageProps } from '../../../types/funnel.type';
+import type { FunnelElementProps } from '../../../types/funnel.type';
 
-const DateInput = ({ onNext }: BaseFunnelPageProps) => {
+const DateInput = ({ onNext }: FunnelElementProps) => {
   const [date, setDate] = useState<string>('');
 
   return (
