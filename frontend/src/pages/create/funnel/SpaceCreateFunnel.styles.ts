@@ -9,6 +9,29 @@ export const Wrapper = styled.div`
   gap: 32px;
 `;
 
+export const TopContainer = styled.div`
+  display: flex;
+`;
+
+export const IconContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+`;
+
+export const Icon = styled.img`
+  width: 30px;
+  height: 30px;
+`;
+
+export const UnderBar = styled.div`
+  width: 18px;
+  height: 3px;
+  border-radius: 50px;
+  background-color: ${({ theme }) => theme.colors.gray01};
+`;
+
 export const ContentContainer = styled.div`
   flex-grow: 1;
 `;
