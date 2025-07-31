@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import CompletePage from '../../components/layout/completePage/CompletePage';
 import { ERROR } from '../../constants/messages';
 
-const ErrorPage = () => {
+const NetworkErrorPage = () => {
   const navigate = useNavigate();
 
   const handleButtonClick = () => {
@@ -22,4 +22,4 @@ const ErrorPage = () => {
   );
 };
 
-export default ErrorPage;
+export default NetworkErrorPage;
