@@ -10,7 +10,7 @@ const glow = keyframes`
   }
 `;
 
-export const Wrapper = styled.div<{ $ratio: number; $width: string }>`
+export const Wrapper = styled.button<{ $ratio: number; $width: string }>`
   aspect-ratio: ${({ $ratio }) => $ratio};
   width: ${({ $width }) => $width};
   background-size: cover;

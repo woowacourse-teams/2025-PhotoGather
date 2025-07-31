@@ -1,6 +1,6 @@
 import defaultImage from '../../../../@assets/images/default_image.png';
 import { createImageErrorHandler } from '../../../../utils/createImageErrorHandler';
-import * as S from './ImageElement.styles';
+import * as S from './ImageElement.common.styles';
 
 interface ImageElementProps {
   /** 사진 파일 경로 */
