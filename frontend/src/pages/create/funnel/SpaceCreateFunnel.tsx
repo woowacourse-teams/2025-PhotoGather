@@ -1,10 +1,10 @@
 import { useState } from 'react';
-import ProgressBar from '../../components/progressBar/ProgressBar';
-import type { SpaceCreateInfo } from '../../types/space.type';
-import DateInput from './date/DateInput';
-import NameInput from './name/NameInput';
+import ProgressBar from '../../../components/progressBar/ProgressBar';
+import type { SpaceCreateInfo } from '../../../types/space.type';
+import DateInput from '../date/DateInput';
+import NameInput from '../name/NameInput';
+import TimeInput from '../time/TimeInput';
 import * as S from './SpaceCreateFunnel.styles';
-import TimeInput from './time/TimeInput';
 
 const STEP_LIST = ['name', 'date', 'time', 'check', 'complete'] as const;
 type STEP = (typeof STEP_LIST)[number];
