@@ -29,49 +29,49 @@ const useFileUpload = ({ fileType }: FileUploadProps) => {
     );
   };
 
-  const checkValidFilesLength = (validFiles: File[], maxCount: number) => {
+  const isUnderUploadLimit = (validFiles: File[], maxCount: number) => {
     if (validFiles.length > maxCount) {
-      setErrorMessage(`한 번에 ${maxCount}장까지 올릴 수 있어요`);
+      return false;
     }
+    return true;
   };
 
-  const checkInvalidFiles = (invalidFiles: File[]) => {
+  const isInvalidFiles = (invalidFiles: File[]) => {
     if (invalidFiles.length > 0) {
+      return false;
+    }
+    return true;
+  };
+
+  const updateFiles = (rawFiles: File[]) => {
+    const { validFiles, invalidFiles } = partitionValidFilesByType(
+      rawFiles,
+      fileType,
+    );
+
+    if (!isUnderUploadLimit(validFiles, 10)) {
+      setErrorMessage(`한 번에 10장까지 올릴 수 있어요`);
+    }
+    if (isInvalidFiles(invalidFiles)) {
       setErrorMessage(
         `이미지 파일만 업로드 가능해요. 파일을 다시 확인해주세요.\n${invalidFiles
           .map((file) => file.name)
           .join('\n')}`,
       );
     }
+    const limitedValidFiles = validFiles.slice(0, 10);
+    setFiles((prev) => [...prev, ...limitedValidFiles]);
+    addPreviewUrlsFromFiles(limitedValidFiles);
   };
 
   const handleFilesUploadClick = (
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
-    const files = Array.from(event.target.files || []);
-    const { validFiles, invalidFiles } = partitionValidFilesByType(
-      files,
-      fileType,
-    );
-
-    checkValidFilesLength(validFiles, 10);
-    checkInvalidFiles(invalidFiles);
-    const limitedValidFiles = validFiles.slice(0, 10);
-    setFiles((prev) => [...prev, ...limitedValidFiles]);
-    addPreviewUrlsFromFiles(limitedValidFiles);
+    updateFiles(Array.from(event.target.files || []));
   };
 
   const handleFilesDrop = (event: React.DragEvent<HTMLLabelElement>) => {
-    const files = Array.from(event.dataTransfer.files || []);
-    const { validFiles, invalidFiles } = partitionValidFilesByType(
-      files,
-      fileType,
-    );
-    checkValidFilesLength(validFiles, 10);
-    checkInvalidFiles(invalidFiles);
-    const limitedValidFiles = validFiles.slice(0, 10);
-    setFiles((prev) => [...prev, ...limitedValidFiles]);
-    addPreviewUrlsFromFiles(limitedValidFiles);
+    updateFiles(Array.from(event.dataTransfer.files || []));
   };
 
   const clearFiles = () => {
