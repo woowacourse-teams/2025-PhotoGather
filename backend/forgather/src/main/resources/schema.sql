@@ -23,10 +23,30 @@ CREATE TABLE space_content
 -- 3. photo
 CREATE TABLE photo
 (
-    id            bigint       NOT NULL AUTO_INCREMENT,
-    path          varchar(255) NOT NULL,
-    captured_at   timestamp NULL DEFAULT NULL,
-    created_at    timestamp    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    id          BIGINT       NOT NULL AUTO_INCREMENT,
+    path        VARCHAR(255) NOT NULL,
+    captured_at TIMESTAMP    NULL     DEFAULT NULL,
+    created_at  TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (id),
     CONSTRAINT photo_space_content_fk FOREIGN KEY (id) REFERENCES space_content (id)
-)
+);
+
+-- 4. host
+CREATE TABLE host
+(
+    id         BIGINT PRIMARY KEY,
+    name       VARCHAR(100),
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 5. host_kakao
+CREATE TABLE host_kakao
+(
+    id            BIGINT PRIMARY KEY,
+    user_id       VARCHAR(100) NOT NULL,
+    access_token  VARCHAR(255),
+    refresh_token VARCHAR(255),
+    picture_url   VARCHAR(255),
+    CONSTRAINT fk_host_kakao FOREIGN KEY (id) REFERENCES host (id)
+);
