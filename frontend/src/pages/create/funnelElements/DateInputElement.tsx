@@ -2,7 +2,7 @@ import { useState } from 'react';
 import type { FunnelElementProps } from '../../../types/funnel.type';
 import FunnelBasePage from '../funnel/funnelElementBase/FunnelElementBase';
 
-const DateInput = ({ onNext }: FunnelElementProps) => {
+const DateInputElement = ({ onNext }: FunnelElementProps) => {
   const [date, setDate] = useState<string>('');
 
   const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -35,4 +35,4 @@ const DateInput = ({ onNext }: FunnelElementProps) => {
   );
 };
 
-export default DateInput;
+export default DateInputElement;

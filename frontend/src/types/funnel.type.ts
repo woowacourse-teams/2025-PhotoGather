@@ -6,6 +6,7 @@ export interface FunnelBaseElementProps {
   description: string;
   element: React.ReactNode;
   handleNextButtonClick: () => void;
+  nextButtonDisabled?: boolean;
 }
 
 export interface FunnelElementProps {

@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import ProgressBar from '../../../components/progressBar/ProgressBar';
 import type { SpaceCreateInfo } from '../../../types/space.type';
-import CheckSpaceInfoPage from '../funnelElements/CheckSpaceInfoPage';
-import DateInput from '../funnelElements/DateInput';
-import NameInput from '../funnelElements/NameInput';
-import TimeInput from '../funnelElements/TimeInput';
+import CheckSpaceInfoElement from '../funnelElements/CheckSpaceInfoElement';
+import DateInputElement from '../funnelElements/DateInputElement';
+import NameInputElement from '../funnelElements/NameInputElement';
+import TimeInputElement from '../funnelElements/TimeInputElement';
 import * as S from './SpaceCreateFunnel.styles';
 
 const PROGRESS_STEP_LIST = ['name', 'date', 'time', 'check'] as const;
@@ -28,7 +28,7 @@ const SpaceCreateFunnel = () => {
       />
       <S.ContentContainer>
         {step === 'name' && (
-          <NameInput
+          <NameInputElement
             onNext={(data) => {
               setStep('date');
               setSpaceInfo((prev) => ({ ...prev, name: data }));
@@ -36,7 +36,7 @@ const SpaceCreateFunnel = () => {
           />
         )}
         {step === 'date' && (
-          <DateInput
+          <DateInputElement
             onNext={(data) => {
               setStep('time');
               setSpaceInfo((prev) => ({ ...prev, date: data }));
@@ -44,7 +44,7 @@ const SpaceCreateFunnel = () => {
           />
         )}
         {step === 'time' && (
-          <TimeInput
+          <TimeInputElement
             onNext={(data) => {
               setStep('check');
               setSpaceInfo((prev) => ({ ...prev, time: data }));
@@ -52,7 +52,7 @@ const SpaceCreateFunnel = () => {
           />
         )}
         {step === 'check' && (
-          <CheckSpaceInfoPage
+          <CheckSpaceInfoElement
             spaceInfo={spaceInfo}
             onNext={(data) => alert(data)}
           />

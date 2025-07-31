@@ -7,7 +7,7 @@ interface CheckSpaceInfoPageProps extends FunnelElementProps {
   spaceInfo: SpaceCreateInfo;
 }
 
-const CheckSpaceInfoPage = ({ spaceInfo }: CheckSpaceInfoPageProps) => {
+const CheckSpaceInfoElement = ({ spaceInfo }: CheckSpaceInfoPageProps) => {
   return (
     <FunnelBasePage
       title={{
@@ -28,4 +28,4 @@ const CheckSpaceInfoPage = ({ spaceInfo }: CheckSpaceInfoPageProps) => {
   );
 };
 
-export default CheckSpaceInfoPage;
+export default CheckSpaceInfoElement;

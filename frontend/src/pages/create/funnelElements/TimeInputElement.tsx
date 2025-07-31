@@ -2,7 +2,7 @@ import { useState } from 'react';
 import type { FunnelElementProps } from '../../../types/funnel.type';
 import FunnelBasePage from '../funnel/funnelElementBase/FunnelElementBase';
 
-const TimeInput = ({ onNext }: FunnelElementProps) => {
+const TimeInputElement = ({ onNext }: FunnelElementProps) => {
   const [time, setTime] = useState<string>('');
 
   return (
@@ -24,4 +24,4 @@ const TimeInput = ({ onNext }: FunnelElementProps) => {
   );
 };
 
-export default TimeInput;
+export default TimeInputElement;
