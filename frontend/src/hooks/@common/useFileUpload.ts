@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { photoService } from '../../apis/services/photo.service';
+import type { PreviewFile } from '../../types/file.type';
 import { isValidFileType } from '../../utils/isValidFileType';
 
 interface FileUploadProps {
@@ -8,13 +9,17 @@ interface FileUploadProps {
 
 const useFileUpload = ({ fileType }: FileUploadProps) => {
   const [files, setFiles] = useState<File[]>([]);
-  const [previewUrls, setPreviewUrls] = useState<string[]>([]);
+  const [previewData, setPreviewData] = useState<PreviewFile[]>([]);
   const [isUploading, setIsUploading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  const addPreviewUrlsFromFiles = (files: File[]) => {
-    const urls = files.map((file) => URL.createObjectURL(file));
-    setPreviewUrls((prev) => [...prev, ...urls]);
+  const addPreviewDataFromFiles = (files: File[]) => {
+    const startIndex = previewData.length;
+    const urls = files.map((file, index) => ({
+      id: startIndex + index,
+      path: URL.createObjectURL(file),
+    }));
+    setPreviewData((prev) => [...prev, ...urls]);
   };
 
   const partitionValidFilesByType = (files: File[], type: string) => {
@@ -43,7 +48,7 @@ const useFileUpload = ({ fileType }: FileUploadProps) => {
         `이미지 파일만 업로드 가능해요. 파일을 다시 확인해주세요.\n${invalidFiles.map((file) => file.name).join('\n')}`,
       );
     setFiles((prev) => [...prev, ...validFiles]);
-    addPreviewUrlsFromFiles(validFiles);
+    addPreviewDataFromFiles(validFiles);
   };
 
   const handleFilesDrop = (event: React.DragEvent<HTMLLabelElement>) => {
@@ -58,13 +63,13 @@ const useFileUpload = ({ fileType }: FileUploadProps) => {
       );
 
     setFiles((prev) => [...prev, ...validFiles]);
-    addPreviewUrlsFromFiles(validFiles);
+    addPreviewDataFromFiles(validFiles);
   };
 
   const clearFiles = () => {
-    previewUrls.forEach((url) => URL.revokeObjectURL(url));
+    previewData.forEach((data) => URL.revokeObjectURL(data.path));
     setFiles([]);
-    setPreviewUrls([]);
+    setPreviewData([]);
   };
 
   const handleUpload = async () => {
@@ -82,7 +87,7 @@ const useFileUpload = ({ fileType }: FileUploadProps) => {
 
   return {
     files,
-    previewUrls,
+    previewData,
     isUploading,
     errorMessage,
     handleUpload,
