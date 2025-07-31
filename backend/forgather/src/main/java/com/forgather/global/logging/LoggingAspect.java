@@ -5,7 +5,6 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.stereotype.Component;
 
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -28,7 +27,7 @@ public class LoggingAspect {
         final String durationInformation = logFormatter.formatDurationMillis(System.currentTimeMillis() - startMillis);
 
         log.info("{} {} {}",
-            methodInformation, requestInformation, durationInformation);
+            methodInformation, durationInformation, requestInformation);
 
         return result;
     }
