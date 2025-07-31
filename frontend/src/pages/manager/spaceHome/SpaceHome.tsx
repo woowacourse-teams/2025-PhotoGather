@@ -5,7 +5,7 @@ import { ReactComponent as SettingSvg } from '../../../@assets/icons/setting.svg
 import { ReactComponent as ArrowUpSvg } from '../../../@assets/icons/upwardArrow.svg';
 import FloatingActionButton from '../../../components/@common/buttons/floatingActionButton/FloatingActionButton';
 import FloatingIconButton from '../../../components/@common/buttons/floatingIconButton/FloatingIconButton';
-import ImageGrid from '../../../components/@common/imageLayout/imageGrid/ImageGrid';
+import SpaceManagerImageGrid from '../../../components/@common/imageLayout/imageGrid/spaceManagerImageGrid/SpaceManagerImageGrid';
 import SpaceHeader from '../../../components/spaceHeader/SpaceHeader';
 import { INFORMATION } from '../../../constants/messages';
 import useIntersectionObserver from '../../../hooks/@common/useIntersectionObserver';
@@ -28,11 +28,16 @@ const SpaceHome = () => {
     reObserve,
   } = useIntersectionObserver({ rootMargin: '200px' });
 
-  const { isLoading, thumbnailList, isEndPage, fetchPhotosList } =
-    usePhotosBySpaceCode({
-      reObserve,
-      spaceCode: mockSpaceData.code,
-    });
+  const {
+    isLoading,
+    photosList,
+    thumbnailPhotoMap,
+    isEndPage,
+    fetchPhotosList,
+  } = usePhotosBySpaceCode({
+    reObserve,
+    spaceCode: mockSpaceData.code,
+  });
 
   const { isDownloading, handleDownload } = useDownload({
     spaceName: mockSpaceData.name,
@@ -42,12 +47,6 @@ const SpaceHome = () => {
     if (!isFetchSectionVisible || isEndPage || isLoading) return;
     fetchPhotosList();
   }, [isFetchSectionVisible, isEndPage]);
-
-  //TODO: useDownload 훅에서 navigate 분리
-  // const handleUploadClick = () => {
-  //   handleDownload();
-  //   navigate(ROUTES.COMPLETE.DOWNLOAD);
-  // };
 
   return (
     <S.Wrapper>
@@ -70,11 +69,16 @@ const SpaceHome = () => {
         />
       </S.InfoContainer>
 
-      {thumbnailList &&
-        (thumbnailList.length > 0 ? (
+      {thumbnailPhotoMap &&
+        (photosList && photosList.length > 0 ? (
           <>
             <S.ImageGridContainer>
-              <ImageGrid imageUrlList={thumbnailList} rowImageAmount={3} />
+              <SpaceManagerImageGrid
+                photoData={photosList}
+                thumbnailUrlList={thumbnailPhotoMap}
+                rowImageAmount={3}
+                onImageClick={() => {}}
+              />
             </S.ImageGridContainer>
 
             <S.DownloadButtonContainer>
