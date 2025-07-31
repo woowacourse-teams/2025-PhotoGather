@@ -33,18 +33,18 @@ const SpaceManagerImageElement = ({
   // 내부에서는 어떤 모드인지 알 필요 없음
   return (
     // biome-ignore lint/a11y/useSemanticElements: button 시맨틱 태그 내부에 button이 존재할 수 없음
-    <S.Wrapper
+    <C.Wrapper
       role="button"
       tabIndex={0}
       aria-label={isSelected ? '선택된 이미지' : '선택되지 않은 이미지'}
       $ratio={ratio}
       $width={width}
-      $isSelected={isSelected}
       onClick={() => onImageClick(data.id)}
     >
       <C.Image src={thumbnailUrl} alt={alt} />
       {isSelected && <S.SelectedMark />}
-    </S.Wrapper>
+      <S.Overlay $isSelected={isSelected} />
+    </C.Wrapper>
   );
 };
 

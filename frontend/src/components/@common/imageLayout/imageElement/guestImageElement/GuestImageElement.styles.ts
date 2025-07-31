@@ -9,12 +9,12 @@ export const CloseButton = styled.button`
   background: ${({ theme }) => hexToRgba(theme.colors.gray06, 0.3)};
   border-radius: 50%;
   width: 17%;
-  max-width: 20px; 
+  max-width: 20px;
   aspect-ratio: 1;
   display: flex;
   align-items: center;
   justify-content: center;
-  &:active{
+  &:active {
     background: ${({ theme }) => hexToRgba(theme.colors.gray06, 0.6)};
   }
 `;

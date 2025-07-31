@@ -29,8 +29,8 @@ const SpaceHome = () => {
   } = useIntersectionObserver({ rootMargin: '200px' });
 
   const {
-    isLoading,
     photosList,
+    isLoading,
     thumbnailPhotoMap,
     isEndPage,
     fetchPhotosList,
@@ -42,6 +42,7 @@ const SpaceHome = () => {
   const { isDownloading, handleDownload } = useDownload({
     spaceName: mockSpaceData.name,
   });
+
   //biome-ignore lint/correctness/useExhaustiveDependencies: isFetchSectionVisible 변경 시 호출
   useEffect(() => {
     if (!isFetchSectionVisible || isEndPage || isLoading) return;

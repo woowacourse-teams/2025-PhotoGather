@@ -75,7 +75,7 @@ export const theme = {
     },
   },
   zIndex: {
-    circlePattern: 1,
+    overlayIcon: 1,
     imageGrid: 2,
     settingButton: 2,
     text: 3,
