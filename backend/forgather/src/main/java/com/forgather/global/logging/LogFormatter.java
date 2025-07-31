@@ -16,18 +16,29 @@ public class LogFormatter {
     private final HttpServletRequest httpServletRequest;
 
     public String formatRequestInformation() {
-        final String formattedFingerprint = formatFingerprint();
-        final String requestURI = httpServletRequest.getRequestURI();
+        String requestIdentifier = getRequestIdentifier();
+        String formattedFingerprint = formatFingerprint();
+        String requestURI = httpServletRequest.getRequestURI();
 
-        return String.format("%s %s",
+        return String.format("%s %s %s",
+            formatWithBrackets("RequestID", requestIdentifier),
             formatWithBrackets("URI", requestURI),
             formattedFingerprint
         );
     }
 
+    private String getRequestIdentifier() {
+        Object requestIdentifier = httpServletRequest.getAttribute("RequestIdentifier");
+        if (requestIdentifier instanceof String) {
+            return String.valueOf(requestIdentifier);
+        }
+
+        return "UnknownIdentifier";
+    }
+
     public String formatMethodInformation(JoinPoint joinPoint) {
-        final String methodName = joinPoint.getSignature().toShortString();
-        final String params = getParams(joinPoint.getArgs());
+        String methodName = joinPoint.getSignature().toShortString();
+        String params = getParams(joinPoint.getArgs());
 
         return String.format("%s %s",
             formatWithBrackets("MethodName", methodName),
@@ -41,7 +52,7 @@ public class LogFormatter {
 
     public String formatWithBrackets(String key, Object... values) {
         String joinedValue = Arrays.stream(values)
-            .map(String::valueOf) // null-safe toString
+            .map(String::valueOf)
             .collect(Collectors.joining(" "));
 
         return String.format("[%s:%s]", key, joinedValue);
@@ -53,10 +64,10 @@ public class LogFormatter {
      * 단순 IP 로는 사용자 추적이 어려움.
      */
     private String formatFingerprint() {
-        final String clientIp = getClientIp();
-        final String forwardedPort = getForwardedPort();
-        final String userAgent = getUserAgent();
-        final String acceptLanguage = getAcceptLanguage();
+        String clientIp = getClientIp();
+        String forwardedPort = getForwardedPort();
+        String userAgent = getUserAgent();
+        String acceptLanguage = getAcceptLanguage();
 
         return String.format("%s %s %s %s",
             formatWithBrackets("IP", clientIp),
