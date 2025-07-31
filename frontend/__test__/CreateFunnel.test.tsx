@@ -30,7 +30,7 @@ describe('스페이스 생성 퍼널 테스트', () => {
   it('퍼널이 단계별로 정상 진행된다.', async () => {
     await navigateToFunnel();
 
-    expect(screen.getByText('스페이스 이름을 정해볼까요?')).toBeInTheDocument();
+    expect(screen.getByText('이름')).toBeInTheDocument();
     await user.click(screen.getByText('다음으로'));
 
     expect(screen.getByText('스페이스를 언제부터 열까요?')).toBeInTheDocument();
