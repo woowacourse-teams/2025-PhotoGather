@@ -10,12 +10,22 @@ const glow = keyframes`
   }
 `;
 
-export const Wrapper = styled.button<{ $ratio: number; $width: string }>`
+export const Wrapper = styled.div<{ $ratio: number; $width: string }>`
   aspect-ratio: ${({ $ratio }) => $ratio};
   width: ${({ $width }) => $width};
   background-size: cover;
   overflow: hidden;
   background: none;
+  cursor: pointer;
+  position: relative;
+  &::after{
+    content: '';
+    pointer-events: none;
+    position: absolute;
+    opacity: 0.5;
+  }
+  /**삭제 예정 */
+  max-width: 94px;
 `;
 
 export const Image = styled.img`
@@ -36,4 +46,7 @@ export const Image = styled.img`
   -moz-user-drag: none;
   -o-user-drag: none;
   overflow: hidden;
+  &:active{
+    opacity: 0.8;
+  }
 `;

@@ -1,13 +1,6 @@
 import { ReactComponent as CloseIcon } from '@assets/icons/close.svg';
 import styled from '@emotion/styled';
 import { hexToRgba } from '../../../../../utils/hexToRgba';
-import * as C from '../ImageElement.common.styles';
-
-export const Wrapper = styled(C.Wrapper)`
-  position: relative;
-  /**삭제 예정 */
-  max-width: 94px;
-`;
 
 export const CloseButton = styled.button`
   position: absolute;
@@ -22,7 +15,7 @@ export const CloseButton = styled.button`
   align-items: center;
   justify-content: center;
   &:active{
-    opacity: 0.7;
+    background: ${({ theme }) => hexToRgba(theme.colors.gray06, 0.6)};
   }
 `;
 

@@ -20,7 +20,9 @@ const handleError = createImageErrorHandler(defaultImage);
 const ImageElement = ({
   src,
   ratio = 1,
-  onImageClick,
+  onImageClick = () => {
+    console.log('작동');
+  },
   alt = '스페이스 이미지',
   width = '100%',
 }: ImageElementProps) => {
