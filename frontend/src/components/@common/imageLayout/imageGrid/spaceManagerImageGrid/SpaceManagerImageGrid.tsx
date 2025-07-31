@@ -7,6 +7,8 @@ interface SpaceManagerImageGridProps {
   thumbnailUrlList: Map<number, string>;
   rowImageAmount: number;
   onImageClick: (id: number) => void;
+  isSelectMode: boolean;
+  selectedPhotoMap: Map<number, boolean>;
 }
 
 const SpaceManagerImageGrid = ({
@@ -14,6 +16,8 @@ const SpaceManagerImageGrid = ({
   thumbnailUrlList,
   rowImageAmount,
   onImageClick,
+  selectedPhotoMap,
+  isSelectMode,
 }: SpaceManagerImageGridProps) => {
   return (
     <S.Wrapper $rowImageAmount={rowImageAmount}>
@@ -22,10 +26,9 @@ const SpaceManagerImageGrid = ({
           key={photo.id}
           data={photo}
           thumbnailUrl={thumbnailUrlList.get(photo.id) ?? ''}
-          isSelected={false}
-          onImageClick={(id: number) => {
-            onImageClick(id);
-          }}
+          isSelected={selectedPhotoMap.get(photo.id) ?? false}
+          isSelectMode={isSelectMode}
+          onImageClick={() => onImageClick(photo.id)}
         />
       ))}
     </S.Wrapper>

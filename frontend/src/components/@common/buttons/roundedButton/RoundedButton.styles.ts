@@ -8,7 +8,7 @@ export const Wrapper = styled.button`
   backdrop-filter: blur(5px);
   color: ${({ theme }) => theme.colors.white};
   &:active {
-    background: ${({ theme }) => hexToRgba(theme.colors.gray04, 0.5)};
+    background: ${({ theme }) => hexToRgba(theme.colors.gray03, 0.3)};
   }
   &:disabled {
     background: ${({ theme }) => hexToRgba(theme.colors.gray01, 0.5)};

@@ -17,6 +17,8 @@ interface SpaceManagerImageElementProps {
   onImageClick: (id: number) => void;
   /** 이미지 썸네일 주소 */
   thumbnailUrl: string;
+  /** 이미지 선택 모드 여부 */
+  isSelectMode: boolean;
 }
 
 const SpaceManagerImageElement = ({
@@ -27,10 +29,13 @@ const SpaceManagerImageElement = ({
   isSelected = true,
   onImageClick,
   thumbnailUrl,
+  isSelectMode,
 }: SpaceManagerImageElementProps) => {
   // TODO : ImageElement를 눌렀을 때 작동해야 할 것 (select 모드 / 모달 띄우기 모드)
   // onImageClick 함수 내부에 모달 띄우기 or select 상태 처리 필요
   // 내부에서는 어떤 모드인지 알 필요 없음
+
+  // TODO : 네비게이션 바가 나와줘야 함 isSelectMode일 경우
   return (
     // biome-ignore lint/a11y/useSemanticElements: button 시맨틱 태그 내부에 button이 존재할 수 없음
     <C.Wrapper
@@ -42,8 +47,8 @@ const SpaceManagerImageElement = ({
       onClick={() => onImageClick(data.id)}
     >
       <C.Image src={thumbnailUrl} alt={alt} />
-      {isSelected && <S.SelectedMark />}
-      <S.Overlay $isSelected={isSelected} />
+      {isSelectMode && isSelected && <S.SelectedMark />}
+      {isSelectMode && <S.Overlay $isSelected={isSelected} />}
     </C.Wrapper>
   );
 };

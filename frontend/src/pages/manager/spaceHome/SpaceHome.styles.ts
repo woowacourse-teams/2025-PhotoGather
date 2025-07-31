@@ -11,6 +11,15 @@ export const Wrapper = styled.div`
   gap: 24px;
 `;
 
+export const ActionBar = styled.div`
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: flex-end;
+  position: sticky;
+  top: 16px;
+`;
+
 export const InfoContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -26,10 +35,13 @@ export const DownloadButtonContainer = styled.div`
   z-index: ${({ theme }) => theme.zIndex.floatingActionButton};
 `;
 
-export const ImageGridContainer = styled.div`
+export const ImageManagementContainer = styled.div`
   position: relative;
   width: 100%;
   height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 `;
 
 export const IntersectionArea = styled.div`

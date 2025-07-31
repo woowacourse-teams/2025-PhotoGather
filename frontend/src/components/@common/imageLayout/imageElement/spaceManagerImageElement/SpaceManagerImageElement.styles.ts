@@ -1,4 +1,5 @@
 import { ReactComponent as RoundCheckIcon } from '@assets/icons/round-check.svg';
+import { ReactComponent as NotSelectedCheckIcon } from '@assets/icons/round-check-outline.svg';
 import styled from '@emotion/styled';
 import { hexToRgba } from '../../../../../utils/hexToRgba';
 
@@ -19,5 +20,14 @@ export const SelectedMark = styled(RoundCheckIcon)`
   right: 4px;
   width: 17%;
   color: ${({ theme }) => theme.colors.accent};
+  z-index: ${({ theme }) => theme.zIndex.overlayIcon};
+`;
+
+export const NotSelectedMark = styled(NotSelectedCheckIcon)`
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 17%;
+  color: ${({ theme }) => theme.colors.gray04};
   z-index: ${({ theme }) => theme.zIndex.overlayIcon};
 `;

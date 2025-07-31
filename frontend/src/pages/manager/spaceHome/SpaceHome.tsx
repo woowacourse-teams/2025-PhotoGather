@@ -1,10 +1,11 @@
 import downloadLoadingSpinner from '@assets/loading-spinner.gif';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { ReactComponent as SaveIcon } from '../../../@assets/icons/download.svg';
 import { ReactComponent as SettingSvg } from '../../../@assets/icons/setting.svg';
 import { ReactComponent as ArrowUpSvg } from '../../../@assets/icons/upwardArrow.svg';
 import FloatingActionButton from '../../../components/@common/buttons/floatingActionButton/FloatingActionButton';
 import FloatingIconButton from '../../../components/@common/buttons/floatingIconButton/FloatingIconButton';
+import RoundedButton from '../../../components/@common/buttons/roundedButton/RoundedButton';
 import SpaceManagerImageGrid from '../../../components/@common/imageLayout/imageGrid/spaceManagerImageGrid/SpaceManagerImageGrid';
 import SpaceHeader from '../../../components/spaceHeader/SpaceHeader';
 import { INFORMATION } from '../../../constants/messages';
@@ -49,6 +50,33 @@ const SpaceHome = () => {
     fetchPhotosList();
   }, [isFetchSectionVisible, isEndPage]);
 
+  const initialSelectedPhotoMap = new Map<number, boolean>(
+    photosList?.map((photo) => [photo.id, false]) ?? [],
+  );
+
+  const [selectedPhotoMap, setSelectedPhotoMap] = useState(
+    initialSelectedPhotoMap,
+  );
+
+  const toggleSelectedPhoto = (id: number) => {
+    setSelectedPhotoMap((prev) => {
+      const newMap = new Map(prev);
+      newMap.set(id, !newMap.get(id));
+      return newMap;
+    });
+  };
+
+  const resetSelectedPhotoMap = () => {
+    setSelectedPhotoMap(initialSelectedPhotoMap);
+  };
+
+  const [isSelectMode, setIsSelectMode] = useState(false);
+  const toggleSelectMode = () => {
+    setIsSelectMode((prev) => !prev);
+    resetSelectedPhotoMap();
+  };
+  const selectModeButtonText = isSelectMode ? '취소' : '선택';
+
   return (
     <S.Wrapper>
       {isDownloading && (
@@ -73,24 +101,39 @@ const SpaceHome = () => {
       {photosList &&
         (photosList.length > 0 ? (
           <>
-            <S.ImageGridContainer>
+            <S.ImageManagementContainer>
+              <S.ActionBar>
+                <RoundedButton
+                  text={selectModeButtonText}
+                  onClick={toggleSelectMode}
+                />
+              </S.ActionBar>
               <SpaceManagerImageGrid
+                isSelectMode={isSelectMode}
+                selectedPhotoMap={selectedPhotoMap}
                 photoData={photosList}
                 thumbnailUrlList={thumbnailPhotoMap}
                 rowImageAmount={3}
-                onImageClick={() => {}}
+                onImageClick={
+                  isSelectMode
+                    ? (id: number) => toggleSelectedPhoto(id)
+                    : () => {
+                        console.log('모달창');
+                      }
+                }
               />
-            </S.ImageGridContainer>
+            </S.ImageManagementContainer>
 
-            <S.DownloadButtonContainer>
-              <FloatingActionButton
-                label="모두 저장하기"
-                icon={<SaveIcon />}
-                onClick={handleDownload}
-                disabled={isDownloading}
-              />
-            </S.DownloadButtonContainer>
-
+            {!isSelectMode && (
+              <S.DownloadButtonContainer>
+                <FloatingActionButton
+                  label="모두 저장하기"
+                  icon={<SaveIcon />}
+                  onClick={handleDownload}
+                  disabled={isDownloading}
+                />
+              </S.DownloadButtonContainer>
+            )}
             <S.TopButtonContainer $isVisible={!isAtPageTop}>
               <FloatingIconButton
                 icon={<ArrowUpSvg fill={theme.colors.white} />}
