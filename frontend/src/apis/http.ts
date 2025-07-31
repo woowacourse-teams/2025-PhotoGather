@@ -71,9 +71,20 @@ const request = async <T>(
       error: data?.message || `Error: ${response.status}`,
     };
   } catch (error) {
+    // 네트워크 관련 에러를 더 정확히 감지
+    // Chrome의 경우 네트워크 오류 시 TypeError: Failed to fetch 발생
+    const isNetworkError = 
+      (error instanceof TypeError && error.message === 'Failed to fetch') ||
+      (error instanceof Error && 
+        (error.message.includes('Failed to fetch') || 
+         error.message.includes('NetworkError') ||
+         error.message.includes('ERR_INTERNET_DISCONNECTED') ||
+         error.message.includes('Network request failed')));
+    
     return {
       success: false,
-      error: error instanceof Error ? error.message : 'Network error',
+      error: isNetworkError ? 'Network error' : 
+             (error instanceof Error ? error.message : 'Unknown error'),
     };
   }
 };

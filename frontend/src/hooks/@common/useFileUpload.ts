@@ -78,6 +78,7 @@ const useFileUpload = ({ fileType }: FileUploadProps) => {
 
       if (response.success) {
         clearFiles();
+        return true;
       } else {
         // JSON 파싱 에러는 업로드 성공으로 간주 (서버가 빈 응답 반환)
         // TODO: 이 부분 다듬기 필요
@@ -86,12 +87,15 @@ const useFileUpload = ({ fileType }: FileUploadProps) => {
           "Failed to execute 'json' on 'Response': Unexpected end of JSON input"
         ) {
           clearFiles();
+          return true;
         } else if (!response.error?.toLowerCase().includes('network error')) {
           alert('사진 업로드에 실패했습니다.');
         }
+        return false;
       }
     } catch (error) {
       console.error('사진 업로드 실패:', error);
+      return false;
     } finally {
       setIsUploading(false);
     }
