@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { photoService } from '../../apis/services/photo.service';
 import { isValidFileType } from '../../utils/isValidFileType';
+import useApiCall from './useApiCall';
 
 interface FileUploadProps {
   fileType: string;
@@ -11,6 +12,7 @@ const useFileUpload = ({ fileType }: FileUploadProps) => {
   const [previewUrls, setPreviewUrls] = useState<string[]>([]);
   const [isUploading, setIsUploading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const { execute } = useApiCall();
 
   const addPreviewUrlsFromFiles = (files: File[]) => {
     const urls = files.map((file) => URL.createObjectURL(file));
@@ -70,10 +72,19 @@ const useFileUpload = ({ fileType }: FileUploadProps) => {
   const handleUpload = async () => {
     try {
       setIsUploading(true);
-      await photoService.uploadFiles('1234567890', files);
-      clearFiles();
+      const response = await execute(() =>
+        photoService.uploadFiles('1234567890', files),
+      );
+
+      if (response.success) {
+        clearFiles();
+      } else {
+        if (!response.error?.toLowerCase().includes('network error')) {
+          alert('사진 업로드에 실패했습니다.');
+        }
+      }
     } catch (error) {
-      console.error('업로드 실패:', error);
+      console.error('사진 업로드 실패:', error);
       alert('사진 업로드에 실패했습니다.');
     } finally {
       setIsUploading(false);
