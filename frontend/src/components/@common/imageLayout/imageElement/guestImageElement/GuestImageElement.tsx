@@ -1,11 +1,12 @@
 import defaultImage from '../../../../../@assets/images/default_image.png';
+import type { PreviewFile } from '../../../../../types/file.type';
 import { createImageErrorHandler } from '../../../../../utils/createImageErrorHandler';
 import * as C from '../ImageElement.common.styles';
 import * as S from './GuestImageElement.styles';
 
 interface GuestImageElementProps {
-  /** 사진 파일 경로 */
-  src: string;
+  /** 사진 데이터 */
+  data: PreviewFile;
   /** 사진을 눌렀을 때 실행할 함수 */
   onImageClick: () => void;
   /** 사진 삭제 버튼 클릭 시 실행할 함수 */
@@ -19,7 +20,7 @@ interface GuestImageElementProps {
 }
 
 const GuestImageElement = ({
-  src,
+  data,
   alt = '스페이스 이미지',
   ratio = 1,
   width = '100%',
@@ -42,7 +43,7 @@ const GuestImageElement = ({
       $width={width}
       onClick={onImageClick}
     >
-      <C.Image src={src} alt={alt} onError={handleError} />
+      <C.Image src={data.path} alt={alt} onError={handleError} />
       <S.CloseButton onClick={handleDeleteClick}>
         <S.Icon />
       </S.CloseButton>

@@ -1,26 +1,32 @@
+import type { PreviewFile } from '../../../../../types/file.type';
 import GuestImageElement from '../../imageElement/guestImageElement/GuestImageElement';
 import * as S from '../ImageGrid.common.styles';
 
 interface GuestImageGridProps {
   /** 이미지의 경로를 담은 배열 */
-  imageUrlList: string[];
+  photoData: PreviewFile[];
   /** 한 줄당 이미지 개수 */
   rowImageAmount: number;
+  /** 이미지 클릭 시 실행되는 함수 */
+  onImageClick: (id: number) => void;
+  /** 이미지 삭제 시 실행되는 함수 */
+  onDeleteClick: (id: number) => void;
 }
 
 const GuestImageGrid = ({
-  imageUrlList,
+  photoData,
   rowImageAmount,
+  onImageClick,
+  onDeleteClick,
 }: GuestImageGridProps) => {
   return (
     <S.Wrapper $rowImageAmount={rowImageAmount}>
-      {imageUrlList.map((url, index) => (
+      {photoData.map((photo) => (
         <GuestImageElement
-          // biome-ignore lint/suspicious/noArrayIndexKey: using index as key is acceptable here
-          key={index}
-          src={url}
-          onImageClick={() => {}}
-          onDeleteClick={() => {}}
+          key={photo.id}
+          data={photo}
+          onImageClick={() => onImageClick(photo.id)}
+          onDeleteClick={() => onDeleteClick(photo.id)}
         />
       ))}
     </S.Wrapper>
