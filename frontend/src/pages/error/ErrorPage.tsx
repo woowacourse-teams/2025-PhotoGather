@@ -2,13 +2,12 @@ import wifiImage from '@assets/images/wifi.png';
 import { useNavigate } from 'react-router-dom';
 import CompletePage from '../../components/layout/completePage/CompletePage';
 import { ERROR } from '../../constants/messages';
-import { ROUTES } from '../../constants/routes';
 
 const ErrorPage = () => {
   const navigate = useNavigate();
 
   const handleButtonClick = () => {
-    navigate(ROUTES.MAIN);
+    navigate(-1);
   };
 
   return (
