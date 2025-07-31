@@ -1,22 +1,32 @@
+import type { Photo } from '../../../../../types/photo.type';
 import * as C from '../ImageElement.common.styles';
 import * as S from './SpaceManagerImageElement.styles';
 
 interface SpaceManagerImageElementProps {
-  src: string;
+  /** 이미지 데이터 */
+  data: Photo;
+  /** 이미지 alt 태그 */
   alt?: string;
+  /** 이미지 비율 */
   ratio?: number;
+  /** 이미지 너비 */
   width?: string;
+  /** 이미지 선택 여부 */
   isSelected: boolean;
-  onImageClick: () => void;
+  /** 이미지 클릭 시 실행할 함수 */
+  onImageClick: (id: number) => void;
+  /** 이미지 썸네일 주소 */
+  thumbnailUrl: string;
 }
 
 const SpaceManagerImageElement = ({
-  src,
+  data,
   alt = '스페이스 이미지',
   ratio = 1,
   width = '100%',
   isSelected = true,
   onImageClick,
+  thumbnailUrl,
 }: SpaceManagerImageElementProps) => {
   // TODO : ImageElement를 눌렀을 때 작동해야 할 것 (select 모드 / 모달 띄우기 모드)
   // onImageClick 함수 내부에 모달 띄우기 or select 상태 처리 필요
@@ -30,9 +40,9 @@ const SpaceManagerImageElement = ({
       $ratio={ratio}
       $width={width}
       $isSelected={isSelected}
-      onClick={onImageClick}
+      onClick={() => onImageClick(data.id)}
     >
-      <C.Image src={src} alt={alt} />
+      <C.Image src={thumbnailUrl} alt={alt} />
       {isSelected && <S.SelectedMark />}
     </S.Wrapper>
   );
