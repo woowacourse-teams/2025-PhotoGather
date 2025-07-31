@@ -1,9 +1,11 @@
 import { useState } from 'react';
+import DateTimeInput from '../../../components/@common/dateTimeInput/DateTimeInput';
 import type { FunnelElementProps } from '../../../types/funnel.type';
 import FunnelBasePage from '../funnel/funnelElementBase/FunnelElementBase';
 
 const TimeInputElement = ({ onNext }: FunnelElementProps) => {
   const [time, setTime] = useState<string>('');
+  const isDisabled = time.length === 0;
 
   return (
     <FunnelBasePage
@@ -13,13 +15,15 @@ const TimeInputElement = ({ onNext }: FunnelElementProps) => {
       }}
       description="선택한 시점부터 24시간 동안 열려요."
       element={
-        <input
-          type="time"
+        <DateTimeInput
+          inputType="time"
           value={time}
           onChange={(e) => setTime(e.target.value)}
+          data-testid="time-input"
         />
       }
       handleNextButtonClick={() => onNext(time)}
+      nextButtonDisabled={isDisabled}
     />
   );
 };

@@ -6,6 +6,7 @@ import FunnelBasePage from '../funnel/funnelElementBase/FunnelElementBase';
 const NameInputElement = ({ onNext }: FunnelElementProps) => {
   const [name, setName] = useState('');
   const isError = name.length > 10;
+  const isDisabled = isError || name.length === 0;
 
   return (
     <FunnelBasePage
@@ -20,11 +21,11 @@ const NameInputElement = ({ onNext }: FunnelElementProps) => {
           value={name}
           placeholder="나만의 스페이스"
           onChange={(e) => setName(e.target.value)}
-          errorMessage={isError ? '10자가 초과되었습니다.' : ''}
+          errorMessage={isError ? '유효하지 않은 이름입니다.' : ''}
         />
       }
       handleNextButtonClick={() => onNext(name)}
-      nextButtonDisabled={isError}
+      nextButtonDisabled={isDisabled}
     />
   );
 };
