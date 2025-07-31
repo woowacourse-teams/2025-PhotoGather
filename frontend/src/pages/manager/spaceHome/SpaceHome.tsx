@@ -69,8 +69,8 @@ const SpaceHome = () => {
         />
       </S.InfoContainer>
 
-      {thumbnailPhotoMap &&
-        (photosList && photosList.length > 0 ? (
+      {photosList &&
+        (photosList.length > 0 ? (
           <>
             <S.ImageGridContainer>
               <SpaceManagerImageGrid
