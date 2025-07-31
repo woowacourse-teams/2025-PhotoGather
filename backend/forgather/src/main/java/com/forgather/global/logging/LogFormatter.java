@@ -41,20 +41,20 @@ public class LogFormatter {
         return formatWithBrackets("DurationMillis", durationMillis);
     }
 
+    public String formatWithBrackets(String key, Object... values) {
+        String joinedValue = Arrays.stream(values)
+            .map(String::valueOf) // null-safe toString
+            .collect(Collectors.joining(" "));
+
+        return String.format("[%s:%s]", key, joinedValue);
+    }
+
     private String getClientIp() {
         String forwarded = httpServletRequest.getHeader("X-Forwarded-For");
         if (forwarded != null) {
             return forwarded.split(",")[0]; // 여러 프록시 거친 경우 첫 IP가 실제 클라이언트
         }
         return httpServletRequest.getRemoteAddr();
-    }
-
-    private String formatWithBrackets(String key, Object... values) {
-        String joinedValue = Arrays.stream(values)
-            .map(String::valueOf) // null-safe toString
-            .collect(Collectors.joining(" "));
-
-        return String.format("[%s:%s]", key, joinedValue);
     }
 
     private String getParams(final Object[] args) {

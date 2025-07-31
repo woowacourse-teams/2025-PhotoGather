@@ -67,7 +67,10 @@ public class PhotoService {
 
     private String upload(String spaceCode, MultipartFile multipartFile) {
         try {
-            log.info("파일 업로드 시작: {} {} {}", spaceCode, multipartFile.getOriginalFilename(),
+            log.info("{} {} {} {}",
+                logFormatter.formatWithBrackets("Event", "파일 업로드 시작"),
+                logFormatter.formatWithBrackets("SpaceCode", spaceCode),
+                logFormatter.formatWithBrackets("OriginalName", multipartFile.getOriginalFilename()),
                 logFormatter.formatRequestInformation());
             return awsS3Cloud.upload(spaceCode, multipartFile);
         } catch (IOException e) {
