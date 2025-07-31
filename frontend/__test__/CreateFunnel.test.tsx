@@ -1,6 +1,8 @@
+import { ThemeProvider } from '@emotion/react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import SpaceCreateFunnel from '../src/pages/create/SpaceCreateFunnel';
+import { theme } from '../src/styles/theme';
 
 describe('스페이스 생성 퍼널 테스트', () => {
   let user: ReturnType<typeof userEvent.setup>;
@@ -18,7 +20,11 @@ describe('스페이스 생성 퍼널 테스트', () => {
   });
 
   const navigateToFunnel = async () => {
-    render(<SpaceCreateFunnel />);
+    render(
+      <ThemeProvider theme={theme}>
+        <SpaceCreateFunnel />
+      </ThemeProvider>,
+    );
   };
 
   it('퍼널이 단계별로 정상 진행된다.', async () => {
