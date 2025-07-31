@@ -10,7 +10,7 @@ const useFileUpload = ({ fileType }: FileUploadProps) => {
   const [files, setFiles] = useState<File[]>([]);
   const [previewUrls, setPreviewUrls] = useState<string[]>([]);
   const [isUploading, setIsUploading] = useState(false);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string>('');
   const MAX_FILE_COUNT = 500;
   const DISALLOWED_FILE_TYPES = ['image/gif'];
 
