@@ -7,7 +7,8 @@ import NameInput from '../funnelElements/NameInput';
 import TimeInput from '../funnelElements/TimeInput';
 import * as S from './SpaceCreateFunnel.styles';
 
-const STEP_LIST = ['name', 'date', 'time', 'check', 'complete'] as const;
+const PROGRESS_STEP_LIST = ['name', 'date', 'time', 'check'] as const;
+const STEP_LIST = [...PROGRESS_STEP_LIST, 'complete'] as const;
 type STEP = (typeof STEP_LIST)[number];
 
 const SpaceCreateFunnel = () => {
@@ -16,11 +17,15 @@ const SpaceCreateFunnel = () => {
     name: '',
     openedAt: '',
   });
-  const currentStep = STEP_LIST.findIndex((oneStep) => oneStep === step) + 1;
+  const currentStep =
+    PROGRESS_STEP_LIST.findIndex((oneStep) => oneStep === step) + 1;
 
   return (
     <S.Wrapper>
-      <ProgressBar currentStep={currentStep} maxStep={STEP_LIST.length} />
+      <ProgressBar
+        currentStep={currentStep}
+        maxStep={PROGRESS_STEP_LIST.length}
+      />
       <S.ContentContainer>
         {step === 'name' && (
           <NameInput
