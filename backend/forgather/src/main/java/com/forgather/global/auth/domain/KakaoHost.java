@@ -7,12 +7,14 @@ import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.PrimaryKeyJoinColumn;
+import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
 @Entity
+@Table(name = "host_kakao")
 @PrimaryKeyJoinColumn(name = "id")
 @DiscriminatorValue("KAKAO")
 @EntityListeners(AuditingEntityListener.class)
