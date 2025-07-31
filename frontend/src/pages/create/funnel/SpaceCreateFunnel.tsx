@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import ProgressBar from '../../../components/progressBar/ProgressBar';
 import type { SpaceCreateInfo } from '../../../types/space.type';
+import CheckSpaceInfoPage from '../funnelElements/CheckSpaceInfoPage';
 import DateInput from '../funnelElements/DateInput';
 import NameInput from '../funnelElements/NameInput';
 import TimeInput from '../funnelElements/TimeInput';
@@ -46,10 +47,10 @@ const SpaceCreateFunnel = () => {
           />
         )}
         {step === 'check' && (
-          <div>
-            <p>스페이스 정보를 확인해 주세요.</p>
-            <p>{JSON.stringify(spaceInfo)}</p>
-          </div>
+          <CheckSpaceInfoPage
+            spaceInfo={spaceInfo}
+            onNext={(data) => alert(data)}
+          />
         )}
       </S.ContentContainer>
     </S.Wrapper>
