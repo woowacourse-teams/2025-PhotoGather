@@ -11,6 +11,7 @@ const useFileUpload = ({ fileType }: FileUploadProps) => {
   const [previewUrls, setPreviewUrls] = useState<string[]>([]);
   const [isUploading, setIsUploading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const MAX_FILE_COUNT = 500;
 
   const addPreviewUrlsFromFiles = (files: File[]) => {
     const urls = files.map((file) => URL.createObjectURL(file));
@@ -29,8 +30,8 @@ const useFileUpload = ({ fileType }: FileUploadProps) => {
     );
   };
 
-  const isUnderUploadLimit = (validFiles: File[], maxCount: number) => {
-    if (validFiles.length > maxCount) {
+  const isUnderUploadLimit = (validFiles: File[]) => {
+    if (validFiles.length > MAX_FILE_COUNT) {
       return false;
     }
     return true;
@@ -49,8 +50,8 @@ const useFileUpload = ({ fileType }: FileUploadProps) => {
       fileType,
     );
 
-    if (!isUnderUploadLimit(validFiles, 10)) {
-      setErrorMessage(`한 번에 10장까지 올릴 수 있어요`);
+    if (!isUnderUploadLimit(validFiles)) {
+      setErrorMessage(`한 번에 ${MAX_FILE_COUNT}장까지 올릴 수 있어요`);
     }
     if (isInvalidFiles(invalidFiles)) {
       setErrorMessage(
@@ -59,7 +60,7 @@ const useFileUpload = ({ fileType }: FileUploadProps) => {
           .join('\n')}`,
       );
     }
-    const limitedValidFiles = validFiles.slice(0, 10);
+    const limitedValidFiles = validFiles.slice(0, MAX_FILE_COUNT);
     setFiles((prev) => [...prev, ...limitedValidFiles]);
     addPreviewUrlsFromFiles(limitedValidFiles);
   };
