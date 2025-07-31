@@ -39,8 +39,6 @@ describe('스페이스 생성 퍼널 테스트', () => {
     expect(screen.getByText('몇시부터')).toBeInTheDocument();
     await user.click(screen.getByText('다음으로'));
 
-    expect(
-      screen.getByText('스페이스 정보를 확인해 주세요.'),
-    ).toBeInTheDocument();
+    expect(screen.getByText('스페이스 정보')).toBeInTheDocument();
   });
 });
