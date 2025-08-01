@@ -4,15 +4,19 @@ import * as S from './PhotoSelectionToolBar.styles';
 
 interface PhotoSelectionToolBarProps {
   selectedCount: number;
+  onDelete: () => void;
+  onDownload: () => void;
 }
 
 const PhotoSelectionToolBar = ({
   selectedCount,
+  onDelete,
+  onDownload,
 }: PhotoSelectionToolBarProps) => {
   const photoSelectedMessage = createPhotoSelectedMessage(selectedCount);
   return (
     <S.Wrapper>
-      <S.Button>
+      <S.Button onClick={onDelete}>
         <S.DeleteIcon />
       </S.Button>
       <HighlightText
@@ -22,7 +26,7 @@ const PhotoSelectionToolBar = ({
         textColorStyle="white"
         highlightColorStyle="accent"
       />
-      <S.Button>
+      <S.Button onClick={onDownload}>
         <S.DownloadIcon />
       </S.Button>
     </S.Wrapper>

@@ -24,9 +24,15 @@ export const Button = styled.button`
 export const DeleteIcon = styled(TrashCanIcon)`
   width: 16px;
   color: ${({ theme }) => theme.colors.white};
+  &:active {
+    transform: scale(0.9);
+  }
 `;
 
 export const DownloadIcon = styled(SaveIcon)`
   width: 16px;
   color: ${({ theme }) => theme.colors.white};
+  &:active {
+    transform: scale(0.9);
+  }
 `;

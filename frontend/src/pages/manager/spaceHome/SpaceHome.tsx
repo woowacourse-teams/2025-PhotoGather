@@ -1,5 +1,5 @@
 import downloadLoadingSpinner from '@assets/loading-spinner.gif';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { ReactComponent as SaveIcon } from '../../../@assets/icons/download.svg';
 import { ReactComponent as SettingSvg } from '../../../@assets/icons/setting.svg';
 import { ReactComponent as ArrowUpSvg } from '../../../@assets/icons/upwardArrow.svg';
@@ -7,10 +7,12 @@ import FloatingActionButton from '../../../components/@common/buttons/floatingAc
 import FloatingIconButton from '../../../components/@common/buttons/floatingIconButton/FloatingIconButton';
 import RoundedButton from '../../../components/@common/buttons/roundedButton/RoundedButton';
 import SpaceManagerImageGrid from '../../../components/@common/imageLayout/imageGrid/spaceManagerImageGrid/SpaceManagerImageGrid';
+import PhotoSelectionToolBar from '../../../components/photoSelectionToolBar/PhotoSelectionToolBar';
 import SpaceHeader from '../../../components/spaceHeader/SpaceHeader';
 import { INFORMATION } from '../../../constants/messages';
 import useIntersectionObserver from '../../../hooks/@common/useIntersectionObserver';
 import useDownload from '../../../hooks/useDownload';
+import usePhotoSelect from '../../../hooks/usePhotoSelect';
 import usePhotosBySpaceCode from '../../../hooks/usePhotosBySpaceCode';
 import { ScrollableBlurArea } from '../../../styles/@common/ScrollableBlurArea';
 import { theme } from '../../../styles/theme';
@@ -44,44 +46,23 @@ const SpaceHome = () => {
     spaceName: mockSpaceData.name,
   });
 
+  const {
+    isSelectMode,
+    selectModeButtonText,
+    toggleSelectMode,
+    selectedPhotoMap,
+    toggleSelectedPhoto,
+    selectedPhotoCount,
+    // TODO : 서버 연동 데이터
+    // extractSelectedPhoto,
+  } = usePhotoSelect({ photosList: photosList ?? [] });
+
   //biome-ignore lint/correctness/useExhaustiveDependencies: isFetchSectionVisible 변경 시 호출
   useEffect(() => {
     if (!isFetchSectionVisible || isEndPage || isLoading) return;
     fetchPhotosList();
   }, [isFetchSectionVisible, isEndPage]);
 
-  const initialSelectedPhotoMap = new Map<number, boolean>(
-    photosList?.map((photo) => [photo.id, false]) ?? [],
-  );
-
-  const [selectedPhotoMap, setSelectedPhotoMap] = useState(
-    initialSelectedPhotoMap,
-  );
-
-  const toggleSelectedPhoto = (id: number) => {
-    setSelectedPhotoMap((prev) => {
-      const newMap = new Map(prev);
-      newMap.set(id, !newMap.get(id));
-      return newMap;
-    });
-  };
-
-  const resetSelectedPhotoMap = () => {
-    setSelectedPhotoMap(initialSelectedPhotoMap);
-  };
-
-  const [isSelectMode, setIsSelectMode] = useState(false);
-  const toggleSelectMode = () => {
-    setIsSelectMode((prev) => !prev);
-    resetSelectedPhotoMap();
-  };
-  const selectModeButtonText = isSelectMode ? '취소' : '선택';
-
-  const mappingImageOnClick = isSelectMode
-    ? toggleSelectedPhoto
-    : () => {
-        console.log('모달창');
-      };
   return (
     <S.Wrapper>
       {isDownloading && (
@@ -107,19 +88,25 @@ const SpaceHome = () => {
         (photosList.length > 0 ? (
           <>
             <S.ImageManagementContainer>
-              <S.ActionBar>
+              <S.TopActionBar>
                 <RoundedButton
                   text={selectModeButtonText}
                   onClick={toggleSelectMode}
                 />
-              </S.ActionBar>
+              </S.TopActionBar>
               <SpaceManagerImageGrid
                 isSelectMode={isSelectMode}
                 selectedPhotoMap={selectedPhotoMap}
                 photoData={photosList}
                 thumbnailUrlList={thumbnailPhotoMap}
                 rowImageAmount={3}
-                onImageClick={mappingImageOnClick}
+                onImageClick={
+                  isSelectMode
+                    ? toggleSelectedPhoto
+                    : () => {
+                        console.log('모달창');
+                      }
+                }
               />
             </S.ImageManagementContainer>
 
@@ -141,6 +128,13 @@ const SpaceHome = () => {
                   onClick={goToTop}
                 />
               </S.TopButtonContainer>
+              {isSelectMode && (
+                <PhotoSelectionToolBar
+                  selectedCount={selectedPhotoCount}
+                  onDelete={() => {}}
+                  onDownload={() => {}}
+                />
+              )}
             </S.BottomNavigatorContainer>
           </>
         ) : (

@@ -34,7 +34,7 @@ export const ImageManagementContainer = styled.div`
   gap: 12px;
 `;
 
-export const ActionBar = styled.div`
+export const TopActionBar = styled.div`
   display: flex;
   gap: 12px;
   align-items: center;
@@ -51,15 +51,22 @@ export const IntersectionArea = styled.div`
 `;
 
 export const BottomNavigatorContainer = styled.div`
+  max-width: 100%;
   position: fixed;
+  padding: 0 24px;
   bottom: 25px;
   left: 50%;
-  transform: translateX(calc(-50% + 140px));
+  transform: translateX(-50%);
   z-index: ${({ theme }) => theme.zIndex.floatingActionButton};
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  width: ${({ theme }) => theme.layout.width};
+  display: flex;
+  justify-content: right;
+  align-items: end;
+  gap: 12px;
 `;
 
 export const TopButtonContainer = styled.div<{ $isVisible: boolean }>`
