@@ -34,7 +34,7 @@ CREATE TABLE photo
 -- 4. host
 CREATE TABLE host
 (
-    id         BIGINT PRIMARY KEY,
+    id         BIGINT AUTO_INCREMENT PRIMARY KEY,
     name       VARCHAR(100),
     type       VARCHAR(16) NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -44,7 +44,7 @@ CREATE TABLE host
 -- 5. host_kakao
 CREATE TABLE host_kakao
 (
-    id            BIGINT PRIMARY KEY,
+    id            BIGINT AUTO_INCREMENT PRIMARY KEY,
     user_id       VARCHAR(100) NOT NULL,
     access_token  VARCHAR(255),
     refresh_token VARCHAR(255),

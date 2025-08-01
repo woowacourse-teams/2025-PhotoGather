@@ -31,6 +31,7 @@ public class AuthController {
         return ResponseEntity.ok(response);
     }
 
+    // TODO: swagger 문서화
     @PostMapping("/logout/kakao")
     public ResponseEntity<Void> kakaoLogout(String accessToken) {
         authService.logoutKakao(accessToken);

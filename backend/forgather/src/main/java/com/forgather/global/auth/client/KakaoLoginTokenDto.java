@@ -2,8 +2,6 @@ package com.forgather.global.auth.client;
 
 import static com.fasterxml.jackson.databind.PropertyNamingStrategies.SnakeCaseStrategy;
 
-import java.time.LocalDateTime;
-
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 
 public class KakaoLoginTokenDto {
@@ -51,7 +49,7 @@ public class KakaoLoginTokenDto {
         String sub,
 
         // 사용자가 카카오 로그인으로 인증을 완료한 시각
-        LocalDateTime authTime,
+        Long authTime,
 
         // ID 토큰을 발급한 인증 기관 정보
         String iss,
@@ -60,10 +58,10 @@ public class KakaoLoginTokenDto {
         String nickname,
 
         // ID 토큰 만료 시간
-        LocalDateTime exp,
+        Long exp,
 
         // ID 토큰 발급 또는 갱신 시각
-        LocalDateTime iat,
+        Long iat,
 
         // 프로필 미리보기 이미지 URL
         String picture
