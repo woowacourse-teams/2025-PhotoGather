@@ -17,13 +17,13 @@ public class LogFormatter {
 
     public String formatRequestInformation() {
         String traceId = getTraceId();
-        String fingerprint = getFingerprint();
+        String formattedFingerprint = formatFingerprint();
         String requestURI = httpServletRequest.getRequestURI();
 
         return String.format("%s %s %s",
             formatWithBrackets("TRACE_ID", traceId),
             formatWithBrackets("URI", requestURI),
-            formatWithBrackets("FINGERPRINT", fingerprint)
+            formattedFingerprint
         );
     }
 
@@ -54,7 +54,7 @@ public class LogFormatter {
      * 현재 서비스 이용자 대부분이 우아한테크코스의 LAN 환경에 있어서
      * 단순 IP 로는 사용자 추적이 어려움.
      */
-    private String getFingerprint() {
+    private String formatFingerprint() {
         String clientIp = getClientIp();
         String userAgent = getUserAgent();
 
