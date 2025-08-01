@@ -12,7 +12,7 @@ const useApiCall = () => {
 
       if (
         !response.success &&
-        response.error?.toLowerCase().includes(NETWORK.DEFAULT)
+        response.error?.toLowerCase().includes(NETWORK.DEFAULT.toLowerCase())
       ) {
         navigate(ROUTES.ERROR.NETWORK);
       }
