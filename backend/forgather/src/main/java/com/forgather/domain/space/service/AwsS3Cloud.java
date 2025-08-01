@@ -2,6 +2,7 @@ package com.forgather.domain.space.service;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.Duration;
 import java.util.UUID;
 
 import org.springframework.stereotype.Component;
@@ -15,6 +16,9 @@ import lombok.RequiredArgsConstructor;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
+import software.amazon.awssdk.services.s3.presigner.S3Presigner;
+import software.amazon.awssdk.services.s3.presigner.model.PresignedPutObjectRequest;
+import software.amazon.awssdk.services.s3.presigner.model.PutObjectPresignRequest;
 import software.amazon.awssdk.transfer.s3.S3TransferManager;
 import software.amazon.awssdk.transfer.s3.config.DownloadFilter;
 import software.amazon.awssdk.transfer.s3.model.DirectoryDownload;
@@ -30,6 +34,7 @@ public class AwsS3Cloud {
     private final S3Client s3Client;
     private final S3Properties s3Properties;
     private final S3TransferManager transferManager;
+    private final S3Presigner s3Presigner;
     private final RandomCodeGenerator randomCodeGenerator;
 
     public String upload(String spaceCode, MultipartFile file) throws IOException {
@@ -79,5 +84,27 @@ public class AwsS3Cloud {
 
     private DownloadFilter excludeThumbnails() {
         return object -> !object.key().contains(THUMBNAILS_INNER_PATH);
+    }
+
+    public String issueSignedUrl(String spaceCode, String extension) {
+        PutObjectRequest objectRequest = PutObjectRequest.builder()
+            .bucket(s3Properties.getBucketName())
+            .key(generateFilePath(spaceCode, extension))
+            .tagging(s3Properties.getTagging())
+            .build();
+
+        PutObjectPresignRequest preSignRequest = PutObjectPresignRequest.builder()
+            .signatureDuration(Duration.ofMinutes(10L)) // 10MBps 에서 5MB 4초 -> 최대 100장 제한, 넉넉히 600초
+            .putObjectRequest(objectRequest)
+            .build();
+
+        PresignedPutObjectRequest preSignedRequest = s3Presigner.presignPutObject(preSignRequest);
+        return preSignedRequest.url().toString();
+    }
+
+    private String generateFilePath(String spaceCode, String extension) {
+        String uploadFileName = UUID.randomUUID().toString();
+        return String.format("%s/%s/%s/%s.%s", s3Properties.getRootDirectory(), CONTENTS_INNER_PATH, spaceCode,
+            uploadFileName, extension);
     }
 }

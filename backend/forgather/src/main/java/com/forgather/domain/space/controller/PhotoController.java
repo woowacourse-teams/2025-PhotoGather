@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -17,15 +18,19 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
+import com.forgather.domain.space.dto.IssueSignedUrlRequest;
+import com.forgather.domain.space.dto.IssueSignedUrlResponse;
 import com.forgather.domain.space.dto.PhotoResponse;
 import com.forgather.domain.space.dto.PhotosResponse;
 import com.forgather.domain.space.service.PhotoService;
+import com.forgather.domain.space.service.UploadService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -42,6 +47,7 @@ public class PhotoController {
     private static final String ZIP_CONTENT_TYPE = "application/zip";
 
     private final PhotoService photoService;
+    private final UploadService uploadService;
 
     @PostMapping(path = "/upload", consumes = {"multipart/form-data"})
     @Operation(summary = "사진 일괄 업로드", description = "사진을 전부 업로드합니다.")
@@ -51,6 +57,16 @@ public class PhotoController {
     ) {
         photoService.saveAll(spaceCode, files);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping(path = "/upload/urls")
+    @Operation(summary = "업로드 URL 일괄 발급", description = "각 확장자의 갯수별로 서명된 URL을 발급합니다.")
+    public ResponseEntity<IssueSignedUrlResponse> issuePreSignedUrls(
+        @PathVariable(name = "spaceCode") String spaceCode,
+        @RequestBody IssueSignedUrlRequest request
+    ) {
+        var response = uploadService.issueSignedUrls(spaceCode, request);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{photoId}")
