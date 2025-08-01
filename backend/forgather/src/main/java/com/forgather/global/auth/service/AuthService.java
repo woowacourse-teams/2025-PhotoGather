@@ -77,9 +77,9 @@ public class AuthService {
     }
 
     @Transactional
-    public void logoutKakao(String accessToken) {
-        KakaoHost host = (KakaoHost)kakaoHostRepository.getHostByAccessToken(accessToken);
-        kakaoAuthClient.logoutKakao(host);
-        host.logout();
+    public void logoutKakao(String userId) {
+        KakaoHost kakaoHost = kakaoHostRepository.getByUserId(userId);
+        kakaoAuthClient.logoutKakao(kakaoHost);
+        kakaoHost.logout();
     }
 }

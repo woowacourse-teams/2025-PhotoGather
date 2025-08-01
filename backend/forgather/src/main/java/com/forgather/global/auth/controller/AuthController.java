@@ -42,7 +42,7 @@ public class AuthController {
         HttpSession session
     ) {
         KakaoLoginCallbackResponse response = authService.requestKakaoLoginToken(authorizationCode);
-        session.setAttribute("USER_ID", response.userId());
+        session.setAttribute("user_id", response.userId());
 
         ResponseCookie refreshToken = ResponseCookie.from("refresh_token", response.refreshToken())
             .httpOnly(true)
@@ -59,8 +59,8 @@ public class AuthController {
     @PostMapping("/logout/kakao")
     @Operation(summary = "Kakao 로그아웃",
         description = "Kakao 로그아웃을 수행하고, 해당 사용자의 세션을 종료합니다.")
-    public ResponseEntity<Void> kakaoLogout(String accessToken) {
-        authService.logoutKakao(accessToken);
+    public ResponseEntity<Void> kakaoLogout(HttpSession session) {
+        authService.logoutKakao(session.getAttribute("user_id").toString());
         return ResponseEntity.ok().build();
     }
 }
