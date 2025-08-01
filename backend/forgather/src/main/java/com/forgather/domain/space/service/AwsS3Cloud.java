@@ -26,7 +26,7 @@ import software.amazon.awssdk.transfer.s3.model.DownloadDirectoryRequest;
 
 @Component
 @RequiredArgsConstructor
-public class AwsS3Cloud {
+public class AwsS3Cloud implements ContentsStorage {
 
     private static final String CONTENTS_INNER_PATH = "contents";
     private static final String THUMBNAILS_INNER_PATH = "thumbnails";
@@ -37,6 +37,7 @@ public class AwsS3Cloud {
     private final S3Presigner s3Presigner;
     private final RandomCodeGenerator randomCodeGenerator;
 
+    @Override
     public String upload(String spaceCode, MultipartFile file) throws IOException {
         String path = generateFilePath(spaceCode, file);
         PutObjectRequest putObjectRequest = PutObjectRequest.builder()
@@ -56,6 +57,7 @@ public class AwsS3Cloud {
             extension);
     }
 
+    @Override
     public File downloadAll(String tempPath, String spaceCode) {
         File localDownloadDirectory = new File(tempPath, "images-" + spaceCode + "-" + randomCodeGenerator.generate());
         createLocalDownloadDirectory(localDownloadDirectory);
@@ -86,6 +88,7 @@ public class AwsS3Cloud {
         return object -> !object.key().contains(THUMBNAILS_INNER_PATH);
     }
 
+    @Override
     public String issueSignedUrl(String spaceCode, String extension) {
         PutObjectRequest objectRequest = PutObjectRequest.builder()
             .bucket(s3Properties.getBucketName())
