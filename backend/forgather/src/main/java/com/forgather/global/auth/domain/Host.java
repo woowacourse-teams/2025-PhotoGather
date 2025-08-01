@@ -26,9 +26,13 @@ public abstract class Host extends BaseTimeEntity {
     @Column(name = "name", nullable = false)
     protected String name;
 
+    @Column(name = "picture_url")
+    private String pictureUrl;
+
     public abstract void logout();
 
-    protected Host(String name) {
+    protected Host(String name, String pictureUrl) {
         this.name = name;
+        this.pictureUrl = pictureUrl;
     }
 }

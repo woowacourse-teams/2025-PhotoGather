@@ -30,15 +30,11 @@ public class KakaoHost extends Host {
     @Column(name = "refresh_token")
     private String refreshToken;
 
-    @Column(name = "picture_url")
-    private String pictureUrl;
-
-    public KakaoHost(String name, String userId, String accessToken, String refreshToken, String pictureUrl) {
-        super(name);
+    public KakaoHost(String name, String pictureUrl, String userId, String accessToken, String refreshToken) {
+        super(name, pictureUrl);
         this.userId = userId;
         this.accessToken = accessToken;
         this.refreshToken = refreshToken;
-        this.pictureUrl = pictureUrl;
     }
 
     @Override

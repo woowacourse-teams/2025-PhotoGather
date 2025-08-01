@@ -39,10 +39,10 @@ public class AuthService {
      * 1. 세션에 사용자 아이디 삽입 - Httponly, Secure, SameSite, TTL
      * 2. DB에 리프레시토큰 삽입 - KakaoHostRepository.save()
      * 3. 바디에 리프레시토큰 삽입 - KakaoLoginCallbackResponse.from()
+     * 6. redirect_uri 카카오 디벨로퍼에서 수정. auth 경로 추가
      *
      * 4. host 테이블로 picture_url 이동
      * 5. 스케줄러로 만료된 리프레시 토큰 삭제
-     * 6. redirect_uri 카카오 디벨로퍼에서 수정. auth 경로 추가
      *
      * 0.로그인 필요한 서비스에 @LoginRequired 어노테이션 추가
      *
@@ -73,10 +73,10 @@ public class AuthService {
         return kakaoHostRepository.save(
             new KakaoHost(
                 userInfo.nickname(),
+                userInfo.picture(),
                 userInfo.sub(),
                 response.accessToken(),
-                response.refreshToken(),
-                userInfo.picture()
+                response.refreshToken()
             ));
     }
 
