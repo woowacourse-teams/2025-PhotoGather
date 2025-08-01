@@ -47,8 +47,6 @@ public class AuthService {
      *
      * 0.로그인 필요한 서비스에 @LoginRequired 어노테이션 추가
      *
-     * 참고
-     * 리프레시 토큰은 로그인 시 생성되고, 유효기간 만료 시 사라진다. 리프레시 토큰은 /auth/** 요청에만 들어온다. 로그아웃 요청 시 리프레시 토큰을 삭제한다.
      */
 
     @Transactional

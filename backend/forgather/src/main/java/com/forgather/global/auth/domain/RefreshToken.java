@@ -21,6 +21,11 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+/**
+ * 생성: 소셜 로그인 시
+ * 사용 범위: /auth/**
+ * 삭제: 로그아웃 요청 시 삭제되며, 만료된 토큰은 스케줄러에 의해 매일 자정에 삭제된다.
+ */
 @Entity
 @Getter
 @Table(name = "refresh_token")
