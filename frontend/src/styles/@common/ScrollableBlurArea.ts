@@ -11,7 +11,7 @@ export const ScrollableBlurArea = styled.div<{
   left: 50%;
   transform: translateX(-50%);
   width: ${({ theme }) => theme.layout.width};
-  height: 40px;
+  height: 80px;
   pointer-events: none;
   ${({ $position, theme }) =>
     $position === 'top'
@@ -19,7 +19,7 @@ export const ScrollableBlurArea = styled.div<{
   background: linear-gradient(
     to top,
     ${hexToRgba(theme.colors.white, 0)} 0%,
-    ${hexToRgba(theme.colors.gradient.start, 0.2)} 30%,
+    ${hexToRgba(theme.colors.gradient.start, 0.2)} 50%,
     ${hexToRgba(theme.colors.gradient.end, 0.6)} 100%
   );
   `
