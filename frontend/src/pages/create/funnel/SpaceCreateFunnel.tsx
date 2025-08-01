@@ -44,6 +44,7 @@ const SpaceCreateFunnel = () => {
         )}
         {step === 'date' && (
           <DateInputElement
+            onPrev={() => setStep('name')}
             onNext={(data) => {
               setStep('time');
               setSpaceInfo((prev) => ({ ...prev, date: data }));
@@ -52,6 +53,7 @@ const SpaceCreateFunnel = () => {
         )}
         {step === 'time' && (
           <TimeInputElement
+            onPrev={() => setStep('date')}
             onNext={(data) => {
               setStep('check');
               setSpaceInfo((prev) => ({ ...prev, time: data }));
@@ -60,6 +62,7 @@ const SpaceCreateFunnel = () => {
         )}
         {step === 'check' && (
           <CheckSpaceInfoElement
+            onPrev={() => setStep('time')}
             spaceInfo={spaceInfo}
             onNext={(data) => alert(data)}
           />

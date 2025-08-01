@@ -7,7 +7,10 @@ interface CheckSpaceInfoPageProps extends FunnelElementProps {
   spaceInfo: SpaceCreateInfo;
 }
 
-const CheckSpaceInfoElement = ({ spaceInfo }: CheckSpaceInfoPageProps) => {
+const CheckSpaceInfoElement = ({
+  spaceInfo,
+  onNext,
+}: CheckSpaceInfoPageProps) => {
   return (
     <FunnelBasePage
       title={{
@@ -23,7 +26,7 @@ const CheckSpaceInfoElement = ({ spaceInfo }: CheckSpaceInfoPageProps) => {
           leftTime="00:00:00"
         />
       }
-      handleNextButtonClick={() => console.dir(spaceInfo)}
+      handleNextButtonClick={() => onNext(JSON.stringify(spaceInfo))}
     />
   );
 };
