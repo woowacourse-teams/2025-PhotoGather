@@ -7,7 +7,16 @@ import org.springframework.stereotype.Component;
 @Component
 public class RandomCodeGenerator {
 
-    public String generate() {
-        return UUID.randomUUID().toString().substring(0, 11).replace("-", "");
+    public String generate(int length) {
+        if (length <= 0) {
+            return "";
+        }
+
+        StringBuilder randomString = new StringBuilder();
+        while (randomString.length() < length) {
+            randomString.append(UUID.randomUUID().toString().replace("-", ""));
+        }
+
+        return randomString.substring(0, length);
     }
 }

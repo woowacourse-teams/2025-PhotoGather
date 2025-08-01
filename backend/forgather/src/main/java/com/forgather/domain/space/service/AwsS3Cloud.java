@@ -52,7 +52,8 @@ public class AwsS3Cloud {
     }
 
     public File downloadAll(String tempPath, String spaceCode) {
-        File localDownloadDirectory = new File(tempPath, "images-" + spaceCode + "-" + randomCodeGenerator.generate());
+        File localDownloadDirectory = new File(tempPath,
+            "images-" + spaceCode + "-" + randomCodeGenerator.generate(10));
         createLocalDownloadDirectory(localDownloadDirectory);
         String s3Prefix = String.format("%s/%s/%s", s3Properties.getRootDirectory(), CONTENTS_INNER_PATH, spaceCode);
 

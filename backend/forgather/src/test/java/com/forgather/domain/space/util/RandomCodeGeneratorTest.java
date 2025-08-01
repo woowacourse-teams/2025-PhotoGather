@@ -14,7 +14,7 @@ class RandomCodeGeneratorTest {
         RandomCodeGenerator generator = new RandomCodeGenerator();
 
         // when
-        String code = generator.generate();
+        String code = generator.generate(10);
 
         // then
         assertThat(code).hasSize(10);
