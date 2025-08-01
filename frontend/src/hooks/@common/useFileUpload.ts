@@ -89,7 +89,9 @@ const useFileUpload = ({ fileType }: FileUploadProps) => {
         ) {
           clearFiles();
           return true;
-        } else if (!response.error?.toLowerCase().includes(NETWORK.DEFAULT.toLowerCase())) {
+        } else if (
+          !response.error?.toLowerCase().includes(NETWORK.DEFAULT.toLowerCase())
+        ) {
           alert('사진 업로드에 실패했습니다.');
         }
         return false;

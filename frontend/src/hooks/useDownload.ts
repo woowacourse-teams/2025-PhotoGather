@@ -44,7 +44,9 @@ const useDownload = ({ spaceName }: UseDownloadProps) => {
         downloadBlob(blob);
         navigate(ROUTES.COMPLETE.DOWNLOAD);
       } else {
-        if (!response.error?.toLowerCase().includes(NETWORK.DEFAULT.toLowerCase())) {
+        if (
+          !response.error?.toLowerCase().includes(NETWORK.DEFAULT.toLowerCase())
+        ) {
           alert('다운로드에 실패했습니다.');
         }
       }
