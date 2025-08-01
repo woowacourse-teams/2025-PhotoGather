@@ -22,6 +22,10 @@ export const theme = {
       start: '#472998',
       end: '#19132A',
     },
+    scrollableBlur: {
+      start: '#4B4B4B',
+      end: '#19132A',
+    },
     uploadBox: {
       active: '#F0EBFCB3',
       default: '#F0EBFC66',
