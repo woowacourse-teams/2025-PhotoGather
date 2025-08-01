@@ -77,6 +77,11 @@ const SpaceHome = () => {
   };
   const selectModeButtonText = isSelectMode ? '취소' : '선택';
 
+  const mappingImageOnClick = isSelectMode
+    ? toggleSelectedPhoto
+    : () => {
+        console.log('모달창');
+      };
   return (
     <S.Wrapper>
       {isDownloading && (
@@ -114,13 +119,7 @@ const SpaceHome = () => {
                 photoData={photosList}
                 thumbnailUrlList={thumbnailPhotoMap}
                 rowImageAmount={3}
-                onImageClick={
-                  isSelectMode
-                    ? (id: number) => toggleSelectedPhoto(id)
-                    : () => {
-                        console.log('모달창');
-                      }
-                }
+                onImageClick={mappingImageOnClick}
               />
             </S.ImageManagementContainer>
 
@@ -128,18 +127,21 @@ const SpaceHome = () => {
               <S.DownloadButtonContainer>
                 <FloatingActionButton
                   label="모두 저장하기"
-                  icon={<SaveIcon />}
+                  icon={<SaveIcon fill={theme.colors.gray06} />}
                   onClick={handleDownload}
                   disabled={isDownloading}
                 />
               </S.DownloadButtonContainer>
             )}
-            <S.TopButtonContainer $isVisible={!isAtPageTop}>
-              <FloatingIconButton
-                icon={<ArrowUpSvg fill={theme.colors.white} />}
-                onClick={goToTop}
-              />
-            </S.TopButtonContainer>
+
+            <S.BottomNavigatorContainer>
+              <S.TopButtonContainer $isVisible={!isAtPageTop}>
+                <FloatingIconButton
+                  icon={<ArrowUpSvg fill={theme.colors.white} />}
+                  onClick={goToTop}
+                />
+              </S.TopButtonContainer>
+            </S.BottomNavigatorContainer>
           </>
         ) : (
           <S.NoImageContainer>
