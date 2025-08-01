@@ -1,9 +1,9 @@
 package com.forgather.global.logging;
 
+import java.util.UUID;
+
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
-
-import com.forgather.domain.space.util.RandomCodeGenerator;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -15,12 +15,12 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class TraceIdInterceptor implements HandlerInterceptor {
 
-    private final RandomCodeGenerator randomCodeGenerator;
+    private static final int TRACE_ID_LENGTH = 4;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws
         Exception {
-        String traceId = randomCodeGenerator.generate(4);
+        String traceId = UUID.randomUUID().toString().substring(0, TRACE_ID_LENGTH).replace("-", "");
         request.setAttribute("com.forgather.traceId", traceId);
         return HandlerInterceptor.super.preHandle(request, response, handler);
     }
