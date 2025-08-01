@@ -44,6 +44,7 @@ public class KakaoHost extends Host {
     @Override
     public void logout() {
         this.accessToken = null;
+        this.refreshToken = null;
     }
 
     public void updateLoginTokens(String accessToken, String refreshToken) {
