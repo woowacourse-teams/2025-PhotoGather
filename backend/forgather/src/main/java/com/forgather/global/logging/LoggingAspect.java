@@ -22,9 +22,9 @@ public class LoggingAspect {
         String methodInformation = logFormatter.formatMethodInformation(joinPoint);
         String requestInformation = logFormatter.formatRequestInformation();
 
-        final long startMillis = System.currentTimeMillis();
-        final Object result = joinPoint.proceed();
-        final String durationInformation = logFormatter.formatDurationMillis(System.currentTimeMillis() - startMillis);
+        long startMillis = System.currentTimeMillis();
+        Object result = joinPoint.proceed();
+        String durationInformation = logFormatter.formatDurationMillis(System.currentTimeMillis() - startMillis);
 
         log.info("{} {} {}",
             methodInformation, durationInformation, requestInformation);

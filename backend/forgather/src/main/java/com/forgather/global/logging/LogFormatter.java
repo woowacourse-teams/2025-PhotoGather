@@ -16,24 +16,15 @@ public class LogFormatter {
     private final HttpServletRequest httpServletRequest;
 
     public String formatRequestInformation() {
-        String requestIdentifier = getRequestIdentifier();
-        String formattedFingerprint = formatFingerprint();
+        String traceId = getTraceId();
+        String fingerprint = getFingerprint();
         String requestURI = httpServletRequest.getRequestURI();
 
         return String.format("%s %s %s",
-            formatWithBrackets("RequestID", requestIdentifier),
+            formatWithBrackets("TRACE_ID", traceId),
             formatWithBrackets("URI", requestURI),
-            formattedFingerprint
+            formatWithBrackets("FINGERPRINT", fingerprint)
         );
-    }
-
-    private String getRequestIdentifier() {
-        Object requestIdentifier = httpServletRequest.getAttribute("RequestIdentifier");
-        if (requestIdentifier instanceof String) {
-            return String.valueOf(requestIdentifier);
-        }
-
-        return "UnknownIdentifier";
     }
 
     public String formatMethodInformation(JoinPoint joinPoint) {
@@ -41,13 +32,13 @@ public class LogFormatter {
         String params = getParams(joinPoint.getArgs());
 
         return String.format("%s %s",
-            formatWithBrackets("MethodName", methodName),
-            formatWithBrackets("MethodParams", params)
+            formatWithBrackets("METHOD_NAME", methodName),
+            formatWithBrackets("METHOD_PARAMS", params)
         );
     }
 
     public String formatDurationMillis(long durationMillis) {
-        return formatWithBrackets("DurationMillis", durationMillis);
+        return formatWithBrackets("DURATION_MILLIS", durationMillis);
     }
 
     public String formatWithBrackets(String key, Object... values) {
@@ -63,18 +54,23 @@ public class LogFormatter {
      * 현재 서비스 이용자 대부분이 우아한테크코스의 LAN 환경에 있어서
      * 단순 IP 로는 사용자 추적이 어려움.
      */
-    private String formatFingerprint() {
+    private String getFingerprint() {
         String clientIp = getClientIp();
-        String forwardedPort = getForwardedPort();
         String userAgent = getUserAgent();
-        String acceptLanguage = getAcceptLanguage();
 
-        return String.format("%s %s %s %s",
+        return String.format("%s %s",
             formatWithBrackets("IP", clientIp),
-            formatWithBrackets("PORT", forwardedPort),
-            formatWithBrackets("USER_AGENT", userAgent),
-            formatWithBrackets("ACCEPT_LANGUAGE", acceptLanguage)
+            formatWithBrackets("USER_AGENT", userAgent)
         );
+    }
+
+    private String getTraceId() {
+        Object traceId = httpServletRequest.getAttribute("com.forgather.traceId");
+        if (traceId instanceof String) {
+            return String.valueOf(traceId);
+        }
+
+        return "UnknownIdentifier";
     }
 
     private String getClientIp() {
@@ -85,28 +81,12 @@ public class LogFormatter {
         return httpServletRequest.getRemoteAddr();
     }
 
-    private String getForwardedPort() {
-        String forwarded = httpServletRequest.getHeader("X-Forwarded-Port");
-        if (forwarded != null && !forwarded.isEmpty()) {
-            return forwarded;
-        }
-        return "UnknownPort";
-    }
-
     private String getUserAgent() {
         String userAgent = httpServletRequest.getHeader("User-Agent");
         if (userAgent == null || userAgent.isEmpty()) {
             return "UnknownUserAgent";
         }
         return userAgent;
-    }
-
-    private String getAcceptLanguage() {
-        String language = httpServletRequest.getHeader("Accept-Language");
-        if (language == null || language.isEmpty()) {
-            return "UnknownLanguage";
-        }
-        return language;
     }
 
     private String getParams(final Object[] args) {

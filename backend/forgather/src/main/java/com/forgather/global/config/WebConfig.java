@@ -9,6 +9,8 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import com.forgather.global.logging.TraceIdInterceptor;
+
 import lombok.RequiredArgsConstructor;
 
 @Configuration
@@ -16,7 +18,7 @@ import lombok.RequiredArgsConstructor;
 public class WebConfig implements WebMvcConfigurer {
 
     private final CorsProperties corsProperties;
-    private final MyInterceptor myInterceptor;
+    private final TraceIdInterceptor traceIdInterceptor;
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
@@ -37,7 +39,7 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(myInterceptor)
+        registry.addInterceptor(traceIdInterceptor)
             .addPathPatterns("/**");
     }
 }
