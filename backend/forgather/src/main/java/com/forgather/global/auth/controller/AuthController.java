@@ -3,12 +3,13 @@ package com.forgather.global.auth.controller;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.forgather.global.auth.dto.KakaoLoginCallbackResponse;
 import com.forgather.global.auth.dto.KakaoLoginUrlResponse;
 import com.forgather.global.auth.service.AuthService;
 
@@ -21,6 +22,7 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequiredArgsConstructor
 @Tag(name = "Auth: 인증", description = "인증 관련 API")
+@RequestMapping("/auth")
 public class AuthController {
 
     private final AuthService authService;
@@ -41,7 +43,7 @@ public class AuthController {
         HttpServletResponse httpServletResponse,
         HttpSession session
     ) {
-        KakaoLoginCallbackResponse response = authService.requestKakaoLoginToken(authorizationCode);
+        var response = authService.requestKakaoLoginToken(authorizationCode);
         session.setAttribute("user_id", response.userId());
 
         ResponseCookie refreshToken = ResponseCookie.from("refresh_token", response.refreshToken())
@@ -59,8 +61,16 @@ public class AuthController {
     @PostMapping("/logout/kakao")
     @Operation(summary = "Kakao 로그아웃",
         description = "Kakao 로그아웃을 수행하고, 해당 사용자의 세션을 종료합니다.")
-    public ResponseEntity<Void> kakaoLogout(HttpSession session) {
-        authService.logoutKakao(session.getAttribute("user_id").toString());
+    public ResponseEntity<Void> kakaoLogout(
+        @CookieValue(name = "refresh_token") String refreshToken,
+        HttpSession session
+    ) {
+        /**
+         * TODO
+         * 리프레시 토큰 기반으로 잘 로그아웃하는지 체크. row 제거되야함.
+         */
+        String userId = session.getAttribute("user_id").toString();
+        authService.logoutKakao(userId, refreshToken);
         return ResponseEntity.ok().build();
     }
 }
