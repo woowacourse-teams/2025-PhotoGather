@@ -50,7 +50,7 @@ public class AuthController {
             .httpOnly(true)
             .secure(true)
             .sameSite("Strict")
-            .path("/login/refresh")
+            .path("/auth")
             .maxAge(60 * 60 * 24 * response.expirationDays())
             .build();
 
