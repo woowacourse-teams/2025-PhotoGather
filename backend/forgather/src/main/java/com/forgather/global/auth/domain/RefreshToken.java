@@ -5,7 +5,6 @@ import java.time.LocalDateTime;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import com.forgather.domain.model.BaseTimeEntity;
 import com.forgather.global.util.RandomCodeGenerator;
 
 import jakarta.persistence.Column;
@@ -27,7 +26,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "refresh_token")
 @EntityListeners(AuditingEntityListener.class)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class RefreshToken extends BaseTimeEntity {
+public class RefreshToken {
 
     private static final int TOKEN_LENGTH = 64;
     private static final int EXPIRES_DAYS = 90;
@@ -57,6 +56,7 @@ public class RefreshToken extends BaseTimeEntity {
     }
 
     public static RefreshToken generate(Host host, RandomCodeGenerator randomCodeGenerator) {
-        return new RefreshToken(host, randomCodeGenerator.generate(TOKEN_LENGTH), LocalDateTime.now().plusDays(EXPIRES_DAYS));
+        return new RefreshToken(host, randomCodeGenerator.generate(TOKEN_LENGTH),
+            LocalDateTime.now().plusDays(EXPIRES_DAYS));
     }
 }
