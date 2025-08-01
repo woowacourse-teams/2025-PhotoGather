@@ -1,4 +1,4 @@
-package com.forgather.domain.space.util;
+package com.forgather.global.util;
 
 import java.util.UUID;
 

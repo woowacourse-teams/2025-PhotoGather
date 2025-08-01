@@ -8,8 +8,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.forgather.domain.space.util.RandomCodeGenerator;
 import com.forgather.global.config.S3Properties;
+import com.forgather.global.util.RandomCodeGenerator;
 
 import lombok.RequiredArgsConstructor;
 import software.amazon.awssdk.core.sync.RequestBody;

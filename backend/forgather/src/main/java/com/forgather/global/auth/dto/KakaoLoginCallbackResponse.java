@@ -1,15 +1,21 @@
 package com.forgather.global.auth.dto;
 
 import com.forgather.global.auth.domain.KakaoHost;
-
-import io.swagger.v3.oas.annotations.media.Schema;
+import com.forgather.global.auth.domain.RefreshToken;
 
 public record KakaoLoginCallbackResponse(
-    @Schema(description = "카카오 로그인 콜백에서 받은 액세스 토큰", example = "your-access-token")
-    String accessToken
+
+    // @Schema(description = "사용자 ID", example = "1234567890")
+    String userId,
+
+    // @Schema(description = "서버 리프레시 토큰", example = "your-refresh-token")
+    String refreshToken,
+
+    // @Schema(description = "유효기간")
+    Long expirationDays
 ) {
 
-    public static KakaoLoginCallbackResponse from(KakaoHost kakaoHost) {
-        return new KakaoLoginCallbackResponse(kakaoHost.getAccessToken());
+    public static KakaoLoginCallbackResponse of(KakaoHost kakaoHost, RefreshToken refreshToken) {
+        return new KakaoLoginCallbackResponse(kakaoHost.getUserId(), refreshToken.getToken(), 90L);
     }
 }

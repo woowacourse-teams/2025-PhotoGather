@@ -1,5 +1,7 @@
 package com.forgather.global.auth.controller;
 
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,6 +14,8 @@ import com.forgather.global.auth.service.AuthService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -32,11 +36,24 @@ public class AuthController {
     @GetMapping("/login/kakao/callback")
     @Operation(summary = "Kakao 로그인 콜백",
         description = "Kakao 로그인 후 리다이렉트되는 URL에서 authorization code를 받아 로그인 처리를 합니다.")
-    public ResponseEntity<KakaoLoginCallbackResponse> kakaoLoginCallback(
-        @RequestParam(name = "code") String authorizationCode
+    public ResponseEntity<Void> kakaoLoginCallback(
+        @RequestParam(name = "code") String authorizationCode,
+        HttpServletResponse httpServletResponse,
+        HttpSession session
     ) {
-        var response = authService.requestKakaoLoginToken(authorizationCode);
-        return ResponseEntity.ok(response);
+        KakaoLoginCallbackResponse response = authService.requestKakaoLoginToken(authorizationCode);
+        session.setAttribute("USER_ID", response.userId());
+
+        ResponseCookie refreshToken = ResponseCookie.from("refresh_token", response.refreshToken())
+            .httpOnly(true)
+            .secure(true)
+            .sameSite("Strict")
+            .path("/login/refresh")
+            .maxAge(60 * 60 * 24 * response.expirationDays())
+            .build();
+
+        httpServletResponse.addHeader(HttpHeaders.SET_COOKIE, refreshToken.toString());
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping("/logout/kakao")
