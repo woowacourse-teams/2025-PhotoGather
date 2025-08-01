@@ -23,6 +23,7 @@ export const DownloadButtonContainer = styled.div`
   bottom: 20px;
   left: 50%;
   transform: translateX(-50%);
+  z-index: ${({ theme }) => theme.zIndex.floatingActionButton};
 `;
 
 export const ImageManagementContainer = styled.div`
