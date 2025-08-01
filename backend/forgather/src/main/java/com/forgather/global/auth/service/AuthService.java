@@ -8,6 +8,7 @@ import com.forgather.global.auth.client.KakaoAuthClient;
 import com.forgather.global.auth.client.KakaoLoginTokenDto;
 import com.forgather.global.auth.domain.KakaoHost;
 import com.forgather.global.auth.dto.KakaoLoginCallbackResponse;
+import com.forgather.global.auth.dto.KakaoLoginUrlResponse;
 import com.forgather.global.auth.repository.KakaoHostRepository;
 import com.forgather.global.auth.util.JwtParser;
 
@@ -22,8 +23,9 @@ public class AuthService {
     private final KakaoAuthClient kakaoAuthClient;
     private final KakaoHostRepository kakaoHostRepository;
 
-    public String getKakaoLoginUrl() {
-        return kakaoAuthClient.getKakaoLoginUrl();
+    public KakaoLoginUrlResponse getKakaoLoginUrl() {
+        String kakaoLoginUrl = kakaoAuthClient.getKakaoLoginUrl();
+        return KakaoLoginUrlResponse.from(kakaoLoginUrl);
     }
 
     @Transactional
