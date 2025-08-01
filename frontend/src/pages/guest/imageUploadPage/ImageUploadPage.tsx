@@ -99,7 +99,7 @@ const ImageUploadPage = () => {
         </>
       )}
       <S.IntersectionArea ref={hideBlurAreaTriggerRef} />
-      <ScrollableBlurArea $isHide={isAtPageBottom} />
+      <ScrollableBlurArea $isHide={isAtPageBottom} $position="bottom" />
     </S.Wrapper>
   );
 };

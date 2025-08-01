@@ -23,7 +23,6 @@ export const DownloadButtonContainer = styled.div`
   bottom: 20px;
   left: 50%;
   transform: translateX(-50%);
-  z-index: ${({ theme }) => theme.zIndex.floatingActionButton};
 `;
 
 export const ImageManagementContainer = styled.div`
@@ -42,7 +41,7 @@ export const TopActionBar = styled.div`
   position: sticky;
   top: 16px;
   left: 0;
-  border: 2px solid red;
+  z-index: ${({ theme }) => theme.zIndex.topActionButton};
 `;
 
 export const IntersectionArea = styled.div`
@@ -67,11 +66,13 @@ export const BottomNavigatorContainer = styled.div`
   justify-content: right;
   align-items: end;
   gap: 12px;
+  pointer-events: none;
 `;
 
 export const TopButtonContainer = styled.div<{ $isVisible: boolean }>`
     opacity: ${({ $isVisible }) => ($isVisible ? 1 : 0)};
     transition: opacity 0.1s ease-in-out;
+    pointer-events: auto;
 `;
 
 export const NoImageContainer = styled.div`

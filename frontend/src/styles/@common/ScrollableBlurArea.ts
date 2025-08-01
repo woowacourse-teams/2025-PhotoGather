@@ -1,9 +1,13 @@
 import styled from '@emotion/styled';
 import { hexToRgba } from '../../utils/hexToRgba';
 
-export const ScrollableBlurArea = styled.div<{ $isHide: boolean }>`
+export const ScrollableBlurArea = styled.div<{
+  $isHide: boolean;
+  $position: 'top' | 'bottom';
+}>`
   position: fixed;
-  bottom: 0;
+  ${({ $position }) => $position === 'top' && 'top: 0;'}
+  ${({ $position }) => $position === 'bottom' && 'bottom: 0;'}
   left: 50%;
   transform: translateX(-50%);
   width: ${({ theme }) => theme.layout.width};

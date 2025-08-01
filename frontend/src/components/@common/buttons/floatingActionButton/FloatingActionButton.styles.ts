@@ -31,6 +31,7 @@ export const Wrapper = styled.button<{ $variant: FloatingActionButtonVariant }>`
   padding: 12px 20px;
   border-radius: 50px;
   white-space: nowrap;
+  z-index: ${({ theme }) => theme.zIndex.floatingActionButton};
 
   box-shadow:
     1px 1px 3px 0px #fff inset,

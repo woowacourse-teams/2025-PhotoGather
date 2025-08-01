@@ -77,11 +77,11 @@ export const theme = {
   zIndex: {
     overlayIcon: 1,
     imageGrid: 2,
-    settingButton: 2,
     text: 3,
     scrollableArea: 3,
-    loadingSpinner: 4,
+    topActionButton: 4,
     floatingActionButton: 4,
+    loadingSpinner: 5,
   },
   layout: {
     width: '400px',

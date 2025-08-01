@@ -13,6 +13,7 @@ export const Wrapper = styled.div`
   border-radius: 500px;
   max-width: ${({ theme }) => theme.layout.width};
   width: 100%;
+  pointer-events: auto;
 `;
 
 export const Button = styled.button`
