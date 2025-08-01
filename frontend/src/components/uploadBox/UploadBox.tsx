@@ -37,7 +37,7 @@ const UploadBox = ({
   return (
     <S.Wrapper
       htmlFor="file-input"
-      $isActive={isActive}
+      $isActive={isActive || !disabled}
       onDragEnter={disabled ? undefined : handleDragEnter}
       onDragOver={disabled ? undefined : handleDragOver}
       onDragLeave={disabled ? undefined : handleDragLeave}
