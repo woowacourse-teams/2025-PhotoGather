@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { photoService } from '../apis/services/photo.service';
 import { DEBUG_MESSAGES } from '../constants/debugMessages';
+import { NETWORK } from '../constants/errors';
 import { ROUTES } from '../constants/routes';
 import { mockSpaceData } from '../pages/manager/spaceHome/mockSpaceData';
 import useApiCall from './@common/useApiCall';
@@ -43,7 +44,7 @@ const useDownload = ({ spaceName }: UseDownloadProps) => {
         downloadBlob(blob);
         navigate(ROUTES.COMPLETE.DOWNLOAD);
       } else {
-        if (!response.error?.toLowerCase().includes('network error')) {
+        if (!response.error?.toLowerCase().includes(NETWORK.DEFAULT)) {
           alert('다운로드에 실패했습니다.');
         }
       }

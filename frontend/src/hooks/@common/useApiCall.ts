@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom';
+import { NETWORK } from '../../constants/errors';
 import { ROUTES } from '../../constants/routes';
 import type { ApiResponse } from '../../types/api.type';
 
@@ -11,7 +12,7 @@ const useApiCall = () => {
 
       if (
         !response.success &&
-        response.error?.toLowerCase().includes('network error')
+        response.error?.toLowerCase().includes(NETWORK.DEFAULT)
       ) {
         navigate(ROUTES.ERROR.NETWORK);
       }

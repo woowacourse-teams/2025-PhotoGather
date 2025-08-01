@@ -1,5 +1,6 @@
 import { useRef, useState } from 'react';
 import { photoService } from '../apis/services/photo.service';
+import { NETWORK } from '../constants/errors';
 import type { Photo } from '../types/photo.type';
 import { buildThumbnailUrl } from '../utils/buildImageUrl';
 import { parsedImagePath } from '../utils/parsedImagePath';
@@ -60,7 +61,7 @@ const usePhotosBySpaceCode = ({
           reObserve();
         });
       } else {
-        if (!response.error?.toLowerCase().includes('network error')) {
+        if (!response.error?.toLowerCase().includes(NETWORK.DEFAULT)) {
           alert('사진 목록을 불러오는데 실패했습니다.');
         }
       }

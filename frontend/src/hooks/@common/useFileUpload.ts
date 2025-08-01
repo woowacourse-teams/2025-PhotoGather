@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { photoService } from '../../apis/services/photo.service';
+import { NETWORK } from '../../constants/errors';
 import { isValidFileType } from '../../utils/isValidFileType';
 import useApiCall from './useApiCall';
 
@@ -88,7 +89,7 @@ const useFileUpload = ({ fileType }: FileUploadProps) => {
         ) {
           clearFiles();
           return true;
-        } else if (!response.error?.toLowerCase().includes('network error')) {
+        } else if (!response.error?.toLowerCase().includes(NETWORK.DEFAULT)) {
           alert('사진 업로드에 실패했습니다.');
         }
         return false;

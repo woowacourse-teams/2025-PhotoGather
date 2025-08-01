@@ -1,3 +1,4 @@
+import { NETWORK } from '../constants/errors';
 import type {
   ApiResponse,
   BodyContentType,
@@ -71,20 +72,21 @@ const request = async <T>(
       error: data?.message || `Error: ${response.status}`,
     };
   } catch (error) {
-    // 네트워크 관련 에러를 더 정확히 감지
-    // Chrome의 경우 네트워크 오류 시 TypeError: Failed to fetch 발생
-    const isNetworkError = 
-      (error instanceof TypeError && error.message === 'Failed to fetch') ||
-      (error instanceof Error && 
-        (error.message.includes('Failed to fetch') || 
-         error.message.includes('NetworkError') ||
-         error.message.includes('ERR_INTERNET_DISCONNECTED') ||
-         error.message.includes('Network request failed')));
-    
+    const isNetworkError =
+      (error instanceof TypeError && error.message === NETWORK.CHROMIUM) ||
+      (error instanceof Error &&
+        (error.message.includes(NETWORK.CHROMIUM) ||
+          error.message.includes(NETWORK.FIREFOX) ||
+          error.message.includes(NETWORK.CHROME) ||
+          error.message.includes(NETWORK.REACT_NATIVE)));
+
     return {
       success: false,
-      error: isNetworkError ? 'Network error' : 
-             (error instanceof Error ? error.message : 'Unknown error'),
+      error: isNetworkError
+        ? NETWORK.DEFAULT
+        : error instanceof Error
+          ? error.message
+          : 'Unknown error',
     };
   }
 };
