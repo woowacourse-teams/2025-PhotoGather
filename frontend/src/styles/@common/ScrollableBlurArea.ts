@@ -13,12 +13,25 @@ export const ScrollableBlurArea = styled.div<{
   width: ${({ theme }) => theme.layout.width};
   height: 40px;
   pointer-events: none;
+  ${({ $position, theme }) =>
+    $position === 'top'
+      ? `
   background: linear-gradient(
-    to bottom,
-    ${({ theme }) => hexToRgba(theme.colors.white, 0)} 0%,
-    ${({ theme }) => hexToRgba(theme.colors.gradient.start, 0.2)} 30%,
-    ${({ theme }) => hexToRgba(theme.colors.gradient.end, 0.6)} 100%
+    to top,
+    ${hexToRgba(theme.colors.white, 0)} 0%,
+    ${hexToRgba(theme.colors.gradient.start, 0.2)} 30%,
+    ${hexToRgba(theme.colors.gradient.end, 0.6)} 100%
   );
+  `
+      : `
+     background: linear-gradient(
+    to bottom,
+    ${hexToRgba(theme.colors.white, 0)} 0%,
+    ${hexToRgba(theme.colors.gradient.start, 0.2)} 30%,
+    ${hexToRgba(theme.colors.gradient.end, 0.6)} 100%
+  ); 
+  `}
+
   z-index: ${({ theme }) => theme.zIndex.scrollableArea};
   opacity: ${({ $isHide }) => ($isHide ? 0 : 1)};
   transition: opacity 0.3s ease-in-out;
