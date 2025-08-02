@@ -1,7 +1,7 @@
 import diamondImage from '@assets/images/diamond.png';
 import { useState } from 'react';
 import ProgressBar from '../../../components/progressBar/ProgressBar';
-import type { SpaceCreateInfo } from '../../../types/space.type';
+import { parseIsoStringFromDateTime } from '../../../utils/parseIsoStringFromDateTime';
 import CheckSpaceInfoElement from '../funnelElements/CheckSpaceInfoElement';
 import DateInputElement from '../funnelElements/DateInputElement';
 import NameInputElement from '../funnelElements/NameInputElement';
@@ -12,11 +12,18 @@ const PROGRESS_STEP_LIST = ['name', 'date', 'time', 'check'] as const;
 const STEP_LIST = [...PROGRESS_STEP_LIST, 'complete'] as const;
 type STEP = (typeof STEP_LIST)[number];
 
+interface SpaceFunnelInfo {
+  name: string;
+  date: string;
+  time: string;
+}
+
 const SpaceCreateFunnel = () => {
   const [step, setStep] = useState<STEP>('name');
-  const [spaceInfo, setSpaceInfo] = useState<SpaceCreateInfo>({
+  const [spaceInfo, setSpaceInfo] = useState<SpaceFunnelInfo>({
     name: '',
-    openedAt: '',
+    date: '',
+    time: '',
   });
   const currentStep =
     PROGRESS_STEP_LIST.findIndex((oneStep) => oneStep === step) + 1;
@@ -53,6 +60,7 @@ const SpaceCreateFunnel = () => {
         )}
         {step === 'time' && (
           <TimeInputElement
+            date={spaceInfo.date}
             onPrev={() => setStep('date')}
             onNext={(data) => {
               setStep('check');
@@ -63,7 +71,13 @@ const SpaceCreateFunnel = () => {
         {step === 'check' && (
           <CheckSpaceInfoElement
             onPrev={() => setStep('time')}
-            spaceInfo={spaceInfo}
+            spaceInfo={{
+              name: spaceInfo.name,
+              openedAt: parseIsoStringFromDateTime(
+                spaceInfo.date,
+                spaceInfo.time,
+              ),
+            }}
             onNext={(data) => alert(data)}
           />
         )}

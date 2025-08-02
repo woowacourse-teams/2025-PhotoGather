@@ -1,11 +1,17 @@
 import { useState } from 'react';
 import DateTimeInput from '../../../components/@common/dateTimeInput/DateTimeInput';
 import type { FunnelElementProps } from '../../../types/funnel.type';
+import { checkIsPastDateTime } from '../../../utils/checkIsPastDateTime';
 import FunnelBasePage from '../funnel/funnelElementBase/FunnelElementBase';
 
-const TimeInputElement = ({ onNext }: FunnelElementProps) => {
+interface TimeInputElementProps extends FunnelElementProps {
+  date: string;
+}
+
+const TimeInputElement = ({ date, onNext }: TimeInputElementProps) => {
   const [time, setTime] = useState<string>('');
-  const isDisabled = time.length === 0;
+  const isError = checkIsPastDateTime(date, time);
+  const isDisabled = time.length === 0 || isError;
 
   return (
     <FunnelBasePage
@@ -20,6 +26,7 @@ const TimeInputElement = ({ onNext }: FunnelElementProps) => {
           value={time}
           onChange={(e) => setTime(e.target.value)}
           data-testid="time-input"
+          errorMessage={isError ? '현재 시간 이후 시간대를 입력해주세요.' : ''}
         />
       }
       handleNextButtonClick={() => onNext(time)}
