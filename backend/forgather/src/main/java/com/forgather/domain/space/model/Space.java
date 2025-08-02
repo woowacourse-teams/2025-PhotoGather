@@ -34,18 +34,18 @@ public class Space extends BaseTimeEntity {
     @Column(name = "name", nullable = false)
     private String name;
 
+    @Column(name = "valid_days", nullable = false)
+    private int validDays;
+
     @Column(name = "opened_at", nullable = false)
     private LocalDateTime openedAt;
 
-    @Column(name = "expired_at", nullable = false)
-    private LocalDateTime expiredAt;
-
-    public Space(String spaceCode, String password, String name, LocalDateTime openedAt) {
+    public Space(String spaceCode, String password, String name, int validDays, LocalDateTime openedAt) {
         this.spaceCode = spaceCode;
         this.password = password;
         this.name = name;
         this.openedAt = openedAt;
-        this.expiredAt = openedAt.plusDays(3L);
+        this.validDays = validDays;
     }
 
     @Override

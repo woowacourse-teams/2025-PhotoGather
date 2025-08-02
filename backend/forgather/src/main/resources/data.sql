@@ -1,8 +1,7 @@
-INSERT INTO `forgather`.`space` (`space_code`, `password`, `name`, `opened_at`, `expired_at`, `created_at`,
+INSERT INTO `forgather`.`space` (`space_code`, `password`, `name`, `valid_days`, `opened_at`, `created_at`,
                                  `updated_at`)
-VALUES ('1234567890', '1234', 'spaceName', now(), now(), now(), now()),
-       ('1234567891', '1234', 'spaceName', now(), now(), now(), now());
-
+VALUES ('1234567890', '1234', 'spaceName', 3, now(), now(), now()),
+       ('1234567891', '1234', 'spaceName', 3, now(), now(), now());
 
 INSERT INTO `forgather`.`space_content` (`content_type`, `space_id`)
 VALUES ('PHOTO', '1'),

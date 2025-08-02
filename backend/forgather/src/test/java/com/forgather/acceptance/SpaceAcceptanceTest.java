@@ -32,7 +32,7 @@ class SpaceAcceptanceTest extends AcceptanceTest {
     @DisplayName("RestAssuredMockMvc를 사용하여 Space를 생성한다.")
     void createSpaceWithRestAssuredMockMvc() {
         // given
-        var request = new CreateSpaceRequest("test-space", LocalDateTime.now().plusDays(3), "1234");
+        var request = new CreateSpaceRequest("test-space", 3, LocalDateTime.now().plusDays(3), "1234");
 
         // when
         var response = RestAssuredMockMvc.given()
