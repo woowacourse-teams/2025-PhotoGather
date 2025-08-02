@@ -48,6 +48,13 @@ public class Space extends BaseTimeEntity {
         this.validDays = validDays;
     }
 
+    public void validateExpiration(LocalDateTime currentDateTime) {
+        LocalDateTime expiredAt = openedAt.plusDays(validDays);
+        if (expiredAt.isBefore(currentDateTime)) {
+            throw new IllegalArgumentException("만료된 스페이스입니다. spaceCode: " + spaceCode);
+        }
+    }
+
     @Override
     public boolean equals(Object object) {
         if (object == null || getClass() != object.getClass())

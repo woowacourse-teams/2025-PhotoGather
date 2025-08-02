@@ -3,6 +3,7 @@ package com.forgather.domain.space.service;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
@@ -34,14 +35,14 @@ public class PhotoService {
     private final Path downloadTempPath;
 
     public PhotoResponse get(String spaceCode, Long photoId) {
-        Space space = spaceRepository.getBySpaceCode(spaceCode);
+        Space space = getUnexpiredSpace(spaceCode);
         Photo photo = photoRepository.getById(photoId);
         photo.validateSpace(space);
         return PhotoResponse.from(photo);
     }
 
     public PhotosResponse getAll(String spaceCode, Pageable pageable) {
-        Space space = spaceRepository.getBySpaceCode(spaceCode);
+        Space space = getUnexpiredSpace(spaceCode);
         Page<Photo> photos = photoRepository.findAllBySpace(space, pageable);
         return PhotosResponse.from(photos);
     }
@@ -53,7 +54,7 @@ public class PhotoService {
      */
     @Transactional
     public void saveAll(String spaceCode, List<MultipartFile> multipartFiles) {
-        Space space = spaceRepository.getBySpaceCode(spaceCode);
+        Space space = getUnexpiredSpace(spaceCode);
         for (MultipartFile multipartFile : multipartFiles) {
             PhotoMetaData metaData = MetaDataExtractor.extractPhotoMetaData(multipartFile);
             String uploadedPath = upload(spaceCode, multipartFile);
@@ -76,12 +77,18 @@ public class PhotoService {
      * 사진 원본 이름 대신 유의미한 이름 변경 추가 논의
      */
     public File compressAll(String spaceCode) throws IOException {
-        Space space = spaceRepository.getBySpaceCode(spaceCode);
+        Space space = getUnexpiredSpace(spaceCode);
 
         File spaceContents = awsS3Cloud.downloadAll(downloadTempPath.toString(), space.getSpaceCode());
 
         File zipFile = ZipGenerator.generate(downloadTempPath, spaceContents, spaceCode);
         FileSystemUtils.deleteRecursively(spaceContents);
         return zipFile;
+    }
+
+    private Space getUnexpiredSpace(String spaceCode) {
+        Space space = spaceRepository.getBySpaceCode(spaceCode);
+        space.validateExpiration(LocalDateTime.now());
+        return space;
     }
 }
