@@ -13,7 +13,7 @@ public class RefreshTokenRemoveScheduler {
 
     private final AuthService authService;
 
-    @Scheduled(cron = "0 0 0 * * *") // 매일 자정에 실행
+    @Scheduled(cron = "0 0 3 * * *") // 매일 새벽 3시 실행
     public void removeExpiredRefreshTokens() {
         authService.removeExpiredRefreshTokens();
     }
