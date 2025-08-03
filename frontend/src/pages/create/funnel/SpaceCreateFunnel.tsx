@@ -1,6 +1,7 @@
 import diamondImage from '@assets/images/diamond.png';
 import { useState } from 'react';
 import ProgressBar from '../../../components/progressBar/ProgressBar';
+import useFunnelHistory from '../../../hooks/useFunnelHistory';
 import { parseIsoStringFromDateTime } from '../../../utils/parseIsoStringFromDateTime';
 import CheckSpaceInfoElement from '../funnelElements/CheckSpaceInfoElement';
 import DateInputElement from '../funnelElements/DateInputElement';
@@ -25,6 +26,15 @@ const SpaceCreateFunnel = () => {
     date: '',
     time: '',
   });
+
+  const { navigateToNext } = useFunnelHistory<STEP>(step, setStep);
+
+  const goNextStep = (nextStep: STEP, data: Partial<SpaceFunnelInfo>) => {
+    setSpaceInfo((prev) => ({ ...prev, ...data }));
+    navigateToNext(nextStep);
+    setStep(nextStep);
+  };
+
   const currentStep =
     PROGRESS_STEP_LIST.findIndex((oneStep) => oneStep === step) + 1;
 
@@ -42,35 +52,19 @@ const SpaceCreateFunnel = () => {
       </S.TopContainer>
       <S.ContentContainer>
         {step === 'name' && (
-          <NameInputElement
-            onNext={(data) => {
-              setStep('date');
-              setSpaceInfo((prev) => ({ ...prev, name: data }));
-            }}
-          />
+          <NameInputElement onNext={(name) => goNextStep('date', { name })} />
         )}
         {step === 'date' && (
-          <DateInputElement
-            onPrev={() => setStep('name')}
-            onNext={(data) => {
-              setStep('time');
-              setSpaceInfo((prev) => ({ ...prev, date: data }));
-            }}
-          />
+          <DateInputElement onNext={(date) => goNextStep('time', { date })} />
         )}
         {step === 'time' && (
           <TimeInputElement
             date={spaceInfo.date}
-            onPrev={() => setStep('date')}
-            onNext={(data) => {
-              setStep('check');
-              setSpaceInfo((prev) => ({ ...prev, time: data }));
-            }}
+            onNext={(time) => goNextStep('check', { time })}
           />
         )}
         {step === 'check' && (
           <CheckSpaceInfoElement
-            onPrev={() => setStep('time')}
             spaceInfo={{
               name: spaceInfo.name,
               openedAt: parseIsoStringFromDateTime(

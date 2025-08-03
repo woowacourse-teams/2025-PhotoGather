@@ -1,13 +1,11 @@
 import { useState } from 'react';
 import DateTimeInput from '../../../components/@common/dateTimeInput/DateTimeInput';
-import useFunnelHistory from '../../../hooks/useFunnelHistory';
 import type { FunnelElementProps } from '../../../types/funnel.type';
 import FunnelBasePage from '../funnel/funnelElementBase/FunnelElementBase';
 
-const DateInputElement = ({ onNext, onPrev }: FunnelElementProps) => {
+const DateInputElement = ({ onNext }: FunnelElementProps) => {
   const [date, setDate] = useState<string>('');
   const isDisabled = date.length === 0;
-  const { navigateToNext } = useFunnelHistory({ stepId: 'date', onPrev });
 
   const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const todayDateString = new Date().toISOString().split('T')[0];
@@ -35,10 +33,7 @@ const DateInputElement = ({ onNext, onPrev }: FunnelElementProps) => {
           data-testid="date-input"
         />
       }
-      handleNextButtonClick={() => {
-        navigateToNext('time');
-        onNext(date);
-      }}
+      handleNextButtonClick={() => onNext(date)}
       nextButtonDisabled={isDisabled}
     />
   );

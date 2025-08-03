@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import Input from '../../../components/@common/input/Input';
-import useFunnelHistory from '../../../hooks/useFunnelHistory';
 import type { FunnelElementProps } from '../../../types/funnel.type';
 import FunnelBasePage from '../funnel/funnelElementBase/FunnelElementBase';
 
@@ -8,7 +7,6 @@ const NameInputElement = ({ onNext }: FunnelElementProps) => {
   const [name, setName] = useState('');
   const isError = name.length > 10;
   const isDisabled = isError || name.length === 0;
-  const { navigateToNext } = useFunnelHistory({ stepId: 'name' });
 
   return (
     <FunnelBasePage
@@ -26,10 +24,7 @@ const NameInputElement = ({ onNext }: FunnelElementProps) => {
           errorMessage={isError ? '유효하지 않은 이름입니다.' : ''}
         />
       }
-      handleNextButtonClick={() => {
-        navigateToNext('date');
-        onNext(name);
-      }}
+      handleNextButtonClick={() => onNext(name)}
       nextButtonDisabled={isDisabled}
     />
   );
