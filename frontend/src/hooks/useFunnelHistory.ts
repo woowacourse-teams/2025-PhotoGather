@@ -16,10 +16,7 @@ function useFunnelHistory<TStep extends string>(
 
     const currentHistoryState = window.history.state;
 
-    if (
-      (currentHistoryState && currentHistoryState.funnelStep === step) ||
-      currentHistoryState.idx === 0
-    ) {
+    if (currentHistoryState && currentHistoryState.funnelStep === step) {
       window.history.replaceState(currentState, '', window.location.href);
     } else {
       window.history.pushState(currentState, '', window.location.href);
