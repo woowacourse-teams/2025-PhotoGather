@@ -88,7 +88,7 @@ public class PhotoService {
     @Transactional
     public void deleteAll(String spaceCode) {
         Space space = spaceRepository.getBySpaceCode(spaceCode);
-        awsS3Cloud.delete(spaceCode);
+        awsS3Cloud.deleteContents(spaceCode);
         photoRepository.deleteSpaceContentBySpace(space);
     }
 }

@@ -86,7 +86,7 @@ public class AwsS3Cloud {
         return object -> !object.key().contains(THUMBNAILS_INNER_PATH);
     }
 
-    public void deleteBySpaceCode(String spaceCode) {
+    public void deleteContents(String spaceCode) {
         String s3Prefix = String.format("%s/%s/%s", s3Properties.getRootDirectory(), CONTENTS_INNER_PATH, spaceCode);
 
         ListObjectsV2Request objectPagesRequest = ListObjectsV2Request.builder()
