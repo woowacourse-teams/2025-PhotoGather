@@ -98,6 +98,21 @@ public class PhotoService {
      * S3 삭제 이후 실패 시 롤백 고려
      */
     @Transactional
+    public void deleteSelected(String spaceCode, List<Long> photoIds) {
+        Space space = spaceRepository.getBySpaceCode(spaceCode);
+        List<Photo> photos = photoRepository.findAllByIdIn(photoIds);
+        photos.forEach(photo -> photo.validateSpace(space));
+        List<String> paths = photos.stream()
+            .map(Photo::getPath)
+            .toList();
+        awsS3Cloud.deleteSelectedContents(paths);
+        photoRepository.deleteSpaceContentBySpaceAndPhotoIds(space, photoIds);
+    }
+
+    /**
+     * S3 삭제 이후 실패 시 롤백 고려
+     */
+    @Transactional
     public void deleteAll(String spaceCode) {
         Space space = spaceRepository.getBySpaceCode(spaceCode);
         awsS3Cloud.deleteContents(spaceCode);

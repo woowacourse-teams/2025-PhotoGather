@@ -99,6 +99,18 @@ public class AwsS3Cloud {
         s3Client.deleteObject(deleteRequest);
     }
 
+    public void deleteSelectedContents(List<String> paths) {
+        List<ObjectIdentifier> deleteObjects = paths.stream()
+            .map(path -> ObjectIdentifier.builder().key(path).build())
+            .toList();
+        DeleteObjectsRequest deleteRequest = DeleteObjectsRequest.builder()
+            .bucket(s3Properties.getBucketName())
+            .delete(Delete.builder().objects(deleteObjects).build())
+            .build();
+        s3Client.deleteObjects(deleteRequest);
+
+    }
+
     public void deleteContents(String spaceCode) {
         List<ObjectIdentifier> deleteObjects = getDeleteObjects(spaceCode);
 

@@ -22,10 +22,20 @@ public interface PhotoRepository extends JpaRepository<Photo, Long> {
 
     List<Photo> findAllBySpace(Space space);
 
+    List<Photo> findAllByIdIn(List<Long> photoIds);
+
     @Modifying(clearAutomatically = true, flushAutomatically = true)
     @Query("""
         DELETE FROM SpaceContent sc
         WHERE sc.space = :space
         """)
     void deleteSpaceContentBySpace(Space space);
+
+    @Modifying(clearAutomatically = true, flushAutomatically = true)
+    @Query("""
+        DELETE FROM SpaceContent sc
+        WHERE sc.space = :space
+          AND sc.id IN :photoIds
+        """)
+    void deleteSpaceContentBySpaceAndPhotoIds(Space space, List<Long> photoIds);
 }
