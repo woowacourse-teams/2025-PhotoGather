@@ -44,6 +44,8 @@ public class AuthService {
      * 5. 스케줄러로 만료된 리프레시 토큰 삭제
      * 6. redirect_uri 카카오 디벨로퍼에서 수정. auth 경로 추가
      *
+     * 7. 리프레시 api
+     *
      * 0.로그인 필요한 서비스에 @LoginRequired 어노테이션 추가
      */
 
@@ -78,10 +80,10 @@ public class AuthService {
     }
 
     @Transactional
-    public void logoutKakao(String hostId, String refreshToken) {
+    public void logoutKakao(Long hostId, String refreshToken) {
         refreshTokenRepository.findByToken(refreshToken)
             .ifPresent(refreshTokenRepository::delete);
-        KakaoHost kakaoHost = kakaoHostRepository.getByUserId(hostId);
+        KakaoHost kakaoHost = kakaoHostRepository.getById(hostId);
         kakaoAuthClient.logoutKakao(kakaoHost);
         kakaoHost.logout();
     }

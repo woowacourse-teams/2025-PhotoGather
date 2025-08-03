@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.forgather.global.auth.annotation.HostId;
 import com.forgather.global.auth.dto.KakaoLoginUrlResponse;
 import com.forgather.global.auth.service.AuthService;
 
@@ -51,6 +52,8 @@ public class AuthController {
             .secure(true)
             .sameSite("Strict")
             .path("/auth")
+            // TODO: path 설정을 /auth로 변경해야함. swagger에서 사용 불가하기 때문에 임시로 /로 설정
+            // .path("/")
             .maxAge(60 * 60 * 24 * response.expirationDays())
             .build();
 
@@ -63,13 +66,12 @@ public class AuthController {
         description = "Kakao 로그아웃을 수행하고, 해당 사용자의 세션을 종료합니다.")
     public ResponseEntity<Void> kakaoLogout(
         @CookieValue(name = "refresh_token") String refreshToken,
-        HttpSession session
+        @HostId Long hostId
     ) {
         /**
          * TODO
          * 리프레시 토큰 기반으로 잘 로그아웃하는지 체크. row 제거되야함.
          */
-        String hostId = session.getAttribute("host_id").toString();
         authService.logoutKakao(hostId, refreshToken);
         return ResponseEntity.ok().build();
     }
