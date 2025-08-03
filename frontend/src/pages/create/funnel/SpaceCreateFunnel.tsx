@@ -5,12 +5,13 @@ import useFunnelHistory from '../../../hooks/useFunnelHistory';
 import { parseIsoStringFromDateTime } from '../../../utils/parseIsoStringFromDateTime';
 import CheckSpaceInfoElement from '../funnelElements/CheckSpaceInfoElement';
 import DateInputElement from '../funnelElements/DateInputElement';
+import FetchElement from '../funnelElements/FetchElement';
 import NameInputElement from '../funnelElements/NameInputElement';
 import TimeInputElement from '../funnelElements/TimeInputElement';
 import * as S from './SpaceCreateFunnel.styles';
 
 const PROGRESS_STEP_LIST = ['name', 'date', 'time', 'check'] as const;
-const STEP_LIST = [...PROGRESS_STEP_LIST, 'complete'] as const;
+const STEP_LIST = [...PROGRESS_STEP_LIST, 'complete', 'fetch'] as const;
 type STEP = (typeof STEP_LIST)[number];
 
 interface SpaceFunnelInfo {
@@ -40,16 +41,21 @@ const SpaceCreateFunnel = () => {
 
   return (
     <S.Wrapper>
-      <ProgressBar
-        currentStep={currentStep}
-        maxStep={PROGRESS_STEP_LIST.length}
-      />
-      <S.TopContainer>
-        <S.IconContainer>
-          <S.Icon src={diamondImage} alt="다이아몬드 이미지" />
-          <S.UnderBar />
-        </S.IconContainer>
-      </S.TopContainer>
+      {step !== 'fetch' && (
+        <>
+          <ProgressBar
+            currentStep={currentStep}
+            maxStep={PROGRESS_STEP_LIST.length}
+          />
+
+          <S.TopContainer>
+            <S.IconContainer>
+              <S.Icon src={diamondImage} alt="다이아몬드 이미지" />
+              <S.UnderBar />
+            </S.IconContainer>
+          </S.TopContainer>
+        </>
+      )}
       <S.ContentContainer>
         {step === 'name' && (
           <NameInputElement
@@ -80,7 +86,23 @@ const SpaceCreateFunnel = () => {
               ),
               password: '',
             }}
-            onNext={(data) => alert(data)}
+            onNext={() => {
+              navigateToNext('fetch');
+              setStep('fetch');
+            }}
+          />
+        )}
+        {step === 'fetch' && (
+          <FetchElement
+            spaceInfo={{
+              name: spaceInfo.name,
+              openedAt: parseIsoStringFromDateTime(
+                spaceInfo.date,
+                spaceInfo.time,
+              ),
+              password: '',
+            }}
+            onNext={() => {}}
           />
         )}
       </S.ContentContainer>

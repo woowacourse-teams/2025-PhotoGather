@@ -42,7 +42,7 @@ const router = createBrowserRouter([
             element: <ImageUploadPage />,
           },
           {
-            path: 'share',
+            path: 'share/:id',
             element: <SharePage />,
           },
         ],
@@ -59,7 +59,7 @@ const router = createBrowserRouter([
             element: <DownloadCompletePage />,
           },
           {
-            path: 'space-created',
+            path: 'space-created/:id',
             element: <SpaceCreatedCompletePage />,
           },
         ],
