@@ -34,22 +34,6 @@ public class AuthService {
         return KakaoLoginUrlResponse.from(kakaoLoginUrl);
     }
 
-    /**
-     * TODO
-     * <p>
-     * 1. 세션에 사용자 아이디 삽입 - Httponly, Secure, SameSite, TTL
-     * 2. DB에 리프레시토큰 삽입 - KakaoHostRepository.save()
-     * 3. 바디에 리프레시토큰 삽입 - KakaoLoginCallbackResponse.from()
-     * 4. host 테이블로 picture_url 이동
-     * 5. 스케줄러로 만료된 리프레시 토큰 삭제
-     * 6. redirect_uri 카카오 디벨로퍼에서 수정. auth 경로 추가
-     * 7. 카카오의 리프레시 토큰과 액세스 토큰은 서버에 저장하지 않음
-     * <p>
-     * 7. 리프레시 api
-     * <p>
-     * 0. 로그인 필요한 api에서 검증 로직 추가 필요
-     */
-
     @Transactional
     public LoginResponse requestKakaoLoginToken(String authorizationCode) {
         KakaoLoginTokenDto.KakaoLoginTokenResponse response = kakaoAuthClient.requestKakaoLoginToken(authorizationCode);
