@@ -2,6 +2,7 @@ package com.forgather.domain.space.service;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.stereotype.Component;
@@ -14,6 +15,10 @@ import com.forgather.global.config.S3Properties;
 import lombok.RequiredArgsConstructor;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.Delete;
+import software.amazon.awssdk.services.s3.model.DeleteObjectsRequest;
+import software.amazon.awssdk.services.s3.model.ListObjectsV2Request;
+import software.amazon.awssdk.services.s3.model.ObjectIdentifier;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 import software.amazon.awssdk.transfer.s3.S3TransferManager;
 import software.amazon.awssdk.transfer.s3.config.DownloadFilter;
@@ -79,5 +84,29 @@ public class AwsS3Cloud {
 
     private DownloadFilter excludeThumbnails() {
         return object -> !object.key().contains(THUMBNAILS_INNER_PATH);
+    }
+
+    public void deleteBySpaceCode(String spaceCode) {
+        String s3Prefix = String.format("%s/%s/%s", s3Properties.getRootDirectory(), CONTENTS_INNER_PATH, spaceCode);
+
+        ListObjectsV2Request objectPagesRequest = ListObjectsV2Request.builder()
+            .bucket(s3Properties.getBucketName())
+            .prefix(s3Prefix)
+            .build();
+        List<ObjectIdentifier> deleteObjects = s3Client.listObjectsV2Paginator(objectPagesRequest)
+            .stream()
+            .flatMap(response -> response.contents().stream()
+                .map(object -> ObjectIdentifier.builder()
+                    .key(object.key())
+                    .build())
+            ).toList();
+
+        if (!deleteObjects.isEmpty()) {
+            DeleteObjectsRequest deleteObjectsRequest = DeleteObjectsRequest.builder()
+                .bucket(s3Properties.getBucketName())
+                .delete(Delete.builder().objects(deleteObjects).build())
+                .build();
+            s3Client.deleteObjects(deleteObjectsRequest);
+        }
     }
 }

@@ -84,4 +84,12 @@ public class PhotoService {
         FileSystemUtils.deleteRecursively(spaceContents);
         return zipFile;
     }
+
+    @Transactional
+    public void deleteAll(String spaceCode) {
+        Space space = spaceRepository.getBySpaceCode(spaceCode);
+
+        awsS3Cloud.deleteBySpaceCode(spaceCode);
+        photoRepository.deleteBySpace(space);
+    }
 }

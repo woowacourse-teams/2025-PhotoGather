@@ -14,6 +14,7 @@ import org.springframework.http.ContentDisposition;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -104,5 +105,14 @@ public class PhotoController {
         return ResponseEntity.ok()
             .headers(httpHeaders)
             .body(responseBody);
+    }
+
+    @DeleteMapping
+    public ResponseEntity<Void> deleteAll(
+        @PathVariable(name = "spaceCode") String spaceCode
+    ) {
+        photoService.deleteAll(spaceCode);
+        return ResponseEntity.noContent()
+            .build();
     }
 }
