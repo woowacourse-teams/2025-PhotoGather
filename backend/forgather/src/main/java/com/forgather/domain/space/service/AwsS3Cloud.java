@@ -59,7 +59,7 @@ public class AwsS3Cloud {
     public File downloadAll(String tempPath, String spaceCode) {
         File localDownloadDirectory = new File(tempPath, "images-" + spaceCode + "-" + randomCodeGenerator.generate());
         createLocalDownloadDirectory(localDownloadDirectory);
-        String s3Prefix = String.format("%s/%s/%s", s3Properties.getRootDirectory(), CONTENTS_INNER_PATH, spaceCode);
+        String s3Prefix = getPrefix(spaceCode);
 
         DownloadDirectoryRequest request = DownloadDirectoryRequest.builder()
             .bucket(s3Properties.getBucketName())
@@ -71,6 +71,10 @@ public class AwsS3Cloud {
         DirectoryDownload directoryDownload = transferManager.downloadDirectory(request);
         directoryDownload.completionFuture().join();
         return localDownloadDirectory;
+    }
+
+    private String getPrefix(String spaceCode) {
+        return String.format("%s/%s/%s", s3Properties.getRootDirectory(), CONTENTS_INNER_PATH, spaceCode);
     }
 
     private void createLocalDownloadDirectory(File localDownloadDirectory) {
@@ -87,19 +91,7 @@ public class AwsS3Cloud {
     }
 
     public void deleteContents(String spaceCode) {
-        String s3Prefix = String.format("%s/%s/%s", s3Properties.getRootDirectory(), CONTENTS_INNER_PATH, spaceCode);
-
-        ListObjectsV2Request objectPagesRequest = ListObjectsV2Request.builder()
-            .bucket(s3Properties.getBucketName())
-            .prefix(s3Prefix)
-            .build();
-        List<ObjectIdentifier> deleteObjects = s3Client.listObjectsV2Paginator(objectPagesRequest)
-            .stream()
-            .flatMap(response -> response.contents().stream()
-                .map(object -> ObjectIdentifier.builder()
-                    .key(object.key())
-                    .build())
-            ).toList();
+        List<ObjectIdentifier> deleteObjects = getDeleteObjects(spaceCode);
 
         if (!deleteObjects.isEmpty()) {
             DeleteObjectsRequest deleteObjectsRequest = DeleteObjectsRequest.builder()
@@ -108,5 +100,23 @@ public class AwsS3Cloud {
                 .build();
             s3Client.deleteObjects(deleteObjectsRequest);
         }
+    }
+
+    private List<ObjectIdentifier> getDeleteObjects(String spaceCode) {
+        return s3Client.listObjectsV2Paginator(createObjectPagesRequest(spaceCode))
+            .stream()
+            .flatMap(response -> response.contents().stream()
+                .map(object -> ObjectIdentifier.builder()
+                    .key(object.key())
+                    .build())
+            ).toList();
+    }
+
+    private ListObjectsV2Request createObjectPagesRequest(String spaceCode) {
+        String s3Prefix = getPrefix(spaceCode);
+        return ListObjectsV2Request.builder()
+            .bucket(s3Properties.getBucketName())
+            .prefix(s3Prefix)
+            .build();
     }
 }
