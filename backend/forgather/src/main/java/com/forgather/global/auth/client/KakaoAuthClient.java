@@ -3,7 +3,6 @@ package com.forgather.global.auth.client;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
 
-import com.forgather.global.auth.domain.KakaoHost;
 import com.forgather.global.config.KakaoProperties;
 
 import lombok.RequiredArgsConstructor;
@@ -38,17 +37,5 @@ public class KakaoAuthClient {
                 .uri(urlBuilder.toString())
                 .retrieve()
                 .body(KakaoLoginTokenDto.KakaoLoginTokenResponse.class);
-    }
-
-    public void logoutKakao(KakaoHost kakaoHost) {
-        StringBuilder urlBuilder = new StringBuilder("https://kapi.kakao.com/v1/user/logout");
-        urlBuilder.append("?target_id_type=user_id");
-        urlBuilder.append("&target_id=").append(kakaoHost.getUserId());
-
-        restClient.post()
-                .uri(urlBuilder.toString())
-                .header("Authorization", "Bearer " + kakaoHost.getAccessToken())
-                .retrieve()
-                .body(Void.class);
     }
 }

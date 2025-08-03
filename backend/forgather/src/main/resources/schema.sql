@@ -47,8 +47,6 @@ CREATE TABLE host_kakao
 (
     id            BIGINT AUTO_INCREMENT PRIMARY KEY,
     user_id       VARCHAR(100) NOT NULL,
-    access_token  VARCHAR(255),
-    refresh_token VARCHAR(255),
     CONSTRAINT fk_host_kakao FOREIGN KEY (id) REFERENCES host (id)
 );
 

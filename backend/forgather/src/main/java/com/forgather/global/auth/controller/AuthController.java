@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.forgather.global.auth.annotation.HostId;
 import com.forgather.global.auth.dto.KakaoLoginUrlResponse;
 import com.forgather.global.auth.service.AuthService;
 
@@ -65,14 +64,13 @@ public class AuthController {
     @Operation(summary = "Kakao 로그아웃",
         description = "Kakao 로그아웃을 수행하고, 해당 사용자의 세션을 종료합니다.")
     public ResponseEntity<Void> kakaoLogout(
-        @CookieValue(name = "refresh_token") String refreshToken,
-        @HostId Long hostId
+        @CookieValue(name = "refresh_token") String refreshToken
     ) {
         /**
          * TODO
          * 리프레시 토큰 기반으로 잘 로그아웃하는지 체크. row 제거되야함.
          */
-        authService.logoutKakao(hostId, refreshToken);
+        authService.logout(refreshToken);
         return ResponseEntity.ok().build();
     }
 }

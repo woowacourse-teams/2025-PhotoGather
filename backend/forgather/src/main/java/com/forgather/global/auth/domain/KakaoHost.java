@@ -24,27 +24,8 @@ public class KakaoHost extends Host {
     @Column(name = "user_id", nullable = false)
     private String userId;
 
-    @Column(name = "access_token")
-    private String accessToken;
-
-    @Column(name = "refresh_token")
-    private String refreshToken;
-
-    public KakaoHost(String name, String pictureUrl, String userId, String accessToken, String refreshToken) {
+    public KakaoHost(String name, String pictureUrl, String userId) {
         super(name, pictureUrl);
         this.userId = userId;
-        this.accessToken = accessToken;
-        this.refreshToken = refreshToken;
-    }
-
-    @Override
-    public void logout() {
-        this.accessToken = null;
-        this.refreshToken = null;
-    }
-
-    public void updateLoginTokens(String accessToken, String refreshToken) {
-        this.accessToken = accessToken;
-        this.refreshToken = refreshToken;
     }
 }

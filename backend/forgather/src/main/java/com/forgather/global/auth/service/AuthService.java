@@ -43,6 +43,7 @@ public class AuthService {
      * 4. host 테이블로 picture_url 이동
      * 5. 스케줄러로 만료된 리프레시 토큰 삭제
      * 6. redirect_uri 카카오 디벨로퍼에서 수정. auth 경로 추가
+     * 7. 카카오의 리프레시 토큰과 액세스 토큰은 서버에 저장하지 않음
      *
      * 7. 리프레시 api
      *
@@ -64,28 +65,18 @@ public class AuthService {
     private KakaoHost loginWithKakao(KakaoLoginTokenDto.KakaoLoginTokenResponse response,
         KakaoLoginTokenDto.UserInfo userInfo) {
         Optional<KakaoHost> kakaoHost = kakaoHostRepository.findByUserId(userInfo.sub());
-        if (kakaoHost.isPresent()) {
-            kakaoHost.get().updateLoginTokens(response.accessToken(), response.refreshToken());
-            return kakaoHost.get();
-        }
-
-        return kakaoHostRepository.save(
+        return kakaoHost.orElseGet(() -> kakaoHostRepository.save(
             new KakaoHost(
                 userInfo.nickname(),
                 userInfo.picture(),
-                userInfo.sub(),
-                response.accessToken(),
-                response.refreshToken()
-            ));
+                userInfo.sub()
+            )));
     }
 
     @Transactional
-    public void logoutKakao(Long hostId, String refreshToken) {
+    public void logout(String refreshToken) {
         refreshTokenRepository.findByToken(refreshToken)
             .ifPresent(refreshTokenRepository::delete);
-        KakaoHost kakaoHost = kakaoHostRepository.getById(hostId);
-        kakaoAuthClient.logoutKakao(kakaoHost);
-        kakaoHost.logout();
     }
 
     @Transactional
