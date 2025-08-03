@@ -16,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.Delete;
+import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
 import software.amazon.awssdk.services.s3.model.DeleteObjectsRequest;
 import software.amazon.awssdk.services.s3.model.ListObjectsV2Request;
 import software.amazon.awssdk.services.s3.model.ObjectIdentifier;
@@ -88,6 +89,14 @@ public class AwsS3Cloud {
 
     private DownloadFilter excludeThumbnails() {
         return object -> !object.key().contains(THUMBNAILS_INNER_PATH);
+    }
+
+    public void deleteContent(String path) {
+        DeleteObjectRequest deleteRequest = DeleteObjectRequest.builder()
+            .bucket(s3Properties.getBucketName())
+            .key(path)
+            .build();
+        s3Client.deleteObject(deleteRequest);
     }
 
     public void deleteContents(String spaceCode) {

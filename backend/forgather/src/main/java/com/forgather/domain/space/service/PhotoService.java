@@ -85,6 +85,15 @@ public class PhotoService {
         return zipFile;
     }
 
+    @Transactional
+    public void delete(String spaceCode, Long photoId) {
+        Space space = spaceRepository.getBySpaceCode(spaceCode);
+        Photo photo = photoRepository.getById(photoId);
+        photo.validateSpace(space);
+        awsS3Cloud.deleteContent(photo.getPath());
+        photoRepository.delete(photo);
+    }
+
     /**
      * S3 삭제 이후 실패 시 롤백 고려
      */

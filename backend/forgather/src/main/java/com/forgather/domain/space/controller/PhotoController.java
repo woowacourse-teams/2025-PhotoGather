@@ -107,6 +107,16 @@ public class PhotoController {
             .body(responseBody);
     }
 
+    @DeleteMapping("/{photoId}")
+    public ResponseEntity<Void> delete(
+        @PathVariable(name = "spaceCode") String spaceCode,
+        @PathVariable(name = "photoId") Long photoId
+    ) {
+        photoService.delete(spaceCode, photoId);
+        return ResponseEntity.noContent()
+            .build();
+    }
+
     @DeleteMapping
     @Operation(summary = "사진 일괄 삭제", description = "특정 공간의 사진을 일괄 삭제합니다.")
     public ResponseEntity<Void> deleteAll(
