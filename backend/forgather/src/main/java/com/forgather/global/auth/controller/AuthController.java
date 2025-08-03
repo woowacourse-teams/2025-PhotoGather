@@ -14,6 +14,7 @@ import com.forgather.global.auth.dto.KakaoLoginUrlResponse;
 import com.forgather.global.auth.service.AuthService;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -51,8 +52,6 @@ public class AuthController {
             .secure(true)
             .sameSite("Strict")
             .path("/auth")
-            // TODO: path 설정을 /auth로 변경해야함. swagger에서 사용 불가하기 때문에 임시로 /로 설정
-            // .path("/")
             .maxAge(60 * 60 * 24 * response.expirationDays())
             .build();
 
@@ -61,16 +60,23 @@ public class AuthController {
     }
 
     @PostMapping("/logout/kakao")
-    @Operation(summary = "Kakao 로그아웃",
-        description = "Kakao 로그아웃을 수행하고, 해당 사용자의 세션을 종료합니다.")
-    public ResponseEntity<Void> kakaoLogout(
-        @CookieValue(name = "refresh_token") String refreshToken
+    @Operation(summary = "로그아웃",
+        description = "로그아웃합니다. 리프레시 토큰을 쿠키에서 제거하고, 서버에서 해당 토큰을 삭제합니다.")
+    public ResponseEntity<Void> logout(
+        @Parameter(hidden = true)
+        @CookieValue(name = "refresh_token") String refreshToken,
+        HttpServletResponse httpServletResponse
     ) {
-        /**
-         * TODO
-         * 리프레시 토큰 기반으로 잘 로그아웃하는지 체크. row 제거되야함.
-         */
         authService.logout(refreshToken);
+        ResponseCookie cookie = ResponseCookie.from("refresh_token", "")
+            .httpOnly(true)
+            .secure(true)
+            .sameSite("Strict")
+            .path("/auth")
+            .maxAge(0)
+            .build();
+
+        httpServletResponse.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
         return ResponseEntity.ok().build();
     }
 }
