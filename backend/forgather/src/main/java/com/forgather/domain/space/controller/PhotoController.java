@@ -108,6 +108,7 @@ public class PhotoController {
     }
 
     @DeleteMapping("/{photoId}")
+    @Operation(summary = "사진 단건 삭제", description = "특정 공간의 단건 사진을 삭제합니다.")
     public ResponseEntity<Void> delete(
         @PathVariable(name = "spaceCode") String spaceCode,
         @PathVariable(name = "photoId") Long photoId
