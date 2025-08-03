@@ -3,7 +3,7 @@ import type { SpaceContent } from './spaceContent.type';
 export interface SpaceCreateInfo {
   name: string;
   openedAt: string;
-  password?: string;
+  password: string;
 }
 
 export interface Space {
@@ -18,13 +18,6 @@ export interface Space {
 
 export interface SpaceWithContents extends Space {
   contents: SpaceContent[];
-}
-
-export interface CreateSpaceInput {
-  spaceCode: string;
-  name: string;
-  openedAt: Date | string;
-  expiredAt: Date | string;
 }
 
 export interface UpdateSpaceInput {

@@ -78,6 +78,7 @@ const SpaceCreateFunnel = () => {
                 spaceInfo.date,
                 spaceInfo.time,
               ),
+              password: '',
             }}
             onNext={(data) => alert(data)}
           />
