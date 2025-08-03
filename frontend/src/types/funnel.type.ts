@@ -11,4 +11,5 @@ export interface FunnelBaseElementProps {
 
 export interface FunnelElementProps {
   onNext: (data: string) => void;
+  initialValue?: string;
 }

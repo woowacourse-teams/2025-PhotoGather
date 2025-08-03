@@ -3,8 +3,11 @@ import Input from '../../../components/@common/input/Input';
 import type { FunnelElementProps } from '../../../types/funnel.type';
 import FunnelBasePage from '../funnel/funnelElementBase/FunnelElementBase';
 
-const NameInputElement = ({ onNext }: FunnelElementProps) => {
-  const [name, setName] = useState('');
+const NameInputElement = ({
+  onNext,
+  initialValue = '',
+}: FunnelElementProps) => {
+  const [name, setName] = useState(initialValue);
   const isError = name.length > 10;
   const isDisabled = isError || name.length === 0;
 

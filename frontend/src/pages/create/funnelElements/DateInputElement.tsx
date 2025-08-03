@@ -3,8 +3,11 @@ import DateTimeInput from '../../../components/@common/dateTimeInput/DateTimeInp
 import type { FunnelElementProps } from '../../../types/funnel.type';
 import FunnelBasePage from '../funnel/funnelElementBase/FunnelElementBase';
 
-const DateInputElement = ({ onNext }: FunnelElementProps) => {
-  const [date, setDate] = useState<string>('');
+const DateInputElement = ({
+  onNext,
+  initialValue = '',
+}: FunnelElementProps) => {
+  const [date, setDate] = useState(initialValue);
   const isDisabled = date.length === 0;
 
   const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {

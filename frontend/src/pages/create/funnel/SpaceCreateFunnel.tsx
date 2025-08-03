@@ -52,15 +52,22 @@ const SpaceCreateFunnel = () => {
       </S.TopContainer>
       <S.ContentContainer>
         {step === 'name' && (
-          <NameInputElement onNext={(name) => goNextStep('date', { name })} />
+          <NameInputElement
+            onNext={(name) => goNextStep('date', { name })}
+            initialValue={spaceInfo.name}
+          />
         )}
         {step === 'date' && (
-          <DateInputElement onNext={(date) => goNextStep('time', { date })} />
+          <DateInputElement
+            onNext={(date) => goNextStep('time', { date })}
+            initialValue={spaceInfo.date}
+          />
         )}
         {step === 'time' && (
           <TimeInputElement
             date={spaceInfo.date}
             onNext={(time) => goNextStep('check', { time })}
+            initialValue={spaceInfo.time}
           />
         )}
         {step === 'check' && (

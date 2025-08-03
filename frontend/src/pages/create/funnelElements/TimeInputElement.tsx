@@ -8,8 +8,12 @@ interface TimeInputElementProps extends FunnelElementProps {
   date: string;
 }
 
-const TimeInputElement = ({ date, onNext }: TimeInputElementProps) => {
-  const [time, setTime] = useState<string>('');
+const TimeInputElement = ({
+  date,
+  onNext,
+  initialValue = '',
+}: TimeInputElementProps) => {
+  const [time, setTime] = useState(initialValue);
   const isError = checkIsPastDateTime(date, time);
   const isDisabled = time.length === 0 || isError;
 
