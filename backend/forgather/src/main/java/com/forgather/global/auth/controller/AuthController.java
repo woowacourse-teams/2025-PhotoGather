@@ -44,7 +44,7 @@ public class AuthController {
         HttpSession session
     ) {
         var response = authService.requestKakaoLoginToken(authorizationCode);
-        session.setAttribute("user_id", response.userId());
+        session.setAttribute("host_id", response.hostId());
 
         ResponseCookie refreshToken = ResponseCookie.from("refresh_token", response.refreshToken())
             .httpOnly(true)
@@ -69,8 +69,8 @@ public class AuthController {
          * TODO
          * 리프레시 토큰 기반으로 잘 로그아웃하는지 체크. row 제거되야함.
          */
-        String userId = session.getAttribute("user_id").toString();
-        authService.logoutKakao(userId, refreshToken);
+        String hostId = session.getAttribute("host_id").toString();
+        authService.logoutKakao(hostId, refreshToken);
         return ResponseEntity.ok().build();
     }
 }
