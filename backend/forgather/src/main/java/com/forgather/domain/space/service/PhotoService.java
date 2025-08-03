@@ -85,6 +85,9 @@ public class PhotoService {
         return zipFile;
     }
 
+    /**
+     * S3 삭제 이후 실패 시 롤백 고려
+     */
     @Transactional
     public void deleteAll(String spaceCode) {
         Space space = spaceRepository.getBySpaceCode(spaceCode);
