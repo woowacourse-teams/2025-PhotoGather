@@ -1,4 +1,5 @@
 import LeftTimeInformationBox from '../../../components/leftTimeInformationBox/LeftTimeInformationBox';
+import useFunnelHistory from '../../../hooks/useFunnelHistory';
 import type { FunnelElementProps } from '../../../types/funnel.type';
 import type { SpaceCreateInfo } from '../../../types/space.type';
 import FunnelBasePage from '../funnel/funnelElementBase/FunnelElementBase';
@@ -10,7 +11,10 @@ interface CheckSpaceInfoPageProps extends FunnelElementProps {
 const CheckSpaceInfoElement = ({
   spaceInfo,
   onNext,
+  onPrev,
 }: CheckSpaceInfoPageProps) => {
+  const { navigateToNext } = useFunnelHistory({ stepId: 'check', onPrev });
+
   return (
     <FunnelBasePage
       title={{
@@ -26,7 +30,10 @@ const CheckSpaceInfoElement = ({
           leftTime="00:00:00"
         />
       }
-      handleNextButtonClick={() => onNext(JSON.stringify(spaceInfo))}
+      handleNextButtonClick={() => {
+        navigateToNext('');
+        onNext(JSON.stringify(spaceInfo));
+      }}
     />
   );
 };
