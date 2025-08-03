@@ -39,7 +39,6 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(traceIdInterceptor)
-            .addPathPatterns("/**");
+        registry.addInterceptor(traceIdInterceptor);
     }
 }

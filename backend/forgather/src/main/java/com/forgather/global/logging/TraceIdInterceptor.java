@@ -15,7 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class TraceIdInterceptor implements HandlerInterceptor {
 
-    private static final int TRACE_ID_LENGTH = 4;
+    private static final int TRACE_ID_LENGTH = 8;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws
