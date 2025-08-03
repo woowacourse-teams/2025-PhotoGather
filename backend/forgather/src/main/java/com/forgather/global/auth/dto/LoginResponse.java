@@ -1,9 +1,9 @@
 package com.forgather.global.auth.dto;
 
-import com.forgather.global.auth.domain.KakaoHost;
+import com.forgather.global.auth.domain.Host;
 import com.forgather.global.auth.domain.RefreshToken;
 
-public record KakaoLoginCallbackResponse(
+public record LoginResponse(
 
     // @Schema(description = "호스트 아이디", example = "123")
     Long hostId,
@@ -15,7 +15,7 @@ public record KakaoLoginCallbackResponse(
     Long expirationDays
 ) {
 
-    public static KakaoLoginCallbackResponse of(KakaoHost kakaoHost, RefreshToken refreshToken) {
-        return new KakaoLoginCallbackResponse(kakaoHost.getId(), refreshToken.getToken(), 90L);
+    public static LoginResponse of(Host host, RefreshToken refreshToken) {
+        return new LoginResponse(host.getId(), refreshToken.getToken(), 90L);
     }
 }

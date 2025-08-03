@@ -64,4 +64,8 @@ public class RefreshToken {
         return new RefreshToken(host, randomCodeGenerator.generate(TOKEN_LENGTH),
             LocalDateTime.now().plusDays(EXPIRES_DAYS));
     }
+
+    public boolean isExpired() {
+        return LocalDateTime.now().isAfter(expiredAt);
+    }
 }
