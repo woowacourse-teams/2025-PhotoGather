@@ -11,7 +11,7 @@ const DateInputElement = ({
   const isDisabled = date.length === 0;
 
   const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const todayDateString = new Date().toISOString().split('T')[0];
+    const todayDateString = new Date(Date.now()).toISOString().split('T')[0];
     const selected = e.target.value;
     if (selected < todayDateString) {
       alert('오늘 이전 날짜는 선택할 수 없습니다.');
