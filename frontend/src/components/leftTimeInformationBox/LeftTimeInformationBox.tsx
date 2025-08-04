@@ -26,12 +26,10 @@ const LeftTimeInformationBox = ({
   return (
     <S.Wrapper>
       <S.Title>{title}</S.Title>
-      <HighlightText
-        text={`열리기까지 ${leftTime}`}
-        highlightTextArray={[leftTime || '']}
-        highlightColorStyle="primary"
-        fontStyle="header03"
-      />
+      <S.TopDescriptionContainer>
+        <S.TopDescription>열리기까지</S.TopDescription>
+        <S.TopLeftTime>{leftTime}</S.TopLeftTime>
+      </S.TopDescriptionContainer>
       <S.Icon src={loadingImage} alt="loading" />
       <HighlightText
         text={`${openDate.date}\n${openDate.time}에 열릴 예정이에요`}
