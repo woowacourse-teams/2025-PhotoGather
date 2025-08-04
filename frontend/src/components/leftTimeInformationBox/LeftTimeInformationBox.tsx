@@ -9,7 +9,7 @@ interface OpenDate {
   time: string;
 }
 
-interface InformationConfirmBoxProps {
+interface LeftTimeInformationBoxProps {
   /** 스페이스 타이틀 */
   title: string;
   /** 오픈까지 남은 날짜와 시간 */
@@ -22,7 +22,7 @@ const LeftTimeInformationBox = ({
   title,
   leftTime,
   openDate,
-}: InformationConfirmBoxProps) => {
+}: LeftTimeInformationBoxProps) => {
   return (
     <S.Wrapper>
       <S.Title>{title}</S.Title>
