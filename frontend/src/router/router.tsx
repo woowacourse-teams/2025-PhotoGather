@@ -1,7 +1,6 @@
 import { createBrowserRouter } from 'react-router-dom';
 import Layout from '../components/layout/Layout';
 import DownloadCompletePage from '../pages/complete/DownloadCompletePage';
-import SpaceCreatedCompletePage from '../pages/complete/SpaceCreatedCompletePage';
 import UploadCompletePage from '../pages/complete/UploadCompletePage';
 import SpaceCreateFunnel from '../pages/create/funnel/SpaceCreateFunnel';
 import DemoHome from '../pages/demo/DemoHome';
