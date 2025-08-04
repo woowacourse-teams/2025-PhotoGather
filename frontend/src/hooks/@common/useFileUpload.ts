@@ -30,23 +30,20 @@ const useFileUpload = ({ fileType }: UseFileUploadProps) => {
     );
   };
 
-  const isUnderUploadLimit = (validFiles: File[]) =>
-    validFiles.length <= CONSTRAINTS.MAX_FILE_COUNT;
-
-  const isInvalidFiles = (invalidFiles: File[]) => invalidFiles.length > 0;
-
   const updateFiles = (rawFiles: File[]) => {
     const { validFiles, invalidFiles } = splitValidFilesByType(
       rawFiles,
       fileType,
     );
+    const isUnderUploadLimit = validFiles.length <= CONSTRAINTS.MAX_FILE_COUNT;
+    const hasInvalidFiles = invalidFiles.length > 0;
 
-    if (!isUnderUploadLimit(validFiles)) {
+    if (!isUnderUploadLimit) {
       setErrorMessage(
         `한 번에 ${CONSTRAINTS.MAX_FILE_COUNT}장까지 올릴 수 있어요`,
       );
     }
-    if (isInvalidFiles(invalidFiles)) {
+    if (hasInvalidFiles) {
       setErrorMessage(
         `이미지 파일만 업로드 가능해요. 파일을 다시 확인해주세요.\n${invalidFiles
           .map((file) => file.name)
