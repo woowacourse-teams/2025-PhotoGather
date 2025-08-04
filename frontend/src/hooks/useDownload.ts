@@ -14,7 +14,7 @@ interface UseDownloadProps {
 const useDownload = ({ spaceName }: UseDownloadProps) => {
   const [isDownloading, setIsDownloading] = useState(false);
   const navigate = useNavigate();
-  const { execute } = useApiCall();
+  const { safeApiCall } = useApiCall();
 
   const downloadBlob = (blob: Blob) => {
     const url = URL.createObjectURL(blob);
@@ -32,7 +32,7 @@ const useDownload = ({ spaceName }: UseDownloadProps) => {
   const handleDownload = async () => {
     try {
       setIsDownloading(true);
-      const response = await execute(() =>
+      const response = await safeApiCall(() =>
         photoService.downloadZip(mockSpaceData.code),
       );
 

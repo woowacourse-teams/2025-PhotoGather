@@ -13,7 +13,7 @@ const useFileUpload = ({ fileType }: FileUploadProps) => {
   const [previewUrls, setPreviewUrls] = useState<string[]>([]);
   const [isUploading, setIsUploading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const { execute } = useApiCall();
+  const { safeApiCall } = useApiCall();
 
   const addPreviewUrlsFromFiles = (files: File[]) => {
     const urls = files.map((file) => URL.createObjectURL(file));
@@ -73,7 +73,7 @@ const useFileUpload = ({ fileType }: FileUploadProps) => {
   const handleUpload = async () => {
     try {
       setIsUploading(true);
-      const response = await execute(() =>
+      const response = await safeApiCall(() =>
         photoService.uploadFiles('1234567890', files),
       );
 

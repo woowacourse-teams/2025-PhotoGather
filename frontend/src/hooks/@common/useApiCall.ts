@@ -6,7 +6,7 @@ import type { ApiResponse } from '../../types/api.type';
 const useApiCall = () => {
   const navigate = useNavigate();
 
-  const execute = async <T>(apiCall: () => Promise<ApiResponse<T>>) => {
+  const safeApiCall = async <T>(apiCall: () => Promise<ApiResponse<T>>) => {
     try {
       const response = await apiCall();
 
@@ -24,7 +24,7 @@ const useApiCall = () => {
     }
   };
 
-  return { execute };
+  return { safeApiCall };
 };
 
 export default useApiCall;

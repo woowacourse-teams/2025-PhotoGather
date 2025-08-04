@@ -25,7 +25,7 @@ describe('useApiCall 훅 테스트', () => {
     };
     const mockApiCall = jest.fn().mockResolvedValue(mockResponse);
 
-    const response = await result.current.execute(mockApiCall);
+    const response = await result.current.safeApiCall(mockApiCall);
 
     expect(response).toEqual(mockResponse);
     expect(mockNavigate).not.toHaveBeenCalled();
@@ -39,7 +39,7 @@ describe('useApiCall 훅 테스트', () => {
     };
     const mockApiCall = jest.fn().mockResolvedValue(mockResponse);
 
-    const response = await result.current.execute(mockApiCall);
+    const response = await result.current.safeApiCall(mockApiCall);
 
     expect(response).toEqual(mockResponse);
     expect(mockNavigate).toHaveBeenCalledWith(ROUTES.ERROR.NETWORK);
@@ -53,7 +53,7 @@ describe('useApiCall 훅 테스트', () => {
     };
     const mockApiCall = jest.fn().mockResolvedValue(mockResponse);
 
-    const response = await result.current.execute(mockApiCall);
+    const response = await result.current.safeApiCall(mockApiCall);
 
     expect(response).toEqual(mockResponse);
     expect(mockNavigate).not.toHaveBeenCalled();
@@ -64,7 +64,7 @@ describe('useApiCall 훅 테스트', () => {
     const mockError = new Error('Unexpected error');
     const mockApiCall = jest.fn().mockRejectedValue(mockError);
 
-    await expect(result.current.execute(mockApiCall)).rejects.toThrow(
+    await expect(result.current.safeApiCall(mockApiCall)).rejects.toThrow(
       mockError,
     );
     expect(mockNavigate).toHaveBeenCalledWith(ROUTES.ERROR.NETWORK);
@@ -78,7 +78,7 @@ describe('useApiCall 훅 테스트', () => {
     };
     const mockApiCall = jest.fn().mockResolvedValue(mockResponse);
 
-    await result.current.execute(mockApiCall);
+    await result.current.safeApiCall(mockApiCall);
 
     expect(mockNavigate).toHaveBeenCalledWith(ROUTES.ERROR.NETWORK);
   });

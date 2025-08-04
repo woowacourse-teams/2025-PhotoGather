@@ -22,7 +22,7 @@ const usePhotosBySpaceCode = ({
   const [photosList, setPhotosList] = useState<Photo[] | null>(null);
   const currentPage = useRef(1);
   const totalPages = useRef(1);
-  const { execute } = useApiCall();
+  const { safeApiCall } = useApiCall();
 
   const thumbnailList = photosList?.map((photo) => {
     return buildThumbnailUrl(spaceCode, parsedImagePath(photo.path), PRESET);
@@ -45,7 +45,7 @@ const usePhotosBySpaceCode = ({
 
     try {
       const pageToFetch = currentPage.current;
-      const response = await execute(() =>
+      const response = await safeApiCall(() =>
         photoService.getBySpaceCode(spaceCode, {
           page: pageToFetch,
           size: PAGE_SIZE,
