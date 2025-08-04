@@ -111,7 +111,7 @@ public class AwsS3Cloud {
 
     }
 
-    public void deleteContents(String spaceCode) {
+    public void deleteAllContents(String spaceCode) {
         List<ObjectIdentifier> deleteObjects = getDeleteObjects(spaceCode);
 
         if (!deleteObjects.isEmpty()) {
