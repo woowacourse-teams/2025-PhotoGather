@@ -1,10 +1,10 @@
 import LeftTimeInformationBox from '../../../components/leftTimeInformationBox/LeftTimeInformationBox';
 import type { FunnelElementProps } from '../../../types/funnel.type';
-import type { SpaceCreateInfo } from '../../../types/space.type';
+import type { SpaceFunnelInfo } from '../../../types/space.type';
 import FunnelBasePage from '../funnel/funnelElementBase/FunnelElementBase';
 
 interface CheckSpaceInfoPageProps extends FunnelElementProps {
-  spaceInfo: SpaceCreateInfo;
+  spaceInfo: SpaceFunnelInfo;
 }
 
 const CheckSpaceInfoElement = ({

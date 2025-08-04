@@ -7,10 +7,10 @@ import type { SpaceCreateInfo } from '../../../types/space.type';
 type FetchStatus = 'loading' | 'error' | 'success';
 
 interface FetchElementProps extends FunnelElementProps {
-  spaceInfo: SpaceCreateInfo;
+  spaceCreateInfo: SpaceCreateInfo;
 }
 
-const FetchElement = ({ spaceInfo }: FetchElementProps) => {
+const FetchElement = ({ spaceCreateInfo }: FetchElementProps) => {
   const [status, setStatus] = useState<FetchStatus>('loading');
   const [spaceCode, setSpaceCode] = useState('');
 
@@ -19,7 +19,7 @@ const FetchElement = ({ spaceInfo }: FetchElementProps) => {
   useEffect(() => {
     const createSpace = async () => {
       try {
-        const spaceCode = await fetchCreateSpace(spaceInfo);
+        const spaceCode = await fetchCreateSpace(spaceCreateInfo);
         if (!spaceCode) throw new Error();
 
         setSpaceCode(spaceCode);
@@ -30,7 +30,7 @@ const FetchElement = ({ spaceInfo }: FetchElementProps) => {
     };
 
     createSpace();
-  }, [fetchCreateSpace, spaceInfo]);
+  }, [fetchCreateSpace, spaceCreateInfo]);
 
   if (status === 'loading') {
     return (
@@ -39,7 +39,7 @@ const FetchElement = ({ spaceInfo }: FetchElementProps) => {
           <p>조금만 기다려주세요</p>
           <p>곧 스페이스 생성이 끝나요</p>
         </div>
-        <p>{JSON.stringify(spaceInfo)}</p>
+        <p>{JSON.stringify(spaceCreateInfo)}</p>
       </>
     );
   }

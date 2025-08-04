@@ -6,6 +6,12 @@ export interface SpaceCreateInfo {
   password: string;
 }
 
+export interface SpaceFunnelInfo {
+  name: string;
+  date: string;
+  time: string;
+}
+
 export interface Space {
   id: number;
   spaceCode: string;

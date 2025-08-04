@@ -2,6 +2,7 @@ import diamondImage from '@assets/images/diamond.png';
 import { useState } from 'react';
 import ProgressBar from '../../../components/progressBar/ProgressBar';
 import useFunnelHistory from '../../../hooks/useFunnelHistory';
+import type { SpaceFunnelInfo } from '../../../types/space.type';
 import { parseIsoStringFromDateTime } from '../../../utils/parseIsoStringFromDateTime';
 import CheckSpaceInfoElement from '../funnelElements/CheckSpaceInfoElement';
 import DateInputElement from '../funnelElements/DateInputElement';
@@ -13,12 +14,6 @@ import * as S from './SpaceCreateFunnel.styles';
 const PROGRESS_STEP_LIST = ['name', 'date', 'time', 'check'] as const;
 const STEP_LIST = [...PROGRESS_STEP_LIST, 'complete', 'fetch'] as const;
 type STEP = (typeof STEP_LIST)[number];
-
-interface SpaceFunnelInfo {
-  name: string;
-  date: string;
-  time: string;
-}
 
 const SpaceCreateFunnel = () => {
   const [step, setStep] = useState<STEP>('name');
@@ -86,20 +81,13 @@ const SpaceCreateFunnel = () => {
         )}
         {step === 'check' && (
           <CheckSpaceInfoElement
-            spaceInfo={{
-              name: spaceInfo.name,
-              openedAt: parseIsoStringFromDateTime(
-                spaceInfo.date,
-                spaceInfo.time,
-              ),
-              password: '',
-            }}
+            spaceInfo={spaceInfo}
             onNext={() => goNextStep('fetch')}
           />
         )}
         {step === 'fetch' && (
           <FetchElement
-            spaceInfo={{
+            spaceCreateInfo={{
               name: spaceInfo.name,
               openedAt: parseIsoStringFromDateTime(
                 spaceInfo.date,
