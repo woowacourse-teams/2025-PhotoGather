@@ -45,7 +45,7 @@ const FetchElement = ({ spaceInfo }: FetchElementProps) => {
     return <Navigate to="/" replace />;
   }
 
-  return <Navigate to={`/complete/space-created/${spaceCode}`} replace />;
+  return <Navigate to={`/guest/share`} state={spaceCode} replace />;
 };
 
 export default FetchElement;

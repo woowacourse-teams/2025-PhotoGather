@@ -4,6 +4,10 @@ export const INFORMATION = {
     DESCRIPTION: `이 화면을 지나면 링크를 볼 수 없어요.\n지금 꼭 복사하거나 저장해 주세요!`,
     HIGHLIGHT_TEXT: '지금 꼭 복사하거나 저장해 주세요!',
   },
+  COMPLETE_CREATE: {
+    DESCRIPTION: '스페이스 생성이 완료됐어요.',
+    HIGHLIGHT_TEXT: '완료',
+  },
   SUGGEST_SHARE: {
     DESCRIPTION: '스페이스 링크를 공유해 보세요',
     HIGHLIGHT_TEXT: '스페이스 링크',
