@@ -5,7 +5,9 @@ import * as S from './UploadBox.styles';
 
 interface UploadBoxProps {
   /** 박스 내 들어갈 텍스트 */
-  text: string;
+  mainText: string;
+  /** 용량 안내 텍스트 */
+  uploadLimitText: string;
   /** 박스 내 아이콘 크기 */
   iconSize?: number;
   /** 파일 선택 시이벤트 핸들러 */
@@ -17,7 +19,8 @@ interface UploadBoxProps {
 }
 
 const UploadBox = ({
-  text,
+  mainText,
+  uploadLimitText,
   iconSize = 60,
   onChange,
   onDrop,
@@ -34,7 +37,7 @@ const UploadBox = ({
   return (
     <S.Wrapper
       htmlFor="file-input"
-      $isActive={isActive}
+      $isActive={isActive || !disabled}
       onDragEnter={disabled ? undefined : handleDragEnter}
       onDragOver={disabled ? undefined : handleDragOver}
       onDragLeave={disabled ? undefined : handleDragLeave}
@@ -42,7 +45,8 @@ const UploadBox = ({
     >
       <S.Container $isActive={isActive}>
         <CameraIcon fill={theme.colors.white} width={iconSize} />
-        {text}
+        {mainText}
+        <S.LimitTextContainer>{uploadLimitText}</S.LimitTextContainer>
       </S.Container>
       <input
         id="file-input"
