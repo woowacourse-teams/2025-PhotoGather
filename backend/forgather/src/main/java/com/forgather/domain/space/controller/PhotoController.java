@@ -1,12 +1,13 @@
 package com.forgather.domain.space.controller;
 
+import static org.springframework.http.HttpStatus.CREATED;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -29,6 +30,8 @@ import com.forgather.domain.space.dto.IssueSignedUrlRequest;
 import com.forgather.domain.space.dto.IssueSignedUrlResponse;
 import com.forgather.domain.space.dto.PhotoResponse;
 import com.forgather.domain.space.dto.PhotosResponse;
+import com.forgather.domain.space.dto.SaveUploadedPhotoRequest;
+import com.forgather.domain.space.dto.SaveUploadedPhotoResponse;
 import com.forgather.domain.space.service.PhotoService;
 import com.forgather.domain.space.service.UploadService;
 
@@ -50,8 +53,8 @@ public class PhotoController {
     private final UploadService uploadService;
 
     @PostMapping(path = "/upload", consumes = {"multipart/form-data"})
-    @Operation(summary = "사진 일괄 업로드", description = "사진을 전부 업로드합니다.")
-    public ResponseEntity<Void> saveAll(
+    @Operation(summary = "사진 일괄 업로드", description = "클라우드 저장소와 DB에 사진을 전부 업로드합니다.")
+    public ResponseEntity<Void> uploadAll(
         @PathVariable(name = "spaceCode") String spaceCode,
         @RequestPart(name = "files") List<MultipartFile> files
     ) {
@@ -67,6 +70,16 @@ public class PhotoController {
     ) {
         var response = uploadService.issueSignedUrls(spaceCode, request);
         return ResponseEntity.ok(response);
+    }
+
+    @PostMapping
+    @Operation(summary = "업로드 된 사진 정보 일괄 저장", description = "업로드 된 사진 정보를 DB에 저장합니다.")
+    public ResponseEntity<SaveUploadedPhotoResponse> saveAll(
+        @PathVariable(name = "spaceCode") String spaceCode,
+        @RequestBody List<SaveUploadedPhotoRequest> requests
+    ) {
+        var response = photoService.saveUploadedPhotos(spaceCode, requests);
+        return ResponseEntity.status(CREATED).body(response);
     }
 
     @GetMapping("/{photoId}")

@@ -14,6 +14,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.forgather.domain.space.dto.PhotoResponse;
 import com.forgather.domain.space.dto.PhotosResponse;
+import com.forgather.domain.space.dto.SaveUploadedPhotoRequest;
+import com.forgather.domain.space.dto.SaveUploadedPhotoResponse;
 import com.forgather.domain.space.model.Photo;
 import com.forgather.domain.space.model.PhotoMetaData;
 import com.forgather.domain.space.model.Space;
@@ -83,5 +85,15 @@ public class PhotoService {
         File zipFile = ZipGenerator.generate(downloadTempPath, spaceContents, spaceCode);
         FileSystemUtils.deleteRecursively(spaceContents);
         return zipFile;
+    }
+
+    @Transactional
+    public SaveUploadedPhotoResponse saveUploadedPhotos(String spaceCode, List<SaveUploadedPhotoRequest> requests) {
+        Space space = spaceRepository.getBySpaceCode(spaceCode);
+        for (SaveUploadedPhotoRequest request : requests) {
+            Photo photo = request.toEntity(space);
+            photoRepository.save(photo);
+        }
+        return new SaveUploadedPhotoResponse(space.getName(), requests.size());
     }
 }
