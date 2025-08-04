@@ -24,6 +24,7 @@ CREATE TABLE space_content
 CREATE TABLE photo
 (
     id            bigint       NOT NULL AUTO_INCREMENT,
+    original_name varchar(255) NOT NULL,
     path          varchar(255) NOT NULL,
     captured_at   timestamp NULL DEFAULT NULL,
     created_at    timestamp    NOT NULL DEFAULT CURRENT_TIMESTAMP,

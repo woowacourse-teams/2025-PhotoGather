@@ -57,7 +57,7 @@ public class PhotoService {
         for (MultipartFile multipartFile : multipartFiles) {
             PhotoMetaData metaData = MetaDataExtractor.extractPhotoMetaData(multipartFile);
             String uploadedPath = upload(spaceCode, multipartFile);
-            photoRepository.save(new Photo(space, uploadedPath, metaData));
+            photoRepository.save(new Photo(space, multipartFile.getOriginalFilename(), uploadedPath, metaData));
         }
     }
 
