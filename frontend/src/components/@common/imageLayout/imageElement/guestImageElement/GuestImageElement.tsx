@@ -29,7 +29,7 @@ const GuestImageElement = ({
     onDeleteClick(data.id);
     e.stopPropagation();
   };
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+  const handleEnterKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
     if (e.key === 'Enter') {
       onImageClick(data.id);
     }
@@ -44,7 +44,7 @@ const GuestImageElement = ({
       $ratio={ratio}
       $width={width}
       onClick={() => onImageClick(data.id)}
-      onKeyDown={(e) => handleKeyDown(e)}
+      onKeyDown={handleEnterKeyDown}
     >
       <C.Image src={data.path} alt={alt} onError={handleError} />
       <S.CloseButton onClick={handleDeleteClick}>

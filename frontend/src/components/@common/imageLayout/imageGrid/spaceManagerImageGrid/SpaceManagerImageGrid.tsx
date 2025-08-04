@@ -4,10 +4,15 @@ import SpaceManagerImageElement from '../../imageElement/spaceManagerImageElemen
 import * as S from '../ImageGrid.common.styles';
 
 interface SpaceManagerImageGridProps extends SpaceManagerImageElementHandlers {
+  /** 이미지 데이터 */
   photoData: Photo[];
+  /** 이미지 썸네일 주소 목록 */
   thumbnailUrlList: Map<number, string>;
+  /** 한 줄에 표시할 이미지 개수 */
   rowImageAmount: number;
+  /** 선택 모드 여부 */
   isSelectMode: boolean;
+  /** 선택된 이미지 목록 */
   selectedPhotoMap: Map<number, boolean>;
 }
 
