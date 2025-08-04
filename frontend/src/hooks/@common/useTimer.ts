@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
+import { DEBUG_MESSAGES } from '../../constants/debugMessages';
 import type { Timer } from '../../types/timer.type';
+import { isParsableToDate } from '../../utils/isParsableToDate';
 
 interface UseTimerProps {
   openedAt: string;
@@ -16,9 +18,18 @@ const useLeftTimer = ({ openedAt }: UseTimerProps) => {
   useEffect(() => {
     const calculateTimeLeft = () => {
       const now = new Date();
-      const openedDate = new Date(openedAt);
-      const timeDifference = openedDate.getTime() - now.getTime();
 
+      if (!isParsableToDate(openedAt)) {
+        console.warn(
+          `${DEBUG_MESSAGES.CAN_NOT_PARSE_TO_DATE} useLeftTimer: "${openedAt}"`,
+        );
+        setLeftTime({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+        return;
+      }
+
+      const openedDate = new Date(openedAt);
+
+      const timeDifference = openedDate.getTime() - now.getTime();
       if (timeDifference <= 0) {
         setLeftTime({ days: 0, hours: 0, minutes: 0, seconds: 0 });
         return;
