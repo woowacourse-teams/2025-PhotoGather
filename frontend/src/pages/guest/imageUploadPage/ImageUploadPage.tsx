@@ -65,6 +65,7 @@ const ImageUploadPage = () => {
           iconSize={hasImages ? 60 : 100}
           onChange={handleFilesUploadClick}
           onDrop={handleFilesDrop}
+          disabled={isUploading}
         />
       </S.UploadContainer>
 

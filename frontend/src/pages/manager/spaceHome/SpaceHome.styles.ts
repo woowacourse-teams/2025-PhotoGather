@@ -1,5 +1,6 @@
 import styled from '@emotion/styled';
 import { ReactComponent as GiftIcon } from '../../../@assets/icons/gift.svg';
+import { theme } from '../../../styles/theme';
 import { hexToRgba } from '../../../utils/hexToRgba';
 
 export const Wrapper = styled.div`
@@ -74,6 +75,10 @@ export const TopButtonContainer = styled.div<{ $isVisible: boolean }>`
   opacity: ${({ $isVisible }) => ($isVisible ? 1 : 0)};
   transition: opacity 0.1s ease-in-out;
   pointer-events: auto;
+
+  @media screen and (max-width: ${theme.breakpoints.mobile}) {
+    transform: translateX(calc(-50% + 140px));
+  }
 `;
 
 export const NoImageContainer = styled.div`
