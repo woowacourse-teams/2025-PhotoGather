@@ -1,5 +1,6 @@
 package com.forgather.domain.space.repository;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -13,5 +14,11 @@ public interface SpaceRepository extends JpaRepository<Space, Long> {
     default Space getBySpaceCode(String spaceCode) {
         return findBySpaceCode(spaceCode)
             .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 스페이스입니다. 스페이스 코드: " + spaceCode));
+    }
+
+    default Space getUnexpiredSpaceBySpaceCode(String spaceCode) {
+        Space space = getBySpaceCode(spaceCode);
+        space.validateExpiration(LocalDateTime.now());
+        return space;
     }
 }

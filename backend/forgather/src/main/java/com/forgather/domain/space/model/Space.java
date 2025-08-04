@@ -25,6 +25,10 @@ public class Space extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    /**
+     * TODO
+     * code로 바꾸기 ddl 포함
+     */
     @Column(name = "space_code", nullable = false, length = 64)
     private String spaceCode;
 
@@ -34,6 +38,14 @@ public class Space extends BaseTimeEntity {
     @Column(name = "name", nullable = false)
     private String name;
 
+    /**
+     * TODO
+     * 성능을 미리 고려
+     *
+     * expiredAt랑 둘다 넣는거
+     *
+     * hours 단위로
+     */
     @Column(name = "valid_days", nullable = false)
     private int validDays;
 
