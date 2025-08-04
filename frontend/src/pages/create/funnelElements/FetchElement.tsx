@@ -3,6 +3,7 @@ import { Navigate } from 'react-router-dom';
 import useCreateSpace from '../../../hooks/useCreateSpace';
 import type { FunnelElementProps } from '../../../types/funnel.type';
 import type { SpaceCreateInfo } from '../../../types/space.type';
+import WaitPage from './waitPage/WaitPage';
 
 type FetchStatus = 'loading' | 'error' | 'success';
 
@@ -31,15 +32,7 @@ const FetchElement = ({ spaceCreateInfo }: FetchElementProps) => {
   }, [fetchCreateSpace, spaceCreateInfo]);
 
   if (status === 'loading') {
-    return (
-      <>
-        <div>
-          <p>조금만 기다려주세요</p>
-          <p>곧 스페이스 생성이 끝나요</p>
-        </div>
-        <p>{JSON.stringify(spaceCreateInfo)}</p>
-      </>
-    );
+    return <WaitPage spaceCreateInfo={spaceCreateInfo} />;
   }
 
   //TODO: Fetch 에러 시 리다이렉트 위치 조정 필요
