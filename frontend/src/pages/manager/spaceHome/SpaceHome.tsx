@@ -3,9 +3,9 @@ import { useEffect } from 'react';
 import { ReactComponent as SaveIcon } from '../../../@assets/icons/download.svg';
 import { ReactComponent as SettingSvg } from '../../../@assets/icons/setting.svg';
 import { ReactComponent as ArrowUpSvg } from '../../../@assets/icons/upwardArrow.svg';
+import Button from '../../../components/@common/buttons/button/Button';
 import FloatingActionButton from '../../../components/@common/buttons/floatingActionButton/FloatingActionButton';
 import FloatingIconButton from '../../../components/@common/buttons/floatingIconButton/FloatingIconButton';
-import RoundedButton from '../../../components/@common/buttons/roundedButton/RoundedButton';
 import SpaceManagerImageGrid from '../../../components/@common/imageLayout/imageGrid/spaceManagerImageGrid/SpaceManagerImageGrid';
 import PhotoSelectionToolBar from '../../../components/photoSelectionToolBar/PhotoSelectionToolBar';
 import SpaceHeader from '../../../components/spaceHeader/SpaceHeader';
@@ -48,7 +48,6 @@ const SpaceHome = () => {
 
   const {
     isSelectMode,
-    selectModeButtonText,
     toggleSelectMode,
     selectedPhotoMap,
     toggleSelectedPhoto,
@@ -89,9 +88,10 @@ const SpaceHome = () => {
           <>
             <S.ImageManagementContainer>
               <S.TopActionBar>
-                <RoundedButton
-                  text={selectModeButtonText}
+                <Button
+                  text={isSelectMode ? '취소' : '선택'}
                   onClick={toggleSelectMode}
+                  variant="darkRounded"
                 />
               </S.TopActionBar>
               <SpaceManagerImageGrid

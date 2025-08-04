@@ -42,11 +42,8 @@ const usePhotoSelect = ({ photosList }: UsePhotoSelectProps) => {
     resetSelectedPhotoMap();
   };
 
-  const selectModeButtonText = isSelectMode ? '취소' : '선택';
-
   return {
     isSelectMode,
-    selectModeButtonText,
     toggleSelectMode,
     selectedPhotoMap,
     selectedPhotoCount,
