@@ -32,8 +32,13 @@ const GuestImageElement = ({
     onDeleteClick();
     e.stopPropagation();
   };
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    if (e.key === 'Enter') {
+      onImageClick();
+    }
+  };
+
   return (
-    // TODO : onKeyDown 추가
     //biome-ignore lint/a11y/useSemanticElements: button 시맨틱 태그 내부에 button이 존재할 수 없음
     <C.Wrapper
       role="button"
@@ -42,6 +47,7 @@ const GuestImageElement = ({
       $ratio={ratio}
       $width={width}
       onClick={onImageClick}
+      onKeyDown={(e) => handleKeyDown(e)}
     >
       <C.Image src={data.path} alt={alt} onError={handleError} />
       <S.CloseButton onClick={handleDeleteClick}>
