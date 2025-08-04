@@ -7,7 +7,7 @@ export const IconContainerStyles = {
   default: (theme: Theme) => css`
     border: 1px solid ${theme.colors.gray02};
     background-color: ${theme.colors.white};
-    `,
+  `,
   danger: (theme: Theme) => css`
     background: ${hexToRgba(theme.colors.white, 0.7)};
   `,

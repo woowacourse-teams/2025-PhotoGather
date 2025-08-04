@@ -4,7 +4,7 @@ import { hexToRgba } from '../../../utils/hexToRgba';
 
 export const Wrapper = styled.div`
   width: 100%;
-  min-height: ${({ theme }) => `calc(100vh - ${parseInt(theme.layout.padding.topBottom)}*2px)`}; 
+  min-height: ${({ theme }) => `calc(100vh - ${parseInt(theme.layout.padding.topBottom)}*2px)`};
   position: relative;
   display: flex;
   flex-direction: column;
@@ -71,9 +71,9 @@ export const BottomNavigatorContainer = styled.div`
 `;
 
 export const TopButtonContainer = styled.div<{ $isVisible: boolean }>`
-    opacity: ${({ $isVisible }) => ($isVisible ? 1 : 0)};
-    transition: opacity 0.1s ease-in-out;
-    pointer-events: auto;
+  opacity: ${({ $isVisible }) => ($isVisible ? 1 : 0)};
+  transition: opacity 0.1s ease-in-out;
+  pointer-events: auto;
 `;
 
 export const NoImageContainer = styled.div`

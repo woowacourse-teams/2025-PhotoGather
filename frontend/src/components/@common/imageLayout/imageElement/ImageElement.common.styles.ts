@@ -38,7 +38,7 @@ export const Image = styled.img`
   -moz-user-drag: none;
   -o-user-drag: none;
   overflow: hidden;
-  &:active{
+  &:active {
     opacity: 0.9;
   }
 `;
