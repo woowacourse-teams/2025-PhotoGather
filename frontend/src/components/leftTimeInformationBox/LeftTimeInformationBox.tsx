@@ -3,9 +3,9 @@ import HighlightText from '../@common/highlightText/HighlightText';
 import * as S from './LeftTimeInformationBox.styles';
 
 interface OpenDate {
-  /** 오픈하는 날짜와 시간 */
+  /** 오픈하는 날짜 */
   date: string;
-  /** 현재 날짜와 시간 */
+  /** 오픈하는 시각 */
   time: string;
 }
 
