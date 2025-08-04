@@ -5,8 +5,8 @@ interface UseTimerProps {
   openedAt: string;
 }
 
-const useTimer = ({ openedAt }: UseTimerProps) => {
-  const [time, setTime] = useState<Timer>({
+const useLeftTimer = ({ openedAt }: UseTimerProps) => {
+  const [leftTime, setLeftTime] = useState<Timer>({
     days: 0,
     hours: 0,
     minutes: 0,
@@ -20,7 +20,7 @@ const useTimer = ({ openedAt }: UseTimerProps) => {
       const timeDifference = openedDate.getTime() - now.getTime();
 
       if (timeDifference <= 0) {
-        setTime({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+        setLeftTime({ days: 0, hours: 0, minutes: 0, seconds: 0 });
         return;
       }
 
@@ -31,7 +31,7 @@ const useTimer = ({ openedAt }: UseTimerProps) => {
       const minutesLeft = Math.floor((totalSeconds % 3600) / 60);
       const secondsLeft = totalSeconds % 60;
 
-      setTime({
+      setLeftTime({
         days: totalDays,
         hours: hoursLeft,
         minutes: minutesLeft,
@@ -45,7 +45,7 @@ const useTimer = ({ openedAt }: UseTimerProps) => {
     return () => clearInterval(timerId);
   }, [openedAt]);
 
-  return { time };
+  return { leftTime };
 };
 
-export default useTimer;
+export default useLeftTimer;
