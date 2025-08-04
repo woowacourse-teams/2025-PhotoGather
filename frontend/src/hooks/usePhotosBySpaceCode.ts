@@ -54,7 +54,6 @@ const usePhotosBySpaceCode = ({
         size: PAGE_SIZE,
       })
       .then((res) => {
-        console.log('fetch 발생');
         const data = res.data;
         currentPage.current += 1;
         if (!data) {
