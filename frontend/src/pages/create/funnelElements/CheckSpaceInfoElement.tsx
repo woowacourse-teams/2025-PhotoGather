@@ -1,6 +1,7 @@
 import LeftTimeInformationBox from '../../../components/leftTimeInformationBox/LeftTimeInformationBox';
 import type { FunnelElementProps } from '../../../types/funnel.type';
 import type { SpaceFunnelInfo } from '../../../types/space.type';
+import { formatDate } from '../../../utils/formatDate';
 import FunnelBasePage from '../funnel/funnelElementBase/FunnelElementBase';
 
 interface CheckSpaceInfoPageProps extends FunnelElementProps {
@@ -11,6 +12,8 @@ const CheckSpaceInfoElement = ({
   spaceInfo,
   onNext,
 }: CheckSpaceInfoPageProps) => {
+  const { date, time } = formatDate(`${spaceInfo.date}T${spaceInfo.time}`);
+
   return (
     <FunnelBasePage
       title={{
@@ -22,7 +25,7 @@ const CheckSpaceInfoElement = ({
         // TODO: 안의 인자를 바꾸어야 함
         <LeftTimeInformationBox
           title={spaceInfo.name}
-          openDate="2025년 7월 13일 12시 30분"
+          openDate={{ date, time }}
           leftTime="00:00:00"
         />
       }
