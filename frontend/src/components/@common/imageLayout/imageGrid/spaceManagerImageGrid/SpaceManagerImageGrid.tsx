@@ -1,12 +1,12 @@
+import type { SpaceManagerImageElementHandlers } from '../../../../../types/imageGrid.type';
 import type { Photo } from '../../../../../types/photo.type';
 import SpaceManagerImageElement from '../../imageElement/spaceManagerImageElement/SpaceManagerImageElement';
 import * as S from '../ImageGrid.common.styles';
 
-interface SpaceManagerImageGridProps {
+interface SpaceManagerImageGridProps extends SpaceManagerImageElementHandlers {
   photoData: Photo[];
   thumbnailUrlList: Map<number, string>;
   rowImageAmount: number;
-  onImageClick: (id: number) => void;
   isSelectMode: boolean;
   selectedPhotoMap: Map<number, boolean>;
 }

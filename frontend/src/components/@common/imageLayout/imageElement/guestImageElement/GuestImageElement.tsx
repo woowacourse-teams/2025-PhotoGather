@@ -1,16 +1,13 @@
 import defaultImage from '../../../../../@assets/images/default_image.png';
 import type { PreviewFile } from '../../../../../types/file.type';
+import type { GuestImageElementHandlers } from '../../../../../types/imageGrid.type';
 import { createImageErrorHandler } from '../../../../../utils/createImageErrorHandler';
 import * as C from '../ImageElement.common.styles';
 import * as S from './GuestImageElement.styles';
 
-interface GuestImageElementProps {
+interface GuestImageElementProps extends GuestImageElementHandlers {
   /** 사진 데이터 */
   data: PreviewFile;
-  /** 사진을 눌렀을 때 실행할 함수 */
-  onImageClick: () => void;
-  /** 사진 삭제 버튼 클릭 시 실행할 함수 */
-  onDeleteClick: () => void;
   /** 사진의 ratio */
   ratio?: number;
   /** 사진의 alt 태그 */
@@ -29,12 +26,12 @@ const GuestImageElement = ({
 }: GuestImageElementProps) => {
   const handleError = createImageErrorHandler(defaultImage);
   const handleDeleteClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    onDeleteClick();
+    onDeleteClick(data.id);
     e.stopPropagation();
   };
   const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
     if (e.key === 'Enter') {
-      onImageClick();
+      onImageClick(data.id);
     }
   };
 
@@ -46,7 +43,7 @@ const GuestImageElement = ({
       aria-label="사진 세부 정보 모달 열기"
       $ratio={ratio}
       $width={width}
-      onClick={onImageClick}
+      onClick={() => onImageClick(data.id)}
       onKeyDown={(e) => handleKeyDown(e)}
     >
       <C.Image src={data.path} alt={alt} onError={handleError} />

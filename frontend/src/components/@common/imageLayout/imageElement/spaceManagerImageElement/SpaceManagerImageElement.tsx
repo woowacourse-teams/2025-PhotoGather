@@ -1,8 +1,10 @@
+import type { SpaceManagerImageElementHandlers } from '../../../../../types/imageGrid.type';
 import type { Photo } from '../../../../../types/photo.type';
 import * as C from '../ImageElement.common.styles';
 import * as S from './SpaceManagerImageElement.styles';
 
-interface SpaceManagerImageElementProps {
+interface SpaceManagerImageElementProps
+  extends SpaceManagerImageElementHandlers {
   /** 이미지 데이터 */
   data: Photo;
   /** 이미지 alt 태그 */
@@ -13,8 +15,6 @@ interface SpaceManagerImageElementProps {
   width?: string;
   /** 이미지 선택 여부 */
   isSelected: boolean;
-  /** 이미지 클릭 시 실행할 함수 */
-  onImageClick: (id: number) => void;
   /** 이미지 썸네일 주소 */
   thumbnailUrl: string;
   /** 이미지 선택 모드 여부 */
