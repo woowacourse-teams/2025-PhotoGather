@@ -25,12 +25,8 @@ public class Space extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    /**
-     * TODO
-     * code로 바꾸기 ddl 포함
-     */
-    @Column(name = "space_code", nullable = false, length = 64)
-    private String spaceCode;
+    @Column(name = "code", nullable = false, length = 64)
+    private String code;
 
     @Column(name = "password", length = 64)
     private String password;
@@ -52,8 +48,8 @@ public class Space extends BaseTimeEntity {
     @Column(name = "opened_at", nullable = false)
     private LocalDateTime openedAt;
 
-    public Space(String spaceCode, String password, String name, int validDays, LocalDateTime openedAt) {
-        this.spaceCode = spaceCode;
+    public Space(String code, String password, String name, int validDays, LocalDateTime openedAt) {
+        this.code = code;
         this.password = password;
         this.name = name;
         this.openedAt = openedAt;
@@ -63,7 +59,7 @@ public class Space extends BaseTimeEntity {
     public void validateExpiration(LocalDateTime currentDateTime) {
         LocalDateTime expiredAt = openedAt.plusDays(validDays);
         if (expiredAt.isBefore(currentDateTime)) {
-            throw new IllegalArgumentException("만료된 스페이스입니다. spaceCode: " + spaceCode);
+            throw new IllegalArgumentException("만료된 스페이스입니다. spaceCode: " + code);
         }
     }
 
