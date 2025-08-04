@@ -24,7 +24,7 @@ export const Container = styled.div<{ $isActive: boolean }>`
   text-align: center;
 `;
 
-export const LimitTextContainer = styled.div`
+export const LimitTextContainer = styled.p`
   color: ${({ theme }) => theme.colors.primary20};
   ${({ theme }) => ({ ...theme.typography.captionSmall })}
   text-align: center;
