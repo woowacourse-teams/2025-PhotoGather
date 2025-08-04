@@ -30,8 +30,7 @@ const SpaceCreateFunnel = () => {
 
   const { navigateToNext } = useFunnelHistory<STEP>(step, setStep);
 
-  const goNextStep = (nextStep: STEP, data: Partial<SpaceFunnelInfo>) => {
-    setSpaceInfo((prev) => ({ ...prev, ...data }));
+  const goNextStep = (nextStep: STEP) => {
     navigateToNext(nextStep);
     setStep(nextStep);
   };
@@ -59,20 +58,29 @@ const SpaceCreateFunnel = () => {
       <S.ContentContainer>
         {step === 'name' && (
           <NameInputElement
-            onNext={(name) => goNextStep('date', { name })}
+            onNext={(name) => {
+              goNextStep('date');
+              setSpaceInfo((prev) => ({ ...prev, name }));
+            }}
             initialValue={spaceInfo.name}
           />
         )}
         {step === 'date' && (
           <DateInputElement
-            onNext={(date) => goNextStep('time', { date })}
+            onNext={(date) => {
+              goNextStep('time');
+              setSpaceInfo((prev) => ({ ...prev, date }));
+            }}
             initialValue={spaceInfo.date}
           />
         )}
         {step === 'time' && (
           <TimeInputElement
             date={spaceInfo.date}
-            onNext={(time) => goNextStep('check', { time })}
+            onNext={(time) => {
+              goNextStep('check');
+              setSpaceInfo((prev) => ({ ...prev, time }));
+            }}
             initialValue={spaceInfo.time}
           />
         )}
@@ -86,10 +94,7 @@ const SpaceCreateFunnel = () => {
               ),
               password: '',
             }}
-            onNext={() => {
-              navigateToNext('fetch');
-              setStep('fetch');
-            }}
+            onNext={() => goNextStep('fetch')}
           />
         )}
         {step === 'fetch' && (
