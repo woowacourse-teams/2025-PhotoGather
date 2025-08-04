@@ -5,15 +5,9 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   maxCount: number;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   value: string;
-  updateValue: (value: string) => void;
 }
 
-const Input = ({
-  errorMessage,
-  maxCount,
-  updateValue,
-  ...inputProps
-}: InputProps) => {
+const Input = ({ errorMessage, maxCount, ...inputProps }: InputProps) => {
   return (
     <S.Wrapper>
       <S.InputField
