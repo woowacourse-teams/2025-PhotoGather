@@ -40,6 +40,7 @@ const useInputLength = ({
   };
 
   const splicedValue = value.slice(0, maxCount);
+
   return {
     handleCompositionEnd,
     handleCompositionStart,

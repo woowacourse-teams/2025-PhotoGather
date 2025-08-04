@@ -5,8 +5,8 @@ export const Wrapper = styled.button`
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  width: 30px;
-  height: 30px;
+  width: 40px;
+  height: 40px;
   white-space: nowrap;
 
   border-radius: 50%;

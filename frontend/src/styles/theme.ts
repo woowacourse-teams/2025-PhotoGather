@@ -94,4 +94,8 @@ export const theme = {
       leftRight: '16px',
     },
   },
+  breakpoints: {
+    desktop: '',
+    mobile: '375px',
+  },
 };
