@@ -1,7 +1,9 @@
 import LeftTimeInformationBox from '../../../components/leftTimeInformationBox/LeftTimeInformationBox';
+import useLeftTimer from '../../../hooks/@common/useTimer';
 import type { FunnelElementProps } from '../../../types/funnel.type';
 import type { SpaceFunnelInfo } from '../../../types/space.type';
 import { formatDate } from '../../../utils/formatDate';
+import { formatTimer } from '../../../utils/formatTimer';
 import FunnelBasePage from '../funnel/funnelElementBase/FunnelElementBase';
 
 interface CheckSpaceInfoPageProps extends FunnelElementProps {
@@ -12,7 +14,9 @@ const CheckSpaceInfoElement = ({
   spaceInfo,
   onNext,
 }: CheckSpaceInfoPageProps) => {
-  const { date, time } = formatDate(`${spaceInfo.date}T${spaceInfo.time}`);
+  const openedAt = `${spaceInfo.date}T${spaceInfo.time}`;
+  const { date, time } = formatDate(openedAt);
+  const { leftTime } = useLeftTimer({ openedAt });
 
   return (
     <FunnelBasePage
@@ -22,11 +26,10 @@ const CheckSpaceInfoElement = ({
       }}
       description="완료를 누르면 곧바로 링크가 발급돼요."
       element={
-        // TODO: 안의 인자를 바꾸어야 함
         <LeftTimeInformationBox
           title={spaceInfo.name}
           openDate={{ date, time }}
-          leftTime="00:00:00"
+          leftTime={formatTimer(leftTime)}
         />
       }
       handleNextButtonClick={() => onNext(JSON.stringify(spaceInfo))}
