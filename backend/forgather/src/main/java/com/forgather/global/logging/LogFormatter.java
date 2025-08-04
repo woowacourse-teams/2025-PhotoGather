@@ -1,6 +1,7 @@
 package com.forgather.global.logging;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import org.aspectj.lang.JoinPoint;
@@ -47,6 +48,10 @@ public class LogFormatter {
             .collect(Collectors.joining(" "));
 
         return String.format("[%s:%s]", key, joinedValue);
+    }
+
+    public String formatSegments(List<String> segments) {
+        return String.join(" ", segments);
     }
 
     /**
