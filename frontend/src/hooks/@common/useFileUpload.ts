@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { photoService } from '../../apis/services/photo.service';
-import type { PreviewFile } from '../../types/file.type';
 import { CONSTRAINTS } from './../../constants/constraints';
 import { isValidFileType } from '../../utils/isValidFileType';
 
@@ -10,17 +9,13 @@ interface UseFileUploadProps {
 
 const useFileUpload = ({ fileType }: UseFileUploadProps) => {
   const [files, setFiles] = useState<File[]>([]);
-  const [previewData, setPreviewData] = useState<PreviewFile[]>([]);
+  const [previewUrls, setPreviewUrls] = useState<string[]>([]);
   const [isUploading, setIsUploading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
-  const addPreviewDataFromFiles = (files: File[]) => {
-    const startIndex = previewData.length;
-    const urls = files.map((file, index) => ({
-      id: startIndex + index,
-      path: URL.createObjectURL(file),
-    }));
-    setPreviewData((prev) => [...prev, ...urls]);
+  const addPreviewUrlsFromFiles = (files: File[]) => {
+    const urls = files.map((file) => URL.createObjectURL(file));
+    setPreviewUrls((prev) => [...prev, ...urls]);
   };
 
   const splitValidFilesByType = (files: File[], type: string) => {
@@ -47,17 +42,8 @@ const useFileUpload = ({ fileType }: UseFileUploadProps) => {
       setErrorMessage(
         `한 번에 ${CONSTRAINTS.MAX_FILE_COUNT}장까지 올릴 수 있어요`,
       );
-    setFiles((prev) => [...prev, ...validFiles]);
-    addPreviewDataFromFiles(validFiles);
-  };
-
-  const handleFilesDrop = (event: React.DragEvent<HTMLLabelElement>) => {
-    const files = Array.from(event.dataTransfer.files || []);
-    const { validFiles, invalidFiles } = partitionValidFilesByType(
-      files,
-      fileType,
-    );
-    if (invalidFiles.length > 0)
+    }
+    if (hasInvalidFiles) {
       setErrorMessage(
         `이미지 파일만 업로드 가능해요. 파일을 다시 확인해주세요.\n${invalidFiles
           .map((file) => file.name)
@@ -80,9 +66,9 @@ const useFileUpload = ({ fileType }: UseFileUploadProps) => {
   };
 
   const clearFiles = () => {
-    previewData.forEach((data) => URL.revokeObjectURL(data.path));
+    previewUrls.forEach((url) => URL.revokeObjectURL(url));
     setFiles([]);
-    setPreviewData([]);
+    setPreviewUrls([]);
   };
 
   const handleUpload = async () => {
@@ -100,7 +86,7 @@ const useFileUpload = ({ fileType }: UseFileUploadProps) => {
 
   return {
     files,
-    previewData,
+    previewUrls,
     isUploading,
     errorMessage,
     handleUpload,
