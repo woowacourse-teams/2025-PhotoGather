@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { photoService } from '../../apis/services/photo.service';
+import { CONSTRAINTS } from './../../constants/constraints';
 import { isValidFileType } from '../../utils/isValidFileType';
 
 interface UseFileUploadProps {
@@ -11,8 +12,6 @@ const useFileUpload = ({ fileType }: UseFileUploadProps) => {
   const [previewUrls, setPreviewUrls] = useState<string[]>([]);
   const [isUploading, setIsUploading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string>('');
-  const MAX_FILE_COUNT = 500;
-  const DISALLOWED_FILE_TYPES = ['image/gif'];
 
   const addPreviewUrlsFromFiles = (files: File[]) => {
     const urls = files.map((file) => URL.createObjectURL(file));
@@ -22,7 +21,7 @@ const useFileUpload = ({ fileType }: UseFileUploadProps) => {
   const partitionValidFilesByType = (files: File[], type: string) => {
     return files.reduce(
       (acc, file) => {
-        isValidFileType(file, type, DISALLOWED_FILE_TYPES)
+        isValidFileType(file, type, CONSTRAINTS.DISALLOWED_FILE_TYPES)
           ? acc.validFiles.push(file)
           : acc.invalidFiles.push(file);
         return acc;
@@ -32,7 +31,7 @@ const useFileUpload = ({ fileType }: UseFileUploadProps) => {
   };
 
   const isUnderUploadLimit = (validFiles: File[]) =>
-    validFiles.length <= MAX_FILE_COUNT;
+    validFiles.length <= CONSTRAINTS.MAX_FILE_COUNT;
 
   const isInvalidFiles = (invalidFiles: File[]) => invalidFiles.length > 0;
 
@@ -43,7 +42,9 @@ const useFileUpload = ({ fileType }: UseFileUploadProps) => {
     );
 
     if (!isUnderUploadLimit(validFiles)) {
-      setErrorMessage(`한 번에 ${MAX_FILE_COUNT}장까지 올릴 수 있어요`);
+      setErrorMessage(
+        `한 번에 ${CONSTRAINTS.MAX_FILE_COUNT}장까지 올릴 수 있어요`,
+      );
     }
     if (isInvalidFiles(invalidFiles)) {
       setErrorMessage(
@@ -52,7 +53,7 @@ const useFileUpload = ({ fileType }: UseFileUploadProps) => {
           .join('\n')}`,
       );
     }
-    const limitedValidFiles = validFiles.slice(0, MAX_FILE_COUNT);
+    const limitedValidFiles = validFiles.slice(0, CONSTRAINTS.MAX_FILE_COUNT);
     setFiles((prev) => [...prev, ...limitedValidFiles]);
     addPreviewUrlsFromFiles(limitedValidFiles);
   };
