@@ -26,8 +26,8 @@ const ImageUploadPage = () => {
     handleFilesDrop,
     handleUpload,
   } = useFileUpload({ fileType: 'image' });
-  const hasImages = Array.isArray(previewData) && previewData.length > 0;
-  const uploadBoxText = '함께한 순간을 올려주세요';
+
+  const hasImages = Array.isArray(previewUrls) && previewUrls.length > 0;
   const { targetRef: hideBlurAreaTriggerRef, isIntersecting: isAtPageBottom } =
     useIntersectionObserver({});
   const { targetRef: scrollTopTriggerRef, isIntersecting: isAtPageTop } =
@@ -61,7 +61,8 @@ const ImageUploadPage = () => {
       />
       <S.UploadContainer $hasImages={hasImages}>
         <UploadBox
-          text={uploadBoxText}
+          mainText={`함께한 순간을 올려주세요.${hasImages ? '' : '\n사진만 올릴 수 있습니다.'}`}
+          uploadLimitText={hasImages ? '' : '한 번에 500장까지 올릴 수 있어요'}
           iconSize={hasImages ? 60 : 100}
           onChange={handleFilesUploadClick}
           onDrop={handleFilesDrop}

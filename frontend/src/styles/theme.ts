@@ -30,6 +30,7 @@ export const theme = {
       active: '#F0EBFCB3',
       default: '#F0EBFC66',
     },
+    overlay: '#000000B3',
   },
   typography: {
     header01: {

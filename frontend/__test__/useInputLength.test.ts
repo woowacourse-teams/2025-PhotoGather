@@ -5,11 +5,7 @@ import useInputLength from '../src/hooks/@common/useInputLength';
 describe('useInputLength 훅 테스트', () => {
   it('value가 maxCount보다 길면 splicedValue는 maxCount만큼 잘린다.', () => {
     const { result } = renderHook(() =>
-      useInputLength({
-        value: '1234567890',
-        maxCount: 5,
-        updateValue: () => {},
-      }),
+      useInputLength({ value: '1234567890', maxCount: 5 }),
     );
 
     expect(result.current.splicedValue).toBe('12345');
@@ -20,11 +16,7 @@ describe('useInputLength 훅 테스트', () => {
     const expectedValue = '가나다라ㅁ';
 
     const { result } = renderHook(() =>
-      useInputLength({
-        value: inputValue,
-        maxCount: 5,
-        updateValue: () => {},
-      }),
+      useInputLength({ value: inputValue, maxCount: 5 }),
     );
 
     expect(result.current.splicedValue).toBe(expectedValue);
@@ -34,11 +26,7 @@ describe('useInputLength 훅 테스트', () => {
     const inputValue = '가나다라마ㅂ';
     const expectedValue = '가나다라마';
     const { result } = renderHook(() =>
-      useInputLength({
-        value: inputValue,
-        maxCount: 5,
-        updateValue: () => {},
-      }),
+      useInputLength({ value: inputValue, maxCount: 5 }),
     );
 
     act(() => {
@@ -52,19 +40,12 @@ describe('useInputLength 훅 테스트', () => {
     const inputValue = '가나다라마바사아자차카타파하';
     const expectedValue = '가나다라마';
     const { result } = renderHook(() =>
-      useInputLength({
-        value: inputValue,
-        maxCount: 5,
-        updateValue: () => {},
-      }),
+      useInputLength({ value: inputValue, maxCount: 5 }),
     );
 
     const mockEvent = {
-      currentTarget: {
-        value: '가나다라마',
-        blur: jest.fn(),
-      },
-    } as unknown as React.CompositionEvent<HTMLInputElement>;
+      currentTarget: { value: inputValue },
+    } as React.CompositionEvent<HTMLInputElement>;
 
     act(() => {
       result.current.handleCompositionEnd(mockEvent);
