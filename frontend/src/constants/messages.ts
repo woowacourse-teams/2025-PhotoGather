@@ -40,3 +40,6 @@ export const COMPLETE = {
     HIGHLIGHT_WORDS: ['스페이스'],
   },
 };
+
+export const createPhotoSelectedMessage = (count: number) =>
+  `${count}개의 사진이 선택됨`;

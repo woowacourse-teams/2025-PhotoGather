@@ -5,7 +5,7 @@ import { ReactComponent as ArrowUpSvg } from '../../../@assets/icons/upwardArrow
 import FloatingActionButton from '../../../components/@common/buttons/floatingActionButton/FloatingActionButton';
 import FloatingIconButton from '../../../components/@common/buttons/floatingIconButton/FloatingIconButton';
 import HighlightText from '../../../components/@common/highlightText/HighlightText';
-import ImageGrid from '../../../components/@common/imageGrid/ImageGrid';
+import GuestImageGrid from '../../../components/@common/imageLayout/imageGrid/guestImageGrid/GuestImageGrid';
 import SpaceHeader from '../../../components/spaceHeader/SpaceHeader';
 import UploadBox from '../../../components/uploadBox/UploadBox';
 import { ROUTES } from '../../../constants/routes';
@@ -19,13 +19,14 @@ import { mockSpaceData } from './mockSpaceData';
 
 const ImageUploadPage = () => {
   const {
-    previewUrls,
+    previewData,
     errorMessage,
     isUploading,
     handleFilesUploadClick,
     handleFilesDrop,
     handleUpload,
   } = useFileUpload({ fileType: 'image' });
+
   const hasImages = Array.isArray(previewUrls) && previewUrls.length > 0;
   const { targetRef: hideBlurAreaTriggerRef, isIntersecting: isAtPageBottom } =
     useIntersectionObserver({});
@@ -71,21 +72,26 @@ const ImageUploadPage = () => {
 
       {hasImages && (
         <>
-          <ImageGrid imageUrlList={previewUrls} rowImageAmount={3} />
           <S.ButtonContainer>
             <FloatingActionButton
               label={
                 <HighlightText
-                  text={`사진 ${previewUrls.length}장 업로드하기`}
+                  text={`사진 ${previewData.length}장 업로드하기`}
                   fontStyle="buttonPrimary"
                   highlightColorStyle="gray04"
-                  highlightTextArray={[`사진 ${previewUrls.length}장`]}
+                  highlightTextArray={[`사진 ${previewData.length}장`]}
                 />
               }
               onClick={handleUploadClick}
               disabled={isUploading}
             />
           </S.ButtonContainer>
+          <GuestImageGrid
+            photoData={previewData}
+            rowImageAmount={3}
+            onImageClick={() => {}}
+            onDeleteClick={() => {}}
+          />
           <S.TopButtonContainer $isVisible={!isAtPageTop}>
             <FloatingIconButton
               icon={<ArrowUpSvg fill={theme.colors.white} />}
@@ -95,7 +101,7 @@ const ImageUploadPage = () => {
         </>
       )}
       <S.IntersectionArea ref={hideBlurAreaTriggerRef} />
-      <ScrollableBlurArea $isHide={isAtPageBottom} />
+      <ScrollableBlurArea $isHide={isAtPageBottom} $position="bottom" />
     </S.Wrapper>
   );
 };

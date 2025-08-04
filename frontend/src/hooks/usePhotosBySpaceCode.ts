@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import { photoService } from '../apis/services/photo.service';
 import { DEBUG_MESSAGES } from '../constants/debugMessages';
 import type { Photo } from '../types/photo.type';
@@ -22,9 +22,15 @@ const usePhotosBySpaceCode = ({
   const currentPage = useRef(1);
   const totalPages = useRef(1);
 
-  const thumbnailList = photosList?.map((photo) => {
-    return buildThumbnailUrl(spaceCode, parsedImagePath(photo.path), PRESET);
-  });
+  //biome-ignore lint/correctness/useExhaustiveDependencies: photosList 변경 시 호출
+  const thumbnailPhotoMap = useMemo(() => {
+    return new Map(
+      photosList?.map((photo) => [
+        photo.id,
+        buildThumbnailUrl(spaceCode, parsedImagePath(photo.path), PRESET),
+      ]),
+    );
+  }, [photosList]);
 
   const isEndPage = currentPage.current > totalPages.current;
 
@@ -54,6 +60,7 @@ const usePhotosBySpaceCode = ({
           console.warn(DEBUG_MESSAGES.NO_RESPONSE);
           return;
         }
+
         const { photos } = data;
         updatePhotosList(photos, data.totalPages);
         requestAnimationFrame(() => {
@@ -71,7 +78,8 @@ const usePhotosBySpaceCode = ({
   return {
     isEndPage,
     fetchPhotosList,
-    thumbnailList,
+    thumbnailPhotoMap,
+    photosList,
     isLoading,
   };
 };

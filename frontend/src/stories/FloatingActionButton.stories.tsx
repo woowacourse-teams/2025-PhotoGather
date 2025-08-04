@@ -26,6 +26,6 @@ export const Disabled: Story = {
 export const WithIcon: Story = {
   args: {
     label: 'With Icon',
-    icon: <img src={DownloadIcon} alt="" />,
+    icon: <img src={DownloadIcon} alt="download" />,
   },
 };

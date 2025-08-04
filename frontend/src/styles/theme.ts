@@ -22,6 +22,10 @@ export const theme = {
       start: '#472998',
       end: '#19132A',
     },
+    scrollableBlur: {
+      start: '#4B4B4B',
+      end: '#19132A',
+    },
     uploadBox: {
       active: '#F0EBFCB3',
       default: '#F0EBFC66',
@@ -76,13 +80,13 @@ export const theme = {
     },
   },
   zIndex: {
-    circlePattern: 1,
+    overlayIcon: 1,
     imageGrid: 2,
-    settingButton: 2,
     text: 3,
     scrollableArea: 3,
-    loadingSpinner: 4,
-    floatingActionButton: 4,
+    topActionButton: 4,
+    floatingActionButton: 400,
+    loadingSpinner: 5,
   },
   layout: {
     width: '400px',
