@@ -1,12 +1,12 @@
 import loadingImage from '@assets/images/loading.png';
-import type { SpaceCreateInfo } from '../../../../types/space.type';
+import type { SpaceFunnelInfo } from '../../../../types/space.type';
 import * as S from './WaitPage.styles';
 
 interface WaitPageProps {
-  spaceCreateInfo: SpaceCreateInfo;
+  spaceInfo: SpaceFunnelInfo;
 }
 
-const WaitPage = ({ spaceCreateInfo }: WaitPageProps) => {
+const WaitPage = ({ spaceInfo }: WaitPageProps) => {
   return (
     <S.Wrapper>
       <S.TitleContainer>
@@ -15,8 +15,9 @@ const WaitPage = ({ spaceCreateInfo }: WaitPageProps) => {
       </S.TitleContainer>
       <S.Icon src={loadingImage} alt="loading" />
       <S.InfoContainer>
-        <S.InfoTitle>{spaceCreateInfo.name}</S.InfoTitle>
-        <S.InfoDescription>{spaceCreateInfo.openedAt}</S.InfoDescription>
+        <S.InfoTitle>{spaceInfo.name}</S.InfoTitle>
+        <S.InfoDescription>{spaceInfo.date}</S.InfoDescription>
+        <S.InfoDescription>{spaceInfo.time}</S.InfoDescription>
       </S.InfoContainer>
     </S.Wrapper>
   );

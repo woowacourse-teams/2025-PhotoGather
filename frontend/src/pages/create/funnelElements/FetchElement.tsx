@@ -2,16 +2,17 @@ import { useEffect, useState } from 'react';
 import { Navigate } from 'react-router-dom';
 import useCreateSpace from '../../../hooks/useCreateSpace';
 import type { FunnelElementProps } from '../../../types/funnel.type';
-import type { SpaceCreateInfo } from '../../../types/space.type';
+import type { SpaceFunnelInfo } from '../../../types/space.type';
+import { parseIsoStringFromDateTime } from '../../../utils/parseIsoStringFromDateTime';
 import WaitPage from './waitPage/WaitPage';
 
 type FetchStatus = 'loading' | 'error' | 'success';
 
 interface FetchElementProps extends FunnelElementProps {
-  spaceCreateInfo: SpaceCreateInfo;
+  spaceInfo: SpaceFunnelInfo;
 }
 
-const FetchElement = ({ spaceCreateInfo }: FetchElementProps) => {
+const FetchElement = ({ spaceInfo }: FetchElementProps) => {
   const [status, setStatus] = useState<FetchStatus>('loading');
   const [spaceCode, setSpaceCode] = useState('');
 
@@ -20,7 +21,11 @@ const FetchElement = ({ spaceCreateInfo }: FetchElementProps) => {
   useEffect(() => {
     const createSpace = async () => {
       try {
-        const spaceCode = await fetchCreateSpace(spaceCreateInfo);
+        const spaceCode = await fetchCreateSpace({
+          name: spaceInfo.name,
+          openedAt: parseIsoStringFromDateTime(spaceInfo.date, spaceInfo.time),
+          password: '',
+        });
         if (spaceCode) setSpaceCode(spaceCode);
         setStatus('success');
       } catch {
@@ -29,10 +34,10 @@ const FetchElement = ({ spaceCreateInfo }: FetchElementProps) => {
     };
 
     createSpace();
-  }, [fetchCreateSpace, spaceCreateInfo]);
+  }, [fetchCreateSpace, spaceInfo]);
 
   if (status === 'loading') {
-    return <WaitPage spaceCreateInfo={spaceCreateInfo} />;
+    return <WaitPage spaceInfo={spaceInfo} />;
   }
 
   //TODO: Fetch 에러 시 리다이렉트 위치 조정 필요

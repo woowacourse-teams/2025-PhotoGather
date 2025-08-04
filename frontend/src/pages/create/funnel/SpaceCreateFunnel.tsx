@@ -3,7 +3,6 @@ import { useState } from 'react';
 import ProgressBar from '../../../components/progressBar/ProgressBar';
 import useFunnelHistory from '../../../hooks/useFunnelHistory';
 import type { SpaceFunnelInfo } from '../../../types/space.type';
-import { parseIsoStringFromDateTime } from '../../../utils/parseIsoStringFromDateTime';
 import CheckSpaceInfoElement from '../funnelElements/CheckSpaceInfoElement';
 import DateInputElement from '../funnelElements/DateInputElement';
 import FetchElement from '../funnelElements/FetchElement';
@@ -86,17 +85,7 @@ const SpaceCreateFunnel = () => {
           />
         )}
         {step === 'fetch' && (
-          <FetchElement
-            spaceCreateInfo={{
-              name: spaceInfo.name,
-              openedAt: parseIsoStringFromDateTime(
-                spaceInfo.date,
-                spaceInfo.time,
-              ),
-              password: '',
-            }}
-            onNext={() => {}}
-          />
+          <FetchElement spaceInfo={spaceInfo} onNext={() => {}} />
         )}
       </S.ContentContainer>
     </S.Wrapper>
