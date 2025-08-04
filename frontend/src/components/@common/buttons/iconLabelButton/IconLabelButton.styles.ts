@@ -1,17 +1,17 @@
-import type { Theme } from '@emotion/react';
+import { css, type Theme } from '@emotion/react';
 import styled from '@emotion/styled';
 import type { IconButtonVariant } from '../../../../types/button.type';
 import { hexToRgba } from '../../../../utils/hexToRgba';
 
 export const IconContainerStyles = {
-  default: (theme: Theme) => `
+  default: (theme: Theme) => css`
     border: 1px solid ${theme.colors.gray02};
     background-color: ${theme.colors.white};
     `,
-  danger: (theme: Theme) => `
+  danger: (theme: Theme) => css`
     background: ${hexToRgba(theme.colors.white, 0.7)};
   `,
-  dark: (theme: Theme) => `
+  dark: (theme: Theme) => css`
     background: ${hexToRgba(theme.colors.grayBackground, 0.7)};
   `,
 };

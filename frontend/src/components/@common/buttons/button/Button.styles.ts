@@ -1,9 +1,10 @@
-import type { Theme } from '@emotion/react';
+import { css, type Theme } from '@emotion/react';
 import styled from '@emotion/styled';
 import type { ButtonVariant } from '../../../../types/button.type';
+import { hexToRgba } from '../../../../utils/hexToRgba';
 
 export const buttonStyles = {
-  primary: (theme: Theme) => `
+  primary: (theme: Theme) => css`
       border-radius: 12px;
       background-color: ${theme.colors.primary};
       color: ${theme.colors.white};
@@ -22,7 +23,7 @@ export const buttonStyles = {
       }
     `,
 
-  secondary: (theme: Theme) => `
+  secondary: (theme: Theme) => css`
       border-radius: 12px;
       color: ${theme.colors.primary};
       background-color: ${theme.colors.white};
@@ -44,7 +45,7 @@ export const buttonStyles = {
 
     `,
 
-  tertiary: (theme: Theme) => `
+  tertiary: (theme: Theme) => css`
       background-color: transparent;
       color: ${theme.colors.gray03};
       ${theme.typography.buttonTertiary}
@@ -59,6 +60,21 @@ export const buttonStyles = {
         color: ${theme.colors.gray01};
       }
     `,
+  darkRounded: (theme: Theme) => css`
+    ${theme.typography.captionSmall}
+    width: auto;
+    border-radius: 500px;
+    padding: 2px 12px;
+    background: ${hexToRgba(theme.colors.gray06, 0.7)};
+    backdrop-filter: blur(5px);
+    color: ${theme.colors.white};
+    &:active {
+      background: ${hexToRgba(theme.colors.gray06, 0.3)};
+    }
+    &:disabled {
+      background: ${hexToRgba(theme.colors.gray01, 0.5)};
+    }
+  `,
 };
 
 export const StyledButton = styled.button<{
@@ -72,6 +88,5 @@ export const StyledButton = styled.button<{
   gap: 10px;
 
   ${({ theme }) => ({ ...theme.typography.buttonPrimary })}
-
   ${({ $variant, theme }) => buttonStyles[$variant](theme)}
 `;

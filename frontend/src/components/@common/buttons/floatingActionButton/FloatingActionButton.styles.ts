@@ -1,17 +1,16 @@
-import type { Theme } from '@emotion/react';
-import { css } from '@emotion/react';
+import { css, type Theme } from '@emotion/react';
 import styled from '@emotion/styled';
 import type { FloatingActionButtonVariant } from '../../../../types/button.type';
 
 export const FloatingActionButtonStyles = {
-  default: (theme: Theme) => ({
-    backgroundColor: theme.colors.accent,
-    color: theme.colors.gray06,
-  }),
-  disabled: (theme: Theme) => ({
-    backgroundColor: theme.colors.grayBackground,
-    color: theme.colors.gray04,
-  }),
+  default: (theme: Theme) => css`
+    background-color: ${theme.colors.accent};
+    color: ${theme.colors.gray06};
+  `,
+  disabled: (theme: Theme) => css`
+    background-color: ${theme.colors.grayBackground};
+    color: ${theme.colors.gray04};
+  `,
 };
 
 const active = (theme: Theme) => css`
