@@ -18,7 +18,7 @@ const useFileUpload = ({ fileType }: UseFileUploadProps) => {
     setPreviewUrls((prev) => [...prev, ...urls]);
   };
 
-  const partitionValidFilesByType = (files: File[], type: string) => {
+  const splitValidFilesByType = (files: File[], type: string) => {
     return files.reduce(
       (acc, file) => {
         isValidFileType(file, type, CONSTRAINTS.DISALLOWED_FILE_TYPES)
@@ -36,7 +36,7 @@ const useFileUpload = ({ fileType }: UseFileUploadProps) => {
   const isInvalidFiles = (invalidFiles: File[]) => invalidFiles.length > 0;
 
   const updateFiles = (rawFiles: File[]) => {
-    const { validFiles, invalidFiles } = partitionValidFilesByType(
+    const { validFiles, invalidFiles } = splitValidFilesByType(
       rawFiles,
       fileType,
     );
