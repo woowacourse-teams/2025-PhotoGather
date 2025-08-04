@@ -1,6 +1,5 @@
 import downloadLoadingSpinner from '@assets/loading-spinner.gif';
 import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { ReactComponent as SaveIcon } from '../../../@assets/icons/download.svg';
 import { ReactComponent as SettingSvg } from '../../../@assets/icons/setting.svg';
 import { ReactComponent as ArrowUpSvg } from '../../../@assets/icons/upwardArrow.svg';

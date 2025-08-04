@@ -4,11 +4,23 @@ import * as S from './Input.styles';
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   errorMessage?: string;
   maxCount: number;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  value: string;
+  updateValue: (value: string) => void;
 }
 
-const Input = ({ errorMessage, maxCount, ...inputProps }: InputProps) => {
+const Input = ({
+  errorMessage,
+  maxCount,
+  updateValue,
+  ...inputProps
+}: InputProps) => {
   const { splicedValue, handleCompositionEnd, handleCompositionStart } =
-    useInputLength({ maxCount, value: String(inputProps.value) });
+    useInputLength({
+      maxCount,
+      value: String(inputProps.value),
+      updateValue: updateValue,
+    });
 
   return (
     <S.Wrapper>
