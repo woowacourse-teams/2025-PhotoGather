@@ -20,9 +20,7 @@ const FetchElement = ({ spaceCreateInfo }: FetchElementProps) => {
     const createSpace = async () => {
       try {
         const spaceCode = await fetchCreateSpace(spaceCreateInfo);
-        if (!spaceCode) throw new Error();
-
-        setSpaceCode(spaceCode);
+        if (spaceCode) setSpaceCode(spaceCode);
         setStatus('success');
       } catch {
         setStatus('error');
@@ -44,6 +42,7 @@ const FetchElement = ({ spaceCreateInfo }: FetchElementProps) => {
     );
   }
 
+  //TODO: Fetch 에러 시 리다이렉트 위치 조정 필요
   if (status === 'error') {
     return <Navigate to="/" replace />;
   }
