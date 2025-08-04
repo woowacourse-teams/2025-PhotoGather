@@ -27,7 +27,7 @@ const ImageUploadPage = () => {
     handleUpload,
   } = useFileUpload({ fileType: 'image' });
 
-  const hasImages = Array.isArray(previewUrls) && previewUrls.length > 0;
+  const hasImages = Array.isArray(previewData) && previewData.length > 0;
   const { targetRef: hideBlurAreaTriggerRef, isIntersecting: isAtPageBottom } =
     useIntersectionObserver({});
   const { targetRef: scrollTopTriggerRef, isIntersecting: isAtPageTop } =

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { photoService } from '../../apis/services/photo.service';
 import { CONSTRAINTS } from './../../constants/constraints';
+import type { PreviewFile } from '../../types/file.type';
 import { isValidFileType } from '../../utils/isValidFileType';
 
 interface UseFileUploadProps {
@@ -9,13 +10,17 @@ interface UseFileUploadProps {
 
 const useFileUpload = ({ fileType }: UseFileUploadProps) => {
   const [files, setFiles] = useState<File[]>([]);
-  const [previewUrls, setPreviewUrls] = useState<string[]>([]);
+  const [previewData, setPreviewData] = useState<PreviewFile[]>([]);
   const [isUploading, setIsUploading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
   const addPreviewUrlsFromFiles = (files: File[]) => {
-    const urls = files.map((file) => URL.createObjectURL(file));
-    setPreviewUrls((prev) => [...prev, ...urls]);
+    const startIndex = previewData.length;
+    const urls = files.map((file, index) => ({
+      id: startIndex + index,
+      path: URL.createObjectURL(file),
+    }));
+    setPreviewData((prev) => [...prev, ...urls]);
   };
 
   const splitValidFilesByType = (files: File[], type: string) => {
@@ -66,9 +71,9 @@ const useFileUpload = ({ fileType }: UseFileUploadProps) => {
   };
 
   const clearFiles = () => {
-    previewUrls.forEach((url) => URL.revokeObjectURL(url));
+    previewData.forEach((data) => URL.revokeObjectURL(data.path));
     setFiles([]);
-    setPreviewUrls([]);
+    setPreviewData([]);
   };
 
   const handleUpload = async () => {
@@ -86,7 +91,7 @@ const useFileUpload = ({ fileType }: UseFileUploadProps) => {
 
   return {
     files,
-    previewUrls,
+    previewData,
     isUploading,
     errorMessage,
     handleUpload,
