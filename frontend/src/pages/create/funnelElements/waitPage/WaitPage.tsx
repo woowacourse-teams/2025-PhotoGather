@@ -1,5 +1,7 @@
 import loadingImage from '@assets/images/loading.png';
+import HighlightText from '../../../../components/@common/highlightText/HighlightText';
 import type { SpaceFunnelInfo } from '../../../../types/space.type';
+import { formatDate } from '../../../../utils/formatDate';
 import * as S from './WaitPage.styles';
 
 interface WaitPageProps {
@@ -7,6 +9,8 @@ interface WaitPageProps {
 }
 
 const WaitPage = ({ spaceInfo }: WaitPageProps) => {
+  const { date, time } = formatDate(`${spaceInfo.date}T${spaceInfo.time}`);
+
   return (
     <S.Wrapper>
       <S.TitleContainer>
@@ -16,8 +20,13 @@ const WaitPage = ({ spaceInfo }: WaitPageProps) => {
       <S.Icon src={loadingImage} alt="loading" />
       <S.InfoContainer>
         <S.InfoTitle>{spaceInfo.name}</S.InfoTitle>
-        <S.InfoDescription>{spaceInfo.date}</S.InfoDescription>
-        <S.InfoDescription>{spaceInfo.time}</S.InfoDescription>
+        <S.InfoDescription>{date}</S.InfoDescription>
+        <HighlightText
+          fontStyle="bodyLarge"
+          highlightColorStyle="primary"
+          text={`${time} 생성 예정`}
+          highlightTextArray={[time]}
+        />
       </S.InfoContainer>
     </S.Wrapper>
   );
