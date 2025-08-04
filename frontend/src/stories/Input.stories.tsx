@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
+import { useState } from 'react';
 import Input from '../components/@common/input/Input';
 
 const meta: Meta<typeof Input> = {
@@ -14,8 +15,15 @@ export default meta;
 type Story = StoryObj<typeof Input>;
 
 export const Default: Story = {
-  args: {
-    value: '기본값',
+  render: (args) => {
+    const [value, setValue] = useState('');
+    return (
+      <Input
+        {...args}
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
+      />
+    );
   },
 };
 
@@ -35,5 +43,6 @@ export const FiveCharacters: Story = {
 export const OverMaxLength: Story = {
   args: {
     value: '12345678901',
+    errorMessage: '최대 10자까지 입력할 수 있습니다.',
   },
 };
