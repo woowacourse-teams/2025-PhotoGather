@@ -4,6 +4,7 @@ import type {
   BodyContentType,
   requestOptionsType,
 } from '../types/api.type';
+import { isNetworkError } from '../utils/isNetworkError';
 import { BASE_URL } from './config';
 import { createBody } from './createBody';
 import { createHeaders } from './createHeaders';
@@ -72,17 +73,9 @@ const request = async <T>(
       error: data?.message || `Error: ${response.status}`,
     };
   } catch (error) {
-    const isNetworkError =
-      (error instanceof TypeError && error.message === NETWORK.CHROMIUM) ||
-      (error instanceof Error &&
-        (error.message.includes(NETWORK.CHROMIUM) ||
-          error.message.includes(NETWORK.FIREFOX) ||
-          error.message.includes(NETWORK.CHROME) ||
-          error.message.includes(NETWORK.REACT_NATIVE)));
-
     return {
       success: false,
-      error: isNetworkError
+      error: isNetworkError(error)
         ? NETWORK.DEFAULT
         : error instanceof Error
           ? error.message
