@@ -61,16 +61,16 @@ const request = async <T>(
 
     const data = await response.json();
 
-    if (response.ok) {
+    if (!response.ok) {
       return {
-        success: true,
-        data: data as T,
+        success: false,
+        error: data?.message || `Error: ${response.status}`,
       };
     }
 
     return {
-      success: false,
-      error: data?.message || `Error: ${response.status}`,
+      success: true,
+      data: data as T,
     };
   } catch (error) {
     return {
