@@ -1,8 +1,7 @@
 export const checkIsPastDateTime = (date: string, time: string): boolean => {
-  const [year, month, day] = date.split('-').map(Number);
-  const [hour, minute] = time.split(':').map(Number);
+  const kstDateString = `${date}T${time}:00+09:00`;
+  const input = new Date(kstDateString);
 
-  const input = new Date(year, month - 1, day, hour, minute);
   const now = Date.now();
   return input.getTime() < now;
 };
