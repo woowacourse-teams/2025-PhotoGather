@@ -64,7 +64,7 @@ const usePhotosBySpaceCode = ({
         if (
           !response.error?.toLowerCase().includes(NETWORK.DEFAULT.toLowerCase())
         ) {
-          alert('사진 목록을 불러오는데 실패했습니다.');
+          console.error('사진 목록을 불러오는데 실패했습니다.');
         }
       }
     } catch (error) {

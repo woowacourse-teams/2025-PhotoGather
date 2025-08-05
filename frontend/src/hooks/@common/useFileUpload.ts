@@ -92,7 +92,7 @@ const useFileUpload = ({ fileType }: FileUploadProps) => {
         } else if (
           !response.error?.toLowerCase().includes(NETWORK.DEFAULT.toLowerCase())
         ) {
-          alert('사진 업로드에 실패했습니다.');
+          console.error('사진 업로드에 실패했습니다.');
         }
         return false;
       }

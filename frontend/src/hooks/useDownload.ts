@@ -47,7 +47,7 @@ const useDownload = ({ spaceName }: UseDownloadProps) => {
         if (
           !response.error?.toLowerCase().includes(NETWORK.DEFAULT.toLowerCase())
         ) {
-          alert('다운로드에 실패했습니다.');
+          console.error('다운로드에 실패했습니다.');
         }
       }
     } catch (error) {
