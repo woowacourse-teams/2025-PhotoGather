@@ -1,5 +1,6 @@
 import { useMemo, useRef, useState } from 'react';
 import { photoService } from '../apis/services/photo.service';
+import { DEBUG_MESSAGES } from '../constants/debugMessages';
 import { NETWORK } from '../constants/errors';
 import type { Photo } from '../types/photo.type';
 import { buildThumbnailUrl } from '../utils/buildImageUrl';
