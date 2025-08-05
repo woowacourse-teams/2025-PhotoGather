@@ -75,6 +75,9 @@ module.exports = (_, argv) => {
       }),
       new HtmlWebpackPlugin({
         template: './public/index.html',
+        templateParameters: {
+          GOOGLE_TAG_ID: process.env.GOOGLE_TAG_ID,
+        },
       }),
       new ForkTsCheckerWebpackPlugin({
         async: true,
