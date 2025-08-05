@@ -11,8 +11,8 @@ public record CreateSpaceRequest(
     @Schema(description = "스페이스 이름", example = "우리의 모임")
     String name,
 
-    @Schema(description = "스페이스 지속 기간(일)", example = "3")
-    int validDays,
+    @Schema(description = "스페이스 지속 기간(시)", example = "48")
+    int validHours,
 
     @Schema(description = "스페이스 오픈 시간", example = "2023-10-01T10:00:00")
     LocalDateTime openedAt,
@@ -22,6 +22,6 @@ public record CreateSpaceRequest(
 ) {
 
     public Space toEntity(String spaceCode) {
-        return new Space(spaceCode, password, name, validDays, openedAt);
+        return new Space(spaceCode, password, name, validHours, openedAt);
     }
 }

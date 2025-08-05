@@ -1,4 +1,4 @@
-INSERT INTO `forgather`.`space` (`code`, `password`, `name`, `valid_days`, `opened_at`, `created_at`,
+INSERT INTO `forgather`.`space` (`code`, `password`, `name`, `valid_hours`, `opened_at`, `created_at`,
                                  `updated_at`)
 VALUES ('1234567890', '1234', 'spaceName', 3, now(), now(), now()),
        ('1234567891', '1234', 'spaceName', 3, now(), now(), now());

@@ -5,7 +5,7 @@ CREATE TABLE space
     code VARCHAR(64)                        NOT NULL,
     password   VARCHAR(64),
     name       VARCHAR(255) CHARACTER SET utf8mb4 NOT NULL,
-    valid_days INT                                NOT NULL,
+    valid_hours INT                                NOT NULL,
     opened_at  TIMESTAMP                          NOT NULL,
     created_at TIMESTAMP                          NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP                          NOT NULL DEFAULT CURRENT_TIMESTAMP

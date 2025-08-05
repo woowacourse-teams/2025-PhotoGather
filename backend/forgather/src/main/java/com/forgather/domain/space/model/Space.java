@@ -34,30 +34,22 @@ public class Space extends BaseTimeEntity {
     @Column(name = "name", nullable = false)
     private String name;
 
-    /**
-     * TODO
-     * 성능을 미리 고려
-     *
-     * expiredAt랑 둘다 넣는거
-     *
-     * hours 단위로
-     */
-    @Column(name = "valid_days", nullable = false)
-    private int validDays;
+    @Column(name = "valid_hours", nullable = false)
+    private int validHours;
 
     @Column(name = "opened_at", nullable = false)
     private LocalDateTime openedAt;
 
-    public Space(String code, String password, String name, int validDays, LocalDateTime openedAt) {
+    public Space(String code, String password, String name, int validHours, LocalDateTime openedAt) {
         this.code = code;
         this.password = password;
         this.name = name;
         this.openedAt = openedAt;
-        this.validDays = validDays;
+        this.validHours = validHours;
     }
 
     public void validateExpiration(LocalDateTime currentDateTime) {
-        LocalDateTime expiredAt = openedAt.plusDays(validDays);
+        LocalDateTime expiredAt = openedAt.plusHours(validHours);
         if (expiredAt.isBefore(currentDateTime)) {
             throw new IllegalArgumentException("만료된 스페이스입니다. spaceCode: " + code);
         }

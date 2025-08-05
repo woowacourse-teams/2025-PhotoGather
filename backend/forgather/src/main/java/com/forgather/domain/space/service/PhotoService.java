@@ -34,14 +34,14 @@ public class PhotoService {
     private final Path downloadTempPath;
 
     public PhotoResponse get(String spaceCode, Long photoId) {
-        Space space = spaceRepository.getUnexpiredSpaceBySpaceCode(spaceCode);
+        Space space = spaceRepository.getUnexpiredSpaceByCode(spaceCode);
         Photo photo = photoRepository.getById(photoId);
         photo.validateSpace(space);
         return PhotoResponse.from(photo);
     }
 
     public PhotosResponse getAll(String spaceCode, Pageable pageable) {
-        Space space = spaceRepository.getUnexpiredSpaceBySpaceCode(spaceCode);
+        Space space = spaceRepository.getUnexpiredSpaceByCode(spaceCode);
         Page<Photo> photos = photoRepository.findAllBySpace(space, pageable);
         return PhotosResponse.from(photos);
     }
@@ -53,7 +53,7 @@ public class PhotoService {
      */
     @Transactional
     public void saveAll(String spaceCode, List<MultipartFile> multipartFiles) {
-        Space space = spaceRepository.getUnexpiredSpaceBySpaceCode(spaceCode);
+        Space space = spaceRepository.getUnexpiredSpaceByCode(spaceCode);
         for (MultipartFile multipartFile : multipartFiles) {
             PhotoMetaData metaData = MetaDataExtractor.extractPhotoMetaData(multipartFile);
             String uploadedPath = upload(spaceCode, multipartFile);
@@ -76,7 +76,7 @@ public class PhotoService {
      * 사진 원본 이름 대신 유의미한 이름 변경 추가 논의
      */
     public File compressAll(String spaceCode) throws IOException {
-        Space space = spaceRepository.getUnexpiredSpaceBySpaceCode(spaceCode);
+        Space space = spaceRepository.getUnexpiredSpaceByCode(spaceCode);
 
         File spaceContents = awsS3Cloud.downloadAll(downloadTempPath.toString(), space.getCode());
 
