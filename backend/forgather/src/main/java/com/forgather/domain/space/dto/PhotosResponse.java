@@ -38,17 +38,13 @@ public record PhotosResponse(
         Long id,
 
         @Schema(description = "사진 경로", example = "/photos/space123/photo1.jpg")
-        String path,
-
-        @Schema(description = "원본 사진 이름", example = "photo1.jpg")
-        String originalName
+        String path
     ) {
 
         public static InnerPhoto from(Photo photo) {
             return new InnerPhoto(
                 photo.getId(),
-                photo.getPath(),
-                photo.getOriginalName()
+                photo.getPath()
             );
         }
     }

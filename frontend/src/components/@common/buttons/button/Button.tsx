@@ -1,9 +1,8 @@
-import type { ButtonVariant } from '../../../../types/button.type';
 import * as S from './Button.styles';
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   /** 버튼의 variant */
-  variant?: ButtonVariant;
+  variant?: keyof typeof S.buttonStyles;
   /** 버튼 내부 텍스트 */
   text: string;
   /** 버튼 클릭했을 때 실행할 함수*/

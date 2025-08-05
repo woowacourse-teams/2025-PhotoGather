@@ -16,6 +16,8 @@ export const Wrapper = styled.div<{ $ratio: number; $width: string }>`
   background-size: cover;
   overflow: hidden;
   background: none;
+  cursor: pointer;
+  position: relative;
 `;
 
 export const Image = styled.img`
@@ -36,4 +38,7 @@ export const Image = styled.img`
   -moz-user-drag: none;
   -o-user-drag: none;
   overflow: hidden;
+  &:active {
+    opacity: 0.9;
+  }
 `;

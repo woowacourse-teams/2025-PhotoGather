@@ -49,3 +49,6 @@ export const ERROR = {
     HIGHLIGHT_WORDS: [''],
   },
 };
+
+export const createPhotoSelectedMessage = (count: number) =>
+  `${count}개의 사진이 선택됨`;
