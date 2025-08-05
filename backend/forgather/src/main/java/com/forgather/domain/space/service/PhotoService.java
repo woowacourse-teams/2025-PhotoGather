@@ -71,7 +71,7 @@ public class PhotoService {
             logger.log()
                 .event("파일 업로드 시작")
                 .spaceCode(spaceCode)
-                .value("ORIGINAL_NAME", multipartFile.getOriginalFilename())
+                .value("originalName", multipartFile.getOriginalFilename())
                 .info();
             return awsS3Cloud.upload(spaceCode, multipartFile);
         } catch (IOException e) {

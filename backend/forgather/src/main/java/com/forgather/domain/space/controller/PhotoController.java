@@ -101,7 +101,7 @@ public class PhotoController {
                 if (zipFile.exists() && !zipFile.delete()) {
                     logger.log()
                         .event("압축 파일 삭제 실패")
-                        .value("ZipPath", zipFile.getAbsolutePath())
+                        .value("zipPath", zipFile.getAbsolutePath())
                         .info();
                 }
             }

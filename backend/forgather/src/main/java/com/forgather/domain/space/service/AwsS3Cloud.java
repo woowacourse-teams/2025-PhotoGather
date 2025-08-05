@@ -49,8 +49,8 @@ public class AwsS3Cloud {
         logger.log()
             .event("S3 업로드 완료")
             .spaceCode(spaceCode)
-            .value("ORIGINAL_NAME", file.getOriginalFilename())
-            .value("UPLOADED_PATH", path)
+            .value("originalName", file.getOriginalFilename())
+            .value("uploadedPath", path)
             .info();
 
         return path;
