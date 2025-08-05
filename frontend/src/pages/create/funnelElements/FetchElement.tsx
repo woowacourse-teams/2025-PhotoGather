@@ -3,6 +3,7 @@ import { Navigate } from 'react-router-dom';
 import useCreateSpace from '../../../hooks/useCreateSpace';
 import type { FunnelElementProps } from '../../../types/funnel.type';
 import type { SpaceFunnelInfo } from '../../../types/space.type';
+import { delay } from '../../../utils/delay';
 import { parseIsoStringFromDateTime } from '../../../utils/parseIsoStringFromDateTime';
 import WaitPage from './waitPage/WaitPage';
 
@@ -20,6 +21,7 @@ const FetchElement = ({ spaceInfo }: FetchElementProps) => {
 
   useEffect(() => {
     const createSpace = async () => {
+      await delay(3000);
       try {
         const spaceCode = await fetchCreateSpace({
           name: spaceInfo.name,
