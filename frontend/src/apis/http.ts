@@ -73,13 +73,19 @@ const request = async <T>(
       data: data as T,
     };
   } catch (error) {
+    const getErrorMessage = (error: unknown): string => {
+      if (isNetworkError(error)) {
+        return NETWORK.DEFAULT;
+      }
+      if (error instanceof Error) {
+        return error.message;
+      }
+      return 'Unknown error';
+    };
+
     return {
       success: false,
-      error: isNetworkError(error)
-        ? NETWORK.DEFAULT
-        : error instanceof Error
-          ? error.message
-          : 'Unknown error',
+      error: getErrorMessage(error),
     };
   }
 };
