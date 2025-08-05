@@ -1,8 +1,8 @@
 import Button from '../../@common/buttons/button/Button';
 import HighlightText from '../../@common/highlightText/HighlightText';
-import * as S from './CompletePage.styles';
+import * as S from './MessageLayout.styles';
 
-interface CompletePageProps {
+interface MessageLayoutProps {
   /** 완료 페이지 아이콘 */
   image: string;
   /** 완료 페이지 제목 */
@@ -17,14 +17,14 @@ interface CompletePageProps {
   onButtonClick: () => void;
 }
 
-const CompletePage = ({
+const MessageLayout = ({
   image,
   title,
   description,
   buttonText,
   highlightWords,
   onButtonClick,
-}: CompletePageProps) => {
+}: MessageLayoutProps) => {
   return (
     <S.Wrapper>
       <S.ContentWrapper>
@@ -47,4 +47,4 @@ const CompletePage = ({
   );
 };
 
-export default CompletePage;
+export default MessageLayout;

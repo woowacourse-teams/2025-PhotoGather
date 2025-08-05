@@ -1,8 +1,10 @@
 import { useState } from 'react';
 import { photoService } from '../../apis/services/photo.service';
-import { CONSTRAINTS } from './../../constants/constraints';
+import { CONSTRAINTS } from '../../constants/constraints';
+import { NETWORK } from '../../constants/errors';
 import type { PreviewFile } from '../../types/file.type';
 import { isValidFileType } from '../../utils/isValidFileType';
+import useApiCall from './useApiCall';
 
 interface UseFileUploadProps {
   fileType: string;
@@ -13,6 +15,7 @@ const useFileUpload = ({ fileType }: UseFileUploadProps) => {
   const [previewData, setPreviewData] = useState<PreviewFile[]>([]);
   const [isUploading, setIsUploading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+  const { safeApiCall } = useApiCall();
 
   const addPreviewUrlsFromFiles = (files: File[]) => {
     const startIndex = previewData.length;
@@ -79,11 +82,32 @@ const useFileUpload = ({ fileType }: UseFileUploadProps) => {
   const handleUpload = async () => {
     try {
       setIsUploading(true);
-      await photoService.uploadFiles('1234567890', files);
-      clearFiles();
+      const response = await safeApiCall(() =>
+        photoService.uploadFiles('1234567890', files),
+      );
+
+      if (response.success) {
+        clearFiles();
+        return true;
+      } else {
+        // JSON 파싱 에러는 업로드 성공으로 간주 (서버가 빈 응답 반환)
+        // TODO: 이 부분 다듬기 필요
+        if (
+          response.error ===
+          "Failed to execute 'json' on 'Response': Unexpected end of JSON input"
+        ) {
+          clearFiles();
+          return true;
+        } else if (
+          !response.error?.toLowerCase().includes(NETWORK.DEFAULT.toLowerCase())
+        ) {
+          console.error('사진 업로드에 실패했습니다.');
+        }
+        return false;
+      }
     } catch (error) {
-      console.error('업로드 실패:', error);
-      alert('사진 업로드에 실패했습니다.');
+      console.error('사진 업로드 실패:', error);
+      return false;
     } finally {
       setIsUploading(false);
     }

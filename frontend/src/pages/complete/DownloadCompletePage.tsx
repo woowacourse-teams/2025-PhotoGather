@@ -1,6 +1,6 @@
 import downloadImage from '@assets/images/download.png';
 import { useNavigate } from 'react-router-dom';
-import CompletePage from '../../components/layout/completePage/CompletePage';
+import MessageLayout from '../../components/layout/MessageLayout/MessageLayout';
 import { COMPLETE } from '../../constants/messages';
 import { ROUTES } from '../../constants/routes';
 
@@ -13,7 +13,7 @@ const DownloadCompletePage = () => {
   };
 
   return (
-    <CompletePage
+    <MessageLayout
       image={downloadImage}
       title={COMPLETE.DOWNLOAD.TITLE}
       description={COMPLETE.DOWNLOAD.DESCRIPTION}

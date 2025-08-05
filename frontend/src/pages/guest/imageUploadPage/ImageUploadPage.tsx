@@ -35,8 +35,10 @@ const ImageUploadPage = () => {
   const navigate = useNavigate();
 
   const handleUploadClick = async () => {
-    await handleUpload();
-    navigate(ROUTES.COMPLETE.UPLOAD);
+    const uploadSuccess = await handleUpload();
+    if (uploadSuccess) {
+      navigate(ROUTES.COMPLETE.UPLOAD);
+    }
   };
 
   //TODO: 에러 토스트 구현 후 사라질 로직

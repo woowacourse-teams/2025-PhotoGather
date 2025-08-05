@@ -4,6 +4,7 @@ import DownloadCompletePage from '../pages/complete/DownloadCompletePage';
 import SpaceCreatedCompletePage from '../pages/complete/SpaceCreatedCompletePage';
 import UploadCompletePage from '../pages/complete/UploadCompletePage';
 import DemoHome from '../pages/demo/DemoHome';
+import NetworkErrorPage from '../pages/error/NetworkErrorPage';
 import ImageUploadPage from '../pages/guest/imageUploadPage/ImageUploadPage';
 import SharePage from '../pages/guest/sharePage/SharePage';
 import SpaceHome from '../pages/manager/spaceHome/SpaceHome';
@@ -57,6 +58,10 @@ const router = createBrowserRouter([
             element: <SpaceCreatedCompletePage />,
           },
         ],
+      },
+      {
+        path: 'network-error',
+        element: <NetworkErrorPage />,
       },
     ],
   },
