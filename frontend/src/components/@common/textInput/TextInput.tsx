@@ -1,4 +1,4 @@
-import * as S from './Input.styles';
+import * as S from './TextInput.styles';
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   errorMessage?: string;
@@ -7,7 +7,7 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   value: string;
 }
 
-const Input = ({ errorMessage, maxCount, ...inputProps }: InputProps) => {
+const TextInput = ({ errorMessage, maxCount, ...inputProps }: InputProps) => {
   return (
     <S.Wrapper>
       <S.InputField
@@ -27,4 +27,4 @@ const Input = ({ errorMessage, maxCount, ...inputProps }: InputProps) => {
   );
 };
 
-export default Input;
+export default TextInput;

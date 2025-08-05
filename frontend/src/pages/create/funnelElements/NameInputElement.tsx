@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import Input from '../../../components/@common/input/Input';
+import TextInput from '../../../components/@common/textInput/TextInput';
 import type { FunnelElementProps } from '../../../types/funnel.type';
 import FunnelBasePage from '../funnel/funnelElementBase/FunnelElementBase';
 
@@ -19,7 +19,7 @@ const NameInputElement = ({
       }}
       description="추억을 담을 공간의 이름을 작성해주세요."
       element={
-        <Input
+        <TextInput
           maxCount={10}
           value={name}
           placeholder="나만의 스페이스"

@@ -1,10 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { useState } from 'react';
-import Input from '../components/@common/input/Input';
+import TextInput from '../components/@common/textInput/TextInput';
 
-const meta: Meta<typeof Input> = {
-  title: 'Components/Input',
-  component: Input,
+const meta: Meta<typeof TextInput> = {
+  title: 'Components/Input/Text',
+  component: TextInput,
   args: {
     maxCount: 10,
     placeholder: '내용을 입력하세요',
@@ -12,13 +12,13 @@ const meta: Meta<typeof Input> = {
 };
 
 export default meta;
-type Story = StoryObj<typeof Input>;
+type Story = StoryObj<typeof TextInput>;
 
 export const Default: Story = {
   render: (args) => {
     const [value, setValue] = useState('');
     return (
-      <Input
+      <TextInput
         {...args}
         value={value}
         onChange={(e) => setValue(e.target.value)}
