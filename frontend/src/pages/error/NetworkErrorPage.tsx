@@ -1,6 +1,6 @@
 import wifiImage from '@assets/images/wifi.png';
 import { useNavigate } from 'react-router-dom';
-import CompletePage from '../../components/layout/completePage/CompletePage';
+import MessageLayout from '../../components/layout/MessageLayout/MessageLayout';
 import { ERROR } from '../../constants/messages';
 
 const NetworkErrorPage = () => {
@@ -11,7 +11,7 @@ const NetworkErrorPage = () => {
   };
 
   return (
-    <CompletePage
+    <MessageLayout
       image={wifiImage}
       title={ERROR.NETWORK.TITLE}
       description={ERROR.NETWORK.DESCRIPTION}
