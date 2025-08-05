@@ -51,7 +51,7 @@ public class Space extends BaseTimeEntity {
     public void validateExpiration(LocalDateTime currentDateTime) {
         LocalDateTime expiredAt = openedAt.plusHours(validHours);
         if (expiredAt.isBefore(currentDateTime)) {
-            throw new IllegalArgumentException("만료된 스페이스입니다. spaceCode: " + code);
+            throw new IllegalArgumentException("만료된 스페이스입니다. code: " + code);
         }
     }
 

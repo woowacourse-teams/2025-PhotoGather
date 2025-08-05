@@ -12,13 +12,13 @@ CREATE TABLE space
 );
 
 -- 2. space_content
-    CREATE TABLE space_content
-    (
-        id           BIGINT AUTO_INCREMENT PRIMARY KEY,
-        content_type VARCHAR(16) NOT NULL,
-        space_id     BIGINT      NOT NULL,
-        FOREIGN KEY (space_id) REFERENCES space (id)
-    );
+CREATE TABLE space_content
+(
+    id           BIGINT AUTO_INCREMENT PRIMARY KEY,
+    content_type VARCHAR(16) NOT NULL,
+    space_id     BIGINT      NOT NULL,
+    FOREIGN KEY (space_id) REFERENCES space (id)
+);
 
 -- 3. photo
 CREATE TABLE photo
