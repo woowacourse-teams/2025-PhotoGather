@@ -26,22 +26,22 @@ public class Logger {
         private final LogFormatter logFormatter;
 
         public LogBuilder event(String value) {
-            segments.add(logFormatter.formatWithBrackets("EVENT", value));
+            segments.add(logFormatter.formatWithBrackets("event", value));
             return this;
         }
 
         public LogBuilder spaceCode(String spaceCode) {
-            segments.add(logFormatter.formatWithBrackets("SPACE_CODE", spaceCode));
+            segments.add(logFormatter.formatWithBrackets("spaceCode", spaceCode));
             return this;
         }
 
         public LogBuilder message(String message) {
-            segments.add(logFormatter.formatWithBrackets("MESSAGE", message));
+            segments.add(logFormatter.formatWithBrackets("message", message));
             return this;
         }
 
-        public LogBuilder value(String upperCamelCaseKey, String value) {
-            segments.add(logFormatter.formatWithBrackets(upperCamelCaseKey, value));
+        public LogBuilder value(String key, String value) {
+            segments.add(logFormatter.formatWithBrackets(key, value));
             return this;
         }
 

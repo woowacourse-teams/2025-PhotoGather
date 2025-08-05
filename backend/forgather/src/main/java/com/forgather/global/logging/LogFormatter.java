@@ -22,8 +22,8 @@ public class LogFormatter {
         String requestURI = httpServletRequest.getRequestURI();
 
         return String.format("%s %s %s",
-            formatWithBrackets("TRACE_ID", traceId),
-            formatWithBrackets("URI", requestURI),
+            formatWithBrackets("traceId", traceId),
+            formatWithBrackets("uri", requestURI),
             formattedFingerprint
         );
     }
@@ -33,13 +33,13 @@ public class LogFormatter {
         String params = getParams(joinPoint.getArgs());
 
         return String.format("%s %s",
-            formatWithBrackets("METHOD_NAME", methodName),
-            formatWithBrackets("METHOD_PARAMS", params)
+            formatWithBrackets("methodName", methodName),
+            formatWithBrackets("methodParams", params)
         );
     }
 
     public String formatDurationMillis(long durationMillis) {
-        return formatWithBrackets("DURATION_MILLIS", durationMillis);
+        return formatWithBrackets("durationMillis", durationMillis);
     }
 
     public String formatWithBrackets(String key, Object... values) {
@@ -64,8 +64,8 @@ public class LogFormatter {
         String userAgent = getUserAgent();
 
         return String.format("%s %s",
-            formatWithBrackets("IP", clientIp),
-            formatWithBrackets("USER_AGENT", userAgent)
+            formatWithBrackets("ip", clientIp),
+            formatWithBrackets("userAgent", userAgent)
         );
     }
 
