@@ -3,6 +3,7 @@ import { photoService } from '../../apis/services/photo.service';
 import { CONSTRAINTS } from './../../constants/constraints';
 import type { PreviewFile } from '../../types/file.type';
 import { isValidFileType } from '../../utils/isValidFileType';
+import { useToast } from './useToast';
 
 interface UseFileUploadProps {
   fileType: string;
@@ -12,7 +13,7 @@ const useFileUpload = ({ fileType }: UseFileUploadProps) => {
   const [files, setFiles] = useState<File[]>([]);
   const [previewData, setPreviewData] = useState<PreviewFile[]>([]);
   const [isUploading, setIsUploading] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('');
+  const { showToast } = useToast();
 
   const addPreviewUrlsFromFiles = (files: File[]) => {
     const startIndex = previewData.length;
@@ -44,16 +45,14 @@ const useFileUpload = ({ fileType }: UseFileUploadProps) => {
     const hasInvalidFiles = invalidFiles.length > 0;
 
     if (!isUnderUploadLimit) {
-      setErrorMessage(
-        `한 번에 ${CONSTRAINTS.MAX_FILE_COUNT}장까지 올릴 수 있어요`,
-      );
+      showToast({
+        text: `한 번에 ${CONSTRAINTS.MAX_FILE_COUNT}장까지 올릴 수 있어요`,
+      });
     }
     if (hasInvalidFiles) {
-      setErrorMessage(
-        `이미지 파일만 업로드 가능해요. 파일을 다시 확인해주세요.\n${invalidFiles
-          .map((file) => file.name)
-          .join('\n')}`,
-      );
+      showToast({
+        text: `이미지 파일만 업로드 가능해요. 파일을 다시 확인해주세요.`,
+      });
     }
     const limitedValidFiles = validFiles.slice(0, CONSTRAINTS.MAX_FILE_COUNT);
     setFiles((prev) => [...prev, ...limitedValidFiles]);
@@ -93,7 +92,6 @@ const useFileUpload = ({ fileType }: UseFileUploadProps) => {
     files,
     previewData,
     isUploading,
-    errorMessage,
     handleUpload,
     handleFilesUploadClick,
     handleFilesDrop,

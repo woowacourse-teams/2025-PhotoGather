@@ -1,5 +1,4 @@
 import downloadLoadingSpinner from '@assets/loading-spinner.gif';
-import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ReactComponent as ArrowUpSvg } from '../../../@assets/icons/upwardArrow.svg';
 import FloatingActionButton from '../../../components/@common/buttons/floatingActionButton/FloatingActionButton';
@@ -20,7 +19,6 @@ import { mockSpaceData } from './mockSpaceData';
 const ImageUploadPage = () => {
   const {
     previewData,
-    errorMessage,
     isUploading,
     handleFilesUploadClick,
     handleFilesDrop,
@@ -39,13 +37,6 @@ const ImageUploadPage = () => {
     navigate(ROUTES.COMPLETE.UPLOAD);
   };
 
-  //TODO: 에러 토스트 구현 후 사라질 로직
-  useEffect(() => {
-    if (errorMessage) {
-      alert(errorMessage);
-    }
-  }, [errorMessage]);
-
   return (
     <S.Wrapper $hasImages={hasImages}>
       {isUploading && (
@@ -53,7 +44,6 @@ const ImageUploadPage = () => {
           <img src={downloadLoadingSpinner} alt="loading" />
         </S.LoadingSpinnerContainer>
       )}
-
       <S.ScrollTopAnchor ref={scrollTopTriggerRef} />
       <SpaceHeader
         title={`${mockSpaceData.name}`}
