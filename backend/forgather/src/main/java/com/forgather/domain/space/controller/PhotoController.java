@@ -26,6 +26,8 @@ import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBo
 import com.forgather.domain.space.dto.PhotoResponse;
 import com.forgather.domain.space.dto.PhotosResponse;
 import com.forgather.domain.space.service.PhotoService;
+import com.forgather.global.logging.LogFormatter;
+import com.forgather.global.logging.Logger;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -42,6 +44,7 @@ public class PhotoController {
     private static final String ZIP_CONTENT_TYPE = "application/zip";
 
     private final PhotoService photoService;
+    private final Logger logger;
 
     @PostMapping(path = "/upload", consumes = {"multipart/form-data"})
     @Operation(summary = "사진 일괄 업로드", description = "사진을 전부 업로드합니다.")
@@ -96,7 +99,10 @@ public class PhotoController {
                 outputStream.flush();
             } finally {
                 if (zipFile.exists() && !zipFile.delete()) {
-                    log.info("파일 삭제 실패: {}", zipFile.getAbsolutePath());
+                    logger.log()
+                        .event("압축 파일 삭제 실패")
+                        .value("zipPath", zipFile.getAbsolutePath())
+                        .info();
                 }
             }
         };

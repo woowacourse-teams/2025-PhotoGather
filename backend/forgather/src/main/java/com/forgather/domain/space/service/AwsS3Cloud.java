@@ -10,8 +10,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.forgather.domain.space.util.RandomCodeGenerator;
 import com.forgather.global.config.S3Properties;
+import com.forgather.global.logging.LogFormatter;
+import com.forgather.global.logging.Logger;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
@@ -21,6 +24,7 @@ import software.amazon.awssdk.transfer.s3.model.DirectoryDownload;
 import software.amazon.awssdk.transfer.s3.model.DownloadDirectoryRequest;
 
 @Component
+@Slf4j
 @RequiredArgsConstructor
 public class AwsS3Cloud {
 
@@ -31,6 +35,7 @@ public class AwsS3Cloud {
     private final S3Properties s3Properties;
     private final S3TransferManager transferManager;
     private final RandomCodeGenerator randomCodeGenerator;
+    private final Logger logger;
 
     public String upload(String spaceCode, MultipartFile file) throws IOException {
         String path = generateFilePath(spaceCode, file);
@@ -40,6 +45,14 @@ public class AwsS3Cloud {
             .tagging(s3Properties.getTagging())
             .build();
         s3Client.putObject(putObjectRequest, RequestBody.fromBytes(file.getBytes()));
+
+        logger.log()
+            .event("S3 업로드 완료")
+            .spaceCode(spaceCode)
+            .value("originalName", file.getOriginalFilename())
+            .value("uploadedPath", path)
+            .info();
+
         return path;
     }
 
@@ -47,8 +60,7 @@ public class AwsS3Cloud {
         String extension = StringUtils.getFilenameExtension(file.getOriginalFilename());
         String uploadFileName = UUID.randomUUID().toString();
         return String.format("%s/%s/%s/%s.%s", s3Properties.getRootDirectory(), CONTENTS_INNER_PATH, spaceCode,
-            uploadFileName,
-            extension);
+            uploadFileName, extension);
     }
 
     public File downloadAll(String tempPath, String spaceCode) {
