@@ -1,0 +1,47 @@
+import { css, type Theme } from '@emotion/react';
+import styled from '@emotion/styled';
+import type { FloatingActionButtonVariant } from '../../../../types/button.type';
+
+export const FloatingActionButtonStyles = {
+  default: (theme: Theme) => css`
+    background-color: ${theme.colors.accent};
+    color: ${theme.colors.gray06};
+  `,
+  disabled: (theme: Theme) => css`
+    background-color: ${theme.colors.grayBackground};
+    color: ${theme.colors.gray04};
+  `,
+};
+
+const active = (theme: Theme) => css`
+  background-color: ${theme.colors.darkAccent};
+  color: ${theme.colors.gray06};
+  box-shadow:
+    0px 2px 3px 0px rgba(0, 0, 0, 0.25) inset,
+    1px 1px 3px 0px #fff inset,
+    5px 5px 5px 0px rgba(0, 0, 0, 0.25);
+`;
+
+export const Wrapper = styled.button<{ $variant: FloatingActionButtonVariant }>`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 20px;
+  border-radius: 50px;
+  white-space: nowrap;
+
+  box-shadow:
+    1px 1px 3px 0px #fff inset,
+    5px 5px 5px 0px rgba(0, 0, 0, 0.25);
+
+  ${({ theme, $variant }) => FloatingActionButtonStyles[$variant](theme)}
+  ${({ theme }) => ({ ...theme.typography.buttonPrimary })}
+  ${({ theme, $variant }) =>
+    $variant !== 'disabled' &&
+    css`
+      &:active {
+        ${active(theme)}
+      }
+    `}
+`;
