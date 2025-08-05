@@ -5,5 +5,5 @@ files:
     destination: /home/ubuntu/2025-PhotoGather
 hooks:
   AfterInstall:
-    - location: /deploy.sh
+    - location: /deploy-prod.sh
       runas: ubuntu
