@@ -12,7 +12,7 @@ public record SpaceResponse(
     @Schema(description = "스페이스 ID", example = "1")
     Long id,
 
-    @Schema(description = "스페이스 코드", example = "abc123")
+    @Schema(description = "스페이스 코드", example = "1234567890")
     String spaceCode,
 
     @Schema(description = "스페이스 이름", example = "My Space")
@@ -37,7 +37,7 @@ public record SpaceResponse(
             space.getName(),
             space.getOpenedAt(),
             space.getExpiredAt(),
-            space.isExpired()
+            space.isExpired(LocalDateTime.now())
         );
     }
 }
