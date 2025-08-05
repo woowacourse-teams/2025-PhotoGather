@@ -15,7 +15,13 @@ export const Wrapper = styled.div`
 export const Icon = styled(InfoIcon)`
   width: 20px;
   aspect-ratio: 1;
-  color: ${({ theme }) => theme.colors.primary60};
+  & circle {
+    fill: transparent
+  }
+
+  & path {
+    fill: ${({ theme }) => theme.colors.primary60};
+  }
 `;
 
 export const Description = styled.p`
