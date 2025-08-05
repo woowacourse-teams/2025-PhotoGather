@@ -1,7 +1,7 @@
 #!/bin/bash
 
 JAR_NAME="forgather-0.0.1-SNAPSHOT.jar"
-PORT=8080                          # ✅ 여기를 원하는 포트로 수정하세요
+PORT=8080
 LOG_DIR="/home/ubuntu/2025-PhotoGather/logs"
 JAR_PATH="/home/ubuntu/2025-PhotoGather/$JAR_NAME"
 LOG_FILE="$LOG_DIR/prod.log"

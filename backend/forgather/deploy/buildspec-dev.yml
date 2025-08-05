@@ -23,15 +23,11 @@ phases:
       - echo "[build] JAR, deploy 파일을 하나의 ZIP으로 압축"
       - cd ../..
       - cp backend/forgather/build/libs/forgather-0.0.1-SNAPSHOT.jar .
-      - cp backend/forgather/deploy/appspec-prod.yml .
-      - cp backend/forgather/deploy/appspec-dev.yml .
-      - cp backend/forgather/deploy/deploy-prod.sh .
-      - cp backend/forgather/deploy/deploy-dev.sh .
+      - cp backend/forgather/deploy/appspec.yml .
+      - cp backend/forgather/deploy/deploy-dev.sh ./deploy.sh
 
 artifacts:
   files:
     - forgather-0.0.1-SNAPSHOT.jar
-    - appspec-prod.yml
-    - appspec-dev.yml
-    - deploy-prod.sh
-    - deploy-dev.sh
+    - appspec.yml
+    - deploy.sh
