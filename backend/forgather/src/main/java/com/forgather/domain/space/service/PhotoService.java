@@ -77,8 +77,11 @@ public class PhotoService {
      */
     public File compressAll(String spaceCode) throws IOException {
         Space space = spaceRepository.getBySpaceCode(spaceCode);
-
-        File spaceContents = awsS3Cloud.downloadAll(downloadTempPath.toString(), space.getSpaceCode());
+        List<String> photoPaths = photoRepository.findAllBySpace(space)
+            .stream()
+            .map(Photo::getPath)
+            .toList();
+        File spaceContents = awsS3Cloud.downloadSelected(downloadTempPath.toString(), spaceCode, photoPaths);
 
         File zipFile = ZipGenerator.generate(downloadTempPath, spaceContents, spaceCode);
         FileSystemUtils.deleteRecursively(spaceContents);
