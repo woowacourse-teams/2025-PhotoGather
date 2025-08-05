@@ -16,7 +16,7 @@ export const Icon = styled(InfoIcon)`
   width: 20px;
   aspect-ratio: 1;
   & circle {
-    fill: transparent
+    fill: transparent;
   }
 
   & path {

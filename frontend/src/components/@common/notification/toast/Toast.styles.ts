@@ -19,9 +19,10 @@ export const Wrapper = styled.div<{
   border-radius: 50px;
   align-items: center;
   opacity: ${({ visible }) => (visible ? 1 : 0)};
-  transform: ${({ visible }) =>
-    visible ? 'translateY(0)' : 'translateY(20px)'};
-  transition: opacity 0.4s ease, transform 0.4s ease;
+  transform: ${({ visible }) => (visible ? 'translateY(0)' : 'translateY(20px)')};
+  transition:
+    opacity 0.4s ease,
+    transform 0.4s ease;
 `;
 
 export const TimerContainer = styled.div<{ type: string }>`
@@ -53,7 +54,8 @@ export const Icon = styled(InfoIcon)<{ type: string }>`
   width: 100%;
   height: 100%;
   & circle {
-    fill: ${({ theme, type }) => (type === 'error' ? theme.colors.lightError : theme.colors.darkAccent)};
+    fill: ${({ theme, type }) =>
+      type === 'error' ? theme.colors.lightError : theme.colors.darkAccent};
   }
 
   & path {
