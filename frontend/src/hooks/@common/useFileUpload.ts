@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { photoService } from '../../apis/services/photo.service';
+import { CONSTRAINTS } from '../../constants/constraints';
 import { NETWORK } from '../../constants/errors';
-import { CONSTRAINTS } from './../../constants/constraints';
 import type { PreviewFile } from '../../types/file.type';
 import { isValidFileType } from '../../utils/isValidFileType';
 import useApiCall from './useApiCall';
