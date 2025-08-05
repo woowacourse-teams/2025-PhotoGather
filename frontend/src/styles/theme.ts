@@ -87,6 +87,7 @@ export const theme = {
     topActionButton: 4,
     floatingActionButton: 400,
     loadingSpinner: 5,
+    overlay: 100,
   },
   layout: {
     width: '400px',

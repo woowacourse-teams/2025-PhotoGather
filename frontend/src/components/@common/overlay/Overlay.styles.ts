@@ -7,3 +7,8 @@ export const Overlay = styled.div`
   background-color: ${({ theme }) => theme.colors.overlay};
   backdrop-filter: blur(1.5px);
 `;
+
+export const OverlayContainer = styled.div`
+  width: auto;
+  z-index: ${({ theme }) => theme.zIndex.overlay};
+`;
