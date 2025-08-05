@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import com.forgather.domain.space.model.Photo;
 import com.forgather.domain.space.model.Space;
@@ -29,7 +30,7 @@ public interface PhotoRepository extends JpaRepository<Photo, Long> {
         DELETE FROM SpaceContent sc
         WHERE sc.space = :space
         """)
-    void deletePhotoBySpace(Space space);
+    void deletePhotoBySpace(@Param("space") Space space);
 
     @Modifying(clearAutomatically = true, flushAutomatically = true)
     @Query("""
@@ -37,5 +38,5 @@ public interface PhotoRepository extends JpaRepository<Photo, Long> {
         WHERE sc.space = :space
           AND sc.id IN :photoIds
         """)
-    void deletePhotoBySpaceAndPhotoIds(Space space, List<Long> photoIds);
+    void deletePhotoBySpaceAndPhotoIds(@Param("space") Space space, @Param("photoIds") List<Long> photoIds);
 }
