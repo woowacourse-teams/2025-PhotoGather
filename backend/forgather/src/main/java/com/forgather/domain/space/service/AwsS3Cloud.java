@@ -108,22 +108,21 @@ public class AwsS3Cloud {
             .delete(Delete.builder().objects(deleteObjects).build())
             .build();
         s3Client.deleteObjects(deleteRequest);
-
     }
 
     public void deleteAllContents(String spaceCode) {
-        List<ObjectIdentifier> deleteObjects = getDeleteObjects(spaceCode);
+        List<ObjectIdentifier> objectIdentifiers = getObjectIdentifiers(spaceCode);
 
-        if (!deleteObjects.isEmpty()) {
+        if (!objectIdentifiers.isEmpty()) {
             DeleteObjectsRequest deleteObjectsRequest = DeleteObjectsRequest.builder()
                 .bucket(s3Properties.getBucketName())
-                .delete(Delete.builder().objects(deleteObjects).build())
+                .delete(Delete.builder().objects(objectIdentifiers).build())
                 .build();
             s3Client.deleteObjects(deleteObjectsRequest);
         }
     }
 
-    private List<ObjectIdentifier> getDeleteObjects(String spaceCode) {
+    private List<ObjectIdentifier> getObjectIdentifiers(String spaceCode) {
         return s3Client.listObjectsV2Paginator(createObjectPagesRequest(spaceCode))
             .stream()
             .flatMap(response -> response.contents().stream()
