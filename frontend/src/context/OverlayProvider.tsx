@@ -70,8 +70,11 @@ const OverlayProvider = ({ children }: PropsWithChildren) => {
       {children}
       {overlayState && (
         <Overlay
-          onClose={handleOverlayClose}
-          closeOnOverlayClick={overlayState.options.clickOverlayClose ?? false}
+          onBackdropClick={
+            overlayState.options.clickOverlayClose 
+              ? handleOverlayClose 
+              : undefined
+          }
         >
           {/* 리액트 엘리먼트는 수정할 수 없어서 새 엘리먼트를 생성한것 */}
           {cloneElement(

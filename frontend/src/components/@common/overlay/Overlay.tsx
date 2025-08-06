@@ -3,15 +3,12 @@ import type { PropsWithChildren } from 'react';
 import * as S from '../../../styles/@common/BackDrop.styles';
 
 interface OverlayProps extends PropsWithChildren {
-  onClose: () => void;
-  closeOnOverlayClick: boolean;
+  onBackdropClick?: () => void;
 }
 
-const Overlay = ({ onClose, closeOnOverlayClick, children }: OverlayProps) => {
+const Overlay = ({ onBackdropClick, children }: OverlayProps) => {
   const handleBackDropClick = () => {
-    if (closeOnOverlayClick) {
-      onClose();
-    }
+    onBackdropClick?.();
   };
 
   const handleStopBubbling = (e: React.MouseEvent) => {
