@@ -39,14 +39,14 @@ interface OverlayState {
 }
 
 const OverlayProvider = ({ children }: PropsWithChildren) => {
-  const [overlay, setOverlay] = useState<OverlayState | null>(null);
+  const [overlayState, setOverlayState] = useState<OverlayState | null>(null);
 
   const openOverlay: OverlayOpenFn = (children, option) => {
     // 엘리먼트는 필요하지만 number, string, 임의의 객체 및 배열 등의 값은 제외하고 싶을 때
     if (isValidElement(children)) {
       return new Promise((resolver) => {
         // 비동기 -> 모달이 반환할 결과를 기다림
-        setOverlay({
+        setOverlayState({
           content: children,
           options: { ...defaultOverlayClickOption, ...(option ?? {}) },
           resolver, // 모달이 닫힐 때의 결과값을 전달하는 함수
@@ -57,27 +57,30 @@ const OverlayProvider = ({ children }: PropsWithChildren) => {
   };
 
   const handleOverlayClose = () => {
-    setOverlay(null);
+    setOverlayState(null);
   };
 
   const handleSubmitOverlay = (result: OverlaySubmitResult) => {
-    overlay?.resolver?.(result);
+    overlayState?.resolver?.(result);
     handleOverlayClose();
   };
 
   return (
     <OverlayContext.Provider value={openOverlay}>
       {children}
-      {overlay && (
+      {overlayState && (
         <Overlay
           onClose={handleOverlayClose}
-          closeOnOverlayClick={overlay.options.clickOverlayClose ?? false}
+          closeOnOverlayClick={overlayState.options.clickOverlayClose ?? false}
         >
           {/* 리액트 엘리먼트는 수정할 수 없어서 새 엘리먼트를 생성한것 */}
-          {cloneElement(overlay.content as ReactElement<OverlayChildProps>, {
-            onClose: handleOverlayClose,
-            onSubmit: handleSubmitOverlay,
-          })}
+          {cloneElement(
+            overlayState.content as ReactElement<OverlayChildProps>,
+            {
+              onClose: handleOverlayClose,
+              onSubmit: handleSubmitOverlay,
+            },
+          )}
         </Overlay>
       )}
     </OverlayContext.Provider>
