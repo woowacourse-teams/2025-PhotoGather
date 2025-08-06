@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.forgather.global.auth.client.KakaoAuthClient;
 import com.forgather.global.auth.client.KakaoTokenDto;
+import com.forgather.global.auth.domain.Host;
 import com.forgather.global.auth.domain.KakaoHost;
 import com.forgather.global.auth.domain.RefreshToken;
 import com.forgather.global.auth.dto.KakaoLoginUrlResponse;
@@ -37,24 +38,19 @@ public class AuthService {
     @Transactional
     public LoginResponse requestKakaoLoginToken(String authorizationCode) {
         KakaoTokenDto.FullToken response = kakaoAuthClient.requestKakaoLoginToken(authorizationCode);
-        KakaoTokenDto.IdToken idToken = jwtParser.parseIdToken(response.idToken());
-        KakaoHost kakaoHost = loginWithKakao(response, idToken);
-
-        RefreshToken refreshToken = RefreshToken.generate(kakaoHost, randomCodeGenerator);
+        KakaoHost kakaoHost = loginWithKakao(response);
+        RefreshToken refreshToken = RefreshToken.generate(kakaoHost.getHost(), randomCodeGenerator);
         refreshTokenRepository.save(refreshToken);
 
-        return LoginResponse.of(kakaoHost, refreshToken);
+        return LoginResponse.of(kakaoHost.getHost(), refreshToken);
     }
 
-    private KakaoHost loginWithKakao(KakaoTokenDto.FullToken response,
-        KakaoTokenDto.IdToken idToken) {
+    private KakaoHost loginWithKakao(KakaoTokenDto.FullToken response) {
+        KakaoTokenDto.IdToken idToken = jwtParser.parseIdToken(response.idToken());
         Optional<KakaoHost> kakaoHost = kakaoHostRepository.findByUserId(idToken.sub());
-        return kakaoHost.orElseGet(() -> kakaoHostRepository.save(
-            new KakaoHost(
-                idToken.nickname(),
-                idToken.picture(),
-                idToken.sub()
-            )));
+        Host host = new Host(idToken.nickname(), idToken.picture());
+
+        return kakaoHost.orElseGet(() -> kakaoHostRepository.save(new KakaoHost(host, idToken.sub())));
     }
 
     @Transactional

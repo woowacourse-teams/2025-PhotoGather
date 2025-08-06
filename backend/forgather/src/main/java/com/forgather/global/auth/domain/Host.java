@@ -3,7 +3,6 @@ package com.forgather.global.auth.domain;
 import com.forgather.domain.model.BaseTimeEntity;
 
 import jakarta.persistence.Column;
-import jakarta.persistence.DiscriminatorColumn;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -17,21 +16,20 @@ import lombok.NoArgsConstructor;
 @Getter
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-@DiscriminatorColumn(name = "type")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public abstract class Host extends BaseTimeEntity {
+public class Host extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected Long id;
 
-    @Column(name = "name", nullable = false)
+    @Column(name = "name")
     protected String name;
 
     @Column(name = "picture_url")
     private String pictureUrl;
 
-    protected Host(String name, String pictureUrl) {
+    public Host(String name, String pictureUrl) {
         this.name = name;
         this.pictureUrl = pictureUrl;
     }

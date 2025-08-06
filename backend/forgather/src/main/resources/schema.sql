@@ -37,7 +37,6 @@ CREATE TABLE host
     id         BIGINT AUTO_INCREMENT PRIMARY KEY,
     name       VARCHAR(100),
     picture_url   VARCHAR(255),
-    type       VARCHAR(16) NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
@@ -46,8 +45,9 @@ CREATE TABLE host
 CREATE TABLE host_kakao
 (
     id            BIGINT AUTO_INCREMENT PRIMARY KEY,
+    host_id       BIGINT NOT NULL,
     user_id       VARCHAR(100) NOT NULL,
-    CONSTRAINT fk_host_kakao FOREIGN KEY (id) REFERENCES host (id)
+    CONSTRAINT fk_host_kakao_host FOREIGN KEY (host_id) REFERENCES host (id)
 );
 
 -- 6. refresh_token
