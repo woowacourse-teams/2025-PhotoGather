@@ -41,7 +41,7 @@ export const Toast = ({
   }, [duration]);
 
   return (
-    <S.Wrapper position={position} visible={visible}>
+    <S.Wrapper $position={position} $visible={visible}>
       <S.TimerContainer
         type={type}
         style={{

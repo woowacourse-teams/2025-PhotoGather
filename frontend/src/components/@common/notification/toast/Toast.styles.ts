@@ -3,12 +3,12 @@ import styled from '@emotion/styled';
 import type { ToastPositionType } from '../../../../types/toast.type';
 
 export const Wrapper = styled.div<{
-  position: ToastPositionType;
-  visible: boolean;
+  $position: ToastPositionType;
+  $visible: boolean;
 }>`
   pointer-events: auto;
   z-index: ${({ theme }) => theme.zIndex.toast};
-  ${({ position }) => (position === 'top' ? 'top: 20px;' : 'bottom: 20px;')}
+  ${({ $position }) => ($position === 'top' ? 'top: 20px;' : 'bottom: 20px;')}
   display: flex;
   max-width: ${({ theme }) =>
     `${parseInt(theme.layout.width) - parseInt(theme.layout.padding.leftRight)}px`};
@@ -18,8 +18,8 @@ export const Wrapper = styled.div<{
   padding: 8px 12px;
   border-radius: 50px;
   align-items: center;
-  opacity: ${({ visible }) => (visible ? 1 : 0)};
-  transform: ${({ visible }) => (visible ? 'translateY(0)' : 'translateY(20px)')};
+  opacity: ${({ $visible }) => ($visible ? 1 : 0)};
+  transform: ${({ $visible }) => ($visible ? 'translateY(0)' : 'translateY(20px)')};
   transition:
     opacity 0.4s ease,
     transform 0.4s ease;
