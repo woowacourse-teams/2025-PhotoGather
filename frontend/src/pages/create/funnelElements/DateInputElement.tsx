@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import DateTimeInput from '../../../components/@common/dateTimeInput/DateTimeInput';
 import type { FunnelElementProps } from '../../../types/funnel.type';
-import FunnelBasePage from '../funnel/funnelElementBase/FunnelElementBase';
+import FunnelBasePage from '../funnel/FunnelBasePage/FunnelBasePage';
 
 const DateInputElement = ({
   onNext,

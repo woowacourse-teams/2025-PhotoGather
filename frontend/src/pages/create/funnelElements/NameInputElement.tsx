@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import TextInput from '../../../components/@common/textInput/TextInput';
 import type { FunnelElementProps } from '../../../types/funnel.type';
-import FunnelBasePage from '../funnel/funnelElementBase/FunnelElementBase';
+import FunnelBasePage from '../funnel/FunnelBasePage/FunnelBasePage';
 
 const NameInputElement = ({
   onNext,

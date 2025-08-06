@@ -1,7 +1,7 @@
 import Button from '../../../../components/@common/buttons/button/Button';
 import HighlightText from '../../../../components/@common/highlightText/HighlightText';
 import type { FunnelBaseElementProps } from '../../../../types/funnel.type';
-import * as S from './FunnelElementBase.styles';
+import * as S from './FunnelBasePage.styles';
 
 const FunnelBasePage = ({
   title,

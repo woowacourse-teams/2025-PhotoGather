@@ -4,7 +4,7 @@ import type { FunnelElementProps } from '../../../types/funnel.type';
 import type { SpaceFunnelInfo } from '../../../types/space.type';
 import { formatDate } from '../../../utils/formatDate';
 import { formatTimer } from '../../../utils/formatTimer';
-import FunnelBasePage from '../funnel/funnelElementBase/FunnelElementBase';
+import FunnelBasePage from '../funnel/FunnelBasePage/FunnelBasePage';
 
 interface CheckSpaceInfoPageProps extends FunnelElementProps {
   spaceInfo: SpaceFunnelInfo;
