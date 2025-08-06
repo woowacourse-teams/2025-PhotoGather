@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import DateTimeInput from '../../../components/@common/dateTimeInput/DateTimeInput';
+import DateTimeInput from '../../../components/@common/inputs/DateTimeInput';
 import type { FunnelElementProps } from '../../../types/funnel.type';
 import { checkIsPastDateTime } from '../../../utils/checkIsPastDateTime';
 import FunnelBasePage from '../funnel/FunnelBasePage/FunnelBasePage';

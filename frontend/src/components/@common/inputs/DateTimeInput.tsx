@@ -1,4 +1,4 @@
-import * as S from './DateTimeInput.styles';
+import * as C from './Input.styles';
 
 interface DateInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   /** 입력 타입: 날짜, 시간 선택 */
@@ -13,14 +13,14 @@ const DateTimeInput = ({
   ...inputProps
 }: DateInputProps) => {
   return (
-    <S.Wrapper>
-      <S.InputField
+    <C.Wrapper>
+      <C.InputField
         $isError={!!errorMessage}
         type={inputType}
         {...inputProps}
       />
-      <S.ErrorMessage>{errorMessage ? errorMessage : ''}</S.ErrorMessage>
-    </S.Wrapper>
+      <C.ErrorMessage>{errorMessage ? errorMessage : ''}</C.ErrorMessage>
+    </C.Wrapper>
   );
 };
 

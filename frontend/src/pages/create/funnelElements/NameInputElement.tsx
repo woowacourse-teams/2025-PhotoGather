@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import TextInput from '../../../components/@common/textInput/TextInput';
+import TextInput from '../../../components/@common/inputs/textInput/TextInput';
 import type { FunnelElementProps } from '../../../types/funnel.type';
 import FunnelBasePage from '../funnel/FunnelBasePage/FunnelBasePage';
 

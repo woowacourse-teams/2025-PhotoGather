@@ -1,3 +1,4 @@
+import * as C from '../Input.styles';
 import * as S from './TextInput.styles';
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
@@ -9,8 +10,8 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
 
 const TextInput = ({ errorMessage, maxCount, ...inputProps }: InputProps) => {
   return (
-    <S.Wrapper>
-      <S.InputField
+    <C.Wrapper>
+      <C.InputField
         {...inputProps}
         id={inputProps.id}
         aria-label={inputProps['aria-label']}
@@ -18,12 +19,12 @@ const TextInput = ({ errorMessage, maxCount, ...inputProps }: InputProps) => {
         $isError={!!errorMessage}
       />
       <S.InputFooterContainer>
-        <S.ErrorMessage>{errorMessage ? errorMessage : ''}</S.ErrorMessage>
+        <C.ErrorMessage>{errorMessage ? errorMessage : ''}</C.ErrorMessage>
         <S.InputCount>
           {maxCount && `${inputProps.value.length} / ${maxCount}`}
         </S.InputCount>
       </S.InputFooterContainer>
-    </S.Wrapper>
+    </C.Wrapper>
   );
 };
 
