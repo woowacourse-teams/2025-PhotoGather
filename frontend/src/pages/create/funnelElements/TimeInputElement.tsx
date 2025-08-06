@@ -33,7 +33,7 @@ const TimeInputElement = ({
           errorMessage={isError ? '현재 시간 이후 시간대를 입력해주세요.' : ''}
         />
       }
-      handleNextButtonClick={() => onNext(time)}
+      onNextButtonClick={() => onNext(time)}
       nextButtonDisabled={isDisabled}
     />
   );

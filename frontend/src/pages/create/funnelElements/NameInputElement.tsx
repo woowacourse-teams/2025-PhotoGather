@@ -28,7 +28,7 @@ const NameInputElement = ({
           errorMessage={isError ? '유효하지 않은 이름입니다.' : ''}
         />
       }
-      handleNextButtonClick={() => onNext(name)}
+      onNextButtonClick={() => onNext(name)}
       nextButtonDisabled={isDisabled}
     />
   );

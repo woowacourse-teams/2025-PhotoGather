@@ -7,7 +7,7 @@ const FunnelBasePage = ({
   title,
   description,
   element,
-  handleNextButtonClick,
+  onNextButtonClick: handleNextButtonClick,
   nextButtonDisabled,
 }: FunnelBaseElementProps) => {
   return (

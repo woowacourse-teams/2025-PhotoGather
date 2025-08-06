@@ -32,7 +32,7 @@ const CheckSpaceInfoElement = ({
           leftTime={formatTimer(leftTime)}
         />
       }
-      handleNextButtonClick={() => onNext(JSON.stringify(spaceInfo))}
+      onNextButtonClick={() => onNext(JSON.stringify(spaceInfo))}
     />
   );
 };

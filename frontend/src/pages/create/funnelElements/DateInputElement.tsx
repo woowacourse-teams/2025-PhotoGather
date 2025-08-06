@@ -36,7 +36,7 @@ const DateInputElement = ({
           data-testid="date-input"
         />
       }
-      handleNextButtonClick={() => onNext(date)}
+      onNextButtonClick={() => onNext(date)}
       nextButtonDisabled={isDisabled}
     />
   );
