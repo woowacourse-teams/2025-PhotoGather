@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import TextInput from '../../../components/@common/inputs/textInput/TextInput';
+import { CONSTRAINTS } from '../../../constants/constraints';
 import type { FunnelElementProps } from '../../../types/funnel.type';
 import FunnelBasePage from '../funnel/FunnelBasePage/FunnelBasePage';
 
@@ -8,7 +9,7 @@ const NameInputElement = ({
   initialValue = '',
 }: FunnelElementProps) => {
   const [name, setName] = useState(initialValue);
-  const isError = name.length > 10;
+  const isError = name.length > CONSTRAINTS.NAME_MAX_LENGTH;
   const isDisabled = isError || name.length === 0;
 
   return (
