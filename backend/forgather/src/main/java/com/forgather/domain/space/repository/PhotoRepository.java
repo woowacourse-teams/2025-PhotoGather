@@ -30,7 +30,7 @@ public interface PhotoRepository extends JpaRepository<Photo, Long> {
         DELETE FROM SpaceContent sc
         WHERE sc.space = :space
         """)
-    void deletePhotoBySpace(@Param("space") Space space);
+    void deleteBySpace(@Param("space") Space space);
 
     @Modifying(clearAutomatically = true, flushAutomatically = true)
     @Query("""
@@ -38,5 +38,5 @@ public interface PhotoRepository extends JpaRepository<Photo, Long> {
         WHERE sc.space = :space
           AND sc.id IN :photoIds
         """)
-    void deletePhotoBySpaceAndPhotoIds(@Param("space") Space space, @Param("photoIds") List<Long> photoIds);
+    void deleteBySpaceAndPhotoIds(@Param("space") Space space, @Param("photoIds") List<Long> photoIds);
 }

@@ -105,7 +105,7 @@ public class PhotoService {
         List<String> paths = photos.stream()
             .map(Photo::getPath)
             .toList();
-        photoRepository.deletePhotoBySpaceAndPhotoIds(space, photoIds);
+        photoRepository.deleteBySpaceAndPhotoIds(space, photoIds);
         awsS3Cloud.deleteSelectedContents(paths);
     }
 
@@ -115,7 +115,7 @@ public class PhotoService {
     @Transactional
     public void deleteAll(String spaceCode) {
         Space space = spaceRepository.getBySpaceCode(spaceCode);
-        photoRepository.deletePhotoBySpace(space);
+        photoRepository.deleteBySpace(space);
         awsS3Cloud.deleteAllContents(spaceCode);
     }
 }
