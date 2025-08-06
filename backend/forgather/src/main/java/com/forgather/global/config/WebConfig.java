@@ -6,9 +6,12 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import com.forgather.global.auth.resolver.HostIdArgumentResolver;
+
+import com.forgather.global.logging.TraceIdInterceptor;
 
 import lombok.RequiredArgsConstructor;
 
@@ -17,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 public class WebConfig implements WebMvcConfigurer {
 
     private final CorsProperties corsProperties;
+    private final TraceIdInterceptor traceIdInterceptor;
     private final HostIdArgumentResolver hostIdArgumentResolver;
 
     @Override
@@ -35,5 +39,10 @@ public class WebConfig implements WebMvcConfigurer {
         pageableResolver.setOneIndexedParameters(true); // 1부터 시작
         resolvers.add(pageableResolver);
         resolvers.add(hostIdArgumentResolver);
+    }
+
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(traceIdInterceptor);
     }
 }

@@ -1,6 +1,6 @@
 import uploadImage from '@assets/images/upload.png';
 import { useNavigate } from 'react-router-dom';
-import CompletePage from '../../components/layout/completePage/CompletePage';
+import MessageLayout from '../../components/layout/MessageLayout/MessageLayout';
 import { COMPLETE } from '../../constants/messages';
 import { ROUTES } from '../../constants/routes';
 
@@ -13,7 +13,7 @@ const UploadCompletePage = () => {
   };
 
   return (
-    <CompletePage
+    <MessageLayout
       image={uploadImage}
       title={COMPLETE.UPLOAD.TITLE}
       description={COMPLETE.UPLOAD.DESCRIPTION}

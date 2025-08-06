@@ -12,6 +12,9 @@ export const ROUTES = {
     DOWNLOAD: '/complete/download',
     SPACE_CREATED: '/complete/space-created',
   },
+  ERROR: {
+    NETWORK: '/network-error',
+  },
 } as const;
 
 export const HIGHLIGHT_PAGES: readonly string[] = [

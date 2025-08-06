@@ -8,7 +8,7 @@ const meta: Meta<typeof Button> = {
     variant: {
       description: '버튼의 스타일 variant',
       control: { type: 'select' },
-      options: ['primary', 'secondary', 'tertiary'],
+      options: ['primary', 'secondary', 'tertiary', 'darkRounded'],
     },
     text: {
       description: '버튼에 표시될 텍스트',
@@ -61,5 +61,12 @@ export const Disabled: Story = {
     text: 'Disabled Button',
     onClick: () => {},
     disabled: true,
+  },
+};
+
+export const DarkRounded: Story = {
+  args: {
+    variant: 'darkRounded',
+    text: 'Dark Rounded Button',
   },
 };
