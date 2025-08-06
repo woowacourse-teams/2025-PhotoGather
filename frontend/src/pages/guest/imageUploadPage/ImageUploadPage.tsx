@@ -24,7 +24,8 @@ const ImageUploadPage = () => {
     isUploading,
     handleFilesUploadClick,
     handleFilesDrop,
-    handleUpload,
+    handleUploadFiles,
+    handleDeleteFile,
   } = useFileUpload({ fileType: 'image', showError: showToast });
 
   const hasImages = Array.isArray(previewData) && previewData.length > 0;
@@ -35,7 +36,7 @@ const ImageUploadPage = () => {
   const navigate = useNavigate();
 
   const handleUploadClick = async () => {
-    const uploadSuccess = await handleUpload();
+    const uploadSuccess = await handleUploadFiles();
     if (uploadSuccess) {
       navigate(ROUTES.COMPLETE.UPLOAD);
     }
@@ -84,7 +85,7 @@ const ImageUploadPage = () => {
             photoData={previewData}
             rowImageAmount={3}
             onImageClick={() => {}}
-            onDeleteClick={() => {}}
+            onDeleteClick={handleDeleteFile}
           />
           <S.TopButtonContainer $isVisible={!isAtPageTop}>
             <FloatingIconButton
