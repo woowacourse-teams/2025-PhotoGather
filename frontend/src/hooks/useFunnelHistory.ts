@@ -11,7 +11,6 @@ const useFunnelHistory = <TStep extends string>(
 
     const currentState = {
       funnelStep: step,
-      timestamp: Date.now(),
     };
 
     const currentHistoryState = window.history.state;
