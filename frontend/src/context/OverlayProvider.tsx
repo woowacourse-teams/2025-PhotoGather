@@ -14,13 +14,13 @@ const defaultOverlayClickOption = {
   clickOverlayClose: false,
 };
 
-export type OverlaySubmitResult = unknown;
+type OverlaySubmitResult = unknown;
 
-export type OverlayOption = {
+type OverlayOption = {
   clickOverlayClose?: boolean;
 };
 
-export type OverlayOpenFn = (
+type OverlayOpenFn = (
   children: ReactNode,
   option?: OverlayOption,
 ) => Promise<OverlaySubmitResult> | null;
