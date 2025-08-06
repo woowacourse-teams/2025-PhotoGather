@@ -13,14 +13,16 @@ import * as S from './SpaceCreateFunnel.styles';
 const PROGRESS_STEP_LIST = ['name', 'date', 'time', 'check'] as const;
 const STEP_LIST = [...PROGRESS_STEP_LIST, 'complete', 'fetch'] as const;
 type STEP = (typeof STEP_LIST)[number];
+const initialFunnelValue = {
+  name: '',
+  date: '',
+  time: '',
+};
 
 const SpaceCreateFunnel = () => {
   const [step, setStep] = useState<STEP>('name');
-  const [spaceInfo, setSpaceInfo] = useState<SpaceFunnelInfo>({
-    name: '',
-    date: '',
-    time: '',
-  });
+  const [spaceInfo, setSpaceInfo] =
+    useState<SpaceFunnelInfo>(initialFunnelValue);
 
   const { navigateToNext } = useFunnelHistory<STEP>(step, setStep);
 
