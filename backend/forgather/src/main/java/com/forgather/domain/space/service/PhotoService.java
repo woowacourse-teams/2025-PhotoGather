@@ -21,7 +21,6 @@ import com.forgather.domain.space.repository.PhotoRepository;
 import com.forgather.domain.space.repository.SpaceRepository;
 import com.forgather.domain.space.util.MetaDataExtractor;
 import com.forgather.domain.space.util.ZipGenerator;
-import com.forgather.global.logging.LogFormatter;
 import com.forgather.global.logging.Logger;
 
 import lombok.RequiredArgsConstructor;

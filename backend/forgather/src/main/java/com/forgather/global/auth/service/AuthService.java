@@ -6,7 +6,7 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 import com.forgather.global.auth.client.KakaoAuthClient;
-import com.forgather.global.auth.client.KakaoLoginTokenDto;
+import com.forgather.global.auth.client.KakaoTokenDto;
 import com.forgather.global.auth.domain.KakaoHost;
 import com.forgather.global.auth.domain.RefreshToken;
 import com.forgather.global.auth.dto.KakaoLoginUrlResponse;
@@ -36,9 +36,9 @@ public class AuthService {
 
     @Transactional
     public LoginResponse requestKakaoLoginToken(String authorizationCode) {
-        KakaoLoginTokenDto.KakaoLoginTokenResponse response = kakaoAuthClient.requestKakaoLoginToken(authorizationCode);
-        KakaoLoginTokenDto.UserInfo userInfo = jwtParser.parseIdToken(response.idToken());
-        KakaoHost kakaoHost = loginWithKakao(response, userInfo);
+        KakaoTokenDto.FullToken response = kakaoAuthClient.requestKakaoLoginToken(authorizationCode);
+        KakaoTokenDto.IdToken idToken = jwtParser.parseIdToken(response.idToken());
+        KakaoHost kakaoHost = loginWithKakao(response, idToken);
 
         RefreshToken refreshToken = RefreshToken.generate(kakaoHost, randomCodeGenerator);
         refreshTokenRepository.save(refreshToken);
@@ -46,14 +46,14 @@ public class AuthService {
         return LoginResponse.of(kakaoHost, refreshToken);
     }
 
-    private KakaoHost loginWithKakao(KakaoLoginTokenDto.KakaoLoginTokenResponse response,
-        KakaoLoginTokenDto.UserInfo userInfo) {
-        Optional<KakaoHost> kakaoHost = kakaoHostRepository.findByUserId(userInfo.sub());
+    private KakaoHost loginWithKakao(KakaoTokenDto.FullToken response,
+        KakaoTokenDto.IdToken idToken) {
+        Optional<KakaoHost> kakaoHost = kakaoHostRepository.findByUserId(idToken.sub());
         return kakaoHost.orElseGet(() -> kakaoHostRepository.save(
             new KakaoHost(
-                userInfo.nickname(),
-                userInfo.picture(),
-                userInfo.sub()
+                idToken.nickname(),
+                idToken.picture(),
+                idToken.sub()
             )));
     }
 
@@ -70,7 +70,7 @@ public class AuthService {
 
     public LoginResponse refreshLoginSession(String refreshTokenStr) {
         RefreshToken refreshToken = refreshTokenRepository.getByToken(refreshTokenStr);
-        if (refreshToken.isExpired()) {
+        if (refreshToken.isExpired(LocalDateTime.now())) {
             throw new IllegalArgumentException("리프레시 토큰이 만료되었습니다.");
         }
         return LoginResponse.of(refreshToken.getHost(), refreshToken);

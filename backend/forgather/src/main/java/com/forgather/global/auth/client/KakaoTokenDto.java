@@ -4,19 +4,13 @@ import static com.fasterxml.jackson.databind.PropertyNamingStrategies.SnakeCaseS
 
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 
-public class KakaoLoginTokenDto {
+public class KakaoTokenDto {
 
-    @JsonNaming(SnakeCaseStrategy.class)
-    public record KakaoLoginTokenRequest(
-        String grantType,
-        String clientId,
-        String redirectUri,
-        String code
-    ) {
+    private KakaoTokenDto() {
     }
 
     @JsonNaming(SnakeCaseStrategy.class)
-    public record KakaoLoginTokenResponse(
+    public record FullToken(
         // 사용자 액세스 토큰 값
         String accessToken,
 
@@ -41,7 +35,7 @@ public class KakaoLoginTokenDto {
     }
 
     @JsonNaming(SnakeCaseStrategy.class)
-    public record UserInfo(
+    public record IdToken(
         // ID 토큰이 발급된 앱의 앱 키
         String aud,
 

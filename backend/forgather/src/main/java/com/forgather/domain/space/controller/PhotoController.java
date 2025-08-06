@@ -27,7 +27,6 @@ import com.forgather.domain.space.dto.PhotoResponse;
 import com.forgather.domain.space.dto.PhotosResponse;
 import com.forgather.domain.space.service.PhotoService;
 import com.forgather.global.auth.annotation.HostId;
-import com.forgather.global.logging.LogFormatter;
 import com.forgather.global.logging.Logger;
 
 import io.swagger.v3.oas.annotations.Operation;

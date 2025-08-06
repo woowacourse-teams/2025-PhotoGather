@@ -26,7 +26,7 @@ public class KakaoAuthClient {
         return urlBuilder.toString();
     }
 
-    public KakaoLoginTokenDto.KakaoLoginTokenResponse requestKakaoLoginToken(String authorizationCode) {
+    public KakaoTokenDto.FullToken requestKakaoLoginToken(String authorizationCode) {
         StringBuilder urlBuilder = new StringBuilder("https://kauth.kakao.com/oauth/token");
         urlBuilder.append("?grant_type=authorization_code");
         urlBuilder.append("&client_id=").append(kakaoProperties.getClientId());
@@ -36,6 +36,6 @@ public class KakaoAuthClient {
         return restClient.post()
                 .uri(urlBuilder.toString())
                 .retrieve()
-                .body(KakaoLoginTokenDto.KakaoLoginTokenResponse.class);
+                .body(KakaoTokenDto.FullToken.class);
     }
 }
