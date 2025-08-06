@@ -43,13 +43,6 @@ const ImageUploadPage = () => {
     }
   };
 
-  //TODO: 에러 토스트 구현 후 사라질 로직
-  useEffect(() => {
-    if (errorMessage) {
-      alert(errorMessage);
-    }
-  }, [errorMessage]);
-
   if (isUploading) {
     return (
       <S.Wrapper $hasImages={hasImages}>
@@ -65,7 +58,6 @@ const ImageUploadPage = () => {
       </S.Wrapper>
     );
   }
-
 
   return (
     <S.Wrapper $hasImages={hasImages}>
