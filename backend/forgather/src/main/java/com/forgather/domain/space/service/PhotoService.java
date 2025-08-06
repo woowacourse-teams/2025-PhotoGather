@@ -95,4 +95,38 @@ public class PhotoService {
         FileSystemUtils.deleteRecursively(spaceContents);
         return zipFile;
     }
+
+    @Transactional
+    public void delete(String spaceCode, Long photoId) {
+        Space space = spaceRepository.getBySpaceCode(spaceCode);
+        Photo photo = photoRepository.getById(photoId);
+        photo.validateSpace(space);
+        photoRepository.delete(photo);
+        awsS3Cloud.deleteContent(photo.getPath());
+    }
+
+    /**
+     * S3 삭제 이후 실패 시 롤백 고려
+     */
+    @Transactional
+    public void deleteSelected(String spaceCode, List<Long> photoIds) {
+        Space space = spaceRepository.getBySpaceCode(spaceCode);
+        List<Photo> photos = photoRepository.findAllByIdIn(photoIds);
+        photos.forEach(photo -> photo.validateSpace(space));
+        List<String> paths = photos.stream()
+            .map(Photo::getPath)
+            .toList();
+        photoRepository.deleteBySpaceAndPhotoIds(space, photoIds);
+        awsS3Cloud.deleteSelectedContents(paths);
+    }
+
+    /**
+     * S3 삭제 이후 실패 시 롤백 고려
+     */
+    @Transactional
+    public void deleteAll(String spaceCode) {
+        Space space = spaceRepository.getBySpaceCode(spaceCode);
+        photoRepository.deleteBySpace(space);
+        awsS3Cloud.deleteAllContents(spaceCode);
+    }
 }
