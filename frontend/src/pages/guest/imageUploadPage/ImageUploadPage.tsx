@@ -1,5 +1,4 @@
 import downloadLoadingSpinner from '@assets/loading-spinner.gif';
-import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ReactComponent as ArrowUpSvg } from '../../../@assets/icons/upwardArrow.svg';
 import FloatingActionButton from '../../../components/@common/buttons/floatingActionButton/FloatingActionButton';
@@ -11,6 +10,7 @@ import UploadBox from '../../../components/uploadBox/UploadBox';
 import { ROUTES } from '../../../constants/routes';
 import useFileUpload from '../../../hooks/@common/useFileUpload';
 import useIntersectionObserver from '../../../hooks/@common/useIntersectionObserver';
+import { useToast } from '../../../hooks/@common/useToast';
 import { ScrollableBlurArea } from '../../../styles/@common/ScrollableBlurArea';
 import { theme } from '../../../styles/theme';
 import { goToTop } from '../../../utils/goToTop';
@@ -18,14 +18,14 @@ import * as S from './ImageUploadPage.styles';
 import { mockSpaceData } from './mockSpaceData';
 
 const ImageUploadPage = () => {
+  const { showToast } = useToast();
   const {
     previewData,
-    errorMessage,
     isUploading,
     handleFilesUploadClick,
     handleFilesDrop,
     handleUpload,
-  } = useFileUpload({ fileType: 'image' });
+  } = useFileUpload({ fileType: 'image', showError: showToast });
 
   const hasImages = Array.isArray(previewData) && previewData.length > 0;
   const { targetRef: hideBlurAreaTriggerRef, isIntersecting: isAtPageBottom } =
@@ -41,13 +41,6 @@ const ImageUploadPage = () => {
     }
   };
 
-  //TODO: 에러 토스트 구현 후 사라질 로직
-  useEffect(() => {
-    if (errorMessage) {
-      alert(errorMessage);
-    }
-  }, [errorMessage]);
-
   return (
     <S.Wrapper $hasImages={hasImages}>
       {isUploading && (
@@ -55,7 +48,6 @@ const ImageUploadPage = () => {
           <img src={downloadLoadingSpinner} alt="loading" />
         </S.LoadingSpinnerContainer>
       )}
-
       <S.ScrollTopAnchor ref={scrollTopTriggerRef} />
       <SpaceHeader
         title={`${mockSpaceData.name}`}
