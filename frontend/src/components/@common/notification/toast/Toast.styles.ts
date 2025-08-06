@@ -1,14 +1,11 @@
 import { ReactComponent as InfoIcon } from '@assets/icons/info.svg';
 import styled from '@emotion/styled';
-import type { ToastPositionType } from '../../../../types/toast.type';
 
 export const Wrapper = styled.div<{
-  $position: ToastPositionType;
   $visible: boolean;
 }>`
   pointer-events: auto;
   z-index: ${({ theme }) => theme.zIndex.toast};
-  ${({ $position }) => ($position === 'top' ? 'top: 20px;' : 'bottom: 20px;')}
   display: flex;
   max-width: ${({ theme }) =>
     `${parseInt(theme.layout.width) - parseInt(theme.layout.padding.leftRight)}px`};

@@ -1,21 +1,9 @@
 import { useEffect, useState } from 'react';
 import { theme } from '../../../../styles/theme';
-import type {
-  ToastBase,
-  ToastPositionType,
-} from '../../../../types/toast.type';
+import type { ToastBase } from '../../../../types/toast.type';
 import * as S from './Toast.styles';
 
-export interface ToastProp extends ToastBase {
-  position?: ToastPositionType;
-}
-
-export const Toast = ({
-  text,
-  type = 'info',
-  duration = 3000,
-  position = 'bottom',
-}: ToastProp) => {
+export const Toast = ({ text, type = 'info', duration = 3000 }: ToastBase) => {
   const [progress, setProgress] = useState(0);
   const [visible, setVisible] = useState(true);
 
@@ -41,7 +29,7 @@ export const Toast = ({
   }, [duration]);
 
   return (
-    <S.Wrapper $position={position} $visible={visible}>
+    <S.Wrapper $visible={visible}>
       <S.TimerContainer
         type={type}
         style={{
