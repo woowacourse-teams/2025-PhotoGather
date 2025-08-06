@@ -1,8 +1,8 @@
 import { checkIsPastDateTime } from '../src/utils/checkIsPastDateTime';
 
 beforeAll(() => {
-  const fixedNow = new Date('2025-07-31T10:00:00Z').getTime();
-  global.Date.now = () => fixedNow;
+  jest.useFakeTimers();
+  jest.setSystemTime(new Date('2025-07-31T10:00:00Z'));
 });
 
 afterAll(() => {

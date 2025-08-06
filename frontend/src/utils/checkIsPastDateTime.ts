@@ -1,4 +1,4 @@
-export const checkIsPastDateTime = (date: string, time: string): boolean => {
+export const checkIsPastDateTime = (date: string, time: string) => {
   const kstDateString = `${date}T${time}:00+09:00`;
   const input = new Date(kstDateString);
 
