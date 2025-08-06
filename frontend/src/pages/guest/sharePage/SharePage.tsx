@@ -8,13 +8,13 @@ import IconLabelButton from '../../../components/@common/buttons/iconLabelButton
 import HighlightText from '../../../components/@common/highlightText/HighlightText';
 import InfoBox from '../../../components/@common/infoBox/InfoBox';
 import { INFORMATION } from '../../../constants/messages';
+import { theme } from '../../../styles/theme';
 import { copyLinkToClipboard } from '../../../utils/copyLinkToClipboard';
 import * as S from './SharePage.styles';
 
 const SharePage = () => {
   const location = useLocation();
   const spaceCode = location.state;
-  const KAKAOTALK_COLOR = '#ffeb00'; // 카카오톡 고정색깔
 
   const handleSpaceHomeButton = () => {
     console.log('클릭');
@@ -54,7 +54,7 @@ const SharePage = () => {
             <IconLabelButton icon={<QrIcon />} />
             <IconLabelButton
               icon={<KakaoTalkIcon />}
-              style={{ backgroundColor: KAKAOTALK_COLOR }}
+              style={{ backgroundColor: theme.colors.kakaoTalk }}
             />
           </S.IconLabelButtonContainer>
         </S.ShareContainer>
