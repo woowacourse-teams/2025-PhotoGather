@@ -17,13 +17,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
+import com.forgather.domain.space.dto.DownloadPhotosRequest;
 import com.forgather.domain.space.dto.PhotoResponse;
 import com.forgather.domain.space.dto.PhotosResponse;
 import com.forgather.domain.space.service.PhotoService;
@@ -78,9 +79,9 @@ public class PhotoController {
     @Operation(summary = "사진 zip 선택 다운로드", description = "특정 공간의 선택된 사진을 zip 파일로 다운로드합니다.")
     public ResponseEntity<StreamingResponseBody> downloadSelected(
         @PathVariable(name = "spaceCode") String spaceCode,
-        @RequestParam(name = "photoIds") List<Long> photoIds
+        @RequestBody DownloadPhotosRequest request
     ) throws IOException {
-        File zipFile = photoService.compressSelected(spaceCode, photoIds);
+        File zipFile = photoService.compressSelected(spaceCode, request);
 
         ContentDisposition contentDisposition = ContentDisposition.attachment()
             .filename(zipFile.getName(), StandardCharsets.UTF_8)
