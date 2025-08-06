@@ -14,10 +14,12 @@ import org.springframework.http.ContentDisposition;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -110,5 +112,37 @@ public class PhotoController {
         return ResponseEntity.ok()
             .headers(httpHeaders)
             .body(responseBody);
+    }
+
+    @DeleteMapping("/{photoId}")
+    @Operation(summary = "사진 단건 삭제", description = "특정 공간의 단건 사진을 삭제합니다.")
+    public ResponseEntity<Void> delete(
+        @PathVariable(name = "spaceCode") String spaceCode,
+        @PathVariable(name = "photoId") Long photoId
+    ) {
+        photoService.delete(spaceCode, photoId);
+        return ResponseEntity.noContent()
+            .build();
+    }
+
+    @DeleteMapping("/selected")
+    @Operation(summary = "사진 선택 삭제", description = "특정 공간의 선택된 사진을 삭제합니다.")
+    public ResponseEntity<Void> deleteSelected(
+        @PathVariable(name = "spaceCode") String spaceCode,
+        @RequestParam(name = "photoIds") List<Long> photoIds
+    ) {
+        photoService.deleteSelected(spaceCode, photoIds);
+        return ResponseEntity.noContent()
+            .build();
+    }
+
+    @DeleteMapping
+    @Operation(summary = "사진 일괄 삭제", description = "특정 공간의 사진을 일괄 삭제합니다.")
+    public ResponseEntity<Void> deleteAll(
+        @PathVariable(name = "spaceCode") String spaceCode
+    ) {
+        photoService.deleteAll(spaceCode);
+        return ResponseEntity.noContent()
+            .build();
     }
 }
