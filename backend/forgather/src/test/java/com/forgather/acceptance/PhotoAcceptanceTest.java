@@ -55,7 +55,7 @@ class PhotoAcceptanceTest extends AcceptanceTest {
         // when
         var response = RestAssuredMockMvc.given()
             .when()
-            .get("/spaces/{spaceCode}/photos/{photoId}", space.getSpaceCode(), photo.getId())
+            .get("/spaces/{spaceCode}/photos/{photoId}", space.getCode(), photo.getId())
             .then()
             .extract();
 
