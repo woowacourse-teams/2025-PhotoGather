@@ -15,6 +15,14 @@ public class JwtParser {
 
     private final ObjectMapper objectMapper;
 
+    /**
+     * TODO
+     * jwt 검증 필요.
+     *
+     * // 카카오 공개 키 가져오기 (JWK)
+     * GET https://kauth.kakao.com/.well-known/jwks.json
+     * → JWT의 kid 헤더를 기반으로 해당 키를 찾아 사용
+     */
     public KakaoLoginTokenDto.UserInfo parseIdToken(String idToken) {
         try {
             String payload = idToken.split("\\.")[1];
