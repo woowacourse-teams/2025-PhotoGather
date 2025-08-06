@@ -1,6 +1,6 @@
 import type React from 'react';
 import type { PropsWithChildren } from 'react';
-import * as S from './Overlay.styles';
+import * as S from '../../../styles/@common/BackDrop.styles';
 
 interface OverlayProps {
   onClose: () => void;
@@ -21,11 +21,11 @@ const Overlay = ({ onClose, closeOnOverlayClick, children }: Props) => {
   };
 
   return (
-    <S.Overlay onClick={handleBackDropClick}>
-      <S.OverlayContainer onClick={handleStopBubbling}>
+    <S.BackDrop onClick={handleBackDropClick}>
+      <S.BackDropContainer onClick={handleStopBubbling}>
         {children}
-      </S.OverlayContainer>
-    </S.Overlay>
+      </S.BackDropContainer>
+    </S.BackDrop>
   );
 };
 
