@@ -1,8 +1,10 @@
+import { NETWORK } from '../constants/errors';
 import type {
   ApiResponse,
   BodyContentType,
   requestOptionsType,
 } from '../types/api.type';
+import { isNetworkError } from '../utils/isNetworkError';
 import { BASE_URL } from './config';
 import { createBody } from './createBody';
 import { createHeaders } from './createHeaders';
@@ -59,21 +61,31 @@ const request = async <T>(
 
     const data = await response.json();
 
-    if (response.ok) {
+    if (!response.ok) {
       return {
-        success: true,
-        data: data as T,
+        success: false,
+        error: data?.message || `Error: ${response.status}`,
       };
     }
 
     return {
-      success: false,
-      error: data?.message || `Error: ${response.status}`,
+      success: true,
+      data: data as T,
     };
   } catch (error) {
+    const getErrorMessage = (error: unknown): string => {
+      if (isNetworkError(error)) {
+        return NETWORK.DEFAULT;
+      }
+      if (error instanceof Error) {
+        return error.message;
+      }
+      return 'Unknown error';
+    };
+
     return {
       success: false,
-      error: error instanceof Error ? error.message : 'Network error',
+      error: getErrorMessage(error),
     };
   }
 };

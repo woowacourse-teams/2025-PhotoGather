@@ -35,8 +35,10 @@ const ImageUploadPage = () => {
   const navigate = useNavigate();
 
   const handleUploadClick = async () => {
-    await handleUpload();
-    navigate(ROUTES.COMPLETE.UPLOAD);
+    const uploadSuccess = await handleUpload();
+    if (uploadSuccess) {
+      navigate(ROUTES.COMPLETE.UPLOAD);
+    }
   };
 
   return (

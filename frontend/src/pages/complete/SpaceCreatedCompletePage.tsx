@@ -1,6 +1,6 @@
 import spaceCreateImage from '@assets/images/space_create.png';
 import { useNavigate } from 'react-router-dom';
-import CompletePage from '../../components/layout/completePage/CompletePage';
+import MessageLayout from '../../components/layout/MessageLayout/MessageLayout';
 import { COMPLETE } from '../../constants/messages';
 import { ROUTES } from '../../constants/routes';
 
@@ -13,7 +13,7 @@ const SpaceCreatedCompletePage = () => {
   };
 
   return (
-    <CompletePage
+    <MessageLayout
       image={spaceCreateImage}
       title={COMPLETE.SPACE_CREATED.TITLE}
       description={COMPLETE.SPACE_CREATED.DESCRIPTION}
