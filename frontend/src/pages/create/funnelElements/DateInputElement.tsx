@@ -12,12 +12,12 @@ const DateInputElement = ({
 
   const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const todayDateString = new Date(Date.now()).toISOString().split('T')[0];
-    const selected = e.target.value;
-    if (selected < todayDateString) {
+    const selectedDate = e.target.value;
+    if (selectedDate < todayDateString) {
       alert('오늘 이전 날짜는 선택할 수 없습니다.');
       return;
     }
-    setDate(selected);
+    setDate(selectedDate);
   };
 
   return (
