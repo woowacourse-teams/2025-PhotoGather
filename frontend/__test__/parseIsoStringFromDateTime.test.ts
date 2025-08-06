@@ -5,6 +5,7 @@ describe('parseIsoStringFromDateTime 유틸 테스트', () => {
     const date = '2025-08-20';
     const time = '20:57';
     const result = '2025-08-20T11:57:00.000Z';
+
     expect(parseIsoStringFromDateTime(date, time)).toBe(result);
   });
 });
