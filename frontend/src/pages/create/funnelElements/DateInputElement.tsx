@@ -2,6 +2,7 @@ import { useState } from 'react';
 import DateTimeInput from '../../../components/@common/inputs/DateTimeInput';
 import { ERROR, INFORMATION } from '../../../constants/messages';
 import type { FunnelElementProps } from '../../../types/funnel.type';
+import { calculateKSTDate } from '../../../utils/calculateKSTDate';
 import FunnelBasePage from '../funnel/FunnelBasePage/FunnelBasePage';
 
 const DateInputElement = ({
@@ -10,11 +11,11 @@ const DateInputElement = ({
 }: FunnelElementProps) => {
   const [date, setDate] = useState(initialValue);
   const isDisabled = date.length === 0;
+  const { kstDateString } = calculateKSTDate();
 
   const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const todayDateString = new Date(Date.now()).toISOString().split('T')[0];
     const selectedDate = e.target.value;
-    if (selectedDate < todayDateString) {
+    if (selectedDate < kstDateString) {
       alert(ERROR.INPUT.DATE);
       return;
     }
@@ -32,7 +33,7 @@ const DateInputElement = ({
         <DateTimeInput
           inputType="date"
           value={date}
-          min={new Date().toISOString().split('T')[0]}
+          min={kstDateString}
           onChange={handleDateChange}
           data-testid="date-input"
         />
