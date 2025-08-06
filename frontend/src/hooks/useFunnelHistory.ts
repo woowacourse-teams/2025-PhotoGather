@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useRef } from 'react';
 
-function useFunnelHistory<TStep extends string>(
+const useFunnelHistory = <TStep extends string>(
   step: TStep,
   setStep: (step: TStep) => void,
-) {
+) => {
   const isInitialized = useRef(false);
 
   const setupHistory = useCallback(() => {
@@ -52,6 +52,6 @@ function useFunnelHistory<TStep extends string>(
   }, []);
 
   return { navigateToNext };
-}
+};
 
 export default useFunnelHistory;
