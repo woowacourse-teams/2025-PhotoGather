@@ -70,6 +70,13 @@ public class PhotoService {
         }
     }
 
+    public File compressSelected(String spaceCode, List<Long> photoIds) throws IOException {
+        Space space = spaceRepository.getBySpaceCode(spaceCode);
+        List<Photo> photos = photoRepository.findAllByIdIn(photoIds);
+        photos.forEach(photo -> photo.validateSpace(space));
+        return compressPhotoFile(spaceCode, photos);
+    }
+
     /**
      * TODO
      * 파일 삭제 트랜잭션 분리
@@ -77,10 +84,18 @@ public class PhotoService {
      */
     public File compressAll(String spaceCode) throws IOException {
         Space space = spaceRepository.getBySpaceCode(spaceCode);
-        List<String> photoPaths = photoRepository.findAllBySpace(space)
-            .stream()
+        List<Photo> photos = photoRepository.findAllBySpace(space);
+        return compressPhotoFile(spaceCode, photos);
+    }
+
+    private List<String> getPhotoPaths(List<Photo> photos) {
+        return photos.stream()
             .map(Photo::getPath)
             .toList();
+    }
+
+    private File compressPhotoFile(String spaceCode, List<Photo> photos) throws IOException {
+        List<String> photoPaths = getPhotoPaths(photos);
         File spaceContents = awsS3Cloud.downloadSelected(downloadTempPath.toString(), spaceCode, photoPaths);
 
         File zipFile = ZipGenerator.generate(downloadTempPath, spaceContents, spaceCode);
