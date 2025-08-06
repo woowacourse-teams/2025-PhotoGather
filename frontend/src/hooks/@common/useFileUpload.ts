@@ -17,7 +17,6 @@ const useFileUpload = ({ fileType, showError }: UseFileUploadProps) => {
   const [files, setFiles] = useState<File[]>([]);
   const [previewData, setPreviewData] = useState<PreviewFile[]>([]);
   const [isUploading, setIsUploading] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('');
   const { safeApiCall } = useApiCall();
 
   const addPreviewUrlsFromFiles = (files: File[]) => {
