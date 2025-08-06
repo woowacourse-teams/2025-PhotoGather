@@ -2,14 +2,12 @@ import type React from 'react';
 import type { PropsWithChildren } from 'react';
 import * as S from '../../../styles/@common/BackDrop.styles';
 
-interface OverlayProps {
+interface OverlayProps extends PropsWithChildren {
   onClose: () => void;
   closeOnOverlayClick: boolean;
 }
 
-type Props = OverlayProps & PropsWithChildren;
-
-const Overlay = ({ onClose, closeOnOverlayClick, children }: Props) => {
+const Overlay = ({ onClose, closeOnOverlayClick, children }: OverlayProps) => {
   const handleBackDropClick = () => {
     if (closeOnOverlayClick) {
       onClose();
