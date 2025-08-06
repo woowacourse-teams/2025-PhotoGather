@@ -10,6 +10,6 @@ public record CreateSpaceResponse(
 ) {
 
     public static CreateSpaceResponse from(Space space) {
-        return new CreateSpaceResponse(space.getCode());
+        return new CreateSpaceResponse(space.getSpaceCode());
     }
 }

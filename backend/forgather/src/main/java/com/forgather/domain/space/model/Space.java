@@ -26,7 +26,7 @@ public class Space extends BaseTimeEntity {
     private Long id;
 
     @Column(name = "space_code", nullable = false, length = 64)
-    private String code;
+    private String spaceCode;
 
     @Column(name = "password", length = 64)
     private String password;
@@ -40,8 +40,8 @@ public class Space extends BaseTimeEntity {
     @Column(name = "expired_at", nullable = false)
     private LocalDateTime expiredAt;
 
-    public Space(String code, String password, String name, LocalDateTime openedAt) {
-        this.code = code;
+    public Space(String spaceCode, String password, String name, LocalDateTime openedAt) {
+        this.spaceCode = spaceCode;
         this.password = password;
         this.name = name;
         this.openedAt = openedAt;
