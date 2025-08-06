@@ -25,8 +25,8 @@ export const Icon = styled.button`
 `;
 
 export const TimerContainer = styled.div`
-    display: flex;
-    gap: 7px;
+  display: flex;
+  gap: 7px;
 `;
 
 export const TextContainer = styled.p<{ isWithinOneHour: boolean }>`
