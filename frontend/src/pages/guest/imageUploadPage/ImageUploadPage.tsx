@@ -10,6 +10,7 @@ import UploadBox from '../../../components/uploadBox/UploadBox';
 import { ROUTES } from '../../../constants/routes';
 import useFileUpload from '../../../hooks/@common/useFileUpload';
 import useIntersectionObserver from '../../../hooks/@common/useIntersectionObserver';
+import { useToast } from '../../../hooks/@common/useToast';
 import { ScrollableBlurArea } from '../../../styles/@common/ScrollableBlurArea';
 import { theme } from '../../../styles/theme';
 import { goToTop } from '../../../utils/goToTop';
@@ -17,13 +18,14 @@ import * as S from './ImageUploadPage.styles';
 import { mockSpaceData } from './mockSpaceData';
 
 const ImageUploadPage = () => {
+  const { showToast } = useToast();
   const {
     previewData,
     isUploading,
     handleFilesUploadClick,
     handleFilesDrop,
     handleUpload,
-  } = useFileUpload({ fileType: 'image' });
+  } = useFileUpload({ fileType: 'image', showError: showToast });
 
   const hasImages = Array.isArray(previewData) && previewData.length > 0;
   const { targetRef: hideBlurAreaTriggerRef, isIntersecting: isAtPageBottom } =

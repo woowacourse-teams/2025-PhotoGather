@@ -2,18 +2,19 @@ import { useState } from 'react';
 import { photoService } from '../../apis/services/photo.service';
 import { CONSTRAINTS } from './../../constants/constraints';
 import type { PreviewFile } from '../../types/file.type';
+import type { ToastBase } from '../../types/toast.type';
 import { isValidFileType } from '../../utils/isValidFileType';
-import { useToast } from './useToast';
 
 interface UseFileUploadProps {
   fileType: string;
+  //TODO: 추후 다른 에러 ui가 들어온다면, 타입 변경 필수
+  showError: (options: ToastBase) => void;
 }
 
-const useFileUpload = ({ fileType }: UseFileUploadProps) => {
+const useFileUpload = ({ fileType, showError }: UseFileUploadProps) => {
   const [files, setFiles] = useState<File[]>([]);
   const [previewData, setPreviewData] = useState<PreviewFile[]>([]);
   const [isUploading, setIsUploading] = useState(false);
-  const { showToast } = useToast();
 
   const addPreviewUrlsFromFiles = (files: File[]) => {
     const startIndex = previewData.length;
@@ -45,12 +46,12 @@ const useFileUpload = ({ fileType }: UseFileUploadProps) => {
     const hasInvalidFiles = invalidFiles.length > 0;
 
     if (!isUnderUploadLimit) {
-      showToast({
+      showError({
         text: `한 번에 ${CONSTRAINTS.MAX_FILE_COUNT}장까지 올릴 수 있어요`,
       });
     }
     if (hasInvalidFiles) {
-      showToast({
+      showError({
         text: `이미지 파일만 업로드 가능해요. 파일을 다시 확인해주세요.`,
       });
     }
