@@ -3,6 +3,7 @@ import styled from '@emotion/styled';
 
 export const Wrapper = styled.div<{
   $visible: boolean;
+  $type: string;
 }>`
   pointer-events: auto;
   z-index: ${({ theme }) => theme.zIndex.toast};
@@ -11,7 +12,8 @@ export const Wrapper = styled.div<{
     `${parseInt(theme.layout.width) - parseInt(theme.layout.padding.leftRight)}px`};
   max-height: 100px;
   gap: 12px;
-  background-color: ${({ theme }) => theme.colors.gray06};
+  background-color: ${({ theme, $type }) =>
+    $type === 'error' ? theme.colors.lightError : theme.colors.lightAccent};
   padding: 8px 12px;
   border-radius: 50px;
   align-items: center;
@@ -22,7 +24,7 @@ export const Wrapper = styled.div<{
     transform 0.4s ease;
 `;
 
-export const TimerContainer = styled.div<{ type: string }>`
+export const TimerContainer = styled.div<{ $type: string }>`
   width: 26px;
   height: 26px;
   border-radius: 50%;
@@ -43,16 +45,16 @@ export const IconContainer = styled.div`
 `;
 
 export const TextContainer = styled.p`
-  color: ${({ theme }) => theme.colors.white};
+  color: ${({ theme }) => theme.colors.gray06};
   ${({ theme }) => theme.typography.captionSmall};
 `;
 
-export const Icon = styled(InfoIcon)<{ type: string }>`
+export const Icon = styled(InfoIcon)<{ $type: string }>`
   width: 100%;
   height: 100%;
   & circle {
-    fill: ${({ theme, type }) =>
-      type === 'error' ? theme.colors.lightError : theme.colors.darkAccent};
+    fill: ${({ theme, $type }) =>
+      $type === 'error' ? theme.colors.lightError : theme.colors.darkAccent};
   }
 
   & path {

@@ -29,9 +29,9 @@ export const Toast = ({ text, type = 'info', duration = 3000 }: ToastBase) => {
   }, [duration]);
 
   return (
-    <S.Wrapper $visible={visible}>
+    <S.Wrapper $visible={visible} $type={type}>
       <S.TimerContainer
-        type={type}
+        $type={type}
         style={{
           background: `conic-gradient(${
             type === 'error' ? theme.colors.error : theme.colors.darkAccent
@@ -39,7 +39,7 @@ export const Toast = ({ text, type = 'info', duration = 3000 }: ToastBase) => {
         }}
       >
         <S.IconContainer>
-          <S.Icon type={type} />
+          <S.Icon $type={type} />
         </S.IconContainer>
       </S.TimerContainer>
       <S.TextContainer>{text}</S.TextContainer>
