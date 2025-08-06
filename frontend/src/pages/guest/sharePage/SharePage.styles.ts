@@ -10,7 +10,6 @@ export const Wrapper = styled.div`
 export const TopContainer = styled.div`
   display: flex;
   flex-direction: column;
-  /* justify-content: center; */
   gap: 32px;
   flex-grow: 1;
 `;
