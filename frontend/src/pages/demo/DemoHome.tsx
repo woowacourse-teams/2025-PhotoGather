@@ -2,7 +2,6 @@ import rocketImage from '@assets/images/rocket.png';
 import * as Sentry from '@sentry/react';
 import { useNavigate } from 'react-router-dom';
 import Button from '../../components/@common/buttons/button/Button';
-import LoadingLayout from '../../components/layout/LoadingLayout/LoadingLayout';
 import { ROUTES } from '../../constants/routes';
 import * as S from './DemoHome.styles';
 
@@ -20,33 +19,6 @@ const DemoHome = () => {
   };
   return (
     <S.Wrapper>
-      <LoadingLayout
-        iconList={[
-          {
-            src: rocketImage,
-            alt: '데모 페이지 아이콘',
-          },
-          {
-            src: rocketImage,
-            alt: '데모 페이지 아이콘',
-          },
-          {
-            src: rocketImage,
-            alt: '데모 페이지 아이콘',
-          },
-          {
-            src: rocketImage,
-            alt: '데모 페이지 아이콘',
-          },
-        ]}
-        descriptionList={[
-          '데모 페이지 설명',
-          '데모 페이지 설명',
-          '데모 페이지 설명',
-          '데모 페이지 설명',
-        ]}
-        percentage={0}
-      />
       <S.Icon src={rocketImage} alt="데모 페이지 아이콘"></S.Icon>
       <S.Title>Forgather DEMO</S.Title>
       <Button

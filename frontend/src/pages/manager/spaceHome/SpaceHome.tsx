@@ -1,3 +1,4 @@
+import rocketIcon from '@assets/images/rocket.png';
 import downloadLoadingSpinner from '@assets/loading-spinner.gif';
 import { useEffect } from 'react';
 import { ReactComponent as SaveIcon } from '../../../@assets/icons/download.svg';
@@ -7,6 +8,7 @@ import Button from '../../../components/@common/buttons/button/Button';
 import FloatingActionButton from '../../../components/@common/buttons/floatingActionButton/FloatingActionButton';
 import FloatingIconButton from '../../../components/@common/buttons/floatingIconButton/FloatingIconButton';
 import SpaceManagerImageGrid from '../../../components/@common/imageLayout/imageGrid/spaceManagerImageGrid/SpaceManagerImageGrid';
+import LoadingLayout from '../../../components/layout/LoadingLayout/LoadingLayout';
 import PhotoSelectionToolBar from '../../../components/photoSelectionToolBar/PhotoSelectionToolBar';
 import SpaceHeader from '../../../components/spaceHeader/SpaceHeader';
 import { INFORMATION } from '../../../constants/messages';
@@ -62,6 +64,21 @@ const SpaceHome = () => {
     fetchPhotosList();
   }, [isFetchSectionVisible, isEndPage]);
 
+  if (isDownloading) {
+    return (
+      <S.Wrapper>
+        <LoadingLayout
+          iconList={[
+            { src: rocketIcon, alt: '로딩 아이콘' },
+            { src: rocketIcon, alt: '로딩 아이콘' },
+            { src: rocketIcon, alt: '로딩 아이콘' },
+          ]}
+          descriptionList={['로딩 설명', '로딩 설명', '로딩 설명']}
+          percentage={0}
+        />
+      </S.Wrapper>
+    );
+  }
   return (
     <S.Wrapper>
       {isDownloading && (

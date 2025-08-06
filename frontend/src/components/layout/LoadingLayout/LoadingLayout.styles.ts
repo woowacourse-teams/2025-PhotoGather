@@ -4,6 +4,7 @@ export const Container = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  max-width: ${({ theme }) => theme.layout.width};
   width: 100%;
   height: 100%;
   position: relative;
