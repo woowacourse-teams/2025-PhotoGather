@@ -1,11 +1,11 @@
 import { useRef } from 'react';
 
-interface useInputLengthProps {
+interface UseInputLengthProps {
   value: string;
   maxCount: number;
 }
 
-const useInputLength = ({ value, maxCount }: useInputLengthProps) => {
+const useInputLength = ({ value, maxCount }: UseInputLengthProps) => {
   const isComposingRef = useRef<boolean>(false);
 
   const handleCompositionStart = () => {

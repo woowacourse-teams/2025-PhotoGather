@@ -1,16 +1,18 @@
 import downloadLoadingSpinner from '@assets/loading-spinner.gif';
 import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { ReactComponent as SaveIcon } from '../../../@assets/icons/download.svg';
 import { ReactComponent as SettingSvg } from '../../../@assets/icons/setting.svg';
 import { ReactComponent as ArrowUpSvg } from '../../../@assets/icons/upwardArrow.svg';
+import Button from '../../../components/@common/buttons/button/Button';
 import FloatingActionButton from '../../../components/@common/buttons/floatingActionButton/FloatingActionButton';
 import FloatingIconButton from '../../../components/@common/buttons/floatingIconButton/FloatingIconButton';
-import ImageGrid from '../../../components/@common/imageGrid/ImageGrid';
+import SpaceManagerImageGrid from '../../../components/@common/imageLayout/imageGrid/spaceManagerImageGrid/SpaceManagerImageGrid';
+import PhotoSelectionToolBar from '../../../components/photoSelectionToolBar/PhotoSelectionToolBar';
 import SpaceHeader from '../../../components/spaceHeader/SpaceHeader';
 import { INFORMATION } from '../../../constants/messages';
 import useIntersectionObserver from '../../../hooks/@common/useIntersectionObserver';
 import useDownload from '../../../hooks/useDownload';
+import usePhotoSelect from '../../../hooks/usePhotoSelect';
 import usePhotosBySpaceCode from '../../../hooks/usePhotosBySpaceCode';
 import { ScrollableBlurArea } from '../../../styles/@common/ScrollableBlurArea';
 import { theme } from '../../../styles/theme';
@@ -29,26 +31,36 @@ const SpaceHome = () => {
     reObserve,
   } = useIntersectionObserver({ rootMargin: '200px' });
 
-  const { isLoading, thumbnailList, isEndPage, fetchPhotosList } =
-    usePhotosBySpaceCode({
-      reObserve,
-      spaceCode: mockSpaceData.code,
-    });
+  const {
+    photosList,
+    isLoading,
+    thumbnailPhotoMap,
+    isEndPage,
+    fetchPhotosList,
+  } = usePhotosBySpaceCode({
+    reObserve,
+    spaceCode: mockSpaceData.code,
+  });
 
   const { isDownloading, handleDownload } = useDownload({
     spaceName: mockSpaceData.name,
   });
+
+  const {
+    isSelectMode,
+    toggleSelectMode,
+    selectedPhotoMap,
+    toggleSelectedPhoto,
+    selectedPhotoCount,
+    // TODO : 서버 연동 데이터
+    // extractSelectedPhoto,
+  } = usePhotoSelect({ photosList: photosList ?? [] });
+
   //biome-ignore lint/correctness/useExhaustiveDependencies: isFetchSectionVisible 변경 시 호출
   useEffect(() => {
     if (!isFetchSectionVisible || isEndPage || isLoading) return;
     fetchPhotosList();
   }, [isFetchSectionVisible, isEndPage]);
-
-  //TODO: useDownload 훅에서 navigate 분리
-  // const handleUploadClick = () => {
-  //   handleDownload();
-  //   navigate(ROUTES.COMPLETE.DOWNLOAD);
-  // };
 
   return (
     <S.Wrapper>
@@ -71,28 +83,59 @@ const SpaceHome = () => {
         />
       </S.InfoContainer>
 
-      {thumbnailList &&
-        (thumbnailList.length > 0 ? (
+      {photosList &&
+        (photosList.length > 0 ? (
           <>
-            <S.ImageGridContainer>
-              <ImageGrid imageUrlList={thumbnailList} rowImageAmount={3} />
-            </S.ImageGridContainer>
-
-            <S.DownloadButtonContainer>
-              <FloatingActionButton
-                label="모두 저장하기"
-                icon={<SaveIcon />}
-                onClick={handleDownload}
-                disabled={isDownloading}
+            <S.ImageManagementContainer>
+              <S.TopActionBar>
+                <Button
+                  text={isSelectMode ? '취소' : '선택'}
+                  onClick={toggleSelectMode}
+                  variant="darkRounded"
+                />
+              </S.TopActionBar>
+              <SpaceManagerImageGrid
+                isSelectMode={isSelectMode}
+                selectedPhotoMap={selectedPhotoMap}
+                photoData={photosList}
+                thumbnailUrlList={thumbnailPhotoMap}
+                rowImageAmount={3}
+                onImageClick={
+                  isSelectMode
+                    ? toggleSelectedPhoto
+                    : () => {
+                        console.log('모달창');
+                      }
+                }
               />
-            </S.DownloadButtonContainer>
+            </S.ImageManagementContainer>
 
-            <S.TopButtonContainer $isVisible={!isAtPageTop}>
-              <FloatingIconButton
-                icon={<ArrowUpSvg fill={theme.colors.white} />}
-                onClick={goToTop}
-              />
-            </S.TopButtonContainer>
+            {!isSelectMode && (
+              <S.DownloadButtonContainer>
+                <FloatingActionButton
+                  label="모두 저장하기"
+                  icon={<SaveIcon fill={theme.colors.gray06} />}
+                  onClick={handleDownload}
+                  disabled={isDownloading}
+                />
+              </S.DownloadButtonContainer>
+            )}
+
+            <S.BottomNavigatorContainer>
+              <S.TopButtonContainer $isVisible={!isAtPageTop}>
+                <FloatingIconButton
+                  icon={<ArrowUpSvg fill={theme.colors.white} />}
+                  onClick={goToTop}
+                />
+              </S.TopButtonContainer>
+              {isSelectMode && (
+                <PhotoSelectionToolBar
+                  selectedCount={selectedPhotoCount}
+                  onDelete={() => {}}
+                  onDownload={() => {}}
+                />
+              )}
+            </S.BottomNavigatorContainer>
           </>
         ) : (
           <S.NoImageContainer>
@@ -103,7 +146,8 @@ const SpaceHome = () => {
 
       <S.IntersectionArea ref={hideBlurAreaTriggerRef} />
       <S.IntersectionArea ref={fetchTriggerRef} />
-      <ScrollableBlurArea $isHide={isAtPageBottom} />
+      <ScrollableBlurArea $isHide={isAtPageBottom} $position="bottom" />
+      <ScrollableBlurArea $isHide={isAtPageTop} $position="top" />
     </S.Wrapper>
   );
 };

@@ -1,10 +1,10 @@
 import { useState } from 'react';
 
-interface useDragProps {
+interface UseDragProps {
   onDrop?: (event: React.DragEvent<HTMLLabelElement>) => void;
 }
 
-const useDrag = ({ onDrop }: useDragProps) => {
+const useDrag = ({ onDrop }: UseDragProps) => {
   const [isActive, setActive] = useState(false);
 
   const stopEvent = (event: React.DragEvent<HTMLLabelElement>) => {
