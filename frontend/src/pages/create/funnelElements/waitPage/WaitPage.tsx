@@ -1,5 +1,6 @@
 import loadingImage from '@assets/images/loading.png';
 import HighlightText from '../../../../components/@common/highlightText/HighlightText';
+import { INFORMATION } from '../../../../constants/messages';
 import type { SpaceFunnelInfo } from '../../../../types/space.type';
 import { formatDate } from '../../../../utils/formatDate';
 import * as S from './WaitPage.styles';
@@ -14,8 +15,9 @@ const WaitPage = ({ spaceInfo }: WaitPageProps) => {
   return (
     <S.Wrapper>
       <S.TitleContainer>
-        <S.Title>조금만 기다려주세요</S.Title>
-        <S.Title>곧 스페이스 생성이 끝나요</S.Title>
+        {INFORMATION.WAIT_PAGE.TITLE_LIST.map((title, index) => (
+          <S.Title key={title + String(index)}>{title}</S.Title>
+        ))}
       </S.TitleContainer>
       <S.Icon src={loadingImage} alt="loading" />
       <S.InfoContainer>
@@ -24,7 +26,7 @@ const WaitPage = ({ spaceInfo }: WaitPageProps) => {
         <HighlightText
           fontStyle="bodyLarge"
           highlightColorStyle="primary"
-          text={`${time} 생성 예정`}
+          text={`${time} 오픈`}
           highlightTextArray={[time]}
         />
       </S.InfoContainer>

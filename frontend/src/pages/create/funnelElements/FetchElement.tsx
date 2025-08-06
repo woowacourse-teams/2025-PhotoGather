@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Navigate } from 'react-router-dom';
+import { ROUTES } from '../../../constants/routes';
 import useCreateSpace from '../../../hooks/useCreateSpace';
 import type { FunnelElementProps } from '../../../types/funnel.type';
 import type { SpaceFunnelInfo } from '../../../types/space.type';
@@ -44,10 +45,10 @@ const FetchElement = ({ spaceInfo }: FetchElementProps) => {
 
   //TODO: Fetch 에러 시 리다이렉트 위치 조정 필요
   if (status === 'error') {
-    return <Navigate to="/" replace />;
+    return <Navigate to={ROUTES.MAIN} replace />;
   }
 
-  return <Navigate to={`/guest/share`} state={spaceCode} replace />;
+  return <Navigate to={ROUTES.GUEST.SHARE} state={spaceCode} replace />;
 };
 
 export default FetchElement;

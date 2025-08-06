@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import TextInput from '../../../components/@common/inputs/textInput/TextInput';
 import { CONSTRAINTS } from '../../../constants/constraints';
+import { ERROR, INFORMATION } from '../../../constants/messages';
 import type { FunnelElementProps } from '../../../types/funnel.type';
 import FunnelBasePage from '../funnel/FunnelBasePage/FunnelBasePage';
 
@@ -15,17 +16,17 @@ const NameInputElement = ({
   return (
     <FunnelBasePage
       title={{
-        text: '스페이스 이름을 정해볼까요?',
-        highlightTextArray: ['이름'],
+        text: INFORMATION.NAME_INPUT.TITLE.TEXT,
+        highlightTextArray: [INFORMATION.NAME_INPUT.TITLE.HIGHLIGHT_TEXT],
       }}
-      description="추억을 담을 공간의 이름을 작성해주세요."
+      description={INFORMATION.NAME_INPUT.DESCRIPTION}
       element={
         <TextInput
-          maxCount={10}
+          maxCount={CONSTRAINTS.NAME_MAX_LENGTH}
           value={name}
-          placeholder="나만의 스페이스"
+          placeholder={INFORMATION.NAME_INPUT.PLACEHOLDER}
           onChange={(e) => setName(e.target.value)}
-          errorMessage={isError ? '유효하지 않은 이름입니다.' : ''}
+          errorMessage={isError ? ERROR.INPUT.NAME : ''}
         />
       }
       onNextButtonClick={() => onNext(name)}

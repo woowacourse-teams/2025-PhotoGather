@@ -1,4 +1,5 @@
 import LeftTimeInformationBox from '../../../components/leftTimeInformationBox/LeftTimeInformationBox';
+import { INFORMATION } from '../../../constants/messages';
 import useLeftTimer from '../../../hooks/@common/useTimer';
 import type { FunnelElementProps } from '../../../types/funnel.type';
 import type { SpaceFunnelInfo } from '../../../types/space.type';
@@ -21,10 +22,10 @@ const CheckSpaceInfoElement = ({
   return (
     <FunnelBasePage
       title={{
-        text: '스페이스 정보를 확인해 주세요.',
-        highlightTextArray: ['스페이스 정보'],
+        text: INFORMATION.CHECK_SPACE_INFO.TITLE.TEXT,
+        highlightTextArray: [INFORMATION.CHECK_SPACE_INFO.TITLE.HIGHLIGHT_TEXT],
       }}
-      description="완료를 누르면 곧바로 링크가 발급돼요."
+      description={INFORMATION.CHECK_SPACE_INFO.DESCRIPTION}
       element={
         <LeftTimeInformationBox
           title={spaceInfo.name}

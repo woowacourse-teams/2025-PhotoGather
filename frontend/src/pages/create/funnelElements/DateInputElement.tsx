@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import DateTimeInput from '../../../components/@common/inputs/DateTimeInput';
+import { ERROR, INFORMATION } from '../../../constants/messages';
 import type { FunnelElementProps } from '../../../types/funnel.type';
 import FunnelBasePage from '../funnel/FunnelBasePage/FunnelBasePage';
 
@@ -14,7 +15,7 @@ const DateInputElement = ({
     const todayDateString = new Date(Date.now()).toISOString().split('T')[0];
     const selectedDate = e.target.value;
     if (selectedDate < todayDateString) {
-      alert('오늘 이전 날짜는 선택할 수 없습니다.');
+      alert(ERROR.INPUT.DATE);
       return;
     }
     setDate(selectedDate);
@@ -23,10 +24,10 @@ const DateInputElement = ({
   return (
     <FunnelBasePage
       title={{
-        text: '스페이스를 언제부터 열까요?',
-        highlightTextArray: ['언제부터'],
+        text: INFORMATION.DATE_INPUT.TITLE.TEXT,
+        highlightTextArray: [INFORMATION.DATE_INPUT.TITLE.HIGHLIGHT_TEXT],
       }}
-      description="선택한 시점부터 24시간 동안 열려요."
+      description={INFORMATION.DATE_INPUT.DESCRIPTION}
       element={
         <DateTimeInput
           inputType="date"
