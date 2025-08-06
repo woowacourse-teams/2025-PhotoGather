@@ -9,13 +9,8 @@ interface ToastListProps {
 export const ToastList = ({ toasts }: ToastListProps) => {
   return (
     <S.ToastList>
-      {toasts.map((toast) => (
-        <ToastComponent
-          key={toast.id}
-          text={toast.text}
-          type={toast.type}
-          duration={toast.duration}
-        />
+      {toasts.map(({ id, text, type, duration }) => (
+        <ToastComponent key={id} text={text} type={type} duration={duration} />
       ))}
     </S.ToastList>
   );
