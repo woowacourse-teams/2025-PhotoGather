@@ -9,7 +9,7 @@
     "forceConsistentCasingInFileNames": true,
     "allowSyntheticDefaultImports": true,
     "skipLibCheck": true,
-    "types": ["node", "jest"]
+    "resolveJsonModule": true
   },
-  "include": ["src", ".storybook"]
+  "include": ["src", "src/types/globals", ".storybook"]
 }

@@ -1,6 +1,5 @@
 /// <reference path="./types/importMeta.d.ts" />
 
-// CSS modules
 type CSSModuleClasses = { readonly [key: string]: string };
 
 declare module '*.module.css' {
