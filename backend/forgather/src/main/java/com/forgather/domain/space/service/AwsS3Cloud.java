@@ -81,7 +81,7 @@ public class AwsS3Cloud {
         Map<String, Path> photoPaths = new LinkedHashMap<>();
         for (int i = 0; i < paths.size(); i++) {
             String photoPath = paths.get(i);
-            String changedName = String.format("%s.%s", spaceCode + "-(" + (i + 1) + ")",
+            String changedName = String.format("%s.%s", spaceCode + "-" + (i + 1),
                 StringUtils.getFilenameExtension(photoPath));
             photoPaths.put(photoPath, localDownloadDirectory.toPath().resolve(changedName));
         }
