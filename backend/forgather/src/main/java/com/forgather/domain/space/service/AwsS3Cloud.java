@@ -9,10 +9,10 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.forgather.domain.space.util.RandomCodeGenerator;
 import com.forgather.global.config.S3Properties;
 import com.forgather.global.logging.LogFormatter;
 import com.forgather.global.logging.Logger;
+import com.forgather.global.util.RandomCodeGenerator;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -70,7 +70,8 @@ public class AwsS3Cloud {
     }
 
     public File downloadAll(String tempPath, String spaceCode) {
-        File localDownloadDirectory = new File(tempPath, "images-" + spaceCode + "-" + randomCodeGenerator.generate());
+        File localDownloadDirectory = new File(tempPath,
+            "images-" + spaceCode + "-" + randomCodeGenerator.generate(10));
         createLocalDownloadDirectory(localDownloadDirectory);
         String s3Prefix = getPrefix(spaceCode);
 

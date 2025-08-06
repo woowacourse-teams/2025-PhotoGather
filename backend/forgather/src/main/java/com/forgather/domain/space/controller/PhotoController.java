@@ -28,7 +28,7 @@ import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBo
 import com.forgather.domain.space.dto.PhotoResponse;
 import com.forgather.domain.space.dto.PhotosResponse;
 import com.forgather.domain.space.service.PhotoService;
-import com.forgather.global.logging.LogFormatter;
+import com.forgather.global.auth.annotation.HostId;
 import com.forgather.global.logging.Logger;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -72,17 +72,20 @@ public class PhotoController {
     @Operation(summary = "사진 목록 조회", description = "특정 공간의 사진 목록을 조회합니다.")
     public ResponseEntity<PhotosResponse> getAll(
         @PathVariable(name = "spaceCode") String spaceCode,
-        @PageableDefault(size = 15, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable
+        @PageableDefault(size = 15, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable,
+        @HostId Long hostId
     ) {
-        var response = photoService.getAll(spaceCode, pageable);
+        var response = photoService.getAll(spaceCode, pageable, hostId);
         return ResponseEntity.ok(response);
     }
 
     @GetMapping(value = "/download", produces = ZIP_CONTENT_TYPE)
     @Operation(summary = "사진 zip 일괄 다운로드", description = "특정 공간의 사진 목록을 zip 파일로 다운로드합니다.")
-    public ResponseEntity<StreamingResponseBody> downloadAll(@PathVariable(name = "spaceCode") String spaceCode)
-        throws IOException {
-        File zipFile = photoService.compressAll(spaceCode);
+    public ResponseEntity<StreamingResponseBody> downloadAll(
+        @PathVariable(name = "spaceCode") String spaceCode,
+        @HostId Long hostId
+    ) throws IOException {
+        File zipFile = photoService.compressAll(spaceCode, hostId);
 
         ContentDisposition contentDisposition = ContentDisposition.attachment()
             .filename(zipFile.getName(), StandardCharsets.UTF_8)
