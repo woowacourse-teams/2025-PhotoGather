@@ -31,8 +31,8 @@ export const IconTextContainer = styled.div`
 `;
 
 export const Icon = styled.img`
-max-width: 100px;
-width: 100%;
+  max-width: 100px;
+  width: 100%;
   aspect-ratio: 1/1;
 `;
 
