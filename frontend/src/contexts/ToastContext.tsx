@@ -16,6 +16,7 @@ let toastId = 0;
 
 export const ToastProvider = ({ children }: { children: React.ReactNode }) => {
   const [toasts, setToasts] = useState<Toast[]>([]);
+  const TOAST_EXIT_DELAY = 500;
 
   const removeToast = (id: number) => {
     setToasts((prev) => prev.filter((toast) => toast.id !== id));
@@ -27,7 +28,7 @@ export const ToastProvider = ({ children }: { children: React.ReactNode }) => {
 
     setTimeout(() => {
       removeToast(id);
-    }, duration + 500);
+    }, duration + TOAST_EXIT_DELAY);
   };
 
   return (
