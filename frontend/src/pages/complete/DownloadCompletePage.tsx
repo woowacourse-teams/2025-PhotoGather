@@ -1,16 +1,15 @@
 import downloadImage from '@assets/images/download.png';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import MessageLayout from '../../components/layout/messageLayout/MessageLayout';
 import { COMPLETE } from '../../constants/messages';
 import { ROUTES } from '../../constants/routes';
-import useSpaceCodeFromPath from '../../hooks/useSpaceCodeFromPath';
 
 const DownloadCompletePage = () => {
-  const { spaceId } = useSpaceCodeFromPath();
   const navigate = useNavigate();
+  const { spaceCode } = useLocation().state as { spaceCode: string };
 
   const handleButtonClick = () => {
-    navigate(ROUTES.MANAGER.SPACE_HOME(spaceId ?? ''));
+    navigate(ROUTES.MANAGER.SPACE_HOME(spaceCode ?? ''));
   };
 
   return (
