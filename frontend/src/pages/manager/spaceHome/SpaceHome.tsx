@@ -135,8 +135,8 @@ const SpaceHome = () => {
               <SpaceHomeTopActionBar
                 isSelectMode={isSelectMode}
                 isAllSelected={isAllSelected}
-                toggleSelectMode={toggleSelectMode}
-                toggleAllSelected={toggleAllSelected}
+                onToggleSelectMode={toggleSelectMode}
+                onToggleAllSelected={toggleAllSelected}
               />
               <SpaceManagerImageGrid
                 isSelectMode={isSelectMode}
