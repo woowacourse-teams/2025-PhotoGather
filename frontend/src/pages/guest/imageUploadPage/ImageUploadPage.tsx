@@ -1,5 +1,4 @@
 import rocketIcon from '@assets/images/rocket.png';
-import downloadLoadingSpinner from '@assets/loading-spinner.gif';
 import { useNavigate } from 'react-router-dom';
 import { ReactComponent as ArrowUpSvg } from '../../../@assets/icons/upwardArrow.svg';
 import FloatingActionButton from '../../../components/@common/buttons/floatingActionButton/FloatingActionButton';
@@ -67,20 +66,10 @@ const ImageUploadPage = () => {
     },
   ];
 
-  if (isUploading) {
-    return (
-      <S.Wrapper $hasImages={hasImages}>
-        <LoadingLayout loadingContents={loadingContents} percentage={0} />
-      </S.Wrapper>
-    );
-  }
-
   return (
     <S.Wrapper $hasImages={hasImages}>
       {isUploading && (
-        <S.LoadingSpinnerContainer>
-          <img src={downloadLoadingSpinner} alt="loading" />
-        </S.LoadingSpinnerContainer>
+        <LoadingLayout loadingContents={loadingContents} percentage={0} />
       )}
       <S.ScrollTopAnchor ref={scrollTopTriggerRef} />
       <SpaceHeader title={`${mockSpaceData.name}`} timer={leftTime} />
