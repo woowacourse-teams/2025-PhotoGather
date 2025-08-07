@@ -2,15 +2,18 @@
 
 import { photoService } from '../apis/services/photo.service';
 import { mockSpaceData } from '../pages/manager/spaceHome/mockSpaceData';
+import type { ToastBase } from '../types/toast.type';
 
 interface UsePhotosDeleteProps {
   selectedPhotoIds: number[];
   submitDeletePhotos: () => Promise<void>;
+  showToast: (options: ToastBase) => void;
 }
 
 const usePhotosDelete = ({
   selectedPhotoIds,
   submitDeletePhotos,
+  showToast,
 }: UsePhotosDeleteProps) => {
   const fetchDeletePhotos = async () => {
     try {
@@ -19,7 +22,10 @@ const usePhotosDelete = ({
       });
       console.log(selectedPhotoIds);
     } catch (error) {
-      //TODO : 에러 토스트 로직으로 변경
+      showToast({
+        text: '다시 시도해 주세요.',
+        type: 'error',
+      });
       console.error(error);
     } finally {
       await submitDeletePhotos();

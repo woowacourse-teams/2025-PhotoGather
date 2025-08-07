@@ -86,6 +86,7 @@ const SpaceHome = () => {
   const { fetchDeletePhotos } = usePhotosDelete({
     selectedPhotoIds: selectedPhotoIds,
     submitDeletePhotos,
+    showToast,
   });
 
   //biome-ignore lint/correctness/useExhaustiveDependencies: isFetchSectionVisible 변경 시 호출
