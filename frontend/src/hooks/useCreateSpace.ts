@@ -6,7 +6,7 @@ import type { SpaceCreateInfo } from '../types/space.type';
 const useCreateSpace = () => {
   const [isCreating, setIsCreating] = useState(false);
 
-  const fetchCreateSpace = async (_spaceCreateInfo: SpaceCreateInfo) => {
+  const fetchCreateSpace = async (spaceCreateInfo: SpaceCreateInfo) => {
     setIsCreating(true);
     try {
       const response = await spaceService.create(spaceCreateInfo);
