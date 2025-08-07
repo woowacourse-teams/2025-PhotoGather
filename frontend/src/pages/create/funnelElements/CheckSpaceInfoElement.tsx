@@ -1,6 +1,6 @@
 import LeftTimeInformationBox from '../../../components/leftTimeInformationBox/LeftTimeInformationBox';
 import { INFORMATION } from '../../../constants/messages';
-import useLeftTimer from '../../../hooks/@common/useTimer';
+import useLeftTimer from '../../../hooks/@common/useLeftTimer';
 import type { FunnelElementProps } from '../../../types/funnel.type';
 import type { SpaceFunnelInfo } from '../../../types/space.type';
 import { formatDate } from '../../../utils/formatDate';
@@ -17,7 +17,7 @@ const CheckSpaceInfoElement = ({
 }: CheckSpaceInfoPageProps) => {
   const openedAt = `${spaceInfo.date}T${spaceInfo.time}`;
   const { date, time } = formatDate(openedAt);
-  const { leftTime } = useLeftTimer({ openedAt });
+  const { leftTime } = useLeftTimer({ targetTime: openedAt });
 
   return (
     <FunnelBasePage
