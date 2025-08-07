@@ -46,6 +46,9 @@ public class Photo extends SpaceContent {
     }
 
     public LocalDateTime getCapturedAt() {
+        if (metaData == null || metaData.getCapturedAt() == null) {
+            return createdAt; // 메타데이터가 없으면 생성일자를 반환
+        }
         return metaData.getCapturedAt();
     }
 }
