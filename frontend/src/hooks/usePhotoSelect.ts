@@ -6,11 +6,13 @@ interface UsePhotoSelectProps {
 }
 
 const usePhotoSelect = ({ photosList }: UsePhotoSelectProps) => {
-  const createInitialSelectedPhotoMap = () =>
-    new Map<number, boolean>(photosList.map((photo) => [photo.id, false]));
+  const createInitialSelectedPhotoMap = (initialValue: boolean) =>
+    new Map<number, boolean>(
+      photosList.map((photo) => [photo.id, initialValue]),
+    );
 
   const [selectedPhotoMap, setSelectedPhotoMap] = useState(() =>
-    createInitialSelectedPhotoMap(),
+    createInitialSelectedPhotoMap(false),
   );
 
   const selectedPhotosCount = Array.from(selectedPhotoMap.values()).filter(
@@ -34,7 +36,11 @@ const usePhotoSelect = ({ photosList }: UsePhotoSelectProps) => {
   };
 
   const resetSelectedPhotoMap = () => {
-    setSelectedPhotoMap(createInitialSelectedPhotoMap());
+    setSelectedPhotoMap(createInitialSelectedPhotoMap(false));
+  };
+
+  const checkAllSelected = () => {
+    setSelectedPhotoMap(createInitialSelectedPhotoMap(true));
   };
 
   const isAllSelected =
@@ -46,10 +52,7 @@ const usePhotoSelect = ({ photosList }: UsePhotoSelectProps) => {
       resetSelectedPhotoMap();
       return;
     }
-    const allSelectedPhotoMap = new Map(
-      photosList.map((photo) => [photo.id, true]),
-    );
-    setSelectedPhotoMap(allSelectedPhotoMap);
+    checkAllSelected();
   };
 
   const [isSelectMode, setIsSelectMode] = useState(false);
