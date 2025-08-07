@@ -53,7 +53,9 @@ const SpaceHome = () => {
     spaceCode: mockSpaceData.code,
   });
 
-  const { isDownloading, handleDownload, selectDownload } = useDownload({ spaceName });
+  const { isDownloading, downloadAll, selectDownload } = useDownload({
+    spaceName,
+  });
 
   const {
     isSelectMode,
