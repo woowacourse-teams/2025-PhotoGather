@@ -64,18 +64,29 @@ const SpaceHome = () => {
     fetchPhotosList();
   }, [isFetchSectionVisible, isEndPage]);
 
+  const loadingContents = [
+    {
+      icon: { src: rocketIcon, alt: '데모 페이지 아이콘' },
+      description: '로딩 텍스트 1',
+    },
+    {
+      icon: { src: rocketIcon, alt: '데모 페이지 아이콘' },
+      description: '로딩 텍스트 2',
+    },
+    {
+      icon: { src: rocketIcon, alt: '데모 페이지 아이콘' },
+      description: '로딩 텍스트 2',
+    },
+    {
+      icon: { src: rocketIcon, alt: '데모 페이지 아이콘' },
+      description: '로딩 텍스트 2',
+    },
+  ];
+
   if (isDownloading) {
     return (
       <S.Wrapper>
-        <LoadingLayout
-          iconList={[
-            { src: rocketIcon, alt: '로딩 아이콘' },
-            { src: rocketIcon, alt: '로딩 아이콘' },
-            { src: rocketIcon, alt: '로딩 아이콘' },
-          ]}
-          descriptionList={['로딩 설명', '로딩 설명', '로딩 설명']}
-          percentage={0}
-        />
+        <LoadingLayout loadingContents={loadingContents} percentage={0} />
       </S.Wrapper>
     );
   }

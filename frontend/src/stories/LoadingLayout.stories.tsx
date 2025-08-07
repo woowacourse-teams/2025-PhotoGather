@@ -23,11 +23,11 @@ export const Default: Story = {
       },
       {
         icon: { src: rocketImage, alt: '데모 페이지 아이콘' },
-        description: '로딩 텍스트 2',
+        description: '로딩 텍스트 3',
       },
       {
         icon: { src: rocketImage, alt: '데모 페이지 아이콘' },
-        description: '로딩 텍스트 2',
+        description: '로딩 텍스트 4',
       },
     ],
     percentage: 30,

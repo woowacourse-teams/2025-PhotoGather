@@ -43,18 +43,29 @@ const ImageUploadPage = () => {
     }
   };
 
+  const loadingContents = [
+    {
+      icon: { src: rocketIcon, alt: '데모 페이지 아이콘' },
+      description: '로딩 텍스트 1',
+    },
+    {
+      icon: { src: rocketIcon, alt: '데모 페이지 아이콘' },
+      description: '로딩 텍스트 2',
+    },
+    {
+      icon: { src: rocketIcon, alt: '데모 페이지 아이콘' },
+      description: '로딩 텍스트 2',
+    },
+    {
+      icon: { src: rocketIcon, alt: '데모 페이지 아이콘' },
+      description: '로딩 텍스트 2',
+    },
+  ];
+
   if (isUploading) {
     return (
       <S.Wrapper $hasImages={hasImages}>
-        <LoadingLayout
-          iconList={[
-            { src: rocketIcon, alt: '로딩 아이콘1' },
-            { src: rocketIcon, alt: '로딩 아이콘2' },
-            { src: rocketIcon, alt: '로딩 아이콘3' },
-          ]}
-          descriptionList={['업로드 중1', '업로드 중2', '업로드 중3']}
-          percentage={0}
-        />
+        <LoadingLayout loadingContents={loadingContents} percentage={0} />
       </S.Wrapper>
     );
   }
