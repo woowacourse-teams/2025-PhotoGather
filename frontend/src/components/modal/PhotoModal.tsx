@@ -1,41 +1,135 @@
 import rocketIcon from '@assets/images/rocket.png';
-import { useEffect, useState } from 'react';
-import { useOverlay } from '../../context/OverlayProvider';
+import { useCallback, useEffect, useState } from 'react';
+import { photoService } from '../../apis/services/photo.service';
+import { DEBUG_MESSAGES } from '../../constants/debugMessages';
+import { NETWORK } from '../../constants/errors';
+import { useOverlay } from '../../contexts/OverlayProvider';
 import useApiCall from '../../hooks/@common/useApiCall';
+import type { PreviewFile } from '../../types/file.type';
 import type { BaseModalProps } from '../../types/modal.type';
 import type { Photo } from '../../types/photo.type';
+import { buildOriginalImageUrl } from '../../utils/buildImageUrl';
+import { parsedImagePath } from '../../utils/parsedImagePath';
 import IconLabelButton from '../@common/buttons/iconLabelButton/IconLabelButton';
-import LoadingLayout from '../layout/LoadingLayout/LoadingLayout';
+import LoadingLayout from '../layout/loadingLayout/LoadingLayout';
 import ConfirmModal from './ConfirmModal';
 import * as S from './PhotoModal.styles';
 
-type Mode = 'guest' | 'manager';
+// Guest mode props - previewData 사용
+interface GuestPhotoModalProps extends BaseModalProps {
+  /** 모달 타입 */
+  mode: 'guest';
+  /** useFileUpload에서 받은 previewData */
+  previewFile: PreviewFile;
+  /** 삭제 핸들러 */
+  onDelete?: (id: number) => void;
+}
 
-interface PhotoModalProps extends BaseModalProps {
+// Manager mode props - API 호출
+interface ManagerPhotoModalProps extends BaseModalProps {
+  /** 모달 타입 */
+  mode: 'manager';
   /** 사진 ID */
   photoId: number;
   /** 스페이스 코드 */
   spaceCode: string;
   /** 업로드한 사람 */
   uploaderName?: string;
-  /** PhotoModal의 모드 */
-  mode: Mode;
+  /** 다운로드 핸들러 */
+  onDownload?: () => void;
+  /** 삭제 핸들러 */
+  onDelete?: (photoId: number) => void;
 }
 
-const PhotoModal = ({
-  photoId,
-  spaceCode,
-  uploaderName = '알 수 없음',
-  mode,
-  onClose,
-  onSubmit,
-}: PhotoModalProps) => {
+type PhotoModalProps = GuestPhotoModalProps | ManagerPhotoModalProps;
+
+const PhotoModal = (props: PhotoModalProps) => {
+  const { mode, onClose, onSubmit } = props;
   const [isLoading, setIsLoading] = useState(false);
   const [photo, setPhoto] = useState<Photo | null>(null);
+  const [displayPath, setDisplayPath] = useState<string>('');
+  const [imageLoadError, setImageLoadError] = useState(false);
   const { safeApiCall } = useApiCall();
   const overlay = useOverlay();
 
   const isManagerMode = mode === 'manager';
+
+  const managerPhotoId = mode === 'manager' ? props.photoId : undefined;
+  const managerSpaceCode = mode === 'manager' ? props.spaceCode : undefined;
+
+  const fetchPhoto = useCallback(async () => {
+    if (mode !== 'manager' || !managerSpaceCode || !managerPhotoId) return;
+
+    setIsLoading(true);
+
+    try {
+      const response = await safeApiCall(() =>
+        photoService.getById(managerSpaceCode, managerPhotoId),
+      );
+
+      console.log('📡 API Response:', response);
+
+      if (response.success && response.data) {
+        const data = response.data;
+        console.log('📸 Photo data:', {
+          id: data.id,
+          path: data.path,
+          originalName: data.originalName,
+          fullData: data,
+        });
+
+        if (!data) {
+          console.warn(DEBUG_MESSAGES.NO_RESPONSE);
+          return;
+        }
+
+        setPhoto(data);
+
+        // API에서 받은 path를 전체 URL로 변환
+        // parsedImagePath를 사용하여 파일명 추출 (확장자 제외)
+        let imageUrl = '';
+
+        if (data.path) {
+          const fileName = parsedImagePath(data.path);
+          if (fileName) {
+            imageUrl = buildOriginalImageUrl(managerSpaceCode, fileName);
+            console.log('🔨 Built image URL:', {
+              originalPath: data.path,
+              parsedFileName: fileName,
+              builtUrl: imageUrl,
+            });
+          } else {
+            console.error('❌ Failed to parse image path:', data.path);
+          }
+        }
+        console.log('Final image URL:', imageUrl);
+        setDisplayPath(imageUrl);
+      } else {
+        console.error('API call failed:', response);
+        if (
+          !response.error?.toLowerCase().includes(NETWORK.DEFAULT.toLowerCase())
+        ) {
+          console.error('사진을 불러오는데 실패했습니다.');
+        }
+      }
+    } catch (error) {
+      console.error('💥 Photo fetch error:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [mode, managerPhotoId, managerSpaceCode, safeApiCall]);
+
+  const guestPreviewPath =
+    mode === 'guest' ? props.previewFile.path : undefined;
+
+  // biome-ignore lint/correctness/useExhaustiveDependencies: fetchPhoto는 useCallback으로 메모이제이션되어 있지만, 의존성에 추가하면 manager mode에서 불필요한 재호출이 발생할 수 있음
+  useEffect(() => {
+    if (mode === 'guest' && guestPreviewPath) {
+      setDisplayPath(guestPreviewPath);
+    } else if (mode === 'manager') {
+      fetchPhoto();
+    }
+  }, [mode, guestPreviewPath]);
 
   const handleDelete = async () => {
     try {
@@ -51,7 +145,12 @@ const PhotoModal = ({
       );
 
       if (result) {
-        // 실제 삭제 로직
+        if (mode === 'guest' && props.onDelete) {
+          props.onDelete(props.previewFile.id);
+        } else if (mode === 'manager' && props.onDelete) {
+          props.onDelete(props.photoId);
+        }
+        onClose?.();
       }
     } catch (error) {
       console.error('모달 오류:', error);
@@ -59,40 +158,58 @@ const PhotoModal = ({
   };
 
   const handleDownload = () => {
+    if (mode === 'manager' && props.onDownload) {
+      props.onDownload();
+    }
     onSubmit?.(true);
   };
+
+  const loadingContents = [
+    {
+      icon: { src: rocketIcon, alt: '데모 페이지 아이콘' },
+      description: '로딩 텍스트 1',
+    },
+    {
+      icon: { src: rocketIcon, alt: '데모 페이지 아이콘' },
+      description: '로딩 텍스트 2',
+    },
+    {
+      icon: { src: rocketIcon, alt: '데모 페이지 아이콘' },
+      description: '로딩 텍스트 2',
+    },
+    {
+      icon: { src: rocketIcon, alt: '데모 페이지 아이콘' },
+      description: '로딩 텍스트 2',
+    },
+  ];
 
   if (isLoading) {
     return (
       <S.Wrapper>
-        <LoadingLayout
-          iconList={[
-            { src: rocketIcon, alt: '로딩 아이콘' },
-            { src: rocketIcon, alt: '로딩 아이콘' },
-            { src: rocketIcon, alt: '로딩 아이콘' },
-          ]}
-          descriptionList={['로딩 설명', '로딩 설명', '로딩 설명']}
-          percentage={0}
-        />
+        <LoadingLayout loadingContents={loadingContents} percentage={0} />
       </S.Wrapper>
     );
   }
 
   return (
     <S.Wrapper>
-      {isManagerMode && (
+      {isManagerMode && 'uploaderName' in props && (
         <S.FromContainer>
           <S.FromMessage>From.</S.FromMessage>
-          {uploaderName}
+          {props.uploaderName || '익명의 우주여행자'}
         </S.FromContainer>
       )}
-      <S.Photo>
-        <img
-          src={photo?.path}
-          alt={photo?.originalName || `ID: ${photo?.id}`}
-          style={{ maxWidth: '100%', height: 'auto' }}
+      <S.PhotoContainer>
+        <S.Photo
+          src={displayPath}
+          alt={photo?.originalName || 'Image'}
+          onError={(e) => {
+            setImageLoadError(true);
+            const img = e.target as HTMLImageElement;
+            img.onerror = null;
+          }}
         />
-      </S.Photo>
+      </S.PhotoContainer>
       <S.ButtonContainer $isManagerMode={isManagerMode}>
         <IconLabelButton
           icon={<S.DeleteIcon />}
