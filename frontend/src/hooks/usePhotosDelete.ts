@@ -6,7 +6,6 @@ import type { Photo } from '../types/photo.type';
 import type { ToastBase } from '../types/toast.type';
 
 interface UsePhotosDeleteProps {
-  selectedPhotoIds: number[];
   showToast: (options: ToastBase) => void;
   toggleSelectMode: () => void;
   updatePhotos: (photos: Photo[]) => void;
@@ -15,17 +14,16 @@ interface UsePhotosDeleteProps {
 }
 
 const usePhotosDelete = ({
-  selectedPhotoIds,
   showToast,
   toggleSelectMode,
   updatePhotos,
   fetchPhotosList,
   extractUnselectedPhotos,
 }: UsePhotosDeleteProps) => {
-  const fetchDeletePhotos = async () => {
+  const fetchDeletePhotos = async (photoIds: number[]) => {
     try {
       await photoService.deletePhotos(mockSpaceData.code, {
-        photoIds: selectedPhotoIds,
+        photoIds: photoIds,
       });
     } catch (error) {
       showToast({
@@ -38,15 +36,13 @@ const usePhotosDelete = ({
     }
   };
 
-  const submitDeletePhotos = async () => {
+  const submitDeletePhotos = async (photoIds: number[]) => {
     // TODO : 모달  로직으로 변경
-    const answer = confirm(
-      `${selectedPhotoIds.length}개의 사진을 삭제하시겠습니까?`,
-    );
+    const answer = confirm(`${photoIds.length}개의 사진을 삭제하시겠습니까?`);
     if (!answer) return;
-    await fetchDeletePhotos();
+    await fetchDeletePhotos(photoIds);
     showToast({
-      text: `${selectedPhotoIds.length}개의 사진을 삭제했습니다.`,
+      text: `${photoIds.length}개의 사진을 삭제했습니다.`,
       type: 'info',
     });
     updatePhotos(extractUnselectedPhotos());

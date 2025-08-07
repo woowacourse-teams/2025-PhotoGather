@@ -29,8 +29,11 @@ export const photoService = {
     );
   },
 
-  downloadZip: (spaceCode: string) =>
-    http.get<Blob>(`/spaces/${spaceCode}/photos/download`, undefined, 'blob'),
+  downloadAll: (spaceCode: string) =>
+    http.post<Blob>(`/spaces/${spaceCode}/photos/download`, undefined),
+
+  downloadPhotos: (spaceCode: string, photoIds: PhotoIds) =>
+    http.post<Blob>(`/spaces/${spaceCode}/photos/download/selected`, photoIds),
 
   deletePhotos: (spaceCode: string, photoIds: PhotoIds) =>
     http.delete<void>(`/spaces/${spaceCode}/photos/selected`, photoIds, 'json'),

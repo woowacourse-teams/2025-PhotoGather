@@ -5,6 +5,7 @@ import { DEBUG_MESSAGES } from '../constants/debugMessages';
 import { NETWORK } from '../constants/errors';
 import { ROUTES } from '../constants/routes';
 import { mockSpaceData } from '../pages/manager/spaceHome/mockSpaceData';
+import type { ApiResponse } from '../types/api.type';
 import useApiCall from './@common/useApiCall';
 
 interface UseDownloadProps {
@@ -29,12 +30,24 @@ const useDownload = ({ spaceName }: UseDownloadProps) => {
     window.URL.revokeObjectURL(url);
   };
 
-  const handleDownload = async () => {
+  const selectDownload = async (photoIds: number[]) => {
+    await handleDownload(() =>
+      photoService.downloadPhotos(mockSpaceData.code, {
+        photoIds: photoIds,
+      }),
+    );
+  };
+
+  const downloadAll = async () => {
+    await handleDownload(() => photoService.downloadAll(mockSpaceData.code));
+  };
+
+  const handleDownload = async (
+    fetchFunction: () => Promise<ApiResponse<unknown>>,
+  ) => {
     try {
       setIsDownloading(true);
-      const response = await safeApiCall(() =>
-        photoService.downloadZip(mockSpaceData.code),
-      );
+      const response = await safeApiCall(fetchFunction);
 
       if (response.success && response.data) {
         const blob = response.data;
@@ -56,7 +69,7 @@ const useDownload = ({ spaceName }: UseDownloadProps) => {
       setIsDownloading(false);
     }
   };
-  return { isDownloading, handleDownload };
+  return { isDownloading, downloadAll, selectDownload };
 };
 
 export default useDownload;
