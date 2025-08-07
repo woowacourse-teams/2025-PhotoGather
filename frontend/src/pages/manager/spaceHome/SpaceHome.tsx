@@ -25,7 +25,7 @@ import { mockSpaceData } from './mockSpaceData';
 import * as S from './SpaceHome.styles';
 
 const SpaceHome = () => {
-  const { spaceInfo } = useSpaceInfo(mockSpaceData.code);
+  const { spaceInfo } = useSpaceInfo('aa');
   const spaceName = spaceInfo?.name ?? '';
   const { targetRef: hideBlurAreaTriggerRef, isIntersecting: isAtPageBottom } =
     useIntersectionObserver({});
