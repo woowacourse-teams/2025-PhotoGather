@@ -4,21 +4,25 @@ import * as S from './SpaceHomeTopActionBar.styles';
 
 interface SpaceHomeTopActionBarProps {
   isSelectMode: boolean;
+  isAllSelected: boolean;
   toggleSelectMode: () => void;
+  toggleAllSelected: () => void;
 }
 
 const SpaceHomeTopActionBar = ({
   isSelectMode,
+  isAllSelected,
   toggleSelectMode,
+  toggleAllSelected,
 }: SpaceHomeTopActionBarProps) => {
   return (
     <S.TopActionBar>
       {isSelectMode && (
         <Button
-          text="전체"
-          onClick={toggleSelectMode}
-          variant="darkRounded"
-          icon={<CheckIcon />}
+          text="전체 선택"
+          onClick={toggleAllSelected}
+          variant={isAllSelected ? 'darkRoundedSelected' : 'darkRounded'}
+          icon={isAllSelected ? <CheckIcon /> : undefined}
         />
       )}
       <Button

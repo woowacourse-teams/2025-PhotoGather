@@ -63,8 +63,10 @@ const SpaceHome = () => {
     selectedPhotoMap,
     selectedPhotosCount,
     toggleSelectedPhoto,
-    filterSelectedPhotos,
+    extractRemainingPhotos,
     selectedPhotoIds,
+    isAllSelected,
+    toggleAllSelected,
   } = usePhotoSelect({ photosList: photosList ?? [] });
 
   const submitDeletePhotos = async () => {
@@ -77,7 +79,7 @@ const SpaceHome = () => {
         text: `${selectedPhotoIds.length}개의 사진을 삭제했습니다.`,
         type: 'info',
       });
-      updatePhotos(filterSelectedPhotos());
+      updatePhotos(extractRemainingPhotos());
       toggleSelectMode();
       await fetchPhotosList();
     }
@@ -132,7 +134,9 @@ const SpaceHome = () => {
             <S.ImageManagementContainer>
               <SpaceHomeTopActionBar
                 isSelectMode={isSelectMode}
+                isAllSelected={isAllSelected}
                 toggleSelectMode={toggleSelectMode}
+                toggleAllSelected={toggleAllSelected}
               />
               <SpaceManagerImageGrid
                 isSelectMode={isSelectMode}

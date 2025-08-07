@@ -6,11 +6,8 @@ interface UsePhotoSelectProps {
 }
 
 const usePhotoSelect = ({ photosList }: UsePhotoSelectProps) => {
-  const createInitialSelectedPhotoMap = () => {
-    return new Map<number, boolean>(
-      photosList.map((photo) => [photo.id, false]) ?? [],
-    );
-  };
+  const createInitialSelectedPhotoMap = () =>
+    new Map<number, boolean>(photosList.map((photo) => [photo.id, false]));
 
   const [selectedPhotoMap, setSelectedPhotoMap] = useState(() =>
     createInitialSelectedPhotoMap(),
@@ -24,7 +21,7 @@ const usePhotoSelect = ({ photosList }: UsePhotoSelectProps) => {
     .filter(([_, value]) => value)
     .map(([key]) => key);
 
-  const filterSelectedPhotos = () => {
+  const extractRemainingPhotos = () => {
     return photosList.filter((photo) => !selectedPhotoMap.get(photo.id));
   };
 
@@ -36,13 +33,23 @@ const usePhotoSelect = ({ photosList }: UsePhotoSelectProps) => {
     });
   };
 
-  // const selectAllPhotos = () => {
-  //   const newMap = new Map()
-  //   setSelectedPhotoMap();
-  // };
-
   const resetSelectedPhotoMap = () => {
     setSelectedPhotoMap(createInitialSelectedPhotoMap());
+  };
+
+  const isAllSelected =
+    Array.from(selectedPhotoMap.values()).filter((value) => value).length ===
+    photosList.length;
+
+  const toggleAllSelected = () => {
+    if (isAllSelected) {
+      resetSelectedPhotoMap();
+      return;
+    }
+    const allSelectedPhotoMap = new Map(
+      photosList.map((photo) => [photo.id, true]),
+    );
+    setSelectedPhotoMap(allSelectedPhotoMap);
   };
 
   const [isSelectMode, setIsSelectMode] = useState(false);
@@ -57,8 +64,10 @@ const usePhotoSelect = ({ photosList }: UsePhotoSelectProps) => {
     selectedPhotoMap,
     selectedPhotosCount,
     selectedPhotoIds,
-    filterSelectedPhotos,
+    extractRemainingPhotos,
     toggleSelectedPhoto,
+    isAllSelected,
+    toggleAllSelected,
   };
 };
 
