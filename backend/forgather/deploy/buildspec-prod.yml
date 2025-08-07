@@ -27,6 +27,7 @@ phases:
     commands:
       - echo "[build] Gradle 빌드 (테스트 생략)"
       - chmod +x ./gradlew
+      - mv src/main/resources/application-prod.yml src/main/resources/application.yml
       - ./gradlew build -x test
       - echo "[build] JAR, deploy 파일을 하나의 ZIP으로 압축"
       - cd ../..
