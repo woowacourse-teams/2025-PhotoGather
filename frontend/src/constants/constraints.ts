@@ -1,5 +1,5 @@
 export const CONSTRAINTS = {
   NAME_MAX_LENGTH: 10,
   MAX_FILE_COUNT: 500,
-  DISALLOWED_FILE_TYPES: ['image/gif'],
+  DISALLOWED_FILE_TYPES: ['image/gif', 'image/svg', 'image/svg+xml'],
 } as const;
