@@ -1,7 +1,9 @@
-export const copyLinkToClipboard = async (copyText: string) => {
+import { createSpaceUrl } from '../constants/routes';
+
+export const copyLinkToClipboard = async (spaceId: string) => {
   // TODO : try catch 유틸 분리
   try {
-    await navigator.clipboard.writeText(copyText);
+    await navigator.clipboard.writeText(createSpaceUrl(spaceId));
   } catch (error) {
     console.log(error);
   }
