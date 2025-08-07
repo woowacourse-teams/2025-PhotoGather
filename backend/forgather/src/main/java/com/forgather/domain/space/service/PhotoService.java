@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.FileSystemUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.forgather.domain.space.dto.DownloadPhotosRequest;
 import com.forgather.domain.space.dto.PhotoResponse;
 import com.forgather.domain.space.dto.PhotosResponse;
 import com.forgather.domain.space.model.Photo;
@@ -80,9 +81,9 @@ public class PhotoService {
         }
     }
 
-    public File compressSelected(String spaceCode, List<Long> photoIds) throws IOException {
+    public File compressSelected(String spaceCode, DownloadPhotosRequest request) throws IOException {
         Space space = spaceRepository.getBySpaceCode(spaceCode);
-        List<Photo> photos = photoRepository.findAllByIdIn(photoIds);
+        List<Photo> photos = photoRepository.findAllByIdIn(request.photoIds());
         photos.forEach(photo -> photo.validateSpace(space));
         return compressPhotoFile(spaceCode, photos);
     }
