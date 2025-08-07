@@ -1,5 +1,6 @@
 import { ReactComponent as InfoIcon } from '@assets/icons/info.svg';
 import styled from '@emotion/styled';
+import { isPropValid } from 'storybook/internal/theming';
 
 export const Wrapper = styled.div<{
   $visible: boolean;
@@ -49,9 +50,12 @@ export const TextContainer = styled.p`
   ${({ theme }) => theme.typography.captionSmall};
 `;
 
-export const Icon = styled(InfoIcon)<{ $type: string }>`
+export const Icon = styled(InfoIcon, {
+  shouldForwardProp: (prop) => isPropValid(prop) || prop === 'type',
+})<{ $type: 'error' | 'info' }>`
   width: 100%;
   height: 100%;
+
   & circle {
     fill: ${({ theme, $type }) =>
       $type === 'error' ? theme.colors.lightError : theme.colors.darkAccent};
