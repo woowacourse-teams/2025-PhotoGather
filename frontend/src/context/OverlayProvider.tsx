@@ -41,7 +41,7 @@ const OverlayProvider = ({ children }: PropsWithChildren) => {
     if (!isValidElement(children)) {
       return Promise.reject(new Error('Invalid element'));
     }
-    
+
     return new Promise((resolver) => {
       // 비동기 -> 모달이 반환할 결과를 기다림
       setOverlayState({
