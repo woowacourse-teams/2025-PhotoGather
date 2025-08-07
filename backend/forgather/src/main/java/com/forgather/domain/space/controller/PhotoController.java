@@ -177,14 +177,4 @@ public class PhotoController {
         return ResponseEntity.noContent()
             .build();
     }
-
-    @DeleteMapping
-    @Operation(summary = "사진 일괄 삭제", description = "특정 공간의 사진을 일괄 삭제합니다.")
-    public ResponseEntity<Void> deleteAll(
-        @PathVariable(name = "spaceCode") String spaceCode
-    ) {
-        photoService.deleteAll(spaceCode);
-        return ResponseEntity.noContent()
-            .build();
-    }
 }

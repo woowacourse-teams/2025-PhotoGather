@@ -137,11 +137,4 @@ public class PhotoService {
         photoRepository.deleteBySpaceAndPhotoIds(space, photoIds);
         awsS3Cloud.deleteSelectedContents(paths);
     }
-
-    @Transactional
-    public void deleteAll(String spaceCode) {
-        Space space = spaceRepository.getBySpaceCode(spaceCode);
-        photoRepository.deleteBySpace(space);
-        awsS3Cloud.deleteAllContents(spaceCode);
-    }
 }
