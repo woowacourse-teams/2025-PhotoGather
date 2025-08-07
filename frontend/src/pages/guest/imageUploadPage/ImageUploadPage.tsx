@@ -10,6 +10,7 @@ import UploadBox from '../../../components/uploadBox/UploadBox';
 import { ROUTES } from '../../../constants/routes';
 import useFileUpload from '../../../hooks/@common/useFileUpload';
 import useIntersectionObserver from '../../../hooks/@common/useIntersectionObserver';
+import useLeftTimer from '../../../hooks/@common/useLeftTimer';
 import { useToast } from '../../../hooks/@common/useToast';
 import { ScrollableBlurArea } from '../../../styles/@common/ScrollableBlurArea';
 import { theme } from '../../../styles/theme';
@@ -34,6 +35,9 @@ const ImageUploadPage = () => {
   const { targetRef: scrollTopTriggerRef, isIntersecting: isAtPageTop } =
     useIntersectionObserver({ isInitialInView: true });
   const navigate = useNavigate();
+  const { leftTime } = useLeftTimer({
+    targetTime: mockSpaceData.expirationDate,
+  });
 
   const handleUploadClick = async () => {
     const uploadSuccess = await handleUploadFiles();
@@ -50,10 +54,7 @@ const ImageUploadPage = () => {
         </S.LoadingSpinnerContainer>
       )}
       <S.ScrollTopAnchor ref={scrollTopTriggerRef} />
-      <SpaceHeader
-        title={`${mockSpaceData.name}`}
-        description="클릭해서 불러올 수 있어요"
-      />
+      <SpaceHeader title={`${mockSpaceData.name}`} timer={leftTime} />
       <S.UploadContainer $hasImages={hasImages}>
         <UploadBox
           mainText={`함께한 순간을 올려주세요.${hasImages ? '' : '\n사진만 올릴 수 있습니다.'}`}
