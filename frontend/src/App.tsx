@@ -1,6 +1,6 @@
 import { ThemeProvider } from '@emotion/react';
 import { RouterProvider } from 'react-router-dom';
-import OverlayProvider from './context/OverlayProvider';
+import OverlayProvider from './contexts/OverlayProvider';
 import { ToastProvider } from './contexts/ToastContext';
 import router from './router/router';
 import GlobalStyle from './styles/GlobalStyles';

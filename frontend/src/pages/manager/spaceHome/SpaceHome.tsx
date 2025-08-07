@@ -12,7 +12,7 @@ import PhotoSelectionToolBar from '../../../components/photoSelectionToolBar/Pho
 import SpaceHeader from '../../../components/spaceHeader/SpaceHeader';
 import SpaceHomeTopActionBar from '../../../components/spaceHomeTopActionBar/SpaceHomeTopActionBar';
 import { INFORMATION } from '../../../constants/messages';
-import { useOverlay } from '../../../context/OverlayProvider';
+import { useOverlay } from '../../../contexts/OverlayProvider';
 import useIntersectionObserver from '../../../hooks/@common/useIntersectionObserver';
 import useLeftTimer from '../../../hooks/@common/useLeftTimer';
 import useDownload from '../../../hooks/useDownload';
@@ -77,10 +77,22 @@ const SpaceHome = () => {
     extractUnselectedPhotos,
   });
 
-  const openPhotoModal = async () => {
-    await overlay(<PhotoModal mode="manager" />, {
-      clickOverlayClose: true,
-    });
+  const openPhotoModal = async (photoId: number) => {
+    await overlay(
+      <PhotoModal
+        mode="manager"
+        photoId={photoId}
+        spaceCode={mockSpaceData.code}
+        uploaderName="알 수 없음"
+        onDownload={() => {
+          // 다운로드 로직 구현
+          console.log('Download photo:', photoId);
+        }}
+      />,
+      {
+        clickOverlayClose: true,
+      },
+    );
   };
 
   const handleImageClick = isSelectMode ? toggleSelectedPhoto : openPhotoModal;
