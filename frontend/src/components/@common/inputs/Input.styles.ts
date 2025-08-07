@@ -19,6 +19,7 @@ export const InputField = styled.input<{ $isError: boolean }>`
   &::placeholder {
     color: ${({ theme }) => theme.colors.gray04};
   }
+  font-size: ${({ theme }) => theme.typography.bodyRegular};
 `;
 
 export const ErrorMessage = styled.p`

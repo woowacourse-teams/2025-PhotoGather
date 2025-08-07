@@ -6,7 +6,8 @@ const config = {
   setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
   testPathIgnorePatterns: ['/node_modules/', '/dist/'],
   moduleNameMapper: {
-    '\\.(jpg|jpeg|png|gif|webp|svg)$': '<rootDir>/fileMock.ts',
+    '\\.(jpg|jpeg|png|gif|webp)$': '<rootDir>/__mocks__/fileMock.ts',
+    '\\.svg$': '<rootDir>/__mocks__/svgMock.ts',
     '\\.(css|scss|sass)$': 'identity-obj-proxy',
     '^@assets/(.*)$': '<rootDir>/src/@assets/$1',
     '^@components/(.*)$': '<rootDir>/src/components/$1',

@@ -76,7 +76,6 @@ const request = async <T>(
       data: data as T,
     };
   } catch (error) {
-    console.log(`여기서 에러 발생 : ${error}`);
     const getErrorMessage = (error: unknown): string => {
       if (isNetworkError(error)) {
         return NETWORK.DEFAULT;

@@ -12,9 +12,10 @@ export const BackDrop = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: ${({ theme }) => theme.zIndex.backdrop};
 `;
 
 export const BackDropContainer = styled.div`
   width: auto;
-  z-index: ${({ theme }) => theme.zIndex.overlay};
+  z-index: ${({ theme }) => theme.zIndex.backdropContainer};
 `;
