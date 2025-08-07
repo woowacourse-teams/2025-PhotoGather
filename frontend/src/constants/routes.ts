@@ -22,6 +22,3 @@ export const HIGHLIGHT_PAGES: readonly string[] = [
   ROUTES.MANAGER.SPACE_HOME(''),
   ROUTES.GUEST.IMAGE_UPLOAD(''),
 ];
-
-export const createSpaceUrl = (spaceId: string) =>
-  process.env.DOMAIN + ROUTES.MANAGER.SPACE_HOME(spaceId);
