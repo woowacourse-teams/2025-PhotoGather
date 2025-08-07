@@ -39,7 +39,7 @@ const useFileUpload = ({ fileType, showError }: UseFileUploadProps) => {
   const splitValidFilesByType = (files: File[], type: string) => {
     return files.reduce(
       (acc, file) => {
-        isValidFileType(file, type, CONSTRAINTS.DISALLOWED_FILE_TYPES)
+        isValidFileType(file, type, CONSTRAINTS.NOT_ALLOWED)
           ? acc.validFiles.push(file)
           : acc.invalidFiles.push(file);
         return acc;
