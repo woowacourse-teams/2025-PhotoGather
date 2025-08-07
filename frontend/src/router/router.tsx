@@ -7,6 +7,7 @@ import DemoHome from '../pages/demo/DemoHome';
 import NetworkErrorPage from '../pages/error/NetworkErrorPage';
 import ImageUploadPage from '../pages/guest/imageUploadPage/ImageUploadPage';
 import SharePage from '../pages/guest/sharePage/SharePage';
+import LandingPage from '../pages/landing/LandingPage';
 import SpaceHome from '../pages/manager/spaceHome/SpaceHome';
 
 const router = createBrowserRouter([
@@ -17,6 +18,10 @@ const router = createBrowserRouter([
       {
         path: '/',
         element: <DemoHome />,
+      },
+      {
+        path: '/landing',
+        element: <LandingPage />,
       },
       {
         path: 'create',
