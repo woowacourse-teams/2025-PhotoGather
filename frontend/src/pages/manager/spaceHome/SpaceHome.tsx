@@ -18,6 +18,7 @@ import useDownload from '../../../hooks/useDownload';
 import usePhotoSelect from '../../../hooks/usePhotoSelect';
 import usePhotosBySpaceCode from '../../../hooks/usePhotosBySpaceCode';
 import usePhotosDelete from '../../../hooks/usePhotosDelete';
+import useSpaceInfo from '../../../hooks/useSpaceInfo';
 import { ScrollableBlurArea } from '../../../styles/@common/ScrollableBlurArea';
 import { theme } from '../../../styles/theme';
 import { goToTop } from '../../../utils/goToTop';
@@ -25,6 +26,8 @@ import { mockSpaceData } from './mockSpaceData';
 import * as S from './SpaceHome.styles';
 
 const SpaceHome = () => {
+  const { spaceInfo } = useSpaceInfo(mockSpaceData.code);
+  const spaceName = spaceInfo?.name ?? '';
   const { targetRef: hideBlurAreaTriggerRef, isIntersecting: isAtPageBottom } =
     useIntersectionObserver({});
   const { targetRef: scrollTopTriggerRef, isIntersecting: isAtPageTop } =
@@ -36,7 +39,7 @@ const SpaceHome = () => {
   } = useIntersectionObserver({ rootMargin: '200px' });
 
   const { leftTime } = useLeftTimer({
-    targetTime: mockSpaceData.expirationDate,
+    targetTime: (spaceInfo?.expiredAt as string) ?? '',
   });
 
   const { showToast } = useToast();
@@ -53,9 +56,7 @@ const SpaceHome = () => {
     spaceCode: mockSpaceData.code,
   });
 
-  const { isDownloading, handleDownload } = useDownload({
-    spaceName: mockSpaceData.name,
-  });
+  const { isDownloading, handleDownload } = useDownload({ spaceName });
 
   const {
     isSelectMode,
@@ -114,7 +115,7 @@ const SpaceHome = () => {
     <S.Wrapper>
       <S.InfoContainer ref={scrollTopTriggerRef}>
         <SpaceHeader
-          title={mockSpaceData.name}
+          title={spaceName}
           timer={leftTime}
           icon={
             <SettingSvg

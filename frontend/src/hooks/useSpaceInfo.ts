@@ -2,11 +2,13 @@ import { useEffect, useState } from 'react';
 import { spaceService } from '../apis/services/space.service';
 import type { Space } from '../types/space.type';
 import useApiCall from './@common/useApiCall';
+import { useToast } from './@common/useToast';
 
 const useSpaceInfo = (spaceCode: string) => {
   const [spaceInfo, setSpaceInfo] = useState<Space>();
   const [isLoading, setIsLoading] = useState(false);
   const { safeApiCall } = useApiCall();
+  const { showToast } = useToast();
 
   useEffect(() => {
     const fetchSpaceInfo = async () => {
@@ -19,7 +21,7 @@ const useSpaceInfo = (spaceCode: string) => {
         setSpaceInfo(data);
       } catch (error) {
         if (error instanceof Error) {
-          console.error(error.message);
+          showToast({ text: error.message, type: 'error' });
         }
       } finally {
         setIsLoading(false);
@@ -27,7 +29,7 @@ const useSpaceInfo = (spaceCode: string) => {
     };
 
     fetchSpaceInfo();
-  }, [safeApiCall, spaceCode]);
+  }, [safeApiCall, spaceCode, showToast]);
 
   return { isLoading, spaceInfo };
 };
