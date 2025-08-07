@@ -1,22 +1,17 @@
-import * as S from './Input.styles';
+import * as C from '../Input.styles';
+import * as S from './TextInput.styles';
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   errorMessage?: string;
   maxCount: number;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   value: string;
-  updateValue: (value: string) => void;
 }
 
-const Input = ({
-  errorMessage,
-  maxCount,
-  updateValue,
-  ...inputProps
-}: InputProps) => {
+const TextInput = ({ errorMessage, maxCount, ...inputProps }: InputProps) => {
   return (
-    <S.Wrapper>
-      <S.InputField
+    <C.Wrapper>
+      <C.InputField
         {...inputProps}
         id={inputProps.id}
         aria-label={inputProps['aria-label']}
@@ -24,13 +19,13 @@ const Input = ({
         $isError={!!errorMessage}
       />
       <S.InputFooterContainer>
-        <S.ErrorMessage>{errorMessage ? errorMessage : ''}</S.ErrorMessage>
+        <C.ErrorMessage>{errorMessage ? errorMessage : ''}</C.ErrorMessage>
         <S.InputCount>
           {maxCount && `${inputProps.value.length} / ${maxCount}`}
         </S.InputCount>
       </S.InputFooterContainer>
-    </S.Wrapper>
+    </C.Wrapper>
   );
 };
 
-export default Input;
+export default TextInput;

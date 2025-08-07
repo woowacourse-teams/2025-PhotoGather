@@ -10,8 +10,14 @@ export const Wrapper = styled.div`
 export const TopContainer = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
   gap: 32px;
+  flex-grow: 1;
+`;
+
+export const TextContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 `;
 
 export const BottomContainer = styled.div`
