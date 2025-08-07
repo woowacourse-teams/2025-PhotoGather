@@ -1,6 +1,6 @@
 import type { Timer } from '../types/timer.type';
 
-export const isTimerExpired = (timer: Timer): boolean => {
+export const checkIsTimerExpired = (timer: Timer): boolean => {
   return (
     timer.days === 0 &&
     timer.hours === 0 &&
