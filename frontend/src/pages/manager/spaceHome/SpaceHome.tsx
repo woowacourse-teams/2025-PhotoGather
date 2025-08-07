@@ -6,9 +6,9 @@ import { ReactComponent as ArrowUpSvg } from '../../../@assets/icons/upwardArrow
 import FloatingActionButton from '../../../components/@common/buttons/floatingActionButton/FloatingActionButton';
 import FloatingIconButton from '../../../components/@common/buttons/floatingIconButton/FloatingIconButton';
 import SpaceManagerImageGrid from '../../../components/@common/imageLayout/imageGrid/spaceManagerImageGrid/SpaceManagerImageGrid';
+import SpaceHeader from '../../../components/header/spaceHeader/SpaceHeader';
 import LoadingLayout from '../../../components/layout/loadingLayout/LoadingLayout';
 import PhotoSelectionToolBar from '../../../components/photoSelectionToolBar/PhotoSelectionToolBar';
-import SpaceHeader from '../../../components/spaceHeader/SpaceHeader';
 import SpaceHomeTopActionBar from '../../../components/spaceHomeTopActionBar/SpaceHomeTopActionBar';
 import { INFORMATION } from '../../../constants/messages';
 import useIntersectionObserver from '../../../hooks/@common/useIntersectionObserver';
