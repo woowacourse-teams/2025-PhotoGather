@@ -2,19 +2,23 @@ import { useState } from 'react';
 import { photoService } from '../../apis/services/photo.service';
 import { CONSTRAINTS } from '../../constants/constraints';
 import { NETWORK } from '../../constants/errors';
-import { mockSpaceData } from '../../pages/manager/spaceHome/mockSpaceData';
 import type { PreviewFile, UploadFile } from '../../types/file.type';
 import type { ToastBase } from '../../types/toast.type';
 import { isValidFileType } from '../../utils/isValidFileType';
 import useApiCall from './useApiCall';
 
 interface UseFileUploadProps {
+  spaceCode: string;
   fileType: string;
   //TODO: 추후 다른 에러 ui가 들어온다면, 타입 변경 필수
   showError: (options: ToastBase) => void;
 }
 
-const useFileUpload = ({ fileType, showError }: UseFileUploadProps) => {
+const useFileUpload = ({
+  spaceCode,
+  fileType,
+  showError,
+}: UseFileUploadProps) => {
   const [uploadFiles, setUploadFiles] = useState<UploadFile[]>([]);
   const [previewData, setPreviewData] = useState<PreviewFile[]>([]);
   const [isUploading, setIsUploading] = useState(false);
@@ -92,7 +96,7 @@ const useFileUpload = ({ fileType, showError }: UseFileUploadProps) => {
       setIsUploading(true);
       const files = uploadFiles.map((file) => file.originFile);
       const response = await safeApiCall(() =>
-        photoService.uploadFiles(mockSpaceData.code, files),
+        photoService.uploadFiles(spaceCode, files),
       );
 
       if (response.success) {

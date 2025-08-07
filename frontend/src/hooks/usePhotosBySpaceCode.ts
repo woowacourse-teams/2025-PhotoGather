@@ -2,7 +2,6 @@ import { useMemo, useRef, useState } from 'react';
 import { photoService } from '../apis/services/photo.service';
 import { DEBUG_MESSAGES } from '../constants/debugMessages';
 import { NETWORK } from '../constants/errors';
-import { mockSpaceData } from '../pages/manager/spaceHome/mockSpaceData';
 import type { Photo } from '../types/photo.type';
 import { buildThumbnailUrl } from '../utils/buildImageUrl';
 import { parsedImagePath } from '../utils/parsedImagePath';
@@ -32,14 +31,10 @@ const usePhotosBySpaceCode = ({
     return new Map(
       photosList.map((photo) => [
         photo.id,
-        buildThumbnailUrl(
-          mockSpaceData.code,
-          parsedImagePath(photo.path),
-          PRESET,
-        ),
+        buildThumbnailUrl(spaceCode, parsedImagePath(photo.path), PRESET),
       ]),
     );
-  }, [photosList]);
+  }, [photosList, spaceCode]);
 
   const isEndPage = currentPage.current > totalPages.current;
 

@@ -13,6 +13,7 @@ import useFileUpload from '../../../hooks/@common/useFileUpload';
 import useIntersectionObserver from '../../../hooks/@common/useIntersectionObserver';
 import useLeftTimer from '../../../hooks/@common/useLeftTimer';
 import { useToast } from '../../../hooks/@common/useToast';
+import useSpaceCodeFromPath from '../../../hooks/useSpaceCodeFromPath';
 import useSpaceInfo from '../../../hooks/useSpaceInfo';
 import { ScrollableBlurArea } from '../../../styles/@common/ScrollableBlurArea';
 import { theme } from '../../../styles/theme';
@@ -21,10 +22,10 @@ import { goToTop } from '../../../utils/goToTop';
 import EarlyPage from '../../status/earlyPage/EarlyPage';
 import ExpiredPage from '../../status/expiredPage/ExpiredPage';
 import * as S from './ImageUploadPage.styles';
-import { mockSpaceData } from './mockSpaceData';
 
 const ImageUploadPage = () => {
-  const { spaceInfo } = useSpaceInfo(mockSpaceData.code);
+  const { spaceId } = useSpaceCodeFromPath();
+  const { spaceInfo } = useSpaceInfo(spaceId ?? '');
   const isEarlyTime = checkIsEarlyDate((spaceInfo?.openedAt as string) ?? '');
   const isSpaceExpired = !spaceInfo || spaceInfo?.isExpired;
 
@@ -37,7 +38,11 @@ const ImageUploadPage = () => {
     handleFilesDrop,
     handleUploadFiles,
     handleDeleteFile,
-  } = useFileUpload({ fileType: 'image', showError: showToast });
+  } = useFileUpload({
+    spaceCode: spaceId ?? '',
+    fileType: 'image',
+    showError: showToast,
+  });
 
   const hasImages = Array.isArray(previewData) && previewData.length > 0;
   const { targetRef: hideBlurAreaTriggerRef, isIntersecting: isAtPageBottom } =
@@ -52,7 +57,11 @@ const ImageUploadPage = () => {
   const handleUploadClick = async () => {
     const uploadSuccess = await handleUploadFiles();
     if (uploadSuccess) {
-      navigate(ROUTES.COMPLETE.UPLOAD);
+      navigate(ROUTES.COMPLETE.UPLOAD, {
+        state: {
+          spaceId: spaceId,
+        },
+      });
     }
   };
 

@@ -3,9 +3,13 @@ import { useLocation } from 'react-router-dom';
 const useSpaceCodeFromPath = () => {
   const { pathname } = useLocation();
 
-  const match = pathname.match(/^\/(?:upload|space)\/(\d+)$/);
+  const match = pathname.match(
+    /^\/(manager|guest)\/(space-home|image-upload)\/([^/]+)$/,
+  );
 
-  return match ? match[1] : null;
+  const spaceId = match ? match[3] : null;
+
+  return { spaceId };
 };
 
 export default useSpaceCodeFromPath;

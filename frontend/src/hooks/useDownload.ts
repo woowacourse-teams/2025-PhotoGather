@@ -5,16 +5,16 @@ import { DEBUG_MESSAGES } from '../constants/debugMessages';
 import { NETWORK } from '../constants/errors';
 import { ERROR } from '../constants/messages';
 import { ROUTES } from '../constants/routes';
-import { mockSpaceData } from '../pages/manager/spaceHome/mockSpaceData';
 import type { ApiResponse } from '../types/api.type';
 import useApiCall from './@common/useApiCall';
 import { useToast } from './@common/useToast';
 
 interface UseDownloadProps {
+  spaceCode: string;
   spaceName: string;
 }
 
-const useDownload = ({ spaceName }: UseDownloadProps) => {
+const useDownload = ({ spaceCode, spaceName }: UseDownloadProps) => {
   const [isDownloading, setIsDownloading] = useState(false);
   const navigate = useNavigate();
   const { safeApiCall } = useApiCall();
@@ -43,14 +43,14 @@ const useDownload = ({ spaceName }: UseDownloadProps) => {
       return;
     }
     await handleDownload(() =>
-      photoService.downloadPhotos(mockSpaceData.code, {
+      photoService.downloadPhotos(spaceCode, {
         photoIds: photoIds,
       }),
     );
   };
 
   const downloadAll = async () => {
-    await handleDownload(() => photoService.downloadAll(mockSpaceData.code));
+    await handleDownload(() => photoService.downloadAll(spaceCode));
   };
 
   const handleDownload = async (

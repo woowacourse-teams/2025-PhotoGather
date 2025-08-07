@@ -17,6 +17,7 @@ import useDownload from '../../../hooks/useDownload';
 import usePhotoSelect from '../../../hooks/usePhotoSelect';
 import usePhotosBySpaceCode from '../../../hooks/usePhotosBySpaceCode';
 import usePhotosDelete from '../../../hooks/usePhotosDelete';
+import useSpaceCodeFromPath from '../../../hooks/useSpaceCodeFromPath';
 import useSpaceInfo from '../../../hooks/useSpaceInfo';
 import { ScrollableBlurArea } from '../../../styles/@common/ScrollableBlurArea';
 import { theme } from '../../../styles/theme';
@@ -24,14 +25,13 @@ import { checkIsEarlyDate } from '../../../utils/checkIsEarlyTime';
 import { goToTop } from '../../../utils/goToTop';
 import EarlyPage from '../../status/earlyPage/EarlyPage';
 import ExpiredPage from '../../status/expiredPage/ExpiredPage';
-import { mockSpaceData } from './mockSpaceData';
 import * as S from './SpaceHome.styles';
 
 const SpaceHome = () => {
-  const { spaceInfo } = useSpaceInfo(mockSpaceData.code);
+  const { spaceId } = useSpaceCodeFromPath();
+  const { spaceInfo } = useSpaceInfo(spaceId ?? '');
   const isEarlyTime = checkIsEarlyDate((spaceInfo?.openedAt as string) ?? '');
   const isSpaceExpired = !spaceInfo || spaceInfo?.isExpired;
-
   const spaceName = spaceInfo?.name ?? '';
   const { targetRef: hideBlurAreaTriggerRef, isIntersecting: isAtPageBottom } =
     useIntersectionObserver({});
@@ -56,10 +56,11 @@ const SpaceHome = () => {
     updatePhotos,
   } = usePhotosBySpaceCode({
     reObserve,
-    spaceCode: mockSpaceData.code,
+    spaceCode: spaceId ?? '',
   });
 
   const { isDownloading, downloadAll, selectDownload } = useDownload({
+    spaceCode: spaceId ?? '',
     spaceName,
   });
 
@@ -76,6 +77,7 @@ const SpaceHome = () => {
   } = usePhotoSelect({ photosList: photosList ?? [] });
 
   const { submitDeletePhotos, isDeleting } = usePhotosDelete({
+    spaceCode: spaceId ?? '',
     toggleSelectMode,
     updatePhotos,
     fetchPhotosList,
