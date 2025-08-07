@@ -31,7 +31,9 @@ const SpaceHome = () => {
   const { spaceId } = useSpaceCodeFromPath();
   const { spaceInfo } = useSpaceInfo(spaceId ?? '');
   const isEarlyTime = checkIsEarlyDate((spaceInfo?.openedAt as string) ?? '');
-  const isSpaceExpired = !spaceInfo || spaceInfo?.isExpired;
+  // TODO: NoData 시 표시할 Layout 필요
+  const isNoData = !spaceInfo;
+  const isSpaceExpired = spaceInfo?.isExpired;
   const spaceName = spaceInfo?.name ?? '';
   const { targetRef: hideBlurAreaTriggerRef, isIntersecting: isAtPageBottom } =
     useIntersectionObserver({});

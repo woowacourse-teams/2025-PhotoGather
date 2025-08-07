@@ -27,7 +27,9 @@ const ImageUploadPage = () => {
   const { spaceId } = useSpaceCodeFromPath();
   const { spaceInfo } = useSpaceInfo(spaceId ?? '');
   const isEarlyTime = checkIsEarlyDate((spaceInfo?.openedAt as string) ?? '');
-  const isSpaceExpired = !spaceInfo || spaceInfo?.isExpired;
+  const isSpaceExpired = spaceInfo?.isExpired;
+  // TODO: NoData 시 표시할 Layout 필요
+  const isNoData = !spaceInfo;
 
   const spaceName = spaceInfo?.name ?? '';
   const { showToast } = useToast();
