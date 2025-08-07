@@ -9,7 +9,6 @@ export const Wrapper = styled.div`
   flex-direction: column;
   align-items: center;
   gap: 20px;
-  border: 1px solid green;
 `;
 
 export const FromContainer = styled.div`
@@ -27,13 +26,20 @@ export const FromMessage = styled.span`
   color: ${({ theme }) => theme.colors.white};
 `;
 
-export const Photo = styled.div`
+export const PhotoContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
   width: 100%;
   min-width: 240px;
   min-height: 330px;
   aspect-ratio: 1;
-  background: url(<path-to-image>) lightgray 50% / contain no-repeat;
+  object-fit: contain;
+  background-color: ${({ theme }) => theme.colors.gray06};
 `;
+
+export const Photo = styled.img``;
 
 export const ButtonContainer = styled.div<{ $isManagerMode: boolean }>`
   display: flex;
