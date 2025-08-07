@@ -1,5 +1,3 @@
-import type { SpaceContent } from './spaceContent.type';
-
 export interface SpaceCreateInfo {
   name: string;
   openedAt: string;
@@ -18,12 +16,7 @@ export interface Space {
   name: string;
   openedAt: Date | string;
   expiredAt: Date | string;
-  createdAt: Date | string;
-  updatedAt: Date | string;
-}
-
-export interface SpaceWithContents extends Space {
-  contents: SpaceContent[];
+  isExpired: boolean;
 }
 
 export interface UpdateSpaceInput {
