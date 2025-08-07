@@ -6,7 +6,7 @@ import * as S from './SpaceHeader.styles';
 interface SpaceHeaderProps {
   /** 헤더의 제목 */
   title: string;
-  /** 헤더의 설명 */
+  /** 헤더의 타이머 */
   timer: Timer;
   /** 헤더 우상단 아이콘 */
   icon?: React.ReactNode;
