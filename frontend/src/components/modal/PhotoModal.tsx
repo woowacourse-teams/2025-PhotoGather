@@ -90,7 +90,7 @@ const PhotoModal = (props: PhotoModalProps) => {
         let imageUrl = '';
 
         if (data.path) {
-          const fileName = parsedImagePath(data.path);
+          const fileName = data.path;
           if (fileName) {
             imageUrl = buildOriginalImageUrl(managerSpaceCode, fileName);
             console.log('🔨 Built image URL:', {
