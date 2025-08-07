@@ -80,7 +80,6 @@ const SpaceHome = () => {
         type: 'info',
       });
       updatePhotos(extractRemainingPhotos());
-      toggleSelectMode();
       await fetchPhotosList();
     }
   };
@@ -89,6 +88,7 @@ const SpaceHome = () => {
     selectedPhotoIds: selectedPhotoIds,
     submitDeletePhotos,
     showToast,
+    toggleSelectMode,
   });
 
   //biome-ignore lint/correctness/useExhaustiveDependencies: isFetchSectionVisible 변경 시 호출

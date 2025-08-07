@@ -8,19 +8,21 @@ interface UsePhotosDeleteProps {
   selectedPhotoIds: number[];
   submitDeletePhotos: () => Promise<void>;
   showToast: (options: ToastBase) => void;
+  toggleSelectMode: () => void;
 }
 
 const usePhotosDelete = ({
   selectedPhotoIds,
   submitDeletePhotos,
   showToast,
+  toggleSelectMode,
 }: UsePhotosDeleteProps) => {
   const fetchDeletePhotos = async () => {
     try {
       await photoService.deletePhotos(mockSpaceData.code, {
         photoIds: selectedPhotoIds,
       });
-      console.log(selectedPhotoIds);
+      await submitDeletePhotos();
     } catch (error) {
       showToast({
         text: '다시 시도해 주세요.',
@@ -28,7 +30,7 @@ const usePhotosDelete = ({
       });
       console.error(error);
     } finally {
-      await submitDeletePhotos();
+      toggleSelectMode();
     }
   };
   return { fetchDeletePhotos };
