@@ -85,8 +85,7 @@ const SpaceHome = () => {
         spaceCode={mockSpaceData.code}
         uploaderName="알 수 없음"
         onDownload={() => {
-          // 다운로드 로직 구현
-          console.log('Download photo:', photoId);
+          selectDownload([photoId]);
         }}
       />,
       {
