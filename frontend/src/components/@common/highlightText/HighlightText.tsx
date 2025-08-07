@@ -42,7 +42,10 @@ const HighlightText = ({
             {token}
           </S.HighLight>
         ) : (
-          <S.Text key={token} $textColorStyle={textColorStyle ?? 'gray06'}>
+          <S.Text
+            key={token + String(index)}
+            $textColorStyle={textColorStyle ?? 'gray06'}
+          >
             {token}
           </S.Text>
         ),

@@ -1,3 +1,4 @@
+import { ReactComponent as ClockIcon } from '@assets/icons/clock.svg';
 import styled from '@emotion/styled';
 
 export const Wrapper = styled.div`
@@ -17,13 +18,26 @@ export const Title = styled.p`
   color: ${({ theme }) => theme.colors.white};
 `;
 
-export const Description = styled.p`
-  ${({ theme }) => ({ ...theme.typography.bodyLarge })};
-  color: ${({ theme }) => theme.colors.white};
-`;
-
 export const Icon = styled.button`
   display: inline-flex;
   justify-content: center;
   align-items: center;
+`;
+
+export const TimerContainer = styled.div`
+  display: flex;
+  gap: 7px;
+`;
+
+export const TextContainer = styled.p<{ $isWithinOneHour: boolean }>`
+  ${({ theme }) => theme.typography.bodyRegular};
+  color: ${({ theme, $isWithinOneHour }) =>
+    $isWithinOneHour ? theme.colors.error : theme.colors.white};
+`;
+
+export const ClockIconContainer = styled(ClockIcon)<{
+  $isWithinOneHour: boolean;
+}>`
+  color: ${({ theme, $isWithinOneHour }) =>
+    $isWithinOneHour ? theme.colors.error : theme.colors.white};
 `;

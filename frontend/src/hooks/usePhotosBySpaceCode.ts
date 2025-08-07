@@ -1,9 +1,11 @@
 import { useMemo, useRef, useState } from 'react';
 import { photoService } from '../apis/services/photo.service';
 import { DEBUG_MESSAGES } from '../constants/debugMessages';
+import { NETWORK } from '../constants/errors';
 import type { Photo } from '../types/photo.type';
 import { buildThumbnailUrl } from '../utils/buildImageUrl';
 import { parsedImagePath } from '../utils/parsedImagePath';
+import useApiCall from './@common/useApiCall';
 
 interface UsePhotosBySpaceIdProps {
   reObserve: () => void;
@@ -21,6 +23,7 @@ const usePhotosBySpaceCode = ({
   const [photosList, setPhotosList] = useState<Photo[] | null>(null);
   const currentPage = useRef(1);
   const totalPages = useRef(1);
+  const { safeApiCall } = useApiCall();
 
   //biome-ignore lint/correctness/useExhaustiveDependencies: photosList 변경 시 호출
   const thumbnailPhotoMap = useMemo(() => {
@@ -44,35 +47,42 @@ const usePhotosBySpaceCode = ({
     });
   };
 
-  const fetchPhotosList = () => {
+  const fetchPhotosList = async () => {
     setIsLoading(true);
-    const pageToFetch = currentPage.current;
 
-    photoService
-      .getBySpaceCode(spaceCode, {
-        page: pageToFetch,
-        size: PAGE_SIZE,
-      })
-      .then((res) => {
-        const data = res.data;
+    try {
+      const pageToFetch = currentPage.current;
+      const response = await safeApiCall(() =>
+        photoService.getBySpaceCode(spaceCode, {
+          page: pageToFetch,
+          size: PAGE_SIZE,
+        }),
+      );
+
+      if (response.success && response.data) {
+        const data = response.data;
         currentPage.current += 1;
         if (!data) {
           console.warn(DEBUG_MESSAGES.NO_RESPONSE);
           return;
         }
-
         const { photos } = data;
         updatePhotosList(photos, data.totalPages);
         requestAnimationFrame(() => {
           reObserve();
         });
-      })
-      .catch((err) => {
-        console.error(err);
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
+      } else {
+        if (
+          !response.error?.toLowerCase().includes(NETWORK.DEFAULT.toLowerCase())
+        ) {
+          console.error('사진 목록을 불러오는데 실패했습니다.');
+        }
+      }
+    } catch (error) {
+      console.error('사진 목록 불러오기 실패:', error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return {

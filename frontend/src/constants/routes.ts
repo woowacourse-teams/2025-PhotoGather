@@ -1,5 +1,6 @@
 export const ROUTES = {
   MAIN: '/',
+  CREATE: '/create',
   MANAGER: {
     SPACE_HOME: '/manager/space-home',
   },
@@ -11,6 +12,9 @@ export const ROUTES = {
     UPLOAD: '/complete/upload',
     DOWNLOAD: '/complete/download',
     SPACE_CREATED: '/complete/space-created',
+  },
+  ERROR: {
+    NETWORK: '/network-error',
   },
 } as const;
 

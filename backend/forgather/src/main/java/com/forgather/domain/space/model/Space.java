@@ -60,4 +60,8 @@ public class Space extends BaseTimeEntity {
     public int hashCode() {
         return Objects.hashCode(id);
     }
+
+    public boolean isExpired(LocalDateTime now) {
+        return expiredAt.isBefore(now);
+    }
 }
