@@ -2,9 +2,10 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { photoService } from '../apis/services/photo.service';
 import { DEBUG_MESSAGES } from '../constants/debugMessages';
+import { NETWORK } from '../constants/errors';
 import { ROUTES } from '../constants/routes';
 import { mockSpaceData } from '../pages/manager/spaceHome/mockSpaceData';
-import { tryAsync } from '../utils/tryAsync';
+import useApiCall from './@common/useApiCall';
 
 interface UseDownloadProps {
   spaceName: string;
@@ -13,6 +14,7 @@ interface UseDownloadProps {
 const useDownload = ({ spaceName }: UseDownloadProps) => {
   const [isDownloading, setIsDownloading] = useState(false);
   const navigate = useNavigate();
+  const { safeApiCall } = useApiCall();
 
   const downloadBlob = (blob: Blob) => {
     const url = URL.createObjectURL(blob);
@@ -27,25 +29,32 @@ const useDownload = ({ spaceName }: UseDownloadProps) => {
     window.URL.revokeObjectURL(url);
   };
 
-  const handleDownload = () => {
-    setIsDownloading(true);
-    tryAsync(
-      async () => {
-        const response = await photoService.downloadZip(mockSpaceData.code);
+  const handleDownload = async () => {
+    try {
+      setIsDownloading(true);
+      const response = await safeApiCall(() =>
+        photoService.downloadZip(mockSpaceData.code),
+      );
+
+      if (response.success && response.data) {
         const blob = response.data;
-        if (!blob) {
-          throw new Error(DEBUG_MESSAGES.NO_BLOB);
-        }
         if (!(blob instanceof Blob)) {
           throw new Error(DEBUG_MESSAGES.NO_BLOB_INSTANCE);
         }
         downloadBlob(blob);
-      },
-      () => {
-        setIsDownloading(false);
         navigate(ROUTES.COMPLETE.DOWNLOAD);
-      },
-    );
+      } else {
+        if (
+          !response.error?.toLowerCase().includes(NETWORK.DEFAULT.toLowerCase())
+        ) {
+          console.error('다운로드에 실패했습니다.');
+        }
+      }
+    } catch (error) {
+      console.error('다운로드 실패:', error);
+    } finally {
+      setIsDownloading(false);
+    }
   };
   return { isDownloading, handleDownload };
 };

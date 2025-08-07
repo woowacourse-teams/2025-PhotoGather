@@ -21,10 +21,13 @@ import com.forgather.domain.space.repository.PhotoRepository;
 import com.forgather.domain.space.repository.SpaceRepository;
 import com.forgather.domain.space.util.MetaDataExtractor;
 import com.forgather.domain.space.util.ZipGenerator;
+import com.forgather.global.logging.Logger;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class PhotoService {
 
@@ -32,6 +35,7 @@ public class PhotoService {
     private final SpaceRepository spaceRepository;
     private final AwsS3Cloud awsS3Cloud;
     private final Path downloadTempPath;
+    private final Logger logger;
 
     public PhotoResponse get(String spaceCode, Long photoId) {
         Space space = spaceRepository.getBySpaceCode(spaceCode);
@@ -40,7 +44,8 @@ public class PhotoService {
         return PhotoResponse.from(photo);
     }
 
-    public PhotosResponse getAll(String spaceCode, Pageable pageable) {
+    public PhotosResponse getAll(String spaceCode, Pageable pageable, Long hostId) {
+        // TODO: Space가 HostId의 소유인지 검증
         Space space = spaceRepository.getBySpaceCode(spaceCode);
         Page<Photo> photos = photoRepository.findAllBySpace(space, pageable);
         return PhotosResponse.from(photos);
@@ -63,6 +68,11 @@ public class PhotoService {
 
     private String upload(String spaceCode, MultipartFile multipartFile) {
         try {
+            logger.log()
+                .event("파일 업로드 시작")
+                .spaceCode(spaceCode)
+                .value("originalName", multipartFile.getOriginalFilename())
+                .info();
             return awsS3Cloud.upload(spaceCode, multipartFile);
         } catch (IOException e) {
             throw new IllegalArgumentException(
@@ -82,7 +92,8 @@ public class PhotoService {
      * 파일 삭제 트랜잭션 분리
      * 사진 원본 이름 대신 유의미한 이름 변경 추가 논의
      */
-    public File compressAll(String spaceCode) throws IOException {
+    public File compressAll(String spaceCode, Long hostId) throws IOException {
+        // TODO: Space가 HostId의 소유인지 검증
         Space space = spaceRepository.getBySpaceCode(spaceCode);
         List<Photo> photos = photoRepository.findAllBySpace(space);
         return compressPhotoFile(spaceCode, photos);
@@ -101,5 +112,39 @@ public class PhotoService {
         File zipFile = ZipGenerator.generate(downloadTempPath, spaceContents, spaceCode);
         FileSystemUtils.deleteRecursively(spaceContents);
         return zipFile;
+    }
+
+    @Transactional
+    public void delete(String spaceCode, Long photoId) {
+        Space space = spaceRepository.getBySpaceCode(spaceCode);
+        Photo photo = photoRepository.getById(photoId);
+        photo.validateSpace(space);
+        photoRepository.delete(photo);
+        awsS3Cloud.deleteContent(photo.getPath());
+    }
+
+    /**
+     * S3 삭제 이후 실패 시 롤백 고려
+     */
+    @Transactional
+    public void deleteSelected(String spaceCode, List<Long> photoIds) {
+        Space space = spaceRepository.getBySpaceCode(spaceCode);
+        List<Photo> photos = photoRepository.findAllByIdIn(photoIds);
+        photos.forEach(photo -> photo.validateSpace(space));
+        List<String> paths = photos.stream()
+            .map(Photo::getPath)
+            .toList();
+        photoRepository.deleteBySpaceAndPhotoIds(space, photoIds);
+        awsS3Cloud.deleteSelectedContents(paths);
+    }
+
+    /**
+     * S3 삭제 이후 실패 시 롤백 고려
+     */
+    @Transactional
+    public void deleteAll(String spaceCode) {
+        Space space = spaceRepository.getBySpaceCode(spaceCode);
+        photoRepository.deleteBySpace(space);
+        awsS3Cloud.deleteAllContents(spaceCode);
     }
 }
