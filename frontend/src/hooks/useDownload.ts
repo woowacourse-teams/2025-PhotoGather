@@ -23,6 +23,7 @@ const useDownload = ({ spaceName }: UseDownloadProps) => {
     const a = document.createElement('a');
     document.body.appendChild(a);
     a.href = url;
+    // TODO : 스페이스명과 연결
     a.download = `${spaceName}.zip`;
     a.click();
 
