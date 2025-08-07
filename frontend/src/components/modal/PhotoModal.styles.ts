@@ -9,6 +9,7 @@ export const Wrapper = styled.div`
   flex-direction: column;
   align-items: center;
   gap: 20px;
+  max-width: 380px;
 `;
 
 export const FromContainer = styled.div`
@@ -36,10 +37,15 @@ export const PhotoContainer = styled.div`
   min-height: 330px;
   aspect-ratio: 1;
   object-fit: contain;
-  background-color: ${({ theme }) => theme.colors.gray06};
 `;
 
-export const Photo = styled.img``;
+export const Photo = styled.img`
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+`;
 
 export const ButtonContainer = styled.div<{ $isManagerMode: boolean }>`
   display: flex;
