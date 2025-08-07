@@ -40,7 +40,6 @@ const request = async <T>(
   const url = `${BASE_URL}${endpoint}${buildQueryString(params)}`;
   const headers = createHeaders(bodyContentType, token);
   const requestBody = createBody(body, bodyContentType);
-  console.log(requestBody);
 
   // TODO : try catch 유틸 분리
   try {

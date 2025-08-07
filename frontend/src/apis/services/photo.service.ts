@@ -33,7 +33,7 @@ export const photoService = {
     http.get<Blob>(`/spaces/${spaceCode}/photos/download`, undefined, 'blob'),
 
   deletePhotos: (spaceCode: string, photoIds: PhotoIds) =>
-    http.post<void>(`/spaces/${spaceCode}/photos/selected`, photoIds, 'json'),
+    http.delete<void>(`/spaces/${spaceCode}/photos/selected`, photoIds, 'json'),
 
   getWithContent: (photoId: number) =>
     http.get<PhotoWithContent>(`/photos/${photoId}/content`),

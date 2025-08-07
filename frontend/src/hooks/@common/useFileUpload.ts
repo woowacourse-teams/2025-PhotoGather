@@ -2,13 +2,9 @@ import { useState } from 'react';
 import { photoService } from '../../apis/services/photo.service';
 import { CONSTRAINTS } from '../../constants/constraints';
 import { NETWORK } from '../../constants/errors';
-<<<<<<< HEAD
 import { mockSpaceData } from '../../pages/manager/spaceHome/mockSpaceData';
-import type { PreviewFile } from '../../types/file.type';
-=======
 import type { PreviewFile, UploadFile } from '../../types/file.type';
 import type { ToastBase } from '../../types/toast.type';
->>>>>>> develop
 import { isValidFileType } from '../../utils/isValidFileType';
 import useApiCall from './useApiCall';
 

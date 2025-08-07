@@ -2,6 +2,7 @@ import { useMemo, useRef, useState } from 'react';
 import { photoService } from '../apis/services/photo.service';
 import { DEBUG_MESSAGES } from '../constants/debugMessages';
 import { NETWORK } from '../constants/errors';
+import { mockSpaceData } from '../pages/manager/spaceHome/mockSpaceData';
 import type { Photo } from '../types/photo.type';
 import { buildThumbnailUrl } from '../utils/buildImageUrl';
 import { parsedImagePath } from '../utils/parsedImagePath';
@@ -25,12 +26,17 @@ const usePhotosBySpaceCode = ({
   const totalPages = useRef(1);
   const { safeApiCall } = useApiCall();
 
-  //biome-ignore lint/correctness/useExhaustiveDependencies: photosList 변경 시 호출
   const thumbnailPhotoMap = useMemo(() => {
+    // TODO : thumbnail 이미지 참조 실패시 원본 이미지 참조하도록 설정
+    if (!photosList) return new Map();
     return new Map(
-      photosList?.map((photo) => [
+      photosList.map((photo) => [
         photo.id,
-        buildThumbnailUrl(spaceCode, parsedImagePath(photo.path), PRESET),
+        buildThumbnailUrl(
+          mockSpaceData.code,
+          parsedImagePath(photo.path),
+          PRESET,
+        ),
       ]),
     );
   }, [photosList]);
@@ -69,7 +75,6 @@ const usePhotosBySpaceCode = ({
       if (response.success && response.data) {
         const data = response.data;
         currentPage.current += 1;
-        console.log('fetch');
         if (!data) {
           console.warn(DEBUG_MESSAGES.NO_RESPONSE);
           return;
