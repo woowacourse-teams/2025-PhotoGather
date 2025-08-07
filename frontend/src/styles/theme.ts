@@ -30,12 +30,8 @@ export const theme = {
       active: '#F0EBFCB3',
       default: '#F0EBFC66',
     },
-<<<<<<< HEAD
-    overlay: '#000000',
-=======
     overlay: '#000000B3',
     kakaoTalk: '#FFEB00',
->>>>>>> develop
   },
   typography: {
     header01: {

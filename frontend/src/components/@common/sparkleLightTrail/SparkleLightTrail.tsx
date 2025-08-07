@@ -2,7 +2,6 @@ import { useEffect, useRef } from 'react';
 import { theme } from '../../../styles/theme';
 import * as S from './SparkleLightTrail.styles';
 
-<<<<<<< HEAD
 /**
  * Inspired by CodePen by Jack Rugile
  * Original animation concept by Ramiro Galan
@@ -10,8 +9,6 @@ import * as S from './SparkleLightTrail.styles';
  * Modified and adapted for React + Emotion by [Your Name], [Date]
  */
 
-=======
->>>>>>> develop
 const SparkleLightTrail = () => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
