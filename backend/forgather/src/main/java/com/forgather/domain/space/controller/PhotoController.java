@@ -81,7 +81,7 @@ public class PhotoController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping(value = "/download/selected", produces = ZIP_CONTENT_TYPE)
+    @PostMapping(value = "/download/selected", produces = ZIP_CONTENT_TYPE)
     @Operation(summary = "사진 zip 선택 다운로드", description = "특정 공간의 선택된 사진을 zip 파일로 다운로드합니다.")
     public ResponseEntity<StreamingResponseBody> downloadSelected(
         @PathVariable(name = "spaceCode") String spaceCode,
@@ -117,7 +117,7 @@ public class PhotoController {
             .body(responseBody);
     }
 
-    @GetMapping(value = "/download", produces = ZIP_CONTENT_TYPE)
+    @PostMapping(value = "/download", produces = ZIP_CONTENT_TYPE)
     @Operation(summary = "사진 zip 일괄 다운로드", description = "특정 공간의 사진 목록을 zip 파일로 다운로드합니다.")
     public ResponseEntity<StreamingResponseBody> downloadAll(
         @PathVariable(name = "spaceCode") String spaceCode,

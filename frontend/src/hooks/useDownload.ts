@@ -3,9 +3,12 @@ import { useNavigate } from 'react-router-dom';
 import { photoService } from '../apis/services/photo.service';
 import { DEBUG_MESSAGES } from '../constants/debugMessages';
 import { NETWORK } from '../constants/errors';
+import { ERROR } from '../constants/messages';
 import { ROUTES } from '../constants/routes';
 import { mockSpaceData } from '../pages/manager/spaceHome/mockSpaceData';
+import type { ApiResponse } from '../types/api.type';
 import useApiCall from './@common/useApiCall';
+import { useToast } from './@common/useToast';
 
 interface UseDownloadProps {
   spaceName: string;
@@ -15,6 +18,7 @@ const useDownload = ({ spaceName }: UseDownloadProps) => {
   const [isDownloading, setIsDownloading] = useState(false);
   const navigate = useNavigate();
   const { safeApiCall } = useApiCall();
+  const { showToast } = useToast();
 
   const downloadBlob = (blob: Blob) => {
     const url = URL.createObjectURL(blob);
@@ -22,6 +26,7 @@ const useDownload = ({ spaceName }: UseDownloadProps) => {
     const a = document.createElement('a');
     document.body.appendChild(a);
     a.href = url;
+    // TODO : 스페이스명 연동 후 변경
     a.download = `${spaceName}.zip`;
     a.click();
 
@@ -29,12 +34,31 @@ const useDownload = ({ spaceName }: UseDownloadProps) => {
     window.URL.revokeObjectURL(url);
   };
 
-  const handleDownload = async () => {
+  const selectDownload = async (photoIds: number[]) => {
+    if (photoIds.length === 0) {
+      showToast({
+        text: ERROR.DOWNLOAD.NO_SELECTED_PHOTO,
+        type: 'error',
+      });
+      return;
+    }
+    await handleDownload(() =>
+      photoService.downloadPhotos(mockSpaceData.code, {
+        photoIds: photoIds,
+      }),
+    );
+  };
+
+  const downloadAll = async () => {
+    await handleDownload(() => photoService.downloadAll(mockSpaceData.code));
+  };
+
+  const handleDownload = async (
+    fetchFunction: () => Promise<ApiResponse<unknown>>,
+  ) => {
     try {
       setIsDownloading(true);
-      const response = await safeApiCall(() =>
-        photoService.downloadZip(mockSpaceData.code),
-      );
+      const response = await safeApiCall(fetchFunction);
 
       if (response.success && response.data) {
         const blob = response.data;
@@ -56,7 +80,7 @@ const useDownload = ({ spaceName }: UseDownloadProps) => {
       setIsDownloading(false);
     }
   };
-  return { isDownloading, handleDownload };
+  return { isDownloading, downloadAll, selectDownload };
 };
 
 export default useDownload;

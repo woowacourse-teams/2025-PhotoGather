@@ -91,6 +91,12 @@ export const ERROR = {
     DATE: '오늘 이전 날짜는 선택할 수 없어요.',
     TIME: '현재 시간 이후 시간대를 입력해주세요.',
   },
+  DOWNLOAD: {
+    NO_SELECTED_PHOTO: '선택된 사진이 없습니다.',
+  },
+  DELETE: {
+    NO_SELECTED_PHOTO: '선택된 사진이 없습니다.',
+  },
 };
 
 export const createPhotoSelectedMessage = (count: number) =>

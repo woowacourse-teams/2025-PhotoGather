@@ -1,4 +1,4 @@
-import { createContext, useState } from 'react';
+import { createContext, useCallback, useState } from 'react';
 import { ToastList } from '../components/@common/notification/toastList/ToastList';
 import type { Toast, ToastBase } from '../types/toast.type';
 
@@ -18,23 +18,26 @@ export const ToastProvider = ({ children }: { children: React.ReactNode }) => {
   const [toasts, setToasts] = useState<Toast[]>([]);
   const TOAST_EXIT_DELAY = 500;
 
-  const removeToast = (id: number) => {
+  const removeToast = useCallback((id: number) => {
     setToasts((prev) => prev.filter((toast) => toast.id !== id));
-  };
+  }, []);
 
-  const showToast = ({
-    text,
-    type = 'error',
-    duration = 5000,
-    position = 'bottom',
-  }: ToastBase) => {
-    const id = toastId++;
-    setToasts((prev) => [...prev, { id, text, type, position, duration }]);
+  const showToast = useCallback(
+    ({
+      text,
+      type = 'error',
+      duration = 5000,
+      position = 'bottom',
+    }: ToastBase) => {
+      const id = toastId++;
+      setToasts((prev) => [...prev, { id, text, type, duration, position }]);
 
-    setTimeout(() => {
-      removeToast(id);
-    }, duration + TOAST_EXIT_DELAY);
-  };
+      setTimeout(() => {
+        removeToast(id);
+      }, duration + TOAST_EXIT_DELAY);
+    },
+    [removeToast],
+  );
 
   return (
     <ToastContext.Provider value={{ showToast, removeToast, toasts }}>
