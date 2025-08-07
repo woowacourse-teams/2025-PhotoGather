@@ -21,11 +21,13 @@ import useSpaceInfo from '../../../hooks/useSpaceInfo';
 import { ScrollableBlurArea } from '../../../styles/@common/ScrollableBlurArea';
 import { theme } from '../../../styles/theme';
 import { goToTop } from '../../../utils/goToTop';
+import ExpiredPage from '../../status/expiredPage/ExpiredPage';
 import { mockSpaceData } from './mockSpaceData';
 import * as S from './SpaceHome.styles';
 
 const SpaceHome = () => {
   const { spaceInfo } = useSpaceInfo(mockSpaceData.code);
+  const isSpaceExpired = !spaceInfo || spaceInfo?.isExpired;
   const spaceName = spaceInfo?.name ?? '';
   const { targetRef: hideBlurAreaTriggerRef, isIntersecting: isAtPageBottom } =
     useIntersectionObserver({});
@@ -106,6 +108,7 @@ const SpaceHome = () => {
       {(isDownloading || isDeleting) && (
         <LoadingLayout loadingContents={loadingContents} percentage={0} />
       )}
+      {isSpaceExpired && <ExpiredPage />}
       <S.InfoContainer ref={scrollTopTriggerRef}>
         <SpaceHeader
           title={spaceName}
