@@ -63,7 +63,7 @@ const SpaceHome = () => {
     selectedPhotoMap,
     selectedPhotosCount,
     toggleSelectedPhoto,
-    extractRemainingPhotos,
+    extractUnselectedPhotos,
     selectedPhotoIds,
     isAllSelected,
     toggleAllSelected,
@@ -79,7 +79,7 @@ const SpaceHome = () => {
         text: `${selectedPhotoIds.length}개의 사진을 삭제했습니다.`,
         type: 'info',
       });
-      updatePhotos(extractRemainingPhotos());
+      updatePhotos(extractUnselectedPhotos());
       await fetchPhotosList();
     }
   };

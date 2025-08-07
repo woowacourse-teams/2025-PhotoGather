@@ -21,7 +21,7 @@ const usePhotoSelect = ({ photosList }: UsePhotoSelectProps) => {
     .filter(([_, value]) => value)
     .map(([key]) => key);
 
-  const extractRemainingPhotos = () => {
+  const extractUnselectedPhotos = () => {
     return photosList.filter((photo) => !selectedPhotoMap.get(photo.id));
   };
 
@@ -64,7 +64,7 @@ const usePhotoSelect = ({ photosList }: UsePhotoSelectProps) => {
     selectedPhotoMap,
     selectedPhotosCount,
     selectedPhotoIds,
-    extractRemainingPhotos,
+    extractUnselectedPhotos,
     toggleSelectedPhoto,
     isAllSelected,
     toggleAllSelected,
