@@ -109,6 +109,14 @@ public class AwsS3Cloud {
         return photoPaths;
     }
 
+    private CompletableFuture<CompletedFileDownload> downloadFileAsync(String key, Path localPath) {
+        DownloadFileRequest request = DownloadFileRequest.builder()
+            .getObjectRequest(r -> r.bucket(s3Properties.getBucketName()).key(key))
+            .destination(localPath)
+            .build();
+        return transferManager.downloadFile(request).completionFuture();
+    }
+
     public void deleteContent(String path) {
         DeleteObjectRequest deleteRequest = DeleteObjectRequest.builder()
             .bucket(s3Properties.getBucketName())
@@ -156,13 +164,5 @@ public class AwsS3Cloud {
             .bucket(s3Properties.getBucketName())
             .prefix(s3Prefix)
             .build();
-    }
-
-    private CompletableFuture<CompletedFileDownload> downloadFileAsync(String key, Path localPath) {
-        DownloadFileRequest request = DownloadFileRequest.builder()
-            .getObjectRequest(r -> r.bucket(s3Properties.getBucketName()).key(key))
-            .destination(localPath)
-            .build();
-        return transferManager.downloadFile(request).completionFuture();
     }
 }
