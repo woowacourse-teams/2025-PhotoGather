@@ -5,6 +5,8 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: keyof typeof S.buttonStyles;
   /** 버튼 내부 텍스트 */
   text: string;
+  /** 버튼 아이콘 */
+  icon?: React.ReactNode;
   /** 버튼 클릭했을 때 실행할 함수*/
   onClick: () => void;
   /** 버튼 활성화 여부*/
@@ -14,6 +16,7 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 const Button = ({
   variant = 'primary',
   text,
+  icon,
   onClick,
   disabled = false,
   ...buttonProps
@@ -26,6 +29,7 @@ const Button = ({
       disabled={disabled}
     >
       {text}
+      {icon && <S.Icon>{icon}</S.Icon>}
     </S.StyledButton>
   );
 };

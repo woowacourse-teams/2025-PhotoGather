@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { photoService } from '../../apis/services/photo.service';
 import { CONSTRAINTS } from '../../constants/constraints';
 import { NETWORK } from '../../constants/errors';
+import { mockSpaceData } from '../../pages/manager/spaceHome/mockSpaceData';
 import type { PreviewFile, UploadFile } from '../../types/file.type';
 import type { ToastBase } from '../../types/toast.type';
 import { isValidFileType } from '../../utils/isValidFileType';
@@ -38,7 +39,7 @@ const useFileUpload = ({ fileType, showError }: UseFileUploadProps) => {
   const splitValidFilesByType = (files: File[], type: string) => {
     return files.reduce(
       (acc, file) => {
-        isValidFileType(file, type, CONSTRAINTS.DISALLOWED_FILE_TYPES)
+        isValidFileType(file, type, CONSTRAINTS.NOT_ALLOWED)
           ? acc.validFiles.push(file)
           : acc.invalidFiles.push(file);
         return acc;
@@ -91,7 +92,7 @@ const useFileUpload = ({ fileType, showError }: UseFileUploadProps) => {
       setIsUploading(true);
       const files = uploadFiles.map((file) => file.originFile);
       const response = await safeApiCall(() =>
-        photoService.uploadFiles('1234567890', files),
+        photoService.uploadFiles(mockSpaceData.code, files),
       );
 
       if (response.success) {

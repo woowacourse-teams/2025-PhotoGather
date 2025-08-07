@@ -1,3 +1,4 @@
+import rocketIcon from '@assets/images/rocket.png';
 import downloadLoadingSpinner from '@assets/loading-spinner.gif';
 import { useNavigate } from 'react-router-dom';
 import { ReactComponent as ArrowUpSvg } from '../../../@assets/icons/upwardArrow.svg';
@@ -5,6 +6,7 @@ import FloatingActionButton from '../../../components/@common/buttons/floatingAc
 import FloatingIconButton from '../../../components/@common/buttons/floatingIconButton/FloatingIconButton';
 import HighlightText from '../../../components/@common/highlightText/HighlightText';
 import GuestImageGrid from '../../../components/@common/imageLayout/imageGrid/guestImageGrid/GuestImageGrid';
+import LoadingLayout from '../../../components/layout/LoadingLayout/LoadingLayout';
 import SpaceHeader from '../../../components/spaceHeader/SpaceHeader';
 import UploadBox from '../../../components/uploadBox/UploadBox';
 import { ROUTES } from '../../../constants/routes';
@@ -45,6 +47,22 @@ const ImageUploadPage = () => {
       navigate(ROUTES.COMPLETE.UPLOAD);
     }
   };
+
+  if (isUploading) {
+    return (
+      <S.Wrapper $hasImages={hasImages}>
+        <LoadingLayout
+          iconList={[
+            { src: rocketIcon, alt: '로딩 아이콘1' },
+            { src: rocketIcon, alt: '로딩 아이콘2' },
+            { src: rocketIcon, alt: '로딩 아이콘3' },
+          ]}
+          descriptionList={['업로드 중1', '업로드 중2', '업로드 중3']}
+          percentage={0}
+        />
+      </S.Wrapper>
+    );
+  }
 
   return (
     <S.Wrapper $hasImages={hasImages}>

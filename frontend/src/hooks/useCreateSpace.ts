@@ -5,7 +5,7 @@ import type { SpaceCreateInfo } from '../types/space.type';
 const useCreateSpace = () => {
   const [isCreating, setIsCreating] = useState(false);
 
-  const fetchCreateSpace = async (spaceCreateInfo: SpaceCreateInfo) => {
+  const fetchCreateSpace = async (_spaceCreateInfo: SpaceCreateInfo) => {
     setIsCreating(true);
     try {
       // TODO: 모킹 API 삭제

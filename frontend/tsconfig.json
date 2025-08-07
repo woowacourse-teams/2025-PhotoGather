@@ -9,6 +9,7 @@
     "forceConsistentCasingInFileNames": true,
     "allowSyntheticDefaultImports": true,
     "skipLibCheck": true,
+    "resolveJsonModule": true,
     "types": ["node", "jest", "@testing-library/jest-dom"]
   },
   "include": ["src", ".storybook"]

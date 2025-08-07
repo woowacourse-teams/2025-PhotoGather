@@ -1,20 +1,23 @@
-import downloadLoadingSpinner from '@assets/loading-spinner.gif';
+import rocketIcon from '@assets/images/rocket.png';
 import { useEffect } from 'react';
 import { ReactComponent as SaveIcon } from '../../../@assets/icons/download.svg';
 import { ReactComponent as SettingSvg } from '../../../@assets/icons/setting.svg';
 import { ReactComponent as ArrowUpSvg } from '../../../@assets/icons/upwardArrow.svg';
-import Button from '../../../components/@common/buttons/button/Button';
 import FloatingActionButton from '../../../components/@common/buttons/floatingActionButton/FloatingActionButton';
 import FloatingIconButton from '../../../components/@common/buttons/floatingIconButton/FloatingIconButton';
 import SpaceManagerImageGrid from '../../../components/@common/imageLayout/imageGrid/spaceManagerImageGrid/SpaceManagerImageGrid';
+import LoadingLayout from '../../../components/layout/LoadingLayout/LoadingLayout';
 import PhotoSelectionToolBar from '../../../components/photoSelectionToolBar/PhotoSelectionToolBar';
 import SpaceHeader from '../../../components/spaceHeader/SpaceHeader';
+import SpaceHomeTopActionBar from '../../../components/spaceHomeTopActionBar/SpaceHomeTopActionBar';
 import { INFORMATION } from '../../../constants/messages';
 import useIntersectionObserver from '../../../hooks/@common/useIntersectionObserver';
 import useLeftTimer from '../../../hooks/@common/useLeftTimer';
+import { useToast } from '../../../hooks/@common/useToast';
 import useDownload from '../../../hooks/useDownload';
 import usePhotoSelect from '../../../hooks/usePhotoSelect';
 import usePhotosBySpaceCode from '../../../hooks/usePhotosBySpaceCode';
+import usePhotosDelete from '../../../hooks/usePhotosDelete';
 import { ScrollableBlurArea } from '../../../styles/@common/ScrollableBlurArea';
 import { theme } from '../../../styles/theme';
 import { goToTop } from '../../../utils/goToTop';
@@ -31,9 +34,12 @@ const SpaceHome = () => {
     isIntersecting: isFetchSectionVisible,
     reObserve,
   } = useIntersectionObserver({ rootMargin: '200px' });
+
   const { leftTime } = useLeftTimer({
     targetTime: mockSpaceData.expirationDate,
   });
+
+  const { showToast } = useToast();
 
   const {
     photosList,
@@ -41,6 +47,7 @@ const SpaceHome = () => {
     thumbnailPhotoMap,
     isEndPage,
     fetchPhotosList,
+    updatePhotos,
   } = usePhotosBySpaceCode({
     reObserve,
     spaceCode: mockSpaceData.code,
@@ -54,11 +61,22 @@ const SpaceHome = () => {
     isSelectMode,
     toggleSelectMode,
     selectedPhotoMap,
+    selectedPhotosCount,
     toggleSelectedPhoto,
-    selectedPhotoCount,
-    // TODO : 서버 연동 데이터
-    // extractSelectedPhoto,
+    extractUnselectedPhotos,
+    selectedPhotoIds,
+    isAllSelected,
+    toggleAllSelected,
   } = usePhotoSelect({ photosList: photosList ?? [] });
+
+  const { submitDeletePhotos } = usePhotosDelete({
+    selectedPhotoIds: selectedPhotoIds,
+    showToast,
+    toggleSelectMode,
+    updatePhotos,
+    fetchPhotosList,
+    extractUnselectedPhotos,
+  });
 
   //biome-ignore lint/correctness/useExhaustiveDependencies: isFetchSectionVisible 변경 시 호출
   useEffect(() => {
@@ -66,13 +84,23 @@ const SpaceHome = () => {
     fetchPhotosList();
   }, [isFetchSectionVisible, isEndPage]);
 
+  if (isDownloading) {
+    return (
+      <S.Wrapper>
+        <LoadingLayout
+          iconList={[
+            { src: rocketIcon, alt: '로딩 아이콘' },
+            { src: rocketIcon, alt: '로딩 아이콘' },
+            { src: rocketIcon, alt: '로딩 아이콘' },
+          ]}
+          descriptionList={['로딩 설명', '로딩 설명', '로딩 설명']}
+          percentage={0}
+        />
+      </S.Wrapper>
+    );
+  }
   return (
     <S.Wrapper>
-      {isDownloading && (
-        <S.LoadingSpinnerContainer>
-          <img src={downloadLoadingSpinner} alt="loading" />
-        </S.LoadingSpinnerContainer>
-      )}
       <S.InfoContainer ref={scrollTopTriggerRef}>
         <SpaceHeader
           title={mockSpaceData.name}
@@ -91,13 +119,12 @@ const SpaceHome = () => {
         (photosList.length > 0 ? (
           <>
             <S.ImageManagementContainer>
-              <S.TopActionBar>
-                <Button
-                  text={isSelectMode ? '취소' : '선택'}
-                  onClick={toggleSelectMode}
-                  variant="darkRounded"
-                />
-              </S.TopActionBar>
+              <SpaceHomeTopActionBar
+                isSelectMode={isSelectMode}
+                isAllSelected={isAllSelected}
+                onToggleSelectMode={toggleSelectMode}
+                onToggleAllSelected={toggleAllSelected}
+              />
               <SpaceManagerImageGrid
                 isSelectMode={isSelectMode}
                 selectedPhotoMap={selectedPhotoMap}
@@ -134,8 +161,8 @@ const SpaceHome = () => {
               </S.TopButtonContainer>
               {isSelectMode && (
                 <PhotoSelectionToolBar
-                  selectedCount={selectedPhotoCount}
-                  onDelete={() => {}}
+                  selectedCount={selectedPhotosCount}
+                  onDelete={submitDeletePhotos}
                   onDownload={() => {}}
                 />
               )}
