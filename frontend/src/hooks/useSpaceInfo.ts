@@ -17,6 +17,12 @@ const useSpaceInfo = (spaceCode: string) => {
         const response = await safeApiCall(() =>
           spaceService.getInfoByCode(spaceCode),
         );
+
+        if (!response.success || !response.data) {
+          throw new Error('스페이스 코드 정보를 불러오는데 실패했습니다.');
+        }
+
+        console.log(response);
         const data = response.data;
         setSpaceInfo(data);
       } catch (error) {
