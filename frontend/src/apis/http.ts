@@ -59,7 +59,6 @@ const request = async <T>(
         error: !response.ok ? `Error: ${response.status}` : undefined,
       };
     }
-    console.log(response);
 
     const text = await response.text();
     const data = text ? JSON.parse(text) : null;
