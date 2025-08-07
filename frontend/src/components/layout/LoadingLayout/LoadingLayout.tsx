@@ -1,16 +1,15 @@
 import SparkleLightTrail from '../../../components/@common/sparkleLightTrail/SparkleLightTrail';
-import { DEBUG_MESSAGES } from '../../../constants/debugMessages';
-import * as C from '../../../styles/@common/BackDrop.styles';
+import * as C from '../../../styles/@common/Overlay.styles';
 import * as S from './LoadingLayout.styles';
 
-type IconListType = Array<IconProps>;
-type DescriptionListType = Array<string>;
-
 interface LoadingLayoutProps {
-  /** 로딩 아이콘 리스트 */
-  iconList: IconListType;
-  /** 로딩 텍스트 리스트 */
-  descriptionList: DescriptionListType;
+  /** 로딩 컨텐츠 */
+  loadingContents: {
+    /** 로딩 아이콘 리스트 */
+    icon: IconProps;
+    /** 로딩 텍스트 리스트 */
+    description: string;
+  }[];
   /** 로딩 퍼센트 */
   percentage: number;
 }
@@ -20,33 +19,35 @@ interface IconProps {
   alt: string;
 }
 
-const LoadingLayout = ({
-  iconList,
-  descriptionList,
-  percentage,
-}: LoadingLayoutProps) => {
-  if (iconList.length !== descriptionList.length) {
-    throw new Error(DEBUG_MESSAGES.INVALID_ICON_LIST_LENGTH);
-  }
 
-  const interval = 100 / iconList.length;
-  const IconMapping = new Map(iconList.map((icon, index) => [index, icon.src]));
-  const textMapping = new Map(
-    descriptionList.map((text, index) => [index, text]),
+const LoadingLayout = ({ loadingContents, percentage }: LoadingLayoutProps) => {
+  const interval = 100 / loadingContents.length;
+
+  const loadingContentMapping = new Map(
+    loadingContents.map(({ icon, description }, index) => [
+      index,
+      { icon, description },
+    ]),
   );
+
   const currentRange = Math.min(
     Math.floor(percentage / interval),
-    iconList.length - 1,
+    loadingContents.length - 1,
   );
 
   return (
-    <C.BackDrop>
+   <C.BackDrop>
       <S.Container>
         <SparkleLightTrail />
         <S.ContentContainer>
           <S.IconTextContainer>
-            <S.Icon src={IconMapping.get(currentRange)} alt={iconList[0].alt} />
-            <S.Text>{textMapping.get(currentRange)}</S.Text>
+            <S.Icon
+              src={loadingContentMapping.get(currentRange)?.icon.src}
+              alt={loadingContentMapping.get(currentRange)?.icon.alt}
+            />
+            <S.Text>
+              {loadingContentMapping.get(currentRange)?.description}
+            </S.Text>
           </S.IconTextContainer>
           <S.Percentage>{percentage}%</S.Percentage>
         </S.ContentContainer>
