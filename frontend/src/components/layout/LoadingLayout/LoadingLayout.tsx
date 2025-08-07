@@ -1,6 +1,6 @@
 import SparkleLightTrail from '../../../components/@common/sparkleLightTrail/SparkleLightTrail';
 import { DEBUG_MESSAGES } from '../../../constants/debugMessages';
-import * as C from '../../../styles/@common/Overlay.styles';
+import * as C from '../../../styles/@common/BackDrop.styles';
 import * as S from './LoadingLayout.styles';
 
 type IconListType = Array<IconProps>;
@@ -40,7 +40,7 @@ const LoadingLayout = ({
   );
 
   return (
-    <C.Overlay>
+    <C.BackDrop>
       <S.Container>
         <SparkleLightTrail />
         <S.ContentContainer>
@@ -51,7 +51,7 @@ const LoadingLayout = ({
           <S.Percentage>{percentage}%</S.Percentage>
         </S.ContentContainer>
       </S.Container>
-    </C.Overlay>
+    </C.BackDrop>
   );
 };
 
