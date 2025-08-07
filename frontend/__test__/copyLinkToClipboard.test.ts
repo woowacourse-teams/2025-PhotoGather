@@ -16,7 +16,7 @@ describe('copyLinkToClipboard 유틸 함수 테스트', () => {
     consoleLogSpy.mockRestore();
   });
 
-  it('텍스트를 클립보드에 복사한다', async () => {
+  it('spaceId를 받아서 공유 URL을 클립보드에 복사한다', async () => {
     const writeTextMock = jest.fn().mockResolvedValue(undefined);
     Object.assign(navigator, {
       clipboard: {
@@ -24,10 +24,13 @@ describe('copyLinkToClipboard 유틸 함수 테스트', () => {
       },
     });
 
-    const testText = 'https://example.com';
-    await copyLinkToClipboard(testText);
+    const testSpaceId = 'test-space-id';
+    await copyLinkToClipboard(testSpaceId);
 
-    expect(writeTextMock).toHaveBeenCalledWith(testText);
+    // createShareUrl 함수가 호출되어 올바른 URL이 생성되는지 확인
+    expect(writeTextMock).toHaveBeenCalledWith(
+      expect.stringContaining('/guest/image-upload/test-space-id'),
+    );
     expect(writeTextMock).toHaveBeenCalledTimes(1);
   });
 
@@ -40,13 +43,13 @@ describe('copyLinkToClipboard 유틸 함수 테스트', () => {
       },
     });
 
-    await copyLinkToClipboard('https://example.com');
+    await copyLinkToClipboard('test-space-id');
 
     expect(writeTextMock).toHaveBeenCalled();
     expect(consoleLogSpy).toHaveBeenCalledWith(testError);
   });
 
-  it('빈 문자열도 복사할 수 있다', async () => {
+  it('빈 spaceId도 복사할 수 있다', async () => {
     const writeTextMock = jest.fn().mockResolvedValue(undefined);
     Object.assign(navigator, {
       clipboard: {
@@ -56,6 +59,8 @@ describe('copyLinkToClipboard 유틸 함수 테스트', () => {
 
     await copyLinkToClipboard('');
 
-    expect(writeTextMock).toHaveBeenCalledWith('');
+    expect(writeTextMock).toHaveBeenCalledWith(
+      expect.stringContaining('/guest/image-upload/'),
+    );
   });
 });
