@@ -4,6 +4,10 @@ export const INFORMATION = {
     DESCRIPTION: `이 화면을 지나면 링크를 볼 수 없어요.\n지금 꼭 복사하거나 저장해 주세요!`,
     HIGHLIGHT_TEXT: '지금 꼭 복사하거나 저장해 주세요!',
   },
+  COMPLETE_CREATE: {
+    DESCRIPTION: '스페이스 생성이 완료됐어요.',
+    HIGHLIGHT_TEXT: '완료',
+  },
   SUGGEST_SHARE: {
     DESCRIPTION: '스페이스 링크를 공유해 보세요',
     HIGHLIGHT_TEXT: '스페이스 링크',
@@ -11,6 +15,38 @@ export const INFORMATION = {
   SHARE_WARNING: {
     DESCRIPTION: `내 스페이스 관리 페이지에서도\n스페이스 링크를 확인할 수 있어요`,
     HIGHLIGHT_TEXT: '스페이스 링크',
+  },
+  NAME_INPUT: {
+    TITLE: {
+      TEXT: '스페이스 이름을 정해볼까요?',
+      HIGHLIGHT_TEXT: '이름',
+    },
+    DESCRIPTION: '추억을 담을 공간의 이름을 작성해주세요.',
+    PLACEHOLDER: '나만의 스페이스',
+  },
+  DATE_INPUT: {
+    TITLE: {
+      TEXT: '스페이스를 언제부터 열까요?',
+      HIGHLIGHT_TEXT: '언제부터',
+    },
+    DESCRIPTION: '선택한 시점부터 72시간 동안 열려요.',
+  },
+  TIME_INPUT: {
+    TITLE: {
+      TEXT: '스페이스를 몇시부터 열까요?',
+      HIGHLIGHT_TEXT: '몇시부터',
+    },
+    DESCRIPTION: '선택한 시점부터 24시간 동안 열려요.',
+  },
+  CHECK_SPACE_INFO: {
+    TITLE: {
+      TEXT: '스페이스 정보를 확인해 주세요.',
+      HIGHLIGHT_TEXT: '스페이스 정보',
+    },
+    DESCRIPTION: '완료를 누르면 곧바로 링크가 발급돼요.',
+  },
+  WAIT_PAGE: {
+    TITLE_LIST: ['조금만 기다려주세요', '곧 스페이스 생성이 끝나요'],
   },
 } as const;
 
@@ -47,6 +83,11 @@ export const ERROR = {
     DESCRIPTION: '잠시후 재시도 해주세요.',
     BUTTON_TEXT: '재시도',
     HIGHLIGHT_WORDS: [''],
+  },
+  INPUT: {
+    NAME: '유효하지 않은 이름입니다.',
+    DATE: '오늘 이전 날짜는 선택할 수 없습니다.',
+    TIME: '현재 시간 이후 시간대를 입력해주세요.',
   },
 };
 

@@ -12,6 +12,7 @@ import SpaceHeader from '../../../components/spaceHeader/SpaceHeader';
 import SpaceHomeTopActionBar from '../../../components/spaceHomeTopActionBar/SpaceHomeTopActionBar';
 import { INFORMATION } from '../../../constants/messages';
 import useIntersectionObserver from '../../../hooks/@common/useIntersectionObserver';
+import useLeftTimer from '../../../hooks/@common/useLeftTimer';
 import useDownload from '../../../hooks/useDownload';
 import usePhotoSelect from '../../../hooks/usePhotoSelect';
 import usePhotosBySpaceCode from '../../../hooks/usePhotosBySpaceCode';
@@ -32,6 +33,9 @@ const SpaceHome = () => {
     isIntersecting: isFetchSectionVisible,
     reObserve,
   } = useIntersectionObserver({ rootMargin: '200px' });
+  const { leftTime } = useLeftTimer({
+    targetTime: mockSpaceData.expirationDate,
+  });
 
   const {
     photosList,
@@ -104,7 +108,7 @@ const SpaceHome = () => {
       <S.InfoContainer ref={scrollTopTriggerRef}>
         <SpaceHeader
           title={mockSpaceData.name}
-          description={mockSpaceData.startDate}
+          timer={leftTime}
           icon={
             <SettingSvg
               fill={theme.colors.primary20}

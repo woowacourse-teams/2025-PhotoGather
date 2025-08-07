@@ -4,10 +4,10 @@ import type { Timer } from '../../types/timer.type';
 import { isParsableToDate } from '../../utils/isParsableToDate';
 
 interface UseTimerProps {
-  openedAt: string;
+  targetTime: string;
 }
 
-const useLeftTimer = ({ openedAt }: UseTimerProps) => {
+const useLeftTimer = ({ targetTime }: UseTimerProps) => {
   const [leftTime, setLeftTime] = useState<Timer>({
     days: 0,
     hours: 0,
@@ -19,15 +19,15 @@ const useLeftTimer = ({ openedAt }: UseTimerProps) => {
     const calculateTimeLeft = () => {
       const now = new Date();
 
-      if (!isParsableToDate(openedAt)) {
+      if (!isParsableToDate(targetTime)) {
         console.warn(
-          `${DEBUG_MESSAGES.CAN_NOT_PARSE_TO_DATE} useLeftTimer: "${openedAt}"`,
+          `${DEBUG_MESSAGES.CAN_NOT_PARSE_TO_DATE} useLeftTimer: "${targetTime}"`,
         );
         setLeftTime({ days: 0, hours: 0, minutes: 0, seconds: 0 });
         return;
       }
 
-      const openedDate = new Date(openedAt);
+      const openedDate = new Date(targetTime);
 
       const timeDifference = openedDate.getTime() - now.getTime();
       if (timeDifference <= 0) {
@@ -54,7 +54,7 @@ const useLeftTimer = ({ openedAt }: UseTimerProps) => {
 
     const timerId = setInterval(calculateTimeLeft, 1000);
     return () => clearInterval(timerId);
-  }, [openedAt]);
+  }, [targetTime]);
 
   return { leftTime };
 };

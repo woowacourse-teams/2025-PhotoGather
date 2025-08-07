@@ -30,7 +30,8 @@ export const theme = {
       active: '#F0EBFCB3',
       default: '#F0EBFC66',
     },
-    overlay: '#000000',
+    overlay: '#000000B3',
+    kakaoTalk: '#FFEB00',
   },
   typography: {
     header01: {
@@ -87,6 +88,7 @@ export const theme = {
     topActionButton: 4,
     floatingActionButton: 400,
     loadingSpinner: 5,
+    toast: 500,
   },
   layout: {
     width: '400px',
