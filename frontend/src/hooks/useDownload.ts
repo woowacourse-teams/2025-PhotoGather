@@ -32,6 +32,7 @@ const useDownload = ({ spaceName }: UseDownloadProps) => {
   };
 
   const selectDownload = async (photoIds: number[]) => {
+    if (photoIds.length === 0) return;
     await handleDownload(() =>
       photoService.downloadPhotos(mockSpaceData.code, {
         photoIds: photoIds,
