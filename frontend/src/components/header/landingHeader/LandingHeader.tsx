@@ -1,10 +1,9 @@
-import { ReactComponent as MenuIcon } from '@assets/icons/menu.svg';
 import * as S from './LandingHeader.styles';
 
 const LandingHeader = () => {
   return (
     <S.Wrapper>
-      <MenuIcon />
+      <S.MenuButton aria-label="메뉴" />
     </S.Wrapper>
   );
 };
