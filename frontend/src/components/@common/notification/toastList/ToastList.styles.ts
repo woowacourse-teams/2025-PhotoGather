@@ -1,8 +1,10 @@
 import styled from '@emotion/styled';
 
-export const ToastList = styled.div`
+export const ToastList = styled.div<{ $position: 'top' | 'bottom' }>`
   position: fixed;
-  bottom: 40px;
+
+  ${({ $position }) => ($position === 'top' ? 'top: 40px;' : 'bottom: 40px;')}
+
   width: 100%;
   display: flex;
   flex-direction: column;

@@ -8,10 +8,31 @@ interface ToastListProps {
 
 export const ToastList = ({ toasts }: ToastListProps) => {
   return (
-    <S.ToastList>
-      {toasts.map(({ id, text, type, duration }) => (
-        <ToastComponent key={id} text={text} type={type} duration={duration} />
-      ))}
-    </S.ToastList>
+    <>
+      <S.ToastList $position="top">
+        {toasts
+          .filter(({ position }) => position === 'top')
+          .map(({ id, text, type, duration }) => (
+            <ToastComponent
+              key={id}
+              text={text}
+              type={type}
+              duration={duration}
+            />
+          ))}
+      </S.ToastList>
+      <S.ToastList $position="bottom">
+        {toasts
+          .filter(({ position }) => position === 'bottom')
+          .map(({ id, text, type, duration }) => (
+            <ToastComponent
+              key={id}
+              text={text}
+              type={type}
+              duration={duration}
+            />
+          ))}
+      </S.ToastList>
+    </>
   );
 };

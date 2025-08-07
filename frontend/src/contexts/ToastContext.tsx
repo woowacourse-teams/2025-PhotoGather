@@ -22,9 +22,14 @@ export const ToastProvider = ({ children }: { children: React.ReactNode }) => {
     setToasts((prev) => prev.filter((toast) => toast.id !== id));
   };
 
-  const showToast = ({ text, type = 'error', duration = 5000 }: ToastBase) => {
+  const showToast = ({
+    text,
+    type = 'error',
+    duration = 5000,
+    position = 'bottom',
+  }: ToastBase) => {
     const id = toastId++;
-    setToasts((prev) => [...prev, { id, text, type, duration }]);
+    setToasts((prev) => [...prev, { id, text, type, position, duration }]);
 
     setTimeout(() => {
       removeToast(id);

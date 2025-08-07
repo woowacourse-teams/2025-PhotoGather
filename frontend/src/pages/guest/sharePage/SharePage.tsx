@@ -49,8 +49,12 @@ const SharePage = () => {
             <IconLabelButton
               icon={<LinkIcon />}
               onClick={() => {
-                showToast({ text: '복사 완료', type: 'info' });
                 copyLinkToClipboard(spaceCode);
+                showToast({
+                  text: '스페이스 공유 링크 복사 완료!',
+                  type: 'info',
+                  position: 'top',
+                });
               }}
             />
           </S.IconLabelButtonContainer>
