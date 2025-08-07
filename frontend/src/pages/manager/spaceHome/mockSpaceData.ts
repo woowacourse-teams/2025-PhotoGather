@@ -3,5 +3,5 @@ export const mockSpaceData = {
   startDate: '2025-08-01',
   participantsCount: 80,
   photosCount: 6,
-  code: '1234567890',
+  code: '62d9696453',
 };

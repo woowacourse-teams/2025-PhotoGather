@@ -40,6 +40,7 @@ const request = async <T>(
   const url = `${BASE_URL}${endpoint}${buildQueryString(params)}`;
   const headers = createHeaders(bodyContentType, token);
   const requestBody = createBody(body, bodyContentType);
+  console.log(requestBody);
 
   // TODO : try catch 유틸 분리
   try {
@@ -73,6 +74,7 @@ const request = async <T>(
       data: data as T,
     };
   } catch (error) {
+    console.log(error);
     const getErrorMessage = (error: unknown): string => {
       if (isNetworkError(error)) {
         return NETWORK.DEFAULT;

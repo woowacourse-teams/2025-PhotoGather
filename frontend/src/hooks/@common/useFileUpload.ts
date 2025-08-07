@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { photoService } from '../../apis/services/photo.service';
 import { CONSTRAINTS } from '../../constants/constraints';
 import { NETWORK } from '../../constants/errors';
+import { mockSpaceData } from '../../pages/manager/spaceHome/mockSpaceData';
 import type { PreviewFile } from '../../types/file.type';
 import { isValidFileType } from '../../utils/isValidFileType';
 import useApiCall from './useApiCall';
@@ -83,7 +84,7 @@ const useFileUpload = ({ fileType }: UseFileUploadProps) => {
     try {
       setIsUploading(true);
       const response = await safeApiCall(() =>
-        photoService.uploadFiles('1234567890', files),
+        photoService.uploadFiles(mockSpaceData.code, files),
       );
 
       if (response.success) {

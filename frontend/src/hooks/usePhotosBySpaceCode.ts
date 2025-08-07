@@ -16,7 +16,7 @@ const usePhotosBySpaceCode = ({
   reObserve,
   spaceCode,
 }: UsePhotosBySpaceIdProps) => {
-  const PAGE_SIZE = 21;
+  const PAGE_SIZE = 20;
   const PRESET = 'x800';
 
   const [isLoading, setIsLoading] = useState(false);
