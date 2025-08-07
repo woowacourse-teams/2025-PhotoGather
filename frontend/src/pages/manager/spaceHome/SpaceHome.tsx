@@ -69,26 +69,13 @@ const SpaceHome = () => {
     toggleAllSelected,
   } = usePhotoSelect({ photosList: photosList ?? [] });
 
-  const submitDeletePhotos = async () => {
-    // TODO : 모달  로직으로 변경
-    const answer = confirm(
-      `${selectedPhotoIds.length}개의 사진을 삭제하시겠습니까?`,
-    );
-    if (answer) {
-      showToast({
-        text: `${selectedPhotoIds.length}개의 사진을 삭제했습니다.`,
-        type: 'info',
-      });
-      updatePhotos(extractUnselectedPhotos());
-      await fetchPhotosList();
-    }
-  };
-
-  const { fetchDeletePhotos } = usePhotosDelete({
+  const { submitDeletePhotos } = usePhotosDelete({
     selectedPhotoIds: selectedPhotoIds,
-    submitDeletePhotos,
     showToast,
     toggleSelectMode,
+    updatePhotos,
+    fetchPhotosList,
+    extractUnselectedPhotos,
   });
 
   //biome-ignore lint/correctness/useExhaustiveDependencies: isFetchSectionVisible 변경 시 호출
@@ -175,7 +162,7 @@ const SpaceHome = () => {
               {isSelectMode && (
                 <PhotoSelectionToolBar
                   selectedCount={selectedPhotosCount}
-                  onDelete={fetchDeletePhotos}
+                  onDelete={submitDeletePhotos}
                   onDownload={() => {}}
                 />
               )}
