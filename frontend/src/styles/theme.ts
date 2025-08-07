@@ -31,6 +31,7 @@ export const theme = {
       default: '#F0EBFC66',
     },
     overlay: '#000000B3',
+    kakaoTalk: '#FFEB00',
   },
   typography: {
     header01: {

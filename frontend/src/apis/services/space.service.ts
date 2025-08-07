@@ -1,12 +1,15 @@
 import type {
-  CreateSpaceInput,
   Space,
+  SpaceCreateInfo,
   SpaceWithContents,
   UpdateSpaceInput,
 } from '../../types/space.type';
 import { http } from '../http';
 
 export const spaceService = {
+  create: (data: SpaceCreateInfo) =>
+    http.post<{ spaceCode: string }>('/spaces', data),
+
   getAll: (params?: { page?: number; limit?: number; search?: string }) =>
     http.get<Space[]>('/spaces', params),
 
@@ -14,8 +17,6 @@ export const spaceService = {
 
   getWithContents: (id: number) =>
     http.get<SpaceWithContents>(`/spaces/${id}/contents`),
-
-  create: (data: CreateSpaceInput) => http.post<Space>('/spaces', data),
 
   update: (id: number, data: UpdateSpaceInput) =>
     http.patch<Space>(`/spaces/${id}`, data),
