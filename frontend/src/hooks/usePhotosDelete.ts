@@ -1,5 +1,6 @@
 // import { photoService } from '../apis/services/photo.service';
 
+import { useState } from 'react';
 import { photoService } from '../apis/services/photo.service';
 import { ERROR } from '../constants/messages';
 import { mockSpaceData } from '../pages/manager/spaceHome/mockSpaceData';
@@ -19,10 +20,12 @@ const usePhotosDelete = ({
   fetchPhotosList,
   extractUnselectedPhotos,
 }: UsePhotosDeleteProps) => {
+  const [isDeleting, setIsDeleting] = useState(false);
   const { showToast } = useToast();
 
   const fetchDeletePhotos = async (photoIds: number[]) => {
     try {
+      setIsDeleting(true);
       await photoService.deletePhotos(mockSpaceData.code, {
         photoIds: photoIds,
       });
@@ -34,6 +37,7 @@ const usePhotosDelete = ({
       console.error(error);
     } finally {
       toggleSelectMode();
+      setIsDeleting(false);
     }
   };
 
@@ -57,7 +61,7 @@ const usePhotosDelete = ({
     await fetchPhotosList();
   };
 
-  return { submitDeletePhotos };
+  return { submitDeletePhotos, isDeleting };
 };
 
 export default usePhotosDelete;

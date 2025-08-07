@@ -69,7 +69,7 @@ const SpaceHome = () => {
     toggleAllSelected,
   } = usePhotoSelect({ photosList: photosList ?? [] });
 
-  const { submitDeletePhotos } = usePhotosDelete({
+  const { submitDeletePhotos, isDeleting } = usePhotosDelete({
     toggleSelectMode,
     updatePhotos,
     fetchPhotosList,
@@ -101,15 +101,11 @@ const SpaceHome = () => {
     },
   ];
 
-  if (isDownloading) {
-    return (
-      <S.Wrapper>
-        <LoadingLayout loadingContents={loadingContents} percentage={0} />
-      </S.Wrapper>
-    );
-  }
   return (
     <S.Wrapper>
+      {(isDownloading || isDeleting) && (
+        <LoadingLayout loadingContents={loadingContents} percentage={0} />
+      )}
       <S.InfoContainer ref={scrollTopTriggerRef}>
         <SpaceHeader
           title={spaceName}
