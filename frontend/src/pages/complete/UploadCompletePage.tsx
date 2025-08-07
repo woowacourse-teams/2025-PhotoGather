@@ -1,13 +1,15 @@
 import uploadImage from '@assets/images/upload.png';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import MessageLayout from '../../components/layout/messageLayout/MessageLayout';
 import { COMPLETE } from '../../constants/messages';
 import { ROUTES } from '../../constants/routes';
-import useSpaceCodeFromPath from '../../hooks/useSpaceCodeFromPath';
 
 const UploadCompletePage = () => {
   const navigate = useNavigate();
-  const { spaceId } = useSpaceCodeFromPath();
+  const location = useLocation();
+  const spaceId = location.state?.spaceId;
+
+  console.log(spaceId);
 
   const handleButtonClick = () => {
     navigate(ROUTES.GUEST.IMAGE_UPLOAD(spaceId ?? ''));

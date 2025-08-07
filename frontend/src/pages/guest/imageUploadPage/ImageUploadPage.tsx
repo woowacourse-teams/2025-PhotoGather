@@ -47,7 +47,11 @@ const ImageUploadPage = () => {
   const handleUploadClick = async () => {
     const uploadSuccess = await handleUploadFiles();
     if (uploadSuccess) {
-      navigate(ROUTES.COMPLETE.UPLOAD);
+      navigate(ROUTES.COMPLETE.UPLOAD, {
+        state: {
+          spaceId: spaceId,
+        },
+      });
     }
   };
 
