@@ -1,3 +1,5 @@
+import { ReactComponent as ClockIcon } from '@assets/icons/clock.svg';
+import { theme } from '../../styles/theme';
 import type { Timer } from '../../types/timer.type';
 import { checkIsTimerExpired } from '../../utils/checkIsTimerExpired';
 import { formatTimer } from '../../utils/formatTimer';
@@ -23,7 +25,11 @@ const SpaceHeader = ({ title, timer, icon }: SpaceHeaderProps) => {
         <S.Icon>{icon}</S.Icon>
       </S.TitleIconContainer>
       <S.TimerContainer>
-        <S.ClockIconContainer $isWithinOneHour={isWithinOneHour} />
+        <ClockIcon
+          fill={isWithinOneHour ? theme.colors.error : theme.colors.white}
+          width="24px"
+          height="24px"
+        />
         <S.TextContainer $isWithinOneHour={isWithinOneHour}>
           {`${formatTimer(timer)} 남았어요`}
         </S.TextContainer>

@@ -1,4 +1,3 @@
-import { ReactComponent as ClockIcon } from '@assets/icons/clock.svg';
 import styled from '@emotion/styled';
 
 export const Wrapper = styled.div`
@@ -31,13 +30,6 @@ export const TimerContainer = styled.div`
 
 export const TextContainer = styled.p<{ $isWithinOneHour: boolean }>`
   ${({ theme }) => theme.typography.bodyRegular};
-  color: ${({ theme, $isWithinOneHour }) =>
-    $isWithinOneHour ? theme.colors.error : theme.colors.white};
-`;
-
-export const ClockIconContainer = styled(ClockIcon)<{
-  $isWithinOneHour: boolean;
-}>`
   color: ${({ theme, $isWithinOneHour }) =>
     $isWithinOneHour ? theme.colors.error : theme.colors.white};
 `;
