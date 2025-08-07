@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import { ReactComponent as SaveIcon } from '../../../@assets/icons/download.svg';
 import { ReactComponent as SettingSvg } from '../../../@assets/icons/setting.svg';
 import { ReactComponent as ArrowUpSvg } from '../../../@assets/icons/upwardArrow.svg';
+import { photoService } from '../../../apis/services/photo.service';
 import FloatingActionButton from '../../../components/@common/buttons/floatingActionButton/FloatingActionButton';
 import FloatingIconButton from '../../../components/@common/buttons/floatingIconButton/FloatingIconButton';
 import SpaceManagerImageGrid from '../../../components/@common/imageLayout/imageGrid/spaceManagerImageGrid/SpaceManagerImageGrid';
@@ -15,6 +16,7 @@ import { INFORMATION } from '../../../constants/messages';
 import { useOverlay } from '../../../contexts/OverlayProvider';
 import useIntersectionObserver from '../../../hooks/@common/useIntersectionObserver';
 import useLeftTimer from '../../../hooks/@common/useLeftTimer';
+import { useToast } from '../../../hooks/@common/useToast';
 import useDownload from '../../../hooks/useDownload';
 import usePhotoSelect from '../../../hooks/usePhotoSelect';
 import usePhotosBySpaceCode from '../../../hooks/usePhotosBySpaceCode';
@@ -41,6 +43,7 @@ const SpaceHome = () => {
   });
 
   const overlay = useOverlay();
+  const { showToast } = useToast();
 
   const {
     photosList,
@@ -77,16 +80,38 @@ const SpaceHome = () => {
     extractUnselectedPhotos,
   });
 
+  const handleSinglePhotoDelete = async (photoId: number) => {
+    try {
+      await photoService.deletePhotos(mockSpaceData.code, {
+        photoIds: [photoId],
+      });
+      showToast({
+        text: '사진을 삭제했습니다.',
+        type: 'info',
+      });
+      const updatedPhotos =
+        photosList?.filter((photo) => photo.id !== photoId) || [];
+      updatePhotos(updatedPhotos);
+    } catch (error) {
+      showToast({
+        text: '삭제에 실패했습니다. 다시 시도해 주세요.',
+        type: 'error',
+      });
+      console.error('삭제 실패:', error);
+    }
+  };
+
   const openPhotoModal = async (photoId: number) => {
     await overlay(
       <PhotoModal
         mode="manager"
         photoId={photoId}
         spaceCode={mockSpaceData.code}
-        uploaderName="알 수 없음"
+        uploaderName="익명의 우주여행자"
         onDownload={() => {
           selectDownload([photoId]);
         }}
+        onDelete={handleSinglePhotoDelete}
       />,
       {
         clickOverlayClose: true,
