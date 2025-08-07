@@ -14,7 +14,6 @@ const stars = [
   { top: 83, left: 84, size: 29, delay: 2.8 },
   { top: 14, left: 67, size: 25, delay: 0.6 },
   { top: 96, left: 70, size: 15, delay: 1.1 },
-  { top: 96, left: 40, size: 43, delay: 1.6 },
 ];
 
 export const StarField = () => {
