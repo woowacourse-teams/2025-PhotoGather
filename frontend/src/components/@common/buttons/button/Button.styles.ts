@@ -85,8 +85,14 @@ export const StyledButton = styled.button<{
   padding: 12px 20px;
   justify-content: center;
   align-items: center;
-  gap: 10px;
+  gap: 4px;
 
   ${({ theme }) => ({ ...theme.typography.buttonPrimary })}
   ${({ $variant, theme }) => buttonStyles[$variant](theme)}
+`;
+
+export const Icon = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;

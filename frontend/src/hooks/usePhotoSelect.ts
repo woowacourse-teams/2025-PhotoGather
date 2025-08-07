@@ -16,9 +16,17 @@ const usePhotoSelect = ({ photosList }: UsePhotoSelectProps) => {
     createInitialSelectedPhotoMap(),
   );
 
-  const selectedPhotoCount = Array.from(selectedPhotoMap.values()).filter(
-    Boolean,
+  const selectedPhotosCount = Array.from(selectedPhotoMap.values()).filter(
+    (value) => value,
   ).length;
+
+  const selectedPhotoIds = Array.from(selectedPhotoMap.entries())
+    .filter(([_, value]) => value)
+    .map(([key]) => key);
+
+  const filterSelectedPhotos = () => {
+    return photosList.filter((photo) => !selectedPhotoMap.get(photo.id));
+  };
 
   const toggleSelectedPhoto = (id: number) => {
     setSelectedPhotoMap((prev) => {
@@ -32,10 +40,6 @@ const usePhotoSelect = ({ photosList }: UsePhotoSelectProps) => {
     setSelectedPhotoMap(createInitialSelectedPhotoMap());
   };
 
-  const extractSelectedPhoto = () => {
-    return photosList.filter((photo) => selectedPhotoMap.get(photo.id));
-  };
-
   const [isSelectMode, setIsSelectMode] = useState(false);
   const toggleSelectMode = () => {
     setIsSelectMode((prev) => !prev);
@@ -46,9 +50,10 @@ const usePhotoSelect = ({ photosList }: UsePhotoSelectProps) => {
     isSelectMode,
     toggleSelectMode,
     selectedPhotoMap,
-    selectedPhotoCount,
+    selectedPhotosCount,
+    selectedPhotoIds,
+    filterSelectedPhotos,
     toggleSelectedPhoto,
-    extractSelectedPhoto,
   };
 };
 

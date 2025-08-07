@@ -37,13 +37,20 @@ const usePhotosBySpaceCode = ({
 
   const isEndPage = currentPage.current > totalPages.current;
 
-  const updatePhotosList = (photos: Photo[], updatedTotalPages: number) => {
+  const appendPhotosList = (photos: Photo[], updatedTotalPages: number) => {
     setPhotosList((prev) => {
       if (!prev) {
         totalPages.current = updatedTotalPages;
         return photos;
       }
       return [...prev, ...photos];
+    });
+  };
+
+  const updatePhotos = (updatePhotos: Photo[]) => {
+    setPhotosList((prev) => {
+      if (!prev) return null;
+      return updatePhotos;
     });
   };
 
@@ -62,12 +69,13 @@ const usePhotosBySpaceCode = ({
       if (response.success && response.data) {
         const data = response.data;
         currentPage.current += 1;
+        console.log('fetch');
         if (!data) {
           console.warn(DEBUG_MESSAGES.NO_RESPONSE);
           return;
         }
         const { photos } = data;
-        updatePhotosList(photos, data.totalPages);
+        appendPhotosList(photos, data.totalPages);
         requestAnimationFrame(() => {
           reObserve();
         });
@@ -91,6 +99,7 @@ const usePhotosBySpaceCode = ({
     thumbnailPhotoMap,
     photosList,
     isLoading,
+    updatePhotos,
   };
 };
 

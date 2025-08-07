@@ -119,6 +119,10 @@ export const http = {
     token?: string,
   ) => request<T>(endpoint, { method: 'PATCH', body, bodyContentType, token }),
 
-  delete: <T>(endpoint: string, token?: string) =>
-    request<T>(endpoint, { method: 'DELETE', token }),
+  delete: <T>(
+    endpoint: string,
+    body?: unknown,
+    bodyContentType: BodyContentType = 'json',
+    token?: string,
+  ) => request<T>(endpoint, { method: 'DELETE', body, bodyContentType, token }),
 };
