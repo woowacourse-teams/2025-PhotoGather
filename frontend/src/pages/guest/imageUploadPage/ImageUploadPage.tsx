@@ -16,14 +16,18 @@ import { useToast } from '../../../hooks/@common/useToast';
 import useSpaceInfo from '../../../hooks/useSpaceInfo';
 import { ScrollableBlurArea } from '../../../styles/@common/ScrollableBlurArea';
 import { theme } from '../../../styles/theme';
+import { checkIsEarlyDate } from '../../../utils/checkIsEarlyTime';
 import { goToTop } from '../../../utils/goToTop';
+import EarlyPage from '../../status/earlyPage/EarlyPage';
 import ExpiredPage from '../../status/expiredPage/ExpiredPage';
 import * as S from './ImageUploadPage.styles';
 import { mockSpaceData } from './mockSpaceData';
 
 const ImageUploadPage = () => {
   const { spaceInfo } = useSpaceInfo(mockSpaceData.code);
+  const isEarlyTime = checkIsEarlyDate((spaceInfo?.openedAt as string) ?? '');
   const isSpaceExpired = !spaceInfo || spaceInfo?.isExpired;
+
   const spaceName = spaceInfo?.name ?? '';
   const { showToast } = useToast();
   const {
@@ -73,6 +77,7 @@ const ImageUploadPage = () => {
 
   return (
     <S.Wrapper $hasImages={hasImages}>
+      {isEarlyTime && <EarlyPage openedAt={spaceInfo?.openedAt ?? ''} />}
       {isSpaceExpired && <ExpiredPage />}
       {isUploading && (
         <LoadingLayout loadingContents={loadingContents} percentage={0} />
