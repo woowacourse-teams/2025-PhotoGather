@@ -76,19 +76,19 @@ export const buttonStyles = {
     }
   `,
   darkRoundedSelected: (theme: Theme) => css`
-  ${theme.typography.captionSmall}
-  width: auto;
-  border-radius: 500px;
-  padding: 2px 12px;
-  background: ${hexToRgba(theme.colors.gray06, 0.7)};
-  backdrop-filter: blur(5px);
-  color: ${theme.colors.accent};
-  &:active {
-    background: ${hexToRgba(theme.colors.gray06, 0.3)};
-  }
-  &:disabled {
-    background: ${hexToRgba(theme.colors.gray01, 0.5)};
-  }
+    ${theme.typography.captionSmall}
+    width: auto;
+    border-radius: 500px;
+    padding: 2px 12px;
+    background: ${hexToRgba(theme.colors.gray06, 0.7)};
+    backdrop-filter: blur(5px);
+    color: ${theme.colors.accent};
+    &:active {
+      background: ${hexToRgba(theme.colors.gray06, 0.3)};
+    }
+    &:disabled {
+      background: ${hexToRgba(theme.colors.gray01, 0.5)};
+    }
   `,
 };
 
