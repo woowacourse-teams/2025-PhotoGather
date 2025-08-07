@@ -3,13 +3,14 @@ import { useNavigate } from 'react-router-dom';
 import MessageLayout from '../../components/layout/messageLayout/MessageLayout';
 import { COMPLETE } from '../../constants/messages';
 import { ROUTES } from '../../constants/routes';
+import useSpaceCodeFromPath from '../../hooks/useSpaceCodeFromPath';
 
 const UploadCompletePage = () => {
   const navigate = useNavigate();
+  const { spaceId } = useSpaceCodeFromPath();
 
   const handleButtonClick = () => {
-    // TODO: 실제 업로드 페이지 경로로 변경 필요
-    navigate(ROUTES.GUEST.IMAGE_UPLOAD);
+    navigate(ROUTES.GUEST.IMAGE_UPLOAD(spaceId ?? ''));
   };
 
   return (

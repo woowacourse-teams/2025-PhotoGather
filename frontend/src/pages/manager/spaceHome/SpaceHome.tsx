@@ -17,15 +17,18 @@ import useDownload from '../../../hooks/useDownload';
 import usePhotoSelect from '../../../hooks/usePhotoSelect';
 import usePhotosBySpaceCode from '../../../hooks/usePhotosBySpaceCode';
 import usePhotosDelete from '../../../hooks/usePhotosDelete';
+import useSpaceCodeFromPath from '../../../hooks/useSpaceCodeFromPath';
 import useSpaceInfo from '../../../hooks/useSpaceInfo';
 import { ScrollableBlurArea } from '../../../styles/@common/ScrollableBlurArea';
 import { theme } from '../../../styles/theme';
 import { goToTop } from '../../../utils/goToTop';
-import { mockSpaceData } from './mockSpaceData';
 import * as S from './SpaceHome.styles';
 
 const SpaceHome = () => {
-  const { spaceInfo } = useSpaceInfo(mockSpaceData.code);
+  const { spaceId } = useSpaceCodeFromPath();
+  console.log(spaceId);
+  const { spaceInfo } = useSpaceInfo(spaceId ?? '');
+  console.log(spaceInfo);
   const spaceName = spaceInfo?.name ?? '';
   const { targetRef: hideBlurAreaTriggerRef, isIntersecting: isAtPageBottom } =
     useIntersectionObserver({});
@@ -50,7 +53,7 @@ const SpaceHome = () => {
     updatePhotos,
   } = usePhotosBySpaceCode({
     reObserve,
-    spaceCode: mockSpaceData.code,
+    spaceCode: spaceId ?? '',
   });
 
   const { isDownloading, downloadAll, selectDownload } = useDownload({

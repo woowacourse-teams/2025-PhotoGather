@@ -8,7 +8,9 @@ const Layout = () => {
   const { pathname } = useLocation();
   useGoogleAnalytics();
 
-  const isHighlightPage = HIGHLIGHT_PAGES.includes(pathname);
+  const isHighlightPage = HIGHLIGHT_PAGES.some((page) =>
+    pathname.includes(page),
+  );
 
   return (
     <S.Container $isHighlightPage={isHighlightPage}>

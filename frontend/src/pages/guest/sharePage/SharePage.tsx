@@ -1,6 +1,6 @@
 import { ReactComponent as LinkIcon } from '@assets/icons/link.svg';
 import LinkImage from '@assets/images/rocket.png';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import Button from '../../../components/@common/buttons/button/Button';
 import IconLabelButton from '../../../components/@common/buttons/iconLabelButton/IconLabelButton';
 import HighlightText from '../../../components/@common/highlightText/HighlightText';
@@ -11,12 +11,13 @@ import { copyLinkToClipboard } from '../../../utils/copyLinkToClipboard';
 import * as S from './SharePage.styles';
 
 const SharePage = () => {
+  const navigate = useNavigate();
   const location = useLocation();
   const spaceCode = location.state;
   const { showToast } = useToast();
 
   const handleSpaceHomeButton = () => {
-    console.log('클릭');
+    navigate(`/space-home/${spaceCode}`);
   };
 
   return (

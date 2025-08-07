@@ -23,11 +23,15 @@ const router = createBrowserRouter([
         element: <SpaceCreateFunnel />,
       },
       {
+        path: 'space-home/:spaceCode',
+        element: <SpaceHome />,
+      },
+      {
         // TODO : 데모 후 삭제
         path: 'manager',
         children: [
           {
-            path: 'space-home',
+            path: 'space-home/:spaceId',
             element: <SpaceHome />,
           },
         ],
@@ -37,7 +41,7 @@ const router = createBrowserRouter([
         path: 'guest',
         children: [
           {
-            path: 'image-upload',
+            path: 'image-upload/:spaceId',
             element: <ImageUploadPage />,
           },
           {
