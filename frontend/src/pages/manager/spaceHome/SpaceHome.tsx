@@ -13,7 +13,6 @@ import SpaceHomeTopActionBar from '../../../components/spaceHomeTopActionBar/Spa
 import { INFORMATION } from '../../../constants/messages';
 import useIntersectionObserver from '../../../hooks/@common/useIntersectionObserver';
 import useLeftTimer from '../../../hooks/@common/useLeftTimer';
-import { useToast } from '../../../hooks/@common/useToast';
 import useDownload from '../../../hooks/useDownload';
 import usePhotoSelect from '../../../hooks/usePhotoSelect';
 import usePhotosBySpaceCode from '../../../hooks/usePhotosBySpaceCode';
@@ -38,8 +37,6 @@ const SpaceHome = () => {
   const { leftTime } = useLeftTimer({
     targetTime: mockSpaceData.expirationDate,
   });
-
-  const { showToast } = useToast();
 
   const {
     photosList,
@@ -70,7 +67,6 @@ const SpaceHome = () => {
   } = usePhotoSelect({ photosList: photosList ?? [] });
 
   const { submitDeletePhotos } = usePhotosDelete({
-    showToast,
     toggleSelectMode,
     updatePhotos,
     fetchPhotosList,
