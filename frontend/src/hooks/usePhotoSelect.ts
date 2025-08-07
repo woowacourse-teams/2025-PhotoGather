@@ -36,6 +36,11 @@ const usePhotoSelect = ({ photosList }: UsePhotoSelectProps) => {
     });
   };
 
+  // const selectAllPhotos = () => {
+  //   const newMap = new Map()
+  //   setSelectedPhotoMap();
+  // };
+
   const resetSelectedPhotoMap = () => {
     setSelectedPhotoMap(createInitialSelectedPhotoMap());
   };
