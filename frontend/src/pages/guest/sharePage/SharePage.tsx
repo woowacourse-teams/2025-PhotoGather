@@ -8,6 +8,7 @@ import InfoBox from '../../../components/@common/infoBox/InfoBox';
 import { INFORMATION } from '../../../constants/messages';
 import { useToast } from '../../../hooks/@common/useToast';
 import { copyLinkToClipboard } from '../../../utils/copyLinkToClipboard';
+import { createShareUrl } from '../../../utils/createSpaceUrl';
 import * as S from './SharePage.styles';
 
 const SharePage = () => {
@@ -50,7 +51,7 @@ const SharePage = () => {
             <IconLabelButton
               icon={<LinkIcon />}
               onClick={() => {
-                copyLinkToClipboard(spaceCode);
+                copyLinkToClipboard(createShareUrl(spaceCode));
                 showToast({
                   text: '스페이스 공유 링크 복사 완료!',
                   type: 'info',

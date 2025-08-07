@@ -1,9 +1,7 @@
-import { createShareUrl } from './createSpaceUrl';
-
-export const copyLinkToClipboard = async (spaceId: string) => {
+export const copyLinkToClipboard = async (copyText: string) => {
   // TODO : try catch 유틸 분리
   try {
-    await navigator.clipboard.writeText(createShareUrl(spaceId));
+    await navigator.clipboard.writeText(copyText);
   } catch (error) {
     console.log(error);
   }
