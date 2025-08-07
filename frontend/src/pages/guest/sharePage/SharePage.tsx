@@ -17,7 +17,7 @@ const SharePage = () => {
   const { showToast } = useToast();
 
   const handleSpaceHomeButton = () => {
-    navigate(`/space-home/${spaceCode}`);
+    navigate(`/manager/space-home/${spaceCode}`);
   };
 
   return (

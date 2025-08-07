@@ -26,9 +26,7 @@ import * as S from './SpaceHome.styles';
 
 const SpaceHome = () => {
   const { spaceId } = useSpaceCodeFromPath();
-  console.log(spaceId);
   const { spaceInfo } = useSpaceInfo(spaceId ?? '');
-  console.log(spaceInfo);
   const spaceName = spaceInfo?.name ?? '';
   const { targetRef: hideBlurAreaTriggerRef, isIntersecting: isAtPageBottom } =
     useIntersectionObserver({});
