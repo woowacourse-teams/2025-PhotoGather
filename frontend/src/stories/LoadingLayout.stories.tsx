@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-webpack5';
 import rocketImage from '../@assets/images/rocket.png';
-import LoadingLayout from '../components/layout/LoadingLayout/LoadingLayout';
+import LoadingLayout from '../components/layout/test/LoadingLayout';
 
 const meta: Meta<typeof LoadingLayout> = {
   title: 'Components/LoadingLayout',

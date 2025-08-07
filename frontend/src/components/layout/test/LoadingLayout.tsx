@@ -1,5 +1,5 @@
-import SparkleLightTrail from '../../../components/@common/sparkleLightTrail/SparkleLightTrail';
 import * as C from '../../../styles/@common/BackDrop.styles';
+import SparkleLightTrail from '../../@common/sparkleLightTrail/SparkleLightTrail';
 import * as S from './LoadingLayout.styles';
 
 interface LoadingLayoutProps {

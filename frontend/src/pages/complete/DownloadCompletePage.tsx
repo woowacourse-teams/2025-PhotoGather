@@ -1,6 +1,6 @@
 import downloadImage from '@assets/images/download.png';
 import { useNavigate } from 'react-router-dom';
-import MessageLayout from '../../components/layout/MessageLayout/MessageLayout';
+import MessageLayout from '../../components/layout/test2/MessageLayout';
 import { COMPLETE } from '../../constants/messages';
 import { ROUTES } from '../../constants/routes';
 
