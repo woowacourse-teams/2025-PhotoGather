@@ -17,10 +17,10 @@ const EarlyPage = ({ openedAt }: EarlyPageProps) => {
       element={
         <S.DescriptionContainer>
           <HighlightText
-            text={`${date} ${time}에 열려요`}
+            text={`${date} \n${time} 오픈 예정`}
             fontStyle="header02"
             highlightColorStyle="accent"
-            highlightTextArray={[`${date} ${time}`]}
+            highlightTextArray={[date, time]}
             textColorStyle="white"
           />
         </S.DescriptionContainer>
