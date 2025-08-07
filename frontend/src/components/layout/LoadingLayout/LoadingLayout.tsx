@@ -1,4 +1,5 @@
 import SparkleLightTrail from '../../../components/@common/sparkleLightTrail/SparkleLightTrail';
+
 import * as C from '../../../styles/@common/Overlay.styles';
 import * as S from './LoadingLayout.styles';
 

@@ -12,6 +12,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.FileSystemUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.forgather.domain.space.dto.DeletePhotosRequest;
+import com.forgather.domain.space.dto.DownloadPhotosRequest;
 import com.forgather.domain.space.dto.PhotoResponse;
 import com.forgather.domain.space.dto.PhotosResponse;
 import com.forgather.domain.space.model.Photo;
@@ -80,6 +82,13 @@ public class PhotoService {
         }
     }
 
+    public File compressSelected(String spaceCode, DownloadPhotosRequest request) throws IOException {
+        Space space = spaceRepository.getBySpaceCode(spaceCode);
+        List<Photo> photos = photoRepository.findAllByIdIn(request.photoIds());
+        photos.forEach(photo -> photo.validateSpace(space));
+        return compressPhotoFile(spaceCode, photos);
+    }
+
     /**
      * TODO
      * 파일 삭제 트랜잭션 분리
@@ -88,8 +97,19 @@ public class PhotoService {
     public File compressAll(String spaceCode, Long hostId) throws IOException {
         // TODO: Space가 HostId의 소유인지 검증
         Space space = spaceRepository.getBySpaceCode(spaceCode);
+        List<Photo> photos = photoRepository.findAllBySpace(space);
+        return compressPhotoFile(spaceCode, photos);
+    }
 
-        File spaceContents = awsS3Cloud.downloadAll(downloadTempPath.toString(), space.getSpaceCode());
+    private List<String> getPhotoPaths(List<Photo> photos) {
+        return photos.stream()
+            .map(Photo::getPath)
+            .toList();
+    }
+
+    private File compressPhotoFile(String spaceCode, List<Photo> photos) throws IOException {
+        List<String> photoPaths = getPhotoPaths(photos);
+        File spaceContents = awsS3Cloud.downloadSelected(downloadTempPath.toString(), spaceCode, photoPaths);
 
         File zipFile = ZipGenerator.generate(downloadTempPath, spaceContents, spaceCode);
         FileSystemUtils.deleteRecursively(spaceContents);
@@ -105,12 +125,10 @@ public class PhotoService {
         awsS3Cloud.deleteContent(photo.getPath());
     }
 
-    /**
-     * S3 삭제 이후 실패 시 롤백 고려
-     */
     @Transactional
-    public void deleteSelected(String spaceCode, List<Long> photoIds) {
+    public void deleteSelected(String spaceCode, DeletePhotosRequest request) {
         Space space = spaceRepository.getBySpaceCode(spaceCode);
+        List<Long> photoIds = request.photoIds();
         List<Photo> photos = photoRepository.findAllByIdIn(photoIds);
         photos.forEach(photo -> photo.validateSpace(space));
         List<String> paths = photos.stream()
@@ -118,15 +136,5 @@ public class PhotoService {
             .toList();
         photoRepository.deleteBySpaceAndPhotoIds(space, photoIds);
         awsS3Cloud.deleteSelectedContents(paths);
-    }
-
-    /**
-     * S3 삭제 이후 실패 시 롤백 고려
-     */
-    @Transactional
-    public void deleteAll(String spaceCode) {
-        Space space = spaceRepository.getBySpaceCode(spaceCode);
-        photoRepository.deleteBySpace(space);
-        awsS3Cloud.deleteAllContents(spaceCode);
     }
 }
