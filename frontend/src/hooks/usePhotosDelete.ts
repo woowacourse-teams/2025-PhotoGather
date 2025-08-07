@@ -3,11 +3,11 @@
 import { useState } from 'react';
 import { photoService } from '../apis/services/photo.service';
 import { ERROR } from '../constants/messages';
-import { mockSpaceData } from '../pages/manager/spaceHome/mockSpaceData';
 import type { Photo } from '../types/photo.type';
 import { useToast } from './@common/useToast';
 
 interface UsePhotosDeleteProps {
+  spaceCode: string;
   toggleSelectMode: () => void;
   updatePhotos: (photos: Photo[]) => void;
   fetchPhotosList: () => Promise<void>;
@@ -15,6 +15,7 @@ interface UsePhotosDeleteProps {
 }
 
 const usePhotosDelete = ({
+  spaceCode,
   toggleSelectMode,
   updatePhotos,
   fetchPhotosList,
@@ -26,7 +27,7 @@ const usePhotosDelete = ({
   const fetchDeletePhotos = async (photoIds: number[]) => {
     try {
       setIsDeleting(true);
-      await photoService.deletePhotos(mockSpaceData.code, {
+      await photoService.deletePhotos(spaceCode, {
         photoIds: photoIds,
       });
     } catch (error) {

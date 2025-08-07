@@ -32,7 +32,11 @@ const ImageUploadPage = () => {
     handleFilesDrop,
     handleUploadFiles,
     handleDeleteFile,
-  } = useFileUpload({ fileType: 'image', showError: showToast });
+  } = useFileUpload({
+    spaceCode: spaceId ?? '',
+    fileType: 'image',
+    showError: showToast,
+  });
 
   const hasImages = Array.isArray(previewData) && previewData.length > 0;
   const { targetRef: hideBlurAreaTriggerRef, isIntersecting: isAtPageBottom } =

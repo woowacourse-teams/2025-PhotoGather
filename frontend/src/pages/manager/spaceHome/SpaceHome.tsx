@@ -55,6 +55,7 @@ const SpaceHome = () => {
   });
 
   const { isDownloading, downloadAll, selectDownload } = useDownload({
+    spaceCode: spaceId ?? '',
     spaceName,
   });
 
@@ -71,6 +72,7 @@ const SpaceHome = () => {
   } = usePhotoSelect({ photosList: photosList ?? [] });
 
   const { submitDeletePhotos, isDeleting } = usePhotosDelete({
+    spaceCode: spaceId ?? '',
     toggleSelectMode,
     updatePhotos,
     fetchPhotosList,
