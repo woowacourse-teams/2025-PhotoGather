@@ -7,10 +7,12 @@ import FloatingActionButton from '../../../components/@common/buttons/floatingAc
 import FloatingIconButton from '../../../components/@common/buttons/floatingIconButton/FloatingIconButton';
 import SpaceManagerImageGrid from '../../../components/@common/imageLayout/imageGrid/spaceManagerImageGrid/SpaceManagerImageGrid';
 import LoadingLayout from '../../../components/layout/loadingLayout/LoadingLayout';
+import PhotoModal from '../../../components/modal/PhotoModal';
 import PhotoSelectionToolBar from '../../../components/photoSelectionToolBar/PhotoSelectionToolBar';
 import SpaceHeader from '../../../components/spaceHeader/SpaceHeader';
 import SpaceHomeTopActionBar from '../../../components/spaceHomeTopActionBar/SpaceHomeTopActionBar';
 import { INFORMATION } from '../../../constants/messages';
+import { useOverlay } from '../../../context/OverlayProvider';
 import useIntersectionObserver from '../../../hooks/@common/useIntersectionObserver';
 import useLeftTimer from '../../../hooks/@common/useLeftTimer';
 import useDownload from '../../../hooks/useDownload';
@@ -37,6 +39,8 @@ const SpaceHome = () => {
   const { leftTime } = useLeftTimer({
     targetTime: mockSpaceData.expirationDate,
   });
+
+  const overlay = useOverlay();
 
   const {
     photosList,
@@ -73,6 +77,14 @@ const SpaceHome = () => {
     extractUnselectedPhotos,
   });
 
+  const openPhotoModal = async () => {
+    await overlay(<PhotoModal mode="manager" />, {
+      clickOverlayClose: true,
+    });
+  };
+
+  const handleImageClick = isSelectMode ? toggleSelectedPhoto : openPhotoModal;
+
   //biome-ignore lint/correctness/useExhaustiveDependencies: isFetchSectionVisible 변경 시 호출
   useEffect(() => {
     if (!isFetchSectionVisible || isEndPage || isLoading) return;
@@ -105,6 +117,7 @@ const SpaceHome = () => {
       </S.Wrapper>
     );
   }
+
   return (
     <S.Wrapper>
       <S.InfoContainer ref={scrollTopTriggerRef}>
@@ -137,13 +150,7 @@ const SpaceHome = () => {
                 photoData={photosList}
                 thumbnailUrlList={thumbnailPhotoMap}
                 rowImageAmount={3}
-                onImageClick={
-                  isSelectMode
-                    ? toggleSelectedPhoto
-                    : () => {
-                        console.log('모달창');
-                      }
-                }
+                onImageClick={handleImageClick}
               />
             </S.ImageManagementContainer>
 
