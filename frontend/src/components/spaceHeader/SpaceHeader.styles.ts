@@ -29,15 +29,15 @@ export const TimerContainer = styled.div`
   gap: 7px;
 `;
 
-export const TextContainer = styled.p<{ isWithinOneHour: boolean }>`
+export const TextContainer = styled.p<{ $isWithinOneHour: boolean }>`
   ${({ theme }) => theme.typography.bodyRegular};
-  color: ${({ theme, isWithinOneHour }) =>
-    isWithinOneHour ? theme.colors.error : theme.colors.white};
+  color: ${({ theme, $isWithinOneHour }) =>
+    $isWithinOneHour ? theme.colors.error : theme.colors.white};
 `;
 
 export const ClockIconContainer = styled(ClockIcon)<{
-  isWithinOneHour: boolean;
+  $isWithinOneHour: boolean;
 }>`
-  color: ${({ theme, isWithinOneHour }) =>
-    isWithinOneHour ? theme.colors.error : theme.colors.white};
+  color: ${({ theme, $isWithinOneHour }) =>
+    $isWithinOneHour ? theme.colors.error : theme.colors.white};
 `;

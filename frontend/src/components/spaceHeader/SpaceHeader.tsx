@@ -1,6 +1,6 @@
 import type { Timer } from '../../types/timer.type';
+import { checkIsTimerExpired } from '../../utils/checkIsTimerExpired';
 import { formatTimer } from '../../utils/formatTimer';
-import { isTimerExpired } from '../../utils/isTimerExpired';
 import * as S from './SpaceHeader.styles';
 
 interface SpaceHeaderProps {
@@ -13,7 +13,7 @@ interface SpaceHeaderProps {
 }
 
 const SpaceHeader = ({ title, timer, icon }: SpaceHeaderProps) => {
-  const isExpired = isTimerExpired(timer);
+  const isExpired = checkIsTimerExpired(timer);
   const isWithinOneHour = timer.days === 0 && timer.hours === 0 && !isExpired;
 
   return (
@@ -23,8 +23,8 @@ const SpaceHeader = ({ title, timer, icon }: SpaceHeaderProps) => {
         <S.Icon>{icon}</S.Icon>
       </S.TitleIconContainer>
       <S.TimerContainer>
-        <S.ClockIconContainer isWithinOneHour={isWithinOneHour} />
-        <S.TextContainer isWithinOneHour={isWithinOneHour}>
+        <S.ClockIconContainer $isWithinOneHour={isWithinOneHour} />
+        <S.TextContainer $isWithinOneHour={isWithinOneHour}>
           {`${formatTimer(timer)} 남았어요`}
         </S.TextContainer>
       </S.TimerContainer>
