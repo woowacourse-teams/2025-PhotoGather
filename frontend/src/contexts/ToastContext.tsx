@@ -23,9 +23,14 @@ export const ToastProvider = ({ children }: { children: React.ReactNode }) => {
   }, []);
 
   const showToast = useCallback(
-    ({ text, type = 'error', duration = 5000 }: ToastBase) => {
+    ({
+      text,
+      type = 'error',
+      duration = 5000,
+      position = 'bottom',
+    }: ToastBase) => {
       const id = toastId++;
-      setToasts((prev) => [...prev, { id, text, type, duration }]);
+      setToasts((prev) => [...prev, { id, text, type, duration, position }]);
 
       setTimeout(() => {
         removeToast(id);

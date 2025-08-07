@@ -25,6 +25,7 @@ export const ErrorToast: Story = {
 export const TopToast: Story = {
   args: {
     text: '새로운 사진 5장이 추가됐어요',
+    position: 'top',
   },
 };
 
