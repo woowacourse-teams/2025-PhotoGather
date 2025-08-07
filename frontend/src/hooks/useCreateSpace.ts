@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { spaceService } from '../apis/services/space.service';
 import { DEBUG_MESSAGES } from '../constants/debugMessages';
 import type { SpaceCreateInfo } from '../types/space.type';
 
@@ -8,11 +9,13 @@ const useCreateSpace = () => {
   const fetchCreateSpace = async (_spaceCreateInfo: SpaceCreateInfo) => {
     setIsCreating(true);
     try {
-      // TODO: 모킹 API 삭제
-      // const response = await spaceService.create(spaceCreateInfo);
-      const response = await new Promise<{ data: { spaceCode: string } }>(
-        (resolve) => resolve({ data: { spaceCode: 'mock-space-code-1234' } }),
-      );
+      const response = await spaceService.create(spaceCreateInfo);
+
+      // 테스트용 모킹 API
+      // const response = await new Promise<{ data: { spaceCode: string } }>(
+      //   (resolve) => resolve({ data: { spaceCode: 'mock-space-code-1234' } }),
+      // );
+
       const data = response.data;
 
       if (!data?.spaceCode) {
