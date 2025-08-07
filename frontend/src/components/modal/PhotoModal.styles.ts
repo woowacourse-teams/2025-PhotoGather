@@ -29,18 +29,19 @@ export const FromMessage = styled.span`
 
 export const Photo = styled.div`
   width: 100%;
-  height: 329px;
+  min-width: 240px;
+  min-height: 330px;
   aspect-ratio: 1;
   background: url(<path-to-image>) lightgray 50% / contain no-repeat;
 `;
 
-export const ButtonContainer = styled.div`
+export const ButtonContainer = styled.div<{ $isManagerMode: boolean }>`
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
   align-items: center;
   width: 106px;
   height: auto;
+  justify-content: ${({ $isManagerMode }) => ($isManagerMode ? 'space-between' : 'center')};
 `;
 
 export const DeleteIcon = styled(TrashCanIcon)`
