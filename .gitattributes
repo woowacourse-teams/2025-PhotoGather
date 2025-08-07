@@ -1,0 +1,1 @@
+backend/forgather/src/main/resources/application*.yml filter=git-crypt diff=git-crypt

@@ -5,6 +5,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import com.forgather.global.util.RandomCodeGenerator;
+
 class RandomCodeGeneratorTest {
 
     @Test
@@ -14,7 +16,7 @@ class RandomCodeGeneratorTest {
         RandomCodeGenerator generator = new RandomCodeGenerator();
 
         // when
-        String code = generator.generate();
+        String code = generator.generate(10);
 
         // then
         assertThat(code).hasSize(10);

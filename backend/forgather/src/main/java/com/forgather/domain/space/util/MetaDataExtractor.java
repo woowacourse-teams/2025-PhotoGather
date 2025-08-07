@@ -15,6 +15,10 @@ import com.forgather.domain.space.model.PhotoMetaData;
 
 public class MetaDataExtractor {
 
+    private MetaDataExtractor() {
+        // private constructor to prevent instantiation
+    }
+
     public static PhotoMetaData extractPhotoMetaData(MultipartFile file) {
         return new PhotoMetaData(extractCapturedAt(file));
     }
@@ -25,7 +29,15 @@ public class MetaDataExtractor {
      */
     private static LocalDateTime extractCapturedAt(MultipartFile file) {
         Metadata metadata = extractMetaData(file);
+        if (metadata == null) {
+            return null;
+        }
+
         ExifSubIFDDirectory directory = metadata.getFirstDirectoryOfType(ExifSubIFDDirectory.class);
+        if (directory == null) {
+            return null;
+        }
+
         return extractLocalDateTime(directory);
     }
 

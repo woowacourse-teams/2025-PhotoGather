@@ -96,7 +96,7 @@ public class LogFormatter {
 
     private String getParams(final Object[] args) {
         return Arrays.stream(args)
-            .map(Object::toString)
+            .map(arg -> arg == null ? "null" : arg.toString())
             .collect(Collectors.joining(", "));
     }
 }
