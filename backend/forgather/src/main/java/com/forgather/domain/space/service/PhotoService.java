@@ -21,7 +21,6 @@ import com.forgather.domain.space.repository.PhotoRepository;
 import com.forgather.domain.space.repository.SpaceRepository;
 import com.forgather.domain.space.util.MetaDataExtractor;
 import com.forgather.domain.space.util.ZipGenerator;
-import com.forgather.global.logging.LogFormatter;
 import com.forgather.global.logging.Logger;
 
 import lombok.RequiredArgsConstructor;
@@ -45,7 +44,8 @@ public class PhotoService {
         return PhotoResponse.from(photo);
     }
 
-    public PhotosResponse getAll(String spaceCode, Pageable pageable) {
+    public PhotosResponse getAll(String spaceCode, Pageable pageable, Long hostId) {
+        // TODO: Space가 HostId의 소유인지 검증
         Space space = spaceRepository.getBySpaceCode(spaceCode);
         Page<Photo> photos = photoRepository.findAllBySpace(space, pageable);
         return PhotosResponse.from(photos);
@@ -85,7 +85,8 @@ public class PhotoService {
      * 파일 삭제 트랜잭션 분리
      * 사진 원본 이름 대신 유의미한 이름 변경 추가 논의
      */
-    public File compressAll(String spaceCode) throws IOException {
+    public File compressAll(String spaceCode, Long hostId) throws IOException {
+        // TODO: Space가 HostId의 소유인지 검증
         Space space = spaceRepository.getBySpaceCode(spaceCode);
 
         File spaceContents = awsS3Cloud.downloadAll(downloadTempPath.toString(), space.getSpaceCode());
@@ -93,5 +94,39 @@ public class PhotoService {
         File zipFile = ZipGenerator.generate(downloadTempPath, spaceContents, spaceCode);
         FileSystemUtils.deleteRecursively(spaceContents);
         return zipFile;
+    }
+
+    @Transactional
+    public void delete(String spaceCode, Long photoId) {
+        Space space = spaceRepository.getBySpaceCode(spaceCode);
+        Photo photo = photoRepository.getById(photoId);
+        photo.validateSpace(space);
+        photoRepository.delete(photo);
+        awsS3Cloud.deleteContent(photo.getPath());
+    }
+
+    /**
+     * S3 삭제 이후 실패 시 롤백 고려
+     */
+    @Transactional
+    public void deleteSelected(String spaceCode, List<Long> photoIds) {
+        Space space = spaceRepository.getBySpaceCode(spaceCode);
+        List<Photo> photos = photoRepository.findAllByIdIn(photoIds);
+        photos.forEach(photo -> photo.validateSpace(space));
+        List<String> paths = photos.stream()
+            .map(Photo::getPath)
+            .toList();
+        photoRepository.deleteBySpaceAndPhotoIds(space, photoIds);
+        awsS3Cloud.deleteSelectedContents(paths);
+    }
+
+    /**
+     * S3 삭제 이후 실패 시 롤백 고려
+     */
+    @Transactional
+    public void deleteAll(String spaceCode) {
+        Space space = spaceRepository.getBySpaceCode(spaceCode);
+        photoRepository.deleteBySpace(space);
+        awsS3Cloud.deleteAllContents(spaceCode);
     }
 }

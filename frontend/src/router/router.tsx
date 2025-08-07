@@ -1,8 +1,8 @@
 import { createBrowserRouter } from 'react-router-dom';
 import Layout from '../components/layout/Layout';
 import DownloadCompletePage from '../pages/complete/DownloadCompletePage';
-import SpaceCreatedCompletePage from '../pages/complete/SpaceCreatedCompletePage';
 import UploadCompletePage from '../pages/complete/UploadCompletePage';
+import SpaceCreateFunnel from '../pages/create/funnel/SpaceCreateFunnel';
 import DemoHome from '../pages/demo/DemoHome';
 import NetworkErrorPage from '../pages/error/NetworkErrorPage';
 import ImageUploadPage from '../pages/guest/imageUploadPage/ImageUploadPage';
@@ -17,6 +17,10 @@ const router = createBrowserRouter([
       {
         path: '/',
         element: <DemoHome />,
+      },
+      {
+        path: 'create',
+        element: <SpaceCreateFunnel />,
       },
       {
         // TODO : 데모 후 삭제
@@ -52,10 +56,6 @@ const router = createBrowserRouter([
           {
             path: 'download',
             element: <DownloadCompletePage />,
-          },
-          {
-            path: 'space-created',
-            element: <SpaceCreatedCompletePage />,
           },
         ],
       },
