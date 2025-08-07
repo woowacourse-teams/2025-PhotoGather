@@ -20,12 +20,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
+import com.forgather.domain.space.dto.DeletePhotosRequest;
 import com.forgather.domain.space.dto.DownloadPhotosRequest;
 import com.forgather.domain.space.dto.PhotoResponse;
 import com.forgather.domain.space.dto.PhotosResponse;
@@ -171,9 +171,9 @@ public class PhotoController {
     @Operation(summary = "사진 선택 삭제", description = "특정 공간의 선택된 사진을 삭제합니다.")
     public ResponseEntity<Void> deleteSelected(
         @PathVariable(name = "spaceCode") String spaceCode,
-        @RequestParam(name = "photoIds") List<Long> photoIds
+        @RequestBody DeletePhotosRequest request
     ) {
-        photoService.deleteSelected(spaceCode, photoIds);
+        photoService.deleteSelected(spaceCode, request);
         return ResponseEntity.noContent()
             .build();
     }
