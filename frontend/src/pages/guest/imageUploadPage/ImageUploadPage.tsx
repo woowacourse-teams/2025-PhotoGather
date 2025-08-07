@@ -7,9 +7,11 @@ import FloatingIconButton from '../../../components/@common/buttons/floatingIcon
 import HighlightText from '../../../components/@common/highlightText/HighlightText';
 import GuestImageGrid from '../../../components/@common/imageLayout/imageGrid/guestImageGrid/GuestImageGrid';
 import LoadingLayout from '../../../components/layout/loadingLayout/LoadingLayout';
+import PhotoModal from '../../../components/modal/PhotoModal';
 import SpaceHeader from '../../../components/spaceHeader/SpaceHeader';
 import UploadBox from '../../../components/uploadBox/UploadBox';
 import { ROUTES } from '../../../constants/routes';
+import { useOverlay } from '../../../contexts/OverlayProvider';
 import useFileUpload from '../../../hooks/@common/useFileUpload';
 import useIntersectionObserver from '../../../hooks/@common/useIntersectionObserver';
 import useLeftTimer from '../../../hooks/@common/useLeftTimer';
@@ -22,6 +24,7 @@ import { mockSpaceData } from './mockSpaceData';
 
 const ImageUploadPage = () => {
   const { showToast } = useToast();
+  const overlay = useOverlay();
   const {
     previewData,
     isUploading,
@@ -46,6 +49,24 @@ const ImageUploadPage = () => {
     if (uploadSuccess) {
       navigate(ROUTES.COMPLETE.UPLOAD);
     }
+  };
+
+  const handleImageClick = async (photoId: number) => {
+    const selectedPhoto = previewData.find((photo) => photo.id === photoId);
+    if (!selectedPhoto) return;
+
+    await overlay(
+      <PhotoModal
+        mode="guest"
+        previewFile={selectedPhoto}
+        onDelete={(id) => {
+          handleDeleteFile(id);
+        }}
+      />,
+      {
+        clickOverlayClose: true,
+      },
+    );
   };
 
   const loadingContents = [
@@ -114,7 +135,7 @@ const ImageUploadPage = () => {
           <GuestImageGrid
             photoData={previewData}
             rowImageAmount={3}
-            onImageClick={() => {}}
+            onImageClick={handleImageClick}
             onDeleteClick={handleDeleteFile}
           />
           <S.TopButtonContainer $isVisible={!isAtPageTop}>
