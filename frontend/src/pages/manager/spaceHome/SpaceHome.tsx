@@ -83,7 +83,6 @@ const SpaceHome = () => {
     fetchPhotosList();
   }, [isFetchSectionVisible, isEndPage]);
 
-
   const loadingContents = [
     {
       icon: { src: rocketIcon, alt: '데모 페이지 아이콘' },

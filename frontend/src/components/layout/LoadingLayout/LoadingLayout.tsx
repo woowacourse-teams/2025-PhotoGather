@@ -1,5 +1,5 @@
 import SparkleLightTrail from '../../../components/@common/sparkleLightTrail/SparkleLightTrail';
-import * as C from '../../../styles/@common/Overlay.styles';
+import * as C from '../../../styles/@common/BackDrop.styles';
 import * as S from './LoadingLayout.styles';
 
 interface LoadingLayoutProps {
@@ -19,7 +19,6 @@ interface IconProps {
   alt: string;
 }
 
-
 const LoadingLayout = ({ loadingContents, percentage }: LoadingLayoutProps) => {
   const interval = 100 / loadingContents.length;
 
@@ -36,7 +35,7 @@ const LoadingLayout = ({ loadingContents, percentage }: LoadingLayoutProps) => {
   );
 
   return (
-   <C.BackDrop>
+    <C.BackDrop>
       <S.Container>
         <SparkleLightTrail />
         <S.ContentContainer>
