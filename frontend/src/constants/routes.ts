@@ -16,9 +16,16 @@ export const ROUTES = {
   ERROR: {
     NETWORK: '/network-error',
   },
+  DEMO: '/demo',
 } as const;
+
+export const STAR_FIELD_PAGES: readonly string[] = [
+  ROUTES.MANAGER.SPACE_HOME(''),
+  ROUTES.GUEST.IMAGE_UPLOAD(''),
+];
 
 export const HIGHLIGHT_PAGES: readonly string[] = [
   ROUTES.MANAGER.SPACE_HOME(''),
   ROUTES.GUEST.IMAGE_UPLOAD(''),
+  ROUTES.MAIN,
 ];

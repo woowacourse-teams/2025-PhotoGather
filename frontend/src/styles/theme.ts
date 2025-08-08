@@ -32,6 +32,7 @@ export const theme = {
     },
     overlay: '#000000B3',
     kakaoTalk: '#FFEB00',
+    naver: '#03C75A',
   },
   typography: {
     header01: {
