@@ -1,5 +1,5 @@
 import rocketIcon from '@assets/images/rocket.png';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { ReactComponent as SaveIcon } from '../../../@assets/icons/download.svg';
 import { ReactComponent as SettingSvg } from '../../../@assets/icons/setting.svg';
 import { ReactComponent as ArrowUpSvg } from '../../../@assets/icons/upwardArrow.svg';
@@ -111,9 +111,23 @@ const SpaceHome = () => {
     },
   ];
 
+  const [isClicked, setIsClicked] = useState(false);
+
   return (
     <S.Wrapper>
-      {isEarlyTime && <EarlyPage openedAt={spaceInfo?.openedAt ?? ''} />}
+      {/* TODO: 버튼 지우기 */}
+      {isEarlyTime && !isClicked && (
+        <>
+          <EarlyPage openedAt={spaceInfo?.openedAt ?? ''} />
+          <button
+            style={{ zIndex: 10000 }}
+            type="button"
+            onClick={() => setIsClicked((prev) => !prev)}
+          >
+            닫기
+          </button>
+        </>
+      )}
       {(isDownloading || isDeleting) && (
         <LoadingLayout loadingContents={loadingContents} percentage={0} />
       )}

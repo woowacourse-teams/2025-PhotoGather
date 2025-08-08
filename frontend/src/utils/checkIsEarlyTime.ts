@@ -1,10 +1,10 @@
-import { calculateKSTDate } from './calculateKSTDate';
+import { changeKSTDate } from './changeKSTDate';
 
 export const checkIsEarlyDate = (openedAt: string) => {
   if (!openedAt) return false;
 
-  const { kstDate } = calculateKSTDate();
-  const openDate = new Date(openedAt);
+  const date = new Date();
+  const openDate = changeKSTDate(new Date(openedAt)).kstDate;
 
-  return kstDate < openDate;
+  return date < openDate;
 };
