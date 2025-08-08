@@ -4,7 +4,7 @@ export const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 200px ;
+  gap: 200px;
   padding: 120px 0px;
 `;
 
@@ -16,8 +16,8 @@ export const LogoContainer = styled.div`
 `;
 
 export const RowContainer = styled.div`
-display: flex;
-gap: 24px;
+  display: flex;
+  gap: 24px;
 `;
 
 export const TextContainer = styled.p`
