@@ -1,4 +1,3 @@
-import rocketIcon from '@assets/images/rocket.png';
 import { useCallback, useEffect, useState } from 'react';
 import { photoService } from '../../apis/services/photo.service';
 import { DEBUG_MESSAGES } from '../../constants/debugMessages';
@@ -9,9 +8,7 @@ import type { PreviewFile } from '../../types/file.type';
 import type { BaseModalProps } from '../../types/modal.type';
 import type { Photo } from '../../types/photo.type';
 import { buildOriginalImageUrl } from '../../utils/buildImageUrl';
-import { parsedImagePath } from '../../utils/parsedImagePath';
 import IconLabelButton from '../@common/buttons/iconLabelButton/IconLabelButton';
-import LoadingLayout from '../layout/loadingLayout/LoadingLayout';
 import ConfirmModal from './ConfirmModal';
 import * as S from './PhotoModal.styles';
 
@@ -45,10 +42,10 @@ type PhotoModalProps = GuestPhotoModalProps | ManagerPhotoModalProps;
 
 const PhotoModal = (props: PhotoModalProps) => {
   const { mode, onClose, onSubmit } = props;
-  const [isLoading, setIsLoading] = useState(false);
+  const [, setIsLoading] = useState(false);
   const [photo, setPhoto] = useState<Photo | null>(null);
   const [displayPath, setDisplayPath] = useState<string>('');
-  const [imageLoadError, setImageLoadError] = useState(false);
+  const [, setImageLoadError] = useState(false);
   const { safeApiCall } = useApiCall();
   const overlay = useOverlay();
 
@@ -163,33 +160,6 @@ const PhotoModal = (props: PhotoModalProps) => {
     }
     onSubmit?.(true);
   };
-
-  const loadingContents = [
-    {
-      icon: { src: rocketIcon, alt: '데모 페이지 아이콘' },
-      description: '로딩 텍스트 1',
-    },
-    {
-      icon: { src: rocketIcon, alt: '데모 페이지 아이콘' },
-      description: '로딩 텍스트 2',
-    },
-    {
-      icon: { src: rocketIcon, alt: '데모 페이지 아이콘' },
-      description: '로딩 텍스트 2',
-    },
-    {
-      icon: { src: rocketIcon, alt: '데모 페이지 아이콘' },
-      description: '로딩 텍스트 2',
-    },
-  ];
-
-  if (isLoading) {
-    return (
-      <S.Wrapper>
-        <LoadingLayout loadingContents={loadingContents} percentage={0} />
-      </S.Wrapper>
-    );
-  }
 
   return (
     <S.Wrapper>

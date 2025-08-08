@@ -5,16 +5,16 @@ import { DEBUG_MESSAGES } from '../constants/debugMessages';
 import { NETWORK } from '../constants/errors';
 import { ERROR } from '../constants/messages';
 import { ROUTES } from '../constants/routes';
-import { mockSpaceData } from '../pages/manager/spaceHome/mockSpaceData';
 import type { ApiResponse } from '../types/api.type';
 import useApiCall from './@common/useApiCall';
 import { useToast } from './@common/useToast';
 
 interface UseDownloadProps {
+  spaceCode: string;
   spaceName: string;
 }
 
-const useDownload = ({ spaceName }: UseDownloadProps) => {
+const useDownload = ({ spaceCode, spaceName }: UseDownloadProps) => {
   const [isDownloading, setIsDownloading] = useState(false);
   const navigate = useNavigate();
   const { safeApiCall } = useApiCall();
@@ -43,21 +43,22 @@ const useDownload = ({ spaceName }: UseDownloadProps) => {
       return;
     }
     await handleDownload(() =>
-      photoService.downloadPhotos(mockSpaceData.code, {
+      photoService.downloadPhotos(spaceCode, {
         photoIds: photoIds,
       }),
     );
   };
 
   const downloadAll = async () => {
-    await handleDownload(() => photoService.downloadAll(mockSpaceData.code));
+    setIsDownloading(true);
+    await handleDownload(() => photoService.downloadAll(spaceCode));
+    setIsDownloading(false);
   };
 
   const handleDownload = async (
     fetchFunction: () => Promise<ApiResponse<unknown>>,
   ) => {
     try {
-      setIsDownloading(true);
       const response = await safeApiCall(fetchFunction);
 
       if (response.success && response.data) {
@@ -66,7 +67,11 @@ const useDownload = ({ spaceName }: UseDownloadProps) => {
           throw new Error(DEBUG_MESSAGES.NO_BLOB_INSTANCE);
         }
         downloadBlob(blob);
-        navigate(ROUTES.COMPLETE.DOWNLOAD);
+        navigate(ROUTES.COMPLETE.DOWNLOAD, {
+          state: {
+            spaceCode,
+          },
+        });
       } else {
         if (
           !response.error?.toLowerCase().includes(NETWORK.DEFAULT.toLowerCase())
