@@ -42,8 +42,8 @@ export const PhotoContainer = styled.div`
 
 export const Photo = styled.img`
   display: block;
-  min-width: 200px;
-  min-height: 200px;
+  min-width: 100px;
+  min-height: 100px;
   max-width: 100%;
   max-height: 100%;
   width: auto;
@@ -51,9 +51,9 @@ export const Photo = styled.img`
   object-fit: contain;
   background: linear-gradient(
     150deg,
-    ${({ theme }) => theme.colors.grayBackground} 40%,
-    ${({ theme }) => theme.colors.white} 50%,
-    ${({ theme }) => theme.colors.grayBackground} 60%
+    ${({ theme }) => theme.colors.gray06} 40%,
+    ${({ theme }) => theme.colors.gray05} 50%,
+    ${({ theme }) => theme.colors.gray06} 60%
   );
   background-size: 300%;
   animation: ${glow} 3s infinite linear;
