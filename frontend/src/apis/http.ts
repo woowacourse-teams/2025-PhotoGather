@@ -60,7 +60,8 @@ const request = async <T>(
       };
     }
 
-    const data = await response.json();
+    const text = await response.text();
+    const data = text ? JSON.parse(text) : null;
 
     if (!response.ok) {
       return {
@@ -74,7 +75,6 @@ const request = async <T>(
       data: data as T,
     };
   } catch (error) {
-    console.log(error);
     const getErrorMessage = (error: unknown): string => {
       if (isNetworkError(error)) {
         return NETWORK.DEFAULT;

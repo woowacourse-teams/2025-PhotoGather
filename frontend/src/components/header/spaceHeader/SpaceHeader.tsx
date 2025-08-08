@@ -1,6 +1,6 @@
-import type { Timer } from '../../types/timer.type';
-import { checkIsTimerExpired } from '../../utils/checkIsTimerExpired';
-import { formatTimer } from '../../utils/formatTimer';
+import type { Timer } from '../../../types/timer.type';
+import { checkIsTimerExpired } from '../../../utils/checkIsTimerExpired';
+import { formatTimer } from '../../../utils/formatTimer';
 import * as S from './SpaceHeader.styles';
 
 interface SpaceHeaderProps {

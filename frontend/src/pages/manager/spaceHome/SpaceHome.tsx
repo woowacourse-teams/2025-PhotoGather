@@ -7,10 +7,10 @@ import { photoService } from '../../../apis/services/photo.service';
 import FloatingActionButton from '../../../components/@common/buttons/floatingActionButton/FloatingActionButton';
 import FloatingIconButton from '../../../components/@common/buttons/floatingIconButton/FloatingIconButton';
 import SpaceManagerImageGrid from '../../../components/@common/imageLayout/imageGrid/spaceManagerImageGrid/SpaceManagerImageGrid';
+import SpaceHeader from '../../../components/header/spaceHeader/SpaceHeader';
 import LoadingLayout from '../../../components/layout/loadingLayout/LoadingLayout';
 import PhotoModal from '../../../components/modal/PhotoModal';
 import PhotoSelectionToolBar from '../../../components/photoSelectionToolBar/PhotoSelectionToolBar';
-import SpaceHeader from '../../../components/spaceHeader/SpaceHeader';
 import SpaceHomeTopActionBar from '../../../components/spaceHomeTopActionBar/SpaceHomeTopActionBar';
 import { INFORMATION } from '../../../constants/messages';
 import { useOverlay } from '../../../contexts/OverlayProvider';
@@ -21,13 +21,17 @@ import useDownload from '../../../hooks/useDownload';
 import usePhotoSelect from '../../../hooks/usePhotoSelect';
 import usePhotosBySpaceCode from '../../../hooks/usePhotosBySpaceCode';
 import usePhotosDelete from '../../../hooks/usePhotosDelete';
+import useSpaceCodeFromPath from '../../../hooks/useSpaceCodeFromPath';
+import useSpaceInfo from '../../../hooks/useSpaceInfo';
 import { ScrollableBlurArea } from '../../../styles/@common/ScrollableBlurArea';
 import { theme } from '../../../styles/theme';
 import { goToTop } from '../../../utils/goToTop';
-import { mockSpaceData } from './mockSpaceData';
 import * as S from './SpaceHome.styles';
 
 const SpaceHome = () => {
+  const { spaceId } = useSpaceCodeFromPath();
+  const { spaceInfo } = useSpaceInfo(spaceId ?? '');
+  const spaceName = spaceInfo?.name ?? '';
   const { targetRef: hideBlurAreaTriggerRef, isIntersecting: isAtPageBottom } =
     useIntersectionObserver({});
   const { targetRef: scrollTopTriggerRef, isIntersecting: isAtPageTop } =
@@ -39,7 +43,7 @@ const SpaceHome = () => {
   } = useIntersectionObserver({ rootMargin: '200px' });
 
   const { leftTime } = useLeftTimer({
-    targetTime: mockSpaceData.expirationDate,
+    targetTime: (spaceInfo?.expiredAt as string) ?? '',
   });
 
   const overlay = useOverlay();
@@ -54,12 +58,12 @@ const SpaceHome = () => {
     updatePhotos,
   } = usePhotosBySpaceCode({
     reObserve,
-    spaceCode: mockSpaceData.code,
+    spaceCode: spaceId ?? '',
   });
 
   const { isDownloading, downloadAll, selectDownload } = useDownload({
-    spaceName: mockSpaceData.name,
-    spaceCode: mockSpaceData.code,
+    spaceCode: spaceId ?? '',
+    spaceName,
   });
 
   const {
@@ -74,7 +78,8 @@ const SpaceHome = () => {
     toggleAllSelected,
   } = usePhotoSelect({ photosList: photosList ?? [] });
 
-  const { submitDeletePhotos } = usePhotosDelete({
+  const { submitDeletePhotos, isDeleting } = usePhotosDelete({
+    spaceCode: spaceId ?? '',
     toggleSelectMode,
     updatePhotos,
     fetchPhotosList,
@@ -83,7 +88,7 @@ const SpaceHome = () => {
 
   const handleSinglePhotoDelete = async (photoId: number) => {
     try {
-      await photoService.deletePhotos(mockSpaceData.code, {
+      await photoService.deletePhotos(spaceId ?? '', {
         photoIds: [photoId],
       });
       showToast({
@@ -107,7 +112,7 @@ const SpaceHome = () => {
       <PhotoModal
         mode="manager"
         photoId={photoId}
-        spaceCode={mockSpaceData.code}
+        spaceCode={spaceId ?? ''}
         uploaderName="익명의 우주여행자"
         onDownload={() => {
           selectDownload([photoId]);
@@ -147,19 +152,14 @@ const SpaceHome = () => {
     },
   ];
 
-  if (isDownloading) {
-    return (
-      <S.Wrapper>
-        <LoadingLayout loadingContents={loadingContents} percentage={0} />
-      </S.Wrapper>
-    );
-  }
-
   return (
     <S.Wrapper>
+      {(isDownloading || isDeleting) && (
+        <LoadingLayout loadingContents={loadingContents} percentage={0} />
+      )}
       <S.InfoContainer ref={scrollTopTriggerRef}>
         <SpaceHeader
-          title={mockSpaceData.name}
+          title={spaceName}
           timer={leftTime}
           icon={
             <SettingSvg

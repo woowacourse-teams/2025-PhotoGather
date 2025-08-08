@@ -2,10 +2,10 @@ export const ROUTES = {
   MAIN: '/',
   CREATE: '/create',
   MANAGER: {
-    SPACE_HOME: '/manager/space-home',
+    SPACE_HOME: (spaceId: string) => `/manager/space-home/${spaceId}`,
   },
   GUEST: {
-    IMAGE_UPLOAD: '/guest/image-upload',
+    IMAGE_UPLOAD: (spaceId: string) => `/guest/image-upload/${spaceId}`,
     SHARE: '/guest/share',
   },
   COMPLETE: {
@@ -16,9 +16,16 @@ export const ROUTES = {
   ERROR: {
     NETWORK: '/network-error',
   },
+  DEMO: '/demo',
 } as const;
 
+export const STAR_FIELD_PAGES: readonly string[] = [
+  ROUTES.MANAGER.SPACE_HOME(''),
+  ROUTES.GUEST.IMAGE_UPLOAD(''),
+];
+
 export const HIGHLIGHT_PAGES: readonly string[] = [
-  ROUTES.MANAGER.SPACE_HOME,
-  ROUTES.GUEST.IMAGE_UPLOAD,
+  ROUTES.MANAGER.SPACE_HOME(''),
+  ROUTES.GUEST.IMAGE_UPLOAD(''),
+  ROUTES.MAIN,
 ];

@@ -1,14 +1,13 @@
 import rocketIcon from '@assets/images/rocket.png';
-import downloadLoadingSpinner from '@assets/loading-spinner.gif';
 import { useNavigate } from 'react-router-dom';
 import { ReactComponent as ArrowUpSvg } from '../../../@assets/icons/upwardArrow.svg';
 import FloatingActionButton from '../../../components/@common/buttons/floatingActionButton/FloatingActionButton';
 import FloatingIconButton from '../../../components/@common/buttons/floatingIconButton/FloatingIconButton';
 import HighlightText from '../../../components/@common/highlightText/HighlightText';
 import GuestImageGrid from '../../../components/@common/imageLayout/imageGrid/guestImageGrid/GuestImageGrid';
+import SpaceHeader from '../../../components/header/spaceHeader/SpaceHeader';
 import LoadingLayout from '../../../components/layout/loadingLayout/LoadingLayout';
 import PhotoModal from '../../../components/modal/PhotoModal';
-import SpaceHeader from '../../../components/spaceHeader/SpaceHeader';
 import UploadBox from '../../../components/uploadBox/UploadBox';
 import { ROUTES } from '../../../constants/routes';
 import { useOverlay } from '../../../contexts/OverlayProvider';
@@ -16,13 +15,17 @@ import useFileUpload from '../../../hooks/@common/useFileUpload';
 import useIntersectionObserver from '../../../hooks/@common/useIntersectionObserver';
 import useLeftTimer from '../../../hooks/@common/useLeftTimer';
 import { useToast } from '../../../hooks/@common/useToast';
+import useSpaceCodeFromPath from '../../../hooks/useSpaceCodeFromPath';
+import useSpaceInfo from '../../../hooks/useSpaceInfo';
 import { ScrollableBlurArea } from '../../../styles/@common/ScrollableBlurArea';
 import { theme } from '../../../styles/theme';
 import { goToTop } from '../../../utils/goToTop';
 import * as S from './ImageUploadPage.styles';
-import { mockSpaceData } from './mockSpaceData';
 
 const ImageUploadPage = () => {
+  const { spaceId } = useSpaceCodeFromPath();
+  const { spaceInfo } = useSpaceInfo(spaceId ?? '');
+  const spaceName = spaceInfo?.name ?? '';
   const { showToast } = useToast();
   const overlay = useOverlay();
   const {
@@ -32,7 +35,11 @@ const ImageUploadPage = () => {
     handleFilesDrop,
     handleUploadFiles,
     handleDeleteFile,
-  } = useFileUpload({ fileType: 'image', showError: showToast });
+  } = useFileUpload({
+    spaceCode: spaceId ?? '',
+    fileType: 'image',
+    showError: showToast,
+  });
 
   const hasImages = Array.isArray(previewData) && previewData.length > 0;
   const { targetRef: hideBlurAreaTriggerRef, isIntersecting: isAtPageBottom } =
@@ -41,13 +48,17 @@ const ImageUploadPage = () => {
     useIntersectionObserver({ isInitialInView: true });
   const navigate = useNavigate();
   const { leftTime } = useLeftTimer({
-    targetTime: mockSpaceData.expirationDate,
+    targetTime: (spaceInfo?.expiredAt as string) ?? '',
   });
 
   const handleUploadClick = async () => {
     const uploadSuccess = await handleUploadFiles();
     if (uploadSuccess) {
-      navigate(ROUTES.COMPLETE.UPLOAD);
+      navigate(ROUTES.COMPLETE.UPLOAD, {
+        state: {
+          spaceId: spaceId,
+        },
+      });
     }
   };
 
@@ -88,23 +99,13 @@ const ImageUploadPage = () => {
     },
   ];
 
-  if (isUploading) {
-    return (
-      <S.Wrapper $hasImages={hasImages}>
-        <LoadingLayout loadingContents={loadingContents} percentage={0} />
-      </S.Wrapper>
-    );
-  }
-
   return (
     <S.Wrapper $hasImages={hasImages}>
       {isUploading && (
-        <S.LoadingSpinnerContainer>
-          <img src={downloadLoadingSpinner} alt="loading" />
-        </S.LoadingSpinnerContainer>
+        <LoadingLayout loadingContents={loadingContents} percentage={0} />
       )}
       <S.ScrollTopAnchor ref={scrollTopTriggerRef} />
-      <SpaceHeader title={`${mockSpaceData.name}`} timer={leftTime} />
+      <SpaceHeader title={spaceName} timer={leftTime} />
       <S.UploadContainer $hasImages={hasImages}>
         <UploadBox
           mainText={`함께한 순간을 올려주세요.${hasImages ? '' : '\n사진만 올릴 수 있습니다.'}`}

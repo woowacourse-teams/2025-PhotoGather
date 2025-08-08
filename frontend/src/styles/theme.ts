@@ -32,6 +32,7 @@ export const theme = {
     },
     overlay: '#000000B3',
     kakaoTalk: '#FFEB00',
+    naver: '#03C75A',
   },
   typography: {
     header01: {
@@ -87,7 +88,8 @@ export const theme = {
     scrollableArea: 3,
     topActionButton: 4,
     loadingSpinner: 5,
-    overlay: 100,
+    backdrop: 100,
+    backdropContainer: 101,
     floatingActionButton: 400,
     toast: 500,
   },
