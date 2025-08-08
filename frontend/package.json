@@ -5,7 +5,8 @@
   "scripts": {
     "test": "jest",
     "start": "webpack serve --mode development",
-    "build": "webpack --mode production",
+    "build:dev": "webpack --mode development",
+    "build:prod": "webpack --mode production",
     "format:styles": "prettier --write 'src/styles/**/*.{ts,tsx,js,jsx}' 'src/**/*.styles.{ts,tsx,js,jsx}'",
     "lint:biome": "biome check src",
     "lint:styles": "prettier --check 'src/styles/**/*.{ts,tsx,js,jsx}' 'src/**/*.styles.{ts,tsx,js,jsx}'",
