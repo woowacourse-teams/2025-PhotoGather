@@ -19,12 +19,20 @@ import useSpaceCodeFromPath from '../../../hooks/useSpaceCodeFromPath';
 import useSpaceInfo from '../../../hooks/useSpaceInfo';
 import { ScrollableBlurArea } from '../../../styles/@common/ScrollableBlurArea';
 import { theme } from '../../../styles/theme';
+import { checkIsEarlyDate } from '../../../utils/checkIsEarlyTime';
 import { goToTop } from '../../../utils/goToTop';
+import EarlyPage from '../../status/earlyPage/EarlyPage';
+import ExpiredPage from '../../status/expiredPage/ExpiredPage';
 import * as S from './ImageUploadPage.styles';
 
 const ImageUploadPage = () => {
   const { spaceId } = useSpaceCodeFromPath();
   const { spaceInfo } = useSpaceInfo(spaceId ?? '');
+  const isEarlyTime = checkIsEarlyDate((spaceInfo?.openedAt as string) ?? '');
+  const isSpaceExpired = spaceInfo?.isExpired;
+  // TODO: NoData 시 표시할 Layout 필요
+  const isNoData = !spaceInfo;
+
   const spaceName = spaceInfo?.name ?? '';
   const { showToast } = useToast();
   const overlay = useOverlay();
@@ -101,6 +109,8 @@ const ImageUploadPage = () => {
 
   return (
     <S.Wrapper $hasImages={hasImages}>
+      {isEarlyTime && <EarlyPage openedAt={spaceInfo?.openedAt ?? ''} />}
+      {isSpaceExpired && <ExpiredPage />}
       {isUploading && (
         <LoadingLayout loadingContents={loadingContents} percentage={0} />
       )}
