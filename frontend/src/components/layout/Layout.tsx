@@ -8,7 +8,10 @@ const Layout = () => {
   const { pathname } = useLocation();
   useGoogleAnalytics();
 
-  const isHighlightPage = HIGHLIGHT_PAGES.includes(pathname);
+  const isHighlightPage = HIGHLIGHT_PAGES.some((page) => {
+    if (page === '/') return pathname === '/';
+    return pathname.startsWith(page);
+  });
   const isStarFieldPage = STAR_FIELD_PAGES.includes(pathname);
 
   return (

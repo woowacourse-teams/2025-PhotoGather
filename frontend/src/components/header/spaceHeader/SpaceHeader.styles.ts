@@ -1,5 +1,6 @@
 import { ReactComponent as ClockIcon } from '@assets/icons/clock.svg';
 import styled from '@emotion/styled';
+import { isPropValid } from 'storybook/internal/theming';
 
 export const Wrapper = styled.div`
   display: flex;
@@ -35,7 +36,9 @@ export const TextContainer = styled.p<{ $isWithinOneHour: boolean }>`
     $isWithinOneHour ? theme.colors.error : theme.colors.white};
 `;
 
-export const ClockIconContainer = styled(ClockIcon)<{
+export const ClockIconContainer = styled(ClockIcon, {
+  shouldForwardProp: (prop) => isPropValid(prop) || prop === 'isWithinOneHour',
+})<{
   $isWithinOneHour: boolean;
 }>`
   color: ${({ theme, $isWithinOneHour }) =>

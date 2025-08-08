@@ -1,6 +1,7 @@
 import { ThemeProvider } from '@emotion/react';
 import { fireEvent, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { ToastProvider } from '../src/contexts/ToastContext';
 import SpaceCreateFunnel from '../src/pages/create/funnel/SpaceCreateFunnel';
 import { theme } from '../src/styles/theme';
 
@@ -31,7 +32,9 @@ describe('스페이스 생성 퍼널 테스트', () => {
   const navigateToFunnel = async () => {
     render(
       <ThemeProvider theme={theme}>
-        <SpaceCreateFunnel />
+        <ToastProvider>
+          <SpaceCreateFunnel />
+        </ToastProvider>
       </ThemeProvider>,
     );
   };

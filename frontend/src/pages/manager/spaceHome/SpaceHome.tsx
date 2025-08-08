@@ -17,13 +17,17 @@ import useDownload from '../../../hooks/useDownload';
 import usePhotoSelect from '../../../hooks/usePhotoSelect';
 import usePhotosBySpaceCode from '../../../hooks/usePhotosBySpaceCode';
 import usePhotosDelete from '../../../hooks/usePhotosDelete';
+import useSpaceCodeFromPath from '../../../hooks/useSpaceCodeFromPath';
+import useSpaceInfo from '../../../hooks/useSpaceInfo';
 import { ScrollableBlurArea } from '../../../styles/@common/ScrollableBlurArea';
 import { theme } from '../../../styles/theme';
 import { goToTop } from '../../../utils/goToTop';
-import { mockSpaceData } from './mockSpaceData';
 import * as S from './SpaceHome.styles';
 
 const SpaceHome = () => {
+  const { spaceId } = useSpaceCodeFromPath();
+  const { spaceInfo } = useSpaceInfo(spaceId ?? '');
+  const spaceName = spaceInfo?.name ?? '';
   const { targetRef: hideBlurAreaTriggerRef, isIntersecting: isAtPageBottom } =
     useIntersectionObserver({});
   const { targetRef: scrollTopTriggerRef, isIntersecting: isAtPageTop } =
@@ -35,7 +39,7 @@ const SpaceHome = () => {
   } = useIntersectionObserver({ rootMargin: '200px' });
 
   const { leftTime } = useLeftTimer({
-    targetTime: mockSpaceData.expirationDate,
+    targetTime: (spaceInfo?.expiredAt as string) ?? '',
   });
 
   const {
@@ -47,11 +51,12 @@ const SpaceHome = () => {
     updatePhotos,
   } = usePhotosBySpaceCode({
     reObserve,
-    spaceCode: mockSpaceData.code,
+    spaceCode: spaceId ?? '',
   });
 
   const { isDownloading, downloadAll, selectDownload } = useDownload({
-    spaceName: mockSpaceData.name,
+    spaceCode: spaceId ?? '',
+    spaceName,
   });
 
   const {
@@ -66,7 +71,8 @@ const SpaceHome = () => {
     toggleAllSelected,
   } = usePhotoSelect({ photosList: photosList ?? [] });
 
-  const { submitDeletePhotos } = usePhotosDelete({
+  const { submitDeletePhotos, isDeleting } = usePhotosDelete({
+    spaceCode: spaceId ?? '',
     toggleSelectMode,
     updatePhotos,
     fetchPhotosList,
@@ -98,18 +104,14 @@ const SpaceHome = () => {
     },
   ];
 
-  if (isDownloading) {
-    return (
-      <S.Wrapper>
-        <LoadingLayout loadingContents={loadingContents} percentage={0} />
-      </S.Wrapper>
-    );
-  }
   return (
     <S.Wrapper>
+      {(isDownloading || isDeleting) && (
+        <LoadingLayout loadingContents={loadingContents} percentage={0} />
+      )}
       <S.InfoContainer ref={scrollTopTriggerRef}>
         <SpaceHeader
-          title={mockSpaceData.name}
+          title={spaceName}
           timer={leftTime}
           icon={
             <SettingSvg

@@ -1,3 +1,5 @@
+import { CONSTRAINTS } from './constraints';
+
 export const INFORMATION = {
   NO_IMAGE: '곧 스페이스가 채워질 예정이에요',
   LINK_WARNING: {
@@ -85,8 +87,8 @@ export const ERROR = {
     HIGHLIGHT_WORDS: [''],
   },
   INPUT: {
-    NAME: '유효하지 않은 이름입니다.',
-    DATE: '오늘 이전 날짜는 선택할 수 없습니다.',
+    NAME: `${CONSTRAINTS.NAME_MAX_LENGTH}자 까지 입력할 수 있어요.`,
+    DATE: '오늘 이전 날짜는 선택할 수 없어요.',
     TIME: '현재 시간 이후 시간대를 입력해주세요.',
   },
   DOWNLOAD: {

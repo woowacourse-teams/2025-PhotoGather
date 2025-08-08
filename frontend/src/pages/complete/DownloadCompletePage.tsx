@@ -3,13 +3,14 @@ import { useNavigate } from 'react-router-dom';
 import MessageLayout from '../../components/layout/messageLayout/MessageLayout';
 import { COMPLETE } from '../../constants/messages';
 import { ROUTES } from '../../constants/routes';
+import useSpaceCodeFromPath from '../../hooks/useSpaceCodeFromPath';
 
 const DownloadCompletePage = () => {
+  const { spaceId } = useSpaceCodeFromPath();
   const navigate = useNavigate();
 
   const handleButtonClick = () => {
-    // TODO: 실제 매니저 스페이스 홈 경로로 변경 필요
-    navigate(ROUTES.MANAGER.SPACE_HOME);
+    navigate(ROUTES.MANAGER.SPACE_HOME(spaceId ?? ''));
   };
 
   return (

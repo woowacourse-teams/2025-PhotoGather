@@ -1,23 +1,24 @@
-import { ReactComponent as KakaoTalkIcon } from '@assets/icons/kakaotalk.svg';
 import { ReactComponent as LinkIcon } from '@assets/icons/link.svg';
-import { ReactComponent as QrIcon } from '@assets/icons/qrCode.svg';
 import LinkImage from '@assets/images/rocket.png';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import Button from '../../../components/@common/buttons/button/Button';
 import IconLabelButton from '../../../components/@common/buttons/iconLabelButton/IconLabelButton';
 import HighlightText from '../../../components/@common/highlightText/HighlightText';
 import InfoBox from '../../../components/@common/infoBox/InfoBox';
 import { INFORMATION } from '../../../constants/messages';
-import { theme } from '../../../styles/theme';
+import { useToast } from '../../../hooks/@common/useToast';
 import { copyLinkToClipboard } from '../../../utils/copyLinkToClipboard';
+import { createShareUrl } from '../../../utils/createSpaceUrl';
 import * as S from './SharePage.styles';
 
 const SharePage = () => {
+  const navigate = useNavigate();
   const location = useLocation();
   const spaceCode = location.state;
+  const { showToast } = useToast();
 
   const handleSpaceHomeButton = () => {
-    console.log('클릭');
+    navigate(`/manager/space-home/${spaceCode}`);
   };
 
   return (
@@ -49,12 +50,14 @@ const SharePage = () => {
           <S.IconLabelButtonContainer>
             <IconLabelButton
               icon={<LinkIcon />}
-              onClick={() => copyLinkToClipboard(spaceCode)}
-            />
-            <IconLabelButton icon={<QrIcon />} />
-            <IconLabelButton
-              icon={<KakaoTalkIcon />}
-              style={{ backgroundColor: theme.colors.kakaoTalk }}
+              onClick={() => {
+                copyLinkToClipboard(createShareUrl(spaceCode));
+                showToast({
+                  text: '스페이스 공유 링크 복사 완료!',
+                  type: 'info',
+                  position: 'top',
+                });
+              }}
             />
           </S.IconLabelButtonContainer>
         </S.ShareContainer>
