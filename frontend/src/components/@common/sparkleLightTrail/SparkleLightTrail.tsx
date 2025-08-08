@@ -21,7 +21,6 @@ const SparkleLightTrail = () => {
     let cw = 0;
     let ch = 0;
 
-    const rand = (a: number, b: number) => ~~(Math.random() * (b - a + 1) + a);
     const dToR = (degrees: number) => degrees * (Math.PI / 180);
 
     const circle = {
@@ -37,18 +36,6 @@ const SparkleLightTrail = () => {
       blur: 300,
     };
 
-    const particles: {
-      x: number;
-      y: number;
-      vx: number;
-      vy: number;
-      radius: number;
-      alpha: number;
-    }[] = [];
-
-    const particleMax = 100;
-
-    ctx.shadowBlur = circle.blur;
     ctx.shadowColor = theme.colors.primary;
     ctx.lineCap = 'round';
 
@@ -177,47 +164,6 @@ const SparkleLightTrail = () => {
       ctx.fill();
       ctx.restore();
     };
-
-    const createParticles = () => {
-      if (particles.length < particleMax) {
-        particles.push({
-          x:
-            circle.x +
-            circle.radius * Math.cos(dToR(circle.rotation - 85)) +
-            (rand(0, circle.thickness * 2) - circle.thickness),
-          y:
-            circle.y +
-            circle.radius * Math.sin(dToR(circle.rotation - 85)) +
-            (rand(0, circle.thickness * 2) - circle.thickness),
-          vx: (rand(0, 100) - 50) / 1000,
-          vy: (rand(0, 100) - 50) / 1000,
-          radius: rand(1, 6) / 2,
-          alpha: rand(10, 20) / 100,
-        });
-      }
-    };
-
-    const updateParticles = () => {
-      for (let i = particles.length - 1; i >= 0; i--) {
-        const p = particles[i];
-        p.vx += (rand(0, 100) - 50) / 750;
-        p.vy += (rand(0, 100) - 50) / 750;
-        p.x += p.vx;
-        p.y += p.vy;
-        p.alpha -= 0.01;
-        if (p.alpha < 0.02) particles.splice(i, 1);
-      }
-    };
-
-    const renderParticles = () => {
-      for (const p of particles) {
-        ctx.beginPath();
-        ctx.fillRect(p.x, p.y, p.radius, p.radius);
-        ctx.closePath();
-        ctx.fillStyle = `hsla(0, 0%, 100%, ${p.alpha})`;
-      }
-    };
-
     const clear = () => {
       ctx.globalCompositeOperation = 'destination-out';
       ctx.fillStyle = 'rgba(0, 0, 0, .1)';
@@ -234,9 +180,6 @@ const SparkleLightTrail = () => {
       renderCircleBorder();
       renderCircleFlare();
       renderCircleFlare2();
-      createParticles();
-      updateParticles();
-      renderParticles();
       animationFrameId = requestAnimationFrame(loop);
     };
 
