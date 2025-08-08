@@ -40,6 +40,7 @@ const LandingPage = () => {
             <IconLabelButton
               icon={<NaverIcon />}
               style={{ backgroundColor: theme.colors.naver }}
+              onClick={() => {}}
             />
             <IconLabelButton
               icon={<KakaoTalkIcon />}

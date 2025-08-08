@@ -50,14 +50,15 @@ const useDownload = ({ spaceCode, spaceName }: UseDownloadProps) => {
   };
 
   const downloadAll = async () => {
+    setIsDownloading(true);
     await handleDownload(() => photoService.downloadAll(spaceCode));
+    setIsDownloading(false);
   };
 
   const handleDownload = async (
     fetchFunction: () => Promise<ApiResponse<unknown>>,
   ) => {
     try {
-      setIsDownloading(true);
       const response = await safeApiCall(fetchFunction);
 
       if (response.success && response.data) {

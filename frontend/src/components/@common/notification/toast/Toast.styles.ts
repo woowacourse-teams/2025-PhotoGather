@@ -41,7 +41,6 @@ export const IconContainer = styled.div`
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  align-items: center;
   width: 18px;
 `;
 

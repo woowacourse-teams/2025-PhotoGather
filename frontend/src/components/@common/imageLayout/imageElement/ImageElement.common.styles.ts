@@ -1,14 +1,5 @@
-import { keyframes } from '@emotion/react';
 import styled from '@emotion/styled';
-
-const glow = keyframes`
-  0% {
-    background-position: 0%;
-  }
-  100% {
-    background-position: 300%;
-  }
-`;
+import { glow } from '../../../../animations/glow';
 
 export const Wrapper = styled.div<{ $ratio: number; $width: string }>`
   aspect-ratio: ${({ $ratio }) => $ratio};

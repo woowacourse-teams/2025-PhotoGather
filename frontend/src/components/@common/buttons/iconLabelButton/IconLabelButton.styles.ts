@@ -14,6 +14,9 @@ export const IconContainerStyles = {
   dark: (theme: Theme) => css`
     background: ${hexToRgba(theme.colors.grayBackground, 0.7)};
   `,
+  light: (theme: Theme) => css`
+    background: ${hexToRgba(theme.colors.gray06, 0.7)};
+  `,
 };
 
 export const Wrapper = styled.div`

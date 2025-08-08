@@ -10,7 +10,8 @@ export const photoService = {
   getAll: (params?: { page?: number; pageSize?: number }) =>
     http.get<PhotoListResponse>('/photos', params),
 
-  getById: (photoId: number) => http.get<Photo>(`/photos/${photoId}`),
+  getById: (spaceCode: string, photoId: number) =>
+    http.get<Photo>(`/spaces/${spaceCode}/photos/${photoId}`),
 
   getBySpaceCode: (
     spaceCode: string,
