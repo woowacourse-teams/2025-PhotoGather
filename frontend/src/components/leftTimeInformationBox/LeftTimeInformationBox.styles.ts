@@ -16,6 +16,24 @@ export const Title = styled.h2`
   ${({ theme }) => ({ ...theme.typography.header02 })};
 `;
 
+export const TopDescriptionContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  gap: 4px;
+  align-items: center;
+`;
+
+export const TopDescription = styled.p`
+  color: ${({ theme }) => theme.colors.gray05};
+  ${({ theme }) => ({ ...theme.typography.header03 })}
+`;
+
+export const TopLeftTime = styled.p`
+  color: ${({ theme }) => theme.colors.primary};
+  ${({ theme }) => ({ ...theme.typography.header03 })}
+  font-family: 'Roboto'
+`;
+
 export const Icon = styled.img`
   width: 64px;
   height: 64px;

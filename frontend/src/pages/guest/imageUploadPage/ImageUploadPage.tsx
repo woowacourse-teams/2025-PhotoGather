@@ -1,67 +1,138 @@
-import downloadLoadingSpinner from '@assets/loading-spinner.gif';
-import { useEffect } from 'react';
+import rocketIcon from '@assets/images/rocket.png';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ReactComponent as ArrowUpSvg } from '../../../@assets/icons/upwardArrow.svg';
 import FloatingActionButton from '../../../components/@common/buttons/floatingActionButton/FloatingActionButton';
 import FloatingIconButton from '../../../components/@common/buttons/floatingIconButton/FloatingIconButton';
 import HighlightText from '../../../components/@common/highlightText/HighlightText';
-import ImageGrid from '../../../components/@common/imageGrid/ImageGrid';
-import SpaceHeader from '../../../components/spaceHeader/SpaceHeader';
+import GuestImageGrid from '../../../components/@common/imageLayout/imageGrid/guestImageGrid/GuestImageGrid';
+import SpaceHeader from '../../../components/header/spaceHeader/SpaceHeader';
+import LoadingLayout from '../../../components/layout/loadingLayout/LoadingLayout';
+import PhotoModal from '../../../components/modal/PhotoModal';
 import UploadBox from '../../../components/uploadBox/UploadBox';
 import { ROUTES } from '../../../constants/routes';
+import { useOverlay } from '../../../contexts/OverlayProvider';
 import useFileUpload from '../../../hooks/@common/useFileUpload';
 import useIntersectionObserver from '../../../hooks/@common/useIntersectionObserver';
+import useLeftTimer from '../../../hooks/@common/useLeftTimer';
+import { useToast } from '../../../hooks/@common/useToast';
+import useSpaceCodeFromPath from '../../../hooks/useSpaceCodeFromPath';
+import useSpaceInfo from '../../../hooks/useSpaceInfo';
 import { ScrollableBlurArea } from '../../../styles/@common/ScrollableBlurArea';
 import { theme } from '../../../styles/theme';
+import { checkIsEarlyDate } from '../../../utils/checkIsEarlyTime';
 import { goToTop } from '../../../utils/goToTop';
+import EarlyPage from '../../status/earlyPage/EarlyPage';
+import ExpiredPage from '../../status/expiredPage/ExpiredPage';
 import * as S from './ImageUploadPage.styles';
-import { mockSpaceData } from './mockSpaceData';
 
 const ImageUploadPage = () => {
+  const { spaceId } = useSpaceCodeFromPath();
+  const { spaceInfo } = useSpaceInfo(spaceId ?? '');
+  const isEarlyTime = checkIsEarlyDate((spaceInfo?.openedAt as string) ?? '');
+  const isSpaceExpired = spaceInfo?.isExpired;
+  // TODO: NoData 시 표시할 Layout 필요
+  const isNoData = !spaceInfo;
+  const [isClicked, setIsClicked] = useState(false);
+
+  const spaceName = spaceInfo?.name ?? '';
+  const { showToast } = useToast();
+  const overlay = useOverlay();
   const {
-    previewUrls,
-    errorMessage,
+    previewData,
     isUploading,
     handleFilesUploadClick,
     handleFilesDrop,
-    handleUpload,
-  } = useFileUpload({ fileType: 'image' });
-  const hasImages = Array.isArray(previewUrls) && previewUrls.length > 0;
-  const uploadBoxText = '함께한 순간을 올려주세요';
+    handleUploadFiles,
+    handleDeleteFile,
+  } = useFileUpload({
+    spaceCode: spaceId ?? '',
+    fileType: 'image',
+    showError: showToast,
+  });
+
+  const hasImages = Array.isArray(previewData) && previewData.length > 0;
   const { targetRef: hideBlurAreaTriggerRef, isIntersecting: isAtPageBottom } =
     useIntersectionObserver({});
   const { targetRef: scrollTopTriggerRef, isIntersecting: isAtPageTop } =
     useIntersectionObserver({ isInitialInView: true });
   const navigate = useNavigate();
+  const { leftTime } = useLeftTimer({
+    targetTime: (spaceInfo?.expiredAt as string) ?? '',
+  });
 
   const handleUploadClick = async () => {
-    await handleUpload();
-    navigate(ROUTES.COMPLETE.UPLOAD);
+    const uploadSuccess = await handleUploadFiles();
+    if (uploadSuccess) {
+      navigate(ROUTES.COMPLETE.UPLOAD, {
+        state: {
+          spaceId: spaceId,
+        },
+      });
+    }
   };
 
-  //TODO: 에러 토스트 구현 후 사라질 로직
-  useEffect(() => {
-    if (errorMessage) {
-      alert(errorMessage);
-    }
-  }, [errorMessage]);
+  const handleImageClick = async (photoId: number) => {
+    const selectedPhoto = previewData.find((photo) => photo.id === photoId);
+    if (!selectedPhoto) return;
+
+    await overlay(
+      <PhotoModal
+        mode="guest"
+        previewFile={selectedPhoto}
+        onDelete={(id) => {
+          handleDeleteFile(id);
+        }}
+      />,
+      {
+        clickOverlayClose: true,
+      },
+    );
+  };
+
+  const loadingContents = [
+    {
+      icon: { src: rocketIcon, alt: '데모 페이지 아이콘' },
+      description: '로딩 텍스트 1',
+    },
+    {
+      icon: { src: rocketIcon, alt: '데모 페이지 아이콘' },
+      description: '로딩 텍스트 2',
+    },
+    {
+      icon: { src: rocketIcon, alt: '데모 페이지 아이콘' },
+      description: '로딩 텍스트 2',
+    },
+    {
+      icon: { src: rocketIcon, alt: '데모 페이지 아이콘' },
+      description: '로딩 텍스트 2',
+    },
+  ];
 
   return (
     <S.Wrapper $hasImages={hasImages}>
-      {isUploading && (
-        <S.LoadingSpinnerContainer>
-          <img src={downloadLoadingSpinner} alt="loading" />
-        </S.LoadingSpinnerContainer>
+      {isEarlyTime && !isClicked && (
+        <>
+          <EarlyPage openedAt={spaceInfo?.openedAt ?? ''} />
+          <button
+            style={{ zIndex: 10000 }}
+            type="button"
+            onClick={() => setIsClicked((prev) => !prev)}
+          >
+            닫기
+          </button>
+        </>
       )}
-
+      {isSpaceExpired && <ExpiredPage />}
+      {isUploading && (
+        <LoadingLayout loadingContents={loadingContents} percentage={0} />
+      )}
       <S.ScrollTopAnchor ref={scrollTopTriggerRef} />
-      <SpaceHeader
-        title={`${mockSpaceData.name}`}
-        description="클릭해서 불러올 수 있어요"
-      />
+      <SpaceHeader title={spaceName} timer={leftTime} />
       <S.UploadContainer $hasImages={hasImages}>
         <UploadBox
-          text={uploadBoxText}
+          mainText={`함께한 순간을 올려주세요.${hasImages ? '' : '\n사진만 올릴 수 있습니다.'}`}
+          uploadLimitText={hasImages ? '' : '한 번에 500장까지 올릴 수 있어요'}
           iconSize={hasImages ? 60 : 100}
           onChange={handleFilesUploadClick}
           onDrop={handleFilesDrop}
@@ -71,21 +142,26 @@ const ImageUploadPage = () => {
 
       {hasImages && (
         <>
-          <ImageGrid imageUrlList={previewUrls} rowImageAmount={3} />
           <S.ButtonContainer>
             <FloatingActionButton
               label={
                 <HighlightText
-                  text={`사진 ${previewUrls.length}장 업로드하기`}
+                  text={`사진 ${previewData.length}장 업로드하기`}
                   fontStyle="buttonPrimary"
                   highlightColorStyle="gray04"
-                  highlightTextArray={[`사진 ${previewUrls.length}장`]}
+                  highlightTextArray={[`사진 ${previewData.length}장`]}
                 />
               }
               onClick={handleUploadClick}
               disabled={isUploading}
             />
           </S.ButtonContainer>
+          <GuestImageGrid
+            photoData={previewData}
+            rowImageAmount={3}
+            onImageClick={handleImageClick}
+            onDeleteClick={handleDeleteFile}
+          />
           <S.TopButtonContainer $isVisible={!isAtPageTop}>
             <FloatingIconButton
               icon={<ArrowUpSvg fill={theme.colors.white} />}
@@ -95,7 +171,7 @@ const ImageUploadPage = () => {
         </>
       )}
       <S.IntersectionArea ref={hideBlurAreaTriggerRef} />
-      <ScrollableBlurArea $isHide={isAtPageBottom} />
+      <ScrollableBlurArea $isHide={isAtPageBottom} $position="bottom" />
     </S.Wrapper>
   );
 };

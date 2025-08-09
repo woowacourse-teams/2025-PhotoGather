@@ -1,19 +1,20 @@
 import spaceCreateImage from '@assets/images/space_create.png';
 import { useNavigate } from 'react-router-dom';
-import CompletePage from '../../components/layout/completePage/CompletePage';
+import MessageLayout from '../../components/layout/messageLayout/MessageLayout';
 import { COMPLETE } from '../../constants/messages';
 import { ROUTES } from '../../constants/routes';
+import useSpaceCodeFromPath from '../../hooks/useSpaceCodeFromPath';
 
 const SpaceCreatedCompletePage = () => {
   const navigate = useNavigate();
+  const { spaceId } = useSpaceCodeFromPath();
 
   const handleButtonClick = () => {
-    // TODO: 실제 매니저 스페이스 홈 경로로 변경 필요
-    navigate(ROUTES.MANAGER.SPACE_HOME);
+    navigate(ROUTES.MANAGER.SPACE_HOME(spaceId ?? ''));
   };
 
   return (
-    <CompletePage
+    <MessageLayout
       image={spaceCreateImage}
       title={COMPLETE.SPACE_CREATED.TITLE}
       description={COMPLETE.SPACE_CREATED.DESCRIPTION}

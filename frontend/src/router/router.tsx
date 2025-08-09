@@ -1,11 +1,13 @@
 import { createBrowserRouter } from 'react-router-dom';
 import Layout from '../components/layout/Layout';
 import DownloadCompletePage from '../pages/complete/DownloadCompletePage';
-import SpaceCreatedCompletePage from '../pages/complete/SpaceCreatedCompletePage';
 import UploadCompletePage from '../pages/complete/UploadCompletePage';
+import SpaceCreateFunnel from '../pages/create/funnel/SpaceCreateFunnel';
 import DemoHome from '../pages/demo/DemoHome';
+import NetworkErrorPage from '../pages/error/NetworkErrorPage';
 import ImageUploadPage from '../pages/guest/imageUploadPage/ImageUploadPage';
 import SharePage from '../pages/guest/sharePage/SharePage';
+import LandingPage from '../pages/landing/LandingPage';
 import SpaceHome from '../pages/manager/spaceHome/SpaceHome';
 
 const router = createBrowserRouter([
@@ -15,14 +17,26 @@ const router = createBrowserRouter([
     children: [
       {
         path: '/',
+        element: <LandingPage />,
+      },
+      {
+        path: '/demo',
         element: <DemoHome />,
+      },
+      {
+        path: 'create',
+        element: <SpaceCreateFunnel />,
+      },
+      {
+        path: 'space-home/:spaceCode',
+        element: <SpaceHome />,
       },
       {
         // TODO : 데모 후 삭제
         path: 'manager',
         children: [
           {
-            path: 'space-home',
+            path: 'space-home/:spaceId',
             element: <SpaceHome />,
           },
         ],
@@ -32,7 +46,7 @@ const router = createBrowserRouter([
         path: 'guest',
         children: [
           {
-            path: 'image-upload',
+            path: 'image-upload/:spaceId',
             element: <ImageUploadPage />,
           },
           {
@@ -52,11 +66,11 @@ const router = createBrowserRouter([
             path: 'download',
             element: <DownloadCompletePage />,
           },
-          {
-            path: 'space-created',
-            element: <SpaceCreatedCompletePage />,
-          },
         ],
+      },
+      {
+        path: 'network-error',
+        element: <NetworkErrorPage />,
       },
     ],
   },

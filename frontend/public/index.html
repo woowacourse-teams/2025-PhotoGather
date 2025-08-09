@@ -2,8 +2,18 @@
 <html lang="ko">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1"
+    />
     <title>포게더 | 당신을 위한 순간, 흩어지지 않게</title>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=<%= GOOGLE_TAG_ID %>"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+     gtag('js', new Date());
+     gtag('config', '<%= GOOGLE_TAG_ID %>');
+   </script>
   </head>
   <body>
     <div id="root"></div>

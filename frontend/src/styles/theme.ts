@@ -22,10 +22,17 @@ export const theme = {
       start: '#472998',
       end: '#19132A',
     },
+    scrollableBlur: {
+      start: '#4B4B4B',
+      end: '#19132A',
+    },
     uploadBox: {
       active: '#F0EBFCB3',
       default: '#F0EBFC66',
     },
+    overlay: '#000000B3',
+    kakaoTalk: '#FFEB00',
+    naver: '#03C75A',
   },
   typography: {
     header01: {
@@ -75,13 +82,16 @@ export const theme = {
     },
   },
   zIndex: {
-    circlePattern: 1,
+    overlayIcon: 1,
     imageGrid: 2,
-    settingButton: 2,
     text: 3,
     scrollableArea: 3,
-    loadingSpinner: 4,
-    floatingActionButton: 4,
+    topActionButton: 4,
+    loadingSpinner: 5,
+    backdrop: 100,
+    backdropContainer: 101,
+    floatingActionButton: 400,
+    toast: 500,
   },
   layout: {
     width: '400px',

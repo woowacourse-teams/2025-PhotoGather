@@ -10,6 +10,7 @@ export const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: 24px;
+  z-index: ${({ theme }) => theme.zIndex.imageGrid};
 `;
 
 export const InfoContainer = styled.div`
@@ -27,10 +28,23 @@ export const DownloadButtonContainer = styled.div`
   z-index: ${({ theme }) => theme.zIndex.floatingActionButton};
 `;
 
-export const ImageGridContainer = styled.div`
-  position: relative;
+export const ImageManagementContainer = styled.div`
   width: 100%;
   height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+`;
+
+export const TopActionBar = styled.div`
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: flex-end;
+  position: sticky;
+  top: 16px;
+  left: 0;
+  z-index: ${({ theme }) => theme.zIndex.topActionButton};
 `;
 
 export const IntersectionArea = styled.div`
@@ -38,14 +52,30 @@ export const IntersectionArea = styled.div`
   bottom: ${({ theme }) => theme.layout.padding.topBottom};
 `;
 
-export const TopButtonContainer = styled.div<{ $isVisible: boolean }>`
+export const BottomNavigatorContainer = styled.div`
+  max-width: 100%;
   position: fixed;
-  bottom: 21px;
+  padding: 0 24px;
+  bottom: 25px;
   left: 50%;
-  transform: translateX(calc(-50% + 150px));
+  transform: translateX(-50%);
   z-index: ${({ theme }) => theme.zIndex.floatingActionButton};
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: ${({ theme }) => theme.layout.width};
+  display: flex;
+  justify-content: right;
+  align-items: end;
+  gap: 12px;
+  pointer-events: none;
+`;
+
+export const TopButtonContainer = styled.div<{ $isVisible: boolean }>`
   opacity: ${({ $isVisible }) => ($isVisible ? 1 : 0)};
   transition: opacity 0.1s ease-in-out;
+  pointer-events: auto;
 
   @media screen and (max-width: ${theme.breakpoints.mobile}) {
     transform: translateX(calc(-50% + 140px));

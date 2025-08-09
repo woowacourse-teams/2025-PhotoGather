@@ -1,0 +1,42 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      java: corretto21
+    commands:
+      - echo "Git clone 시작"
+      - rm -rf *  # 소스 스테이지에서 내려온 불완전한 zip 제거
+      - git clone https://github.com/woowacourse-teams/2025-PhotoGather.git
+      - cd 2025-PhotoGather
+      - echo "[install] git-crypt 설치"
+      - sudo apt-get install git-crypt
+      - echo "[install] 압축 해제 준비 및 디렉토리 생성"
+      - cd backend/forgather/
+      - mkdir -p src/main/resources/
+
+  pre_build:
+    commands:
+      - echo "[pre_build] .yml 등 설정 파일 준비"
+      - cd ../..
+      - echo $gitcrypt | xxd -r -p > git-crypt-key
+      - git-crypt unlock git-crypt-key
+      - cd backend/forgather/
+
+  build:
+    commands:
+      - echo "[build] Gradle 빌드 (테스트 생략)"
+      - chmod +x ./gradlew
+      - mv src/main/resources/application-prod.yml src/main/resources/application.yml
+      - ./gradlew build -x test
+      - echo "[build] JAR, deploy 파일을 하나의 ZIP으로 압축"
+      - cd ../..
+      - cp backend/forgather/build/libs/forgather-0.0.1-SNAPSHOT.jar ..
+      - cp backend/forgather/deploy/appspec.yml ..
+      - cp backend/forgather/deploy/deploy-prod.sh ../deploy.sh
+
+artifacts:
+  files:
+    - forgather-0.0.1-SNAPSHOT.jar
+    - appspec.yml
+    - deploy.sh

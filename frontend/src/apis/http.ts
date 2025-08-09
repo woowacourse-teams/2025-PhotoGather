@@ -1,8 +1,10 @@
+import { NETWORK } from '../constants/errors';
 import type {
   ApiResponse,
   BodyContentType,
   requestOptionsType,
 } from '../types/api.type';
+import { isNetworkError } from '../utils/isNetworkError';
 import { BASE_URL } from './config';
 import { createBody } from './createBody';
 import { createHeaders } from './createHeaders';
@@ -47,8 +49,9 @@ const request = async <T>(
       body: requestBody,
     });
 
-    // zip 파일로 받고, 응답이 blob으로 오는 경우
-    if (bodyContentType === 'blob') {
+    const contentType = response.headers.get('content-type');
+
+    if (contentType?.includes('application/zip')) {
       const blob = await response.blob();
       return {
         success: response.ok,
@@ -57,23 +60,34 @@ const request = async <T>(
       };
     }
 
-    const data = await response.json();
+    const text = await response.text();
+    const data = text ? JSON.parse(text) : null;
 
-    if (response.ok) {
+    if (!response.ok) {
       return {
-        success: true,
-        data: data as T,
+        success: false,
+        error: data?.message || `Error: ${response.status}`,
       };
     }
 
     return {
-      success: false,
-      error: data?.message || `Error: ${response.status}`,
+      success: true,
+      data: data as T,
     };
   } catch (error) {
+    const getErrorMessage = (error: unknown): string => {
+      if (isNetworkError(error)) {
+        return NETWORK.DEFAULT;
+      }
+      if (error instanceof Error) {
+        return error.message;
+      }
+      return 'Unknown error';
+    };
+
     return {
       success: false,
-      error: error instanceof Error ? error.message : 'Network error',
+      error: getErrorMessage(error),
     };
   }
 };
@@ -84,7 +98,13 @@ export const http = {
     params?: Record<string, unknown>,
     bodyContentType?: BodyContentType,
     token?: string,
-  ) => request<T>(endpoint, { method: 'GET', params, bodyContentType, token }),
+  ) =>
+    request<T>(endpoint, {
+      method: 'GET',
+      params,
+      bodyContentType,
+      token,
+    }),
 
   post: <T>(
     endpoint: string,
@@ -107,6 +127,10 @@ export const http = {
     token?: string,
   ) => request<T>(endpoint, { method: 'PATCH', body, bodyContentType, token }),
 
-  delete: <T>(endpoint: string, token?: string) =>
-    request<T>(endpoint, { method: 'DELETE', token }),
+  delete: <T>(
+    endpoint: string,
+    body?: unknown,
+    bodyContentType: BodyContentType = 'json',
+    token?: string,
+  ) => request<T>(endpoint, { method: 'DELETE', body, bodyContentType, token }),
 };

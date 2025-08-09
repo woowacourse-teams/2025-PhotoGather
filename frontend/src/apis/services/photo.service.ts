@@ -1,4 +1,4 @@
-import type { PhotoListResponse } from '../../types/api.type';
+import type { PhotoIds, PhotoListResponse } from '../../types/api.type';
 import type {
   CreatePhotoInput,
   Photo,
@@ -10,7 +10,8 @@ export const photoService = {
   getAll: (params?: { page?: number; pageSize?: number }) =>
     http.get<PhotoListResponse>('/photos', params),
 
-  getById: (id: number) => http.get<Photo>(`/photos/${id}`),
+  getById: (spaceCode: string, photoId: number) =>
+    http.get<Photo>(`/spaces/${spaceCode}/photos/${photoId}`),
 
   getBySpaceCode: (
     spaceCode: string,
@@ -29,11 +30,15 @@ export const photoService = {
     );
   },
 
-  downloadZip: (spaceCode: string) =>
-    http.get<Blob>(`/spaces/${spaceCode}/photos/download`, undefined, 'blob'),
+  downloadAll: (spaceCode: string) =>
+    http.post<Blob>(`/spaces/${spaceCode}/photos/download`, undefined),
 
-  delete: (id: number) => http.delete<void>(`/photos/${id}`),
+  downloadPhotos: (spaceCode: string, photoIds: PhotoIds) =>
+    http.post<Blob>(`/spaces/${spaceCode}/photos/download/selected`, photoIds),
 
-  getWithContent: (id: number) =>
-    http.get<PhotoWithContent>(`/photos/${id}/content`),
+  deletePhotos: (spaceCode: string, photoIds: PhotoIds) =>
+    http.delete<void>(`/spaces/${spaceCode}/photos/selected`, photoIds, 'json'),
+
+  getWithContent: (photoId: number) =>
+    http.get<PhotoWithContent>(`/photos/${photoId}/content`),
 };
