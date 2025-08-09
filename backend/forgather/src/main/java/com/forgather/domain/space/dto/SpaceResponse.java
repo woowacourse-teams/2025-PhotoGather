@@ -33,7 +33,7 @@ public record SpaceResponse(
     public static SpaceResponse from(Space space) {
         return new SpaceResponse(
             space.getId(),
-            space.getSpaceCode(),
+            space.getCode(),
             space.getName(),
             space.getOpenedAt(),
             space.getExpiredAt(),

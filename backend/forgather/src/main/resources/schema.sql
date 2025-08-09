@@ -2,11 +2,11 @@
 CREATE TABLE space
 (
     id         BIGINT AUTO_INCREMENT PRIMARY KEY,
-    space_code VARCHAR(64)                        NOT NULL,
+    code VARCHAR(64)                        NOT NULL,
     password   VARCHAR(64),
     name       VARCHAR(255) CHARACTER SET utf8mb4 NOT NULL,
+    valid_hours INT                                NOT NULL,
     opened_at  TIMESTAMP                          NOT NULL,
-    expired_at TIMESTAMP                          NOT NULL,
     created_at TIMESTAMP                          NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP                          NOT NULL DEFAULT CURRENT_TIMESTAMP
 );

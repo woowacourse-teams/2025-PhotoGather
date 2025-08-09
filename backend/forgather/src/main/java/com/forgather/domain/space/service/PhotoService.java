@@ -40,7 +40,7 @@ public class PhotoService {
     private final Logger logger;
 
     public PhotoResponse get(String spaceCode, Long photoId) {
-        Space space = spaceRepository.getBySpaceCode(spaceCode);
+        Space space = spaceRepository.getUnexpiredSpaceByCode(spaceCode);
         Photo photo = photoRepository.getById(photoId);
         photo.validateSpace(space);
         return PhotoResponse.from(photo);
@@ -48,7 +48,7 @@ public class PhotoService {
 
     public PhotosResponse getAll(String spaceCode, Pageable pageable, Long hostId) {
         // TODO: Space가 HostId의 소유인지 검증
-        Space space = spaceRepository.getBySpaceCode(spaceCode);
+        Space space = spaceRepository.getUnexpiredSpaceByCode(spaceCode);
         Page<Photo> photos = photoRepository.findAllBySpace(space, pageable);
         return PhotosResponse.from(photos);
     }
@@ -60,7 +60,7 @@ public class PhotoService {
      */
     @Transactional
     public void saveAll(String spaceCode, List<MultipartFile> multipartFiles) {
-        Space space = spaceRepository.getBySpaceCode(spaceCode);
+        Space space = spaceRepository.getUnexpiredSpaceByCode(spaceCode);
         for (MultipartFile multipartFile : multipartFiles) {
             PhotoMetaData metaData = MetaDataExtractor.extractPhotoMetaData(multipartFile);
             String uploadedPath = upload(spaceCode, multipartFile);
@@ -83,7 +83,7 @@ public class PhotoService {
     }
 
     public File compressSelected(String spaceCode, DownloadPhotosRequest request) throws IOException {
-        Space space = spaceRepository.getBySpaceCode(spaceCode);
+        Space space = spaceRepository.getUnexpiredSpaceByCode(spaceCode);
         List<Photo> photos = photoRepository.findAllByIdIn(request.photoIds());
         photos.forEach(photo -> photo.validateSpace(space));
         return compressPhotoFile(spaceCode, photos);
@@ -96,7 +96,7 @@ public class PhotoService {
      */
     public File compressAll(String spaceCode, Long hostId) throws IOException {
         // TODO: Space가 HostId의 소유인지 검증
-        Space space = spaceRepository.getBySpaceCode(spaceCode);
+        Space space = spaceRepository.getUnexpiredSpaceByCode(spaceCode);
         List<Photo> photos = photoRepository.findAllBySpace(space);
         return compressPhotoFile(spaceCode, photos);
     }
@@ -118,7 +118,7 @@ public class PhotoService {
 
     @Transactional
     public void delete(String spaceCode, Long photoId) {
-        Space space = spaceRepository.getBySpaceCode(spaceCode);
+        Space space = spaceRepository.getUnexpiredSpaceByCode(spaceCode);
         Photo photo = photoRepository.getById(photoId);
         photo.validateSpace(space);
         photoRepository.delete(photo);
@@ -127,7 +127,7 @@ public class PhotoService {
 
     @Transactional
     public void deleteSelected(String spaceCode, DeletePhotosRequest request) {
-        Space space = spaceRepository.getBySpaceCode(spaceCode);
+        Space space = spaceRepository.getUnexpiredSpaceByCode(spaceCode);
         List<Long> photoIds = request.photoIds();
         List<Photo> photos = photoRepository.findAllByIdIn(photoIds);
         photos.forEach(photo -> photo.validateSpace(space));
