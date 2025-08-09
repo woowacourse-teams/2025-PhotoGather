@@ -83,7 +83,7 @@ public class PhotoService {
     }
 
     public File compressSelected(String spaceCode, DownloadPhotosRequest request) throws IOException {
-        Space space = spaceRepository.getBySpaceCode(spaceCode);
+        Space space = spaceRepository.getUnexpiredSpaceByCode(spaceCode);
         List<Photo> photos = photoRepository.findAllByIdIn(request.photoIds());
         photos.forEach(photo -> photo.validateSpace(space));
         return compressPhotoFile(spaceCode, photos);

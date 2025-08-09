@@ -69,6 +69,10 @@ public class Space extends BaseTimeEntity {
     }
 
     public boolean isExpired(LocalDateTime now) {
-        return expiredAt.isBefore(now);
+        return getExpiredAt().isBefore(now);
+    }
+
+    public LocalDateTime getExpiredAt() {
+        return openedAt.plusHours(validHours);
     }
 }
