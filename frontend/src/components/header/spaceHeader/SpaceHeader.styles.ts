@@ -28,7 +28,7 @@ export const Icon = styled.button`
   display: inline-flex;
   justify-content: center;
   align-items: center;
-  &:active{
+  &:active {
     scale: 0.9;
   }
 `;
