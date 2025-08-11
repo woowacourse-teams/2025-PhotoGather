@@ -1,4 +1,3 @@
-// import { photoService } from '../apis/services/photo.service';
 import React, { useState } from 'react';
 import { photoService } from '../apis/services/photo.service';
 import ConfirmModal from '../components/modal/ConfirmModal';
