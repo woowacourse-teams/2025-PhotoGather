@@ -1,5 +1,6 @@
 import type { BaseModalProps } from '../../../../types/modal.type';
 import Button from '../../buttons/button/Button';
+import BaseModal from '../baseModal/BaseModal';
 import * as S from './ConfirmModal.styles';
 
 interface ConfirmModalProps extends BaseModalProps {
@@ -30,7 +31,7 @@ const ConfirmModal = ({
   };
 
   return (
-    <S.Wrapper>
+    <BaseModal>
       {image && (
         <S.IconContainer>
           <S.Icon src={image} alt={description} />
@@ -41,7 +42,7 @@ const ConfirmModal = ({
         <Button text={cancelText} variant="secondary" onClick={handleCancel} />
         <Button text={confirmText} variant="primary" onClick={handleConfirm} />
       </S.ButtonContainer>
-    </S.Wrapper>
+    </BaseModal>
   );
 };
 
