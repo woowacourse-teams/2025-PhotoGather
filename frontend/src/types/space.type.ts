@@ -8,6 +8,7 @@ export interface SpaceFunnelInfo {
   name: string;
   date: string;
   time: string;
+  isImmediateOpen: boolean | null;
 }
 
 export interface Space {
