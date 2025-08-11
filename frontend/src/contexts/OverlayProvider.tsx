@@ -5,6 +5,7 @@ import {
   type PropsWithChildren,
   type ReactElement,
   useContext,
+  useEffect,
   useState,
 } from 'react';
 import Overlay from '../components/@common/overlay/Overlay';
@@ -43,6 +44,7 @@ const OverlayProvider = ({ children }: PropsWithChildren) => {
     }
 
     return new Promise((resolver) => {
+      history.pushState({ modal: true }, '');
       // 비동기 -> 모달이 반환할 결과를 기다림
       setOverlayState({
         content: children,
@@ -61,6 +63,30 @@ const OverlayProvider = ({ children }: PropsWithChildren) => {
     overlayState?.resolver?.(result);
     setOverlayState(null);
   };
+
+  useEffect(() => {
+    const handlePopState = (event: PopStateEvent) => {
+      // 모달이 열려있는데 뒤로가기를 해서 이전 페이지로 이동한 경우
+      if (overlayState && !event.state?.modal) {
+        overlayState?.resolver?.(undefined);
+        setOverlayState(null);
+      }
+    };
+
+    window.addEventListener('popstate', handlePopState);
+
+    return () => {
+      window.removeEventListener('popstate', handlePopState);
+    };
+  }, [overlayState]);
+
+  useEffect(() => {
+    if (!overlayState) {
+      if (history.state?.modal) {
+        history.back();
+      }
+    }
+  }, [overlayState]);
 
   return (
     <OverlayContext.Provider value={openOverlay}>
