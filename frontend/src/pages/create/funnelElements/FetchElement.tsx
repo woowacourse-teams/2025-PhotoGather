@@ -26,6 +26,7 @@ const FetchElement = ({ spaceInfo }: FetchElementProps) => {
       try {
         const spaceCode = await fetchCreateSpace({
           name: spaceInfo.name,
+          validHours: 72,
           openedAt: parseIsoStringFromDateTime(spaceInfo.date, spaceInfo.time),
           password: '',
         });

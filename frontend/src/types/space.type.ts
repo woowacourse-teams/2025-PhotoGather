@@ -1,5 +1,6 @@
 export interface SpaceCreateInfo {
   name: string;
+  validHours: number;
   openedAt: string;
   password: string;
 }
