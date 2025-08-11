@@ -64,16 +64,8 @@ const PhotoModal = (props: PhotoModalProps) => {
         photoService.getById(managerSpaceCode, managerPhotoId),
       );
 
-      console.log('📡 API Response:', response);
-
       if (response.success && response.data) {
         const data = response.data;
-        console.log('📸 Photo data:', {
-          id: data.id,
-          path: data.path,
-          originalName: data.originalName,
-          fullData: data,
-        });
 
         if (!data) {
           console.warn(DEBUG_MESSAGES.NO_RESPONSE);
@@ -90,16 +82,10 @@ const PhotoModal = (props: PhotoModalProps) => {
           const fileName = data.path;
           if (fileName) {
             imageUrl = buildOriginalImageUrl(managerSpaceCode, fileName);
-            console.log('🔨 Built image URL:', {
-              originalPath: data.path,
-              parsedFileName: fileName,
-              builtUrl: imageUrl,
-            });
           } else {
             console.error('❌ Failed to parse image path:', data.path);
           }
         }
-        console.log('Final image URL:', imageUrl);
         setDisplayPath(imageUrl);
       } else {
         console.error('API call failed:', response);
