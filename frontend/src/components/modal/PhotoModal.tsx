@@ -115,28 +115,29 @@ const PhotoModal = (props: PhotoModalProps) => {
   }, [mode, guestPreviewPath]);
 
   const handleDelete = async () => {
-    try {
-      const result = await overlay(
-        <ConfirmModal
-          description="정말 삭제하시겠어요?"
-          confirmText="삭제"
-          cancelText="취소"
-        />,
-        {
-          clickOverlayClose: true,
-        },
-      );
+    if (mode === 'guest' && props.onDelete) {
+      try {
+        const result = await overlay(
+          <ConfirmModal
+            description="정말 삭제하시겠어요?"
+            confirmText="삭제"
+            cancelText="취소"
+          />,
+          {
+            clickOverlayClose: true,
+          },
+        );
 
-      if (result) {
-        if (mode === 'guest' && props.onDelete) {
+        if (result) {
           props.onDelete(props.previewFile.id);
-        } else if (mode === 'manager' && props.onDelete) {
-          props.onDelete(props.photoId);
+          onClose?.();
         }
-        onClose?.();
+      } catch (error) {
+        console.error('모달 오류:', error);
       }
-    } catch (error) {
-      console.error('모달 오류:', error);
+    } else if (mode === 'manager' && props.onDelete) {
+      props.onDelete(props.photoId);
+      onClose?.();
     }
   };
 

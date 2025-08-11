@@ -78,7 +78,33 @@ const usePhotosDelete = ({
     }
   };
 
-  return { submitDeletePhotos, isDeleting };
+  const deleteSinglePhoto = async (photoId: number) => {
+    try {
+      const result = await overlay(
+        React.createElement(ConfirmModal, {
+          description: `정말 삭제하시겠어요?`,
+          confirmText: '삭제',
+          cancelText: '취소',
+        }),
+        {
+          clickOverlayClose: true,
+        },
+      );
+
+      if (result) {
+        await fetchDeletePhotos([photoId]);
+        showToast({
+          text: `사진을 삭제했습니다.`,
+          type: 'info',
+        });
+        await fetchPhotosList();
+      }
+    } catch (error) {
+      console.error('모달 오류:', error);
+    }
+  };
+
+  return { submitDeletePhotos, deleteSinglePhoto, isDeleting };
 };
 
 export default usePhotosDelete;
