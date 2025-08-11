@@ -13,6 +13,7 @@ import LeftTimeInformationBox from '../../components/leftTimeInformationBox/Left
 import { ROUTES } from '../../constants/routes';
 import useLandingScroll from '../../hooks/@common/useLandingScroll';
 import { theme } from '../../styles/theme';
+import { track } from '../../utils/googleAnalytics/track';
 import * as S from './LandingPage.styles';
 
 //TODO: 캐러셀 추가
@@ -30,11 +31,16 @@ const LandingPage = () => {
           <Logo />
         </S.SectionContainer>
 
-        <S.SectionContainer {...useLandingScroll()}>
+        <S.SectionContainer {...useLandingScroll({})}>
           <S.TextContainer>{`주인공은 당신이니까,\n당신을 위한 순간, 흩어지지 않게`}</S.TextContainer>
         </S.SectionContainer>
 
-        <S.SectionContainer {...useLandingScroll(0.8, 0.4)}>
+        <S.SectionContainer
+          {...useLandingScroll({
+            delay: 0.4,
+            onVisible: () => track.sectionView('first-section', 1),
+          })}
+        >
           <S.TextContainer>소셜 로그인으로 시작하기</S.TextContainer>
           <S.RowContainer>
             <IconLabelButton
@@ -56,7 +62,12 @@ const LandingPage = () => {
           </S.RowContainer>
         </S.SectionContainer>
 
-        <S.SectionContainer {...useLandingScroll(0.8, 0.4)}>
+        <S.SectionContainer
+          {...useLandingScroll({
+            delay: 0.4,
+            onVisible: () => track.sectionView('second-section', 2),
+          })}
+        >
           <S.TextContainer>{`3초면 끝\n링크 하나로 그 날의 추억을 모아요`}</S.TextContainer>
           <LeftTimeInformationBox
             title="나의 스페이스"
@@ -66,11 +77,21 @@ const LandingPage = () => {
           />
         </S.SectionContainer>
 
-        <S.SectionContainer {...useLandingScroll(0.8, 0.4)}>
+        <S.SectionContainer
+          {...useLandingScroll({
+            delay: 0.4,
+            onVisible: () => track.sectionView('u', 3),
+          })}
+        >
           <S.TextContainer>{`귀찮은 로그인 없이\n사진 업로드 가능`}</S.TextContainer>
         </S.SectionContainer>
 
-        <S.SectionContainer {...useLandingScroll(0.8, 0.4)}>
+        <S.SectionContainer
+          {...useLandingScroll({
+            delay: 0.4,
+            onVisible: () => track.sectionView('third-section', 4),
+          })}
+        >
           <S.TextContainer>{`한번에 사진 다운로드\n클릭 한번으로 추억 정리 끝`}</S.TextContainer>
           <FloatingActionButton
             label="모두 저장하기"
@@ -78,7 +99,12 @@ const LandingPage = () => {
           />
         </S.SectionContainer>
 
-        <S.SectionContainer {...useLandingScroll(0.8, 0.4)}>
+        <S.SectionContainer
+          {...useLandingScroll({
+            delay: 0.4,
+            onVisible: () => track.sectionView('last-section', 5),
+          })}
+        >
           <S.TextContainer>{`인스타그램, 카카오톡, QR코드\n빠르게 공유하고 사진을 모아보세요`}</S.TextContainer>
           <S.RowContainer>
             <InstagramIcon />
