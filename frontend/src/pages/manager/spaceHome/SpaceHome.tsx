@@ -26,17 +26,19 @@ import useSpaceInfo from '../../../hooks/useSpaceInfo';
 import { ScrollableBlurArea } from '../../../styles/@common/ScrollableBlurArea';
 import { theme } from '../../../styles/theme';
 import { checkIsEarlyDate } from '../../../utils/checkIsEarlyTime';
+import { copyLinkToClipboard } from '../../../utils/copyLinkToClipboard';
+import { createShareUrl } from '../../../utils/createSpaceUrl';
 import { goToTop } from '../../../utils/goToTop';
 import EarlyPage from '../../status/earlyPage/EarlyPage';
 import ExpiredPage from '../../status/expiredPage/ExpiredPage';
 import * as S from './SpaceHome.styles';
 
 const SpaceHome = () => {
-  const { spaceId } = useSpaceCodeFromPath();
-  const { spaceInfo } = useSpaceInfo(spaceId ?? '');
+  const { spaceCode } = useSpaceCodeFromPath();
+  const { spaceInfo } = useSpaceInfo(spaceCode ?? '');
   const isEarlyTime = checkIsEarlyDate((spaceInfo?.openedAt as string) ?? '');
   // TODO: NoData 시 표시할 Layout 필요
-  const isNoData = !spaceInfo;
+  const _isNoData = !spaceInfo;
   const isSpaceExpired = spaceInfo?.isExpired;
   const spaceName = spaceInfo?.name ?? '';
   const { targetRef: hideBlurAreaTriggerRef, isIntersecting: isAtPageBottom } =
@@ -65,11 +67,11 @@ const SpaceHome = () => {
     updatePhotos,
   } = usePhotosBySpaceCode({
     reObserve,
-    spaceCode: spaceId ?? '',
+    spaceCode: spaceCode ?? '',
   });
 
   const { isDownloading, downloadAll, selectDownload } = useDownload({
-    spaceCode: spaceId ?? '',
+    spaceCode: spaceCode ?? '',
     spaceName,
   });
 
@@ -86,7 +88,7 @@ const SpaceHome = () => {
   } = usePhotoSelect({ photosList: photosList ?? [] });
 
   const { submitDeletePhotos, isDeleting } = usePhotosDelete({
-    spaceCode: spaceId ?? '',
+    spaceCode: spaceCode ?? '',
     toggleSelectMode,
     updatePhotos,
     fetchPhotosList,
@@ -95,7 +97,7 @@ const SpaceHome = () => {
 
   const handleSinglePhotoDelete = async (photoId: number) => {
     try {
-      await photoService.deletePhotos(spaceId ?? '', {
+      await photoService.deletePhotos(spaceCode ?? '', {
         photoIds: [photoId],
       });
       showToast({
@@ -119,7 +121,7 @@ const SpaceHome = () => {
       <PhotoModal
         mode="manager"
         photoId={photoId}
-        spaceCode={spaceId ?? ''}
+        spaceCode={spaceCode ?? ''}
         uploaderName="익명의 우주여행자"
         onDownload={() => {
           selectDownload([photoId]);
@@ -203,6 +205,14 @@ const SpaceHome = () => {
                 isAllSelected={isAllSelected}
                 onToggleSelectMode={toggleSelectMode}
                 onToggleAllSelected={toggleAllSelected}
+                onShareLinkClick={() => {
+                  copyLinkToClipboard(createShareUrl(spaceCode ?? ''));
+                  showToast({
+                    text: '스페이스 공유 링크 복사 완료!',
+                    type: 'info',
+                    position: 'top',
+                  });
+                }}
               />
               <SpaceManagerImageGrid
                 isSelectMode={isSelectMode}

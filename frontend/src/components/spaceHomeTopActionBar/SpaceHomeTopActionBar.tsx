@@ -1,4 +1,6 @@
 import { ReactComponent as CheckIcon } from '@assets/icons/check.svg';
+import { ReactComponent as CopyIcon } from '@assets/icons/clipboard.svg';
+import { theme } from '../../styles/theme';
 import Button from '../@common/buttons/button/Button';
 import * as S from './SpaceHomeTopActionBar.styles';
 
@@ -7,6 +9,7 @@ interface SpaceHomeTopActionBarProps {
   isAllSelected: boolean;
   onToggleSelectMode: () => void;
   onToggleAllSelected: () => void;
+  onShareLinkClick: () => void;
 }
 
 const SpaceHomeTopActionBar = ({
@@ -14,9 +17,16 @@ const SpaceHomeTopActionBar = ({
   isAllSelected,
   onToggleSelectMode,
   onToggleAllSelected,
+  onShareLinkClick,
 }: SpaceHomeTopActionBarProps) => {
   return (
     <S.TopActionBar>
+      <Button
+        text="사진 업로드 링크"
+        variant="darkRounded"
+        onClick={onShareLinkClick}
+        icon={<CopyIcon fill={theme.colors.white} width="16px" />}
+      />
       {isSelectMode && (
         <Button
           text="전체 선택"

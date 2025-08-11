@@ -27,12 +27,12 @@ import ExpiredPage from '../../status/expiredPage/ExpiredPage';
 import * as S from './ImageUploadPage.styles';
 
 const ImageUploadPage = () => {
-  const { spaceId } = useSpaceCodeFromPath();
-  const { spaceInfo } = useSpaceInfo(spaceId ?? '');
+  const { spaceCode } = useSpaceCodeFromPath();
+  const { spaceInfo } = useSpaceInfo(spaceCode ?? '');
   const isEarlyTime = checkIsEarlyDate((spaceInfo?.openedAt as string) ?? '');
   const isSpaceExpired = spaceInfo?.isExpired;
   // TODO: NoData 시 표시할 Layout 필요
-  const isNoData = !spaceInfo;
+  const _isNoData = !spaceInfo;
   const [isClicked, setIsClicked] = useState(false);
 
   const spaceName = spaceInfo?.name ?? '';
@@ -46,7 +46,7 @@ const ImageUploadPage = () => {
     handleUploadFiles,
     handleDeleteFile,
   } = useFileUpload({
-    spaceCode: spaceId ?? '',
+    spaceCode: spaceCode ?? '',
     fileType: 'image',
     showError: showToast,
   });
@@ -66,7 +66,7 @@ const ImageUploadPage = () => {
     if (uploadSuccess) {
       navigate(ROUTES.COMPLETE.UPLOAD, {
         state: {
-          spaceId: spaceId,
+          spaceCode: spaceCode,
         },
       });
     }
