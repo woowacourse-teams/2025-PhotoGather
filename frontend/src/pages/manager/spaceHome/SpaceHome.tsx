@@ -36,7 +36,7 @@ const SpaceHome = () => {
   const { spaceInfo } = useSpaceInfo(spaceId ?? '');
   const isEarlyTime = checkIsEarlyDate((spaceInfo?.openedAt as string) ?? '');
   // TODO: NoData 시 표시할 Layout 필요
-  const isNoData = !spaceInfo;
+  const _isNoData = !spaceInfo;
   const isSpaceExpired = spaceInfo?.isExpired;
   const spaceName = spaceInfo?.name ?? '';
   const { targetRef: hideBlurAreaTriggerRef, isIntersecting: isAtPageBottom } =
