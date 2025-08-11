@@ -21,12 +21,14 @@ const SpaceHomeTopActionBar = ({
 }: SpaceHomeTopActionBarProps) => {
   return (
     <S.TopActionBar>
-      <Button
-        text="사진 업로드 링크"
-        variant="darkRounded"
-        onClick={onShareLinkClick}
-        icon={<CopyIcon fill={theme.colors.white} width="16px" />}
-      />
+      {!isSelectMode && (
+        <Button
+          text="사진 업로드 링크"
+          variant="darkRounded"
+          onClick={onShareLinkClick}
+          icon={<CopyIcon fill={theme.colors.white} width="16px" />}
+        />
+      )}
       {isSelectMode && (
         <Button
           text="전체 선택"
