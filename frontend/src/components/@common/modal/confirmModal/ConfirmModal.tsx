@@ -1,5 +1,5 @@
-import type { BaseModalProps } from '../../types/modal.type';
-import Button from '../@common/buttons/button/Button';
+import type { BaseModalProps } from '../../../../types/modal.type';
+import Button from '../../buttons/button/Button';
 import * as S from './ConfirmModal.styles';
 
 interface ConfirmModalProps extends BaseModalProps {

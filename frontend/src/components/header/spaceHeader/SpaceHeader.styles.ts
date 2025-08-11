@@ -19,10 +19,18 @@ export const Title = styled.p`
   color: ${({ theme }) => theme.colors.white};
 `;
 
+export const IconContainer = styled.div`
+  display: flex;
+  gap: 8px;
+`;
+
 export const Icon = styled.button`
   display: inline-flex;
   justify-content: center;
   align-items: center;
+  &:active{
+    scale: 0.9;
+  }
 `;
 
 export const TimerContainer = styled.div`
