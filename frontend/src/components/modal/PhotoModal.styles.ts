@@ -10,7 +10,13 @@ export const Wrapper = styled.div`
   flex-direction: column;
   align-items: center;
   gap: 20px;
-  max-width: 380px;
+  width: 100%;
+  max-width: min(
+    calc(100vw - 32px), 
+    calc(${({ theme }) => theme.layout.width} - 32px)
+  );
+  max-height: 80vh;
+  overflow: hidden;
 `;
 
 export const FromContainer = styled.div`
@@ -30,24 +36,20 @@ export const FromMessage = styled.span`
 
 export const PhotoContainer = styled.div`
   display: flex;
-  flex-direction: row;
   justify-content: center;
   align-items: center;
   width: 100%;
-  min-width: 240px;
-  min-height: 330px;
-  aspect-ratio: 1;
-  object-fit: contain;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: hidden;
 `;
 
 export const Photo = styled.img`
-  display: block;
-  min-width: 100px;
-  min-height: 100px;
-  max-width: 100%;
-  max-height: 100%;
   width: auto;
   height: auto;
+  max-width: min(100%, 320px);
+  max-height: min(100%, 480px);
+  aspect-ratio: 1;
   object-fit: contain;
   background: linear-gradient(
     150deg,
@@ -58,10 +60,8 @@ export const Photo = styled.img`
   background-size: 300%;
   animation: ${glow} 3s infinite linear;
   -webkit-user-drag: none;
-  -khtml-user-drag: none;
-  -moz-user-drag: none;
-  -o-user-drag: none;
-  overflow: hidden;
+  touch-action: pinch-zoom;
+  -webkit-touch-callout: none;
   &:active {
     opacity: 0.9;
   }
@@ -69,7 +69,6 @@ export const Photo = styled.img`
 
 export const ButtonContainer = styled.div<{ $isManagerMode: boolean }>`
   display: flex;
-  flex-direction: row;
   align-items: center;
   width: 106px;
   height: auto;
