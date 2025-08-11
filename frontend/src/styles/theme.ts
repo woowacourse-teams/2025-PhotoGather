@@ -31,6 +31,8 @@ export const theme = {
       default: '#F0EBFC66',
     },
     overlay: '#000000B3',
+    kakaoTalk: '#FFEB00',
+    naver: '#03C75A',
   },
   typography: {
     header01: {
@@ -85,8 +87,11 @@ export const theme = {
     text: 3,
     scrollableArea: 3,
     topActionButton: 4,
-    floatingActionButton: 400,
     loadingSpinner: 5,
+    backdrop: 100,
+    backdropContainer: 101,
+    floatingActionButton: 400,
+    toast: 500,
   },
   layout: {
     width: '400px',

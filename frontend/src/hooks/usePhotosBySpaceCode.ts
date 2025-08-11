@@ -16,7 +16,7 @@ const usePhotosBySpaceCode = ({
   reObserve,
   spaceCode,
 }: UsePhotosBySpaceIdProps) => {
-  const PAGE_SIZE = 21;
+  const PAGE_SIZE = 20;
   const PRESET = 'x800';
 
   const [isLoading, setIsLoading] = useState(false);
@@ -25,25 +25,33 @@ const usePhotosBySpaceCode = ({
   const totalPages = useRef(1);
   const { safeApiCall } = useApiCall();
 
-  //biome-ignore lint/correctness/useExhaustiveDependencies: photosList 변경 시 호출
   const thumbnailPhotoMap = useMemo(() => {
+    // TODO : thumbnail 이미지 참조 실패시 원본 이미지 참조하도록 설정
+    if (!photosList) return new Map();
     return new Map(
-      photosList?.map((photo) => [
+      photosList.map((photo) => [
         photo.id,
         buildThumbnailUrl(spaceCode, parsedImagePath(photo.path), PRESET),
       ]),
     );
-  }, [photosList]);
+  }, [photosList, spaceCode]);
 
   const isEndPage = currentPage.current > totalPages.current;
 
-  const updatePhotosList = (photos: Photo[], updatedTotalPages: number) => {
+  const appendPhotosList = (photos: Photo[], updatedTotalPages: number) => {
     setPhotosList((prev) => {
       if (!prev) {
         totalPages.current = updatedTotalPages;
         return photos;
       }
       return [...prev, ...photos];
+    });
+  };
+
+  const updatePhotos = (updatePhotos: Photo[]) => {
+    setPhotosList((prev) => {
+      if (!prev) return null;
+      return updatePhotos;
     });
   };
 
@@ -67,7 +75,7 @@ const usePhotosBySpaceCode = ({
           return;
         }
         const { photos } = data;
-        updatePhotosList(photos, data.totalPages);
+        appendPhotosList(photos, data.totalPages);
         requestAnimationFrame(() => {
           reObserve();
         });
@@ -91,6 +99,7 @@ const usePhotosBySpaceCode = ({
     thumbnailPhotoMap,
     photosList,
     isLoading,
+    updatePhotos,
   };
 };
 

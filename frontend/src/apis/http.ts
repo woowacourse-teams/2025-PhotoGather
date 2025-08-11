@@ -49,8 +49,9 @@ const request = async <T>(
       body: requestBody,
     });
 
-    // zip 파일로 받고, 응답이 blob으로 오는 경우
-    if (bodyContentType === 'blob') {
+    const contentType = response.headers.get('content-type');
+
+    if (contentType?.includes('application/zip')) {
       const blob = await response.blob();
       return {
         success: response.ok,
@@ -59,7 +60,8 @@ const request = async <T>(
       };
     }
 
-    const data = await response.json();
+    const text = await response.text();
+    const data = text ? JSON.parse(text) : null;
 
     if (!response.ok) {
       return {
@@ -96,7 +98,13 @@ export const http = {
     params?: Record<string, unknown>,
     bodyContentType?: BodyContentType,
     token?: string,
-  ) => request<T>(endpoint, { method: 'GET', params, bodyContentType, token }),
+  ) =>
+    request<T>(endpoint, {
+      method: 'GET',
+      params,
+      bodyContentType,
+      token,
+    }),
 
   post: <T>(
     endpoint: string,
@@ -119,6 +127,10 @@ export const http = {
     token?: string,
   ) => request<T>(endpoint, { method: 'PATCH', body, bodyContentType, token }),
 
-  delete: <T>(endpoint: string, token?: string) =>
-    request<T>(endpoint, { method: 'DELETE', token }),
+  delete: <T>(
+    endpoint: string,
+    body?: unknown,
+    bodyContentType: BodyContentType = 'json',
+    token?: string,
+  ) => request<T>(endpoint, { method: 'DELETE', body, bodyContentType, token }),
 };

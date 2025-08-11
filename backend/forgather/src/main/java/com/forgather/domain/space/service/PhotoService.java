@@ -12,6 +12,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.FileSystemUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.forgather.domain.space.dto.DeletePhotosRequest;
+import com.forgather.domain.space.dto.DownloadPhotosRequest;
 import com.forgather.domain.space.dto.PhotoResponse;
 import com.forgather.domain.space.dto.PhotosResponse;
 import com.forgather.domain.space.model.Photo;
@@ -21,7 +23,6 @@ import com.forgather.domain.space.repository.PhotoRepository;
 import com.forgather.domain.space.repository.SpaceRepository;
 import com.forgather.domain.space.util.MetaDataExtractor;
 import com.forgather.domain.space.util.ZipGenerator;
-import com.forgather.global.logging.LogFormatter;
 import com.forgather.global.logging.Logger;
 
 import lombok.RequiredArgsConstructor;
@@ -39,14 +40,15 @@ public class PhotoService {
     private final Logger logger;
 
     public PhotoResponse get(String spaceCode, Long photoId) {
-        Space space = spaceRepository.getBySpaceCode(spaceCode);
+        Space space = spaceRepository.getUnexpiredSpaceByCode(spaceCode);
         Photo photo = photoRepository.getById(photoId);
         photo.validateSpace(space);
         return PhotoResponse.from(photo);
     }
 
-    public PhotosResponse getAll(String spaceCode, Pageable pageable) {
-        Space space = spaceRepository.getBySpaceCode(spaceCode);
+    public PhotosResponse getAll(String spaceCode, Pageable pageable, Long hostId) {
+        // TODO: Space가 HostId의 소유인지 검증
+        Space space = spaceRepository.getUnexpiredSpaceByCode(spaceCode);
         Page<Photo> photos = photoRepository.findAllBySpace(space, pageable);
         return PhotosResponse.from(photos);
     }
@@ -58,7 +60,7 @@ public class PhotoService {
      */
     @Transactional
     public void saveAll(String spaceCode, List<MultipartFile> multipartFiles) {
-        Space space = spaceRepository.getBySpaceCode(spaceCode);
+        Space space = spaceRepository.getUnexpiredSpaceByCode(spaceCode);
         for (MultipartFile multipartFile : multipartFiles) {
             PhotoMetaData metaData = MetaDataExtractor.extractPhotoMetaData(multipartFile);
             String uploadedPath = upload(spaceCode, multipartFile);
@@ -80,18 +82,59 @@ public class PhotoService {
         }
     }
 
+    public File compressSelected(String spaceCode, DownloadPhotosRequest request) throws IOException {
+        Space space = spaceRepository.getUnexpiredSpaceByCode(spaceCode);
+        List<Photo> photos = photoRepository.findAllByIdIn(request.photoIds());
+        photos.forEach(photo -> photo.validateSpace(space));
+        return compressPhotoFile(spaceCode, photos);
+    }
+
     /**
      * TODO
      * 파일 삭제 트랜잭션 분리
      * 사진 원본 이름 대신 유의미한 이름 변경 추가 논의
      */
-    public File compressAll(String spaceCode) throws IOException {
-        Space space = spaceRepository.getBySpaceCode(spaceCode);
+    public File compressAll(String spaceCode, Long hostId) throws IOException {
+        // TODO: Space가 HostId의 소유인지 검증
+        Space space = spaceRepository.getUnexpiredSpaceByCode(spaceCode);
+        List<Photo> photos = photoRepository.findAllBySpace(space);
+        return compressPhotoFile(spaceCode, photos);
+    }
 
-        File spaceContents = awsS3Cloud.downloadAll(downloadTempPath.toString(), space.getSpaceCode());
+    private List<String> getPhotoPaths(List<Photo> photos) {
+        return photos.stream()
+            .map(Photo::getPath)
+            .toList();
+    }
+
+    private File compressPhotoFile(String spaceCode, List<Photo> photos) throws IOException {
+        List<String> photoPaths = getPhotoPaths(photos);
+        File spaceContents = awsS3Cloud.downloadSelected(downloadTempPath.toString(), spaceCode, photoPaths);
 
         File zipFile = ZipGenerator.generate(downloadTempPath, spaceContents, spaceCode);
         FileSystemUtils.deleteRecursively(spaceContents);
         return zipFile;
+    }
+
+    @Transactional
+    public void delete(String spaceCode, Long photoId) {
+        Space space = spaceRepository.getUnexpiredSpaceByCode(spaceCode);
+        Photo photo = photoRepository.getById(photoId);
+        photo.validateSpace(space);
+        photoRepository.delete(photo);
+        awsS3Cloud.deleteContent(photo.getPath());
+    }
+
+    @Transactional
+    public void deleteSelected(String spaceCode, DeletePhotosRequest request) {
+        Space space = spaceRepository.getUnexpiredSpaceByCode(spaceCode);
+        List<Long> photoIds = request.photoIds();
+        List<Photo> photos = photoRepository.findAllByIdIn(photoIds);
+        photos.forEach(photo -> photo.validateSpace(space));
+        List<String> paths = photos.stream()
+            .map(Photo::getPath)
+            .toList();
+        photoRepository.deleteBySpaceAndPhotoIds(space, photoIds);
+        awsS3Cloud.deleteSelectedContents(paths);
     }
 }

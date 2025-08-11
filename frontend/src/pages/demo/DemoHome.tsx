@@ -6,6 +6,7 @@ import { ROUTES } from '../../constants/routes';
 import * as S from './DemoHome.styles';
 
 const DemoHome = () => {
+  const MOCK_SPACE_ID = '0b117a24a4';
   const navigate = useNavigate();
   const testFunc = () => {
     try {
@@ -22,12 +23,16 @@ const DemoHome = () => {
       <S.Icon src={rocketImage} alt="데모 페이지 아이콘"></S.Icon>
       <S.Title>Forgather DEMO</S.Title>
       <Button
+        text="(CREATE) 스페이스 생성 퍼널"
+        onClick={() => navigate(ROUTES.CREATE)}
+      />
+      <Button
         text="(GUEST) 스페이스 업로드 페이지"
-        onClick={() => navigate(ROUTES.GUEST.IMAGE_UPLOAD)}
+        onClick={() => navigate(ROUTES.GUEST.IMAGE_UPLOAD(MOCK_SPACE_ID))}
       />
       <Button
         text="(MANAGER) 스페이스 관리 페이지 이동"
-        onClick={() => navigate(ROUTES.MANAGER.SPACE_HOME)}
+        onClick={() => navigate(ROUTES.MANAGER.SPACE_HOME(MOCK_SPACE_ID))}
       />
       <Button text="테스트 에러 발생" onClick={testFunc} />
     </S.Wrapper>

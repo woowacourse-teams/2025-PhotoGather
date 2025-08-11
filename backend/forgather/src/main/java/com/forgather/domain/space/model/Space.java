@@ -25,8 +25,8 @@ public class Space extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "space_code", nullable = false, length = 64)
-    private String spaceCode;
+    @Column(name = "code", nullable = false, length = 64)
+    private String code;
 
     @Column(name = "password", length = 64)
     private String password;
@@ -34,18 +34,25 @@ public class Space extends BaseTimeEntity {
     @Column(name = "name", nullable = false)
     private String name;
 
+    @Column(name = "valid_hours", nullable = false)
+    private int validHours;
+
     @Column(name = "opened_at", nullable = false)
     private LocalDateTime openedAt;
 
-    @Column(name = "expired_at", nullable = false)
-    private LocalDateTime expiredAt;
-
-    public Space(String spaceCode, String password, String name, LocalDateTime openedAt) {
-        this.spaceCode = spaceCode;
+    public Space(String code, String password, String name, int validHours, LocalDateTime openedAt) {
+        this.code = code;
         this.password = password;
         this.name = name;
         this.openedAt = openedAt;
-        this.expiredAt = openedAt.plusDays(3L);
+        this.validHours = validHours;
+    }
+
+    public void validateExpiration(LocalDateTime currentDateTime) {
+        LocalDateTime expiredAt = openedAt.plusHours(validHours);
+        if (expiredAt.isBefore(currentDateTime)) {
+            throw new IllegalArgumentException("만료된 스페이스입니다. code: " + code);
+        }
     }
 
     @Override
@@ -59,5 +66,13 @@ public class Space extends BaseTimeEntity {
     @Override
     public int hashCode() {
         return Objects.hashCode(id);
+    }
+
+    public boolean isExpired(LocalDateTime now) {
+        return getExpiredAt().isBefore(now);
+    }
+
+    public LocalDateTime getExpiredAt() {
+        return openedAt.plusHours(validHours);
     }
 }

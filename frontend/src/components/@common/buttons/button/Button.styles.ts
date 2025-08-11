@@ -75,6 +75,21 @@ export const buttonStyles = {
       background: ${hexToRgba(theme.colors.gray01, 0.5)};
     }
   `,
+  darkRoundedSelected: (theme: Theme) => css`
+    ${theme.typography.captionSmall}
+    width: auto;
+    border-radius: 500px;
+    padding: 2px 12px;
+    background: ${hexToRgba(theme.colors.gray06, 0.7)};
+    backdrop-filter: blur(5px);
+    color: ${theme.colors.accent};
+    &:active {
+      background: ${hexToRgba(theme.colors.gray06, 0.3)};
+    }
+    &:disabled {
+      background: ${hexToRgba(theme.colors.gray01, 0.5)};
+    }
+  `,
 };
 
 export const StyledButton = styled.button<{
@@ -85,8 +100,14 @@ export const StyledButton = styled.button<{
   padding: 12px 20px;
   justify-content: center;
   align-items: center;
-  gap: 10px;
+  gap: 4px;
 
   ${({ theme }) => ({ ...theme.typography.buttonPrimary })}
   ${({ $variant, theme }) => buttonStyles[$variant](theme)}
+`;
+
+export const Icon = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;

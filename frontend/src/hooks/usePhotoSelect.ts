@@ -6,19 +6,26 @@ interface UsePhotoSelectProps {
 }
 
 const usePhotoSelect = ({ photosList }: UsePhotoSelectProps) => {
-  const createInitialSelectedPhotoMap = () => {
-    return new Map<number, boolean>(
-      photosList.map((photo) => [photo.id, false]) ?? [],
+  const createInitialSelectedPhotoMap = (initialValue: boolean) =>
+    new Map<number, boolean>(
+      photosList.map((photo) => [photo.id, initialValue]),
     );
-  };
 
   const [selectedPhotoMap, setSelectedPhotoMap] = useState(() =>
-    createInitialSelectedPhotoMap(),
+    createInitialSelectedPhotoMap(false),
   );
 
-  const selectedPhotoCount = Array.from(selectedPhotoMap.values()).filter(
-    Boolean,
+  const selectedPhotosCount = Array.from(selectedPhotoMap.values()).filter(
+    (value) => value,
   ).length;
+
+  const selectedPhotoIds = Array.from(selectedPhotoMap.entries())
+    .filter(([_, value]) => value)
+    .map(([key]) => key);
+
+  const extractUnselectedPhotos = () => {
+    return photosList.filter((photo) => !selectedPhotoMap.get(photo.id));
+  };
 
   const toggleSelectedPhoto = (id: number) => {
     setSelectedPhotoMap((prev) => {
@@ -29,11 +36,23 @@ const usePhotoSelect = ({ photosList }: UsePhotoSelectProps) => {
   };
 
   const resetSelectedPhotoMap = () => {
-    setSelectedPhotoMap(createInitialSelectedPhotoMap());
+    setSelectedPhotoMap(createInitialSelectedPhotoMap(false));
   };
 
-  const extractSelectedPhoto = () => {
-    return photosList.filter((photo) => selectedPhotoMap.get(photo.id));
+  const checkAllSelected = () => {
+    setSelectedPhotoMap(createInitialSelectedPhotoMap(true));
+  };
+
+  const isAllSelected =
+    Array.from(selectedPhotoMap.values()).filter((value) => value).length ===
+    photosList.length;
+
+  const toggleAllSelected = () => {
+    if (isAllSelected) {
+      resetSelectedPhotoMap();
+      return;
+    }
+    checkAllSelected();
   };
 
   const [isSelectMode, setIsSelectMode] = useState(false);
@@ -46,9 +65,12 @@ const usePhotoSelect = ({ photosList }: UsePhotoSelectProps) => {
     isSelectMode,
     toggleSelectMode,
     selectedPhotoMap,
-    selectedPhotoCount,
+    selectedPhotosCount,
+    selectedPhotoIds,
+    extractUnselectedPhotos,
     toggleSelectedPhoto,
-    extractSelectedPhoto,
+    isAllSelected,
+    toggleAllSelected,
   };
 };
 

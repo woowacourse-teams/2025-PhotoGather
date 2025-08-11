@@ -41,6 +41,10 @@ module.exports = (_, argv) => {
           },
         },
         {
+          test: /\.(webm)$/i,
+          type: 'asset/resource',
+        },
+        {
           test: /\.(png|jpe?g|gif)$/i,
           type: 'asset/resource',
           generator: {
@@ -75,6 +79,9 @@ module.exports = (_, argv) => {
       }),
       new HtmlWebpackPlugin({
         template: './public/index.html',
+        templateParameters: {
+          GOOGLE_TAG_ID: process.env.GOOGLE_TAG_ID,
+        },
       }),
       new ForkTsCheckerWebpackPlugin({
         async: true,
