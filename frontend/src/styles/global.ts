@@ -41,4 +41,7 @@ export const global = css`
       cursor: default;
     }
   }
+  .scroll-lock {
+    overflow: hidden;
+  }
 `;
