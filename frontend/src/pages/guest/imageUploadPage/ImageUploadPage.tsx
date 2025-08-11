@@ -33,7 +33,6 @@ const ImageUploadPage = () => {
   const isSpaceExpired = spaceInfo?.isExpired;
   // TODO: NoData 시 표시할 Layout 필요
   const isNoData = !spaceInfo;
-  const [isClicked, setIsClicked] = useState(false);
 
   const spaceName = spaceInfo?.name ?? '';
   const { showToast } = useToast();
@@ -111,18 +110,7 @@ const ImageUploadPage = () => {
 
   return (
     <S.Wrapper $hasImages={hasImages}>
-      {isEarlyTime && !isClicked && (
-        <>
-          <EarlyPage openedAt={spaceInfo?.openedAt ?? ''} />
-          <button
-            style={{ zIndex: 10000 }}
-            type="button"
-            onClick={() => setIsClicked((prev) => !prev)}
-          >
-            닫기
-          </button>
-        </>
-      )}
+      {isEarlyTime && <EarlyPage openedAt={spaceInfo?.openedAt ?? ''} />}
       {isSpaceExpired && <ExpiredPage />}
       {isUploading && (
         <LoadingLayout loadingContents={loadingContents} percentage={0} />

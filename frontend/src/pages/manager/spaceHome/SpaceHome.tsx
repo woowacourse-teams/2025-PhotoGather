@@ -159,23 +159,10 @@ const SpaceHome = () => {
     },
   ];
 
-  const [isClicked, setIsClicked] = useState(false);
-
   return (
     <S.Wrapper>
       {/* TODO: 버튼 지우기 */}
-      {isEarlyTime && !isClicked && (
-        <>
-          <EarlyPage openedAt={spaceInfo?.openedAt ?? ''} />
-          <button
-            style={{ zIndex: 10000 }}
-            type="button"
-            onClick={() => setIsClicked((prev) => !prev)}
-          >
-            닫기
-          </button>
-        </>
-      )}
+      {isEarlyTime && <EarlyPage openedAt={spaceInfo?.openedAt ?? ''} />}
       {(isDownloading || isDeleting) && (
         <LoadingLayout loadingContents={loadingContents} percentage={0} />
       )}
