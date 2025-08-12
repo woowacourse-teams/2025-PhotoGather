@@ -1,26 +1,25 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { photoService } from '../apis/services/photo.service';
 import { DEBUG_MESSAGES } from '../constants/debugMessages';
-import { NETWORK } from '../constants/errors';
-import { ERROR } from '../constants/messages';
-import { ROUTES } from '../constants/routes';
 import type { ApiResponse } from '../types/api.type';
 import { checkSelectedPhotoExist } from '../validators/photo.validator';
 import useApiCall from './@common/useApiCall';
 import useError from './@common/useError';
-import { useToast } from './@common/useToast';
 
 interface UseDownloadProps {
   spaceCode: string;
   spaceName: string;
+  onDownloadSuccess?: () => void;
 }
 
-const useDownload = ({ spaceCode, spaceName }: UseDownloadProps) => {
+const useDownload = ({
+  spaceCode,
+  spaceName,
+  onDownloadSuccess,
+}: UseDownloadProps) => {
   const [isDownloading, setIsDownloading] = useState(false);
-  const navigate = useNavigate();
   const { safeApiCall } = useApiCall();
-  const { showToast } = useToast();
+  const { tryTask } = useError();
 
   const downloadBlob = (blob: Blob) => {
     const url = URL.createObjectURL(blob);
@@ -35,53 +34,73 @@ const useDownload = ({ spaceCode, spaceName }: UseDownloadProps) => {
     window.URL.revokeObjectURL(url);
   };
 
-  const { runWithErrorHandling } = useError();
-
   const selectDownload = async (photoIds: number[]) => {
-    runWithErrorHandling(() => checkSelectedPhotoExist(photoIds), ['toast']);
+    const isSelectedPhotoExist = await tryTask({
+      task: async () => {
+        checkSelectedPhotoExist(photoIds);
+      },
+      errorActions: ['toast'],
+    });
+    if (!isSelectedPhotoExist) return;
 
-    await handleDownload(() =>
-      photoService.downloadPhotos(spaceCode, {
-        photoIds: photoIds,
-      }),
-    );
+    tryTask({
+      task: async () => {
+        await handleDownload(() =>
+          photoService.downloadPhotos(spaceCode, {
+            photoIds: photoIds,
+          }),
+        );
+      },
+      errorActions: ['toast', 'console'],
+      context: {
+        toast: {
+          text: '다운로드에 실패했습니다. 다시 시도해 주세요.',
+          type: 'error',
+        },
+      },
+    });
   };
 
   const downloadAll = async () => {
-    setIsDownloading(true);
-    await handleDownload(() => photoService.downloadAll(spaceCode));
-    setIsDownloading(false);
+    tryTask({
+      task: async () => {
+        setIsDownloading(true);
+        await handleDownload(() => photoService.downloadAll(spaceCode));
+      },
+      errorActions: ['toast', 'console'],
+      context: {
+        toast: {
+          text: '다운로드에 실패했습니다. 다시 시도해 주세요.',
+          type: 'error',
+        },
+      },
+      onFinally: () => {
+        setIsDownloading(false);
+      },
+    });
+  };
+
+  const checkDownloadFormat = async (data: unknown) => {
+    if (!(data instanceof Blob)) {
+      throw new Error(DEBUG_MESSAGES.NO_BLOB_INSTANCE);
+    }
   };
 
   const handleDownload = async (
     fetchFunction: () => Promise<ApiResponse<unknown>>,
   ) => {
-    try {
-      const response = await safeApiCall(fetchFunction);
+    const response = await safeApiCall(fetchFunction);
 
-      if (response.success && response.data) {
-        const blob = response.data;
-        if (!(blob instanceof Blob)) {
-          throw new Error(DEBUG_MESSAGES.NO_BLOB_INSTANCE);
-        }
-        downloadBlob(blob);
-        navigate(ROUTES.COMPLETE.DOWNLOAD, {
-          state: {
-            spaceCode,
-          },
-        });
-      } else {
-        if (
-          !response.error?.toLowerCase().includes(NETWORK.DEFAULT.toLowerCase())
-        ) {
-          console.error('다운로드에 실패했습니다.');
-        }
-      }
-    } catch (error) {
-      console.error('다운로드 실패:', error);
-    } finally {
-      setIsDownloading(false);
-    }
+    const blob = response.data;
+
+    tryTask({
+      task: () => {
+        checkDownloadFormat(blob);
+        downloadBlob(blob as Blob);
+        onDownloadSuccess?.();
+      },
+      errorActions: ['console'],
+    });
   };
   return { isDownloading, downloadAll, selectDownload };
 };

@@ -1,7 +1,7 @@
 import { useMemo, useRef, useState } from 'react';
 import { photoService } from '../apis/services/photo.service';
 import { DEBUG_MESSAGES } from '../constants/debugMessages';
-import { NETWORK } from '../constants/errors';
+import { NETWORK_ERROR } from '../constants/errors';
 import type { Photo } from '../types/photo.type';
 import { buildThumbnailUrl } from '../utils/buildImageUrl';
 import { parsedImagePath } from '../utils/parsedImagePath';
@@ -81,7 +81,9 @@ const usePhotosBySpaceCode = ({
         });
       } else {
         if (
-          !response.error?.toLowerCase().includes(NETWORK.DEFAULT.toLowerCase())
+          !response.error
+            ?.toLowerCase()
+            .includes(NETWORK_ERROR.DEFAULT.toLowerCase())
         ) {
           console.error('사진 목록을 불러오는데 실패했습니다.');
         }

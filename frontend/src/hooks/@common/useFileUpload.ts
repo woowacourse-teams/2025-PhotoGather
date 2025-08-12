@@ -1,23 +1,25 @@
 import { useState } from 'react';
 import { photoService } from '../../apis/services/photo.service';
 import { CONSTRAINTS } from '../../constants/constraints';
-import { NETWORK } from '../../constants/errors';
 import type { PreviewFile, UploadFile } from '../../types/file.type';
-import type { ToastBase } from '../../types/toast.type';
 import { isValidFileType } from '../../utils/isValidFileType';
+import {
+  checkInvalidFileType,
+  checkUploadLimit,
+} from '../../validators/photo.validator';
 import useApiCall from './useApiCall';
+import useError from './useError';
 
 interface UseFileUploadProps {
   spaceCode: string;
   fileType: string;
-  //TODO: 추후 다른 에러 ui가 들어온다면, 타입 변경 필수
-  showError: (options: ToastBase) => void;
+  onUploadSuccess?: () => void;
 }
 
 const useFileUpload = ({
   spaceCode,
   fileType,
-  showError,
+  onUploadSuccess,
 }: UseFileUploadProps) => {
   const [uploadFiles, setUploadFiles] = useState<UploadFile[]>([]);
   const [previewData, setPreviewData] = useState<PreviewFile[]>([]);
@@ -57,21 +59,16 @@ const useFileUpload = ({
       rawFiles,
       fileType,
     );
-    const isUnderUploadLimit = validFiles.length <= CONSTRAINTS.MAX_FILE_COUNT;
-    const hasInvalidFiles = invalidFiles.length > 0;
 
-    if (!isUnderUploadLimit) {
-      showError({
-        text: `한 번에 ${CONSTRAINTS.MAX_FILE_COUNT}장까지 올릴 수 있어요`,
-      });
-    }
-    if (hasInvalidFiles) {
-      showError({
-        text: `이미지 파일만 업로드 가능해요. 파일을 다시 확인해주세요.`,
-      });
-    }
+    tryTask({
+      task: () => {
+        checkInvalidFileType(invalidFiles);
+        checkUploadLimit(validFiles);
+      },
+      errorActions: ['toast'],
+    });
+
     const limitedValidFiles = validFiles.slice(0, CONSTRAINTS.MAX_FILE_COUNT);
-    // setFiles((prev) => [...prev, ...limitedValidFiles]);
     addPreviewUrlsFromFiles(limitedValidFiles);
   };
 
@@ -91,41 +88,40 @@ const useFileUpload = ({
     setPreviewData([]);
   };
 
-  const handleUploadFiles = async () => {
-    try {
-      setIsUploading(true);
-      const files = uploadFiles.map((file) => file.originFile);
-      const response = await safeApiCall(() =>
-        photoService.uploadFiles(spaceCode, files),
-      );
+  const { tryTask } = useError();
 
-      if (response.success) {
-        clearFiles();
-        return true;
-      } else {
-        // JSON 파싱 에러는 업로드 성공으로 간주 (서버가 빈 응답 반환)
-        // TODO: 이 부분 다듬기 필요 react-query 도입 후 사라질 로직
-        if (
-          response.error ===
-          "Failed to execute 'json' on 'Response': Unexpected end of JSON input"
-        ) {
-          clearFiles();
-          return true;
-        } else if (
-          !response.error?.toLowerCase().includes(NETWORK.DEFAULT.toLowerCase())
-        ) {
-          console.error('사진 업로드에 실패했습니다.');
-          showError({ text: '사진 업로드에 실패했습니다' });
-        }
-        return false;
-      }
-    } catch (error) {
-      console.error('사진 업로드 실패:', error);
-      showError({ text: '사진 업로드에 실패했습니다' });
-      return false;
-    } finally {
+  const fetchUploadFiles = async () => {
+    const files = uploadFiles.map((file) => file.originFile);
+    const response = await safeApiCall(() =>
+      photoService.uploadFiles(spaceCode, files),
+    );
+
+    return response;
+  };
+
+  const errorOption = {
+    toast: {
+      text: '사진 업로드에 실패했습니다',
+    },
+    afterAction: () => {
       setIsUploading(false);
-    }
+    },
+  };
+
+  const handleUploadFiles = async () => {
+    await tryTask({
+      task: async () => {
+        setIsUploading(true);
+        await fetchUploadFiles();
+        onUploadSuccess?.();
+      },
+      errorActions: ['toast', 'afterAction'],
+      context: errorOption,
+      onFinally: () => {
+        clearFiles();
+        setIsUploading(false);
+      },
+    });
   };
 
   const handleDeleteFile = (id: number) => {

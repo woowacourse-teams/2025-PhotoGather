@@ -31,7 +31,7 @@ export const photoService = {
   },
 
   downloadAll: (spaceCode: string) =>
-    http.post<Blob>(`/spaces/${spaceCode}/photos/download`, undefined),
+    http.post<Blob>(`/space/${spaceCode}/photos/download`, undefined),
 
   downloadPhotos: (spaceCode: string, photoIds: PhotoIds) =>
     http.post<Blob>(`/spaces/${spaceCode}/photos/download/selected`, photoIds),

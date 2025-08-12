@@ -1,5 +1,6 @@
 import rocketIcon from '@assets/images/rocket.png';
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { ReactComponent as SaveIcon } from '../../../@assets/icons/download.svg';
 import { ReactComponent as SettingSvg } from '../../../@assets/icons/setting.svg';
 import { ReactComponent as ArrowUpSvg } from '../../../@assets/icons/upwardArrow.svg';
@@ -13,6 +14,7 @@ import PhotoModal from '../../../components/modal/PhotoModal';
 import PhotoSelectionToolBar from '../../../components/photoSelectionToolBar/PhotoSelectionToolBar';
 import SpaceHomeTopActionBar from '../../../components/spaceHomeTopActionBar/SpaceHomeTopActionBar';
 import { INFORMATION } from '../../../constants/messages';
+import { ROUTES } from '../../../constants/routes';
 import { useOverlay } from '../../../contexts/OverlayProvider';
 import useIntersectionObserver from '../../../hooks/@common/useIntersectionObserver';
 import useLeftTimer from '../../../hooks/@common/useLeftTimer';
@@ -32,11 +34,11 @@ import ExpiredPage from '../../status/expiredPage/ExpiredPage';
 import * as S from './SpaceHome.styles';
 
 const SpaceHome = () => {
-  const { spaceId } = useSpaceCodeFromPath();
-  const { spaceInfo } = useSpaceInfo(spaceId ?? '');
+  const { spaceCode } = useSpaceCodeFromPath();
+  const { spaceInfo } = useSpaceInfo(spaceCode ?? '');
   const isEarlyTime = checkIsEarlyDate((spaceInfo?.openedAt as string) ?? '');
   // TODO: NoData 시 표시할 Layout 필요
-  const isNoData = !spaceInfo;
+  const _isNoData = !spaceInfo;
   const isSpaceExpired = spaceInfo?.isExpired;
   const spaceName = spaceInfo?.name ?? '';
   const { targetRef: hideBlurAreaTriggerRef, isIntersecting: isAtPageBottom } =
@@ -65,12 +67,21 @@ const SpaceHome = () => {
     updatePhotos,
   } = usePhotosBySpaceCode({
     reObserve,
-    spaceCode: spaceId ?? '',
+    spaceCode: spaceCode ?? '',
   });
 
+  const navigate = useNavigate();
+
   const { isDownloading, downloadAll, selectDownload } = useDownload({
-    spaceCode: spaceId ?? '',
+    spaceCode: spaceCode ?? '',
     spaceName,
+    onDownloadSuccess: () => {
+      navigate(ROUTES.COMPLETE.DOWNLOAD, {
+        state: {
+          spaceCode: spaceCode ?? '',
+        },
+      });
+    },
   });
 
   const {
@@ -86,7 +97,7 @@ const SpaceHome = () => {
   } = usePhotoSelect({ photosList: photosList ?? [] });
 
   const { submitDeletePhotos, isDeleting } = usePhotosDelete({
-    spaceCode: spaceId ?? '',
+    spaceCode: spaceCode ?? '',
     toggleSelectMode,
     updatePhotos,
     fetchPhotosList,
@@ -95,7 +106,7 @@ const SpaceHome = () => {
 
   const handleSinglePhotoDelete = async (photoId: number) => {
     try {
-      await photoService.deletePhotos(spaceId ?? '', {
+      await photoService.deletePhotos(spaceCode ?? '', {
         photoIds: [photoId],
       });
       showToast({
@@ -119,7 +130,7 @@ const SpaceHome = () => {
       <PhotoModal
         mode="manager"
         photoId={photoId}
-        spaceCode={spaceId ?? ''}
+        spaceCode={spaceCode ?? ''}
         uploaderName="익명의 우주여행자"
         onDownload={() => {
           selectDownload([photoId]);

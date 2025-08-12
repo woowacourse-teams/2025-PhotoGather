@@ -1,4 +1,4 @@
-import { NETWORK } from '../constants/errors';
+import { NETWORK_ERROR } from '../constants/errors';
 import type {
   ApiResponse,
   BodyContentType,
@@ -77,7 +77,7 @@ const request = async <T>(
   } catch (error) {
     const getErrorMessage = (error: unknown): string => {
       if (isNetworkError(error)) {
-        return NETWORK.DEFAULT;
+        return NETWORK_ERROR.DEFAULT;
       }
       if (error instanceof Error) {
         return error.message;

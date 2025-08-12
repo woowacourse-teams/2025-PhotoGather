@@ -11,6 +11,7 @@ interface ErrorRequiredProps {
   toast?: ToastOptions;
   afterAction?: AfterAction;
   redirect?: RedirectPath;
+  // TODO : 센트리 기록 여부 받을 것
 }
 
 const useError = () => {
@@ -18,14 +19,9 @@ const useError = () => {
   const { showToast } = useToast();
   const navigate = useNavigate();
 
-  const baseToastSetting = {
-    type: 'error',
-    position: 'bottom',
-  } as const;
-
-  const mappingErrorHandler = {
+  const errorHandler = {
     toast: (toastBase: ToastBase) => {
-      showToast({ ...baseToastSetting, ...toastBase });
+      showToast(toastBase);
     },
     afterAction: (afterAction: AfterAction) => {
       afterAction();
@@ -33,41 +29,70 @@ const useError = () => {
     redirect: (path: RedirectPath) => {
       navigate(path);
     },
+    console: (message: string) => {
+      console.error(message);
+    },
   };
 
-  type ErrorType = keyof typeof mappingErrorHandler;
+  type ErrorType = keyof typeof errorHandler;
 
-  const runWithErrorHandling = async (
-    taskFunction: () => void | Promise<void>,
-    errorTypes: ErrorType[],
-    context?: ErrorRequiredProps,
-  ) => {
+  interface TryTaskProps {
+    task: () => void | Promise<void>;
+    errorActions: ErrorType[];
+    context?: ErrorRequiredProps;
+    onFinally?: () => void;
+  }
+
+  const tryTask = async ({
+    task,
+    errorActions,
+    context,
+    onFinally,
+  }: TryTaskProps) => {
     try {
       setIsError(false);
-      await Promise.resolve(taskFunction());
-    } catch (error) {
+      await Promise.resolve(task());
+      return true;
+    } catch (e) {
       setIsError(true);
-      if (!context) return;
-      if (!(error instanceof Error)) return;
-
-      if (errorTypes.includes('toast')) {
-        const finalToastBase = {
-          ...baseToastSetting,
-          ...context.toast,
-          text: context.toast?.text ?? error.message,
-        };
-        mappingErrorHandler.toast(finalToastBase);
-      }
-      if (errorTypes.includes('afterAction') && context.afterAction) {
-        mappingErrorHandler.afterAction(context.afterAction);
-      }
-      if (errorTypes.includes('redirect') && context.redirect) {
-        mappingErrorHandler.redirect(context.redirect);
-      }
+      const error = e instanceof Error ? e : new Error(String(e));
+      matchingErrorHandler(errorActions, context, error);
+      return false;
+    } finally {
+      onFinally?.();
     }
   };
 
-  return { isError, runWithErrorHandling };
+  const baseToastSetting = {
+    type: 'error',
+    position: 'bottom',
+  } as const;
+
+  const matchingErrorHandler = (
+    errorActions: ErrorType[],
+    context: ErrorRequiredProps | undefined,
+    error: Error,
+  ) => {
+    if (errorActions.includes('toast')) {
+      const finalToastBase = {
+        ...baseToastSetting,
+        ...context?.toast,
+        text: context?.toast?.text ?? error.message,
+      };
+      errorHandler.toast(finalToastBase);
+    }
+    if (errorActions.includes('afterAction') && context?.afterAction) {
+      errorHandler.afterAction(context.afterAction);
+    }
+    if (errorActions.includes('redirect') && context?.redirect) {
+      errorHandler.redirect(context.redirect);
+    }
+    if (errorActions.includes('console')) {
+      errorHandler.console(error.message);
+    }
+  };
+
+  return { isError, tryTask };
 };
 
 export default useError;

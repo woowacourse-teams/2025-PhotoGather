@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { NETWORK } from '../../constants/errors';
+import { NETWORK_ERROR } from '../../constants/errors';
 import { ROUTES } from '../../constants/routes';
 import type { ApiResponse } from '../../types/api.type';
 
@@ -14,7 +14,9 @@ const useApiCall = () => {
 
         if (
           !response.success &&
-          response.error?.toLowerCase().includes(NETWORK.DEFAULT.toLowerCase())
+          response.error
+            ?.toLowerCase()
+            .includes(NETWORK_ERROR.DEFAULT.toLowerCase())
         ) {
           navigate(ROUTES.ERROR.NETWORK);
         }

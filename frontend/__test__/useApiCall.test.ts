@@ -1,6 +1,6 @@
 import { renderHook } from '@testing-library/react';
 import { useNavigate } from 'react-router-dom';
-import { NETWORK } from '../src/constants/errors';
+import { NETWORK_ERROR } from '../src/constants/errors';
 import { ROUTES } from '../src/constants/routes';
 import useApiCall from '../src/hooks/@common/useApiCall';
 import type { ApiResponse } from '../src/types/api.type';
@@ -35,7 +35,7 @@ describe('useApiCall 훅 테스트', () => {
     const { result } = renderHook(() => useApiCall());
     const mockResponse: ApiResponse<string> = {
       success: false,
-      error: NETWORK.DEFAULT,
+      error: NETWORK_ERROR.DEFAULT,
     };
     const mockApiCall = jest.fn().mockResolvedValue(mockResponse);
 

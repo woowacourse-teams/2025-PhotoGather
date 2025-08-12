@@ -1,4 +1,4 @@
-export const NETWORK = {
+export const NETWORK_ERROR = {
   DEFAULT: 'Network error',
   CHROMIUM: 'Failed to fetch',
   FIREFOX: 'NetworkError',
