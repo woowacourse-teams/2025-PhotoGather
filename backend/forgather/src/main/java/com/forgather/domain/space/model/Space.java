@@ -4,12 +4,16 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 import com.forgather.domain.model.BaseTimeEntity;
+import com.forgather.global.auth.domain.Host;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -25,11 +29,12 @@ public class Space extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "host_id", nullable = false)
+    private Host host;
+
     @Column(name = "code", nullable = false, length = 64)
     private String code;
-
-    @Column(name = "password", length = 64)
-    private String password;
 
     @Column(name = "name", nullable = false)
     private String name;
@@ -40,9 +45,9 @@ public class Space extends BaseTimeEntity {
     @Column(name = "opened_at", nullable = false)
     private LocalDateTime openedAt;
 
-    public Space(String code, String password, String name, int validHours, LocalDateTime openedAt) {
+    public Space(Host host, String code, String name, int validHours, LocalDateTime openedAt) {
+        this.host = host;
         this.code = code;
-        this.password = password;
         this.name = name;
         this.openedAt = openedAt;
         this.validHours = validHours;
@@ -53,6 +58,18 @@ public class Space extends BaseTimeEntity {
         if (expiredAt.isBefore(currentDateTime)) {
             throw new IllegalArgumentException("만료된 스페이스입니다. code: " + code);
         }
+    }
+
+    public boolean isHost(Host host) {
+        return host != null && Objects.equals(this.host.getId(), host.getId());
+    }
+
+    public boolean isExpired(LocalDateTime now) {
+        return getExpiredAt().isBefore(now);
+    }
+
+    public LocalDateTime getExpiredAt() {
+        return openedAt.plusHours(validHours);
     }
 
     @Override
@@ -66,13 +83,5 @@ public class Space extends BaseTimeEntity {
     @Override
     public int hashCode() {
         return Objects.hashCode(id);
-    }
-
-    public boolean isExpired(LocalDateTime now) {
-        return getExpiredAt().isBefore(now);
-    }
-
-    public LocalDateTime getExpiredAt() {
-        return openedAt.plusHours(validHours);
     }
 }

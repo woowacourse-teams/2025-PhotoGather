@@ -3,6 +3,7 @@ package com.forgather.domain.space.dto;
 import java.time.LocalDateTime;
 
 import com.forgather.domain.space.model.Space;
+import com.forgather.global.auth.domain.Host;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
@@ -21,7 +22,7 @@ public record CreateSpaceRequest(
     String password
 ) {
 
-    public Space toEntity(String spaceCode) {
-        return new Space(spaceCode, password, name, validHours, openedAt);
+    public Space toEntity(String spaceCode, Host host) {
+        return new Space(host, spaceCode, name, validHours, openedAt);
     }
 }

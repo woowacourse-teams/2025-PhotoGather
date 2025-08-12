@@ -9,8 +9,9 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import com.forgather.global.auth.resolver.HostIdArgumentResolver;
-
+import com.forgather.global.auth.interceptor.HostEntityInterceptor;
+import com.forgather.global.auth.interceptor.HostOwnerInterceptor;
+import com.forgather.global.auth.resolver.SessionHostArgumentResolver;
 import com.forgather.global.logging.TraceIdInterceptor;
 
 import lombok.RequiredArgsConstructor;
@@ -21,7 +22,9 @@ public class WebConfig implements WebMvcConfigurer {
 
     private final CorsProperties corsProperties;
     private final TraceIdInterceptor traceIdInterceptor;
-    private final HostIdArgumentResolver hostIdArgumentResolver;
+    private final SessionHostArgumentResolver sessionHostArgumentResolver;
+    private final HostEntityInterceptor hostEntityInterceptor;
+    private final HostOwnerInterceptor hostOwnerInterceptor;
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
@@ -38,11 +41,13 @@ public class WebConfig implements WebMvcConfigurer {
         PageableHandlerMethodArgumentResolver pageableResolver = new PageableHandlerMethodArgumentResolver();
         pageableResolver.setOneIndexedParameters(true); // 1부터 시작
         resolvers.add(pageableResolver);
-        resolvers.add(hostIdArgumentResolver);
+        resolvers.add(sessionHostArgumentResolver);
     }
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(traceIdInterceptor);
+        registry.addInterceptor(hostEntityInterceptor);
+        registry.addInterceptor(hostOwnerInterceptor);
     }
 }

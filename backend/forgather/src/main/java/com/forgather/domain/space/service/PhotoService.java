@@ -19,6 +19,7 @@ import com.forgather.domain.space.dto.PhotosResponse;
 import com.forgather.domain.space.model.Photo;
 import com.forgather.domain.space.model.PhotoMetaData;
 import com.forgather.domain.space.model.Space;
+import com.forgather.domain.space.repository.HostRepository;
 import com.forgather.domain.space.repository.PhotoRepository;
 import com.forgather.domain.space.repository.SpaceRepository;
 import com.forgather.domain.space.util.MetaDataExtractor;
@@ -35,6 +36,7 @@ public class PhotoService {
 
     private final PhotoRepository photoRepository;
     private final SpaceRepository spaceRepository;
+    private final HostRepository hostRepository;
     private final AwsS3Cloud awsS3Cloud;
     private final Path downloadTempPath;
     private final Logger logger;
@@ -46,8 +48,7 @@ public class PhotoService {
         return PhotoResponse.from(photo);
     }
 
-    public PhotosResponse getAll(String spaceCode, Pageable pageable, Long hostId) {
-        // TODO: Space가 HostId의 소유인지 검증
+    public PhotosResponse getAll(String spaceCode, Pageable pageable) {
         Space space = spaceRepository.getUnexpiredSpaceByCode(spaceCode);
         Page<Photo> photos = photoRepository.findAllBySpace(space, pageable);
         return PhotosResponse.from(photos);
@@ -94,8 +95,7 @@ public class PhotoService {
      * 파일 삭제 트랜잭션 분리
      * 사진 원본 이름 대신 유의미한 이름 변경 추가 논의
      */
-    public File compressAll(String spaceCode, Long hostId) throws IOException {
-        // TODO: Space가 HostId의 소유인지 검증
+    public File compressAll(String spaceCode) throws IOException {
         Space space = spaceRepository.getUnexpiredSpaceByCode(spaceCode);
         List<Photo> photos = photoRepository.findAllBySpace(space);
         return compressPhotoFile(spaceCode, photos);

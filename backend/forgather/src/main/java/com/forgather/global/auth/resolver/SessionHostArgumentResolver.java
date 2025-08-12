@@ -7,28 +7,27 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
-import com.forgather.global.auth.annotation.HostId;
+import com.forgather.global.auth.annotation.SessionHost;
+import com.forgather.global.auth.domain.Host;
 
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 
 @Component
-public class HostIdArgumentResolver implements HandlerMethodArgumentResolver {
+public class SessionHostArgumentResolver implements HandlerMethodArgumentResolver {
 
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
-        return parameter.hasParameterAnnotation(HostId.class);
+        return parameter.hasParameterAnnotation(SessionHost.class);
     }
 
     @Override
-    public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
+    public Host resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
         NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
-        HttpServletRequest request = (HttpServletRequest) webRequest.getNativeRequest();
-        HttpSession session = request.getSession(false);
-        if (session == null) {
+        HttpServletRequest request = webRequest.getNativeRequest(HttpServletRequest.class);
+        if (request == null) {
             return null;
         }
 
-        return session.getAttribute("host_id");
+        return (Host)request.getAttribute("host");
     }
 }
