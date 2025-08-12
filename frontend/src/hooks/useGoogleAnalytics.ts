@@ -8,6 +8,23 @@ const useGoogleAnalytics = () => {
 
   //biome-ignore lint/correctness/useExhaustiveDependencies: GA4 초기화 코드는 첫 마운트시 실행
   useEffect(() => {
+    /* 개발모드에서 GA 트래픽확인하기 위해서는 아래 코드 대신 사용 */
+    /* const isDev = process.env.ENVIRONMENT === 'development';
+    if (!MEASUREMENT_ID) {
+      console.log('🚫 GA4 측정 ID 없음 - 초기화 생략');
+      return;
+    }
+
+    if (isDev) {
+      ReactGA.initialize(MEASUREMENT_ID, {
+        // 타입에 맞는 필드만 전달 (원하면 testMode: true 도 가능)
+        gtagOptions: {},
+      });
+
+      // DebugView 보장
+      ReactGA.gtag('config', MEASUREMENT_ID, { debug_mode: true });
+    } else ReactGA.initialize(MEASUREMENT_ID); */
+
     if (!MEASUREMENT_ID) {
       console.log('🚫 로컬 환경 - GA4 초기화 건너뜀');
       return;
