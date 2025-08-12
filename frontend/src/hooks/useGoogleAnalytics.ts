@@ -33,8 +33,13 @@ const useGoogleAnalytics = () => {
       console.log('🚫 로컬 환경 - GA4 초기화 건너뜀');
       return;
     }
-    ReactGA.initialize(MEASUREMENT_ID);
+    ReactGA.initialize(MEASUREMENT_ID, {
+      gtagOptions: {
+        send_page_view: false, // prod도 꺼두기
+      },
+    });
     console.log('✅ GA4 초기화 완료:', MEASUREMENT_ID);
+    /* production 코드 끝 */
   }, []);
 
   //biome-ignore lint/correctness/useExhaustiveDependencies: GA4 페이지뷰 전송 코드는 페이지 변경 시 실행
