@@ -54,7 +54,7 @@ const OverlayProvider = ({ children }: PropsWithChildren) => {
         if (prev.length === 0) {
           history.pushState({ modal: true }, '');
         }
-        
+
         return [
           ...prev,
           {
