@@ -30,12 +30,14 @@ interface OverlayState {
   content: ReactElement;
   options: OverlayOptions;
   resolver?: (value: OverlaySubmitResult) => void;
+  id: number;
 }
 
 export const OverlayContext = createContext<OverlayOpenFn | null>(null);
 
 const OverlayProvider = ({ children }: PropsWithChildren) => {
-  const [overlayState, setOverlayState] = useState<OverlayState | null>(null);
+  const [overlayStack, setOverlayStack] = useState<OverlayState[]>([]);
+  const [nextId, setNextId] = useState(0);
 
   const openOverlay: OverlayOpenFn = (children, options) => {
     // 엘리먼트는 필요하지만 number, string, 임의의 객체 및 배열 등의 값은 제외하고 싶을 때
@@ -44,32 +46,49 @@ const OverlayProvider = ({ children }: PropsWithChildren) => {
     }
 
     return new Promise((resolver) => {
-      history.pushState({ modal: true }, '');
-      // 비동기 -> 모달이 반환할 결과를 기다림
-      setOverlayState({
-        content: children,
-        options: { ...defaultOverlayClickOption, ...(options ?? {}) },
-        resolver, // 모달이 닫힐 때의 결과값을 전달하는 함수
-      });
+      const id = nextId;
+      setNextId((prev) => prev + 1);
+
+      if (overlayStack.length === 0) {
+        history.pushState({ modal: true }, '');
+      }
+
+      setOverlayStack((prev) => [
+        ...prev,
+        {
+          content: children,
+          options: { ...defaultOverlayClickOption, ...(options ?? {}) },
+          resolver, // 모달이 닫힐 때의 결과값을 전달하는 함수
+          id,
+        },
+      ]);
     });
   };
 
-  const handleOverlayClose = () => {
-    overlayState?.resolver?.(undefined);
-    setOverlayState(null);
+  const handleOverlayClose = (id: number) => {
+    setOverlayStack((prev) => {
+      const overlay = prev.find((overlayState) => overlayState.id === id);
+      overlay?.resolver?.(undefined);
+      return prev.filter((overlayState) => overlayState.id !== id);
+    });
   };
 
-  const handleSubmitOverlay = (result: unknown) => {
-    overlayState?.resolver?.(result);
-    setOverlayState(null);
+  const handleSubmitOverlay = (id: number, result: unknown) => {
+    setOverlayStack((prev) => {
+      const overlay = prev.find((o) => o.id === id);
+      overlay?.resolver?.(result);
+      return prev.filter((o) => o.id !== id);
+    });
   };
 
   useEffect(() => {
     const handlePopState = (event: PopStateEvent) => {
       // 모달이 열려있는데 뒤로가기를 해서 이전 페이지로 이동한 경우
-      if (overlayState && !event.state?.modal) {
-        overlayState?.resolver?.(undefined);
-        setOverlayState(null);
+      if (overlayStack.length > 0 && !event.state?.modal) {
+        overlayStack.forEach((overlay) => {
+          overlay.resolver?.(undefined);
+        });
+        setOverlayStack([]);
       }
     };
 
@@ -78,34 +97,37 @@ const OverlayProvider = ({ children }: PropsWithChildren) => {
     return () => {
       window.removeEventListener('popstate', handlePopState);
     };
-  }, [overlayState]);
+  }, [overlayStack]);
 
   useEffect(() => {
-    if (!overlayState) {
+    if (overlayStack.length === 0) {
       if (history.state?.modal) {
         history.back();
       }
     }
-  }, [overlayState]);
+  }, [overlayStack.length]);
 
   return (
     <OverlayContext.Provider value={openOverlay}>
       {children}
-      {overlayState && (
+      {overlayStack.map((overlayState, index) => (
         <Overlay
+          key={overlayState.id}
           onBackdropClick={
+            index === overlayStack.length - 1 &&
             overlayState.options.clickOverlayClose
-              ? handleOverlayClose
+              ? () => handleOverlayClose(overlayState.id)
               : undefined
           }
         >
           {/* 리액트 엘리먼트는 수정할 수 없어서 새 엘리먼트를 생성한것 */}
           {cloneElement(overlayState.content as ReactElement<BaseModalProps>, {
-            onClose: handleOverlayClose,
-            onSubmit: handleSubmitOverlay,
+            onClose: () => handleOverlayClose(overlayState.id),
+            onSubmit: (result: unknown) =>
+              handleSubmitOverlay(overlayState.id, result),
           })}
         </Overlay>
-      )}
+      ))}
     </OverlayContext.Provider>
   );
 };
