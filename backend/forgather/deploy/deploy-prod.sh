@@ -7,7 +7,7 @@ JAR_PATH="/home/ubuntu/2025-PhotoGather/$JAR_NAME"
 LOG_FILE="$LOG_DIR/prod.log"
 
 echo "🛑 기존 $PORT 포트 프로세스 종료 시도..."
-PID=$(lsof -t -i:$PORT)
+PID=$(sudo lsof -t -i:$PORT)
 
 if [ -n "$PID" ]; then
   echo "🔍 PID $PID 종료 중..."
