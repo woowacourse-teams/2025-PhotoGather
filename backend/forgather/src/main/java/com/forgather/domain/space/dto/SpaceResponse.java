@@ -18,6 +18,9 @@ public record SpaceResponse(
     @Schema(description = "스페이스 이름", example = "My Space")
     String name,
 
+    @Schema(description = "스페이스 유효 시간", example = "72")
+    int validHours,
+
     @Schema(description = "스페이스 시작 시간", example = "2023-10-01T10:00:00")
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     LocalDateTime openedAt,
@@ -35,6 +38,7 @@ public record SpaceResponse(
             space.getId(),
             space.getCode(),
             space.getName(),
+            space.getValidHours(),
             space.getOpenedAt(),
             space.getExpiredAt(),
             space.isExpired(LocalDateTime.now())
