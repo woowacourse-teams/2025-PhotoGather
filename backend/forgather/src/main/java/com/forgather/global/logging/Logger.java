@@ -45,6 +45,16 @@ public class Logger {
             return this;
         }
 
+        public LogBuilder value(String key, int value) {
+            segments.add(logFormatter.formatWithBrackets(key, String.valueOf(value)));
+            return this;
+        }
+
+        public LogBuilder value(String key, long value) {
+            segments.add(logFormatter.formatWithBrackets(key, String.valueOf(value)));
+            return this;
+        }
+
         public void info() {
             addRequestInformation();
             log.info(logFormatter.formatSegments(segments));
