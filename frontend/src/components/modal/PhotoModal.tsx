@@ -35,7 +35,7 @@ interface ManagerPhotoModalProps extends BaseModalProps {
   /** 다운로드 핸들러 */
   onDownload?: () => void;
   /** 삭제 핸들러 */
-  onDelete?: () => void;
+  onDelete?: () => undefined | Promise<boolean>;
 }
 
 type PhotoModalProps = GuestPhotoModalProps | ManagerPhotoModalProps;
@@ -136,8 +136,10 @@ const PhotoModal = (props: PhotoModalProps) => {
         console.error('모달 오류:', error);
       }
     } else if (mode === 'manager' && props.onDelete) {
-      props.onDelete();
-      onClose?.();
+      const result = await props.onDelete();
+      if (result) {
+        onClose?.();
+      }
     }
   };
 
@@ -168,7 +170,13 @@ const PhotoModal = (props: PhotoModalProps) => {
             }}
           />
         ) : (
-          <div style={{ width: '100%', height: '100%', backgroundColor: '#f0f0f0' }} />
+          <div
+            style={{
+              width: '100%',
+              height: '100%',
+              backgroundColor: '#f0f0f0',
+            }}
+          />
         )}
       </S.PhotoContainer>
       <S.ButtonContainer $isManagerMode={isManagerMode}>

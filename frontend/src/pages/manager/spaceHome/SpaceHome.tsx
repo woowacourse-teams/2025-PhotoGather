@@ -84,13 +84,16 @@ const SpaceHome = () => {
     toggleAllSelected,
   } = usePhotoSelect({ photosList: photosList ?? [] });
 
-  const { submitDeletePhotos, deleteSinglePhoto, isDeleting } = usePhotosDelete({
-    spaceCode: spaceId ?? '',
-    toggleSelectMode,
-    updatePhotos,
-    fetchPhotosList,
-    extractUnselectedPhotos,
-  });
+  const { submitDeletePhotos, deleteSinglePhoto, isDeleting } = usePhotosDelete(
+    {
+      spaceCode: spaceId ?? '',
+      toggleSelectMode,
+      updatePhotos,
+      fetchPhotosList,
+      extractUnselectedPhotos,
+      photosList,
+    },
+  );
 
   const openPhotoModal = async (photoId: number) => {
     await overlay(

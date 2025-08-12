@@ -12,6 +12,7 @@ interface UsePhotosDeleteProps {
   updatePhotos: (photos: Photo[]) => void;
   fetchPhotosList: () => Promise<void>;
   extractUnselectedPhotos: () => Photo[];
+  photosList?: Photo[] | null;
 }
 
 const usePhotosDelete = ({
@@ -20,6 +21,7 @@ const usePhotosDelete = ({
   updatePhotos,
   fetchPhotosList,
   extractUnselectedPhotos,
+  photosList,
 }: UsePhotosDeleteProps) => {
   const [isDeleting, setIsDeleting] = useState(false);
   const { showToast } = useToast();
@@ -92,19 +94,46 @@ const usePhotosDelete = ({
       );
 
       if (result) {
-        await fetchDeletePhotos([photoId]);
-        showToast({
-          text: `사진을 삭제했습니다.`,
-          type: 'info',
-        });
-        await fetchPhotosList();
+        try {
+          setIsDeleting(true);
+          await photoService.deletePhoto(spaceCode, photoId);
+
+          showToast({
+            text: `사진을 삭제했습니다.`,
+            type: 'info',
+          });
+
+          if (photosList) {
+            const updatedPhotos = photosList.filter(
+              (photo) => photo.id !== photoId,
+            );
+            updatePhotos(updatedPhotos);
+          }
+
+          return true;
+        } catch (error) {
+          showToast({
+            text: '다시 시도해 주세요.',
+            type: 'error',
+          });
+          console.error(error);
+          return false; // 네트워크 오류, 서버 오류 등
+        } finally {
+          setIsDeleting(false);
+        }
       }
+      return false; // 사용자가 취소 버튼을 눌렀을 때
     } catch (error) {
       console.error('모달 오류:', error);
+      return false; // overlay 함수 호출 실패
     }
   };
 
-  return { submitDeletePhotos, deleteSinglePhoto, isDeleting };
+  return {
+    submitDeletePhotos,
+    deleteSinglePhoto,
+    isDeleting,
+  };
 };
 
 export default usePhotosDelete;
