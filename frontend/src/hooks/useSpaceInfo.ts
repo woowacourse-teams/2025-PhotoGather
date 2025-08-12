@@ -1,40 +1,38 @@
 import { useEffect, useState } from 'react';
 import { spaceService } from '../apis/services/space.service';
 import type { Space } from '../types/space.type';
+import { validateDataExist } from '../validators/data.validator';
 import useApiCall from './@common/useApiCall';
-import { useToast } from './@common/useToast';
+import useError from './@common/useError';
 
 const useSpaceInfo = (spaceCode: string) => {
   const [spaceInfo, setSpaceInfo] = useState<Space>();
   const [isLoading, setIsLoading] = useState(false);
   const { safeApiCall } = useApiCall();
-  const { showToast } = useToast();
+  const { tryTask } = useError();
 
+  const requestSpaceInfo = async () => {
+    setIsLoading(true);
+    const response = await safeApiCall(() =>
+      spaceService.getInfoByCode(spaceCode),
+    );
+    validateDataExist(response);
+    setSpaceInfo(response.data);
+  };
+
+  //biome-ignore lint/correctness/useExhaustiveDependencies: 무한 렌더링 방지
   useEffect(() => {
-    const fetchSpaceInfo = async () => {
-      setIsLoading(true);
-      try {
-        const response = await safeApiCall(() =>
-          spaceService.getInfoByCode(spaceCode),
-        );
-
-        if (!response.success || !response.data) {
-          throw new Error('스페이스 코드 정보를 불러오는데 실패했습니다.');
-        }
-
-        const data = response.data;
-        setSpaceInfo(data);
-      } catch (error) {
-        if (error instanceof Error) {
-          showToast({ text: error.message, type: 'error' });
-        }
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchSpaceInfo();
-  }, [safeApiCall, spaceCode, showToast]);
+    tryTask({
+      task: requestSpaceInfo,
+      errorActions: ['toast'],
+      context: {
+        toast: {
+          text: '스페이스 정보를 불러오는데 실패했습니다.',
+        },
+      },
+      onFinally: () => setIsLoading(false),
+    });
+  }, [spaceCode]);
 
   return { isLoading, spaceInfo };
 };

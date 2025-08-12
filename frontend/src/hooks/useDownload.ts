@@ -35,13 +35,13 @@ const useDownload = ({
   };
 
   const selectDownload = async (photoIds: number[]) => {
-    const isSelectedPhotoExist = await tryTask({
-      task: async () => {
-        checkSelectedPhotoExist(photoIds);
+    const taskResult = await tryTask({
+      task: () => {
+        return checkSelectedPhotoExist(photoIds);
       },
       errorActions: ['toast'],
     });
-    if (!isSelectedPhotoExist) return;
+    if (!taskResult.success) return;
 
     tryTask({
       task: async () => {

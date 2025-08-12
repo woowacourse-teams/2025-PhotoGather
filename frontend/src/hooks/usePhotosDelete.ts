@@ -59,11 +59,11 @@ const usePhotosDelete = ({
   };
 
   const submitDeletePhotos = async (photoIds: number[]) => {
-    const isSelectedPhotoExist = await tryTask({
+    const taskResult = await tryTask({
       task: () => checkSelectedPhotoExist(photoIds),
       errorActions: ['toast'],
     });
-    if (!isSelectedPhotoExist) return;
+    if (!taskResult.success) return;
 
     const isConfirm = await receiveConfirm(photoIds);
     if (!isConfirm) return;

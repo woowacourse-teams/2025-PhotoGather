@@ -36,28 +36,29 @@ const useError = () => {
 
   type ErrorType = keyof typeof errorHandler;
 
-  interface TryTaskProps {
-    task: () => void | Promise<void>;
+  interface TryTaskProps<T> {
+    task: () => T | Promise<T>;
     errorActions: ErrorType[];
     context?: ErrorRequiredProps;
     onFinally?: () => void;
   }
 
-  const tryTask = async ({
+  const tryTask = async <T>({
     task,
     errorActions,
     context,
     onFinally,
-  }: TryTaskProps) => {
+  }: TryTaskProps<T>) => {
     try {
       setIsError(false);
-      await Promise.resolve(task());
-      return true;
+      const data = await Promise.resolve(task());
+      console.log(data);
+      return { success: true, data };
     } catch (e) {
       setIsError(true);
       const error = e instanceof Error ? e : new Error(String(e));
       matchingErrorHandler(errorActions, context, error);
-      return false;
+      return { success: false };
     } finally {
       onFinally?.();
     }
