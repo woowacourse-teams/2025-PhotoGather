@@ -12,7 +12,7 @@ interface UsePhotosDeleteProps {
   spaceCode: string;
   toggleSelectMode: () => void;
   updatePhotos: (photos: Photo[]) => void;
-  fetchPhotosList: () => Promise<void>;
+  tryFetchPhotosList: () => Promise<void>;
   extractUnselectedPhotos: () => Photo[];
 }
 
@@ -20,7 +20,7 @@ const usePhotosDelete = ({
   spaceCode,
   toggleSelectMode,
   updatePhotos,
-  fetchPhotosList,
+  tryFetchPhotosList,
   extractUnselectedPhotos,
 }: UsePhotosDeleteProps) => {
   const [isDeleting, setIsDeleting] = useState(false);
@@ -38,7 +38,7 @@ const usePhotosDelete = ({
     setIsDeleting(true);
     await fetchDeletePhotos(photoIds);
     updatePhotos(extractUnselectedPhotos());
-    await fetchPhotosList();
+    await tryFetchPhotosList();
     showToast({
       text: `${photoIds.length}개의 사진을 삭제했습니다.`,
       type: 'info',

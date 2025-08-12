@@ -63,7 +63,7 @@ const SpaceHome = () => {
     isLoading,
     thumbnailPhotoMap,
     isEndPage,
-    fetchPhotosList,
+    tryFetchPhotosList,
     updatePhotos,
   } = usePhotosBySpaceCode({
     reObserve,
@@ -100,7 +100,7 @@ const SpaceHome = () => {
     spaceCode: spaceCode ?? '',
     toggleSelectMode,
     updatePhotos,
-    fetchPhotosList,
+    tryFetchPhotosList,
     extractUnselectedPhotos,
   });
 
@@ -148,7 +148,7 @@ const SpaceHome = () => {
   //biome-ignore lint/correctness/useExhaustiveDependencies: isFetchSectionVisible 변경 시 호출
   useEffect(() => {
     if (!isFetchSectionVisible || isEndPage || isLoading) return;
-    fetchPhotosList();
+    tryFetchPhotosList();
   }, [isFetchSectionVisible, isEndPage]);
 
   const loadingContents = [

@@ -1,11 +1,12 @@
 import { useMemo, useRef, useState } from 'react';
 import { photoService } from '../apis/services/photo.service';
-import { DEBUG_MESSAGES } from '../constants/debugMessages';
-import { NETWORK_ERROR } from '../constants/errors';
+import type { PhotoListResponse } from '../types/api.type';
 import type { Photo } from '../types/photo.type';
 import { buildThumbnailUrl } from '../utils/buildImageUrl';
 import { parsedImagePath } from '../utils/parsedImagePath';
+import { validateDataExist } from '../validators/data.validator';
 import useApiCall from './@common/useApiCall';
+import useError from './@common/useError';
 
 interface UsePhotosBySpaceIdProps {
   reObserve: () => void;
@@ -57,47 +58,44 @@ const usePhotosBySpaceCode = ({
 
   const fetchPhotosList = async () => {
     setIsLoading(true);
+    const pageToFetch = currentPage.current;
+    const response = await safeApiCall(() =>
+      photoService.getBySpaceCode(spaceCode, {
+        page: pageToFetch,
+        size: PAGE_SIZE,
+      }),
+    );
+    validateDataExist<PhotoListResponse>(response);
+    currentPage.current += 1;
+    if (!response.data) return;
+    const { photos, totalPages } = response.data;
+    appendPhotosList(photos, totalPages);
+    requestAnimationFrame(() => {
+      reObserve();
+    });
+  };
 
-    try {
-      const pageToFetch = currentPage.current;
-      const response = await safeApiCall(() =>
-        photoService.getBySpaceCode(spaceCode, {
-          page: pageToFetch,
-          size: PAGE_SIZE,
-        }),
-      );
+  const { tryTask } = useError();
 
-      if (response.success && response.data) {
-        const data = response.data;
-        currentPage.current += 1;
-        if (!data) {
-          console.warn(DEBUG_MESSAGES.NO_RESPONSE);
-          return;
-        }
-        const { photos } = data;
-        appendPhotosList(photos, data.totalPages);
-        requestAnimationFrame(() => {
-          reObserve();
-        });
-      } else {
-        if (
-          !response.error
-            ?.toLowerCase()
-            .includes(NETWORK_ERROR.DEFAULT.toLowerCase())
-        ) {
-          console.error('사진 목록을 불러오는데 실패했습니다.');
-        }
-      }
-    } catch (error) {
-      console.error('사진 목록 불러오기 실패:', error);
-    } finally {
-      setIsLoading(false);
-    }
+  const tryFetchPhotosList = async () => {
+    tryTask({
+      task: fetchPhotosList,
+      errorActions: ['toast', 'console'],
+      context: {
+        toast: {
+          text: '사진 목록을 불러오는데 실패했습니다. 다시 시도해 주세요.',
+          type: 'error',
+        },
+      },
+      onFinally: () => {
+        setIsLoading(false);
+      },
+    });
   };
 
   return {
     isEndPage,
-    fetchPhotosList,
+    tryFetchPhotosList,
     thumbnailPhotoMap,
     photosList,
     isLoading,
