@@ -6,6 +6,7 @@ import {
   type ReactElement,
   useContext,
   useEffect,
+  useRef,
   useState,
 } from 'react';
 import Overlay from '../components/@common/overlay/Overlay';
@@ -37,7 +38,7 @@ export const OverlayContext = createContext<OverlayOpenFn | null>(null);
 
 const OverlayProvider = ({ children }: PropsWithChildren) => {
   const [overlayStack, setOverlayStack] = useState<OverlayState[]>([]);
-  const [nextId, setNextId] = useState(0);
+  const nextIdRef = useRef(0);
 
   const openOverlay: OverlayOpenFn = (children, options) => {
     // 엘리먼트는 필요하지만 number, string, 임의의 객체 및 배열 등의 값은 제외하고 싶을 때
@@ -46,22 +47,24 @@ const OverlayProvider = ({ children }: PropsWithChildren) => {
     }
 
     return new Promise((resolver) => {
-      const id = nextId;
-      setNextId((prev) => prev + 1);
+      const id = nextIdRef.current++;
 
-      if (overlayStack.length === 0) {
-        history.pushState({ modal: true }, '');
-      }
-
-      setOverlayStack((prev) => [
-        ...prev,
-        {
-          content: children,
-          options: { ...defaultOverlayClickOption, ...(options ?? {}) },
-          resolver, // 모달이 닫힐 때의 결과값을 전달하는 함수
-          id,
-        },
-      ]);
+      setOverlayStack((prev) => {
+        // 첫 번째 모달일 때만 history push
+        if (prev.length === 0) {
+          history.pushState({ modal: true }, '');
+        }
+        
+        return [
+          ...prev,
+          {
+            content: children,
+            options: { ...defaultOverlayClickOption, ...(options ?? {}) },
+            resolver, // 모달이 닫힐 때의 결과값을 전달하는 함수
+            id,
+          },
+        ];
+      });
     });
   };
 
