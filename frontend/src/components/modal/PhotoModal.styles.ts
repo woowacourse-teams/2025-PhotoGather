@@ -1,7 +1,6 @@
 import { ReactComponent as SaveIcon } from '@assets/icons/download.svg';
 import { ReactComponent as TrashCanIcon } from '@assets/icons/trash-can.svg';
 import styled from '@emotion/styled';
-import { glow } from '../../animations/glow';
 import { theme } from '../../styles/theme';
 import { hexToRgba } from '../../utils/hexToRgba';
 
@@ -38,27 +37,19 @@ export const PhotoContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 100%;
-  flex: 1 1 auto;
-  min-height: 0;
+  width: auto;
+  height: 320px;
+  background-color: transparent;
   overflow: hidden;
 `;
 
 export const Photo = styled.img`
-  width: auto;
-  height: auto;
+    width: auto;
+    height: 320px;
   max-width: min(100%, 320px);
-  max-height: min(100%, 480px);
+  max-height: min(100%, 320px);
   aspect-ratio: 1;
   object-fit: contain;
-  background: linear-gradient(
-    150deg,
-    ${({ theme }) => theme.colors.gray06} 40%,
-    ${({ theme }) => theme.colors.gray05} 50%,
-    ${({ theme }) => theme.colors.gray06} 60%
-  );
-  background-size: 300%;
-  animation: ${glow} 3s infinite linear;
   -webkit-user-drag: none;
   touch-action: pinch-zoom;
   -webkit-touch-callout: none;
