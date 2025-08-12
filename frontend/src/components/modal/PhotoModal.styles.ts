@@ -10,10 +10,7 @@ export const Wrapper = styled.div`
   align-items: center;
   gap: 20px;
   width: 100%;
-  max-width: min(
-    calc(100vw - 32px), 
-    calc(${({ theme }) => theme.layout.width} - 32px)
-  );
+  max-width: min(calc(100vw - 32px), calc(${({ theme }) => theme.layout.width} - 32px));
   max-height: 80vh;
   overflow: hidden;
 `;
@@ -44,8 +41,8 @@ export const PhotoContainer = styled.div`
 `;
 
 export const Photo = styled.img`
-    width: auto;
-    height: 320px;
+  width: auto;
+  height: 320px;
   max-width: min(100%, 320px);
   max-height: min(100%, 320px);
   aspect-ratio: 1;
