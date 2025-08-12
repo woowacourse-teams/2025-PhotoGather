@@ -21,6 +21,7 @@ import useSpaceInfo from '../../../hooks/useSpaceInfo';
 import { ScrollableBlurArea } from '../../../styles/@common/ScrollableBlurArea';
 import { theme } from '../../../styles/theme';
 import { checkIsEarlyDate } from '../../../utils/checkIsEarlyTime';
+import { track } from '../../../utils/googleAnalytics/track';
 import { goToTop } from '../../../utils/goToTop';
 import EarlyPage from '../../status/earlyPage/EarlyPage';
 import ExpiredPage from '../../status/expiredPage/ExpiredPage';
@@ -82,6 +83,11 @@ const ImageUploadPage = () => {
         previewFile={selectedPhoto}
         onDelete={(id) => {
           handleDeleteFile(id);
+          track.button('single-delete-button', {
+            page: 'image-upload-page',
+            section: 'photo-modal',
+            action: 'delete-single',
+          });
         }}
       />,
       {
@@ -160,7 +166,14 @@ const ImageUploadPage = () => {
             photoData={previewData}
             rowImageAmount={3}
             onImageClick={handleImageClick}
-            onDeleteClick={handleDeleteFile}
+            onDeleteClick={(id: number) => {
+              handleDeleteFile(id);
+              track.button('grid-delete-button', {
+                page: 'image-upload-page',
+                section: 'image-grid',
+                action: 'delete-single',
+              });
+            }}
           />
           <S.TopButtonContainer $isVisible={!isAtPageTop}>
             <FloatingIconButton

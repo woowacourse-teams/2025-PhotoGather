@@ -26,6 +26,7 @@ import useSpaceInfo from '../../../hooks/useSpaceInfo';
 import { ScrollableBlurArea } from '../../../styles/@common/ScrollableBlurArea';
 import { theme } from '../../../styles/theme';
 import { checkIsEarlyDate } from '../../../utils/checkIsEarlyTime';
+import { track } from '../../../utils/googleAnalytics/track';
 import { goToTop } from '../../../utils/goToTop';
 import EarlyPage from '../../status/earlyPage/EarlyPage';
 import ExpiredPage from '../../status/expiredPage/ExpiredPage';
@@ -123,8 +124,20 @@ const SpaceHome = () => {
         uploaderName="익명의 우주여행자"
         onDownload={() => {
           selectDownload([photoId]);
+          track.button('single-download-button', {
+            page: 'space-home',
+            section: 'photo-modal',
+            action: 'download-single',
+          });
         }}
-        onDelete={handleSinglePhotoDelete}
+        onDelete={() => {
+          handleSinglePhotoDelete(photoId);
+          track.button('single-delete-button', {
+            page: 'space-home',
+            section: 'photo-modal',
+            action: 'delete-single',
+          });
+        }}
       />,
       {
         clickOverlayClose: true,
@@ -191,6 +204,13 @@ const SpaceHome = () => {
               height="24px"
             />
           }
+          onIconClick={() =>
+            track.button('space-setting-button', {
+              page: 'space-home',
+              section: 'space-home-header',
+              action: 'open-setting',
+            })
+          }
         />
       </S.InfoContainer>
 
@@ -219,7 +239,14 @@ const SpaceHome = () => {
                 <FloatingActionButton
                   label="모두 저장하기"
                   icon={<SaveIcon fill={theme.colors.gray06} />}
-                  onClick={downloadAll}
+                  onClick={() => {
+                    downloadAll();
+                    track.button('all-download-button', {
+                      page: 'space-home',
+                      section: 'space-home',
+                      action: 'download-all',
+                    });
+                  }}
                   disabled={isDownloading}
                 />
               </S.DownloadButtonContainer>

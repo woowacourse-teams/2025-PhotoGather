@@ -1,4 +1,5 @@
 import { createPhotoSelectedMessage } from '../../constants/messages';
+import { track } from '../../utils/googleAnalytics/track';
 import HighlightText from '../@common/highlightText/HighlightText';
 import * as S from './PhotoSelectionToolBar.styles';
 
@@ -19,7 +20,16 @@ const PhotoSelectionToolBar = ({
   const photoSelectedMessage = createPhotoSelectedMessage(selectedCount);
   return (
     <S.Wrapper>
-      <S.Button onClick={onDelete}>
+      <S.Button
+        onClick={() => {
+          onDelete();
+          track.button('selected-delete-button', {
+            page: 'space-home',
+            section: 'photo-selection-tool-bar',
+            action: 'delete-selected',
+          });
+        }}
+      >
         <S.DeleteIcon />
       </S.Button>
       <HighlightText
@@ -29,7 +39,16 @@ const PhotoSelectionToolBar = ({
         textColorStyle="white"
         highlightColorStyle="accent"
       />
-      <S.Button onClick={onDownload}>
+      <S.Button
+        onClick={() => {
+          onDownload();
+          track.button('selected-download-button', {
+            page: 'space-home',
+            section: 'photo-selection-tool-bar',
+            action: 'download-selected',
+          });
+        }}
+      >
         <S.DownloadIcon />
       </S.Button>
     </S.Wrapper>
