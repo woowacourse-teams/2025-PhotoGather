@@ -25,7 +25,7 @@ public class SpaceService {
     }
 
     public SpaceResponse getSpaceInformation(String spaceCode) {
-        Space space = spaceRepository.getUnexpiredSpaceByCode(spaceCode);
+        Space space = spaceRepository.getByCode(spaceCode);
         return SpaceResponse.from(space);
     }
 }
