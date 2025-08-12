@@ -50,10 +50,7 @@ public class HostOwnerInterceptor implements HandlerInterceptor {
 
         Space space = spaceRepository.getByCode(spaceCode);
         Host host = (Host)request.getAttribute("host");
-        if (space.isHost(host)) {
-            return true;
-        }
-        response.sendError(HttpServletResponse.SC_FORBIDDEN, "해당 스페이스에 대한 접근 권한이 없습니다.");
-        return false;
+        space.validateHost(host);
+        return true;
     }
 }

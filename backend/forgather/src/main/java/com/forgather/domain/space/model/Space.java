@@ -60,8 +60,10 @@ public class Space extends BaseTimeEntity {
         }
     }
 
-    public boolean isHost(Host host) {
-        return host != null && Objects.equals(this.host.getId(), host.getId());
+    public void validateHost(Host host) {
+        if (host == null || !Objects.equals(this.host.getId(), host.getId())) {
+            throw new IllegalArgumentException("해당 호스트는 이 스페이스의 호스트가 아닙니다. code: " + code);
+        }
     }
 
     public boolean isExpired(LocalDateTime now) {
