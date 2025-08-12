@@ -38,7 +38,7 @@ const LandingPage = () => {
         <S.SectionContainer
           {...useLandingScroll({
             delay: 0.4,
-            onVisible: () => track.sectionView('first-section', 1),
+            onVisible: () => track.sectionView('first_section', 1),
           })}
         >
           <S.TextContainer>소셜 로그인으로 시작하기</S.TextContainer>
@@ -65,7 +65,7 @@ const LandingPage = () => {
         <S.SectionContainer
           {...useLandingScroll({
             delay: 0.4,
-            onVisible: () => track.sectionView('second-section', 2),
+            onVisible: () => track.sectionView('second_section', 2),
           })}
         >
           <S.TextContainer>{`3초면 끝\n링크 하나로 그 날의 추억을 모아요`}</S.TextContainer>
@@ -89,7 +89,7 @@ const LandingPage = () => {
         <S.SectionContainer
           {...useLandingScroll({
             delay: 0.4,
-            onVisible: () => track.sectionView('third-section', 4),
+            onVisible: () => track.sectionView('third_section', 4),
           })}
         >
           <S.TextContainer>{`한번에 사진 다운로드\n클릭 한번으로 추억 정리 끝`}</S.TextContainer>
@@ -102,7 +102,7 @@ const LandingPage = () => {
         <S.SectionContainer
           {...useLandingScroll({
             delay: 0.4,
-            onVisible: () => track.sectionView('last-section', 5),
+            onVisible: () => track.sectionView('last_section', 5),
           })}
         >
           <S.TextContainer>{`인스타그램, 카카오톡, QR코드\n빠르게 공유하고 사진을 모아보세요`}</S.TextContainer>

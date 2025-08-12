@@ -23,10 +23,10 @@ const PhotoSelectionToolBar = ({
       <S.Button
         onClick={() => {
           onDelete();
-          track.button('selected-delete-button', {
-            page: 'space-home',
-            section: 'photo-selection-tool-bar',
-            action: 'delete-selected',
+          track.button('selected_delete_button', {
+            page: 'space_home',
+            section: 'photo_selection_tool-bar',
+            action: 'delete_selected',
           });
         }}
       >
@@ -42,10 +42,10 @@ const PhotoSelectionToolBar = ({
       <S.Button
         onClick={() => {
           onDownload();
-          track.button('selected-download-button', {
-            page: 'space-home',
-            section: 'photo-selection-tool-bar',
-            action: 'download-selected',
+          track.button('selected_download_button', {
+            page: 'space_home',
+            section: 'photo_selection_tool_bar',
+            action: 'download_selected',
           });
         }}
       >

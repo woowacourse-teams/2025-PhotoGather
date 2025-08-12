@@ -124,18 +124,18 @@ const SpaceHome = () => {
         uploaderName="익명의 우주여행자"
         onDownload={() => {
           selectDownload([photoId]);
-          track.button('single-download-button', {
-            page: 'space-home',
-            section: 'photo-modal',
-            action: 'download-single',
+          track.button('single_download_button', {
+            page: 'space_home',
+            section: 'photo_modal',
+            action: 'download_single',
           });
         }}
         onDelete={() => {
           handleSinglePhotoDelete(photoId);
-          track.button('single-delete-button', {
-            page: 'space-home',
-            section: 'photo-modal',
-            action: 'delete-single',
+          track.button('single_delete_button', {
+            page: 'space_home',
+            section: 'photo_modal',
+            action: 'delete_single',
           });
         }}
       />,
@@ -205,10 +205,10 @@ const SpaceHome = () => {
             />
           }
           onIconClick={() =>
-            track.button('space-setting-button', {
-              page: 'space-home',
-              section: 'space-home-header',
-              action: 'open-setting',
+            track.button('space_setting_button', {
+              page: 'space_home',
+              section: 'space_home_header',
+              action: 'open_setting',
             })
           }
         />
@@ -241,10 +241,10 @@ const SpaceHome = () => {
                   icon={<SaveIcon fill={theme.colors.gray06} />}
                   onClick={() => {
                     downloadAll();
-                    track.button('all-download-button', {
-                      page: 'space-home',
-                      section: 'space-home',
-                      action: 'download-all',
+                    track.button('all_download_button', {
+                      page: 'space_home',
+                      section: 'space_home',
+                      action: 'download_all',
                     });
                   }}
                   disabled={isDownloading}

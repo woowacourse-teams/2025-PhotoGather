@@ -83,10 +83,10 @@ const ImageUploadPage = () => {
         previewFile={selectedPhoto}
         onDelete={(id) => {
           handleDeleteFile(id);
-          track.button('single-delete-button', {
-            page: 'image-upload-page',
-            section: 'photo-modal',
-            action: 'delete-single',
+          track.button('single_delete_button', {
+            page: 'image_upload_page',
+            section: 'photo_modal',
+            action: 'delete_single',
           });
         }}
       />,
@@ -168,10 +168,10 @@ const ImageUploadPage = () => {
             onImageClick={handleImageClick}
             onDeleteClick={(id: number) => {
               handleDeleteFile(id);
-              track.button('grid-delete-button', {
-                page: 'image-upload-page',
-                section: 'image-grid',
-                action: 'delete-single',
+              track.button('grid_delete_button', {
+                page: 'image_upload_page',
+                section: 'image_grid',
+                action: 'delete_single',
               });
             }}
           />
