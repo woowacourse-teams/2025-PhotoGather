@@ -6,7 +6,9 @@ import { NETWORK } from '../constants/errors';
 import { ERROR } from '../constants/messages';
 import { ROUTES } from '../constants/routes';
 import type { ApiResponse } from '../types/api.type';
+import { checkSelectedPhotoExist } from '../validators/photo.validator';
 import useApiCall from './@common/useApiCall';
+import useError from './@common/useError';
 import { useToast } from './@common/useToast';
 
 interface UseDownloadProps {
@@ -26,7 +28,6 @@ const useDownload = ({ spaceCode, spaceName }: UseDownloadProps) => {
     const a = document.createElement('a');
     document.body.appendChild(a);
     a.href = url;
-    // TODO : 스페이스명 연동 후 변경
     a.download = `${spaceName}.zip`;
     a.click();
 
@@ -34,14 +35,11 @@ const useDownload = ({ spaceCode, spaceName }: UseDownloadProps) => {
     window.URL.revokeObjectURL(url);
   };
 
+  const { runWithErrorHandling } = useError();
+
   const selectDownload = async (photoIds: number[]) => {
-    if (photoIds.length === 0) {
-      showToast({
-        text: ERROR.DOWNLOAD.NO_SELECTED_PHOTO,
-        type: 'error',
-      });
-      return;
-    }
+    runWithErrorHandling(() => checkSelectedPhotoExist(photoIds), ['toast']);
+
     await handleDownload(() =>
       photoService.downloadPhotos(spaceCode, {
         photoIds: photoIds,

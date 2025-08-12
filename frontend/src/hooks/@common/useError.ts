@@ -3,60 +3,66 @@ import { useNavigate } from 'react-router-dom';
 import type { ToastBase } from '../../types/toast.type';
 import { useToast } from './useToast';
 
-interface ToastContext {
-  toastContext: ToastBase;
-}
+type AfterAction = () => void;
+type RedirectPath = string;
+type ToastOptions = Omit<ToastBase, 'text'> & { text?: string };
 
-interface ToastActionContext extends ToastContext {
-  afterAction: () => void;
+interface ErrorRequiredProps {
+  toast?: ToastOptions;
+  afterAction?: AfterAction;
+  redirect?: RedirectPath;
 }
-
-interface RedirectContext {
-  path: string;
-}
-
-interface ContextMap {
-  toast: ToastContext;
-  toastAction: ToastActionContext;
-  redirect: RedirectContext;
-}
-
-type Handlers = {
-  [K in keyof ContextMap]: (context: ContextMap[K]) => void;
-};
 
 const useError = () => {
-  const mappingErrorHandler: Handlers = {
-    toast: ({ toastContext }: ToastContext) => {
-      showToast(toastContext);
+  const [isError, setIsError] = useState(false);
+  const { showToast } = useToast();
+  const navigate = useNavigate();
+
+  const baseToastSetting = {
+    type: 'error',
+    position: 'bottom',
+  } as const;
+
+  const mappingErrorHandler = {
+    toast: (toastBase: ToastBase) => {
+      showToast({ ...baseToastSetting, ...toastBase });
     },
-    toastAction: ({ toastContext, afterAction }: ToastActionContext) => {
-      showToast(toastContext);
+    afterAction: (afterAction: AfterAction) => {
       afterAction();
     },
-    redirect: ({ path }: RedirectContext) => {
+    redirect: (path: RedirectPath) => {
       navigate(path);
     },
   };
 
   type ErrorType = keyof typeof mappingErrorHandler;
 
-  const [isError, setIsError] = useState(false);
-  const { showToast } = useToast();
-  const navigate = useNavigate();
-
-  const runWithErrorHandling = async <K extends ErrorType>(
+  const runWithErrorHandling = async (
     taskFunction: () => void | Promise<void>,
-    errorType: K,
-    context?: ContextMap[K],
+    errorTypes: ErrorType[],
+    context?: ErrorRequiredProps,
   ) => {
     try {
       setIsError(false);
       await Promise.resolve(taskFunction());
-    } catch (_error) {
+    } catch (error) {
       setIsError(true);
-      if (context) {
-        mappingErrorHandler[errorType](context);
+      if (!context) return;
+      if (!(error instanceof Error)) return;
+
+      if (errorTypes.includes('toast')) {
+        const finalToastBase = {
+          ...baseToastSetting,
+          ...context.toast,
+          text: context.toast?.text ?? error.message,
+        };
+        mappingErrorHandler.toast(finalToastBase);
+      }
+      if (errorTypes.includes('afterAction') && context.afterAction) {
+        mappingErrorHandler.afterAction(context.afterAction);
+      }
+      if (errorTypes.includes('redirect') && context.redirect) {
+        mappingErrorHandler.redirect(context.redirect);
       }
     }
   };
