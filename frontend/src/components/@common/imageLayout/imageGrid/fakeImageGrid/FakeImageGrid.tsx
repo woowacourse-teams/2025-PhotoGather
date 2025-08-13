@@ -1,3 +1,4 @@
+import { theme } from '../../../../../styles/theme';
 import FakeImageElement from '../../imageElement/fakeImageElement/FakeImageElement';
 import * as S from '../ImageGrid.common.styles';
 
@@ -13,7 +14,7 @@ const FakeImageGrid = ({ photoLength, rowImageAmount }: FakeImageGridProps) => {
     <S.Wrapper $rowImageAmount={rowImageAmount}>
       {Array.from({ length: photoLength }).map((_, index) => (
         // biome-ignore lint/suspicious/noArrayIndexKey: 가짜 이미지는 index만 가지고 있음
-        <FakeImageElement key={index} />
+        <FakeImageElement key={index} color={theme.colors.gray03} />
       ))}
     </S.Wrapper>
   );
