@@ -1,5 +1,5 @@
 import rocketIcon from '@assets/images/rocket.png';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { ReactComponent as SaveIcon } from '../../../@assets/icons/download.svg';
 import { ReactComponent as SettingSvg } from '../../../@assets/icons/setting.svg';
 import { ReactComponent as ArrowUpSvg } from '../../../@assets/icons/upwardArrow.svg';
@@ -34,7 +34,8 @@ import * as S from './SpaceHome.styles';
 const SpaceHome = () => {
   const { spaceId } = useSpaceCodeFromPath();
   const { spaceInfo } = useSpaceInfo(spaceId ?? '');
-  const isEarlyTime = checkIsEarlyDate((spaceInfo?.openedAt as string) ?? '');
+  const isEarlyTime =
+    spaceInfo?.openedAt && checkIsEarlyDate(spaceInfo.openedAt);
   // TODO: NoData 시 표시할 Layout 필요
   const isNoData = !spaceInfo;
   const isSpaceExpired = spaceInfo?.isExpired;
@@ -162,7 +163,7 @@ const SpaceHome = () => {
   return (
     <S.Wrapper>
       {/* TODO: 버튼 지우기 */}
-      {isEarlyTime && <EarlyPage openedAt={spaceInfo?.openedAt ?? ''} />}
+      {isEarlyTime && <EarlyPage openedAt={spaceInfo.openedAt} />}
       {(isDownloading || isDeleting) && (
         <LoadingLayout loadingContents={loadingContents} percentage={0} />
       )}

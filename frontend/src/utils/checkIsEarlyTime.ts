@@ -1,4 +1,4 @@
-export const checkIsEarlyDate = (openedAt: string) => {
+export const checkIsEarlyDate = (openedAt: string | Date) => {
   if (!openedAt) return false;
 
   const date = new Date();

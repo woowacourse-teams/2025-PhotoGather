@@ -5,11 +5,11 @@ import { formatDate } from '../../../utils/formatDate';
 import * as S from './EarlyPage.styles';
 
 interface EarlyPageProps {
-  openedAt: Date | string;
+  openedAt: string;
 }
 
 const EarlyPage = ({ openedAt }: EarlyPageProps) => {
-  const { date, time } = formatDate(openedAt as string);
+  const { date, time } = formatDate(openedAt);
 
   return (
     <StatusLayout

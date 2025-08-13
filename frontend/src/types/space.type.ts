@@ -16,8 +16,8 @@ export interface Space {
   id: number;
   spaceCode: string;
   name: string;
-  openedAt: Date | string;
-  expiredAt: Date | string;
+  openedAt: string;
+  expiredAt: string;
   isExpired: boolean;
 }
 
