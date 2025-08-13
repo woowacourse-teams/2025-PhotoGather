@@ -1,9 +1,6 @@
 import { ROUTES } from '../../constants/routes';
 import type { ApiResponse } from '../../types/api.type';
-import {
-  validateNetworkError,
-  validateResponseExist,
-} from '../../validators/fetch.validator';
+import { validateNetworkError } from '../../validators/fetch.validator';
 import useError from './useError';
 
 // TODO : 훅 명칭 변경
@@ -15,7 +12,6 @@ const useApiCall = () => {
   ): Promise<ApiResponse<T>> => {
     const response = await apiCall();
     validateNetworkError(response);
-    validateResponseExist(response);
     return response;
   };
 

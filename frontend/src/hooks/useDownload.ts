@@ -42,12 +42,13 @@ const useDownload = ({
     if (!taskResult.success) return;
 
     await tryTask({
-      task: async () =>
-        await safeApiCall(() =>
+      task: async () => {
+        await handleDownload(() =>
           photoService.downloadPhotos(spaceCode, {
             photoIds: photoIds,
           }),
-        ),
+        );
+      },
       errorActions: ['toast', 'console'],
       context: {
         toast: {
