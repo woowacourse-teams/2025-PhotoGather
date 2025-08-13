@@ -1,8 +1,8 @@
 import { ReactComponent as SaveIcon } from '@assets/icons/download.svg';
 import { ReactComponent as TrashCanIcon } from '@assets/icons/trash-can.svg';
 import styled from '@emotion/styled';
-import { hexToRgba } from '../../../utils/hexToRgba';
 import { theme } from '../../../styles/theme';
+import { hexToRgba } from '../../../utils/hexToRgba';
 
 export const Wrapper = styled.div`
   display: flex;
