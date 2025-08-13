@@ -46,12 +46,12 @@ public class SessionHostArgumentResolver implements HandlerMethodArgumentResolve
             return null;
         }
 
-        Long hostId = (Long)session.getAttribute("host_id");
-        if (hostId == null) {
+        Object attribute = session.getAttribute("host_id");
+        if (attribute == null) {
             throwExceptionIfRequired(required);
             return null;
         }
-
+        Long hostId = (attribute instanceof Long) ? (Long)attribute : Long.valueOf(String.valueOf(attribute));
         return hostRepository.getById(hostId);
     }
 
