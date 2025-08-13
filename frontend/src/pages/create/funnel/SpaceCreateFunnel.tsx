@@ -82,7 +82,10 @@ const SpaceCreateFunnel = () => {
         {step === 'check' && (
           <CheckSpaceInfoElement
             spaceInfo={spaceInfo}
-            onNext={() => goNextStep('fetch')}
+            onNext={(isImmediateOpen) => {
+              goNextStep('fetch');
+              setSpaceInfo((prev) => ({ ...prev, isImmediateOpen }));
+            }}
           />
         )}
         {step === 'fetch' && (
