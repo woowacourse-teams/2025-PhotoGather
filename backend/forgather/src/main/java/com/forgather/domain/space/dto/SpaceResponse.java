@@ -46,7 +46,8 @@ public record SpaceResponse(
             space.getOpenedAt(),
             space.getExpiredAt(),
             space.isExpired(LocalDateTime.now()),
-            HostResponse.from(space.getHost())
+            // TODO: 스페이스 : 호스트 m:n 관계로 변경 후 수정 필요
+            HostResponse.from(space.getSpaceHostMap().getFirst().getHost())
         );
     }
 }

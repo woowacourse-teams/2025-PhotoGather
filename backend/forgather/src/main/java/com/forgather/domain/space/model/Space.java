@@ -1,19 +1,21 @@
 package com.forgather.domain.space.model;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import com.forgather.domain.model.BaseTimeEntity;
 import com.forgather.global.auth.domain.Host;
+import com.forgather.global.auth.domain.SpaceHostMap;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -29,9 +31,8 @@ public class Space extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "host_id", nullable = false)
-    private Host host;
+    @OneToMany(mappedBy = "space", cascade = CascadeType.ALL)
+    private List<SpaceHostMap> spaceHostMap = new ArrayList<>();
 
     @Column(name = "code", nullable = false, length = 64)
     private String code;
@@ -46,7 +47,7 @@ public class Space extends BaseTimeEntity {
     private LocalDateTime openedAt;
 
     public Space(Host host, String code, String name, int validHours, LocalDateTime openedAt) {
-        this.host = host;
+        spaceHostMap.add(new SpaceHostMap(this, host));
         this.code = code;
         this.name = name;
         this.openedAt = openedAt;
@@ -64,7 +65,8 @@ public class Space extends BaseTimeEntity {
         if (host == null) {
             throw new IllegalArgumentException("호스트 정보가 없습니다.");
         }
-        if (!Objects.equals(this.host.getId(), host.getId())) {
+        if (spaceHostMap.stream()
+            .noneMatch(map -> Objects.equals(map.getHost().getId(), host.getId()))) {
             throw new IllegalArgumentException(
                 "해당 호스트는 이 스페이스의 호스트가 아닙니다. host id: " + host.getId() + ", spaceCode:" + code);
         }
