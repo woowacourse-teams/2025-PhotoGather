@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
+import defaultImage from '../../@assets/images/default_image.png';
 import { photoService } from '../../apis/services/photo.service';
 import { DEBUG_MESSAGES } from '../../constants/debugMessages';
 import { NETWORK } from '../../constants/errors';
@@ -8,6 +9,7 @@ import type { PreviewFile } from '../../types/file.type';
 import type { BaseModalProps } from '../../types/modal.type';
 import type { Photo } from '../../types/photo.type';
 import { buildOriginalImageUrl } from '../../utils/buildImageUrl';
+import { createImageErrorHandler } from '../../utils/createImageErrorHandler';
 import IconLabelButton from '../@common/buttons/iconLabelButton/IconLabelButton';
 import ConfirmModal from './ConfirmModal';
 import * as S from './PhotoModal.styles';
@@ -45,11 +47,11 @@ const PhotoModal = (props: PhotoModalProps) => {
   const [, setIsLoading] = useState(false);
   const [photo, setPhoto] = useState<Photo | null>(null);
   const [displayPath, setDisplayPath] = useState<string>('');
-  const [, setImageLoadError] = useState(false);
   const { safeApiCall } = useApiCall();
   const overlay = useOverlay();
 
   const isManagerMode = mode === 'manager';
+  const handleImageError = createImageErrorHandler(defaultImage);
 
   const managerPhotoId = mode === 'manager' ? props.photoId : undefined;
   const managerSpaceCode = mode === 'manager' ? props.spaceCode : undefined;
@@ -169,11 +171,7 @@ const PhotoModal = (props: PhotoModalProps) => {
           <S.Photo
             src={displayPath}
             alt={photo?.originalName || 'Image'}
-            onError={(e) => {
-              setImageLoadError(true);
-              const img = e.target as HTMLImageElement;
-              img.onerror = null;
-            }}
+            onError={handleImageError}
           />
         ) : (
           <div
