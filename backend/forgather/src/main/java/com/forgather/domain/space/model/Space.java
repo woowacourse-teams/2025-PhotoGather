@@ -61,8 +61,12 @@ public class Space extends BaseTimeEntity {
     }
 
     public void validateHost(Host host) {
-        if (host == null || !Objects.equals(this.host.getId(), host.getId())) {
-            throw new IllegalArgumentException("해당 호스트는 이 스페이스의 호스트가 아닙니다. code: " + code);
+        if (host == null) {
+            throw new IllegalArgumentException("호스트 정보가 없습니다.");
+        }
+        if (!Objects.equals(this.host.getId(), host.getId())) {
+            throw new IllegalArgumentException(
+                "해당 호스트는 이 스페이스의 호스트가 아닙니다. host id: " + host.getId() + ", spaceCode:" + code);
         }
     }
 

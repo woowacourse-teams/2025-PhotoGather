@@ -1,5 +1,7 @@
 package com.forgather.global.auth.resolver;
 
+import java.util.Objects;
+
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.support.WebDataBinderFactory;
@@ -29,21 +31,33 @@ public class SessionHostArgumentResolver implements HandlerMethodArgumentResolve
     @Override
     public Host resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
         NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
+
+        SessionHost annotation = parameter.getParameterAnnotation(SessionHost.class);
+        boolean required = Objects.requireNonNull(annotation).required();
         HttpServletRequest request = webRequest.getNativeRequest(HttpServletRequest.class);
         if (request == null) {
+            throwExceptionIfRequired(required);
             return null;
         }
 
         HttpSession session = request.getSession(false);
         if (session == null) {
+            throwExceptionIfRequired(required);
             return null;
         }
 
         Long hostId = (Long)session.getAttribute("host_id");
         if (hostId == null) {
+            throwExceptionIfRequired(required);
             return null;
         }
 
         return hostRepository.getById(hostId);
+    }
+
+    private void throwExceptionIfRequired(boolean required) {
+        if (required) {
+            throw new IllegalArgumentException("로그인 정보를 찾을 수 없습니다. 세션이 만료되었거나 로그인하지 않았습니다.");
+        }
     }
 }

@@ -10,4 +10,6 @@ import io.swagger.v3.oas.annotations.Hidden;
 @Target({java.lang.annotation.ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface SessionHost {
+
+    boolean required() default true;
 }
