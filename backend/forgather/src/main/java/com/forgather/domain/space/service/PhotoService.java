@@ -121,6 +121,7 @@ public class PhotoService {
         Space space = spaceRepository.getUnexpiredSpaceByCode(spaceCode);
         Photo photo = photoRepository.getById(photoId);
         photo.validateSpace(space);
+
         photoRepository.delete(photo);
         awsS3Cloud.deleteContent(photo.getPath());
     }
@@ -128,13 +129,13 @@ public class PhotoService {
     @Transactional
     public void deleteSelected(String spaceCode, DeletePhotosRequest request) {
         Space space = spaceRepository.getUnexpiredSpaceByCode(spaceCode);
-        List<Long> photoIds = request.photoIds();
-        List<Photo> photos = photoRepository.findAllByIdIn(photoIds);
+        List<Photo> photos = photoRepository.findAllByIdIn(request.photoIds());
         photos.forEach(photo -> photo.validateSpace(space));
         List<String> paths = photos.stream()
             .map(Photo::getPath)
             .toList();
-        photoRepository.deleteBySpaceAndPhotoIds(space, photoIds);
+
+        photoRepository.deleteAll(photos);
         awsS3Cloud.deleteSelectedContents(paths);
     }
 }

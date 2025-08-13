@@ -153,5 +153,10 @@ public class AwsS3Cloud {
             .delete(Delete.builder().objects(deleteObjects).build())
             .build();
         s3Client.deleteObjects(deleteRequest);
+
+        logger.log()
+            .event("S3 삭제 완료")
+            .value("deletedSize", String.valueOf(deletePaths.size()))
+            .info();
     }
 }
