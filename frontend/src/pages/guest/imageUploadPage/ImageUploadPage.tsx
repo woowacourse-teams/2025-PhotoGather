@@ -32,7 +32,7 @@ const ImageUploadPage = () => {
   const isEarlyTime = checkIsEarlyDate((spaceInfo?.openedAt as string) ?? '');
   const isSpaceExpired = spaceInfo?.isExpired;
   // TODO: NoData 시 표시할 Layout 필요
-  const isNoData = !spaceInfo;
+  const _isNoData = !spaceInfo;
   const [isClicked, setIsClicked] = useState(false);
 
   const spaceName = spaceInfo?.name ?? '';
