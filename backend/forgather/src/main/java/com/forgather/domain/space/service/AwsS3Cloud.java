@@ -39,7 +39,7 @@ public class AwsS3Cloud {
     private static final String THUMBNAILS_INNER_PATH = "thumbnails";
     private static final String MOBILE_THUMBNAIL_SIZE = "x800";
     private static final String DESKTOP_THUMBNAIL_SIZE = "x1080";
-    private static final String THUMBNAIL_EXTENSION = ".webp";
+    private static final String THUMBNAIL_EXTENSION = "webp";
 
     private final S3Client s3Client;
     private final S3Properties s3Properties;
@@ -140,7 +140,7 @@ public class AwsS3Cloud {
         String[] tokens = StringUtils.getFilename(contentPath).split("\\.");
         String fileName = tokens[0];
 
-        return String.format("%s/%s/%s_%s%s", contentDirectory, THUMBNAILS_INNER_PATH, fileName, thumbnailSize,
+        return String.format("%s/%s/%s_%s.%s", contentDirectory, THUMBNAILS_INNER_PATH, fileName, thumbnailSize,
             THUMBNAIL_EXTENSION);
     }
 
