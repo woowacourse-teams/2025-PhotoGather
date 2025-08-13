@@ -43,5 +43,12 @@ export const global = css`
   }
   .scroll-lock {
     overflow: hidden;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    overscroll-behavior: none;
+    touch-action: none;
   }
 `;
