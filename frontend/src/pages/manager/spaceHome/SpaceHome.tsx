@@ -19,6 +19,7 @@ import { INFORMATION } from '../../../constants/messages';
 import { useOverlay } from '../../../contexts/OverlayProvider';
 import useIntersectionObserver from '../../../hooks/@common/useIntersectionObserver';
 import useLeftTimer from '../../../hooks/@common/useLeftTimer';
+import { useToast } from '../../../hooks/@common/useToast';
 import useDownload from '../../../hooks/useDownload';
 import usePhotoSelect from '../../../hooks/usePhotoSelect';
 import usePhotosBySpaceCode from '../../../hooks/usePhotosBySpaceCode';
@@ -35,8 +36,6 @@ import { goToTop } from '../../../utils/goToTop';
 import EarlyPage from '../../status/earlyPage/EarlyPage';
 import ExpiredPage from '../../status/expiredPage/ExpiredPage';
 import * as S from './SpaceHome.styles';
-import {photoService} from "../../../apis/services/photo.service";
-import {useToast} from "../../../hooks/@common/useToast";
 
 const SpaceHome = () => {
   const { spaceCode } = useSpaceCodeFromPath();
@@ -102,29 +101,6 @@ const SpaceHome = () => {
       extractUnselectedPhotos,
       photosList,
     });
-
-  const handleSinglePhotoDelete = async (photoId: number) => {
-    try {
-      await photoService.deletePhotos(spaceCode ?? '', {
-        photoIds: [photoId],
-      });
-      showToast({
-        text: '사진을 삭제했습니다.',
-        type: 'info',
-        position: 'top',
-      });
-      const updatedPhotos =
-        photosList?.filter((photo) => photo.id !== photoId) || [];
-      updatePhotos(updatedPhotos);
-    } catch (error) {
-      showToast({
-        text: '삭제에 실패했습니다. 다시 시도해 주세요.',
-        type: 'error',
-        position: 'top',
-      });
-      console.error('삭제 실패:', error);
-    }
-  };
 
   const openPhotoModal = async (photoId: number) => {
     await overlay(
@@ -241,7 +217,13 @@ const SpaceHome = () => {
           icons={[
             {
               element: <SettingSvg fill={theme.colors.white} width="20px" />,
-              onClick: () => {},
+              onClick: () => {
+                track.button('space_setting_button', {
+                  page: 'space_home',
+                  section: 'space_home_header',
+                  action: 'open_setting',
+                });
+              },
               label: '설정',
             },
             {
@@ -250,13 +232,6 @@ const SpaceHome = () => {
               label: '공유',
             },
           ]}
-          onIconClick={() =>
-            track.button('space_setting_button', {
-              page: 'space_home',
-              section: 'space_home_header',
-              action: 'open_setting',
-            })
-          }
         />
       </S.InfoContainer>
 

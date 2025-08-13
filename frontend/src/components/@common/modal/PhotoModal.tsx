@@ -1,18 +1,18 @@
+import defaultImage from '@assets/images/default_image.png';
 import { useCallback, useEffect, useState } from 'react';
-import defaultImage from '../../@assets/images/default_image.png';
 import { photoService } from '../../../apis/services/photo.service';
 import { DEBUG_MESSAGES } from '../../../constants/debugMessages';
 import { NETWORK } from '../../../constants/errors';
 import { useOverlay } from '../../../contexts/OverlayProvider';
 import useApiCall from '../../../hooks/@common/useApiCall';
+import type { PreviewFile } from '../../../types/file.type';
+import type { BaseModalProps } from '../../../types/modal.type';
+import type { Photo } from '../../../types/photo.type';
 import { buildOriginalImageUrl } from '../../../utils/buildImageUrl';
+import { createImageErrorHandler } from '../../../utils/createImageErrorHandler';
+import IconLabelButton from '../buttons/iconLabelButton/IconLabelButton';
+import ConfirmModal from './confirmModal/ConfirmModal';
 import * as S from './PhotoModal.styles';
-import {BaseModalProps} from "../../../types/modal.type";
-import {PreviewFile} from "../../../types/file.type";
-import {Photo} from "../../../types/photo.type";
-import {createImageErrorHandler} from "../../../utils/createImageErrorHandler";
-import ConfirmModal from "./confirmModal/ConfirmModal";
-import IconLabelButton from "../buttons/iconLabelButton/IconLabelButton";
 
 // Guest mode props - previewData 사용
 interface GuestPhotoModalProps extends BaseModalProps {
@@ -83,7 +83,7 @@ const PhotoModal = (props: PhotoModalProps) => {
         if (data.path) {
           const fileName = data.path;
           if (fileName) {
-            imageUrl = buildOriginalImageUrl(managerSpaceCode, fileName);
+            imageUrl = buildOriginalImageUrl(fileName);
           } else {
             console.error('❌ Failed to parse image path:', data.path);
           }
