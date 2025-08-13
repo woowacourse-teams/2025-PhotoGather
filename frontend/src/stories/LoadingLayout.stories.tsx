@@ -15,19 +15,19 @@ export const Default: Story = {
     loadingContents: [
       {
         icon: { src: rocketImage, alt: '데모 페이지 아이콘' },
-        description: '로딩 텍스트 1',
+        description: '추억 담는 중',
       },
       {
         icon: { src: rocketImage, alt: '데모 페이지 아이콘' },
-        description: '로딩 텍스트 2',
+        description: '선물 상자 포장하는 중',
       },
       {
         icon: { src: rocketImage, alt: '데모 페이지 아이콘' },
-        description: '로딩 텍스트 3',
+        description: '배달 가는 중',
       },
       {
         icon: { src: rocketImage, alt: '데모 페이지 아이콘' },
-        description: '로딩 텍스트 4',
+        description: '당신에게 전달 중',
       },
     ],
     percentage: 30,

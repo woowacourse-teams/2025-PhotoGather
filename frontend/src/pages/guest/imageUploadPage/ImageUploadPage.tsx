@@ -99,19 +99,19 @@ const ImageUploadPage = () => {
   const loadingContents = [
     {
       icon: { src: rocketIcon, alt: '데모 페이지 아이콘' },
-      description: '로딩 텍스트 1',
+      description: '추억 담는 중',
     },
     {
       icon: { src: rocketIcon, alt: '데모 페이지 아이콘' },
-      description: '로딩 텍스트 2',
+      description: '선물 상자 포장하는 중',
     },
     {
       icon: { src: rocketIcon, alt: '데모 페이지 아이콘' },
-      description: '로딩 텍스트 2',
+      description: '배달 가는 중',
     },
     {
       icon: { src: rocketIcon, alt: '데모 페이지 아이콘' },
-      description: '로딩 텍스트 2',
+      description: '당신에게 전달 중',
     },
   ];
 
