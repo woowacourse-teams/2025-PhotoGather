@@ -28,10 +28,10 @@ public class LoggingAspect {
         Object result = joinPoint.proceed();
         long durationMillis = System.currentTimeMillis() - startMillis;
 
-        log.atInfo()
+        log.atDebug()
+            .addKeyValue("requestUri", request.getRequestURI())
             .addKeyValue("methodName", getMethodName(joinPoint))
             .addKeyValue("methodParams", getMethodParams(joinPoint))
-            .addKeyValue("requestUri", request.getRequestURI())
             .log("({}ms)", durationMillis);
         return result;
     }

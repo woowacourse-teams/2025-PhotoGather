@@ -14,7 +14,6 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.forgather.global.config.S3Properties;
-import com.forgather.global.logging.Logger;
 import com.forgather.global.util.RandomCodeGenerator;
 
 import lombok.RequiredArgsConstructor;
@@ -43,7 +42,6 @@ public class AwsS3Cloud {
     private final S3Properties s3Properties;
     private final S3TransferManager transferManager;
     private final RandomCodeGenerator randomCodeGenerator;
-    private final Logger logger;
 
     public String upload(String spaceCode, MultipartFile file) throws IOException {
         String path = generateFilePath(spaceCode, file);
@@ -54,12 +52,11 @@ public class AwsS3Cloud {
             .build();
         s3Client.putObject(putObjectRequest, RequestBody.fromBytes(file.getBytes()));
 
-        logger.log()
-            .event("S3 업로드 완료")
-            .spaceCode(spaceCode)
-            .value("originalName", file.getOriginalFilename())
-            .value("uploadedPath", path)
-            .info();
+        log.atDebug()
+            .addKeyValue("spaceCode", spaceCode)
+            .addKeyValue("originalName", file.getOriginalFilename())
+            .addKeyValue("uploadedPath", path)
+            .log("S3 업로드 완료");
 
         return path;
     }
