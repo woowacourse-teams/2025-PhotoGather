@@ -84,16 +84,15 @@ const SpaceHome = () => {
     toggleAllSelected,
   } = usePhotoSelect({ photosList: photosList ?? [] });
 
-  const { submitDeletePhotos, deleteSinglePhoto, isDeleting } = usePhotosDelete(
-    {
+  const { deleteSelectedPhotos, deleteSinglePhoto, isDeleting } =
+    usePhotosDelete({
       spaceCode: spaceId ?? '',
       toggleSelectMode,
       updatePhotos,
       fetchPhotosList,
       extractUnselectedPhotos,
       photosList,
-    },
-  );
+    });
 
   const openPhotoModal = async (photoId: number) => {
     await overlay(
@@ -232,7 +231,7 @@ const SpaceHome = () => {
               {isSelectMode && (
                 <PhotoSelectionToolBar
                   selectedCount={selectedPhotosCount}
-                  onDelete={() => submitDeletePhotos(selectedPhotoIds)}
+                  onDelete={() => deleteSelectedPhotos(selectedPhotoIds)}
                   onDownload={() => selectDownload(selectedPhotoIds)}
                 />
               )}
