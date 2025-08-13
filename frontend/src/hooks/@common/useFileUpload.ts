@@ -92,11 +92,7 @@ const useFileUpload = ({
 
   const fetchUploadFiles = async () => {
     const files = uploadFiles.map((file) => file.originFile);
-    const response = await safeApiCall(() =>
-      photoService.uploadFiles(spaceCode, files),
-    );
-
-    return response;
+    await safeApiCall(() => photoService.uploadFiles(spaceCode, files));
   };
 
   const errorOption = {
@@ -124,7 +120,7 @@ const useFileUpload = ({
     });
   };
 
-  const handleDeleteFile = (id: number) => {
+  const deleteFile = (id: number) => {
     setPreviewData((prev) => {
       const updated = prev.filter((item) => item.id !== id);
       const deleted = prev.find((item) => item.id === id);
@@ -142,7 +138,7 @@ const useFileUpload = ({
     previewData,
     isUploading,
     submitFileUpload,
-    handleDeleteFile,
+    deleteFile,
     handleFilesUploadClick,
     handleFilesDrop,
   };
