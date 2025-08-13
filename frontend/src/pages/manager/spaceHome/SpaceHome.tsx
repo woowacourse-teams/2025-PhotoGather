@@ -1,7 +1,7 @@
 import { ReactComponent as LinkIcon } from '@assets/icons/link.svg';
 import { ReactComponent as ShareIcon } from '@assets/icons/share.svg';
 import rocketIcon from '@assets/images/rocket.png';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { ReactComponent as SaveIcon } from '../../../@assets/icons/download.svg';
 import { ReactComponent as SettingSvg } from '../../../@assets/icons/setting.svg';
 import { ReactComponent as ArrowUpSvg } from '../../../@assets/icons/upwardArrow.svg';
@@ -32,6 +32,7 @@ import { theme } from '../../../styles/theme';
 import { checkIsEarlyDate } from '../../../utils/checkIsEarlyTime';
 import { copyLinkToClipboard } from '../../../utils/copyLinkToClipboard';
 import { createShareUrl, createSpaceUrl } from '../../../utils/createSpaceUrl';
+import { track } from '../../../utils/googleAnalytics/track';
 import { goToTop } from '../../../utils/goToTop';
 import EarlyPage from '../../status/earlyPage/EarlyPage';
 import ExpiredPage from '../../status/expiredPage/ExpiredPage';
@@ -40,7 +41,8 @@ import * as S from './SpaceHome.styles';
 const SpaceHome = () => {
   const { spaceCode } = useSpaceCodeFromPath();
   const { spaceInfo } = useSpaceInfo(spaceCode ?? '');
-  const isEarlyTime = checkIsEarlyDate((spaceInfo?.openedAt as string) ?? '');
+  const isEarlyTime =
+    spaceInfo?.openedAt && checkIsEarlyDate(spaceInfo.openedAt);
   // TODO: NoData 시 표시할 Layout 필요
   const _isNoData = !spaceInfo;
   const isSpaceExpired = spaceInfo?.isExpired;
@@ -131,8 +133,20 @@ const SpaceHome = () => {
         uploaderName="익명의 우주여행자"
         onDownload={() => {
           selectDownload([photoId]);
+          track.button('single_download_button', {
+            page: 'space_home',
+            section: 'photo_modal',
+            action: 'download_single',
+          });
         }}
-        onDelete={handleSinglePhotoDelete}
+        onDelete={() => {
+          handleSinglePhotoDelete(photoId);
+          track.button('single_delete_button', {
+            page: 'space_home',
+            section: 'photo_modal',
+            action: 'delete_single',
+          });
+        }}
       />,
       {
         clickOverlayClose: true,
@@ -166,6 +180,7 @@ const SpaceHome = () => {
       description: '로딩 텍스트 2',
     },
   ];
+
 
   const [isClicked, setIsClicked] = useState(false);
 
@@ -209,21 +224,11 @@ const SpaceHome = () => {
     }
   };
 
+
   return (
     <S.Wrapper>
       {/* TODO: 버튼 지우기 */}
-      {isEarlyTime && !isClicked && (
-        <>
-          <EarlyPage openedAt={spaceInfo?.openedAt ?? ''} />
-          <button
-            style={{ zIndex: 10000 }}
-            type="button"
-            onClick={() => setIsClicked((prev) => !prev)}
-          >
-            닫기
-          </button>
-        </>
-      )}
+      {isEarlyTime && <EarlyPage openedAt={spaceInfo.openedAt} />}
       {(isDownloading || isDeleting) && (
         <LoadingLayout loadingContents={loadingContents} percentage={0} />
       )}
@@ -272,7 +277,14 @@ const SpaceHome = () => {
                 <FloatingActionButton
                   label="모두 저장하기"
                   icon={<SaveIcon fill={theme.colors.gray06} />}
-                  onClick={downloadAll}
+                  onClick={() => {
+                    downloadAll();
+                    track.button('all_download_button', {
+                      page: 'space_home',
+                      section: 'space_home',
+                      action: 'download_all',
+                    });
+                  }}
                   disabled={isDownloading}
                 />
               </S.DownloadButtonContainer>

@@ -8,6 +8,7 @@ export const Wrapper = styled.div`
 
 export const InputField = styled.input<{ $isError: boolean }>`
   width: 100%;
+  height: 3rem;
   padding: 8px 12px;
   border: 1px solid
     ${({ $isError, theme }) => ($isError ? theme.colors.error : theme.colors.gray02)};

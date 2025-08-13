@@ -1,17 +1,15 @@
 import lockImage from '@assets/images/lock.png';
 import HighlightText from '../../../components/@common/highlightText/HighlightText';
 import StatusLayout from '../../../components/layout/statusLayout/StatusLayout';
-import { changeKSTDate } from '../../../utils/changeKSTDate';
 import { formatDate } from '../../../utils/formatDate';
 import * as S from './EarlyPage.styles';
 
 interface EarlyPageProps {
-  openedAt: Date | string;
+  openedAt: string;
 }
 
 const EarlyPage = ({ openedAt }: EarlyPageProps) => {
-  const kstOpenedAt = changeKSTDate(new Date(openedAt)).kstDate.toISOString();
-  const { date, time } = formatDate(kstOpenedAt as string);
+  const { date, time } = formatDate(openedAt);
 
   return (
     <StatusLayout

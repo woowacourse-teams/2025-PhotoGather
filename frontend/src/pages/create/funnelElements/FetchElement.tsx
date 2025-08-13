@@ -4,6 +4,7 @@ import { ROUTES } from '../../../constants/routes';
 import useCreateSpace from '../../../hooks/useCreateSpace';
 import type { FunnelElementProps } from '../../../types/funnel.type';
 import type { SpaceFunnelInfo } from '../../../types/space.type';
+import { calculateKstToday } from '../../../utils/calculateKstToday';
 import { delay } from '../../../utils/delay';
 import { parseIsoStringFromDateTime } from '../../../utils/parseIsoStringFromDateTime';
 import WaitPage from './waitPage/WaitPage';
@@ -17,6 +18,10 @@ interface FetchElementProps extends FunnelElementProps {
 const FetchElement = ({ spaceInfo }: FetchElementProps) => {
   const [status, setStatus] = useState<FetchStatus>('loading');
   const [spaceCode, setSpaceCode] = useState('');
+  const { kstDateString, kstTimeString } = calculateKstToday();
+  const calculatedOpenedAt = spaceInfo.isImmediateOpen
+    ? parseIsoStringFromDateTime(kstDateString, kstTimeString)
+    : parseIsoStringFromDateTime(spaceInfo.date, spaceInfo.time);
 
   const { fetchCreateSpace } = useCreateSpace();
 
@@ -26,7 +31,8 @@ const FetchElement = ({ spaceInfo }: FetchElementProps) => {
       try {
         const spaceCode = await fetchCreateSpace({
           name: spaceInfo.name,
-          openedAt: parseIsoStringFromDateTime(spaceInfo.date, spaceInfo.time),
+          validHours: 72,
+          openedAt: calculatedOpenedAt,
           password: '',
         });
         if (spaceCode) setSpaceCode(spaceCode);
@@ -37,7 +43,7 @@ const FetchElement = ({ spaceInfo }: FetchElementProps) => {
     };
 
     createSpace();
-  }, [fetchCreateSpace, spaceInfo]);
+  }, [calculatedOpenedAt, fetchCreateSpace, spaceInfo]);
 
   if (status === 'loading') {
     return <WaitPage spaceInfo={spaceInfo} />;

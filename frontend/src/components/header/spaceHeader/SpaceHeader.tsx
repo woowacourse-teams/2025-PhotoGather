@@ -42,7 +42,7 @@ const SpaceHeader = ({ title, timer, icons }: SpaceHeaderProps) => {
       <S.TimerContainer>
         <S.ClockIconContainer $isWithinOneHour={isWithinOneHour} />
         <S.TextContainer $isWithinOneHour={isWithinOneHour}>
-          {`${formatTimer(timer)} 남았어요`}
+          {`스페이스 만료까지 ${formatTimer(timer)}`}
         </S.TextContainer>
       </S.TimerContainer>
     </S.Wrapper>

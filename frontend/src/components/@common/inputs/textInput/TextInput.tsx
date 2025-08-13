@@ -9,6 +9,12 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
 }
 
 const TextInput = ({ errorMessage, maxCount, ...inputProps }: InputProps) => {
+  const segmenter = new Intl.Segmenter('und', { granularity: 'grapheme' });
+  const graphemes = Array.from(
+    segmenter.segment(inputProps.value),
+    (word) => word.segment,
+  );
+
   return (
     <C.Wrapper>
       <C.InputField
@@ -21,7 +27,7 @@ const TextInput = ({ errorMessage, maxCount, ...inputProps }: InputProps) => {
       <S.InputFooterContainer>
         <C.ErrorMessage>{errorMessage ? errorMessage : ''}</C.ErrorMessage>
         <S.InputCount>
-          {maxCount && `${inputProps.value.length} / ${maxCount}`}
+          {maxCount && `${graphemes.length} / ${maxCount}`}
         </S.InputCount>
       </S.InputFooterContainer>
     </C.Wrapper>
