@@ -20,6 +20,7 @@ import useSpaceInfo from '../../../hooks/useSpaceInfo';
 import { ScrollableBlurArea } from '../../../styles/@common/ScrollableBlurArea';
 import { theme } from '../../../styles/theme';
 import { checkIsEarlyDate } from '../../../utils/checkIsEarlyTime';
+import { track } from '../../../utils/googleAnalytics/track';
 import { goToTop } from '../../../utils/goToTop';
 import EarlyPage from '../../status/earlyPage/EarlyPage';
 import ExpiredPage from '../../status/expiredPage/ExpiredPage';
@@ -32,7 +33,7 @@ const ImageUploadPage = () => {
     spaceInfo?.openedAt && checkIsEarlyDate(spaceInfo.openedAt);
   const isSpaceExpired = spaceInfo?.isExpired;
   // TODO: NoData 시 표시할 Layout 필요
-  const isNoData = !spaceInfo;
+  const _isNoData = !spaceInfo;
 
   const spaceName = spaceInfo?.name ?? '';
   const { showToast } = useToast();
@@ -81,6 +82,11 @@ const ImageUploadPage = () => {
         previewFile={selectedPhoto}
         onDelete={(id) => {
           handleDeleteFile(id);
+          track.button('single_delete_button', {
+            page: 'image_upload_page',
+            section: 'photo_modal',
+            action: 'delete_single',
+          });
         }}
       />,
       {
@@ -148,7 +154,14 @@ const ImageUploadPage = () => {
             photoData={previewData}
             rowImageAmount={3}
             onImageClick={handleImageClick}
-            onDeleteClick={handleDeleteFile}
+            onDeleteClick={(id: number) => {
+              handleDeleteFile(id);
+              track.button('grid_delete_button', {
+                page: 'image_upload_page',
+                section: 'image_grid',
+                action: 'delete_single',
+              });
+            }}
           />
           <S.TopButtonContainer $isVisible={!isAtPageTop}>
             <FloatingIconButton

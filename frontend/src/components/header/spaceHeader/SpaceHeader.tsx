@@ -10,9 +10,11 @@ interface SpaceHeaderProps {
   timer: Timer;
   /** 헤더 우상단 아이콘 */
   icon?: React.ReactNode;
+  /** 헤더 우상단 아이콘 클릭 이벤트 */
+  onIconClick?: () => void;
 }
 
-const SpaceHeader = ({ title, timer, icon }: SpaceHeaderProps) => {
+const SpaceHeader = ({ title, timer, icon, onIconClick }: SpaceHeaderProps) => {
   const isExpired = checkIsTimerExpired(timer);
   const isWithinOneHour = timer.days === 0 && timer.hours === 0 && !isExpired;
 
@@ -20,12 +22,12 @@ const SpaceHeader = ({ title, timer, icon }: SpaceHeaderProps) => {
     <S.Wrapper>
       <S.TitleIconContainer>
         <S.Title>{title}</S.Title>
-        <S.Icon>{icon}</S.Icon>
+        <S.Icon onClick={onIconClick}>{icon}</S.Icon>
       </S.TitleIconContainer>
       <S.TimerContainer>
         <S.ClockIconContainer $isWithinOneHour={isWithinOneHour} />
         <S.TextContainer $isWithinOneHour={isWithinOneHour}>
-          {`${formatTimer(timer)} 남았어요`}
+          {`스페이스 만료까지 ${formatTimer(timer)}`}
         </S.TextContainer>
       </S.TimerContainer>
     </S.Wrapper>

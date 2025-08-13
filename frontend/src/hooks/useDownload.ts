@@ -42,11 +42,13 @@ const useDownload = ({ spaceCode, spaceName }: UseDownloadProps) => {
       });
       return;
     }
+    setIsDownloading(true);
     await handleDownload(() =>
       photoService.downloadPhotos(spaceCode, {
         photoIds: photoIds,
       }),
     );
+    setIsDownloading(false);
   };
 
   const downloadAll = async () => {

@@ -14,7 +14,7 @@ export const Wrapper = styled.div<{
   max-height: 100px;
   gap: 12px;
   background-color: ${({ theme, $type }) =>
-    $type === 'error' ? theme.colors.lightError : theme.colors.lightAccent};
+    $type === 'error' ? theme.colors.lightError : theme.colors.accent};
   padding: 8px 12px;
   border-radius: 50px;
   align-items: center;
@@ -46,7 +46,7 @@ export const IconContainer = styled.div`
 
 export const TextContainer = styled.p`
   color: ${({ theme }) => theme.colors.gray06};
-  ${({ theme }) => theme.typography.captionSmall};
+  ${({ theme }) => theme.typography.bodyRegular};
 `;
 
 export const Icon = styled(InfoIcon, {
@@ -57,7 +57,7 @@ export const Icon = styled(InfoIcon, {
 
   & circle {
     fill: ${({ theme, $type }) =>
-      $type === 'error' ? theme.colors.lightError : theme.colors.darkAccent};
+      $type === 'error' ? theme.colors.lightError : theme.colors.lightAccent};
   }
 
   & path {

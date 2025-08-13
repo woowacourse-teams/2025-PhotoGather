@@ -26,6 +26,7 @@ import useSpaceInfo from '../../../hooks/useSpaceInfo';
 import { ScrollableBlurArea } from '../../../styles/@common/ScrollableBlurArea';
 import { theme } from '../../../styles/theme';
 import { checkIsEarlyDate } from '../../../utils/checkIsEarlyTime';
+import { track } from '../../../utils/googleAnalytics/track';
 import { goToTop } from '../../../utils/goToTop';
 import EarlyPage from '../../status/earlyPage/EarlyPage';
 import ExpiredPage from '../../status/expiredPage/ExpiredPage';
@@ -37,7 +38,7 @@ const SpaceHome = () => {
   const isEarlyTime =
     spaceInfo?.openedAt && checkIsEarlyDate(spaceInfo.openedAt);
   // TODO: NoData 시 표시할 Layout 필요
-  const isNoData = !spaceInfo;
+  const _isNoData = !spaceInfo;
   const isSpaceExpired = spaceInfo?.isExpired;
   const spaceName = spaceInfo?.name ?? '';
   const { targetRef: hideBlurAreaTriggerRef, isIntersecting: isAtPageBottom } =
@@ -124,8 +125,20 @@ const SpaceHome = () => {
         uploaderName="익명의 우주여행자"
         onDownload={() => {
           selectDownload([photoId]);
+          track.button('single_download_button', {
+            page: 'space_home',
+            section: 'photo_modal',
+            action: 'download_single',
+          });
         }}
-        onDelete={handleSinglePhotoDelete}
+        onDelete={() => {
+          handleSinglePhotoDelete(photoId);
+          track.button('single_delete_button', {
+            page: 'space_home',
+            section: 'photo_modal',
+            action: 'delete_single',
+          });
+        }}
       />,
       {
         clickOverlayClose: true,
@@ -179,6 +192,13 @@ const SpaceHome = () => {
               height="24px"
             />
           }
+          onIconClick={() =>
+            track.button('space_setting_button', {
+              page: 'space_home',
+              section: 'space_home_header',
+              action: 'open_setting',
+            })
+          }
         />
       </S.InfoContainer>
 
@@ -207,7 +227,14 @@ const SpaceHome = () => {
                 <FloatingActionButton
                   label="모두 저장하기"
                   icon={<SaveIcon fill={theme.colors.gray06} />}
-                  onClick={downloadAll}
+                  onClick={() => {
+                    downloadAll();
+                    track.button('all_download_button', {
+                      page: 'space_home',
+                      section: 'space_home',
+                      action: 'download_all',
+                    });
+                  }}
                   disabled={isDownloading}
                 />
               </S.DownloadButtonContainer>

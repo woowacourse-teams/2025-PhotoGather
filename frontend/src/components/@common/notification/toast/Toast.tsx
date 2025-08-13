@@ -3,7 +3,7 @@ import { theme } from '../../../../styles/theme';
 import type { ToastBase } from '../../../../types/toast.type';
 import * as S from './Toast.styles';
 
-export const Toast = ({ text, type = 'info', duration = 3000 }: ToastBase) => {
+export const Toast = ({ text, type = 'info', duration = 1500 }: ToastBase) => {
   const [progress, setProgress] = useState(0);
   const [visible, setVisible] = useState(true);
 
