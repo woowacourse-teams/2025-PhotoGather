@@ -34,6 +34,11 @@ const UploadBox = ({
     handleDrop,
   } = useDrag({ onDrop });
 
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    onChange(event);
+    event.target.value = '';
+  };
+
   return (
     <S.Wrapper
       htmlFor="file-input"
@@ -53,7 +58,7 @@ const UploadBox = ({
         type="file"
         multiple
         hidden
-        onChange={onChange}
+        onChange={handleChange}
         accept="image/*"
         disabled={disabled}
       />
