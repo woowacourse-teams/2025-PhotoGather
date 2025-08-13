@@ -45,5 +45,4 @@ public class LoggingAspect {
             .map(arg -> arg == null ? "null" : arg.toString())
             .collect(Collectors.joining(", "));
     }
-
 }
