@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { photoService } from '../apis/services/photo.service';
-import { DEBUG_MESSAGES } from '../constants/debugMessages';
 import type { ApiResponse } from '../types/api.type';
+import { validateDownloadFormat } from '../validators/fetch.validator';
 import { checkSelectedPhotoExist } from '../validators/photo.validator';
 import useApiCall from './@common/useApiCall';
 import useError from './@common/useError';
@@ -80,16 +80,8 @@ const useDownload = ({
     });
   };
 
-  const checkDownloadFormat = async (data: unknown) => {
-    if (!(data instanceof Blob)) {
-      throw new Error(DEBUG_MESSAGES.NO_BLOB_INSTANCE);
-    }
-  };
-
-  // TODO :navigate 로직 외부로 
   const handleDownload = async (
     fetchFunction: () => Promise<ApiResponse<unknown>>,
-    shouldNavigate = false,
   ) => {
     const response = await safeApiCall(fetchFunction);
     if (!response) return;
@@ -97,13 +89,12 @@ const useDownload = ({
 
     await tryTask({
       task: () => {
-        checkDownloadFormat(blob);
+        validateDownloadFormat(blob);
         downloadBlob(blob as Blob);
         onDownloadSuccess?.();
       },
       errorActions: ['console'],
     });
-
   };
   return { isDownloading, downloadAll, selectDownload };
 };

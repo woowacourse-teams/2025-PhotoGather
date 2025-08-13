@@ -13,7 +13,7 @@ interface UsePhotosDeleteProps {
   updatePhotos: (photos: Photo[]) => void;
   tryFetchPhotosList: () => Promise<void>;
   extractUnselectedPhotos: () => Photo[];
-  photosList?: Photo[] | null;
+  photosList: Photo[] | null;
 }
 
 const usePhotosDelete = ({
@@ -30,100 +30,97 @@ const usePhotosDelete = ({
   const { showToast } = useToast();
 
   const showDeleteConfirmModal = async (message: string) => {
-    try {
-      return await overlay(
-        React.createElement(ConfirmModal, {
-          description: message,
-          confirmText: '삭제',
-          cancelText: '취소',
-        }),
-        {
-          clickOverlayClose: true,
-        },
-      );
-    } catch (error) {
-      console.error('모달 오류:', error);
-      return false;
-    }
-  };
-
-  const handleDeleteError = (error: unknown) => {
-    showToast({
-      text: '다시 시도해 주세요.',
-      type: 'error',
-    });
-    console.error(error);
+    const result = await overlay(
+      React.createElement(ConfirmModal, {
+        description: message,
+        confirmText: '삭제',
+        cancelText: '취소',
+      }),
+      {
+        clickOverlayClose: true,
+      },
+    );
+    return result;
   };
 
   const deleteSelectedPhotos = async (photoIds: number[]) => {
-    if (photoIds.length === 0) {
-      showToast({
-        text: ERROR.DELETE.NO_SELECTED_PHOTO,
-        type: 'error',
-      });
-      return false;
-    }
+    setIsDeleting(true);
+    await photoService.deletePhotos(spaceCode, { photoIds });
+    showToast({
+      text: `${photoIds.length}개의 사진을 삭제했습니다.`,
+      type: 'info',
+    });
+    updatePhotos(extractUnselectedPhotos());
+    await tryFetchPhotosList();
+    toggleSelectMode();
+  };
+
+  const tryDeleteSelectedPhotos = async (photoIds: number[]) => {
+    const taskResult = await tryTask({
+      task: () => checkSelectedPhotoExist(photoIds),
+      errorActions: ['toast'],
+    });
+    if (!taskResult.success) return;
 
     const result = await showDeleteConfirmModal(
       `${photoIds.length}개의 사진을 삭제하시겠습니까?`,
     );
+    if (!result) return;
 
-    if (!result) return false;
-
-    try {
-      setIsDeleting(true);
-      await photoService.deletePhotos(spaceCode, { photoIds });
-
-      showToast({
-        text: `${photoIds.length}개의 사진을 삭제했습니다.`,
-        type: 'info',
-      });
-
-      updatePhotos(extractUnselectedPhotos());
-      await fetchPhotosList();
-      return true;
-    } catch (error) {
-      handleDeleteError(error);
-      return false;
-    } finally {
-      toggleSelectMode();
-      setIsDeleting(false);
-    }
+    tryTask({
+      task: async () => {
+        return await deleteSelectedPhotos(photoIds);
+      },
+      errorActions: ['toast'],
+      context: {
+        toast: {
+          text: '사진 삭제에 실패했습니다. 다시 시도해 주세요.',
+        },
+      },
+      onFinally: () => {
+        setIsDeleting(false);
+      },
+    });
   };
 
   const deleteSinglePhoto = async (photoId: number) => {
-    const result = await showDeleteConfirmModal('정말 삭제하시겠어요?');
-
-    if (!result) return false;
-
-    try {
-      setIsDeleting(true);
-      await photoService.deletePhoto(spaceCode, photoId);
-
-      showToast({
-        text: `사진을 삭제했습니다.`,
-        type: 'info',
-      });
-
-      if (photosList) {
-        const updatedPhotos = photosList.filter(
-          (photo) => photo.id !== photoId,
-        );
-        updatePhotos(updatedPhotos);
-      }
-
-      return true;
-    } catch (error) {
-      handleDeleteError(error);
-      return false;
-    } finally {
-      setIsDeleting(false);
+    setIsDeleting(true);
+    await photoService.deletePhoto(spaceCode, photoId);
+    showToast({
+      text: `사진을 삭제했습니다.`,
+      type: 'info',
+    });
+    if (photosList) {
+      const updatedPhotos = photosList.filter((photo) => photo.id !== photoId);
+      updatePhotos(updatedPhotos);
     }
   };
 
+  const tryDeleteSinglePhoto = async (photoId: number) => {
+    const result = await showDeleteConfirmModal('정말 삭제하시겠어요?');
+    if (!result) return;
+
+    tryTask({
+      task: async () => {
+        return await deleteSinglePhoto(photoId);
+      },
+      errorActions: ['toast'],
+      context: {
+        toast: {
+          text: '사진 삭제에 실패했습니다. 다시 시도해 주세요.',
+        },
+      },
+      onFinally: () => {
+        setIsDeleting(false);
+      },
+    });
+
+    return true;
+  };
+
   return {
-    deleteSelectedPhotos,
-    deleteSinglePhoto,
+    tryDeleteSelectedPhotos,
+    tryDeleteSinglePhoto,
     isDeleting,
   };
 };

@@ -69,6 +69,15 @@ const ImageUploadPage = () => {
     targetTime: (spaceInfo?.expiredAt as string) ?? '',
   });
 
+  const deletePhotoWithTracking = async (id: number) => {
+    deleteFile(id);
+    track.button('single_delete_button', {
+      page: 'image_upload_page',
+      section: 'photo_modal',
+      action: 'delete_single',
+    });
+  };
+
   const handleImageClick = async (photoId: number) => {
     const selectedPhoto = previewData.find((photo) => photo.id === photoId);
     if (!selectedPhoto) return;
@@ -77,14 +86,7 @@ const ImageUploadPage = () => {
       <PhotoModal
         mode="guest"
         previewFile={selectedPhoto}
-        onDelete={(id) => {
-          deleteFile(id);
-          track.button('single_delete_button', {
-            page: 'image_upload_page',
-            section: 'photo_modal',
-            action: 'delete_single',
-          });
-        }}
+        onDelete={async () => await deletePhotoWithTracking(photoId)}
       />,
       {
         clickOverlayClose: true,

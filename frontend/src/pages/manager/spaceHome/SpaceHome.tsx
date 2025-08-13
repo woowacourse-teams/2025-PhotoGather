@@ -104,16 +104,33 @@ const SpaceHome = () => {
     toggleAllSelected,
   } = usePhotoSelect({ photosList: photosList ?? [] });
 
-
-  const { deleteSelectedPhotos, deleteSinglePhoto, isDeleting } =
+  const { tryDeleteSelectedPhotos, tryDeleteSinglePhoto, isDeleting } =
     usePhotosDelete({
       spaceCode: spaceCode ?? '',
       toggleSelectMode,
       updatePhotos,
-      fetchPhotosList,
+      tryFetchPhotosList,
       extractUnselectedPhotos,
       photosList,
     });
+
+  const deletePhotoWithTracking = async (photoId: number) => {
+    await tryDeleteSinglePhoto(photoId);
+    track.button('single_delete_button', {
+      page: 'space_home',
+      section: 'photo_modal',
+      action: 'delete_single',
+    });
+  };
+
+  const downloadPhotoWithTracking = async (photoId: number) => {
+    await selectDownload([photoId]);
+    track.button('single_download_button', {
+      page: 'space_home',
+      section: 'photo_modal',
+      action: 'download_single',
+    });
+  };
 
   const openPhotoModal = async (photoId: number) => {
     await overlay(
@@ -122,25 +139,8 @@ const SpaceHome = () => {
         photoId={photoId}
         spaceCode={spaceCode ?? ''}
         uploaderName="익명의 우주여행자"
-        onDownload={() => {
-          selectDownload([photoId]);
-          track.button('single_download_button', {
-            page: 'space_home',
-            section: 'photo_modal',
-            action: 'download_single',
-          });
-        }}
-        onDelete={async () => {
-          const result = await deleteSinglePhoto(photoId);
-          if (result) {
-            track.button('single_delete_button', {
-              page: 'space_home',
-              section: 'photo_modal',
-              action: 'delete_single',
-            });
-          }
-          return result;
-        }}
+        onDownload={async () => await downloadPhotoWithTracking(photoId)}
+        onDelete={async () => await deletePhotoWithTracking(photoId)}
       />,
       {
         clickOverlayClose: true,
@@ -296,7 +296,7 @@ const SpaceHome = () => {
               {isSelectMode && (
                 <PhotoSelectionToolBar
                   selectedCount={selectedPhotosCount}
-                  onDelete={() => deleteSelectedPhotos(selectedPhotoIds)}
+                  onDelete={() => tryDeleteSelectedPhotos(selectedPhotoIds)}
                   onDownload={() => selectDownload(selectedPhotoIds)}
                 />
               )}

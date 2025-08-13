@@ -1,7 +1,6 @@
 import { CONSTRAINTS } from '../constants/constraints';
 import { ERROR } from '../constants/messages';
 
-// TODO : 접두어 뭘로 할까~ validate-
 export const checkSelectedPhotoExist = (photoIds: number[]) => {
   if (photoIds.length === 0) {
     throw new Error(ERROR.DOWNLOAD.NO_SELECTED_PHOTO);
