@@ -108,7 +108,7 @@ const useFileUpload = ({
     },
   };
 
-  const handleUploadFiles = async () => {
+  const submitFileUpload = async () => {
     await tryTask({
       task: async () => {
         setIsUploading(true);
@@ -141,7 +141,7 @@ const useFileUpload = ({
     uploadFiles,
     previewData,
     isUploading,
-    handleUploadFiles,
+    submitFileUpload,
     handleDeleteFile,
     handleFilesUploadClick,
     handleFilesDrop,

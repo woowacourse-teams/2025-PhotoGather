@@ -23,6 +23,7 @@ const usePhotosBySpaceCode = ({
   const currentPage = useRef(1);
   const totalPages = useRef(1);
   const { safeApiCall } = useApiCall();
+  const { tryTask } = useError();
 
   const thumbnailPhotoMap = useMemo(() => {
     // TODO : thumbnail 이미지 참조 실패시 원본 이미지 참조하도록 설정
@@ -72,8 +73,6 @@ const usePhotosBySpaceCode = ({
       reObserve();
     });
   };
-
-  const { tryTask } = useError();
 
   const tryFetchPhotosList = async () => {
     tryTask({

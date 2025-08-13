@@ -52,8 +52,8 @@ const ImageUploadPage = () => {
     isUploading,
     handleFilesUploadClick,
     handleFilesDrop,
-    handleUploadFiles,
-    handleDeleteFile,
+    submitFileUpload,
+    deleteFile,
   } = useFileUpload({
     spaceCode: spaceCode ?? '',
     fileType: 'image',
@@ -78,7 +78,7 @@ const ImageUploadPage = () => {
         mode="guest"
         previewFile={selectedPhoto}
         onDelete={(id) => {
-          handleDeleteFile(id);
+          deleteFile(id);
           track.button('single_delete_button', {
             page: 'image_upload_page',
             section: 'photo_modal',
@@ -143,7 +143,7 @@ const ImageUploadPage = () => {
                   highlightTextArray={[`사진 ${previewData.length}장`]}
                 />
               }
-              onClick={handleUploadFiles}
+              onClick={submitFileUpload}
               disabled={isUploading}
             />
           </S.ButtonContainer>
@@ -152,7 +152,7 @@ const ImageUploadPage = () => {
             rowImageAmount={3}
             onImageClick={handleImageClick}
             onDeleteClick={(id: number) => {
-              handleDeleteFile(id);
+              deleteFile(id);
               track.button('grid_delete_button', {
                 page: 'image_upload_page',
                 section: 'image_grid',
