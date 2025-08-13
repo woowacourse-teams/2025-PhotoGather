@@ -13,6 +13,7 @@ import { createImageErrorHandler } from '../../utils/createImageErrorHandler';
 import IconLabelButton from '../@common/buttons/iconLabelButton/IconLabelButton';
 import ConfirmModal from './ConfirmModal';
 import * as S from './PhotoModal.styles';
+import { LoadingPhoto } from './PhotoModal.styles';
 
 // Guest mode props - previewData 사용
 interface GuestPhotoModalProps extends BaseModalProps {
@@ -174,13 +175,7 @@ const PhotoModal = (props: PhotoModalProps) => {
             onError={handleImageError}
           />
         ) : (
-          <div
-            style={{
-              width: '100%',
-              height: '100%',
-              backgroundColor: '#f0f0f0',
-            }}
-          />
+          <S.LoadingPhoto />
         )}
       </S.PhotoContainer>
       <S.ButtonContainer

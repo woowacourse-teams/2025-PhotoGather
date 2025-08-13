@@ -56,6 +56,12 @@ export const Photo = styled.img`
   }
 `;
 
+export const LoadingPhoto = styled.img`
+  width: 100%;
+  height: 100%;
+  background-color: ${({ theme }) => theme.colors.gray01};
+`;
+
 export const ButtonContainer = styled.div<{ $isManagerMode: boolean }>`
   display: flex;
   align-items: center;
