@@ -24,8 +24,10 @@ import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.Delete;
 import software.amazon.awssdk.services.s3.model.DeleteObjectsRequest;
+import software.amazon.awssdk.services.s3.model.DeleteObjectsResponse;
 import software.amazon.awssdk.services.s3.model.ObjectIdentifier;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
+import software.amazon.awssdk.services.s3.model.S3Error;
 import software.amazon.awssdk.transfer.s3.S3TransferManager;
 import software.amazon.awssdk.transfer.s3.model.CompletedFileDownload;
 import software.amazon.awssdk.transfer.s3.model.DownloadFileRequest;
@@ -40,6 +42,7 @@ public class AwsS3Cloud {
     private static final String MOBILE_THUMBNAIL_SIZE = "x800";
     private static final String DESKTOP_THUMBNAIL_SIZE = "x1080";
     private static final String THUMBNAIL_EXTENSION = "webp";
+    private static final int MAX_DELETE_COUNT = 1_000;
 
     private final S3Client s3Client;
     private final S3Properties s3Properties;
@@ -145,6 +148,21 @@ public class AwsS3Cloud {
     }
 
     private void deleteCloudContents(List<String> deletePaths) {
+        // S3Client#deleteObjects 의 최대 처리 가능 개수 1,000
+        for (int i = 0; i < deletePaths.size(); i += MAX_DELETE_COUNT) {
+            List<String> batch = deletePaths.subList(i, Math.min(i + MAX_DELETE_COUNT, deletePaths.size()));
+            DeleteObjectsResponse response = deleteContents(batch);
+            if (response.hasErrors()) {
+                retryDeleteContents(response);
+            }
+        }
+        logger.log()
+            .event("S3 삭제 완료")
+            .value("deletedSize", String.valueOf(deletePaths.size()))
+            .info();
+    }
+
+    private DeleteObjectsResponse deleteContents(List<String> deletePaths) {
         List<ObjectIdentifier> deleteObjects = deletePaths.stream()
             .map(path -> ObjectIdentifier.builder().key(path).build())
             .toList();
@@ -152,11 +170,24 @@ public class AwsS3Cloud {
             .bucket(s3Properties.getBucketName())
             .delete(Delete.builder().objects(deleteObjects).build())
             .build();
-        s3Client.deleteObjects(deleteRequest);
+        return s3Client.deleteObjects(deleteRequest);
+    }
 
-        logger.log()
-            .event("S3 삭제 완료")
-            .value("deletedSize", String.valueOf(deletePaths.size()))
-            .info();
+    private void retryDeleteContents(DeleteObjectsResponse response) {
+        List<String> retryPaths = extractFailedKeys(response);
+        DeleteObjectsResponse retryResponse = deleteContents(retryPaths);
+        if (retryResponse.hasErrors()) {
+            logger.log()
+                .event("S3 삭제 실패")
+                .value("deleteFailPath", extractFailedKeys(retryResponse).toString())
+                .info();
+        }
+    }
+
+    private List<String> extractFailedKeys(DeleteObjectsResponse response) {
+        return response.errors()
+            .stream()
+            .map(S3Error::key)
+            .toList();
     }
 }
