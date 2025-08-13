@@ -76,7 +76,7 @@ const usePhotosDelete = ({
         text: `${photoIds.length}개의 사진을 삭제했습니다.`,
         type: 'info',
       });
-      
+
       updatePhotos(extractUnselectedPhotos());
       await fetchPhotosList();
       return true;
