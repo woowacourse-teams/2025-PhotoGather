@@ -181,9 +181,6 @@ const SpaceHome = () => {
     },
   ];
 
-
-  const [isClicked, setIsClicked] = useState(false);
-
   const toggleShareModal = async () => {
     try {
       await overlay(
@@ -223,7 +220,6 @@ const SpaceHome = () => {
       console.error(`모달 실패 : ${error}`);
     }
   };
-
 
   return (
     <S.Wrapper>
