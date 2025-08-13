@@ -4,7 +4,7 @@ import { ROUTES } from '../../../constants/routes';
 import useCreateSpace from '../../../hooks/useCreateSpace';
 import type { FunnelElementProps } from '../../../types/funnel.type';
 import type { SpaceFunnelInfo } from '../../../types/space.type';
-import { calculateKSTDate } from '../../../utils/calculateKSTDate';
+import { calculateKstToday } from '../../../utils/calculateKstToday';
 import { delay } from '../../../utils/delay';
 import { parseIsoStringFromDateTime } from '../../../utils/parseIsoStringFromDateTime';
 import WaitPage from './waitPage/WaitPage';
@@ -18,7 +18,7 @@ interface FetchElementProps extends FunnelElementProps {
 const FetchElement = ({ spaceInfo }: FetchElementProps) => {
   const [status, setStatus] = useState<FetchStatus>('loading');
   const [spaceCode, setSpaceCode] = useState('');
-  const { kstDateString, kstTimeString } = calculateKSTDate();
+  const { kstDateString, kstTimeString } = calculateKstToday();
   const calculatedOpenedAt = spaceInfo.isImmediateOpen
     ? parseIsoStringFromDateTime(kstDateString, kstTimeString)
     : parseIsoStringFromDateTime(spaceInfo.date, spaceInfo.time);

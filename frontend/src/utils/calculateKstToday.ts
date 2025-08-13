@@ -1,4 +1,4 @@
-export const calculateKSTDate = () => {
+export const calculateKstToday = () => {
   const kstDate = new Date(Date.now() + 9 * 60 * 60 * 1000);
 
   const padZero = (num: number) => String(num).padStart(2, '0');

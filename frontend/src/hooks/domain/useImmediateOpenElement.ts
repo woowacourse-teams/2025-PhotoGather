@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { ERROR } from '../../constants/messages';
 import type { ImmediateOpenElementInitialValue } from '../../types/funnel.type';
-import { calculateKSTDate } from '../../utils/calculateKSTDate';
+import { calculateKstToday } from '../../utils/calculateKstToday';
 import { checkIsPastDateTime } from '../../utils/checkIsPastDateTime';
 import { useToast } from '../@common/useToast';
 
@@ -15,7 +15,7 @@ const useImmediateOpenElement = (
   );
   const isNoInput =
     isImmediateOpen === false && (date.length === 0 || time.length === 0);
-  const { kstDateString } = calculateKSTDate();
+  const { kstDateString } = calculateKstToday();
   const { showToast } = useToast();
 
   const handleTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
