@@ -1,5 +1,4 @@
 import rocketIcon from '@assets/images/rocket.png';
-import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ReactComponent as ArrowUpSvg } from '../../../@assets/icons/upwardArrow.svg';
 import FloatingActionButton from '../../../components/@common/buttons/floatingActionButton/FloatingActionButton';
@@ -30,11 +29,11 @@ import * as S from './ImageUploadPage.styles';
 const ImageUploadPage = () => {
   const { spaceId } = useSpaceCodeFromPath();
   const { spaceInfo } = useSpaceInfo(spaceId ?? '');
-  const isEarlyTime = checkIsEarlyDate((spaceInfo?.openedAt as string) ?? '');
+  const isEarlyTime =
+    spaceInfo?.openedAt && checkIsEarlyDate(spaceInfo.openedAt);
   const isSpaceExpired = spaceInfo?.isExpired;
   // TODO: NoData 시 표시할 Layout 필요
   const _isNoData = !spaceInfo;
-  const [isClicked, setIsClicked] = useState(false);
 
   const spaceName = spaceInfo?.name ?? '';
   const { showToast } = useToast();
@@ -117,18 +116,7 @@ const ImageUploadPage = () => {
 
   return (
     <S.Wrapper $hasImages={hasImages}>
-      {isEarlyTime && !isClicked && (
-        <>
-          <EarlyPage openedAt={spaceInfo?.openedAt ?? ''} />
-          <button
-            style={{ zIndex: 10000 }}
-            type="button"
-            onClick={() => setIsClicked((prev) => !prev)}
-          >
-            닫기
-          </button>
-        </>
-      )}
+      {isEarlyTime && <EarlyPage openedAt={spaceInfo.openedAt} />}
       {isSpaceExpired && <ExpiredPage />}
       {isUploading && (
         <LoadingLayout loadingContents={loadingContents} percentage={0} />

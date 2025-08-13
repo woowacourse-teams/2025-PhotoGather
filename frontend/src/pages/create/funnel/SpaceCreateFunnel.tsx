@@ -4,19 +4,19 @@ import ProgressBar from '../../../components/progressBar/ProgressBar';
 import useFunnelHistory from '../../../hooks/useFunnelHistory';
 import type { SpaceFunnelInfo } from '../../../types/space.type';
 import CheckSpaceInfoElement from '../funnelElements/CheckSpaceInfoElement';
-import DateInputElement from '../funnelElements/DateInputElement';
 import FetchElement from '../funnelElements/FetchElement';
+import ImmediateOpenElement from '../funnelElements/immediateOpenElement/ImmediateOpenElement';
 import NameInputElement from '../funnelElements/NameInputElement';
-import TimeInputElement from '../funnelElements/TimeInputElement';
 import * as S from './SpaceCreateFunnel.styles';
 
-const PROGRESS_STEP_LIST = ['name', 'date', 'time', 'check'] as const;
+const PROGRESS_STEP_LIST = ['name', 'date', 'check'] as const;
 const STEP_LIST = [...PROGRESS_STEP_LIST, 'complete', 'fetch'] as const;
 type STEP = (typeof STEP_LIST)[number];
-const initialFunnelValue = {
+const initialFunnelValue: SpaceFunnelInfo = {
   name: '',
   date: '',
   time: '',
+  isImmediateOpen: null,
 };
 
 const SpaceCreateFunnel = () => {
@@ -62,22 +62,21 @@ const SpaceCreateFunnel = () => {
           />
         )}
         {step === 'date' && (
-          <DateInputElement
-            onNext={(date) => {
-              goNextStep('time');
-              setSpaceInfo((prev) => ({ ...prev, date }));
-            }}
-            initialValue={spaceInfo.date}
-          />
-        )}
-        {step === 'time' && (
-          <TimeInputElement
-            date={spaceInfo.date}
-            onNext={(time) => {
+          <ImmediateOpenElement
+            onNext={({ date, time, isImmediateOpen }) => {
               goNextStep('check');
-              setSpaceInfo((prev) => ({ ...prev, time }));
+              setSpaceInfo((prev) => ({
+                ...prev,
+                date,
+                time,
+                isImmediateOpen: isImmediateOpen ?? false,
+              }));
             }}
-            initialValue={spaceInfo.time}
+            initialValue={{
+              date: spaceInfo.date,
+              time: spaceInfo.time,
+              isImmediateOpen: spaceInfo.isImmediateOpen,
+            }}
           />
         )}
         {step === 'check' && (
