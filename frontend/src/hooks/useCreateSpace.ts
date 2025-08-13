@@ -20,9 +20,7 @@ const useCreateSpace = () => {
 
   const fetchCreateSpace = async (spaceCreateInfo: SpaceCreateInfo) => {
     const taskResult = await tryTask<string | undefined>({
-      task: async () => {
-        return await requestSpaceCode(spaceCreateInfo);
-      },
+      task: async () => requestSpaceCode(spaceCreateInfo),
       errorActions: ['toast'],
       context: {
         toast: {
@@ -30,6 +28,7 @@ const useCreateSpace = () => {
         },
       },
       onFinally: () => setIsCreating(false),
+      shouldLogToSentry: true,
     });
 
     return taskResult.data;

@@ -83,11 +83,11 @@ const PhotoModal = (props: PhotoModalProps) => {
       onFinally: () => {
         setIsLoading(false);
       },
+      shouldLogToSentry: true,
     });
   };
 
   const guestModeDelete = async () => {
-    console.log('guestModeDelete');
     // TODO : 모달을 종류별로 분리 및 아래 if 분기점 삭제
     if (!props.onDelete) return;
     if (!('previewFile' in props)) return;
@@ -109,7 +109,6 @@ const PhotoModal = (props: PhotoModalProps) => {
   };
 
   const managerModeDelete = async () => {
-    console.log('managerModeDelete');
     if (!props.onDelete) return;
     if (!('photoId' in props)) return;
     props.onDelete(props.photoId);

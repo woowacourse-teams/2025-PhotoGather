@@ -117,6 +117,7 @@ const useFileUpload = ({
         clearFiles();
         setIsUploading(false);
       },
+      shouldLogToSentry: true,
     });
   };
 

@@ -80,6 +80,7 @@ const usePhotosDelete = ({
       onFinally: () => {
         setIsDeleting(false);
       },
+      shouldLogToSentry: true,
     });
   };
 
@@ -113,6 +114,7 @@ const usePhotosDelete = ({
       onFinally: () => {
         setIsDeleting(false);
       },
+      shouldLogToSentry: true,
     });
 
     return true;

@@ -1,3 +1,4 @@
+import * as Sentry from '@sentry/react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import type { TryTaskResultType } from '../../types/common.type';
@@ -12,7 +13,6 @@ interface ErrorRequiredProps {
   toast?: ToastOptions;
   afterAction?: AfterAction;
   redirect?: RedirectPath;
-  // TODO : 센트리 기록 여부 받을 것
 }
 
 const useError = () => {
@@ -42,6 +42,7 @@ const useError = () => {
     errorActions: ErrorType[];
     context?: ErrorRequiredProps;
     onFinally?: () => void;
+    shouldLogToSentry?: boolean;
   }
 
   const tryTask = async <T>({
@@ -49,15 +50,20 @@ const useError = () => {
     errorActions,
     context,
     onFinally,
+    shouldLogToSentry = false,
   }: TryTaskProps<T>): Promise<TryTaskResultType<T>> => {
     try {
       setIsError(false);
       const data = await Promise.resolve(task());
       return { success: true, data };
     } catch (e) {
+      if (shouldLogToSentry) {
+        Sentry.captureException(e);
+      }
       setIsError(true);
       const error = e instanceof Error ? e : new Error(String(e));
       matchingErrorHandler(errorActions, context, error);
+
       return { success: false, data: null };
     } finally {
       onFinally?.();

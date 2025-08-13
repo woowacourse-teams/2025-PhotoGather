@@ -36,21 +36,18 @@ const useDownload = ({
 
   const selectDownload = async (photoIds: number[]) => {
     const taskResult = await tryTask({
-      task: () => {
-        return checkSelectedPhotoExist(photoIds);
-      },
+      task: () => checkSelectedPhotoExist(photoIds),
       errorActions: ['toast'],
     });
     if (!taskResult.success) return;
 
     await tryTask({
-      task: async () => {
-        await handleDownload(() =>
+      task: async () =>
+        await safeApiCall(() =>
           photoService.downloadPhotos(spaceCode, {
             photoIds: photoIds,
           }),
-        );
-      },
+        ),
       errorActions: ['toast', 'console'],
       context: {
         toast: {
@@ -58,6 +55,7 @@ const useDownload = ({
           type: 'error',
         },
       },
+      shouldLogToSentry: true,
     });
   };
 
@@ -77,6 +75,7 @@ const useDownload = ({
       onFinally: () => {
         setIsDownloading(false);
       },
+      shouldLogToSentry: true,
     });
   };
 
@@ -94,6 +93,7 @@ const useDownload = ({
         onDownloadSuccess?.();
       },
       errorActions: ['console'],
+      shouldLogToSentry: true,
     });
   };
   return { isDownloading, downloadAll, selectDownload };
