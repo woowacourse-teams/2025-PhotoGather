@@ -1,15 +1,15 @@
 import { useCallback, useEffect, useState } from 'react';
-import { photoService } from '../../apis/services/photo.service';
-import { DEBUG_MESSAGES } from '../../constants/debugMessages';
-import { NETWORK_ERROR } from '../../constants/errors';
-import { useOverlay } from '../../contexts/OverlayProvider';
-import useApiCall from '../../hooks/@common/useApiCall';
-import type { PreviewFile } from '../../types/file.type';
-import type { BaseModalProps } from '../../types/modal.type';
-import type { Photo } from '../../types/photo.type';
-import { buildOriginalImageUrl } from '../../utils/buildImageUrl';
-import IconLabelButton from '../@common/buttons/iconLabelButton/IconLabelButton';
-import ConfirmModal from './ConfirmModal';
+import { photoService } from '../../../apis/services/photo.service';
+import { DEBUG_MESSAGES } from '../../../constants/debugMessages';
+import { NETWORK_ERROR } from '../../../constants/errors';
+import { useOverlay } from '../../../contexts/OverlayProvider';
+import useApiCall from '../../../hooks/@common/useApiCall';
+import type { PreviewFile } from '../../../types/file.type';
+import type { BaseModalProps } from '../../../types/modal.type';
+import type { Photo } from '../../../types/photo.type';
+import { buildOriginalImageUrl } from '../../../utils/buildImageUrl';
+import IconLabelButton from '../buttons/iconLabelButton/IconLabelButton';
+import ConfirmModal from '../modal/confirmModal/ConfirmModal';
 import * as S from './PhotoModal.styles';
 
 // Guest mode props - previewData 사용
@@ -90,7 +90,7 @@ const PhotoModal = (props: PhotoModalProps) => {
         if (data.path) {
           const fileName = data.path;
           if (fileName) {
-            imageUrl = buildOriginalImageUrl(managerSpaceCode, fileName);
+            imageUrl = buildOriginalImageUrl(fileName);
             console.log('🔨 Built image URL:', {
               originalPath: data.path,
               parsedFileName: fileName,

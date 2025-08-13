@@ -23,6 +23,8 @@ const LeftTimeInformationBox = ({
   leftTime,
   openDate,
 }: LeftTimeInformationBoxProps) => {
+  const hasNoLeftTime = leftTime === '00:00:00';
+
   return (
     <S.Wrapper>
       <S.Title>{title}</S.Title>
@@ -31,12 +33,21 @@ const LeftTimeInformationBox = ({
         <S.TopLeftTime>{leftTime}</S.TopLeftTime>
       </S.TopDescriptionContainer>
       <S.Icon src={loadingImage} alt="loading" />
-      <HighlightText
-        text={`${openDate.date}\n${openDate.time}에 열릴 예정이에요`}
-        highlightTextArray={[openDate.date, openDate.time]}
-        highlightColorStyle="primary"
-        fontStyle="bodyLarge"
-      />
+      {hasNoLeftTime ? (
+        <HighlightText
+          text={`지금 당장\n열릴 예정이에요`}
+          highlightTextArray={['지금 당장']}
+          highlightColorStyle="primary"
+          fontStyle="bodyLarge"
+        />
+      ) : (
+        <HighlightText
+          text={`${openDate.date}\n${openDate.time}에 열릴 예정이에요`}
+          highlightTextArray={[openDate.date, openDate.time]}
+          highlightColorStyle="primary"
+          fontStyle="bodyLarge"
+        />
+      )}
     </S.Wrapper>
   );
 };

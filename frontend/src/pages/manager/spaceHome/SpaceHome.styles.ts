@@ -110,3 +110,8 @@ export const LoadingSpinnerContainer = styled.div`
   transform: translate(-50%, -50%);
   z-index: ${({ theme }) => theme.zIndex.loadingSpinner};
 `;
+
+export const ModalContentContainer = styled.div`
+  display: flex;
+  gap: 24px;
+`;

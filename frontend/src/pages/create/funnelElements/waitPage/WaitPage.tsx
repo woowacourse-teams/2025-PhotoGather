@@ -23,12 +23,21 @@ const WaitPage = ({ spaceInfo }: WaitPageProps) => {
       <S.InfoContainer>
         <S.InfoTitle>{spaceInfo.name}</S.InfoTitle>
         <S.InfoDescription>{date}</S.InfoDescription>
-        <HighlightText
-          fontStyle="bodyLarge"
-          highlightColorStyle="primary"
-          text={`${time} 오픈`}
-          highlightTextArray={[time]}
-        />
+        {spaceInfo.isImmediateOpen ? (
+          <HighlightText
+            fontStyle="bodyLarge"
+            highlightColorStyle="primary"
+            text={`지금 당장 오픈`}
+            highlightTextArray={['지금 당장']}
+          />
+        ) : (
+          <HighlightText
+            fontStyle="bodyLarge"
+            highlightColorStyle="primary"
+            text={`${time} 오픈`}
+            highlightTextArray={[time]}
+          />
+        )}
       </S.InfoContainer>
     </S.Wrapper>
   );

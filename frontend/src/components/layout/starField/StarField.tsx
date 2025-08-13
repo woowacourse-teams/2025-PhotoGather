@@ -19,17 +19,21 @@ const stars = [
 export const StarField = () => {
   return (
     <S.Wrapper>
-      {stars.map((star, index) => (
-        <S.StarContainer
-          // biome-ignore lint/suspicious/noArrayIndexKey: false positive
-          key={index}
-          top={star.top}
-          left={star.left}
-          size={star.size}
-          delay={star.delay}
-          star={index % 2 === 0 ? 'filled' : 'outlined'}
-        />
-      ))}
+      <S.CenterClip>
+        <S.Canvas>
+          {stars.map((star, index) => (
+            <S.StarContainer
+              // biome-ignore lint/suspicious/noArrayIndexKey: false positive
+              key={index}
+              top={star.top}
+              left={star.left}
+              size={star.size}
+              delay={star.delay}
+              star={index % 2 === 0 ? 'filled' : 'outlined'}
+            />
+          ))}
+        </S.Canvas>
+      </S.CenterClip>
     </S.Wrapper>
   );
 };

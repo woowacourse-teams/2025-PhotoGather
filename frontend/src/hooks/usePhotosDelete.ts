@@ -1,7 +1,7 @@
 // import { photoService } from '../apis/services/photo.service';
 import React, { useState } from 'react';
 import { photoService } from '../apis/services/photo.service';
-import ConfirmModal from '../components/modal/ConfirmModal';
+import ConfirmModal from '../components/@common/modal/confirmModal/ConfirmModal';
 import { useOverlay } from '../contexts/OverlayProvider';
 import type { Photo } from '../types/photo.type';
 import { checkSelectedPhotoExist } from '../validators/photo.validator';

@@ -1,5 +1,7 @@
+import { ReactComponent as LinkIcon } from '@assets/icons/link.svg';
+import { ReactComponent as ShareIcon } from '@assets/icons/share.svg';
 import rocketIcon from '@assets/images/rocket.png';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ReactComponent as SaveIcon } from '../../../@assets/icons/download.svg';
 import { ReactComponent as SettingSvg } from '../../../@assets/icons/setting.svg';
@@ -7,10 +9,12 @@ import { ReactComponent as ArrowUpSvg } from '../../../@assets/icons/upwardArrow
 import { photoService } from '../../../apis/services/photo.service';
 import FloatingActionButton from '../../../components/@common/buttons/floatingActionButton/FloatingActionButton';
 import FloatingIconButton from '../../../components/@common/buttons/floatingIconButton/FloatingIconButton';
+import IconLabelButton from '../../../components/@common/buttons/iconLabelButton/IconLabelButton';
 import SpaceManagerImageGrid from '../../../components/@common/imageLayout/imageGrid/spaceManagerImageGrid/SpaceManagerImageGrid';
+import BaseModal from '../../../components/@common/modal/baseModal/BaseModal';
+import PhotoModal from '../../../components/@common/modal/PhotoModal';
 import SpaceHeader from '../../../components/header/spaceHeader/SpaceHeader';
 import LoadingLayout from '../../../components/layout/loadingLayout/LoadingLayout';
-import PhotoModal from '../../../components/modal/PhotoModal';
 import PhotoSelectionToolBar from '../../../components/photoSelectionToolBar/PhotoSelectionToolBar';
 import SpaceHomeTopActionBar from '../../../components/spaceHomeTopActionBar/SpaceHomeTopActionBar';
 import { INFORMATION } from '../../../constants/messages';
@@ -28,6 +32,9 @@ import useSpaceInfo from '../../../hooks/useSpaceInfo';
 import { ScrollableBlurArea } from '../../../styles/@common/ScrollableBlurArea';
 import { theme } from '../../../styles/theme';
 import { checkIsEarlyDate } from '../../../utils/checkIsEarlyTime';
+import { copyLinkToClipboard } from '../../../utils/copyLinkToClipboard';
+import { createShareUrl, createSpaceUrl } from '../../../utils/createSpaceUrl';
+import { track } from '../../../utils/googleAnalytics/track';
 import { goToTop } from '../../../utils/goToTop';
 import EarlyPage from '../../status/earlyPage/EarlyPage';
 import ExpiredPage from '../../status/expiredPage/ExpiredPage';
@@ -36,7 +43,9 @@ import * as S from './SpaceHome.styles';
 const SpaceHome = () => {
   const { spaceCode } = useSpaceCodeFromPath();
   const { spaceInfo } = useSpaceInfo(spaceCode ?? '');
-  const isEarlyTime = checkIsEarlyDate((spaceInfo?.openedAt as string) ?? '');
+  const isEarlyTime =
+    spaceInfo?.openedAt && checkIsEarlyDate(spaceInfo.openedAt);
+
   // TODO: NoData 시 표시할 Layout 필요
   const _isNoData = !spaceInfo;
   const isSpaceExpired = spaceInfo?.isExpired;
@@ -112,6 +121,7 @@ const SpaceHome = () => {
       showToast({
         text: '사진을 삭제했습니다.',
         type: 'info',
+        position: 'top',
       });
       const updatedPhotos =
         photosList?.filter((photo) => photo.id !== photoId) || [];
@@ -120,6 +130,7 @@ const SpaceHome = () => {
       showToast({
         text: '삭제에 실패했습니다. 다시 시도해 주세요.',
         type: 'error',
+        position: 'top',
       });
       console.error('삭제 실패:', error);
     }
@@ -134,8 +145,20 @@ const SpaceHome = () => {
         uploaderName="익명의 우주여행자"
         onDownload={() => {
           selectDownload([photoId]);
+          track.button('single_download_button', {
+            page: 'space_home',
+            section: 'photo_modal',
+            action: 'download_single',
+          });
         }}
-        onDelete={handleSinglePhotoDelete}
+        onDelete={() => {
+          handleSinglePhotoDelete(photoId);
+          track.button('single_delete_button', {
+            page: 'space_home',
+            section: 'photo_modal',
+            action: 'delete_single',
+          });
+        }}
       />,
       {
         clickOverlayClose: true,
@@ -170,23 +193,50 @@ const SpaceHome = () => {
     },
   ];
 
-  const [isClicked, setIsClicked] = useState(false);
+  const toggleShareModal = async () => {
+    try {
+      await overlay(
+        <BaseModal>
+          <S.ModalContentContainer>
+            <IconLabelButton
+              icon={<LinkIcon fill={theme.colors.white} width="20px" />}
+              onClick={() => {
+                copyLinkToClipboard(createShareUrl(spaceCode ?? ''));
+                showToast({
+                  text: '링크가 복사되었습니다.',
+                  type: 'info',
+                  position: 'top',
+                });
+              }}
+              label="업로드 링크"
+            />
+            <IconLabelButton
+              icon={<LinkIcon fill={theme.colors.white} width="20px" />}
+              onClick={() => {
+                copyLinkToClipboard(createSpaceUrl(spaceCode ?? ''));
+                showToast({
+                  text: '링크가 복사되었습니다.',
+                  type: 'info',
+                  position: 'top',
+                });
+              }}
+              label="스페이스 링크"
+            />
+          </S.ModalContentContainer>
+        </BaseModal>,
+        {
+          clickOverlayClose: true,
+        },
+      );
+    } catch (error) {
+      console.error(`모달 실패 : ${error}`);
+    }
+  };
 
   return (
     <S.Wrapper>
       {/* TODO: 버튼 지우기 */}
-      {isEarlyTime && !isClicked && (
-        <>
-          <EarlyPage openedAt={spaceInfo?.openedAt ?? ''} />
-          <button
-            style={{ zIndex: 10000 }}
-            type="button"
-            onClick={() => setIsClicked((prev) => !prev)}
-          >
-            닫기
-          </button>
-        </>
-      )}
+      {isEarlyTime && <EarlyPage openedAt={spaceInfo.openedAt} />}
       {(isDownloading || isDeleting) && (
         <LoadingLayout loadingContents={loadingContents} percentage={0} />
       )}
@@ -195,13 +245,18 @@ const SpaceHome = () => {
         <SpaceHeader
           title={spaceName}
           timer={leftTime}
-          icon={
-            <SettingSvg
-              fill={theme.colors.primary20}
-              width="24px"
-              height="24px"
-            />
-          }
+          icons={[
+            {
+              element: <SettingSvg fill={theme.colors.white} width="20px" />,
+              onClick: () => {},
+              label: '설정',
+            },
+            {
+              element: <ShareIcon fill={theme.colors.white} width="20px" />,
+              onClick: toggleShareModal,
+              label: '공유',
+            },
+          ]}
         />
       </S.InfoContainer>
 
@@ -230,7 +285,14 @@ const SpaceHome = () => {
                 <FloatingActionButton
                   label="모두 저장하기"
                   icon={<SaveIcon fill={theme.colors.gray06} />}
-                  onClick={downloadAll}
+                  onClick={() => {
+                    downloadAll();
+                    track.button('all_download_button', {
+                      page: 'space_home',
+                      section: 'space_home',
+                      action: 'download_all',
+                    });
+                  }}
                   disabled={isDownloading}
                 />
               </S.DownloadButtonContainer>
