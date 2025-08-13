@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { spaceService } from '../apis/services/space.service';
 import type { Space } from '../types/space.type';
-import { validateDataExist } from '../validators/data.validator';
 import useApiCall from './@common/useApiCall';
 import useError from './@common/useError';
 
@@ -16,7 +15,7 @@ const useSpaceInfo = (spaceCode: string) => {
     const response = await safeApiCall(() =>
       spaceService.getInfoByCode(spaceCode),
     );
-    validateDataExist(response);
+    if (!response) return;
     setSpaceInfo(response.data);
   };
 

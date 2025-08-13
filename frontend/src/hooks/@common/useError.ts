@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import type { TryTaskResultType } from '../../types/common.type';
 import type { ToastBase } from '../../types/toast.type';
 import { useToast } from './useToast';
 
@@ -48,17 +49,16 @@ const useError = () => {
     errorActions,
     context,
     onFinally,
-  }: TryTaskProps<T>) => {
+  }: TryTaskProps<T>): Promise<TryTaskResultType<T>> => {
     try {
       setIsError(false);
       const data = await Promise.resolve(task());
-      console.log(data);
       return { success: true, data };
     } catch (e) {
       setIsError(true);
       const error = e instanceof Error ? e : new Error(String(e));
       matchingErrorHandler(errorActions, context, error);
-      return { success: false };
+      return { success: false, data: null };
     } finally {
       onFinally?.();
     }

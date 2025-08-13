@@ -1,18 +1,21 @@
 import { useState } from 'react';
 import { spaceService } from '../apis/services/space.service';
 import type { SpaceCreateInfo } from '../types/space.type';
-import { validateDataExist } from '../validators/data.validator';
+import useApiCall from './@common/useApiCall';
 import useError from './@common/useError';
 
 const useCreateSpace = () => {
   const [isCreating, setIsCreating] = useState(false);
   const { tryTask } = useError();
+  const { safeApiCall } = useApiCall();
 
   const requestSpaceCode = async (spaceCreateInfo: SpaceCreateInfo) => {
     setIsCreating(true);
-    const response = await spaceService.create(spaceCreateInfo);
-    validateDataExist(response);
-    return response.data?.spaceCode;
+    const response = await safeApiCall(() =>
+      spaceService.create(spaceCreateInfo),
+    );
+    if (!response || !response.data) return;
+    return response.data.spaceCode;
   };
 
   const fetchCreateSpace = async (spaceCreateInfo: SpaceCreateInfo) => {
@@ -28,8 +31,6 @@ const useCreateSpace = () => {
       },
       onFinally: () => setIsCreating(false),
     });
-
-    console.log(taskResult);
 
     return taskResult.data;
   };

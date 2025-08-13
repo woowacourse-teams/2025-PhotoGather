@@ -1,10 +1,8 @@
 import { useMemo, useRef, useState } from 'react';
 import { photoService } from '../apis/services/photo.service';
-import type { PhotoListResponse } from '../types/api.type';
 import type { Photo } from '../types/photo.type';
 import { buildThumbnailUrl } from '../utils/buildImageUrl';
 import { parsedImagePath } from '../utils/parsedImagePath';
-import { validateDataExist } from '../validators/data.validator';
 import useApiCall from './@common/useApiCall';
 import useError from './@common/useError';
 
@@ -65,9 +63,9 @@ const usePhotosBySpaceCode = ({
         size: PAGE_SIZE,
       }),
     );
-    validateDataExist<PhotoListResponse>(response);
+    if (!response || !response.data) return;
     currentPage.current += 1;
-    if (!response.data) return;
+
     const { photos, totalPages } = response.data;
     appendPhotosList(photos, totalPages);
     requestAnimationFrame(() => {

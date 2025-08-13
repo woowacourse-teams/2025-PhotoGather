@@ -66,6 +66,7 @@ const PhotoModal = (props: PhotoModalProps) => {
 
       console.log('📡 API Response:', response);
 
+      if (!response) return;
       if (response.success && response.data) {
         const data = response.data;
         console.log('📸 Photo data:', {

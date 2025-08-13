@@ -1,34 +1,44 @@
-import { useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { NETWORK_ERROR } from '../../constants/errors';
 import { ROUTES } from '../../constants/routes';
 import type { ApiResponse } from '../../types/api.type';
+import {
+  validateNetworkError,
+  validateResponseExist,
+} from '../../validators/fetch.validator';
+import useError from './useError';
 
+// TODO : 훅 명칭 변경
 const useApiCall = () => {
-  const navigate = useNavigate();
+  const { tryTask } = useError();
 
-  const safeApiCall = useCallback(
-    async <T>(apiCall: () => Promise<ApiResponse<T>>) => {
-      try {
-        const response = await apiCall();
+  const fetchAndValidate = async <T>(
+    apiCall: () => Promise<ApiResponse<T>>,
+  ): Promise<ApiResponse<T>> => {
+    const response = await apiCall();
+    validateNetworkError(response);
+    validateResponseExist(response);
+    return response;
+  };
 
-        if (
-          !response.success &&
-          response.error
-            ?.toLowerCase()
-            .includes(NETWORK_ERROR.DEFAULT.toLowerCase())
-        ) {
-          navigate(ROUTES.ERROR.NETWORK);
-        }
+  const safeApiCall = async <T>(
+    apiCall: () => Promise<ApiResponse<T>>,
+  ): Promise<ApiResponse<T> | null> => {
+    const taskResult = await tryTask<ApiResponse<T>>({
+      task: async () => {
+        return await fetchAndValidate(apiCall);
+      },
+      errorActions: ['redirect'],
+      context: {
+        redirect: ROUTES.ERROR.NETWORK,
+        // TODO : 토스트도 같이 띄울지 논의 필요
+        toast: {
+          text: NETWORK_ERROR.DEFAULT,
+        },
+      },
+    });
 
-        return response;
-      } catch (error) {
-        navigate(ROUTES.ERROR.NETWORK);
-        throw error;
-      }
-    },
-    [navigate],
-  );
+    return taskResult.data;
+  };
 
   return { safeApiCall };
 };

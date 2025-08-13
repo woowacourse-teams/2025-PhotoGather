@@ -90,7 +90,7 @@ const useDownload = ({
     fetchFunction: () => Promise<ApiResponse<unknown>>,
   ) => {
     const response = await safeApiCall(fetchFunction);
-
+    if (!response) return;
     const blob = response.data;
 
     tryTask({
