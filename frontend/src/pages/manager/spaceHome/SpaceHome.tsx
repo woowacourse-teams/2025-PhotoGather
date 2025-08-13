@@ -110,13 +110,16 @@ const SpaceHome = () => {
             action: 'download_single',
           });
         }}
-        onDelete={() => {
-          deleteSinglePhoto(photoId);
-          track.button('single_delete_button', {
-            page: 'space_home',
-            section: 'photo_modal',
-            action: 'delete_single',
-          });
+        onDelete={async () => {
+          const result = await deleteSinglePhoto(photoId);
+          if (result) {
+            track.button('single_delete_button', {
+              page: 'space_home',
+              section: 'photo_modal',
+              action: 'delete_single',
+            });
+          }
+          return result;
         }}
       />,
       {
