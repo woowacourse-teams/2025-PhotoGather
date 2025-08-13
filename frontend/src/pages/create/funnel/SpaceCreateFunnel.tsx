@@ -1,6 +1,7 @@
 import diamondImage from '@assets/images/diamond.png';
 import { useState } from 'react';
 import ProgressBar from '../../../components/progressBar/ProgressBar';
+import useConfirmBeforeRefresh from '../../../hooks/@common/useConfirmBeforeRefresh';
 import useFunnelHistory from '../../../hooks/useFunnelHistory';
 import type { SpaceFunnelInfo } from '../../../types/space.type';
 import CheckSpaceInfoElement from '../funnelElements/CheckSpaceInfoElement';
@@ -20,6 +21,7 @@ const initialFunnelValue: SpaceFunnelInfo = {
 };
 
 const SpaceCreateFunnel = () => {
+  useConfirmBeforeRefresh();
   const [step, setStep] = useState<STEP>('name');
   const [spaceInfo, setSpaceInfo] =
     useState<SpaceFunnelInfo>(initialFunnelValue);
