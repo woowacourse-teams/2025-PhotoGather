@@ -5,7 +5,6 @@ import { useEffect } from 'react';
 import { ReactComponent as SaveIcon } from '../../../@assets/icons/download.svg';
 import { ReactComponent as SettingSvg } from '../../../@assets/icons/setting.svg';
 import { ReactComponent as ArrowUpSvg } from '../../../@assets/icons/upwardArrow.svg';
-import { photoService } from '../../../apis/services/photo.service';
 import FloatingActionButton from '../../../components/@common/buttons/floatingActionButton/FloatingActionButton';
 import FloatingIconButton from '../../../components/@common/buttons/floatingIconButton/FloatingIconButton';
 import IconLabelButton from '../../../components/@common/buttons/iconLabelButton/IconLabelButton';
@@ -93,36 +92,15 @@ const SpaceHome = () => {
     toggleAllSelected,
   } = usePhotoSelect({ photosList: photosList ?? [] });
 
-  const { submitDeletePhotos, isDeleting } = usePhotosDelete({
-    spaceCode: spaceCode ?? '',
-    toggleSelectMode,
-    updatePhotos,
-    fetchPhotosList,
-    extractUnselectedPhotos,
-  });
-
-  const handleSinglePhotoDelete = async (photoId: number) => {
-    try {
-      await photoService.deletePhotos(spaceCode ?? '', {
-        photoIds: [photoId],
-      });
-      showToast({
-        text: '사진을 삭제했습니다.',
-        type: 'info',
-        position: 'top',
-      });
-      const updatedPhotos =
-        photosList?.filter((photo) => photo.id !== photoId) || [];
-      updatePhotos(updatedPhotos);
-    } catch (error) {
-      showToast({
-        text: '삭제에 실패했습니다. 다시 시도해 주세요.',
-        type: 'error',
-        position: 'top',
-      });
-      console.error('삭제 실패:', error);
-    }
-  };
+  const { deleteSelectedPhotos, deleteSinglePhoto, isDeleting } =
+    usePhotosDelete({
+      spaceCode: spaceCode ?? '',
+      toggleSelectMode,
+      updatePhotos,
+      fetchPhotosList,
+      extractUnselectedPhotos,
+      photosList,
+    });
 
   const openPhotoModal = async (photoId: number) => {
     await overlay(
@@ -139,13 +117,16 @@ const SpaceHome = () => {
             action: 'download_single',
           });
         }}
-        onDelete={() => {
-          handleSinglePhotoDelete(photoId);
-          track.button('single_delete_button', {
-            page: 'space_home',
-            section: 'photo_modal',
-            action: 'delete_single',
-          });
+        onDelete={async () => {
+          const result = await deleteSinglePhoto(photoId);
+          if (result) {
+            track.button('single_delete_button', {
+              page: 'space_home',
+              section: 'photo_modal',
+              action: 'delete_single',
+            });
+          }
+          return result;
         }}
       />,
       {
@@ -236,7 +217,13 @@ const SpaceHome = () => {
           icons={[
             {
               element: <SettingSvg fill={theme.colors.white} width="20px" />,
-              onClick: () => {},
+              onClick: () => {
+                track.button('space_setting_button', {
+                  page: 'space_home',
+                  section: 'space_home_header',
+                  action: 'open_setting',
+                });
+              },
               label: '설정',
             },
             {
@@ -296,7 +283,7 @@ const SpaceHome = () => {
               {isSelectMode && (
                 <PhotoSelectionToolBar
                   selectedCount={selectedPhotosCount}
-                  onDelete={() => submitDeletePhotos(selectedPhotoIds)}
+                  onDelete={() => deleteSelectedPhotos(selectedPhotoIds)}
                   onDownload={() => selectDownload(selectedPhotoIds)}
                 />
               )}
