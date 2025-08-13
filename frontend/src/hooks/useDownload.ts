@@ -86,8 +86,10 @@ const useDownload = ({
     }
   };
 
+  // TODO :navigate 로직 외부로 
   const handleDownload = async (
     fetchFunction: () => Promise<ApiResponse<unknown>>,
+    shouldNavigate = false,
   ) => {
     const response = await safeApiCall(fetchFunction);
     if (!response) return;
@@ -101,6 +103,7 @@ const useDownload = ({
       },
       errorActions: ['console'],
     });
+
   };
   return { isDownloading, downloadAll, selectDownload };
 };

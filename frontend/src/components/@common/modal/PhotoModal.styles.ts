@@ -1,7 +1,6 @@
 import { ReactComponent as SaveIcon } from '@assets/icons/download.svg';
 import { ReactComponent as TrashCanIcon } from '@assets/icons/trash-can.svg';
 import styled from '@emotion/styled';
-import { glow } from '../../../animations/glow';
 import { theme } from '../../../styles/theme';
 import { hexToRgba } from '../../../utils/hexToRgba';
 
@@ -10,7 +9,10 @@ export const Wrapper = styled.div`
   flex-direction: column;
   align-items: center;
   gap: 20px;
-  max-width: 380px;
+  width: 100%;
+  max-width: min(calc(100vw - 32px), calc(${({ theme }) => theme.layout.width} - 32px));
+  max-height: 80vh;
+  overflow: hidden;
 `;
 
 export const FromContainer = styled.div`
@@ -30,46 +32,38 @@ export const FromMessage = styled.span`
 
 export const PhotoContainer = styled.div`
   display: flex;
-  flex-direction: row;
   justify-content: center;
   align-items: center;
-  width: 100%;
-  min-width: 240px;
-  min-height: 330px;
-  aspect-ratio: 1;
-  object-fit: contain;
+  width: auto;
+  height: 320px;
+  background: ${hexToRgba(theme.colors.gray03, 0.3)};
+  backdrop-filter: blur(4px);
+  overflow: hidden;
 `;
 
 export const Photo = styled.img`
-  display: block;
-  min-width: 100px;
-  min-height: 100px;
-  max-width: 100%;
-  max-height: 100%;
   width: auto;
-  height: auto;
+  height: 320px;
+  max-width: min(100%, 320px);
+  max-height: min(100%, 320px);
+  aspect-ratio: 1;
   object-fit: contain;
-  background: linear-gradient(
-    150deg,
-    ${({ theme }) => theme.colors.gray06} 40%,
-    ${({ theme }) => theme.colors.gray05} 50%,
-    ${({ theme }) => theme.colors.gray06} 60%
-  );
-  background-size: 300%;
-  animation: ${glow} 3s infinite linear;
   -webkit-user-drag: none;
-  -khtml-user-drag: none;
-  -moz-user-drag: none;
-  -o-user-drag: none;
-  overflow: hidden;
+  touch-action: pinch-zoom;
+  -webkit-touch-callout: none;
   &:active {
     opacity: 0.9;
   }
 `;
 
+export const LoadingPhoto = styled.img`
+  width: 100%;
+  height: 100%;
+  background-color: ${({ theme }) => theme.colors.gray01};
+`;
+
 export const ButtonContainer = styled.div<{ $isManagerMode: boolean }>`
   display: flex;
-  flex-direction: row;
   align-items: center;
   width: 106px;
   height: auto;

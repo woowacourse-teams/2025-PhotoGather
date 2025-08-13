@@ -26,3 +26,7 @@ export interface PhotoListResponse {
 export interface PhotoIds {
   photoIds: number[];
 }
+
+export interface PhotoId {
+  photoId: number;
+}
