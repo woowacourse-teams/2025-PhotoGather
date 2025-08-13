@@ -43,7 +43,7 @@ const useDownload = ({
     });
     if (!taskResult.success) return;
 
-    tryTask({
+    await tryTask({
       task: async () => {
         await handleDownload(() =>
           photoService.downloadPhotos(spaceCode, {
@@ -62,7 +62,7 @@ const useDownload = ({
   };
 
   const downloadAll = async () => {
-    tryTask({
+    await tryTask({
       task: async () => {
         setIsDownloading(true);
         await handleDownload(() => photoService.downloadAll(spaceCode));
@@ -93,7 +93,7 @@ const useDownload = ({
     if (!response) return;
     const blob = response.data;
 
-    tryTask({
+    await tryTask({
       task: () => {
         checkDownloadFormat(blob);
         downloadBlob(blob as Blob);

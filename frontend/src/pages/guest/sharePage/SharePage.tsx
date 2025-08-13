@@ -32,8 +32,8 @@ const SharePage = () => {
     });
   };
 
-  const handleCopyLink = () => {
-    tryTask({
+  const handleCopyLink = async () => {
+    await tryTask({
       task: copyShareLink,
       errorActions: ['toast'],
       context: {

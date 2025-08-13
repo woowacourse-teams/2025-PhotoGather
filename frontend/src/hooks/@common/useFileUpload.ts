@@ -54,13 +54,13 @@ const useFileUpload = ({
     );
   };
 
-  const updateFiles = (rawFiles: File[]) => {
+  const updateFiles = async (rawFiles: File[]) => {
     const { validFiles, invalidFiles } = splitValidFilesByType(
       rawFiles,
       fileType,
     );
 
-    tryTask({
+    await tryTask({
       task: () => {
         checkInvalidFileType(invalidFiles);
         checkUploadLimit(validFiles);

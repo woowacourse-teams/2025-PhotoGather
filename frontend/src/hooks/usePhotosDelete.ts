@@ -68,7 +68,7 @@ const usePhotosDelete = ({
     const isConfirm = await receiveConfirm(photoIds);
     if (!isConfirm) return;
 
-    tryTask({
+    await tryTask({
       task: async () => {
         await handleDeletePhotos(photoIds);
       },

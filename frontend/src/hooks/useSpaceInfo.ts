@@ -21,16 +21,20 @@ const useSpaceInfo = (spaceCode: string) => {
 
   //biome-ignore lint/correctness/useExhaustiveDependencies: 무한 렌더링 방지
   useEffect(() => {
-    tryTask({
-      task: requestSpaceInfo,
-      errorActions: ['toast'],
-      context: {
-        toast: {
-          text: '스페이스 정보를 불러오는데 실패했습니다.',
+    const fetchSpaceInfo = async () => {
+      await tryTask({
+        task: requestSpaceInfo,
+        errorActions: ['toast'],
+        context: {
+          toast: {
+            text: '스페이스 정보를 불러오는데 실패했습니다.',
+          },
         },
-      },
-      onFinally: () => setIsLoading(false),
-    });
+        onFinally: () => setIsLoading(false),
+      });
+    };
+
+    fetchSpaceInfo();
   }, [spaceCode]);
 
   return { isLoading, spaceInfo };
