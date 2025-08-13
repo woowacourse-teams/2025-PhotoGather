@@ -14,7 +14,7 @@ const useCreateSpace = () => {
     const response = await safeApiCall(() =>
       spaceService.create(spaceCreateInfo),
     );
-    if (!response || !response.data) return;
+    if (!response || !response.data) return '';
     return response.data.spaceCode;
   };
 
