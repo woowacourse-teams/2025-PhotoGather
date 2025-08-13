@@ -9,8 +9,6 @@ const UploadCompletePage = () => {
   const location = useLocation();
   const spaceCode = location.state?.spaceCode;
 
-  console.log(spaceCode);
-
   const handleButtonClick = () => {
     navigate(ROUTES.GUEST.IMAGE_UPLOAD(spaceCode ?? ''));
   };

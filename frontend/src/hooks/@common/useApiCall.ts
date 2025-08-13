@@ -1,4 +1,3 @@
-import { NETWORK_ERROR } from '../../constants/errors';
 import { ROUTES } from '../../constants/routes';
 import type { ApiResponse } from '../../types/api.type';
 import {
@@ -33,7 +32,6 @@ const useApiCall = () => {
       },
     });
 
-    // { success: true, data: response | {success: false, data: null}
     return taskResult.data;
   };
 
