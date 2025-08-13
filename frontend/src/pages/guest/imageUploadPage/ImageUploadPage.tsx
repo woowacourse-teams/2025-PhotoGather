@@ -5,9 +5,9 @@ import FloatingActionButton from '../../../components/@common/buttons/floatingAc
 import FloatingIconButton from '../../../components/@common/buttons/floatingIconButton/FloatingIconButton';
 import HighlightText from '../../../components/@common/highlightText/HighlightText';
 import GuestImageGrid from '../../../components/@common/imageLayout/imageGrid/guestImageGrid/GuestImageGrid';
+import PhotoModal from '../../../components/@common/modal/PhotoModal';
 import SpaceHeader from '../../../components/header/spaceHeader/SpaceHeader';
 import LoadingLayout from '../../../components/layout/loadingLayout/LoadingLayout';
-import PhotoModal from '../../../components/modal/PhotoModal';
 import UploadBox from '../../../components/uploadBox/UploadBox';
 import { ROUTES } from '../../../constants/routes';
 import { useOverlay } from '../../../contexts/OverlayProvider';
@@ -27,13 +27,14 @@ import ExpiredPage from '../../status/expiredPage/ExpiredPage';
 import * as S from './ImageUploadPage.styles';
 
 const ImageUploadPage = () => {
-  const { spaceId } = useSpaceCodeFromPath();
-  const { spaceInfo } = useSpaceInfo(spaceId ?? '');
-  const isEarlyTime =
-    spaceInfo?.openedAt && checkIsEarlyDate(spaceInfo.openedAt);
+  const { spaceCode } = useSpaceCodeFromPath();
+  const { spaceInfo } = useSpaceInfo(spaceCode ?? '');
   const isSpaceExpired = spaceInfo?.isExpired;
   // TODO: NoData 시 표시할 Layout 필요
   const _isNoData = !spaceInfo;
+
+  const isEarlyTime =
+    spaceInfo?.openedAt && checkIsEarlyDate(spaceInfo.openedAt);
 
   const spaceName = spaceInfo?.name ?? '';
   const { showToast } = useToast();
@@ -46,7 +47,7 @@ const ImageUploadPage = () => {
     handleUploadFiles,
     handleDeleteFile,
   } = useFileUpload({
-    spaceCode: spaceId ?? '',
+    spaceCode: spaceCode ?? '',
     fileType: 'image',
     showError: showToast,
   });
@@ -66,7 +67,7 @@ const ImageUploadPage = () => {
     if (uploadSuccess) {
       navigate(ROUTES.COMPLETE.UPLOAD, {
         state: {
-          spaceId: spaceId,
+          spaceCode: spaceCode,
         },
       });
     }
