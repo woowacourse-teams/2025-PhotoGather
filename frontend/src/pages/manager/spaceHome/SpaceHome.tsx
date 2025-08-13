@@ -31,7 +31,7 @@ import { ScrollableBlurArea } from '../../../styles/@common/ScrollableBlurArea';
 import { theme } from '../../../styles/theme';
 import { checkIsEarlyDate } from '../../../utils/checkIsEarlyTime';
 import { copyLinkToClipboard } from '../../../utils/copyLinkToClipboard';
-import { createShareUrl } from '../../../utils/createSpaceUrl';
+import { createShareUrl, createSpaceUrl } from '../../../utils/createSpaceUrl';
 import { goToTop } from '../../../utils/goToTop';
 import EarlyPage from '../../status/earlyPage/EarlyPage';
 import ExpiredPage from '../../status/expiredPage/ExpiredPage';
@@ -173,18 +173,32 @@ const SpaceHome = () => {
     try {
       await overlay(
         <BaseModal>
-          <IconLabelButton
-            icon={<LinkIcon fill={theme.colors.white} width="20px" />}
-            onClick={() => {
-              copyLinkToClipboard(createShareUrl(spaceCode ?? ''));
-              showToast({
-                text: '링크가 복사되었습니다.',
-                type: 'info',
-                position: 'top',
-              });
-            }}
-            label="업로드 링크"
-          />
+          <S.ModalContentContainer>
+            <IconLabelButton
+              icon={<LinkIcon fill={theme.colors.white} width="20px" />}
+              onClick={() => {
+                copyLinkToClipboard(createShareUrl(spaceCode ?? ''));
+                showToast({
+                  text: '링크가 복사되었습니다.',
+                  type: 'info',
+                  position: 'top',
+                });
+              }}
+              label="업로드 링크"
+            />
+            <IconLabelButton
+              icon={<LinkIcon fill={theme.colors.white} width="20px" />}
+              onClick={() => {
+                copyLinkToClipboard(createSpaceUrl(spaceCode ?? ''));
+                showToast({
+                  text: '링크가 복사되었습니다.',
+                  type: 'info',
+                  position: 'top',
+                });
+              }}
+              label="스페이스 링크"
+            />
+          </S.ModalContentContainer>
         </BaseModal>,
         {
           clickOverlayClose: true,
