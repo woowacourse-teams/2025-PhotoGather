@@ -5,7 +5,7 @@ export const ButtonContainer = styled.div`
   gap: 16px;
 
   & > button {
-    font-size: ${({ theme }) => theme.typography.bodyLarge.fontSize};
+    ${({ theme }) => ({ ...theme.typography.bodyLarge })}
   }
 `;
 
