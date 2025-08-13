@@ -16,10 +16,7 @@ public record CreateSpaceRequest(
     int validHours,
 
     @Schema(description = "스페이스 오픈 시간", example = "2023-10-01T10:00:00")
-    LocalDateTime openedAt,
-
-    @Schema(description = "스페이스 비밀번호", example = "password123")
-    String password
+    LocalDateTime openedAt
 ) {
 
     public Space toEntity(String spaceCode, Host host) {
