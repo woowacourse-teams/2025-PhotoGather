@@ -9,8 +9,6 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import com.forgather.global.auth.interceptor.HostEntityInterceptor;
-import com.forgather.global.auth.interceptor.HostOwnerInterceptor;
 import com.forgather.global.auth.resolver.SessionHostArgumentResolver;
 import com.forgather.global.logging.TraceIdInterceptor;
 
@@ -23,8 +21,6 @@ public class WebConfig implements WebMvcConfigurer {
     private final CorsProperties corsProperties;
     private final TraceIdInterceptor traceIdInterceptor;
     private final SessionHostArgumentResolver sessionHostArgumentResolver;
-    private final HostEntityInterceptor hostEntityInterceptor;
-    private final HostOwnerInterceptor hostOwnerInterceptor;
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
@@ -47,7 +43,5 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(traceIdInterceptor);
-        registry.addInterceptor(hostEntityInterceptor);
-        registry.addInterceptor(hostOwnerInterceptor);
     }
 }

@@ -30,7 +30,8 @@ import com.forgather.domain.space.dto.DownloadPhotosRequest;
 import com.forgather.domain.space.dto.PhotoResponse;
 import com.forgather.domain.space.dto.PhotosResponse;
 import com.forgather.domain.space.service.PhotoService;
-import com.forgather.global.auth.annotation.SpaceOwner;
+import com.forgather.global.auth.annotation.SessionHost;
+import com.forgather.global.auth.domain.Host;
 import com.forgather.global.logging.Logger;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -60,36 +61,36 @@ public class PhotoController {
         return ResponseEntity.ok().build();
     }
 
-    @SpaceOwner
     @GetMapping("/{photoId}")
     @Operation(summary = "사진 조회", description = "특정 공간의 사진을 조회합니다.")
     public ResponseEntity<PhotoResponse> get(
         @PathVariable(name = "spaceCode") String spaceCode,
-        @PathVariable(name = "photoId") Long photoId
+        @PathVariable(name = "photoId") Long photoId,
+        @SessionHost Host host
     ) {
-        var response = photoService.get(spaceCode, photoId);
+        var response = photoService.get(spaceCode, photoId, host);
         return ResponseEntity.ok(response);
     }
 
-    @SpaceOwner
     @GetMapping
     @Operation(summary = "사진 목록 조회", description = "특정 공간의 사진 목록을 조회합니다.")
     public ResponseEntity<PhotosResponse> getAll(
         @PathVariable(name = "spaceCode") String spaceCode,
-        @PageableDefault(size = 15, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable
+        @PageableDefault(size = 15, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable,
+        @SessionHost Host host
     ) {
-        var response = photoService.getAll(spaceCode, pageable);
+        var response = photoService.getAll(spaceCode, pageable, host);
         return ResponseEntity.ok(response);
     }
 
-    @SpaceOwner
     @PostMapping(value = "/download/selected", produces = ZIP_CONTENT_TYPE)
     @Operation(summary = "사진 zip 선택 다운로드", description = "특정 공간의 선택된 사진을 zip 파일로 다운로드합니다.")
     public ResponseEntity<StreamingResponseBody> downloadSelected(
         @PathVariable(name = "spaceCode") String spaceCode,
-        @RequestBody DownloadPhotosRequest request
+        @RequestBody DownloadPhotosRequest request,
+        @SessionHost Host host
     ) throws IOException {
-        File zipFile = photoService.compressSelected(spaceCode, request);
+        File zipFile = photoService.compressSelected(spaceCode, request, host);
 
         ContentDisposition contentDisposition = ContentDisposition.attachment()
             .filename(zipFile.getName(), StandardCharsets.UTF_8)
@@ -119,13 +120,13 @@ public class PhotoController {
             .body(responseBody);
     }
 
-    @SpaceOwner
     @PostMapping(value = "/download", produces = ZIP_CONTENT_TYPE)
     @Operation(summary = "사진 zip 일괄 다운로드", description = "특정 공간의 사진 목록을 zip 파일로 다운로드합니다.")
     public ResponseEntity<StreamingResponseBody> downloadAll(
-        @PathVariable(name = "spaceCode") String spaceCode
+        @PathVariable(name = "spaceCode") String spaceCode,
+        @SessionHost Host host
     ) throws IOException {
-        File zipFile = photoService.compressAll(spaceCode);
+        File zipFile = photoService.compressAll(spaceCode, host);
 
         ContentDisposition contentDisposition = ContentDisposition.attachment()
             .filename(zipFile.getName(), StandardCharsets.UTF_8)
@@ -158,26 +159,26 @@ public class PhotoController {
             .body(responseBody);
     }
 
-    @SpaceOwner
     @DeleteMapping("/{photoId}")
     @Operation(summary = "사진 단건 삭제", description = "특정 공간의 단건 사진을 삭제합니다.")
     public ResponseEntity<Void> delete(
         @PathVariable(name = "spaceCode") String spaceCode,
-        @PathVariable(name = "photoId") Long photoId
+        @PathVariable(name = "photoId") Long photoId,
+        @SessionHost Host host
     ) {
-        photoService.delete(spaceCode, photoId);
+        photoService.delete(spaceCode, photoId, host);
         return ResponseEntity.noContent()
             .build();
     }
 
-    @SpaceOwner
     @DeleteMapping("/selected")
     @Operation(summary = "사진 선택 삭제", description = "특정 공간의 선택된 사진을 삭제합니다.")
     public ResponseEntity<Void> deleteSelected(
         @PathVariable(name = "spaceCode") String spaceCode,
-        @RequestBody DeletePhotosRequest request
+        @RequestBody DeletePhotosRequest request,
+        @SessionHost Host host
     ) {
-        photoService.deleteSelected(spaceCode, request);
+        photoService.deleteSelected(spaceCode, request, host);
         return ResponseEntity.noContent()
             .build();
     }
