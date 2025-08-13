@@ -75,7 +75,7 @@ const usePhotosBySpaceCode = ({
   };
 
   const tryFetchPhotosList = async () => {
-    tryTask({
+    await tryTask({
       task: fetchPhotosList,
       errorActions: ['toast', 'console'],
       context: {

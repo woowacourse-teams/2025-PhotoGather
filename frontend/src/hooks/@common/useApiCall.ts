@@ -30,10 +30,6 @@ const useApiCall = () => {
       errorActions: ['redirect'],
       context: {
         redirect: ROUTES.ERROR.NETWORK,
-        // TODO : 토스트도 같이 띄울지 논의 필요
-        toast: {
-          text: NETWORK_ERROR.DEFAULT,
-        },
       },
     });
 
