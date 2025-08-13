@@ -151,14 +151,20 @@ const PhotoModal = (props: PhotoModalProps) => {
   };
 
   return (
-    <S.Wrapper>
+    <S.Wrapper
+      onMouseDown={(e) => {
+        if (e.target === e.currentTarget) {
+          onClose?.();
+        }
+      }}
+    >
       {isManagerMode && 'uploaderName' in props && (
-        <S.FromContainer>
+        <S.FromContainer onMouseDown={(e) => e.stopPropagation()}>
           <S.FromMessage>From.</S.FromMessage>
           {props.uploaderName || '익명의 우주여행자'}
         </S.FromContainer>
       )}
-      <S.PhotoContainer>
+      <S.PhotoContainer onMouseDown={(e) => e.stopPropagation()}>
         {displayPath ? (
           <S.Photo
             src={displayPath}
@@ -179,7 +185,10 @@ const PhotoModal = (props: PhotoModalProps) => {
           />
         )}
       </S.PhotoContainer>
-      <S.ButtonContainer $isManagerMode={isManagerMode}>
+      <S.ButtonContainer
+        $isManagerMode={isManagerMode}
+        onMouseDown={(e) => e.stopPropagation()}
+      >
         <IconLabelButton
           icon={<S.DeleteIcon />}
           variant="dark"

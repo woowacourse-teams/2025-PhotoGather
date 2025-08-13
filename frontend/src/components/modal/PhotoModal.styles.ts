@@ -36,8 +36,10 @@ export const PhotoContainer = styled.div`
   align-items: center;
   width: auto;
   height: 320px;
-  background-color: transparent;
+  background: ${hexToRgba(theme.colors.gray03, 0.3)};
+  backdrop-filter: blur(4px);
   overflow: hidden;
+  // background -> gray06 op 70% blur()
 `;
 
 export const Photo = styled.img`
