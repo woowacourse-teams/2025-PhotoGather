@@ -7,7 +7,7 @@ import { formatDate } from '../../../utils/formatDate';
 import { formatTimer } from '../../../utils/formatTimer';
 import FunnelBasePage from '../funnel/FunnelBasePage/FunnelBasePage';
 
-interface CheckSpaceInfoPageProps extends FunnelElementProps {
+interface CheckSpaceInfoPageProps extends FunnelElementProps<boolean> {
   spaceInfo: SpaceFunnelInfo;
 }
 
@@ -18,6 +18,8 @@ const CheckSpaceInfoElement = ({
   const openedAt = `${spaceInfo.date}T${spaceInfo.time}`;
   const { date, time } = formatDate(openedAt);
   const { leftTime } = useLeftTimer({ targetTime: openedAt });
+  const formattedLeftTime = formatTimer(leftTime);
+  const isImmediateOpen = formattedLeftTime === '00:00:00';
 
   return (
     <FunnelBasePage
@@ -30,10 +32,10 @@ const CheckSpaceInfoElement = ({
         <LeftTimeInformationBox
           title={spaceInfo.name}
           openDate={{ date, time }}
-          leftTime={formatTimer(leftTime)}
+          leftTime={formattedLeftTime}
         />
       }
-      onNextButtonClick={() => onNext(JSON.stringify(spaceInfo))}
+      onNextButtonClick={() => onNext(isImmediateOpen)}
     />
   );
 };
