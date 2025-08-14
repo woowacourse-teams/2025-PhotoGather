@@ -26,7 +26,6 @@ import software.amazon.awssdk.services.s3.model.Delete;
 import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
 import software.amazon.awssdk.services.s3.model.DeleteObjectsRequest;
 import software.amazon.awssdk.services.s3.model.GetObjectRequest;
-import software.amazon.awssdk.services.s3.model.ListObjectsV2Request;
 import software.amazon.awssdk.services.s3.model.ObjectIdentifier;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 import software.amazon.awssdk.transfer.s3.S3TransferManager;
@@ -145,35 +144,5 @@ public class AwsS3Cloud {
             .delete(Delete.builder().objects(deleteObjects).build())
             .build();
         s3Client.deleteObjects(deleteRequest);
-    }
-
-    public void deleteAllContents(String spaceCode) {
-        List<ObjectIdentifier> objectIdentifiers = getObjectIdentifiers(spaceCode);
-
-        if (!objectIdentifiers.isEmpty()) {
-            DeleteObjectsRequest deleteObjectsRequest = DeleteObjectsRequest.builder()
-                .bucket(s3Properties.getBucketName())
-                .delete(Delete.builder().objects(objectIdentifiers).build())
-                .build();
-            s3Client.deleteObjects(deleteObjectsRequest);
-        }
-    }
-
-    private List<ObjectIdentifier> getObjectIdentifiers(String spaceCode) {
-        return s3Client.listObjectsV2Paginator(createObjectPagesRequest(spaceCode))
-            .stream()
-            .flatMap(response -> response.contents().stream()
-                .map(object -> ObjectIdentifier.builder()
-                    .key(object.key())
-                    .build())
-            ).toList();
-    }
-
-    private ListObjectsV2Request createObjectPagesRequest(String spaceCode) {
-        String s3Prefix = getPrefix(spaceCode);
-        return ListObjectsV2Request.builder()
-            .bucket(s3Properties.getBucketName())
-            .prefix(s3Prefix)
-            .build();
     }
 }
