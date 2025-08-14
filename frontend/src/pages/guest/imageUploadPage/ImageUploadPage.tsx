@@ -29,12 +29,11 @@ import * as S from './ImageUploadPage.styles';
 const ImageUploadPage = () => {
   const { spaceCode } = useSpaceCodeFromPath();
   const { spaceInfo } = useSpaceInfo(spaceCode ?? '');
+  const isNoData = !spaceInfo;
   const isSpaceExpired = spaceInfo?.isExpired;
-  // TODO: NoData 시 표시할 Layout 필요
-  const _isNoData = !spaceInfo;
-
   const isEarlyTime =
     spaceInfo?.openedAt && checkIsEarlyDate(spaceInfo.openedAt);
+  const shouldShowFakeUploadBox = isNoData || isEarlyTime || isSpaceExpired;
 
   const spaceName = spaceInfo?.name ?? '';
   const { showToast } = useToast();
@@ -125,14 +124,27 @@ const ImageUploadPage = () => {
       <S.ScrollTopAnchor ref={scrollTopTriggerRef} />
       <SpaceHeader title={spaceName} timer={leftTime} />
       <S.UploadContainer $hasImages={hasImages}>
-        <UploadBox
-          mainText={`함께한 순간을 올려주세요.${hasImages ? '' : '\n사진만 올릴 수 있습니다.'}`}
-          uploadLimitText={hasImages ? '' : '한 번에 500장까지 올릴 수 있어요'}
-          iconSize={hasImages ? 60 : 100}
-          onChange={handleFilesUploadClick}
-          onDrop={handleFilesDrop}
-          disabled={isUploading}
-        />
+        {shouldShowFakeUploadBox ? (
+          <UploadBox
+            mainText={''}
+            uploadLimitText={''}
+            iconSize={hasImages ? 60 : 100}
+            onChange={handleFilesUploadClick}
+            onDrop={handleFilesDrop}
+            disabled={true}
+          />
+        ) : (
+          <UploadBox
+            mainText={`함께한 순간을 올려주세요.${hasImages ? '' : '\n사진만 올릴 수 있습니다.'}`}
+            uploadLimitText={
+              hasImages ? '' : '한 번에 500장까지 올릴 수 있어요'
+            }
+            iconSize={hasImages ? 60 : 100}
+            onChange={handleFilesUploadClick}
+            onDrop={handleFilesDrop}
+            disabled={isUploading}
+          />
+        )}
       </S.UploadContainer>
 
       {hasImages && (
