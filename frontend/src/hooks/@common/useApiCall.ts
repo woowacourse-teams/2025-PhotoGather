@@ -1,32 +1,26 @@
-import { useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { NETWORK } from '../../constants/errors';
 import { ROUTES } from '../../constants/routes';
 import type { ApiResponse } from '../../types/api.type';
+import useError from './useError';
 
+// TODO : 훅 명칭 변경
 const useApiCall = () => {
-  const navigate = useNavigate();
+  const { tryTask } = useError();
 
-  const safeApiCall = useCallback(
-    async <T>(apiCall: () => Promise<ApiResponse<T>>) => {
-      try {
-        const response = await apiCall();
+  const safeApiCall = async <T>(
+    apiCall: () => Promise<ApiResponse<T>>,
+  ): Promise<ApiResponse<T> | null> => {
+    const taskResult = await tryTask<ApiResponse<T>>({
+      task: async () => {
+        return await apiCall();
+      },
+      errorActions: ['redirect'],
+      context: {
+        redirect: ROUTES.ERROR.NETWORK,
+      },
+    });
 
-        if (
-          !response.success &&
-          response.error?.toLowerCase().includes(NETWORK.DEFAULT.toLowerCase())
-        ) {
-          navigate(ROUTES.ERROR.NETWORK);
-        }
-
-        return response;
-      } catch (error) {
-        navigate(ROUTES.ERROR.NETWORK);
-        throw error;
-      }
-    },
-    [navigate],
-  );
+    return taskResult.data;
+  };
 
   return { safeApiCall };
 };

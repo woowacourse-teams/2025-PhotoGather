@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import useScrollLock from '../../../hooks/@common/useScrollLock';
 import * as C from '../../../styles/@common/BackDrop.styles';
 import * as S from './StatusLayout.styles';
 
@@ -13,8 +14,9 @@ interface StatusBackdropProps {
 }
 
 const StatusLayout = ({ image, element }: StatusBackdropProps) => {
+  useScrollLock();
   return (
-    <C.BackDrop>
+    <C.BackDrop onTouchMove={(e) => e.preventDefault()}>
       <S.Wrapper>
         <S.Icon src={image.src} alt={image.alt} />
         {element}
