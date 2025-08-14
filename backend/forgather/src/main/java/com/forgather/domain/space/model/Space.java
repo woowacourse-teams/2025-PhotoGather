@@ -1,15 +1,21 @@
 package com.forgather.domain.space.model;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import com.forgather.domain.model.BaseTimeEntity;
+import com.forgather.global.auth.domain.Host;
+import com.forgather.global.auth.domain.SpaceHostMap;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -25,11 +31,11 @@ public class Space extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @OneToMany(mappedBy = "space", cascade = CascadeType.ALL)
+    private List<SpaceHostMap> spaceHostMap = new ArrayList<>();
+
     @Column(name = "code", nullable = false, length = 64)
     private String code;
-
-    @Column(name = "password", length = 64)
-    private String password;
 
     @Column(name = "name", nullable = false)
     private String name;
@@ -40,9 +46,9 @@ public class Space extends BaseTimeEntity {
     @Column(name = "opened_at", nullable = false)
     private LocalDateTime openedAt;
 
-    public Space(String code, String password, String name, int validHours, LocalDateTime openedAt) {
+    public Space(Host host, String code, String name, int validHours, LocalDateTime openedAt) {
+        spaceHostMap.add(new SpaceHostMap(this, host));
         this.code = code;
-        this.password = password;
         this.name = name;
         this.openedAt = openedAt;
         this.validHours = validHours;
@@ -53,6 +59,25 @@ public class Space extends BaseTimeEntity {
         if (expiredAt.isBefore(currentDateTime)) {
             throw new IllegalArgumentException("만료된 스페이스입니다. code: " + code);
         }
+    }
+
+    public void validateHost(Host host) {
+        if (host == null) {
+            throw new IllegalArgumentException("호스트 정보가 없습니다.");
+        }
+        if (spaceHostMap.stream()
+            .noneMatch(map -> Objects.equals(map.getHost().getId(), host.getId()))) {
+            throw new IllegalArgumentException(
+                "해당 호스트는 이 스페이스의 호스트가 아닙니다. host id: " + host.getId() + ", spaceCode:" + code);
+        }
+    }
+
+    public boolean isExpired(LocalDateTime now) {
+        return getExpiredAt().isBefore(now);
+    }
+
+    public LocalDateTime getExpiredAt() {
+        return openedAt.plusHours(validHours);
     }
 
     @Override
@@ -66,13 +91,5 @@ public class Space extends BaseTimeEntity {
     @Override
     public int hashCode() {
         return Objects.hashCode(id);
-    }
-
-    public boolean isExpired(LocalDateTime now) {
-        return getExpiredAt().isBefore(now);
-    }
-
-    public LocalDateTime getExpiredAt() {
-        return openedAt.plusHours(validHours);
     }
 }
