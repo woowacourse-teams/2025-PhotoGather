@@ -78,8 +78,8 @@ public class Space extends BaseTimeEntity {
             throw new IllegalArgumentException("스페이스 오픈 시각은 비어있을 수 없습니다.");
         }
 
-        // 네트워크 지연 고려해서 1분 과거 생성까지는 허용
-        if (openedAt.isBefore(LocalDateTime.now().minusMinutes(1))) {
+        // 네트워크 지연 고려해서 1시간 과거 생성까지는 허용
+        if (openedAt.isBefore(LocalDateTime.now().minusHours(1L))) {
             throw new IllegalArgumentException("스페이스 오픈 시각은 현재 시각 이후여야 합니다. 생성 시도 시각: " + openedAt);
         }
     }
