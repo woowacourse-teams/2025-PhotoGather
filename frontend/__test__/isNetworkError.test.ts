@@ -1,14 +1,14 @@
-import { NETWORK } from '../src/constants/errors';
+import { NETWORK_ERROR } from '../src/constants/errors';
 import { isNetworkError } from '../src/utils/isNetworkError';
 
 describe('isNetworkError 유틸 함수 테스트', () => {
   it('Chrome의 TypeError Failed to fetch를 감지해야 함', () => {
-    const error = new TypeError(NETWORK.CHROMIUM);
+    const error = new TypeError(NETWORK_ERROR.CHROMIUM);
     expect(isNetworkError(error)).toBe(true);
   });
 
   it('에러 메시지에 네트워크 에러 문자열이 포함된 경우 감지해야 함', () => {
-    const error = new Error(`Something went wrong: ${NETWORK.CHROMIUM}`);
+    const error = new Error(`Something went wrong: ${NETWORK_ERROR.CHROMIUM}`);
     expect(isNetworkError(error)).toBe(true);
   });
 

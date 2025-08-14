@@ -10,6 +10,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -55,6 +57,33 @@ public class Space extends BaseTimeEntity {
         }
     }
 
+    public boolean isExpired(LocalDateTime now) {
+        return getExpiredAt().isBefore(now);
+    }
+
+    public LocalDateTime getExpiredAt() {
+        return openedAt.plusHours(validHours);
+    }
+
+    @PrePersist
+    @PreUpdate
+    void validate() {
+        if (name == null || name.isBlank()) {
+            throw new IllegalArgumentException("스페이스 이름은 비어있을 수 없습니다. 생성 시도 이름: " + name);
+        }
+        if (name.length() > 10) {
+            throw new IllegalArgumentException("스페이스 이름은 10자를 초과할 수 없습니다. 생성 시도 이름: " + name);
+        }
+        if (openedAt == null) {
+            throw new IllegalArgumentException("스페이스 오픈 시각은 비어있을 수 없습니다.");
+        }
+
+        // 네트워크 지연 고려해서 1시간 과거 생성까지는 허용
+        if (openedAt.isBefore(LocalDateTime.now().minusHours(1L))) {
+            throw new IllegalArgumentException("스페이스 오픈 시각은 현재 시각 이후여야 합니다. 생성 시도 시각: " + openedAt);
+        }
+    }
+
     @Override
     public boolean equals(Object object) {
         if (object == null || getClass() != object.getClass())
@@ -66,13 +95,5 @@ public class Space extends BaseTimeEntity {
     @Override
     public int hashCode() {
         return Objects.hashCode(id);
-    }
-
-    public boolean isExpired(LocalDateTime now) {
-        return getExpiredAt().isBefore(now);
-    }
-
-    public LocalDateTime getExpiredAt() {
-        return openedAt.plusHours(validHours);
     }
 }

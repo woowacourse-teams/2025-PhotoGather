@@ -14,7 +14,6 @@ import { useOverlay } from '../../../contexts/OverlayProvider';
 import useFileUpload from '../../../hooks/@common/useFileUpload';
 import useIntersectionObserver from '../../../hooks/@common/useIntersectionObserver';
 import useLeftTimer from '../../../hooks/@common/useLeftTimer';
-import { useToast } from '../../../hooks/@common/useToast';
 import useSpaceCodeFromPath from '../../../hooks/useSpaceCodeFromPath';
 import useSpaceInfo from '../../../hooks/useSpaceInfo';
 import { ScrollableBlurArea } from '../../../styles/@common/ScrollableBlurArea';
@@ -29,27 +28,35 @@ import * as S from './ImageUploadPage.styles';
 const ImageUploadPage = () => {
   const { spaceCode } = useSpaceCodeFromPath();
   const { spaceInfo } = useSpaceInfo(spaceCode ?? '');
+  const isNoData = !spaceInfo;
   const isSpaceExpired = spaceInfo?.isExpired;
-  // TODO: NoData 시 표시할 Layout 필요
-  const _isNoData = !spaceInfo;
-
   const isEarlyTime =
     spaceInfo?.openedAt && checkIsEarlyDate(spaceInfo.openedAt);
+  const shouldShowFakeUploadBox = isNoData || isEarlyTime || isSpaceExpired;
+
+  const navigate = useNavigate();
+
+  const navigateToUploadComplete = () => {
+    navigate(ROUTES.COMPLETE.UPLOAD, {
+      state: {
+        spaceCode: spaceCode ?? '',
+      },
+    });
+  };
 
   const spaceName = spaceInfo?.name ?? '';
-  const { showToast } = useToast();
   const overlay = useOverlay();
   const {
     previewData,
     isUploading,
     handleFilesUploadClick,
     handleFilesDrop,
-    handleUploadFiles,
-    handleDeleteFile,
+    submitFileUpload,
+    deleteFile,
   } = useFileUpload({
     spaceCode: spaceCode ?? '',
     fileType: 'image',
-    showError: showToast,
+    onUploadSuccess: navigateToUploadComplete,
   });
 
   const hasImages = Array.isArray(previewData) && previewData.length > 0;
@@ -57,20 +64,17 @@ const ImageUploadPage = () => {
     useIntersectionObserver({});
   const { targetRef: scrollTopTriggerRef, isIntersecting: isAtPageTop } =
     useIntersectionObserver({ isInitialInView: true });
-  const navigate = useNavigate();
   const { leftTime } = useLeftTimer({
     targetTime: (spaceInfo?.expiredAt as string) ?? '',
   });
 
-  const handleUploadClick = async () => {
-    const uploadSuccess = await handleUploadFiles();
-    if (uploadSuccess) {
-      navigate(ROUTES.COMPLETE.UPLOAD, {
-        state: {
-          spaceCode: spaceCode,
-        },
-      });
-    }
+  const deletePhotoWithTracking = async (id: number) => {
+    deleteFile(id);
+    track.button('single_delete_button', {
+      page: 'image_upload_page',
+      section: 'photo_modal',
+      action: 'delete_single',
+    });
   };
 
   const handleImageClick = async (photoId: number) => {
@@ -81,14 +85,7 @@ const ImageUploadPage = () => {
       <PhotoModal
         mode="guest"
         previewFile={selectedPhoto}
-        onDelete={(id) => {
-          handleDeleteFile(id);
-          track.button('single_delete_button', {
-            page: 'image_upload_page',
-            section: 'photo_modal',
-            action: 'delete_single',
-          });
-        }}
+        onDelete={async () => await deletePhotoWithTracking(photoId)}
       />,
       {
         clickOverlayClose: true,
@@ -125,14 +122,27 @@ const ImageUploadPage = () => {
       <S.ScrollTopAnchor ref={scrollTopTriggerRef} />
       <SpaceHeader title={spaceName} timer={leftTime} />
       <S.UploadContainer $hasImages={hasImages}>
-        <UploadBox
-          mainText={`함께한 순간을 올려주세요.${hasImages ? '' : '\n사진만 올릴 수 있습니다.'}`}
-          uploadLimitText={hasImages ? '' : '한 번에 500장까지 올릴 수 있어요'}
-          iconSize={hasImages ? 60 : 100}
-          onChange={handleFilesUploadClick}
-          onDrop={handleFilesDrop}
-          disabled={isUploading}
-        />
+        {shouldShowFakeUploadBox ? (
+          <UploadBox
+            mainText={''}
+            uploadLimitText={''}
+            iconSize={hasImages ? 60 : 100}
+            onChange={handleFilesUploadClick}
+            onDrop={handleFilesDrop}
+            disabled={true}
+          />
+        ) : (
+          <UploadBox
+            mainText={`함께한 순간을 올려주세요.${hasImages ? '' : '\n사진만 올릴 수 있습니다.'}`}
+            uploadLimitText={
+              hasImages ? '' : '한 번에 500장까지 올릴 수 있어요'
+            }
+            iconSize={hasImages ? 60 : 100}
+            onChange={handleFilesUploadClick}
+            onDrop={handleFilesDrop}
+            disabled={isUploading}
+          />
+        )}
       </S.UploadContainer>
 
       {hasImages && (
@@ -147,7 +157,7 @@ const ImageUploadPage = () => {
                   highlightTextArray={[`사진 ${previewData.length}장`]}
                 />
               }
-              onClick={handleUploadClick}
+              onClick={submitFileUpload}
               disabled={isUploading}
             />
           </S.ButtonContainer>
@@ -156,7 +166,7 @@ const ImageUploadPage = () => {
             rowImageAmount={3}
             onImageClick={handleImageClick}
             onDeleteClick={(id: number) => {
-              handleDeleteFile(id);
+              deleteFile(id);
               track.button('grid_delete_button', {
                 page: 'image_upload_page',
                 section: 'image_grid',

@@ -1,24 +1,23 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { photoService } from '../apis/services/photo.service';
-import { DEBUG_MESSAGES } from '../constants/debugMessages';
-import { NETWORK } from '../constants/errors';
-import { ERROR } from '../constants/messages';
-import { ROUTES } from '../constants/routes';
 import type { ApiResponse } from '../types/api.type';
-import useApiCall from './@common/useApiCall';
-import { useToast } from './@common/useToast';
+import { validateDownloadFormat } from '../validators/fetch.validator';
+import { checkSelectedPhotoExist } from '../validators/photo.validator';
+import useError from './@common/useError';
 
 interface UseDownloadProps {
   spaceCode: string;
   spaceName: string;
+  onDownloadSuccess?: () => void;
 }
 
-const useDownload = ({ spaceCode, spaceName }: UseDownloadProps) => {
+const useDownload = ({
+  spaceCode,
+  spaceName,
+  onDownloadSuccess,
+}: UseDownloadProps) => {
   const [isDownloading, setIsDownloading] = useState(false);
-  const navigate = useNavigate();
-  const { safeApiCall } = useApiCall();
-  const { showToast } = useToast();
+  const { tryTask } = useError();
 
   const downloadBlob = (blob: Blob) => {
     const url = URL.createObjectURL(blob);
@@ -26,7 +25,6 @@ const useDownload = ({ spaceCode, spaceName }: UseDownloadProps) => {
     const a = document.createElement('a');
     document.body.appendChild(a);
     a.href = url;
-    // TODO : 스페이스명 연동 후 변경
     a.download = `${spaceName}.zip`;
     a.click();
 
@@ -35,61 +33,67 @@ const useDownload = ({ spaceCode, spaceName }: UseDownloadProps) => {
   };
 
   const selectDownload = async (photoIds: number[]) => {
-    if (photoIds.length === 0) {
-      showToast({
-        text: ERROR.DOWNLOAD.NO_SELECTED_PHOTO,
-        type: 'error',
-      });
-      return;
-    }
-    setIsDownloading(true);
-    await handleDownload(() =>
-      photoService.downloadPhotos(spaceCode, {
-        photoIds: photoIds,
-      }),
-    );
-    setIsDownloading(false);
+    const taskResult = await tryTask({
+      task: () => checkSelectedPhotoExist(photoIds),
+      errorActions: ['toast'],
+    });
+    if (!taskResult.success) return;
+
+    await tryTask({
+      task: async () => {
+        await handleDownload(() =>
+          photoService.downloadPhotos(spaceCode, {
+            photoIds: photoIds,
+          }),
+        );
+      },
+      errorActions: ['toast', 'console'],
+      context: {
+        toast: {
+          text: '다운로드에 실패했습니다. 다시 시도해 주세요.',
+          type: 'error',
+        },
+      },
+      shouldLogToSentry: true,
+    });
   };
 
   const downloadAll = async () => {
-    setIsDownloading(true);
-    await handleDownload(() => photoService.downloadAll(spaceCode), true);
-    setIsDownloading(false);
+    await tryTask({
+      task: async () => {
+        setIsDownloading(true);
+        await handleDownload(() => photoService.downloadAll(spaceCode));
+        onDownloadSuccess?.();
+      },
+      errorActions: ['toast', 'console'],
+      context: {
+        toast: {
+          text: '다운로드에 실패했습니다. 다시 시도해 주세요.',
+          type: 'error',
+        },
+      },
+      onFinally: () => {
+        setIsDownloading(false);
+      },
+      shouldLogToSentry: true,
+    });
   };
 
   const handleDownload = async (
     fetchFunction: () => Promise<ApiResponse<unknown>>,
-    shouldNavigate = false,
   ) => {
-    try {
-      const response = await safeApiCall(fetchFunction);
+    const response = await fetchFunction();
+    if (!response) return;
+    const blob = response.data;
 
-      if (response.success && response.data) {
-        const blob = response.data;
-        if (!(blob instanceof Blob)) {
-          throw new Error(DEBUG_MESSAGES.NO_BLOB_INSTANCE);
-        }
-        downloadBlob(blob);
-
-        if (shouldNavigate) {
-          navigate(ROUTES.COMPLETE.DOWNLOAD, {
-            state: {
-              spaceCode,
-            },
-          });
-        }
-      } else {
-        if (
-          !response.error?.toLowerCase().includes(NETWORK.DEFAULT.toLowerCase())
-        ) {
-          console.error('다운로드에 실패했습니다.');
-        }
-      }
-    } catch (error) {
-      console.error('다운로드 실패:', error);
-    } finally {
-      setIsDownloading(false);
-    }
+    await tryTask({
+      task: () => {
+        validateDownloadFormat(blob);
+        downloadBlob(blob as Blob);
+      },
+      errorActions: ['console'],
+      shouldLogToSentry: true,
+    });
   };
   return { isDownloading, downloadAll, selectDownload };
 };
