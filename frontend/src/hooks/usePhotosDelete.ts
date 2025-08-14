@@ -99,9 +99,6 @@ const usePhotosDelete = ({
   };
 
   const tryDeleteSinglePhoto = async (photoId: number) => {
-    const result = await showDeleteConfirmModal('정말 삭제하시겠어요?');
-    if (!result) return;
-
     tryTask({
       task: async () => {
         return await deleteSinglePhoto(photoId);

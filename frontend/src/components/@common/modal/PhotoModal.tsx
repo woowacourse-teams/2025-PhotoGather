@@ -110,6 +110,19 @@ const PhotoModal = (props: PhotoModalProps) => {
   const managerModeDelete = async () => {
     if (!props.onDelete) return;
     if (!('photoId' in props)) return;
+    // TODO : usePhotosDelete로 모달 로직 이동
+    const confirmResult = await overlay(
+      <ConfirmModal
+        description="정말 삭제하시겠어요?"
+        confirmText="삭제"
+        cancelText="취소"
+      />,
+      {
+        clickOverlayClose: true,
+      },
+    );
+    if (!confirmResult) return;
+
     props.onDelete(props.photoId);
     onClose?.();
   };
@@ -123,9 +136,9 @@ const PhotoModal = (props: PhotoModalProps) => {
   };
 
   const handleDownload = () => {
-    // TODO : 구조 개선 필요
     if (!('onDownload' in props)) return;
     if (!props.onDownload) return;
+
     props.onDownload();
     onSubmit?.(true);
   };
