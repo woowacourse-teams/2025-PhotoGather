@@ -30,8 +30,7 @@ import com.forgather.domain.space.dto.DownloadPhotosRequest;
 import com.forgather.domain.space.dto.PhotoResponse;
 import com.forgather.domain.space.dto.PhotosResponse;
 import com.forgather.domain.space.service.PhotoService;
-import com.forgather.global.auth.annotation.SessionHost;
-import com.forgather.global.auth.domain.Host;
+import com.forgather.global.auth.annotation.HostId;
 import com.forgather.global.logging.Logger;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -65,10 +64,9 @@ public class PhotoController {
     @Operation(summary = "사진 조회", description = "특정 공간의 사진을 조회합니다.")
     public ResponseEntity<PhotoResponse> get(
         @PathVariable(name = "spaceCode") String spaceCode,
-        @PathVariable(name = "photoId") Long photoId,
-        @SessionHost Host host
+        @PathVariable(name = "photoId") Long photoId
     ) {
-        var response = photoService.get(spaceCode, photoId, host);
+        var response = photoService.get(spaceCode, photoId);
         return ResponseEntity.ok(response);
     }
 
@@ -77,9 +75,9 @@ public class PhotoController {
     public ResponseEntity<PhotosResponse> getAll(
         @PathVariable(name = "spaceCode") String spaceCode,
         @PageableDefault(size = 15, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable,
-        @SessionHost Host host
+        @HostId Long hostId
     ) {
-        var response = photoService.getAll(spaceCode, pageable, host);
+        var response = photoService.getAll(spaceCode, pageable, hostId);
         return ResponseEntity.ok(response);
     }
 
@@ -87,10 +85,9 @@ public class PhotoController {
     @Operation(summary = "사진 zip 선택 다운로드", description = "특정 공간의 선택된 사진을 zip 파일로 다운로드합니다.")
     public ResponseEntity<StreamingResponseBody> downloadSelected(
         @PathVariable(name = "spaceCode") String spaceCode,
-        @RequestBody DownloadPhotosRequest request,
-        @SessionHost Host host
+        @RequestBody DownloadPhotosRequest request
     ) throws IOException {
-        File zipFile = photoService.compressSelected(spaceCode, request, host);
+        File zipFile = photoService.compressSelected(spaceCode, request);
 
         ContentDisposition contentDisposition = ContentDisposition.attachment()
             .filename(zipFile.getName(), StandardCharsets.UTF_8)
@@ -124,9 +121,9 @@ public class PhotoController {
     @Operation(summary = "사진 zip 일괄 다운로드", description = "특정 공간의 사진 목록을 zip 파일로 다운로드합니다.")
     public ResponseEntity<StreamingResponseBody> downloadAll(
         @PathVariable(name = "spaceCode") String spaceCode,
-        @SessionHost Host host
+        @HostId Long hostId
     ) throws IOException {
-        File zipFile = photoService.compressAll(spaceCode, host);
+        File zipFile = photoService.compressAll(spaceCode, hostId);
 
         ContentDisposition contentDisposition = ContentDisposition.attachment()
             .filename(zipFile.getName(), StandardCharsets.UTF_8)
@@ -163,10 +160,9 @@ public class PhotoController {
     @Operation(summary = "사진 단건 삭제", description = "특정 공간의 단건 사진을 삭제합니다.")
     public ResponseEntity<Void> delete(
         @PathVariable(name = "spaceCode") String spaceCode,
-        @PathVariable(name = "photoId") Long photoId,
-        @SessionHost Host host
+        @PathVariable(name = "photoId") Long photoId
     ) {
-        photoService.delete(spaceCode, photoId, host);
+        photoService.delete(spaceCode, photoId);
         return ResponseEntity.noContent()
             .build();
     }
@@ -175,10 +171,9 @@ public class PhotoController {
     @Operation(summary = "사진 선택 삭제", description = "특정 공간의 선택된 사진을 삭제합니다.")
     public ResponseEntity<Void> deleteSelected(
         @PathVariable(name = "spaceCode") String spaceCode,
-        @RequestBody DeletePhotosRequest request,
-        @SessionHost Host host
+        @RequestBody DeletePhotosRequest request
     ) {
-        photoService.deleteSelected(spaceCode, request, host);
+        photoService.deleteSelected(spaceCode, request);
         return ResponseEntity.noContent()
             .build();
     }

@@ -12,8 +12,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.forgather.domain.space.dto.CreateSpaceRequest;
-import com.forgather.domain.space.repository.HostRepository;
-import com.forgather.global.auth.domain.Host;
 
 import io.restassured.http.ContentType;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
@@ -25,9 +23,6 @@ class SpaceAcceptanceTest extends AcceptanceTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @Autowired
-    private HostRepository hostRepository;
-
     @BeforeEach
     void setUp() {
         RestAssuredMockMvc.mockMvc(mockMvc);
@@ -37,14 +32,12 @@ class SpaceAcceptanceTest extends AcceptanceTest {
     @DisplayName("RestAssuredMockMvc를 사용하여 Space를 생성한다.")
     void createSpaceWithRestAssuredMockMvc() {
         // given
-        var host = hostRepository.save(new Host("모코", "pictureUrl"));
-        var request = new CreateSpaceRequest("test-space", 72, LocalDateTime.now().plusDays(3));
+        var request = new CreateSpaceRequest("test-space", 72, LocalDateTime.now().plusDays(3), "1234");
 
         // when
         var response = RestAssuredMockMvc.given()
             .contentType(ContentType.JSON)
             .body(request)
-            .sessionAttr("host_id", host.getId())
             .when()
             .post("/spaces")
             .then()

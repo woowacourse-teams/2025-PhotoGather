@@ -15,10 +15,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.forgather.domain.space.model.Photo;
 import com.forgather.domain.space.model.PhotoMetaData;
 import com.forgather.domain.space.model.Space;
-import com.forgather.domain.space.repository.HostRepository;
 import com.forgather.domain.space.repository.PhotoRepository;
 import com.forgather.domain.space.repository.SpaceRepository;
-import com.forgather.global.auth.domain.Host;
 
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
 
@@ -35,9 +33,6 @@ class PhotoAcceptanceTest extends AcceptanceTest {
     @Autowired
     private PhotoRepository photoRepository;
 
-    @Autowired
-    private HostRepository hostRepository;
-
     @BeforeEach
     void setUp() {
         RestAssuredMockMvc.mockMvc(mockMvc);
@@ -48,14 +43,11 @@ class PhotoAcceptanceTest extends AcceptanceTest {
     @DisplayName("스페이스 호스트가 사진을 조회한다.")
     void getPhoto() {
         // given
-        var host = hostRepository.save(new Host("모코", "pictureUrl"));
-        var space = spaceRepository.save(new Space(host, "space-code", "test-space", 3,
-            LocalDateTime.now()));
+        var space = spaceRepository.save(new Space("space-code", "1234", "test-space", 3, LocalDateTime.now()));
         var photo = photoRepository.save(new Photo(space, "path", new PhotoMetaData(LocalDateTime.now())));
 
         // when
         var response = RestAssuredMockMvc.given()
-            .sessionAttr("host_id", host.getId())
             .when()
             .get("/spaces/{spaceCode}/photos/{photoId}", space.getCode(), photo.getId())
             .then()
