@@ -47,6 +47,7 @@ export const IconContainer = styled.div`
 export const TextContainer = styled.p`
   color: ${({ theme }) => theme.colors.gray06};
   ${({ theme }) => theme.typography.bodyRegular};
+  white-space: pre-line;
 `;
 
 export const Icon = styled(InfoIcon, {
