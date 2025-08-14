@@ -9,7 +9,6 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.stereotype.Component;
 
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -19,8 +18,6 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class LoggingAspect {
 
-    private final HttpServletRequest request;
-
     @Around("@within(org.springframework.stereotype.Service) || "
         + "execution(* com.forgather.domain.space.service.AwsS3Cloud.*(..))")
     public Object logging(final ProceedingJoinPoint joinPoint) throws Throwable {
@@ -29,7 +26,6 @@ public class LoggingAspect {
         long durationMillis = System.currentTimeMillis() - startMillis;
 
         log.atDebug()
-            .addKeyValue("requestUri", request.getRequestURI())
             .addKeyValue("methodName", getMethodName(joinPoint))
             .addKeyValue("methodParams", getMethodParams(joinPoint))
             .log("({}ms)", durationMillis);
