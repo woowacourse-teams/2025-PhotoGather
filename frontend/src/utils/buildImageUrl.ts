@@ -3,7 +3,9 @@ export const buildThumbnailUrl = (
   fileName: string,
   preset: string,
 ) => {
-  return `${process.env.IMAGE_BASE_URL}/photogather/dev/contents/${spaceCode}/thumbnails/${fileName}_${preset}.webp`;
+  if (process.env.ENVIRONMENT === 'development')
+    return `${process.env.IMAGE_BASE_URL}/photogather/dev/contents/${spaceCode}/thumbnails/${fileName}_${preset}.webp`;
+  return `${process.env.IMAGE_BASE_URL}/photogather/contents/${spaceCode}/thumbnails/${fileName}_${preset}.webp`;
 };
 
 export const buildOriginalImageUrl = (fileName: string) => {
