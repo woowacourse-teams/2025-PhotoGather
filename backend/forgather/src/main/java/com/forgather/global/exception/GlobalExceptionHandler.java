@@ -27,7 +27,7 @@ public class GlobalExceptionHandler {
         var errorResponse = ErrorResponse.from(e.getMessage());
         log.atError()
             .setCause(e)
-            .log("500 Internal Server Error");
+            .log("500 INTERNAL SERVER ERROR");
         return ResponseEntity.internalServerError().body(errorResponse);
     }
 

@@ -1,7 +1,6 @@
 package com.forgather.global.logging;
 
 import org.slf4j.MDC;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
@@ -64,16 +63,11 @@ public class LoggingInterceptor implements HandlerInterceptor {
         long durationMillis = (startTime != null) ? (System.currentTimeMillis() - startTime) : -1;
 
         log.atInfo()
-            .addKeyValue("event", getResponseEvent(response))
+            .addKeyValue("event", "RESPONSE")
             .addKeyValue("duration", durationMillis + "ms")
             .log();
 
         // 쓰레드 종료 시 MDC 초기화
         MDC.clear();
-    }
-
-    private String getResponseEvent(HttpServletResponse response) {
-        HttpStatus httpStatus = HttpStatus.valueOf(response.getStatus());
-        return httpStatus.isError() ? "ERROR_RESPONSE" : "RESPONSE";
     }
 }
