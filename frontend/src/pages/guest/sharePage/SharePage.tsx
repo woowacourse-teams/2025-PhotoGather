@@ -8,6 +8,7 @@ import InfoBox from '../../../components/@common/infoBox/InfoBox';
 import { INFORMATION } from '../../../constants/messages';
 import useError from '../../../hooks/@common/useError';
 import { useToast } from '../../../hooks/@common/useToast';
+import { theme } from '../../../styles/theme';
 import { copyLinkToClipboard } from '../../../utils/copyLinkToClipboard';
 import { createShareUrl } from '../../../utils/createSpaceUrl';
 import * as S from './SharePage.styles';
@@ -72,7 +73,10 @@ const SharePage = () => {
         <S.ShareContainer>
           <p>친구에게도 알려 주세요</p>
           <S.IconLabelButtonContainer>
-            <IconLabelButton icon={<LinkIcon />} onClick={handleCopyLink} />
+            <IconLabelButton
+              icon={<LinkIcon fill={theme.colors.white} width="20px" />}
+              onClick={handleCopyLink}
+            />
           </S.IconLabelButtonContainer>
         </S.ShareContainer>
         <Button text="나의 스페이스로 이동" onClick={handleSpaceHomeButton} />
