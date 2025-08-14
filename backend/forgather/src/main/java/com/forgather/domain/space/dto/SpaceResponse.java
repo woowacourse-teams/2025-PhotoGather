@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.forgather.domain.space.model.Space;
-import com.forgather.global.auth.dto.HostResponse;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
@@ -31,10 +30,7 @@ public record SpaceResponse(
     LocalDateTime expiredAt,
 
     @Schema(description = "스페이스 만료 여부", example = "false")
-    boolean isExpired,
-
-    @Schema(description = "호스트 정보")
-    HostResponse host
+    boolean isExpired
 ) {
 
     public static SpaceResponse from(Space space) {
@@ -45,9 +41,7 @@ public record SpaceResponse(
             space.getValidHours(),
             space.getOpenedAt(),
             space.getExpiredAt(),
-            space.isExpired(LocalDateTime.now()),
-            // TODO: 스페이스 : 호스트 m:n 관계로 변경 후 수정 필요
-            HostResponse.from(space.getSpaceHostMap().getFirst().getHost())
+            space.isExpired(LocalDateTime.now())
         );
     }
 }

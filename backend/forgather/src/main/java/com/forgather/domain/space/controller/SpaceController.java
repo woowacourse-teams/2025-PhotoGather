@@ -14,8 +14,6 @@ import com.forgather.domain.space.dto.CreateSpaceRequest;
 import com.forgather.domain.space.dto.CreateSpaceResponse;
 import com.forgather.domain.space.dto.SpaceResponse;
 import com.forgather.domain.space.service.SpaceService;
-import com.forgather.global.auth.annotation.SessionHost;
-import com.forgather.global.auth.domain.Host;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -31,11 +29,8 @@ public class SpaceController {
 
     @PostMapping
     @Operation(summary = "스페이스 생성", description = "새로운 스페이스를 생성합니다.")
-    public ResponseEntity<CreateSpaceResponse> create(
-        @RequestBody CreateSpaceRequest request,
-        @SessionHost Host host
-    ) {
-        var response = spaceService.create(request, host);
+    public ResponseEntity<CreateSpaceResponse> create(@RequestBody CreateSpaceRequest request) {
+        var response = spaceService.create(request);
         return ResponseEntity.status(CREATED).body(response);
     }
 
