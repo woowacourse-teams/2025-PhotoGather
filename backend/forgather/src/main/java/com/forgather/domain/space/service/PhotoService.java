@@ -23,7 +23,6 @@ import com.forgather.domain.space.repository.PhotoRepository;
 import com.forgather.domain.space.repository.SpaceRepository;
 import com.forgather.domain.space.util.MetaDataExtractor;
 import com.forgather.domain.space.util.ZipGenerator;
-import com.forgather.global.logging.Logger;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -37,7 +36,6 @@ public class PhotoService {
     private final SpaceRepository spaceRepository;
     private final AwsS3Cloud awsS3Cloud;
     private final Path downloadTempPath;
-    private final Logger logger;
 
     public PhotoResponse get(String spaceCode, Long photoId) {
         Space space = spaceRepository.getUnexpiredSpaceByCode(spaceCode);
@@ -70,11 +68,10 @@ public class PhotoService {
 
     private String upload(String spaceCode, MultipartFile multipartFile) {
         try {
-            logger.log()
-                .event("파일 업로드 시작")
-                .spaceCode(spaceCode)
-                .value("originalName", multipartFile.getOriginalFilename())
-                .info();
+            log.atDebug()
+                .addKeyValue("spaceCode", spaceCode)
+                .addKeyValue("originalName", multipartFile.getOriginalFilename())
+                .log("파일 업로드 시작");
             return awsS3Cloud.upload(spaceCode, multipartFile);
         } catch (IOException e) {
             throw new IllegalArgumentException(
