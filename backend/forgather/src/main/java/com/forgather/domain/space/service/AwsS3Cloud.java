@@ -24,8 +24,8 @@ import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.Delete;
 import software.amazon.awssdk.services.s3.model.DeleteObjectsRequest;
-import software.amazon.awssdk.services.s3.model.GetObjectRequest;
 import software.amazon.awssdk.services.s3.model.DeleteObjectsResponse;
+import software.amazon.awssdk.services.s3.model.GetObjectRequest;
 import software.amazon.awssdk.services.s3.model.ObjectIdentifier;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 import software.amazon.awssdk.services.s3.model.S3Error;
@@ -164,10 +164,9 @@ public class AwsS3Cloud {
                 retryDeleteContents(response);
             }
         }
-        logger.log()
-            .event("S3 삭제 완료")
-            .value("deletedSize", String.valueOf(deletePaths.size()))
-            .info();
+        log.atInfo()
+            .addKeyValue("deletedSize", String.valueOf(deletePaths.size()))
+            .log("S3 삭제 완료");
     }
 
     private DeleteObjectsResponse deleteContents(List<String> deletePaths) {
@@ -185,10 +184,9 @@ public class AwsS3Cloud {
         List<String> retryPaths = extractFailedKeys(response);
         DeleteObjectsResponse retryResponse = deleteContents(retryPaths);
         if (retryResponse.hasErrors()) {
-            logger.log()
-                .event("S3 삭제 실패")
-                .value("deleteFailPath", extractFailedKeys(retryResponse).toString())
-                .info();
+            log.atInfo()
+                .addKeyValue("deleteFailPath", extractFailedKeys(retryResponse).toString())
+                .log("S3 삭제 실패");
         }
     }
 
