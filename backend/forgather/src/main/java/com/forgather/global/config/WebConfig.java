@@ -11,7 +11,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import com.forgather.global.auth.resolver.HostIdArgumentResolver;
 
-import com.forgather.global.logging.TraceIdInterceptor;
+import com.forgather.global.logging.LoggingInterceptor;
 
 import lombok.RequiredArgsConstructor;
 
@@ -20,7 +20,7 @@ import lombok.RequiredArgsConstructor;
 public class WebConfig implements WebMvcConfigurer {
 
     private final CorsProperties corsProperties;
-    private final TraceIdInterceptor traceIdInterceptor;
+    private final LoggingInterceptor loggingInterceptor;
     private final HostIdArgumentResolver hostIdArgumentResolver;
 
     @Override
@@ -43,6 +43,7 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(traceIdInterceptor);
+        registry.addInterceptor(loggingInterceptor)
+            .excludePathPatterns("/swagger-ui/**", "/v3/api-docs/**");
     }
 }

@@ -6,7 +6,9 @@ import IconLabelButton from '../../../components/@common/buttons/iconLabelButton
 import HighlightText from '../../../components/@common/highlightText/HighlightText';
 import InfoBox from '../../../components/@common/infoBox/InfoBox';
 import { INFORMATION } from '../../../constants/messages';
+import useError from '../../../hooks/@common/useError';
 import { useToast } from '../../../hooks/@common/useToast';
+import { theme } from '../../../styles/theme';
 import { copyLinkToClipboard } from '../../../utils/copyLinkToClipboard';
 import { createShareUrl } from '../../../utils/createSpaceUrl';
 import * as S from './SharePage.styles';
@@ -16,9 +18,32 @@ const SharePage = () => {
   const location = useLocation();
   const spaceCode = location.state;
   const { showToast } = useToast();
+  const { tryTask } = useError();
 
   const handleSpaceHomeButton = () => {
     navigate(`/manager/space-home/${spaceCode}`);
+  };
+
+  const copyShareLink = () => {
+    copyLinkToClipboard(createShareUrl(spaceCode));
+    showToast({
+      text: '스페이스 공유 링크 복사 완료!',
+      type: 'info',
+      position: 'top',
+    });
+  };
+
+  const handleCopyLink = async () => {
+    await tryTask({
+      task: copyShareLink,
+      errorActions: ['toast'],
+      context: {
+        toast: {
+          text: '스페이스 공유 링크 복사에 실패했습니다. 다시 시도해 주세요.',
+          position: 'top',
+        },
+      },
+    });
   };
 
   return (
@@ -49,15 +74,8 @@ const SharePage = () => {
           <p>친구에게도 알려 주세요</p>
           <S.IconLabelButtonContainer>
             <IconLabelButton
-              icon={<LinkIcon />}
-              onClick={() => {
-                copyLinkToClipboard(createShareUrl(spaceCode));
-                showToast({
-                  text: '스페이스 공유 링크 복사 완료!',
-                  type: 'info',
-                  position: 'top',
-                });
-              }}
+              icon={<LinkIcon fill={theme.colors.white} width="20px" />}
+              onClick={handleCopyLink}
             />
           </S.IconLabelButtonContainer>
         </S.ShareContainer>

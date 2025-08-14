@@ -2,6 +2,7 @@ import { ReactComponent as LinkIcon } from '@assets/icons/link.svg';
 import { ReactComponent as ShareIcon } from '@assets/icons/share.svg';
 import rocketIcon from '@assets/images/rocket.png';
 import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { ReactComponent as SaveIcon } from '../../../@assets/icons/download.svg';
 import { ReactComponent as SettingSvg } from '../../../@assets/icons/setting.svg';
 import { ReactComponent as ArrowUpSvg } from '../../../@assets/icons/upwardArrow.svg';
@@ -16,6 +17,7 @@ import LoadingLayout from '../../../components/layout/loadingLayout/LoadingLayou
 import PhotoSelectionToolBar from '../../../components/photoSelectionToolBar/PhotoSelectionToolBar';
 import SpaceHomeTopActionBar from '../../../components/spaceHomeTopActionBar/SpaceHomeTopActionBar';
 import { INFORMATION } from '../../../constants/messages';
+import { ROUTES } from '../../../constants/routes';
 import { useOverlay } from '../../../contexts/OverlayProvider';
 import useIntersectionObserver from '../../../hooks/@common/useIntersectionObserver';
 import useLeftTimer from '../../../hooks/@common/useLeftTimer';
@@ -42,6 +44,7 @@ const SpaceHome = () => {
   const { spaceInfo } = useSpaceInfo(spaceCode ?? '');
   const isEarlyTime =
     spaceInfo?.openedAt && checkIsEarlyDate(spaceInfo.openedAt);
+
   // TODO: NoData 시 표시할 Layout 필요
   const _isNoData = !spaceInfo;
   const isSpaceExpired = spaceInfo?.isExpired;
@@ -68,16 +71,25 @@ const SpaceHome = () => {
     isLoading,
     thumbnailPhotoMap,
     isEndPage,
-    fetchPhotosList,
+    tryFetchPhotosList,
     updatePhotos,
   } = usePhotosBySpaceCode({
     reObserve,
     spaceCode: spaceCode ?? '',
   });
 
+  const navigate = useNavigate();
+
   const { isDownloading, downloadAll, selectDownload } = useDownload({
     spaceCode: spaceCode ?? '',
     spaceName,
+    onDownloadSuccess: () => {
+      navigate(ROUTES.COMPLETE.DOWNLOAD, {
+        state: {
+          spaceCode: spaceCode ?? '',
+        },
+      });
+    },
   });
 
   const {
@@ -92,15 +104,33 @@ const SpaceHome = () => {
     toggleAllSelected,
   } = usePhotoSelect({ photosList: photosList ?? [] });
 
-  const { deleteSelectedPhotos, deleteSinglePhoto, isDeleting } =
+  const { tryDeleteSelectedPhotos, tryDeleteSinglePhoto, isDeleting } =
     usePhotosDelete({
       spaceCode: spaceCode ?? '',
       toggleSelectMode,
       updatePhotos,
-      fetchPhotosList,
+      tryFetchPhotosList,
       extractUnselectedPhotos,
       photosList,
     });
+
+  const deletePhotoWithTracking = async (photoId: number) => {
+    await tryDeleteSinglePhoto(photoId);
+    track.button('single_delete_button', {
+      page: 'space_home',
+      section: 'photo_modal',
+      action: 'delete_single',
+    });
+  };
+
+  const downloadPhotoWithTracking = async (photoId: number) => {
+    await selectDownload([photoId]);
+    track.button('single_download_button', {
+      page: 'space_home',
+      section: 'photo_modal',
+      action: 'download_single',
+    });
+  };
 
   const openPhotoModal = async (photoId: number) => {
     await overlay(
@@ -109,25 +139,8 @@ const SpaceHome = () => {
         photoId={photoId}
         spaceCode={spaceCode ?? ''}
         uploaderName="익명의 우주여행자"
-        onDownload={() => {
-          selectDownload([photoId]);
-          track.button('single_download_button', {
-            page: 'space_home',
-            section: 'photo_modal',
-            action: 'download_single',
-          });
-        }}
-        onDelete={async () => {
-          const result = await deleteSinglePhoto(photoId);
-          if (result) {
-            track.button('single_delete_button', {
-              page: 'space_home',
-              section: 'photo_modal',
-              action: 'delete_single',
-            });
-          }
-          return result;
-        }}
+        onDownload={async () => await downloadPhotoWithTracking(photoId)}
+        onDelete={async () => await deletePhotoWithTracking(photoId)}
       />,
       {
         clickOverlayClose: true,
@@ -140,25 +153,25 @@ const SpaceHome = () => {
   //biome-ignore lint/correctness/useExhaustiveDependencies: isFetchSectionVisible 변경 시 호출
   useEffect(() => {
     if (!isFetchSectionVisible || isEndPage || isLoading) return;
-    fetchPhotosList();
+    tryFetchPhotosList();
   }, [isFetchSectionVisible, isEndPage]);
 
   const loadingContents = [
     {
       icon: { src: rocketIcon, alt: '데모 페이지 아이콘' },
-      description: '로딩 텍스트 1',
+      description: '추억 담는 중',
     },
     {
       icon: { src: rocketIcon, alt: '데모 페이지 아이콘' },
-      description: '로딩 텍스트 2',
+      description: '선물 상자 포장하는 중',
     },
     {
       icon: { src: rocketIcon, alt: '데모 페이지 아이콘' },
-      description: '로딩 텍스트 2',
+      description: '배달 가는 중',
     },
     {
       icon: { src: rocketIcon, alt: '데모 페이지 아이콘' },
-      description: '로딩 텍스트 2',
+      description: '당신에게 전달 중',
     },
   ];
 
@@ -283,7 +296,7 @@ const SpaceHome = () => {
               {isSelectMode && (
                 <PhotoSelectionToolBar
                   selectedCount={selectedPhotosCount}
-                  onDelete={() => deleteSelectedPhotos(selectedPhotoIds)}
+                  onDelete={() => tryDeleteSelectedPhotos(selectedPhotoIds)}
                   onDownload={() => selectDownload(selectedPhotoIds)}
                 />
               )}

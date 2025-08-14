@@ -31,21 +31,6 @@ describe('copyLinkToClipboard 유틸 함수 테스트', () => {
     expect(writeTextMock).toHaveBeenCalledTimes(1);
   });
 
-  it('복사 실패 시 에러를 콘솔로 출력한다', async () => {
-    const testError = new Error('복사 실패');
-    const writeTextMock = jest.fn().mockRejectedValue(testError);
-    Object.assign(navigator, {
-      clipboard: {
-        writeText: writeTextMock,
-      },
-    });
-
-    await copyLinkToClipboard('https://example.com');
-
-    expect(writeTextMock).toHaveBeenCalled();
-    expect(consoleLogSpy).toHaveBeenCalledWith(testError);
-  });
-
   it('빈 문자열도 복사할 수 있다', async () => {
     const writeTextMock = jest.fn().mockResolvedValue(undefined);
     Object.assign(navigator, {

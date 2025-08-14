@@ -1,10 +1,8 @@
-import { NETWORK } from '../constants/errors';
 import type {
   ApiResponse,
   BodyContentType,
   requestOptionsType,
 } from '../types/api.type';
-import { isNetworkError } from '../utils/isNetworkError';
 import { BASE_URL } from './config';
 import { createBody } from './createBody';
 import { createHeaders } from './createHeaders';
@@ -41,55 +39,60 @@ const request = async <T>(
   const headers = createHeaders(bodyContentType, token);
   const requestBody = createBody(body, bodyContentType);
 
-  // TODO : try catch 유틸 분리
-  try {
-    const response = await fetch(url, {
-      method,
-      headers,
-      body: requestBody,
-    });
+  const response = await fetch(url, {
+    method,
+    headers,
+    body: requestBody,
+  });
 
-    const contentType = response.headers.get('content-type');
+  const contentType = response.headers.get('content-type');
 
-    if (contentType?.includes('application/zip')) {
-      const blob = await response.blob();
-      return {
-        success: response.ok,
-        data: blob as unknown as T,
-        error: !response.ok ? `Error: ${response.status}` : undefined,
-      };
-    }
-
-    const text = await response.text();
-    const data = text ? JSON.parse(text) : null;
-
-    if (!response.ok) {
-      return {
-        success: false,
-        error: data?.message || `Error: ${response.status}`,
-      };
-    }
-
+  if (contentType?.includes('application/zip')) {
+    const blob = await response.blob();
     return {
-      success: true,
-      data: data as T,
-    };
-  } catch (error) {
-    const getErrorMessage = (error: unknown): string => {
-      if (isNetworkError(error)) {
-        return NETWORK.DEFAULT;
-      }
-      if (error instanceof Error) {
-        return error.message;
-      }
-      return 'Unknown error';
-    };
-
-    return {
-      success: false,
-      error: getErrorMessage(error),
+      success: response.ok,
+      data: blob as unknown as T,
+      error: !response.ok ? `Error: ${response.status}` : undefined,
     };
   }
+
+  const text = await response.text();
+  const data = text ? JSON.parse(text) : null;
+
+  if (!response.ok) {
+    // TODO : 함수 분리
+    if (response.status === 400) {
+      throw new Error('요청 형식이 올바르지 않습니다.');
+    }
+    if (response.status === 401) {
+      throw new Error('인증이 필요합니다.');
+    }
+    if (response.status === 403) {
+      throw new Error('접근 권한이 없습니다.');
+    }
+    if (response.status === 404) {
+      throw new Error('존재하지 않는 리소스입니다.');
+    }
+    if (response.status === 500) {
+      throw new Error('서버 오류가 발생했습니다.');
+    }
+    if (response.status === 502) {
+      throw new Error('서버 통신에 문제가 발생했습니다.');
+    }
+    if (response.status === 503) {
+      throw new Error('서버가 일시적으로 장애가 발생했습니다.');
+    }
+    // 네트워크 에러
+    return {
+      success: false,
+      error: data?.message || `Error: ${response.status}`,
+    };
+  }
+
+  return {
+    success: true,
+    data: data as T,
+  };
 };
 
 export const http = {

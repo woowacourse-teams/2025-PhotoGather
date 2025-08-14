@@ -26,7 +26,6 @@ import com.forgather.domain.space.repository.PhotoRepository;
 import com.forgather.domain.space.repository.SpaceRepository;
 import com.forgather.domain.space.util.MetaDataExtractor;
 import com.forgather.domain.space.util.ZipGenerator;
-import com.forgather.global.logging.Logger;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -40,7 +39,6 @@ public class PhotoService {
     private final SpaceRepository spaceRepository;
     private final AwsS3Cloud awsS3Cloud;
     private final Path downloadTempPath;
-    private final Logger logger;
 
     public PhotoResponse get(String spaceCode, Long photoId) {
         Space space = spaceRepository.getUnexpiredSpaceByCode(spaceCode);
@@ -73,11 +71,10 @@ public class PhotoService {
 
     private String upload(String spaceCode, MultipartFile multipartFile) {
         try {
-            logger.log()
-                .event("파일 업로드 시작")
-                .spaceCode(spaceCode)
-                .value("originalName", multipartFile.getOriginalFilename())
-                .info();
+            log.atDebug()
+                .addKeyValue("spaceCode", spaceCode)
+                .addKeyValue("originalName", multipartFile.getOriginalFilename())
+                .log("파일 업로드 시작");
             return awsS3Cloud.upload(spaceCode, multipartFile);
         } catch (IOException e) {
             throw new IllegalArgumentException(
@@ -136,6 +133,7 @@ public class PhotoService {
         Space space = spaceRepository.getUnexpiredSpaceByCode(spaceCode);
         Photo photo = photoRepository.getById(photoId);
         photo.validateSpace(space);
+
         photoRepository.delete(photo);
         awsS3Cloud.deleteContent(photo.getPath());
     }
@@ -143,13 +141,13 @@ public class PhotoService {
     @Transactional
     public void deleteSelected(String spaceCode, DeletePhotosRequest request) {
         Space space = spaceRepository.getUnexpiredSpaceByCode(spaceCode);
-        List<Long> photoIds = request.photoIds();
-        List<Photo> photos = photoRepository.findAllByIdIn(photoIds);
+        List<Photo> photos = photoRepository.findAllByIdIn(request.photoIds());
         photos.forEach(photo -> photo.validateSpace(space));
         List<String> paths = photos.stream()
             .map(Photo::getPath)
             .toList();
-        photoRepository.deleteBySpaceAndPhotoIds(space, photoIds);
+
+        photoRepository.deleteAll(photos);
         awsS3Cloud.deleteSelectedContents(paths);
     }
 }
