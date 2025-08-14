@@ -3,7 +3,6 @@ import { photoService } from '../apis/services/photo.service';
 import type { Photo } from '../types/photo.type';
 import { buildThumbnailUrl } from '../utils/buildImageUrl';
 import { parsedImagePath } from '../utils/parsedImagePath';
-import useApiCall from './@common/useApiCall';
 import useError from './@common/useError';
 
 interface UsePhotosBySpaceIdProps {
@@ -22,7 +21,6 @@ const usePhotosBySpaceCode = ({
   const [photosList, setPhotosList] = useState<Photo[] | null>(null);
   const currentPage = useRef(1);
   const totalPages = useRef(1);
-  const { safeApiCall } = useApiCall();
   const { tryTask } = useError();
 
   const thumbnailPhotoMap = useMemo(() => {
@@ -58,12 +56,11 @@ const usePhotosBySpaceCode = ({
   const fetchPhotosList = async () => {
     setIsLoading(true);
     const pageToFetch = currentPage.current;
-    const response = await safeApiCall(() =>
-      photoService.getBySpaceCode(spaceCode, {
-        page: pageToFetch,
-        size: PAGE_SIZE,
-      }),
-    );
+    const response = await photoService.getBySpaceCode(spaceCode, {
+      page: pageToFetch,
+      size: PAGE_SIZE,
+    });
+
     if (!response || !response.data) return;
     currentPage.current += 1;
 

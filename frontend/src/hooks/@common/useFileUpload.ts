@@ -7,7 +7,6 @@ import {
   checkInvalidFileType,
   checkUploadLimit,
 } from '../../validators/photo.validator';
-import useApiCall from './useApiCall';
 import useError from './useError';
 
 interface UseFileUploadProps {
@@ -24,7 +23,6 @@ const useFileUpload = ({
   const [uploadFiles, setUploadFiles] = useState<UploadFile[]>([]);
   const [previewData, setPreviewData] = useState<PreviewFile[]>([]);
   const [isUploading, setIsUploading] = useState(false);
-  const { safeApiCall } = useApiCall();
 
   const addPreviewUrlsFromFiles = (files: File[]) => {
     const startIndex = previewData.length;
@@ -92,7 +90,7 @@ const useFileUpload = ({
 
   const fetchUploadFiles = async () => {
     const files = uploadFiles.map((file) => file.originFile);
-    await safeApiCall(() => photoService.uploadFiles(spaceCode, files));
+    await photoService.uploadFiles(spaceCode, files);
   };
 
   const errorOption = {
@@ -110,11 +108,11 @@ const useFileUpload = ({
         setIsUploading(true);
         await fetchUploadFiles();
         onUploadSuccess?.();
+        clearFiles();
       },
       errorActions: ['toast', 'afterAction'],
       context: errorOption,
       onFinally: () => {
-        clearFiles();
         setIsUploading(false);
       },
       shouldLogToSentry: true,

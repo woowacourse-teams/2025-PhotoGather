@@ -2,7 +2,6 @@ import defaultImage from '@assets/images/default_image.png';
 import { useEffect, useState } from 'react';
 import { photoService } from '../../../apis/services/photo.service';
 import { useOverlay } from '../../../contexts/OverlayProvider';
-import useApiCall from '../../../hooks/@common/useApiCall';
 import useError from '../../../hooks/@common/useError';
 import type { PreviewFile } from '../../../types/file.type';
 import type { BaseModalProps } from '../../../types/modal.type';
@@ -45,7 +44,6 @@ const PhotoModal = (props: PhotoModalProps) => {
   const [photo, setPhoto] = useState<Photo | null>(null);
   // TODO : 중복 상태 여부 확인 필요
   const [displayPath, setDisplayPath] = useState<string>('');
-  const { safeApiCall } = useApiCall();
   const overlay = useOverlay();
   const { tryTask } = useError();
 
@@ -70,8 +68,9 @@ const PhotoModal = (props: PhotoModalProps) => {
         setIsLoading(true);
         // TODO : 모달을 종류별로 분리
         if (!managerSpaceCode || !managerPhotoId) return;
-        const response = await safeApiCall(() =>
-          photoService.getById(managerSpaceCode, managerPhotoId),
+        const response = await photoService.getById(
+          managerSpaceCode,
+          managerPhotoId,
         );
 
         if (!response || !response.data) return;

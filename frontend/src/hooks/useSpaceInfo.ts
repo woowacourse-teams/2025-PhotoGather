@@ -1,20 +1,16 @@
 import { useEffect, useState } from 'react';
 import { spaceService } from '../apis/services/space.service';
 import type { Space } from '../types/space.type';
-import useApiCall from './@common/useApiCall';
 import useError from './@common/useError';
 
 const useSpaceInfo = (spaceCode: string) => {
   const [spaceInfo, setSpaceInfo] = useState<Space>();
   const [isLoading, setIsLoading] = useState(false);
-  const { safeApiCall } = useApiCall();
   const { tryTask } = useError();
 
   const requestSpaceInfo = async () => {
     setIsLoading(true);
-    const response = await safeApiCall(() =>
-      spaceService.getInfoByCode(spaceCode),
-    );
+    const response = await spaceService.getInfoByCode(spaceCode);
     if (!response) return;
     setSpaceInfo(response.data);
   };

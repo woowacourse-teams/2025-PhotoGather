@@ -3,7 +3,6 @@ import { photoService } from '../apis/services/photo.service';
 import type { ApiResponse } from '../types/api.type';
 import { validateDownloadFormat } from '../validators/fetch.validator';
 import { checkSelectedPhotoExist } from '../validators/photo.validator';
-import useApiCall from './@common/useApiCall';
 import useError from './@common/useError';
 
 interface UseDownloadProps {
@@ -18,7 +17,6 @@ const useDownload = ({
   onDownloadSuccess,
 }: UseDownloadProps) => {
   const [isDownloading, setIsDownloading] = useState(false);
-  const { safeApiCall } = useApiCall();
   const { tryTask } = useError();
 
   const downloadBlob = (blob: Blob) => {
@@ -83,7 +81,7 @@ const useDownload = ({
   const handleDownload = async (
     fetchFunction: () => Promise<ApiResponse<unknown>>,
   ) => {
-    const response = await safeApiCall(fetchFunction);
+    const response = await fetchFunction();
     if (!response) return;
     const blob = response.data;
 

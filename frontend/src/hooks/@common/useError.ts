@@ -57,13 +57,12 @@ const useError = () => {
       const data = await Promise.resolve(task());
       return { success: true, data };
     } catch (e) {
-      console.log('에러 발생');
       if (shouldLogToSentry) {
-        console.log('로그가 기록됨');
         Sentry.captureException(e);
       }
       setIsError(true);
       const error = e instanceof Error ? e : new Error(String(e));
+
       matchingErrorHandler(errorActions, context, error);
 
       return { success: false, data: null };

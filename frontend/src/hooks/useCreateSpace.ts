@@ -1,19 +1,15 @@
 import { useState } from 'react';
 import { spaceService } from '../apis/services/space.service';
 import type { SpaceCreateInfo } from '../types/space.type';
-import useApiCall from './@common/useApiCall';
 import useError from './@common/useError';
 
 const useCreateSpace = () => {
   const [isCreating, setIsCreating] = useState(false);
   const { tryTask } = useError();
-  const { safeApiCall } = useApiCall();
 
   const requestSpaceCode = async (spaceCreateInfo: SpaceCreateInfo) => {
     setIsCreating(true);
-    const response = await safeApiCall(() =>
-      spaceService.create(spaceCreateInfo),
-    );
+    const response = await spaceService.create(spaceCreateInfo);
     if (!response || !response.data) return '';
     return response.data.spaceCode;
   };
