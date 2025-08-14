@@ -9,6 +9,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.springframework.test.util.ReflectionTestUtils;
 
 class SpaceTest {
 
@@ -31,12 +32,14 @@ class SpaceTest {
     @DisplayName("스페이스 오픈 시각이 과거라면 예외를 던진다")
     @Test
     void spaceOpenedAtValidationTest() {
+        // given
         String spaceCode = "1234567890";
         int validHours = 48;
         LocalDateTime openedAt = LocalDateTime.now().minusDays(1);
+        Space space = new Space(spaceCode, "0000", "name", validHours, openedAt);
 
-        assertThatIllegalArgumentException().isThrownBy(
-                () -> new Space(spaceCode, "0000", "name", validHours, openedAt))
+        // when & then
+        assertThatIllegalArgumentException().isThrownBy(() -> ReflectionTestUtils.invokeMethod(space, "validate"))
             .isInstanceOf(IllegalArgumentException.class)
             .withMessageContaining("스페이스 오픈 시각");
     }
@@ -45,8 +48,12 @@ class SpaceTest {
     @ParameterizedTest
     @ValueSource(strings = {"", " ", "          "})
     void spaceNameValidationTest(String invalidName) {
+        // given
+        Space space = new Space("1234567890", "0000", invalidName, 48, LocalDateTime.now());
+
+        // when & then
         assertThatIllegalArgumentException().isThrownBy(
-                () -> new Space("1234567890", "0000", invalidName, 48, LocalDateTime.now()))
+                () -> ReflectionTestUtils.invokeMethod(space, "validate"))
             .isInstanceOf(IllegalArgumentException.class)
             .withMessageContaining("스페이스 이름");
     }

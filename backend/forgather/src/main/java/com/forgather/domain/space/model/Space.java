@@ -10,6 +10,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -41,7 +43,6 @@ public class Space extends BaseTimeEntity {
     private LocalDateTime openedAt;
 
     public Space(String code, String password, String name, int validHours, LocalDateTime openedAt) {
-        validate(name, openedAt);
         this.code = code;
         this.password = password;
         this.name = name;
@@ -64,7 +65,9 @@ public class Space extends BaseTimeEntity {
         return openedAt.plusHours(validHours);
     }
 
-    private void validate(String name, LocalDateTime openedAt) {
+    @PrePersist
+    @PreUpdate
+    void validate() {
         if (name == null || name.isBlank()) {
             throw new IllegalArgumentException("스페이스 이름은 비어있을 수 없습니다. 생성 시도 이름: " + name);
         }
