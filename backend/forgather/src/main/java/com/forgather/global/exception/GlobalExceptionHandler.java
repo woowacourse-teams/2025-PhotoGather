@@ -30,8 +30,8 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleException(Exception e) {
         var errorResponse = ErrorResponse.from(e.getMessage());
         logger.log()
-            .message(e.getClass() + ": " + e.getMessage())
-            .error();
+            .message("500 Internal Server Error")
+            .error(e);
         return ResponseEntity.internalServerError().body(errorResponse);
     }
 

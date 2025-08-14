@@ -65,6 +65,11 @@ public class Logger {
             log.error(logFormatter.formatSegments(segments));
         }
 
+        public void error(Throwable throwable) {
+            addRequestInformation();
+            log.error(logFormatter.formatSegments(segments), throwable);
+        }
+
         private void addRequestInformation() {
             segments.add(logFormatter.formatRequestInformation());
         }
