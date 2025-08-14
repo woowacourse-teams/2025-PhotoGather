@@ -26,9 +26,10 @@ public class LoggingAspect {
         long durationMillis = System.currentTimeMillis() - startMillis;
 
         log.atDebug()
-            .addKeyValue("methodName", getMethodName(joinPoint))
-            .addKeyValue("methodParams", getMethodParams(joinPoint))
-            .log("({}ms)", durationMillis);
+            .addKeyValue("event", getMethodName(joinPoint))
+            .addKeyValue("params", getMethodParams(joinPoint))
+            .addKeyValue("duration", durationMillis + "ms")
+            .log();
         return result;
     }
 

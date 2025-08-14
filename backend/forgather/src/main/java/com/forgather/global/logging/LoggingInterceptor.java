@@ -28,16 +28,16 @@ public class LoggingInterceptor implements HandlerInterceptor {
         request.setAttribute("com.forgather.traceId", traceId);
         request.setAttribute("com.forgather.startTime", System.currentTimeMillis());
 
-        // 해당 쓰레드에서 발생하는 모든 로그에 대해 자동으로 추가됨
+        // 이후 해당 쓰레드에서 발생하는 모든 로그에 대해 자동으로 추가됨
         MDC.put("traceId", traceId);
-        MDC.put("event", "REQUEST");
+
         log.atInfo()
+            .addKeyValue("event", "REQUEST")
             .addKeyValue("httpMethod", request.getMethod())
             .addKeyValue("requestUri", request.getRequestURI())
             .addKeyValue("ip", getClientIp(request))
             .addKeyValue("userAgent", getUserAgent(request))
             .log();
-        MDC.remove("event");
         return true;
     }
 
@@ -63,11 +63,12 @@ public class LoggingInterceptor implements HandlerInterceptor {
         Long startTime = (Long) request.getAttribute("com.forgather.startTime");
         long durationMillis = (startTime != null) ? (System.currentTimeMillis() - startTime) : -1;
 
-        MDC.put("event", getResponseEvent(response));
         log.atInfo()
-            .log("({}ms)", durationMillis);
+            .addKeyValue("event", getResponseEvent(response))
+            .addKeyValue("duration", durationMillis + "ms")
+            .log();
 
-        // 쓰레드 재활용을 대비한 초기화
+        // 쓰레드 종료 시 MDC 초기화
         MDC.clear();
     }
 
