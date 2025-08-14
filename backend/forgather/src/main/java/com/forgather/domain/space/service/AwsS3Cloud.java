@@ -2,6 +2,7 @@ package com.forgather.domain.space.service;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Path;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -24,6 +25,7 @@ import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.Delete;
 import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
 import software.amazon.awssdk.services.s3.model.DeleteObjectsRequest;
+import software.amazon.awssdk.services.s3.model.GetObjectRequest;
 import software.amazon.awssdk.services.s3.model.ListObjectsV2Request;
 import software.amazon.awssdk.services.s3.model.ObjectIdentifier;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
@@ -69,6 +71,15 @@ public class AwsS3Cloud {
         String uploadFileName = UUID.randomUUID().toString();
         return String.format("%s/%s/%s/%s.%s", s3Properties.getRootDirectory(), CONTENTS_INNER_PATH, spaceCode,
             uploadFileName, extension);
+    }
+
+    public InputStream download(String photoPath) {
+        GetObjectRequest request = GetObjectRequest.builder()
+            .bucket(s3Properties.getBucketName())
+            .key(photoPath)
+            .build();
+
+        return s3Client.getObject(request);
     }
 
     public File downloadSelected(String tempPath, String spaceCode, List<String> photoPaths) {
