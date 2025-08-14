@@ -1,15 +1,17 @@
+import defaultImage from '@assets/images/default_image.png';
 import { useCallback, useEffect, useState } from 'react';
-import { photoService } from '../../apis/services/photo.service';
-import { DEBUG_MESSAGES } from '../../constants/debugMessages';
-import { NETWORK } from '../../constants/errors';
-import { useOverlay } from '../../contexts/OverlayProvider';
-import useApiCall from '../../hooks/@common/useApiCall';
-import type { PreviewFile } from '../../types/file.type';
-import type { BaseModalProps } from '../../types/modal.type';
-import type { Photo } from '../../types/photo.type';
-import { buildOriginalImageUrl } from '../../utils/buildImageUrl';
-import IconLabelButton from '../@common/buttons/iconLabelButton/IconLabelButton';
-import ConfirmModal from './ConfirmModal';
+import { photoService } from '../../../apis/services/photo.service';
+import { DEBUG_MESSAGES } from '../../../constants/debugMessages';
+import { NETWORK } from '../../../constants/errors';
+import { useOverlay } from '../../../contexts/OverlayProvider';
+import useApiCall from '../../../hooks/@common/useApiCall';
+import type { PreviewFile } from '../../../types/file.type';
+import type { BaseModalProps } from '../../../types/modal.type';
+import type { Photo } from '../../../types/photo.type';
+import { buildOriginalImageUrl } from '../../../utils/buildImageUrl';
+import { createImageErrorHandler } from '../../../utils/createImageErrorHandler';
+import IconLabelButton from '../buttons/iconLabelButton/IconLabelButton';
+import ConfirmModal from './confirmModal/ConfirmModal';
 import * as S from './PhotoModal.styles';
 
 // Guest mode props - previewData 사용
@@ -35,7 +37,7 @@ interface ManagerPhotoModalProps extends BaseModalProps {
   /** 다운로드 핸들러 */
   onDownload?: () => void;
   /** 삭제 핸들러 */
-  onDelete?: (photoId: number) => void;
+  onDelete?: () => undefined | Promise<boolean>;
 }
 
 type PhotoModalProps = GuestPhotoModalProps | ManagerPhotoModalProps;
@@ -45,11 +47,11 @@ const PhotoModal = (props: PhotoModalProps) => {
   const [, setIsLoading] = useState(false);
   const [photo, setPhoto] = useState<Photo | null>(null);
   const [displayPath, setDisplayPath] = useState<string>('');
-  const [, setImageLoadError] = useState(false);
   const { safeApiCall } = useApiCall();
   const overlay = useOverlay();
 
   const isManagerMode = mode === 'manager';
+  const handleImageError = createImageErrorHandler(defaultImage);
 
   const managerPhotoId = mode === 'manager' ? props.photoId : undefined;
   const managerSpaceCode = mode === 'manager' ? props.spaceCode : undefined;
@@ -64,16 +66,8 @@ const PhotoModal = (props: PhotoModalProps) => {
         photoService.getById(managerSpaceCode, managerPhotoId),
       );
 
-      console.log('📡 API Response:', response);
-
       if (response.success && response.data) {
         const data = response.data;
-        console.log('📸 Photo data:', {
-          id: data.id,
-          path: data.path,
-          originalName: data.originalName,
-          fullData: data,
-        });
 
         if (!data) {
           console.warn(DEBUG_MESSAGES.NO_RESPONSE);
@@ -89,17 +83,11 @@ const PhotoModal = (props: PhotoModalProps) => {
         if (data.path) {
           const fileName = data.path;
           if (fileName) {
-            imageUrl = buildOriginalImageUrl(managerSpaceCode, fileName);
-            console.log('🔨 Built image URL:', {
-              originalPath: data.path,
-              parsedFileName: fileName,
-              builtUrl: imageUrl,
-            });
+            imageUrl = buildOriginalImageUrl(fileName);
           } else {
             console.error('❌ Failed to parse image path:', data.path);
           }
         }
-        console.log('Final image URL:', imageUrl);
         setDisplayPath(imageUrl);
       } else {
         console.error('API call failed:', response);
@@ -129,28 +117,31 @@ const PhotoModal = (props: PhotoModalProps) => {
   }, [mode, guestPreviewPath]);
 
   const handleDelete = async () => {
-    try {
-      const result = await overlay(
-        <ConfirmModal
-          description="정말 삭제하시겠어요?"
-          confirmText="삭제"
-          cancelText="취소"
-        />,
-        {
-          clickOverlayClose: true,
-        },
-      );
+    if (mode === 'guest' && props.onDelete) {
+      try {
+        const result = await overlay(
+          <ConfirmModal
+            description="정말 삭제하시겠어요?"
+            confirmText="삭제"
+            cancelText="취소"
+          />,
+          {
+            clickOverlayClose: true,
+          },
+        );
 
-      if (result) {
-        if (mode === 'guest' && props.onDelete) {
+        if (result) {
           props.onDelete(props.previewFile.id);
-        } else if (mode === 'manager' && props.onDelete) {
-          props.onDelete(props.photoId);
+          onClose?.();
         }
+      } catch (error) {
+        console.error('모달 오류:', error);
+      }
+    } else if (mode === 'manager' && props.onDelete) {
+      const result = await props.onDelete();
+      if (result) {
         onClose?.();
       }
-    } catch (error) {
-      console.error('모달 오류:', error);
     }
   };
 
@@ -162,25 +153,34 @@ const PhotoModal = (props: PhotoModalProps) => {
   };
 
   return (
-    <S.Wrapper>
+    <S.Wrapper
+      onMouseDown={(e) => {
+        if (e.target === e.currentTarget) {
+          onClose?.();
+        }
+      }}
+    >
       {isManagerMode && 'uploaderName' in props && (
-        <S.FromContainer>
+        <S.FromContainer onMouseDown={(e) => e.stopPropagation()}>
           <S.FromMessage>From.</S.FromMessage>
           {props.uploaderName || '익명의 우주여행자'}
         </S.FromContainer>
       )}
-      <S.PhotoContainer>
-        <S.Photo
-          src={displayPath}
-          alt={photo?.originalName || 'Image'}
-          onError={(e) => {
-            setImageLoadError(true);
-            const img = e.target as HTMLImageElement;
-            img.onerror = null;
-          }}
-        />
+      <S.PhotoContainer onMouseDown={(e) => e.stopPropagation()}>
+        {displayPath ? (
+          <S.Photo
+            src={displayPath}
+            alt={photo?.originalName || 'Image'}
+            onError={handleImageError}
+          />
+        ) : (
+          <S.LoadingPhoto />
+        )}
       </S.PhotoContainer>
-      <S.ButtonContainer $isManagerMode={isManagerMode}>
+      <S.ButtonContainer
+        $isManagerMode={isManagerMode}
+        onMouseDown={(e) => e.stopPropagation()}
+      >
         <IconLabelButton
           icon={<S.DeleteIcon />}
           variant="dark"

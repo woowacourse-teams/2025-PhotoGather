@@ -1,5 +1,6 @@
 import type React from 'react';
 import type { PropsWithChildren } from 'react';
+import useScrollLock from '../../../hooks/@common/useScrollLock';
 import * as S from '../../../styles/@common/BackDrop.styles';
 
 interface OverlayProps extends PropsWithChildren {
@@ -7,6 +8,8 @@ interface OverlayProps extends PropsWithChildren {
 }
 
 const Overlay = ({ onBackdropClick, children }: OverlayProps) => {
+  useScrollLock();
+
   const handleBackDropClick = () => {
     onBackdropClick?.();
   };

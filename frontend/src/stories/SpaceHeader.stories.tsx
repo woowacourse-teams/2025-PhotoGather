@@ -1,4 +1,5 @@
 import { ReactComponent as SaveIcon } from '@assets/icons/download.svg';
+import { ReactComponent as ShareIcon } from '@assets/icons/share.svg';
 import type { Meta, StoryObj } from '@storybook/react-webpack5';
 import SpaceHeader from '../components/header/spaceHeader/SpaceHeader';
 
@@ -19,7 +20,10 @@ export const Default: Story = {
       minutes: 45,
       seconds: 30,
     },
-    icon: <SaveIcon />,
+    icons: [
+      { element: <SaveIcon />, onClick: () => {}, label: '저장' },
+      { element: <ShareIcon />, onClick: () => {}, label: '공유' },
+    ],
   },
 };
 
@@ -32,6 +36,9 @@ export const Urgent: Story = {
       minutes: 45,
       seconds: 30,
     },
-    icon: <SaveIcon />,
+    icons: [
+      { element: <SaveIcon />, onClick: () => {}, label: '저장' },
+      { element: <ShareIcon />, onClick: () => {}, label: '공유' },
+    ],
   },
 };

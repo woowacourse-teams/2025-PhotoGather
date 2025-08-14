@@ -42,21 +42,24 @@ const useDownload = ({ spaceCode, spaceName }: UseDownloadProps) => {
       });
       return;
     }
+    setIsDownloading(true);
     await handleDownload(() =>
       photoService.downloadPhotos(spaceCode, {
         photoIds: photoIds,
       }),
     );
+    setIsDownloading(false);
   };
 
   const downloadAll = async () => {
     setIsDownloading(true);
-    await handleDownload(() => photoService.downloadAll(spaceCode));
+    await handleDownload(() => photoService.downloadAll(spaceCode), true);
     setIsDownloading(false);
   };
 
   const handleDownload = async (
     fetchFunction: () => Promise<ApiResponse<unknown>>,
+    shouldNavigate = false,
   ) => {
     try {
       const response = await safeApiCall(fetchFunction);
@@ -67,11 +70,14 @@ const useDownload = ({ spaceCode, spaceName }: UseDownloadProps) => {
           throw new Error(DEBUG_MESSAGES.NO_BLOB_INSTANCE);
         }
         downloadBlob(blob);
-        navigate(ROUTES.COMPLETE.DOWNLOAD, {
-          state: {
-            spaceCode,
-          },
-        });
+
+        if (shouldNavigate) {
+          navigate(ROUTES.COMPLETE.DOWNLOAD, {
+            state: {
+              spaceCode,
+            },
+          });
+        }
       } else {
         if (
           !response.error?.toLowerCase().includes(NETWORK.DEFAULT.toLowerCase())

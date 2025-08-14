@@ -7,10 +7,10 @@ import useSpaceCodeFromPath from '../../hooks/useSpaceCodeFromPath';
 
 const SpaceCreatedCompletePage = () => {
   const navigate = useNavigate();
-  const { spaceId } = useSpaceCodeFromPath();
+  const { spaceCode } = useSpaceCodeFromPath();
 
   const handleButtonClick = () => {
-    navigate(ROUTES.MANAGER.SPACE_HOME(spaceId ?? ''));
+    navigate(ROUTES.MANAGER.SPACE_HOME(spaceCode ?? ''));
   };
 
   return (

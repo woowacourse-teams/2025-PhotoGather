@@ -7,9 +7,9 @@ const useSpaceCodeFromPath = () => {
     /^\/(manager|guest)\/(space-home|image-upload)\/([^/]+)$/,
   );
 
-  const spaceId = match ? match[3] : null;
+  const spaceCode = match ? match[3] : null;
 
-  return { spaceId };
+  return { spaceCode };
 };
 
 export default useSpaceCodeFromPath;

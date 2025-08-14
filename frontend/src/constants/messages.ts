@@ -91,6 +91,12 @@ export const ERROR = {
     DATE: '오늘 이전 날짜는 선택할 수 없어요.',
     TIME: '현재 시간 이후 시간대를 입력해주세요.',
   },
+  NOT_FOUND: {
+    TITLE: '페이지를 찾을 수 없습니다',
+    DESCRIPTION: '잘못된 경로이거나 페이지가 삭제되었어요.',
+    BUTTON_TEXT: '홈으로 이동',
+    HIGHLIGHT_WORDS: [''],
+  },
   DOWNLOAD: {
     NO_SELECTED_PHOTO: '선택된 사진이 없습니다.',
   },

@@ -1,4 +1,4 @@
-import { calculateKSTDate } from '../src/utils/calculateKSTDate';
+import { calculateKstToday } from '../src/utils/calculateKstToday';
 
 beforeAll(() => {
   jest.useFakeTimers();
@@ -9,21 +9,21 @@ afterAll(() => {
   jest.useRealTimers();
 });
 
-describe('calculateKSTDate 유틸 테스트', () => {
+describe('calculateKstToday 유틸 테스트', () => {
   it('KST 기준의 Date 객체를 받을 수 있다.', () => {
-    const { kstDate } = calculateKSTDate();
+    const { kstDate } = calculateKstToday();
     const expectedTime =
       new Date('2025-07-30T18:00:00Z').getTime() + 9 * 60 * 60 * 1000;
     expect(kstDate.getTime()).toBe(expectedTime);
   });
 
   it('KST 기준의 날짜 문자열를 받을 수 있다.', () => {
-    const { kstDateString } = calculateKSTDate();
+    const { kstDateString } = calculateKstToday();
     expect(kstDateString).toBe('2025-07-31');
   });
 
   it('KST 기준의 시간 문자열를 받을 수 있다.', () => {
-    const { kstTimeString } = calculateKSTDate();
+    const { kstTimeString } = calculateKstToday();
     expect(kstTimeString).toBe('03:00');
   });
 });

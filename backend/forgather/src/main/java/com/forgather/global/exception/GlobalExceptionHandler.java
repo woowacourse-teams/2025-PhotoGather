@@ -25,7 +25,9 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleException(Exception e) {
         var errorResponse = ErrorResponse.from(e.getMessage());
-        log.atError().log(e.getClass() + ": " + e.getMessage());
+        log.atError()
+            .setCause(e)
+            .log("500 Internal Server Error");
         return ResponseEntity.internalServerError().body(errorResponse);
     }
 

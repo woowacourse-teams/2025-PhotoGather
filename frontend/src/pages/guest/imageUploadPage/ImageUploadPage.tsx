@@ -1,14 +1,13 @@
 import rocketIcon from '@assets/images/rocket.png';
-import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ReactComponent as ArrowUpSvg } from '../../../@assets/icons/upwardArrow.svg';
 import FloatingActionButton from '../../../components/@common/buttons/floatingActionButton/FloatingActionButton';
 import FloatingIconButton from '../../../components/@common/buttons/floatingIconButton/FloatingIconButton';
 import HighlightText from '../../../components/@common/highlightText/HighlightText';
 import GuestImageGrid from '../../../components/@common/imageLayout/imageGrid/guestImageGrid/GuestImageGrid';
+import PhotoModal from '../../../components/@common/modal/PhotoModal';
 import SpaceHeader from '../../../components/header/spaceHeader/SpaceHeader';
 import LoadingLayout from '../../../components/layout/loadingLayout/LoadingLayout';
-import PhotoModal from '../../../components/modal/PhotoModal';
 import UploadBox from '../../../components/uploadBox/UploadBox';
 import { ROUTES } from '../../../constants/routes';
 import { useOverlay } from '../../../contexts/OverlayProvider';
@@ -21,19 +20,21 @@ import useSpaceInfo from '../../../hooks/useSpaceInfo';
 import { ScrollableBlurArea } from '../../../styles/@common/ScrollableBlurArea';
 import { theme } from '../../../styles/theme';
 import { checkIsEarlyDate } from '../../../utils/checkIsEarlyTime';
+import { track } from '../../../utils/googleAnalytics/track';
 import { goToTop } from '../../../utils/goToTop';
 import EarlyPage from '../../status/earlyPage/EarlyPage';
 import ExpiredPage from '../../status/expiredPage/ExpiredPage';
 import * as S from './ImageUploadPage.styles';
 
 const ImageUploadPage = () => {
-  const { spaceId } = useSpaceCodeFromPath();
-  const { spaceInfo } = useSpaceInfo(spaceId ?? '');
-  const isEarlyTime = checkIsEarlyDate((spaceInfo?.openedAt as string) ?? '');
+  const { spaceCode } = useSpaceCodeFromPath();
+  const { spaceInfo } = useSpaceInfo(spaceCode ?? '');
   const isSpaceExpired = spaceInfo?.isExpired;
   // TODO: NoData 시 표시할 Layout 필요
-  const isNoData = !spaceInfo;
-  const [isClicked, setIsClicked] = useState(false);
+  const _isNoData = !spaceInfo;
+
+  const isEarlyTime =
+    spaceInfo?.openedAt && checkIsEarlyDate(spaceInfo.openedAt);
 
   const spaceName = spaceInfo?.name ?? '';
   const { showToast } = useToast();
@@ -46,7 +47,7 @@ const ImageUploadPage = () => {
     handleUploadFiles,
     handleDeleteFile,
   } = useFileUpload({
-    spaceCode: spaceId ?? '',
+    spaceCode: spaceCode ?? '',
     fileType: 'image',
     showError: showToast,
   });
@@ -66,7 +67,7 @@ const ImageUploadPage = () => {
     if (uploadSuccess) {
       navigate(ROUTES.COMPLETE.UPLOAD, {
         state: {
-          spaceId: spaceId,
+          spaceCode: spaceCode,
         },
       });
     }
@@ -82,6 +83,11 @@ const ImageUploadPage = () => {
         previewFile={selectedPhoto}
         onDelete={(id) => {
           handleDeleteFile(id);
+          track.button('single_delete_button', {
+            page: 'image_upload_page',
+            section: 'photo_modal',
+            action: 'delete_single',
+          });
         }}
       />,
       {
@@ -93,36 +99,25 @@ const ImageUploadPage = () => {
   const loadingContents = [
     {
       icon: { src: rocketIcon, alt: '데모 페이지 아이콘' },
-      description: '로딩 텍스트 1',
+      description: '추억 담는 중',
     },
     {
       icon: { src: rocketIcon, alt: '데모 페이지 아이콘' },
-      description: '로딩 텍스트 2',
+      description: '선물 상자 포장하는 중',
     },
     {
       icon: { src: rocketIcon, alt: '데모 페이지 아이콘' },
-      description: '로딩 텍스트 2',
+      description: '배달 가는 중',
     },
     {
       icon: { src: rocketIcon, alt: '데모 페이지 아이콘' },
-      description: '로딩 텍스트 2',
+      description: '당신에게 전달 중',
     },
   ];
 
   return (
     <S.Wrapper $hasImages={hasImages}>
-      {isEarlyTime && !isClicked && (
-        <>
-          <EarlyPage openedAt={spaceInfo?.openedAt ?? ''} />
-          <button
-            style={{ zIndex: 10000 }}
-            type="button"
-            onClick={() => setIsClicked((prev) => !prev)}
-          >
-            닫기
-          </button>
-        </>
-      )}
+      {isEarlyTime && <EarlyPage openedAt={spaceInfo.openedAt} />}
       {isSpaceExpired && <ExpiredPage />}
       {isUploading && (
         <LoadingLayout loadingContents={loadingContents} percentage={0} />
@@ -160,7 +155,14 @@ const ImageUploadPage = () => {
             photoData={previewData}
             rowImageAmount={3}
             onImageClick={handleImageClick}
-            onDeleteClick={handleDeleteFile}
+            onDeleteClick={(id: number) => {
+              handleDeleteFile(id);
+              track.button('grid_delete_button', {
+                page: 'image_upload_page',
+                section: 'image_grid',
+                action: 'delete_single',
+              });
+            }}
           />
           <S.TopButtonContainer $isVisible={!isAtPageTop}>
             <FloatingIconButton

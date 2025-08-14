@@ -5,6 +5,7 @@ import UploadCompletePage from '../pages/complete/UploadCompletePage';
 import SpaceCreateFunnel from '../pages/create/funnel/SpaceCreateFunnel';
 import DemoHome from '../pages/demo/DemoHome';
 import NetworkErrorPage from '../pages/error/NetworkErrorPage';
+import NotFoundErrorPage from '../pages/error/NotFoundErrorPage';
 import ImageUploadPage from '../pages/guest/imageUploadPage/ImageUploadPage';
 import SharePage from '../pages/guest/sharePage/SharePage';
 import LandingPage from '../pages/landing/LandingPage';
@@ -71,6 +72,10 @@ const router = createBrowserRouter([
       {
         path: 'network-error',
         element: <NetworkErrorPage />,
+      },
+      {
+        path: '*',
+        element: <NotFoundErrorPage />,
       },
     ],
   },
