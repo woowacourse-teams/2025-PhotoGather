@@ -33,15 +33,26 @@ const LandingPage = () => {
 
         <S.SectionContainer {...useLandingScroll({})}>
           <S.TextContainer>{`주인공은 당신이니까,\n당신을 위한 순간, 흩어지지 않게`}</S.TextContainer>
+          <FloatingActionButton
+            label="스페이스 생성하기"
+            onClick={() => {
+              navigate(ROUTES.CREATE);
+              track.button('create_space_button', {
+                page: 'landing_page',
+                section: 'landing_page',
+                action: 'create_space',
+              });
+            }}
+          />
         </S.SectionContainer>
 
-        <S.SectionContainer
+        {/* <S.SectionContainer
           {...useLandingScroll({
             delay: 0.4,
             onVisible: () => track.sectionView('first_section', 1),
           })}
         >
-          <S.TextContainer>소셜 로그인으로 시작하기</S.TextContainer>
+          <S.TextContainer>지금 바로 생성하기</S.TextContainer>
           <S.RowContainer>
             <IconLabelButton
               icon={<NaverIcon />}
@@ -60,7 +71,7 @@ const LandingPage = () => {
               style={{ backgroundColor: theme.colors.white }}
             />
           </S.RowContainer>
-        </S.SectionContainer>
+        </S.SectionContainer> */}
 
         <S.SectionContainer
           {...useLandingScroll({
