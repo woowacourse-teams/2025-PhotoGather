@@ -41,17 +41,18 @@ const LandingPage = () => {
             onVisible: () => track.sectionView('first_section', 1),
           })}
         >
-          <S.TextContainer>소셜 로그인으로 시작하기</S.TextContainer>
+          <S.TextContainer>지금 바로 생성하기</S.TextContainer>
           <S.RowContainer>
             <FloatingActionButton
               label="스페이스 생성하기"
-              onClick={() =>
+              onClick={() => {
+                navigate(ROUTES.CREATE);
                 track.button('create_space_button', {
                   page: 'landing_page',
                   section: 'landing_page',
                   action: 'create_space',
-                })
-              }
+                });
+              }}
             />
             {/* <IconLabelButton
               icon={<NaverIcon />}
