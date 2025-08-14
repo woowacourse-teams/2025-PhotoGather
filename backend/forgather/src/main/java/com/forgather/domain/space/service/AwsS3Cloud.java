@@ -2,6 +2,7 @@ package com.forgather.domain.space.service;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -24,6 +25,7 @@ import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.Delete;
 import software.amazon.awssdk.services.s3.model.DeleteObjectsRequest;
 import software.amazon.awssdk.services.s3.model.DeleteObjectsResponse;
+import software.amazon.awssdk.services.s3.model.GetObjectRequest;
 import software.amazon.awssdk.services.s3.model.ObjectIdentifier;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 import software.amazon.awssdk.services.s3.model.S3Error;
@@ -71,6 +73,15 @@ public class AwsS3Cloud {
         String uploadFileName = UUID.randomUUID().toString();
         return String.format("%s/%s/%s/%s.%s", s3Properties.getRootDirectory(), CONTENTS_INNER_PATH, spaceCode,
             uploadFileName, extension);
+    }
+
+    public InputStream download(String photoPath) {
+        GetObjectRequest request = GetObjectRequest.builder()
+            .bucket(s3Properties.getBucketName())
+            .key(photoPath)
+            .build();
+
+        return s3Client.getObject(request);
     }
 
     public File downloadSelected(String tempPath, String spaceCode, List<String> photoPaths) {
@@ -153,10 +164,9 @@ public class AwsS3Cloud {
                 retryDeleteContents(response);
             }
         }
-        logger.log()
-            .event("S3 삭제 완료")
-            .value("deletedSize", String.valueOf(deletePaths.size()))
-            .info();
+        log.atInfo()
+            .addKeyValue("deletedSize", String.valueOf(deletePaths.size()))
+            .log("S3 삭제 완료");
     }
 
     private DeleteObjectsResponse deleteContents(List<String> deletePaths) {
@@ -174,10 +184,9 @@ public class AwsS3Cloud {
         List<String> retryPaths = extractFailedKeys(response);
         DeleteObjectsResponse retryResponse = deleteContents(retryPaths);
         if (retryResponse.hasErrors()) {
-            logger.log()
-                .event("S3 삭제 실패")
-                .value("deleteFailPath", extractFailedKeys(retryResponse).toString())
-                .info();
+            log.atInfo()
+                .addKeyValue("deleteFailPath", extractFailedKeys(retryResponse).toString())
+                .log("S3 삭제 실패");
         }
     }
 

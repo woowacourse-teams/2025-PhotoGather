@@ -7,6 +7,8 @@ import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -77,6 +79,27 @@ public class PhotoController {
     ) {
         var response = photoService.getAll(spaceCode, pageable, hostId);
         return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/download/{photoId}")
+    @Operation(summary = "사진 단일 다운로드", description = "특정 공간의 선택된 단일 사진을 다운로드합니다.")
+    public ResponseEntity<Resource> download(
+        @PathVariable(name = "spaceCode") String spaceCode,
+        @PathVariable(name = "photoId") Long photoId,
+        @HostId Long hostId
+    ) {
+        var response = photoService.download(spaceCode, photoId, hostId);
+        ContentDisposition contentDisposition = ContentDisposition.attachment()
+            .filename(response.name(), StandardCharsets.UTF_8)
+            .build();
+        HttpHeaders httpHeaders = new HttpHeaders();
+        InputStreamResource body = new InputStreamResource(response.photoFile());
+        httpHeaders.setContentDisposition(contentDisposition);
+        httpHeaders.setContentType(MediaType.valueOf("image/" + response.extension()));
+
+        return ResponseEntity.ok()
+            .headers(httpHeaders)
+            .body(body);
     }
 
     @PostMapping(value = "/download/selected", produces = ZIP_CONTENT_TYPE)
