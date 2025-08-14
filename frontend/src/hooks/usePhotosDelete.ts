@@ -40,6 +40,7 @@ const usePhotosDelete = ({
         clickOverlayClose: true,
       },
     );
+
     return result;
   };
 

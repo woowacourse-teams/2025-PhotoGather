@@ -63,6 +63,7 @@ const useDownload = ({
       task: async () => {
         setIsDownloading(true);
         await handleDownload(() => photoService.downloadAll(spaceCode));
+        onDownloadSuccess?.();
       },
       errorActions: ['toast', 'console'],
       context: {
@@ -89,7 +90,6 @@ const useDownload = ({
       task: () => {
         validateDownloadFormat(blob);
         downloadBlob(blob as Blob);
-        onDownloadSuccess?.();
       },
       errorActions: ['console'],
       shouldLogToSentry: true,
