@@ -34,6 +34,7 @@ const CheckSpaceInfoElement = ({
     ? parseIsoStringFromDateTime(kstDateString, kstTimeString)
     : parseIsoStringFromDateTime(spaceInfo.date, spaceInfo.time);
 
+  console.log(isCreating);
   const createSpaceRedirect = async () => {
     const spaceCode = await fetchCreateSpace({
       name: spaceInfo.name,
@@ -63,6 +64,7 @@ const CheckSpaceInfoElement = ({
         await createSpaceRedirect();
       }}
       nextButtonDisabled={isCreating}
+      buttonText={isCreating ? '생성중' : '생성하기'}
     />
   );
 };
