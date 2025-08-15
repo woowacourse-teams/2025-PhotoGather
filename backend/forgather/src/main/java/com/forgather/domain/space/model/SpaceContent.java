@@ -12,6 +12,7 @@ import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -30,6 +31,10 @@ public abstract class SpaceContent {
     @JoinColumn(name = "space_id", nullable = false)
     @ManyToOne(fetch = FetchType.LAZY)
     protected Space space;
+
+    @JoinColumn(name = "guest_id", nullable = false)
+    @OneToOne(fetch = FetchType.LAZY)
+    protected Guest guest;
 
     protected SpaceContent(Space space) {
         this.space = space;

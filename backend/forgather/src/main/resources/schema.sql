@@ -17,6 +17,7 @@ CREATE TABLE space_content
     id           BIGINT AUTO_INCREMENT PRIMARY KEY,
     content_type VARCHAR(16) NOT NULL,
     space_id     BIGINT      NOT NULL,
+    guest_id     BIGINT      NOT NULL,
     FOREIGN KEY (space_id) REFERENCES space (id)
 );
 
@@ -60,3 +61,13 @@ CREATE TABLE refresh_token
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT fk_login_host FOREIGN KEY (host_id) REFERENCES host (id)
 );
+
+-- 7. guest
+CREATE TABLE guest
+(
+    id         BIGINT AUTO_INCREMENT PRIMARY KEY,
+    name       VARCHAR(100),
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
