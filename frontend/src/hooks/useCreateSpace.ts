@@ -17,7 +17,7 @@ const useCreateSpace = () => {
   const fetchCreateSpace = async (spaceCreateInfo: SpaceCreateInfo) => {
     const taskResult = await tryTask<string | undefined>({
       task: async () => requestSpaceCode(spaceCreateInfo),
-      errorActions: ['afterAction'],
+      errorActions: ['toast'],
       context: {
         afterAction: () => {
           throw new Error();

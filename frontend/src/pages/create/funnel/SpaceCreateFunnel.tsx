@@ -5,13 +5,12 @@ import useConfirmBeforeRefresh from '../../../hooks/@common/useConfirmBeforeRefr
 import useFunnelHistory from '../../../hooks/useFunnelHistory';
 import type { SpaceFunnelInfo } from '../../../types/space.type';
 import CheckSpaceInfoElement from '../funnelElements/CheckSpaceInfoElement';
-import FetchElement from '../funnelElements/FetchElement';
 import ImmediateOpenElement from '../funnelElements/immediateOpenElement/ImmediateOpenElement';
 import NameInputElement from '../funnelElements/NameInputElement';
 import * as S from './SpaceCreateFunnel.styles';
 
 const PROGRESS_STEP_LIST = ['name', 'date', 'check'] as const;
-const STEP_LIST = [...PROGRESS_STEP_LIST, 'complete', 'fetch'] as const;
+const STEP_LIST = [...PROGRESS_STEP_LIST, 'complete'] as const;
 type STEP = (typeof STEP_LIST)[number];
 const initialFunnelValue: SpaceFunnelInfo = {
   name: '',
@@ -38,7 +37,7 @@ const SpaceCreateFunnel = () => {
 
   return (
     <S.Wrapper>
-      {step !== 'fetch' && (
+      {step !== 'complete' && (
         <>
           <ProgressBar
             currentStep={currentStep}
@@ -85,13 +84,10 @@ const SpaceCreateFunnel = () => {
           <CheckSpaceInfoElement
             spaceInfo={spaceInfo}
             onNext={(isImmediateOpen) => {
-              goNextStep('fetch');
+              goNextStep('complete');
               setSpaceInfo((prev) => ({ ...prev, isImmediateOpen }));
             }}
           />
-        )}
-        {step === 'fetch' && (
-          <FetchElement spaceInfo={spaceInfo} onNext={() => {}} />
         )}
       </S.ContentContainer>
     </S.Wrapper>
