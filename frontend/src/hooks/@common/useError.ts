@@ -63,7 +63,7 @@ const useError = () => {
 
       if (shouldLogToSentry) {
         Sentry.captureException(error, (scope) => {
-          const { headers, requestBody, ...rest } = extraLogData;
+          const { headers, requestBody, ...rest } = extraLogData || {};
 
           scope.setContext('http', {
             ...rest,
