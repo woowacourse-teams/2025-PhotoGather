@@ -17,8 +17,9 @@ CREATE TABLE space_content
     id           BIGINT AUTO_INCREMENT PRIMARY KEY,
     content_type VARCHAR(16) NOT NULL,
     space_id     BIGINT      NOT NULL,
-    guest_id     BIGINT      NOT NULL,
-    FOREIGN KEY (space_id) REFERENCES space (id)
+    guest_id     BIGINT      NULL DEFAULT NULL,
+    CONSTRAINT space_content_space_fk FOREIGN KEY (space_id) REFERENCES space (id),
+    CONSTRAINT space_content_guest_fk FOREIGN KEY (guest_id) REFERENCES guest (id)
 );
 
 -- 3. photo

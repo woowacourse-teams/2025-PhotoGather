@@ -32,7 +32,7 @@ public abstract class SpaceContent {
     @ManyToOne(fetch = FetchType.LAZY)
     protected Space space;
 
-    @JoinColumn(name = "guest_id", nullable = false)
+    @JoinColumn(name = "guest_id")
     @OneToOne(fetch = FetchType.LAZY)
     protected Guest guest;
 
