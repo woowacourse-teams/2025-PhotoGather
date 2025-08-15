@@ -9,6 +9,10 @@ type AfterAction = () => void;
 type RedirectPath = string;
 type ToastOptions = Omit<ToastBase, 'text'> & { text?: string };
 
+interface ErrorLog {
+  body: Record<string, unknown>;
+}
+
 interface ErrorRequiredProps {
   toast?: ToastOptions;
   afterAction?: AfterAction;
@@ -42,7 +46,7 @@ const useError = () => {
     errorActions: ErrorType[];
     context?: ErrorRequiredProps;
     onFinally?: () => void;
-    shouldLogToSentry?: boolean;
+    sentryLog?: ErrorLog;
   }
 
   const tryTask = async <T>({
@@ -50,15 +54,17 @@ const useError = () => {
     errorActions,
     context,
     onFinally,
-    shouldLogToSentry = false,
+    sentryLog,
   }: TryTaskProps<T>): Promise<TryTaskResultType<T>> => {
     try {
       setIsError(false);
       const data = await Promise.resolve(task());
       return { success: true, data };
     } catch (e) {
-      if (shouldLogToSentry) {
-        Sentry.captureException(e);
+      if (sentryLog) {
+        Sentry.captureException(e, {
+          extra: sentryLog.body,
+        });
       }
       setIsError(true);
       const error = e instanceof Error ? e : new Error(String(e));

@@ -24,7 +24,11 @@ const useCreateSpace = () => {
         },
       },
       onFinally: () => setIsCreating(false),
-      shouldLogToSentry: true,
+      sentryLog: {
+        body: {
+          spaceCreateInfo,
+        },
+      },
     });
 
     return taskResult.data;

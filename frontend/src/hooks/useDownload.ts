@@ -54,7 +54,11 @@ const useDownload = ({
           type: 'error',
         },
       },
-      shouldLogToSentry: true,
+      sentryLog: {
+        body: {
+          photoIds,
+        },
+      },
     });
   };
 
@@ -75,7 +79,11 @@ const useDownload = ({
       onFinally: () => {
         setIsDownloading(false);
       },
-      shouldLogToSentry: true,
+      sentryLog: {
+        body: {
+          spaceCode,
+        },
+      },
     });
   };
 
@@ -92,7 +100,11 @@ const useDownload = ({
         downloadBlob(blob as Blob);
       },
       errorActions: ['console'],
-      shouldLogToSentry: true,
+      sentryLog: {
+        body: {
+          spaceCode,
+        },
+      },
     });
   };
   return { isDownloading, downloadAll, selectDownload };

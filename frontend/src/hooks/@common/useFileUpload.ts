@@ -115,7 +115,11 @@ const useFileUpload = ({
       onFinally: () => {
         setIsUploading(false);
       },
-      shouldLogToSentry: true,
+      sentryLog: {
+        body: {
+          spaceCode,
+        },
+      },
     });
   };
 

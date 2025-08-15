@@ -84,7 +84,11 @@ const usePhotosBySpaceCode = ({
       onFinally: () => {
         setIsLoading(false);
       },
-      shouldLogToSentry: true,
+      sentryLog: {
+        body: {
+          spaceCode,
+        },
+      },
     });
   };
 

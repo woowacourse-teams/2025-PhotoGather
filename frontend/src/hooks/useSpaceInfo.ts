@@ -27,7 +27,11 @@ const useSpaceInfo = (spaceCode: string) => {
           },
         },
         onFinally: () => setIsLoading(false),
-        shouldLogToSentry: true,
+        sentryLog: {
+          body: {
+            spaceCode,
+          },
+        },
       });
     };
 
