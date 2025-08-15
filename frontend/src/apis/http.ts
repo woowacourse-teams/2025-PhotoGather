@@ -45,8 +45,7 @@ const request = async <T>(
     headers,
     body: requestBody,
   });
-  if (!response) {
-  }
+  // TODO: response가 없는 경우 (단순 네트워크 에러) 대응 - Failed To Fetch
 
   const contentType = response.headers.get('content-type');
 
