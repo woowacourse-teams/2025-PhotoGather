@@ -59,10 +59,14 @@ const useError = () => {
     } catch (e) {
       setIsError(true);
       const error = e instanceof Error ? e : new Error(String(e));
-      const extraContext = (error as any).sentryContext;
+      const extraLogData = (error as any).sentryContext;
+
       if (shouldLogToSentry) {
-        Sentry.captureException(error, {
-          captureContext: extraContext,
+        Sentry.captureException(error, (scope) => {
+          if (extraLogData) {
+            scope.setContext('http', extraLogData);
+          }
+          return scope;
         });
       }
 
