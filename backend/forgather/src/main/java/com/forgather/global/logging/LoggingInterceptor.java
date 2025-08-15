@@ -22,13 +22,14 @@ public class LoggingInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
-        // TODO 클라이언트에게서 traceId를 받기
-        String traceId = randomCodeGenerator.generate(TRACE_ID_LENGTH);
-        request.setAttribute("com.forgather.traceId", traceId);
         request.setAttribute("com.forgather.startTime", System.currentTimeMillis());
 
+        // TODO 클라이언트에게서 traceId를 받기
+        String traceId = randomCodeGenerator.generate(TRACE_ID_LENGTH);
+        String formattedTraceId = "\"" + traceId + "\"";
+
         // 이후 해당 쓰레드에서 발생하는 모든 로그에 대해 자동으로 추가됨
-        MDC.put("traceId", traceId);
+        MDC.put("traceId", formattedTraceId);
 
         log.atInfo()
             .addKeyValue("event", "REQUEST")
