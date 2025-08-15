@@ -1,14 +1,49 @@
 <configuration>
     <!-- 로그 메세지 커스텀 변환기 등록 -->
     <conversionRule conversionWord="msg" class="com.forgather.global.logging.LogMessageConverter"/>
-    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
-        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %logger{36} %marker %mdc %kvp %msg%n</pattern>
-            <charset>UTF-8</charset>
-        </encoder>
-    </appender>
 
-    <root>
-        <appender-ref ref="CONSOLE"/>
-    </root>
+    <!-- 환경 별 로그 포맷 -->
+    <property name="DEV_PATTERN" value="%d{HH:mm:ss.SSS} %-5level %logger{36} %marker %mdc %kvp %msg%n"/>
+    <property name="PROD_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %logger{36} %marker %mdc %kvp %msg%n"/>
+    <!-- <property name="DEV_COLOR_PATTERN" value="%d{HH:mm:ss.SSS} %highlight(%-5level) %cyan(%logger{36}) %marker %mdc %kvp %msg%n"/> -->
+    <!-- <property name="PROD_COLOR_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS} %highlight(%-5level) %cyan(%logger{36}) %marker %mdc %kvp %msg%n"/> -->
+
+    <!-- 로컬/개발 프로필 -->
+    <springProfile name="dev,local">
+        <appender name="CONSOLE_DEV" class="ch.qos.logback.core.ConsoleAppender">
+            <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+                <pattern>${DEV_PATTERN}</pattern>
+                <charset>UTF-8</charset>
+            </encoder>
+        </appender>
+        <root>
+            <appender-ref ref="CONSOLE_DEV"/>
+        </root>
+    </springProfile>
+
+    <!-- 운영 프로필 -->
+    <springProfile name="prod">
+        <appender name="CONSOLE_PROD" class="ch.qos.logback.core.ConsoleAppender">
+            <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+                <pattern>${PROD_PATTERN}</pattern>
+                <charset>UTF-8</charset>
+            </encoder>
+        </appender>
+        <root>
+            <appender-ref ref="CONSOLE_PROD"/>
+        </root>
+    </springProfile>
+
+    <!-- 기타 프로필 -->
+    <springProfile name="!(dev | local | prod)">
+        <appender name="CONSOLE_DEFAULT" class="ch.qos.logback.core.ConsoleAppender">
+            <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+                <pattern>${PROD_PATTERN}</pattern>
+                <charset>UTF-8</charset>
+            </encoder>
+        </appender>
+        <root level="INFO">
+            <appender-ref ref="CONSOLE_DEFAULT"/>
+        </root>
+    </springProfile>
 </configuration>
