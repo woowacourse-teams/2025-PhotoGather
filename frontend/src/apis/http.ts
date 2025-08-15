@@ -3,6 +3,7 @@ import type {
   BodyContentType,
   requestOptionsType,
 } from '../types/api.type';
+import { makeSentryRequestContext } from '../utils/sentry';
 import { BASE_URL } from './config';
 import { createBody } from './createBody';
 import { createHeaders } from './createHeaders';
@@ -60,32 +61,28 @@ const request = async <T>(
   const data = text ? JSON.parse(text) : null;
 
   if (!response.ok) {
-    // TODO : 함수 분리
-    if (response.status === 400) {
+    const responseContext = {
+      status: response.status,
+      data,
+    };
+    if (response.status === 400)
       throw new Error('요청 형식이 올바르지 않습니다.');
-    }
-    if (response.status === 401) {
-      throw new Error('인증이 필요합니다.');
-    }
-    if (response.status === 403) {
-      throw new Error('접근 권한이 없습니다.');
-    }
-    if (response.status === 404) {
-      throw new Error('존재하지 않는 리소스입니다.');
-    }
-    if (response.status === 500) {
-      throw new Error('서버 오류가 발생했습니다.');
-    }
-    if (response.status === 502) {
+    if (response.status === 401) throw new Error('인증이 필요합니다.');
+    if (response.status === 403) throw new Error('접근 권한이 없습니다.');
+    if (response.status === 404) throw new Error('존재하지 않는 리소스입니다.');
+    if (response.status === 500) throw new Error('서버 오류가 발생했습니다.');
+    if (response.status === 502)
       throw new Error('서버 통신에 문제가 발생했습니다.');
-    }
-    if (response.status === 503) {
+    if (response.status === 503)
       throw new Error('서버가 일시적으로 장애가 발생했습니다.');
-    }
-    // 네트워크 에러
+
     return {
       success: false,
       error: data?.message || `Error: ${response.status}`,
+      sentryContext: {
+        request: makeSentryRequestContext(url, method, headers, requestBody),
+        response: responseContext,
+      },
     };
   }
 

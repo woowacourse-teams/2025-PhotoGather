@@ -9,7 +9,7 @@ export const spaceService = {
   create: (data: SpaceCreateInfo) =>
     http.post<{ spaceCode: string }>('/spaces', data),
 
-  getInfoByCode: (spaceCode: string) => http.get<Space>(`/spaces/${spaceCode}`),
+  getInfoByCode: (spaceCode: string) => http.get<Space>(`/space/${spaceCode}`),
 
   update: (id: number, data: UpdateSpaceInput) =>
     http.patch<Space>(`/spaces/${id}`, data),

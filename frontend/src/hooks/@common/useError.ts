@@ -63,7 +63,7 @@ const useError = () => {
     } catch (e) {
       if (sentryLog) {
         Sentry.captureException(e, {
-          extra: sentryLog.body,
+          captureContext: sentryLog.body,
         });
       }
       setIsError(true);
