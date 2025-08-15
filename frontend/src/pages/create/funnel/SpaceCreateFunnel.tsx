@@ -10,7 +10,7 @@ import NameInputElement from '../funnelElements/NameInputElement';
 import * as S from './SpaceCreateFunnel.styles';
 
 const PROGRESS_STEP_LIST = ['name', 'date', 'check'] as const;
-const STEP_LIST = [...PROGRESS_STEP_LIST, 'complete'] as const;
+const STEP_LIST = [...PROGRESS_STEP_LIST] as const;
 type STEP = (typeof STEP_LIST)[number];
 const initialFunnelValue: SpaceFunnelInfo = {
   name: '',
@@ -37,21 +37,17 @@ const SpaceCreateFunnel = () => {
 
   return (
     <S.Wrapper>
-      {step !== 'complete' && (
-        <>
-          <ProgressBar
-            currentStep={currentStep}
-            maxStep={PROGRESS_STEP_LIST.length}
-          />
+      <ProgressBar
+        currentStep={currentStep}
+        maxStep={PROGRESS_STEP_LIST.length}
+      />
 
-          <S.TopContainer>
-            <S.IconContainer>
-              <S.Icon src={diamondImage} alt="다이아몬드 이미지" />
-              <S.UnderBar />
-            </S.IconContainer>
-          </S.TopContainer>
-        </>
-      )}
+      <S.TopContainer>
+        <S.IconContainer>
+          <S.Icon src={diamondImage} alt="다이아몬드 이미지" />
+          <S.UnderBar />
+        </S.IconContainer>
+      </S.TopContainer>
       <S.ContentContainer>
         {step === 'name' && (
           <NameInputElement
@@ -84,7 +80,6 @@ const SpaceCreateFunnel = () => {
           <CheckSpaceInfoElement
             spaceInfo={spaceInfo}
             onNext={(isImmediateOpen) => {
-              goNextStep('complete');
               setSpaceInfo((prev) => ({ ...prev, isImmediateOpen }));
             }}
           />

@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import LeftTimeInformationBox from '../../../components/leftTimeInformationBox/LeftTimeInformationBox';
 import { INFORMATION } from '../../../constants/messages';
@@ -34,16 +33,16 @@ const CheckSpaceInfoElement = ({
   const calculatedOpenedAt = spaceInfo.isImmediateOpen
     ? parseIsoStringFromDateTime(kstDateString, kstTimeString)
     : parseIsoStringFromDateTime(spaceInfo.date, spaceInfo.time);
-  const [spaceCode, setSpaceCode] = useState('');
 
-  const createSpace = async () => {
+  const createSpaceRedirect = async () => {
     const spaceCode = await fetchCreateSpace({
       name: spaceInfo.name,
       validHours: 72,
       openedAt: calculatedOpenedAt,
       password: '',
     });
-    if (spaceCode) setSpaceCode(spaceCode);
+    onNext(isImmediateOpen);
+    navigate(ROUTES.GUEST.SHARE, { state: spaceCode });
   };
 
   return (
@@ -60,10 +59,8 @@ const CheckSpaceInfoElement = ({
           leftTime={formattedLeftTime}
         />
       }
-      onNextButtonClick={() => {
-        createSpace();
-        onNext(isImmediateOpen);
-        navigate(ROUTES.GUEST.SHARE, { state: spaceCode });
+      onNextButtonClick={async () => {
+        await createSpaceRedirect();
       }}
       nextButtonDisabled={isCreating}
     />
