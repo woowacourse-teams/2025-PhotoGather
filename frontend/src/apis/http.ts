@@ -45,6 +45,8 @@ const request = async <T>(
     headers,
     body: requestBody,
   });
+  if (!response) {
+  }
 
   const contentType = response.headers.get('content-type');
 
@@ -61,29 +63,28 @@ const request = async <T>(
   const data = text ? JSON.parse(text) : null;
 
   if (!response.ok) {
-    const responseContext = {
-      status: response.status,
-      data,
+    const statusMessages: Record<number, string> = {
+      400: '요청 형식이 올바르지 않습니다.',
+      401: '인증이 필요합니다.',
+      403: '접근 권한이 없습니다.',
+      404: '존재하지 않는 리소스입니다.',
+      500: '서버 오류가 발생했습니다.',
+      502: '서버 통신에 문제가 발생했습니다.',
+      503: '서버가 일시적으로 장애가 발생했습니다.',
     };
-    if (response.status === 400)
-      throw new Error('요청 형식이 올바르지 않습니다.');
-    if (response.status === 401) throw new Error('인증이 필요합니다.');
-    if (response.status === 403) throw new Error('접근 권한이 없습니다.');
-    if (response.status === 404) throw new Error('존재하지 않는 리소스입니다.');
-    if (response.status === 500) throw new Error('서버 오류가 발생했습니다.');
-    if (response.status === 502)
-      throw new Error('서버 통신에 문제가 발생했습니다.');
-    if (response.status === 503)
-      throw new Error('서버가 일시적으로 장애가 발생했습니다.');
 
-    return {
-      success: false,
-      error: data?.message || `Error: ${response.status}`,
-      sentryContext: {
-        request: makeSentryRequestContext(url, method, headers, requestBody),
-        response: responseContext,
-      },
+    const message =
+      statusMessages[response.status] || `Error: ${response.status}`;
+
+    const err = new Error(message) as Error & {
+      sentryContext?: Record<string, unknown>;
     };
+
+    err.sentryContext = {
+      request: makeSentryRequestContext(url, method, headers, requestBody),
+    };
+
+    throw err;
   }
 
   return {

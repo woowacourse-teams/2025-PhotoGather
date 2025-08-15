@@ -81,11 +81,7 @@ const usePhotosDelete = ({
       onFinally: () => {
         setIsDeleting(false);
       },
-      sentryLog: {
-        body: {
-          photoIds,
-        },
-      },
+      shouldLogToSentry: true,
     });
   };
 
@@ -116,11 +112,7 @@ const usePhotosDelete = ({
       onFinally: () => {
         setIsDeleting(false);
       },
-      sentryLog: {
-        body: {
-          photoId,
-        },
-      },
+      shouldLogToSentry: true,
     });
 
     return true;

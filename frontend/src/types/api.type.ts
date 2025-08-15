@@ -21,10 +21,6 @@ export interface ApiResponse<T> {
       headers: Record<string, unknown>;
       requestBody: Record<string, unknown> | undefined;
     };
-    response: {
-      status: number;
-      data: unknown;
-    };
   };
 }
 

@@ -82,12 +82,7 @@ const PhotoModal = (props: PhotoModalProps) => {
       onFinally: () => {
         setIsLoading(false);
       },
-      sentryLog: {
-        body: {
-          managerSpaceCode,
-          managerPhotoId,
-        },
-      },
+      shouldLogToSentry: true,
     });
   };
 
