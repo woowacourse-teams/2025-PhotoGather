@@ -1,44 +1,67 @@
 <configuration>
-    <!-- 로그 메세지 커스텀 변환기 등록 -->
+    <!-- 로그 메세지 커스텀 변환기 -->
     <conversionRule conversionWord="msg" class="com.forgather.global.logging.LogMessageConverter"/>
 
     <!-- 환경 별 로그 포맷 -->
     <property name="DEV_PATTERN" value="%d{HH:mm:ss.SSS} %-5level %logger{36} %marker %mdc %kvp %msg%n"/>
     <property name="PROD_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %logger{36} %marker %mdc %kvp %msg%n"/>
-    <!-- <property name="DEV_COLOR_PATTERN" value="%d{HH:mm:ss.SSS} %highlight(%-5level) %cyan(%logger{36}) %marker %mdc %kvp %msg%n"/> -->
-    <!-- <property name="PROD_COLOR_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS} %highlight(%-5level) %cyan(%logger{36}) %marker %mdc %kvp %msg%n"/> -->
+    <property name="DEV_COLOR_PATTERN" value="%d{HH:mm:ss.SSS} %highlight(%-5level) %cyan(%logger{36}) %marker %mdc %kvp %msg%n"/>
+    <property name="PROD_COLOR_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS} %highlight(%-5level) %cyan(%logger{36}) %marker %mdc %kvp %msg%n"/>
 
-    <!-- 로컬/개발 프로필 -->
-    <springProfile name="dev,local">
-        <appender name="CONSOLE_DEV" class="ch.qos.logback.core.ConsoleAppender">
+    <!-- 환경 별 로그 파일 경로-->
+    <property name="DEV_LOG_FILE" value="/home/ubuntu/2025-PhotoGather/logs/dev.log"/>
+    <property name="PROD_LOG_FILE" value="/home/ubuntu/2025-PhotoGather/logs/prod.log"/>
+
+    <!-- 로컬 프로필 -->
+    <springProfile name="local">
+        <!--로컬 콘솔 출력 -->
+        <appender name="CONSOLE_LOCAL" class="ch.qos.logback.core.ConsoleAppender">
+            <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+                <pattern>${DEV_COLOR_PATTERN}</pattern>
+                <charset>UTF-8</charset>
+            </encoder>
+        </appender>
+        <root>
+            <appender-ref ref="CONSOLE_LOCAL"/>
+        </root>
+    </springProfile>
+
+    <!-- 개발 프로필 -->
+    <springProfile name="dev">
+        <!-- 파일 쓰기 -->
+        <appender name="FILE_DEV" class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <file>${DEV_LOG_FILE}</file>
             <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
                 <pattern>${DEV_PATTERN}</pattern>
                 <charset>UTF-8</charset>
             </encoder>
         </appender>
         <root>
-            <appender-ref ref="CONSOLE_DEV"/>
+            <appender-ref ref="FILE_DEV"/>
         </root>
     </springProfile>
 
     <!-- 운영 프로필 -->
     <springProfile name="prod">
-        <appender name="CONSOLE_PROD" class="ch.qos.logback.core.ConsoleAppender">
+        <!-- 파일 쓰기 -->
+        <appender name="FILE_PROD" class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <file>${PROD_LOG_FILE}</file>
             <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
                 <pattern>${PROD_PATTERN}</pattern>
                 <charset>UTF-8</charset>
             </encoder>
         </appender>
         <root>
-            <appender-ref ref="CONSOLE_PROD"/>
+            <appender-ref ref="FILE_PROD"/>
         </root>
     </springProfile>
 
     <!-- 기타 프로필 -->
     <springProfile name="!(dev | local | prod)">
+        <!-- 콘솔 출력-->
         <appender name="CONSOLE_DEFAULT" class="ch.qos.logback.core.ConsoleAppender">
             <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-                <pattern>${PROD_PATTERN}</pattern>
+                <pattern>${PROD_COLOR_PATTERN}</pattern>
                 <charset>UTF-8</charset>
             </encoder>
         </appender>
