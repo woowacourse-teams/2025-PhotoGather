@@ -63,9 +63,14 @@ const useError = () => {
 
       if (shouldLogToSentry) {
         Sentry.captureException(error, (scope) => {
-          if (extraLogData) {
-            scope.setContext('http', extraLogData);
-          }
+          const { headers, requestBody, ...rest } = extraLogData;
+
+          scope.setContext('http', {
+            ...rest,
+            headers: headers ? JSON.stringify(headers) : undefined,
+            requestBody: requestBody ? JSON.stringify(requestBody) : undefined,
+          });
+
           return scope;
         });
       }
