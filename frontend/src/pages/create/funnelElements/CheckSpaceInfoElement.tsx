@@ -30,11 +30,11 @@ const CheckSpaceInfoElement = ({
 
   const { isCreating, fetchCreateSpace } = useCreateSpace();
   const { kstDateString, kstTimeString } = calculateKstToday();
-  const calculatedOpenedAt = spaceInfo.isImmediateOpen
-    ? parseIsoStringFromDateTime(kstDateString, kstTimeString)
-    : parseIsoStringFromDateTime(spaceInfo.date, spaceInfo.time);
+  const calculatedOpenedAt =
+    spaceInfo.isImmediateOpen || isImmediateOpen
+      ? parseIsoStringFromDateTime(kstDateString, kstTimeString)
+      : parseIsoStringFromDateTime(spaceInfo.date, spaceInfo.time);
 
-  console.log(isCreating);
   const createSpaceRedirect = async () => {
     const spaceCode = await fetchCreateSpace({
       name: spaceInfo.name,

@@ -19,8 +19,8 @@ const useCreateSpace = () => {
       task: async () => requestSpaceCode(spaceCreateInfo),
       errorActions: ['toast'],
       context: {
-        afterAction: () => {
-          throw new Error();
+        toast: {
+          text: '스페이스 생성에 실패했습니다. 다시 시도해 주세요.',
         },
       },
       onFinally: () => setIsCreating(false),
