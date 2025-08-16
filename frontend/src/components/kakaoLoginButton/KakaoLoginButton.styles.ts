@@ -7,8 +7,8 @@ export const KakaoStyledButton = styled.button<{
   width: 100%;
   display: flex;
   padding: 12px 20px;
-    ${({ $iconPosition }) => $iconPosition === 'center' && { justifyContent: 'center' }}
-    ${({ $iconPosition }) => $iconPosition === 'left' && { justifyContent: 'space-between' }}
+  ${({ $iconPosition }) => $iconPosition === 'center' && { justifyContent: 'center' }}
+  ${({ $iconPosition }) => $iconPosition === 'left' && { justifyContent: 'space-between' }}
   align-items: center;
   gap: 8px;
   background-color: ${({ theme }) => theme.colors.kakaoTalk};
