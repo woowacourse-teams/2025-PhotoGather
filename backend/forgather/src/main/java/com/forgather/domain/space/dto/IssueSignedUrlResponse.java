@@ -1,6 +1,4 @@
 package com.forgather.domain.space.dto;
 
-import java.util.Map;
-
-public record IssueSignedUrlResponse(Map<String, String> signedUrls) {
+public record IssueSignedUrlResponse(String signeUrl, String extension) {
 }

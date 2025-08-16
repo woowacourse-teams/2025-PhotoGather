@@ -1,5 +1,7 @@
 package com.forgather.domain.space.service;
 
+import static com.forgather.domain.space.service.FilePathGenerator.generateContentsFilePath;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -23,6 +25,7 @@ import com.forgather.domain.space.repository.PhotoRepository;
 import com.forgather.domain.space.repository.SpaceRepository;
 import com.forgather.domain.space.util.MetaDataExtractor;
 import com.forgather.domain.space.util.ZipGenerator;
+import com.forgather.global.config.S3Properties;
 
 import lombok.RequiredArgsConstructor;
 
@@ -34,6 +37,7 @@ public class PhotoService {
     private final SpaceRepository spaceRepository;
     private final AwsS3Cloud awsS3Cloud;
     private final Path downloadTempPath;
+    private final S3Properties s3Properties;
 
     public PhotoResponse get(String spaceCode, Long photoId) {
         Space space = spaceRepository.getBySpaceCode(spaceCode);
@@ -63,12 +67,14 @@ public class PhotoService {
         }
     }
 
-    private String upload(String spaceCode, MultipartFile multipartFile) {
+    private String upload(String spaceCode, MultipartFile file) {
         try {
-            return awsS3Cloud.upload(spaceCode, multipartFile);
+            String filePath = generateContentsFilePath(s3Properties.getRootDirectory(), spaceCode, file);
+            awsS3Cloud.upload(filePath, file);
+            return filePath;
         } catch (IOException e) {
             throw new IllegalArgumentException(
-                "파일 업로드에 실패했습니다. 파일 이름: " + multipartFile.getOriginalFilename(), e);
+                "파일 업로드에 실패했습니다. 파일 이름: " + file.getOriginalFilename(), e);
         }
     }
 

@@ -1,12 +1,12 @@
 package com.forgather.domain.space.service;
 
+import static com.forgather.domain.space.service.FilePathGenerator.generateContentsFilePath;
+
 import java.io.File;
 import java.io.IOException;
 import java.time.Duration;
-import java.util.UUID;
 
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.forgather.domain.space.util.RandomCodeGenerator;
@@ -38,23 +38,14 @@ public class AwsS3Cloud implements ContentsStorage {
     private final RandomCodeGenerator randomCodeGenerator;
 
     @Override
-    public String upload(String spaceCode, MultipartFile file) throws IOException {
-        String path = generateFilePath(spaceCode, file);
+    public String upload(String filePath, MultipartFile file) throws IOException {
         PutObjectRequest putObjectRequest = PutObjectRequest.builder()
             .bucket(s3Properties.getBucketName())
-            .key(path)
+            .key(filePath)
             .tagging(s3Properties.getTagging())
             .build();
         s3Client.putObject(putObjectRequest, RequestBody.fromBytes(file.getBytes()));
-        return path;
-    }
-
-    private String generateFilePath(String spaceCode, MultipartFile file) {
-        String extension = StringUtils.getFilenameExtension(file.getOriginalFilename());
-        String uploadFileName = UUID.randomUUID().toString();
-        return String.format("%s/%s/%s/%s.%s", s3Properties.getRootDirectory(), CONTENTS_INNER_PATH, spaceCode,
-            uploadFileName,
-            extension);
+        return filePath;
     }
 
     @Override
@@ -90,9 +81,11 @@ public class AwsS3Cloud implements ContentsStorage {
 
     @Override
     public String issueSignedUrl(String spaceCode, String extension) {
+        String filePath = generateContentsFilePath(s3Properties.getRootDirectory(), spaceCode, extension);
+
         PutObjectRequest objectRequest = PutObjectRequest.builder()
             .bucket(s3Properties.getBucketName())
-            .key(generateFilePath(spaceCode, extension))
+            .key(filePath)
             .tagging(s3Properties.getTagging())
             .build();
 
@@ -103,11 +96,5 @@ public class AwsS3Cloud implements ContentsStorage {
 
         PresignedPutObjectRequest preSignedRequest = s3Presigner.presignPutObject(preSignRequest);
         return preSignedRequest.url().toString();
-    }
-
-    private String generateFilePath(String spaceCode, String extension) {
-        String uploadFileName = UUID.randomUUID().toString();
-        return String.format("%s/%s/%s/%s.%s", s3Properties.getRootDirectory(), CONTENTS_INNER_PATH, spaceCode,
-            uploadFileName, extension);
     }
 }
