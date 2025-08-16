@@ -1,9 +1,10 @@
+import { HTTP_STATUS_MESSAGES } from '../constants/errors';
 import type {
   ApiResponse,
   BodyContentType,
   requestOptionsType,
 } from '../types/api.type';
-import { makeSentryRequestContext } from '../utils/sentry';
+import { makeSentryRequestContext } from '../utils/sentry/sentryRequestContext';
 import { BASE_URL } from './config';
 import { createBody } from './createBody';
 import { createHeaders } from './createHeaders';
@@ -62,18 +63,8 @@ const request = async <T>(
   const data = text ? JSON.parse(text) : null;
 
   if (!response.ok) {
-    const statusMessages: Record<number, string> = {
-      400: '요청 형식이 올바르지 않습니다.',
-      401: '인증이 필요합니다.',
-      403: '접근 권한이 없습니다.',
-      404: '존재하지 않는 리소스입니다.',
-      500: '서버 오류가 발생했습니다.',
-      502: '서버 통신에 문제가 발생했습니다.',
-      503: '서버가 일시적으로 장애가 발생했습니다.',
-    };
-
     const message =
-      statusMessages[response.status] || `Error: ${response.status}`;
+      HTTP_STATUS_MESSAGES[response.status] || `Error: ${response.status}`;
 
     const err = new Error(message) as Error & {
       sentryContext?: Record<string, unknown>;

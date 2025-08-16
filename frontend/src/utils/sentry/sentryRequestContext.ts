@@ -5,10 +5,23 @@ interface SentryRequestContext {
   requestBody: Record<string, unknown> | undefined;
 }
 
-const DISALLOW_HEADERS = ['authorization', 'cookie', 'set-cookie', 'x-api-key'];
+const DISALLOW_HEADERS = [
+  'authorization',
+  'cookie',
+  'set-cookie',
+  'x-api-key',
+] as const;
+
+const BODY_SENSITIVE_KEYS = [
+  'password',
+  'token',
+  'secret',
+  'email',
+  'phone',
+] as const;
 
 const ALLOW_BODY_OPTIONS = {
-  sensitiveKeys: ['password', 'token', 'secret', 'email', 'phone'],
+  sensitiveKeys: BODY_SENSITIVE_KEYS,
   maxString: 200,
   maxArray: 20,
 };
@@ -55,7 +68,11 @@ export const extractAllowedBody = (
   const bodyObject = parseBodyToObject(body);
 
   for (const [key, value] of Object.entries(bodyObject)) {
-    if (sensitiveKeys?.includes(key.toLowerCase())) {
+    if (
+      sensitiveKeys.includes(
+        key.toLowerCase() as (typeof BODY_SENSITIVE_KEYS)[number],
+      )
+    ) {
       result[key] = '***';
       continue;
     }
@@ -93,7 +110,7 @@ export const parseHeadersToObject = (headers: HeadersInit) => {
 };
 
 export const maskObject = (
-  sensitiveKeys: string[],
+  sensitiveKeys: readonly string[],
   object: Record<string, unknown>,
 ): Record<string, unknown> => {
   const cloneObject = { ...object };
