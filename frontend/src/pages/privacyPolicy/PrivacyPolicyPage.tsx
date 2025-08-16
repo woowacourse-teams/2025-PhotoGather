@@ -38,8 +38,8 @@ const PrivacyPolicyPage = () => {
               카카오 소셜 로그인 시: [필수] 닉네임, [선택] 프로필 사진
             </S.ListItem>
             <S.ListItem>
-              서비스 이용 과정에서 수집되는 정보: 이용자가 업로드한 사진 및 이미지 파일
-              (사진 속 인물, 장소 등의 정보 포함 가능)
+              서비스 이용 과정에서 수집되는 정보: 이용자가 업로드한 사진 및
+              이미지 파일 (사진 속 인물, 장소 등의 정보 포함 가능)
             </S.ListItem>
             <S.ListItem>
               자동수집항목: 접속 IP 정보, 쿠키, 서비스 이용 기록, 방문 기록
@@ -56,9 +56,17 @@ const PrivacyPolicyPage = () => {
           </S.Paragraph>
           <S.List>
             <S.ListItem>
-              스페이스 관련 정보 및 업로드된 사진: 스페이스 만료일로부터 30일
+              업로드된 사진: 스페이스 만료 즉시 삭제
             </S.ListItem>
-            <S.ListItem>서비스 이용 기록: 3개월</S.ListItem>
+            <S.ListItem>
+              스페이스 정보 (스페이스명, 생성자명 등): 스페이스 만료일로부터 1년
+            </S.ListItem>
+            <S.ListItem>
+              서비스 이용 기록 (접속 로그, IP 정보 등): 1년
+            </S.ListItem>
+            <S.ListItem>
+              카카오 소셜 로그인 정보: 최종 접속일로부터 1년
+            </S.ListItem>
           </S.List>
         </S.Section>
 
@@ -126,6 +134,7 @@ const PrivacyPolicyPage = () => {
           </S.Paragraph>
           <S.List>
             <S.ListItem>개인정보 보호책임자: 포게더 운영팀</S.ListItem>
+            {/* TODO: 주소 추가 */}
             <S.ListItem>이메일: privacy@photogather.com</S.ListItem>
           </S.List>
         </S.Section>
