@@ -2,6 +2,9 @@ package com.forgather.global.auth.client;
 
 import static com.fasterxml.jackson.databind.PropertyNamingStrategies.SnakeCaseStrategy;
 
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 
 public class KakaoTokenDto {
@@ -36,8 +39,9 @@ public class KakaoTokenDto {
 
     @JsonNaming(SnakeCaseStrategy.class)
     public record IdToken(
-        // ID 토큰이 발급된 앱의 앱 키
-        String aud,
+        // ID 토큰이 발급된 앱의 앱 키 (문자열 또는 배열)
+        @JsonProperty("aud")
+        Object aud,
 
         // ID 토큰에 해당하는 사용자의 회원번호
         String sub,
@@ -60,5 +64,14 @@ public class KakaoTokenDto {
         // 프로필 미리보기 이미지 URL
         String picture
     ) {
+
+        public String getAudience() {
+            if (aud instanceof String) {
+                return (String) aud;
+            } else if (aud instanceof List<?> audList && !audList.isEmpty()) {
+                return (String) audList.get(0);
+            }
+            return null;
+        }
     }
 }
