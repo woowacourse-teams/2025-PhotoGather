@@ -1,4 +1,5 @@
 import * as Sentry from '@sentry/react';
+import { HTTP_STATUS_MESSAGES } from '../constants/errors';
 import type {
   ApiResponse,
   BodyContentType,
@@ -47,7 +48,6 @@ const request = async <T>(
       headers,
       body: requestBody,
     });
-    console.log(response.body);
 
     const contentType = response.headers.get('content-type');
 
@@ -64,7 +64,9 @@ const request = async <T>(
     const data = text ? JSON.parse(text) : null;
 
     if (!response.ok) {
-      const error = `ErrorCode: ${response.status} ErrorMessage: ${data.message}`;
+      const error = `ErrorCode: ${response.status} ErrorMessage: ${
+        data.message ? data.message : HTTP_STATUS_MESSAGES[response.status]
+      }`;
       const sentryContext = makeSentryRequestContext(
         url,
         method,
@@ -74,8 +76,6 @@ const request = async <T>(
       Sentry.captureException(error, (scope) => {
         scope.setContext('http', {
           ...sentryContext,
-          headers,
-          requestBody,
         });
 
         return scope;
@@ -88,7 +88,10 @@ const request = async <T>(
       data: data as T,
     };
   } catch (error) {
-    throw new Error(`네트워크 에러 발생: ${error}`);
+    if (error instanceof Error) {
+      throw new Error(`Network Error: ${error.message}`);
+    }
+    throw error;
   }
 };
 
