@@ -19,6 +19,7 @@ import com.forgather.domain.space.dto.DownloadPhotoResponse;
 import com.forgather.domain.space.dto.DownloadPhotosRequest;
 import com.forgather.domain.space.dto.PhotoResponse;
 import com.forgather.domain.space.dto.PhotosResponse;
+import com.forgather.domain.space.dto.SaveUploadedPhotoRequest;
 import com.forgather.domain.space.model.Photo;
 import com.forgather.domain.space.model.PhotoMetaData;
 import com.forgather.domain.space.model.Space;
@@ -65,7 +66,7 @@ public class PhotoService {
         for (MultipartFile multipartFile : multipartFiles) {
             PhotoMetaData metaData = MetaDataExtractor.extractPhotoMetaData(multipartFile);
             String uploadedPath = upload(spaceCode, multipartFile);
-            photoRepository.save(new Photo(space, uploadedPath, metaData));
+            photoRepository.save(new Photo(space, multipartFile.getOriginalFilename(), uploadedPath, metaData));
         }
     }
 
@@ -80,6 +81,15 @@ public class PhotoService {
             throw new IllegalArgumentException(
                 "파일 업로드에 실패했습니다. 파일 이름: " + multipartFile.getOriginalFilename(), e);
         }
+    }
+
+    @Transactional
+    public void saveUploadedPhotos(String spaceCode, SaveUploadedPhotoRequest request) {
+        Space space = spaceRepository.getUnexpiredSpaceByCode(spaceCode);
+        List<Photo> photos = request.uploadedPhotos().stream()
+            .map(uploadedPhoto -> uploadedPhoto.toEntity(space, awsS3Cloud.getRootDirectory()))
+            .toList();
+        photoRepository.saveAll(photos);
     }
 
     public File compressSelected(String spaceCode, DownloadPhotosRequest request) throws IOException {

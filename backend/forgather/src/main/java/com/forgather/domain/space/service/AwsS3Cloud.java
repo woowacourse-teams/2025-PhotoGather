@@ -58,10 +58,11 @@ public class AwsS3Cloud implements ContentsStorage {
     private final RandomCodeGenerator randomCodeGenerator;
 
     @Override
-    public String upload(String filePath, MultipartFile file) throws IOException {
+    public String upload(String spaceCode, MultipartFile file) throws IOException {
+        String path = generateFilePath(spaceCode, file);
         PutObjectRequest putObjectRequest = PutObjectRequest.builder()
             .bucket(s3Properties.getBucketName())
-            .key(filePath)
+            .key(path)
             .tagging(s3Properties.getTagging())
             .build();
         s3Client.putObject(putObjectRequest, RequestBody.fromBytes(file.getBytes()));
@@ -72,7 +73,7 @@ public class AwsS3Cloud implements ContentsStorage {
             .addKeyValue("uploadedPath", path)
             .log("S3 업로드 완료");
 
-        return filePath;
+        return path;
     }
 
     private String generateFilePath(String spaceCode, MultipartFile file) {
@@ -82,6 +83,7 @@ public class AwsS3Cloud implements ContentsStorage {
             uploadFileName, extension);
     }
 
+    @Override
     public InputStream download(String photoPath) {
         GetObjectRequest request = GetObjectRequest.builder()
             .bucket(s3Properties.getBucketName())
@@ -91,6 +93,7 @@ public class AwsS3Cloud implements ContentsStorage {
         return s3Client.getObject(request);
     }
 
+    @Override
     public File downloadSelected(String tempPath, String spaceCode, List<String> photoPaths) {
         File localDownloadDirectory = createLocalDownloadDirectory(tempPath, spaceCode);
         Map<String, Path> paths = getPhotoPathNames(spaceCode, photoPaths, localDownloadDirectory);
@@ -133,11 +136,13 @@ public class AwsS3Cloud implements ContentsStorage {
         return transferManager.downloadFile(request).completionFuture();
     }
 
+    @Override
     public void deleteContent(String contentPath) {
         List<String> deletePaths = getPathWithThumbnails(contentPath);
         deleteCloudContents(deletePaths);
     }
 
+    @Override
     public void deleteSelectedContents(List<String> contentPaths) {
         List<String> deletePaths = contentPaths.stream()
             .flatMap(path -> getPathWithThumbnails(path).stream())
@@ -205,12 +210,10 @@ public class AwsS3Cloud implements ContentsStorage {
     }
 
     @Override
-    public String issueSignedUrl(String spaceCode, String extension) {
-        String filePath = generateContentsFilePath(s3Properties.getRootDirectory(), spaceCode, extension);
-
+    public String issueSignedUrl(String path) {
         PutObjectRequest objectRequest = PutObjectRequest.builder()
             .bucket(s3Properties.getBucketName())
-            .key(filePath)
+            .key(path)
             .tagging(s3Properties.getTagging())
             .build();
 
@@ -221,5 +224,10 @@ public class AwsS3Cloud implements ContentsStorage {
 
         PresignedPutObjectRequest preSignedRequest = s3Presigner.presignPutObject(preSignRequest);
         return preSignedRequest.url().toString();
+    }
+
+    @Override
+    public String getRootDirectory() {
+        return s3Properties.getRootDirectory();
     }
 }

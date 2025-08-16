@@ -35,9 +35,10 @@ import com.forgather.domain.space.dto.IssueSignedUrlRequest;
 import com.forgather.domain.space.dto.IssueSignedUrlResponse;
 import com.forgather.domain.space.dto.PhotoResponse;
 import com.forgather.domain.space.dto.PhotosResponse;
+import com.forgather.domain.space.dto.SaveUploadedPhotoRequest;
 import com.forgather.domain.space.service.PhotoService;
-import com.forgather.global.auth.annotation.HostId;
 import com.forgather.domain.space.service.UploadService;
+import com.forgather.global.auth.annotation.HostId;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -66,8 +67,8 @@ public class PhotoController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping(path = "/upload/urls")
-    @Operation(summary = "업로드 URL 일괄 발급", description = "각 확장자의 갯수별로 서명된 URL을 발급합니다.")
+    @PostMapping(path = "/upload/urls")
+    @Operation(summary = "업로드 URL 일괄 발급", description = "업로드 사진 별 서명된 URL을 발급합니다.")
     public ResponseEntity<IssueSignedUrlResponse> issuePreSignedUrls(
         @PathVariable(name = "spaceCode") String spaceCode,
         @RequestBody IssueSignedUrlRequest request
@@ -78,12 +79,12 @@ public class PhotoController {
 
     @PostMapping
     @Operation(summary = "업로드 된 사진 정보 일괄 저장", description = "업로드 된 사진 정보를 DB에 저장합니다.")
-    public ResponseEntity<SaveUploadedPhotoResponse> saveAll(
+    public ResponseEntity<Void> saveAll(
         @PathVariable(name = "spaceCode") String spaceCode,
-        @RequestBody List<SaveUploadedPhotoRequest> requests
+        @RequestBody SaveUploadedPhotoRequest request
     ) {
-        var response = photoService.saveUploadedPhotos(spaceCode, requests);
-        return ResponseEntity.status(CREATED).body(response);
+        photoService.saveUploadedPhotos(spaceCode, request);
+        return ResponseEntity.status(CREATED).build();
     }
 
     @GetMapping("/{photoId}")

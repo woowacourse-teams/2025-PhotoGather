@@ -2,6 +2,8 @@ package com.forgather.domain.space.service;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
 
@@ -9,7 +11,15 @@ public interface ContentsStorage {
 
     String upload(String spaceCode, MultipartFile file) throws IOException;
 
-    File downloadAll(String tempPath, String spaceCode);
+    InputStream download(String photoPath);
 
-    String issueSignedUrl(String spaceCode, String extension);
+    File downloadSelected(String tempPath, String spaceCode, List<String> photoPaths);
+
+    void deleteContent(String contentPath);
+
+    void deleteSelectedContents(List<String> contentPaths);
+
+    String issueSignedUrl(String path);
+
+    String getRootDirectory();
 }
