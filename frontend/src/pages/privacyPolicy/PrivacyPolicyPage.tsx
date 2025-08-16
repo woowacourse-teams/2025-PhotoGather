@@ -1,11 +1,12 @@
 import { ReactComponent as Logo } from '@assets/icons/logo.svg';
+import { theme } from '../../styles/theme';
 import * as S from './PrivacyPolicyPage.styles';
 
 const PrivacyPolicyPage = () => {
   return (
     <S.Wrapper>
       <S.Header>
-        <Logo />
+        <Logo fill={theme.colors.gray06} />
         <S.Title>개인정보처리방침</S.Title>
       </S.Header>
 

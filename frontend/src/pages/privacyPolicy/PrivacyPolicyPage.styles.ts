@@ -13,13 +13,14 @@ export const Header = styled.div`
   flex-direction: column;
   align-items: center;
   margin-bottom: 30px;
-  padding-bottom: 16px;
+  padding-bottom: 32px;
   border-bottom: 2px solid ${({ theme }) => theme.colors.primary20};
+  gap: 10px;
 `;
 
 export const Title = styled.h1`
-  ${({ theme }) => ({ ...theme.typography.header01 })};
-  color: ${({ theme }) => theme.colors.white};
+  ${({ theme }) => ({ ...theme.typography.header02 })};
+  color: ${({ theme }) => theme.colors.gray06};
 `;
 
 export const Content = styled.div`
@@ -40,7 +41,7 @@ export const Section = styled.section`
 
 export const SectionTitle = styled.h2`
   ${({ theme }) => ({ ...theme.typography.header02 })};
-  color: ${({ theme }) => theme.colors.gray05};
+  color: ${({ theme }) => theme.colors.gray06};
   margin-bottom: 12px;
   position: relative;
 `;

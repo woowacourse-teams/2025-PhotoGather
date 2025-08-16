@@ -28,7 +28,7 @@ const LandingPage = () => {
       <S.Wrapper>
         <S.SectionContainer>
           <S.TextContainer>당신을 위한 순간, 흩어지지 않게</S.TextContainer>
-          <Logo />
+          <Logo fill={theme.colors.white} />
         </S.SectionContainer>
 
         <S.SectionContainer {...useLandingScroll({})}>
