@@ -6,7 +6,6 @@ export const Wrapper = styled.div`
   margin: -32px -16px;
   padding: 48px 20px;
   background-color: ${({ theme }) => theme.colors.primary10};
-  min-height: calc(100vh + 64px);
 `;
 
 export const Header = styled.div`
@@ -20,9 +19,6 @@ export const Header = styled.div`
 
 export const Title = styled.h1`
   ${({ theme }) => ({ ...theme.typography.header01 })};
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
   color: ${({ theme }) => theme.colors.white};
 `;
 
