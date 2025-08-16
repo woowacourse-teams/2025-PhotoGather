@@ -17,6 +17,7 @@ export const ROUTES = {
     NETWORK: '/network-error',
   },
   DEMO: '/demo',
+  PRIVACY_POLICY: '/privacy-policy',
 } as const;
 
 export const STAR_FIELD_PAGES: readonly string[] = [
