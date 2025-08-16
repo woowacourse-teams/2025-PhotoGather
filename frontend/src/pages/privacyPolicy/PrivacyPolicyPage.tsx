@@ -35,6 +35,13 @@ const PrivacyPolicyPage = () => {
           <S.List>
             <S.ListItem>필수항목: 스페이스 생성 시 입력하는 이름</S.ListItem>
             <S.ListItem>
+              카카오 소셜 로그인 시: [필수] 닉네임, [선택] 프로필 사진
+            </S.ListItem>
+            <S.ListItem>
+              서비스 이용 과정에서 수집되는 정보: 이용자가 업로드한 사진 및 이미지 파일
+              (사진 속 인물, 장소 등의 정보 포함 가능)
+            </S.ListItem>
+            <S.ListItem>
               자동수집항목: 접속 IP 정보, 쿠키, 서비스 이용 기록, 방문 기록
             </S.ListItem>
           </S.List>
@@ -49,7 +56,7 @@ const PrivacyPolicyPage = () => {
           </S.Paragraph>
           <S.List>
             <S.ListItem>
-              스페이스 관련 정보: 스페이스 만료일로부터 30일
+              스페이스 관련 정보 및 업로드된 사진: 스페이스 만료일로부터 30일
             </S.ListItem>
             <S.ListItem>서비스 이용 기록: 3개월</S.ListItem>
           </S.List>
