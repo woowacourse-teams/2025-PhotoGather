@@ -66,7 +66,7 @@ const request = async <T>(
 
     if (!response.ok) {
       const errorMessage = `[ErrorCode ${response.status}] ${
-        data.message ? data.message : HTTP_STATUS_MESSAGES[response.status]
+        data?.message ? data.message : HTTP_STATUS_MESSAGES[response.status]
       }`;
       const error = new Error(errorMessage);
 
