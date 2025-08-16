@@ -95,7 +95,7 @@ const request = async <T>(
       throw error;
     }
     if (error instanceof Error) {
-      throw new Error(`Network Error: ${error.message}`);
+      throw new Error(`네트워크 에러가 발생했습니다. 다시 시도해 주세요.`);
     }
     throw error;
   }
