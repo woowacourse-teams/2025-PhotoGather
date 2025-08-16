@@ -3,15 +3,17 @@
     <conversionRule conversionWord="msg" class="com.forgather.global.logging.LogMessageConverter"/>
 
     <!-- 환경 별 로그 포맷 -->
-    <property name="DEV_PATTERN" value="%d{HH:mm:ss.SSS} %-5level %logger{36} %marker %mdc %kvp %msg%n"/>
+    <property name="DEV_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %logger{36} %marker %mdc %kvp %msg%n"/>
+    <property name="DEV_COLOR_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS} %highlight(%-5level) %cyan(%logger{36}) %marker %mdc %kvp %msg%n"/>
+
     <property name="PROD_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %logger{36} %marker %mdc %kvp %msg%n"/>
-    <property name="DEV_COLOR_PATTERN" value="%d{HH:mm:ss.SSS} %highlight(%-5level) %cyan(%logger{36}) %marker %mdc %kvp %msg%n"/>
     <property name="PROD_COLOR_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS} %highlight(%-5level) %cyan(%logger{36}) %marker %mdc %kvp %msg%n"/>
 
     <!-- 환경 별 로그 파일 경로-->
     <property name="DEV_LOG_FILE" value="/home/ubuntu/2025-PhotoGather/logs/dev.log"/>
-    <property name="PROD_LOG_FILE" value="/home/ubuntu/2025-PhotoGather/logs/prod.log"/>
     <property name="DEV_LOG_BODY_FILE" value="/home/ubuntu/2025-PhotoGather/logs/dev-body.log"/>
+
+    <property name="PROD_LOG_FILE" value="/home/ubuntu/2025-PhotoGather/logs/prod.log"/>
     <property name="PROD_LOG_BODY_FILE" value="/home/ubuntu/2025-PhotoGather/logs/prod-body.log"/>
 
     <!-- 로컬 프로필 -->
