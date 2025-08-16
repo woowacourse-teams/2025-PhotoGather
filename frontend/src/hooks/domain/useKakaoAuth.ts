@@ -1,7 +1,7 @@
 import { authService } from '../../apis/services/auth.service';
 import useError from '../@common/useError';
 
-const useKakaoLogin = () => {
+const useKakaoAuth = () => {
   const { tryTask } = useError();
 
   const requestKakaoURL = async () => {
@@ -19,7 +19,14 @@ const useKakaoLogin = () => {
     if (taskResult.success) window.location.href = taskResult.data;
   };
 
-  return { handleKakaoLogin };
+  const handleKakaoLogout = async () => {
+    await tryTask({
+      task: async () => await authService.logout(),
+      errorActions: ['toast'],
+    });
+  };
+
+  return { handleKakaoLogin, handleKakaoLogout };
 };
 
-export default useKakaoLogin;
+export default useKakaoAuth;
