@@ -3,7 +3,6 @@ import styled from '@emotion/styled';
 export const Wrapper = styled.footer`
   margin-top: 200px;
   padding: 40px 20px;
-  border-top: 1px solid ${({ theme }) => theme.colors.gray06};
   display: flex;
   flex-direction: column;
   align-items: center;
