@@ -8,6 +8,7 @@ import { ReactComponent as QrcodeIcon } from '@assets/icons/qrCode.svg';
 import { useNavigate } from 'react-router-dom';
 import FloatingActionButton from '../../components/@common/buttons/floatingActionButton/FloatingActionButton';
 import IconLabelButton from '../../components/@common/buttons/iconLabelButton/IconLabelButton';
+import Footer from '../../components/footer/Footer';
 import LandingHeader from '../../components/header/landingHeader/LandingHeader';
 import LeftTimeInformationBox from '../../components/leftTimeInformationBox/LeftTimeInformationBox';
 import { ROUTES } from '../../constants/routes';
@@ -28,7 +29,7 @@ const LandingPage = () => {
       <S.Wrapper>
         <S.SectionContainer>
           <S.TextContainer>당신을 위한 순간, 흩어지지 않게</S.TextContainer>
-          <Logo />
+          <Logo fill={theme.colors.white} />
         </S.SectionContainer>
 
         <S.SectionContainer {...useLandingScroll({})}>
@@ -127,6 +128,7 @@ const LandingPage = () => {
           </S.RowContainer>
         </S.SectionContainer>
       </S.Wrapper>
+      <Footer />
     </>
   );
 };
