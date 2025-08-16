@@ -4,7 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import Button from '../../components/@common/buttons/button/Button';
 import KakaoLoginButton from '../../components/kakaoLoginButton/KakaoLoginButton';
 import { ROUTES } from '../../constants/routes';
-import useKakaoLogin from '../../hooks/domain/useKakaoLogin';
+import useKakaoAuth from '../../hooks/domain/useKakaoAuth';
+import { hasCookie } from '../../utils/hasCookie';
 import * as S from './DemoHome.styles';
 
 const DemoHome = () => {
@@ -20,13 +21,21 @@ const DemoHome = () => {
       Sentry.captureMessage('가짜 축하');
     }
   };
-  const { handleKakaoLogin } = useKakaoLogin();
+  const { handleKakaoLogin, handleKakaoLogout } = useKakaoAuth();
 
   return (
     <S.Wrapper>
       <S.Icon src={rocketImage} alt="데모 페이지 아이콘"></S.Icon>
       <S.Title>Forgather DEMO</S.Title>
-      <KakaoLoginButton onClick={handleKakaoLogin} />
+      {hasCookie('JSESSIONID') ? (
+        <Button
+          text="로그아웃"
+          variant="secondary"
+          onClick={handleKakaoLogout}
+        />
+      ) : (
+        <KakaoLoginButton onClick={handleKakaoLogin} />
+      )}
       <Button
         text="(CREATE) 스페이스 생성 퍼널"
         onClick={() => navigate(ROUTES.CREATE)}
