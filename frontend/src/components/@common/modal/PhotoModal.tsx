@@ -163,6 +163,7 @@ const PhotoModal = (props: PhotoModalProps) => {
             src={displayPath}
             alt={photo?.originalName || 'Image'}
             onError={handleImageError}
+            className="clarity-mask-photo"
           />
         ) : (
           <S.LoadingPhoto />

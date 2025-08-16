@@ -26,7 +26,7 @@ export const ToastProvider = ({ children }: { children: React.ReactNode }) => {
     ({
       text,
       type = 'error',
-      duration = 5000,
+      duration = 1500,
       position = 'bottom',
     }: ToastBase) => {
       const id = toastId++;
