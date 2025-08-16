@@ -55,9 +55,7 @@ const PrivacyPolicyPage = () => {
             개인정보를 처리·보유합니다.
           </S.Paragraph>
           <S.List>
-            <S.ListItem>
-              업로드된 사진: 스페이스 만료 즉시 삭제
-            </S.ListItem>
+            <S.ListItem>업로드된 사진: 스페이스 만료 즉시 삭제</S.ListItem>
             <S.ListItem>
               스페이스 정보 (스페이스명, 생성자명 등): 스페이스 만료일로부터 1년
             </S.ListItem>
