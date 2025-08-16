@@ -1,0 +1,14 @@
+<configuration>
+    <!-- 로그 메세지 커스텀 변환기 등록 -->
+    <conversionRule conversionWord="msg" class="com.forgather.global.logging.LogMessageConverter"/>
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %logger{36} %marker %mdc %kvp %msg%n</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+    <root>
+        <appender-ref ref="CONSOLE"/>
+    </root>
+</configuration>

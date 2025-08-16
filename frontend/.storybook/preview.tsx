@@ -14,6 +14,7 @@ const preview: Preview = {
   decorators: [withGlobalStyle],
   tags: ['autodocs'],
   parameters: {
+    layout: 'padded',
     controls: {
       matchers: {
         color: /(background|color)$/i,

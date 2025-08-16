@@ -1,4 +1,23 @@
+import { css, type Theme } from '@emotion/react';
 import styled from '@emotion/styled';
+import type { IconButtonVariant } from '../../../../types/button.type';
+import { hexToRgba } from '../../../../utils/hexToRgba';
+
+export const IconContainerStyles = {
+  default: (theme: Theme) => css`
+    border: 1px solid ${theme.colors.gray02};
+    background-color: ${theme.colors.white};
+  `,
+  danger: (theme: Theme) => css`
+    background: ${hexToRgba(theme.colors.white, 0.7)};
+  `,
+  dark: (theme: Theme) => css`
+    background: ${hexToRgba(theme.colors.grayBackground, 0.7)};
+  `,
+  light: (theme: Theme) => css`
+    background: ${hexToRgba(theme.colors.gray06, 0.7)};
+  `,
+};
 
 export const Wrapper = styled.div`
   display: inline-flex;
@@ -8,9 +27,11 @@ export const Wrapper = styled.div`
   gap: 4px;
 `;
 
-export const IconContainer = styled.button`
-  width: 44px;
-  height: 44px;
+export const IconContainer = styled.button<{
+  $variant: IconButtonVariant;
+}>`
+  max-width: 44px;
+  aspect-ratio: 1/1;
   display: flex;
   padding: 10px;
   overflow: hidden;
@@ -19,8 +40,8 @@ export const IconContainer = styled.button`
   align-items: center;
   gap: 10px;
   border-radius: 12px;
-  border: 1px solid ${({ theme }) => theme.colors.gray02};
-  background-color: ${({ theme }) => theme.colors.white};
+
+  ${({ $variant, theme }) => IconContainerStyles[$variant](theme)}
 `;
 
 export const Icon = styled.div`

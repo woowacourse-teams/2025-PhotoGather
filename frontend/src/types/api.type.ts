@@ -22,3 +22,11 @@ export interface PhotoListResponse {
   pageSize: number;
   totalPages: number;
 }
+
+export interface PhotoIds {
+  photoIds: number[];
+}
+
+export interface PhotoId {
+  photoId: number;
+}

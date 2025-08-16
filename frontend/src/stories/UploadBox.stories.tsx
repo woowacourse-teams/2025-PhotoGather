@@ -11,6 +11,6 @@ type Story = StoryObj<typeof UploadBox>;
 
 export const Filled: Story = {
   args: {
-    text: '이어 올리기',
+    mainText: '이어 올리기',
   },
 };

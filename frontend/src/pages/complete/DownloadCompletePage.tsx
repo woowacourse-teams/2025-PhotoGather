@@ -1,19 +1,19 @@
 import downloadImage from '@assets/images/download.png';
-import { useNavigate } from 'react-router-dom';
-import CompletePage from '../../components/layout/completePage/CompletePage';
+import { useLocation, useNavigate } from 'react-router-dom';
+import MessageLayout from '../../components/layout/messageLayout/MessageLayout';
 import { COMPLETE } from '../../constants/messages';
 import { ROUTES } from '../../constants/routes';
 
 const DownloadCompletePage = () => {
   const navigate = useNavigate();
+  const { spaceCode } = useLocation().state as { spaceCode: string };
 
   const handleButtonClick = () => {
-    // TODO: 실제 매니저 스페이스 홈 경로로 변경 필요
-    navigate(ROUTES.MANAGER.SPACE_HOME);
+    navigate(ROUTES.MANAGER.SPACE_HOME(spaceCode ?? ''));
   };
 
   return (
-    <CompletePage
+    <MessageLayout
       image={downloadImage}
       title={COMPLETE.DOWNLOAD.TITLE}
       description={COMPLETE.DOWNLOAD.DESCRIPTION}

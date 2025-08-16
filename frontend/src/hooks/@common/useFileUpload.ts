@@ -1,26 +1,49 @@
 import { useState } from 'react';
 import { photoService } from '../../apis/services/photo.service';
+import { CONSTRAINTS } from '../../constants/constraints';
+import type { PreviewFile, UploadFile } from '../../types/file.type';
 import { isValidFileType } from '../../utils/isValidFileType';
+import {
+  checkInvalidFileType,
+  checkUploadLimit,
+} from '../../validators/photo.validator';
+import useError from './useError';
 
-interface FileUploadProps {
+interface UseFileUploadProps {
+  spaceCode: string;
   fileType: string;
+  onUploadSuccess?: () => void;
 }
 
-const useFileUpload = ({ fileType }: FileUploadProps) => {
-  const [files, setFiles] = useState<File[]>([]);
-  const [previewUrls, setPreviewUrls] = useState<string[]>([]);
+const useFileUpload = ({
+  spaceCode,
+  fileType,
+  onUploadSuccess,
+}: UseFileUploadProps) => {
+  const [uploadFiles, setUploadFiles] = useState<UploadFile[]>([]);
+  const [previewData, setPreviewData] = useState<PreviewFile[]>([]);
   const [isUploading, setIsUploading] = useState(false);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const addPreviewUrlsFromFiles = (files: File[]) => {
-    const urls = files.map((file) => URL.createObjectURL(file));
-    setPreviewUrls((prev) => [...prev, ...urls]);
+    const startIndex = previewData.length;
+    const urls = files.map((file, index) => ({
+      id: startIndex + index,
+      path: URL.createObjectURL(file),
+    }));
+
+    const tmpFiles = files.map((file, index) => ({
+      id: startIndex + index,
+      originFile: file,
+    }));
+
+    setPreviewData((prev) => [...prev, ...urls]);
+    setUploadFiles((prev) => [...prev, ...tmpFiles]);
   };
 
-  const partitionValidFilesByType = (files: File[], type: string) => {
+  const splitValidFilesByType = (files: File[], type: string) => {
     return files.reduce(
       (acc, file) => {
-        isValidFileType(file, type)
+        isValidFileType(file, type, CONSTRAINTS.NOT_ALLOWED)
           ? acc.validFiles.push(file)
           : acc.invalidFiles.push(file);
         return acc;
@@ -29,63 +52,92 @@ const useFileUpload = ({ fileType }: FileUploadProps) => {
     );
   };
 
+  const updateFiles = async (rawFiles: File[]) => {
+    const { validFiles, invalidFiles } = splitValidFilesByType(
+      rawFiles,
+      fileType,
+    );
+
+    await tryTask({
+      task: () => {
+        checkInvalidFileType(invalidFiles);
+        checkUploadLimit(validFiles);
+      },
+      errorActions: ['toast'],
+    });
+
+    const limitedValidFiles = validFiles.slice(0, CONSTRAINTS.MAX_FILE_COUNT);
+    addPreviewUrlsFromFiles(limitedValidFiles);
+  };
+
   const handleFilesUploadClick = (
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
-    //TODO: 파일 업로드 최대 용량 제한 | 업로드 최대 개수 제한?
-    const files = Array.from(event.target.files || []);
-    const { validFiles, invalidFiles } = partitionValidFilesByType(
-      files,
-      fileType,
-    );
-    if (invalidFiles.length > 0)
-      setErrorMessage(
-        `이미지 파일만 업로드 가능해요. 파일을 다시 확인해주세요.\n${invalidFiles.map((file) => file.name).join('\n')}`,
-      );
-    setFiles((prev) => [...prev, ...validFiles]);
-    addPreviewUrlsFromFiles(validFiles);
+    updateFiles(Array.from(event.target.files || []));
   };
 
   const handleFilesDrop = (event: React.DragEvent<HTMLLabelElement>) => {
-    const files = Array.from(event.dataTransfer.files || []);
-    const { validFiles, invalidFiles } = partitionValidFilesByType(
-      files,
-      fileType,
-    );
-    if (invalidFiles.length > 0)
-      setErrorMessage(
-        `이미지 파일만 업로드 가능해요. 파일을 다시 확인해주세요.\n${invalidFiles.map((file) => file.name).join('\n')}`,
-      );
-
-    setFiles((prev) => [...prev, ...validFiles]);
-    addPreviewUrlsFromFiles(validFiles);
+    updateFiles(Array.from(event.dataTransfer.files || []));
   };
 
   const clearFiles = () => {
-    previewUrls.forEach((url) => URL.revokeObjectURL(url));
-    setFiles([]);
-    setPreviewUrls([]);
+    previewData.forEach((data) => URL.revokeObjectURL(data.path));
+    setUploadFiles([]);
+    setPreviewData([]);
   };
 
-  const handleUpload = async () => {
-    try {
-      setIsUploading(true);
-      await photoService.uploadFiles('1234567890', files);
-      clearFiles();
-    } catch (error) {
-      console.error('업로드 실패:', error);
-      alert('사진 업로드에 실패했습니다.');
-    } finally {
+  const { tryTask } = useError();
+
+  const fetchUploadFiles = async () => {
+    const files = uploadFiles.map((file) => file.originFile);
+    await photoService.uploadFiles(spaceCode, files);
+  };
+
+  const errorOption = {
+    toast: {
+      text: '사진 업로드에 실패했습니다',
+    },
+    afterAction: () => {
       setIsUploading(false);
-    }
+    },
+  };
+
+  const submitFileUpload = async () => {
+    await tryTask({
+      task: async () => {
+        setIsUploading(true);
+        await fetchUploadFiles();
+        onUploadSuccess?.();
+        clearFiles();
+      },
+      errorActions: ['toast', 'afterAction'],
+      context: errorOption,
+      onFinally: () => {
+        setIsUploading(false);
+      },
+      shouldLogToSentry: true,
+    });
+  };
+
+  const deleteFile = (id: number) => {
+    setPreviewData((prev) => {
+      const updated = prev.filter((item) => item.id !== id);
+      const deleted = prev.find((item) => item.id === id);
+      if (deleted) URL.revokeObjectURL(deleted.path);
+      return updated;
+    });
+
+    setUploadFiles((prev) => {
+      return prev.filter((file) => file.id !== id);
+    });
   };
 
   return {
-    files,
-    previewUrls,
+    uploadFiles,
+    previewData,
     isUploading,
-    errorMessage,
-    handleUpload,
+    submitFileUpload,
+    deleteFile,
     handleFilesUploadClick,
     handleFilesDrop,
   };

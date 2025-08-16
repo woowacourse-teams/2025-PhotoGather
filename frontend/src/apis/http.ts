@@ -39,43 +39,60 @@ const request = async <T>(
   const headers = createHeaders(bodyContentType, token);
   const requestBody = createBody(body, bodyContentType);
 
-  // TODO : try catch 유틸 분리
-  try {
-    const response = await fetch(url, {
-      method,
-      headers,
-      body: requestBody,
-    });
+  const response = await fetch(url, {
+    method,
+    headers,
+    body: requestBody,
+  });
 
-    // zip 파일로 받고, 응답이 blob으로 오는 경우
-    if (bodyContentType === 'blob') {
-      const blob = await response.blob();
-      return {
-        success: response.ok,
-        data: blob as unknown as T,
-        error: !response.ok ? `Error: ${response.status}` : undefined,
-      };
+  const contentType = response.headers.get('content-type');
+
+  if (contentType?.includes('application/zip')) {
+    const blob = await response.blob();
+    return {
+      success: response.ok,
+      data: blob as unknown as T,
+      error: !response.ok ? `Error: ${response.status}` : undefined,
+    };
+  }
+
+  const text = await response.text();
+  const data = text ? JSON.parse(text) : null;
+
+  if (!response.ok) {
+    // TODO : 함수 분리
+    if (response.status === 400) {
+      throw new Error('요청 형식이 올바르지 않습니다.');
     }
-
-    const data = await response.json();
-
-    if (response.ok) {
-      return {
-        success: true,
-        data: data as T,
-      };
+    if (response.status === 401) {
+      throw new Error('인증이 필요합니다.');
     }
-
+    if (response.status === 403) {
+      throw new Error('접근 권한이 없습니다.');
+    }
+    if (response.status === 404) {
+      throw new Error('존재하지 않는 리소스입니다.');
+    }
+    if (response.status === 500) {
+      throw new Error('서버 오류가 발생했습니다.');
+    }
+    if (response.status === 502) {
+      throw new Error('서버 통신에 문제가 발생했습니다.');
+    }
+    if (response.status === 503) {
+      throw new Error('서버가 일시적으로 장애가 발생했습니다.');
+    }
+    // 네트워크 에러
     return {
       success: false,
       error: data?.message || `Error: ${response.status}`,
     };
-  } catch (error) {
-    return {
-      success: false,
-      error: error instanceof Error ? error.message : 'Network error',
-    };
   }
+
+  return {
+    success: true,
+    data: data as T,
+  };
 };
 
 export const http = {
@@ -84,7 +101,13 @@ export const http = {
     params?: Record<string, unknown>,
     bodyContentType?: BodyContentType,
     token?: string,
-  ) => request<T>(endpoint, { method: 'GET', params, bodyContentType, token }),
+  ) =>
+    request<T>(endpoint, {
+      method: 'GET',
+      params,
+      bodyContentType,
+      token,
+    }),
 
   post: <T>(
     endpoint: string,
@@ -107,6 +130,10 @@ export const http = {
     token?: string,
   ) => request<T>(endpoint, { method: 'PATCH', body, bodyContentType, token }),
 
-  delete: <T>(endpoint: string, token?: string) =>
-    request<T>(endpoint, { method: 'DELETE', token }),
+  delete: <T>(
+    endpoint: string,
+    body?: unknown,
+    bodyContentType: BodyContentType = 'json',
+    token?: string,
+  ) => request<T>(endpoint, { method: 'DELETE', body, bodyContentType, token }),
 };

@@ -1,6 +1,7 @@
 import { ReactComponent as SaveIcon } from '@assets/icons/download.svg';
+import { ReactComponent as ShareIcon } from '@assets/icons/share.svg';
 import type { Meta, StoryObj } from '@storybook/react-webpack5';
-import SpaceHeader from '../components/spaceHeader/SpaceHeader';
+import SpaceHeader from '../components/header/spaceHeader/SpaceHeader';
 
 const meta: Meta<typeof SpaceHeader> = {
   title: 'Components/SpaceHeader',
@@ -13,7 +14,31 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   args: {
     title: '제목임',
-    description: '설명임',
-    icon: <SaveIcon />,
+    timer: {
+      days: 0,
+      hours: 1,
+      minutes: 45,
+      seconds: 30,
+    },
+    icons: [
+      { element: <SaveIcon />, onClick: () => {}, label: '저장' },
+      { element: <ShareIcon />, onClick: () => {}, label: '공유' },
+    ],
+  },
+};
+
+export const Urgent: Story = {
+  args: {
+    title: '제목임',
+    timer: {
+      days: 0,
+      hours: 0,
+      minutes: 45,
+      seconds: 30,
+    },
+    icons: [
+      { element: <SaveIcon />, onClick: () => {}, label: '저장' },
+      { element: <ShareIcon />, onClick: () => {}, label: '공유' },
+    ],
   },
 };

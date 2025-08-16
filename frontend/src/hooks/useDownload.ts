@@ -1,18 +1,23 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { photoService } from '../apis/services/photo.service';
-import { DEBUG_MESSAGES } from '../constants/debugMessages';
-import { ROUTES } from '../constants/routes';
-import { mockSpaceData } from '../pages/manager/spaceHome/mockSpaceData';
-import { tryAsync } from '../utils/tryAsync';
+import type { ApiResponse } from '../types/api.type';
+import { validateDownloadFormat } from '../validators/fetch.validator';
+import { checkSelectedPhotoExist } from '../validators/photo.validator';
+import useError from './@common/useError';
 
 interface UseDownloadProps {
+  spaceCode: string;
   spaceName: string;
+  onDownloadSuccess?: () => void;
 }
 
-const useDownload = ({ spaceName }: UseDownloadProps) => {
+const useDownload = ({
+  spaceCode,
+  spaceName,
+  onDownloadSuccess,
+}: UseDownloadProps) => {
   const [isDownloading, setIsDownloading] = useState(false);
-  const navigate = useNavigate();
+  const { tryTask } = useError();
 
   const downloadBlob = (blob: Blob) => {
     const url = URL.createObjectURL(blob);
@@ -27,27 +32,70 @@ const useDownload = ({ spaceName }: UseDownloadProps) => {
     window.URL.revokeObjectURL(url);
   };
 
-  const handleDownload = () => {
-    setIsDownloading(true);
-    tryAsync(
-      async () => {
-        const response = await photoService.downloadZip(mockSpaceData.code);
-        const blob = response.data;
-        if (!blob) {
-          throw new Error(DEBUG_MESSAGES.NO_BLOB);
-        }
-        if (!(blob instanceof Blob)) {
-          throw new Error(DEBUG_MESSAGES.NO_BLOB_INSTANCE);
-        }
-        downloadBlob(blob);
+  const selectDownload = async (photoIds: number[]) => {
+    const taskResult = await tryTask({
+      task: () => checkSelectedPhotoExist(photoIds),
+      errorActions: ['toast'],
+    });
+    if (!taskResult.success) return;
+
+    await tryTask({
+      task: async () => {
+        await handleDownload(() =>
+          photoService.downloadPhotos(spaceCode, {
+            photoIds: photoIds,
+          }),
+        );
       },
-      () => {
-        setIsDownloading(false);
-        navigate(ROUTES.COMPLETE.DOWNLOAD);
+      errorActions: ['toast', 'console'],
+      context: {
+        toast: {
+          text: '다운로드에 실패했습니다. 다시 시도해 주세요.',
+          type: 'error',
+        },
       },
-    );
+      shouldLogToSentry: true,
+    });
   };
-  return { isDownloading, handleDownload };
+
+  const downloadAll = async () => {
+    await tryTask({
+      task: async () => {
+        setIsDownloading(true);
+        await handleDownload(() => photoService.downloadAll(spaceCode));
+        onDownloadSuccess?.();
+      },
+      errorActions: ['toast', 'console'],
+      context: {
+        toast: {
+          text: '다운로드에 실패했습니다. 다시 시도해 주세요.',
+          type: 'error',
+        },
+      },
+      onFinally: () => {
+        setIsDownloading(false);
+      },
+      shouldLogToSentry: true,
+    });
+  };
+
+  const handleDownload = async (
+    fetchFunction: () => Promise<ApiResponse<unknown>>,
+  ) => {
+    const response = await fetchFunction();
+    if (!response) return;
+    const blob = response.data;
+
+    await tryTask({
+      task: () => {
+        validateDownloadFormat(blob);
+        downloadBlob(blob as Blob);
+      },
+      errorActions: ['console'],
+      shouldLogToSentry: true,
+    });
+  };
+  return { isDownloading, downloadAll, selectDownload };
 };
 
 export default useDownload;
