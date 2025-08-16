@@ -65,9 +65,11 @@ const request = async <T>(
     const data = text ? JSON.parse(text) : null;
 
     if (!response.ok) {
-      const error = `ErrorCode: ${response.status} ErrorMessage: ${
+      const errorMessage = `[ErrorCode ${response.status}] ${
         data.message ? data.message : HTTP_STATUS_MESSAGES[response.status]
       }`;
+      const error = new Error(errorMessage);
+
       const sentryContext = makeSentryRequestContext(
         url,
         method,
@@ -81,7 +83,7 @@ const request = async <T>(
 
         return scope;
       });
-      throw new Error(error);
+      throw new HttpError(response.status, errorMessage);
     }
 
     return {
