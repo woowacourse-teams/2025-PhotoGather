@@ -5,6 +5,7 @@ import type {
   BodyContentType,
   requestOptionsType,
 } from '../types/api.type';
+import { HttpError } from '../types/error.type';
 import { makeSentryRequestContext } from '../utils/sentry/sentryRequestContext';
 import { BASE_URL } from './config';
 import { createBody } from './createBody';
@@ -88,6 +89,9 @@ const request = async <T>(
       data: data as T,
     };
   } catch (error) {
+    if (error instanceof HttpError) {
+      throw error;
+    }
     if (error instanceof Error) {
       throw new Error(`Network Error: ${error.message}`);
     }
