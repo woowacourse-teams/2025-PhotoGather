@@ -57,11 +57,23 @@ const useError = () => {
       const data = await Promise.resolve(task());
       return { success: true, data };
     } catch (e) {
-      if (shouldLogToSentry) {
-        Sentry.captureException(e);
-      }
       setIsError(true);
       const error = e instanceof Error ? e : new Error(String(e));
+      const extraLogData = (error as any).sentryContext;
+
+      if (shouldLogToSentry) {
+        Sentry.captureException(error, (scope) => {
+          const { headers, requestBody, ...rest } = extraLogData || {};
+
+          scope.setContext('http', {
+            ...rest,
+            headers: headers ? JSON.stringify(headers) : undefined,
+            requestBody: requestBody ? JSON.stringify(requestBody) : undefined,
+          });
+
+          return scope;
+        });
+      }
 
       matchingErrorHandler(errorActions, context, error);
 
