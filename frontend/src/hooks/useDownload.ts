@@ -47,7 +47,7 @@ const useDownload = ({
           }),
         );
       },
-      errorActions: ['toast', 'console'],
+      errorActions: ['toast'],
       context: {
         toast: {
           text: '다운로드에 실패했습니다. 다시 시도해 주세요.',

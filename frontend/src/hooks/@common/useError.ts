@@ -6,8 +6,12 @@ import { HttpError } from '../../types/error.type';
 import type { ToastBase } from '../../types/toast.type';
 import { useToast } from './useToast';
 
-type AfterAction = () => void;
-type RedirectPath = string;
+interface AfterAction {
+  action: () => void;
+}
+interface RedirectPath {
+  path: string;
+}
 type ToastOptions = Omit<ToastBase, 'text'> & { text?: string };
 
 interface ErrorRequiredProps {
@@ -26,10 +30,10 @@ const useError = () => {
       showToast(toastBase);
     },
     afterAction: (afterAction: AfterAction) => {
-      afterAction();
+      afterAction.action();
     },
     redirect: (path: RedirectPath) => {
-      navigate(path);
+      navigate(path.path);
     },
     console: (message: string) => {
       console.error(message);
@@ -123,7 +127,8 @@ const useError = () => {
       errorHandler.afterAction(context.afterAction);
     }
     if (errorActions.includes('redirect') && context?.redirect) {
-      errorHandler.redirect(context.redirect);
+      const redirectPath = context.redirect;
+      errorHandler.redirect(redirectPath);
     }
     if (errorActions.includes('console')) {
       errorHandler.console(error.message);
@@ -136,7 +141,7 @@ const useError = () => {
         ...baseToastSetting,
         text: '로그인이 필요합니다.',
       });
-      errorHandler.redirect(ROUTES.LOGIN);
+      errorHandler.redirect({ path: ROUTES.LOGIN });
     }
     if (errorCode === 403) {
       errorHandler.toast({

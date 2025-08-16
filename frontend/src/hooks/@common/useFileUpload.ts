@@ -97,8 +97,10 @@ const useFileUpload = ({
     toast: {
       text: '사진 업로드에 실패했습니다',
     },
-    afterAction: () => {
-      setIsUploading(false);
+    afterAction: {
+      action: () => {
+        setIsUploading(false);
+      },
     },
   };
 
