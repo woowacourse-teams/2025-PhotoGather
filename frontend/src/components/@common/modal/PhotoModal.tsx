@@ -45,7 +45,7 @@ const PhotoModal = (props: PhotoModalProps) => {
   // TODO : 중복 상태 여부 확인 필요
   const [displayPath, setDisplayPath] = useState<string>('');
   const overlay = useOverlay();
-  const { tryTask } = useError();
+  const { tryFetch } = useError();
 
   const isManagerMode = mode === 'manager';
   const handleImageError = createImageErrorHandler(defaultImage);
@@ -63,7 +63,7 @@ const PhotoModal = (props: PhotoModalProps) => {
   }, []);
 
   const fetchPhoto = async () => {
-    await tryTask({
+    await tryFetch({
       task: async () => {
         setIsLoading(true);
         // TODO : 모달을 종류별로 분리
@@ -82,7 +82,6 @@ const PhotoModal = (props: PhotoModalProps) => {
       onFinally: () => {
         setIsLoading(false);
       },
-      shouldLogToSentry: true,
     });
   };
 

@@ -5,7 +5,7 @@ import useError from './@common/useError';
 
 const useCreateSpace = () => {
   const [isCreating, setIsCreating] = useState(false);
-  const { tryTask } = useError();
+  const { tryFetch } = useError();
 
   const requestSpaceCode = async (spaceCreateInfo: SpaceCreateInfo) => {
     setIsCreating(true);
@@ -15,7 +15,7 @@ const useCreateSpace = () => {
   };
 
   const fetchCreateSpace = async (spaceCreateInfo: SpaceCreateInfo) => {
-    const taskResult = await tryTask<string | undefined>({
+    const taskResult = await tryFetch<string | undefined>({
       task: async () => requestSpaceCode(spaceCreateInfo),
       errorActions: ['toast'],
       context: {
@@ -24,7 +24,6 @@ const useCreateSpace = () => {
         },
       },
       onFinally: () => setIsCreating(false),
-      shouldLogToSentry: true,
     });
 
     return taskResult.data;

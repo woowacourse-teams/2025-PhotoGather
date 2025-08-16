@@ -17,7 +17,7 @@ const useDownload = ({
   onDownloadSuccess,
 }: UseDownloadProps) => {
   const [isDownloading, setIsDownloading] = useState(false);
-  const { tryTask } = useError();
+  const { tryTask, tryFetch } = useError();
 
   const downloadBlob = (blob: Blob) => {
     const url = URL.createObjectURL(blob);
@@ -33,13 +33,13 @@ const useDownload = ({
   };
 
   const selectDownload = async (photoIds: number[]) => {
-    const taskResult = await tryTask({
+    const taskResult = tryTask({
       task: () => checkSelectedPhotoExist(photoIds),
       errorActions: ['toast'],
     });
     if (!taskResult.success) return;
 
-    await tryTask({
+    await tryFetch({
       task: async () => {
         await handleDownload(() =>
           photoService.downloadPhotos(spaceCode, {
@@ -54,12 +54,11 @@ const useDownload = ({
           type: 'error',
         },
       },
-      shouldLogToSentry: true,
     });
   };
 
   const downloadAll = async () => {
-    await tryTask({
+    await tryFetch({
       task: async () => {
         setIsDownloading(true);
         await handleDownload(() => photoService.downloadAll(spaceCode));
@@ -75,7 +74,6 @@ const useDownload = ({
       onFinally: () => {
         setIsDownloading(false);
       },
-      shouldLogToSentry: true,
     });
   };
 
@@ -86,13 +84,12 @@ const useDownload = ({
     if (!response) return;
     const blob = response.data;
 
-    await tryTask({
+    tryTask({
       task: () => {
         validateDownloadFormat(blob);
         downloadBlob(blob as Blob);
       },
       errorActions: ['console'],
-      shouldLogToSentry: true,
     });
   };
   return { isDownloading, downloadAll, selectDownload };

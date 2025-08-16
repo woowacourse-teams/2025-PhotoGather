@@ -39,22 +39,21 @@ const useError = () => {
   type ErrorType = keyof typeof errorHandler;
 
   interface TryTaskProps<T> {
-    task: () => T | Promise<T>;
+    task: () => T;
     errorActions: ErrorType[];
     context?: ErrorRequiredProps;
     onFinally?: () => void;
   }
 
-  // TODO :async 제거
-  const tryTask = async <T>({
+  const tryTask = <T>({
     task,
     errorActions,
     context,
     onFinally,
-  }: TryTaskProps<T>): Promise<TryTaskResultType<T>> => {
+  }: TryTaskProps<T>): TryTaskResultType<T> => {
     try {
       setIsError(false);
-      const data = await Promise.resolve(task());
+      const data = task();
       return { success: true, data };
     } catch (e) {
       setIsError(true);
@@ -67,23 +66,23 @@ const useError = () => {
     }
   };
 
-  interface TryFetchProps {
-    url: string;
-    options: RequestInit;
+  interface TryFetchProps<T> {
+    task: () => Promise<T>;
     errorActions: ErrorType[];
-    context: ErrorRequiredProps;
+    context?: ErrorRequiredProps;
+    onFinally?: () => void;
   }
 
   const ERROR_CODES_TO_HANDLE = [401, 403];
 
-  const tryFetch = async ({
-    url,
-    options,
+  const tryFetch = async <T>({
+    task,
     errorActions,
     context,
-  }: TryFetchProps) => {
+    onFinally,
+  }: TryFetchProps<T>) => {
     try {
-      const response = await fetch(url, options);
+      const response = await task();
       return { success: true, data: response };
     } catch (e) {
       const error = e instanceof Error ? e : new Error(String(e));
@@ -98,6 +97,8 @@ const useError = () => {
 
       matchingErrorHandler(errorActions, context, error);
       return { success: false, data: null };
+    } finally {
+      onFinally?.();
     }
   };
   const baseToastSetting = {
