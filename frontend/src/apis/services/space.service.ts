@@ -9,6 +9,7 @@ export const spaceService = {
   create: (data: SpaceCreateInfo) =>
     http.post<{ spaceCode: string }>('/spaces', data),
 
+  // TODO : 원상복구
   getInfoByCode: (spaceCode: string) => http.get<Space>(`/spaces/${spaceCode}`),
 
   update: (id: number, data: UpdateSpaceInput) =>
