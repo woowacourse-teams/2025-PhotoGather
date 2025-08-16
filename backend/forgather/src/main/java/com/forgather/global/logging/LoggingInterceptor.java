@@ -1,6 +1,10 @@
 package com.forgather.global.logging;
 
+import java.io.IOException;
+
 import org.slf4j.MDC;
+import org.slf4j.Marker;
+import org.slf4j.MarkerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
@@ -17,6 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 public class LoggingInterceptor implements HandlerInterceptor {
 
     private static final int TRACE_ID_LENGTH = 8;
+    private static final Marker BODY_MARKER = MarkerFactory.getMarker("BODY");
 
     private final RandomCodeGenerator randomCodeGenerator;
 
@@ -60,7 +65,12 @@ public class LoggingInterceptor implements HandlerInterceptor {
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler,
         Exception exception) {
-        Long startTime = (Long) request.getAttribute("com.forgather.startTime");
+        // requestBody 로깅
+        if (request.getMethod().equals("POST")) {
+            logRequestBody(request);
+        }
+
+        Long startTime = (Long)request.getAttribute("com.forgather.startTime");
         long durationMillis = (startTime != null) ? (System.currentTimeMillis() - startTime) : -1;
 
         log.atInfo()
@@ -70,5 +80,16 @@ public class LoggingInterceptor implements HandlerInterceptor {
 
         // 쓰레드 종료 시 MDC 초기화
         MDC.clear();
+    }
+
+    private void logRequestBody(HttpServletRequest request) {
+        try {
+            byte[] bytes = request.getInputStream().readAllBytes();
+            log.atInfo()
+                .addMarker(BODY_MARKER)
+                .log("\n{}", new String(bytes));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

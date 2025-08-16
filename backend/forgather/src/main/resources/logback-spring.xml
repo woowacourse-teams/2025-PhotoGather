@@ -11,6 +11,8 @@
     <!-- 환경 별 로그 파일 경로-->
     <property name="DEV_LOG_FILE" value="/home/ubuntu/2025-PhotoGather/logs/dev.log"/>
     <property name="PROD_LOG_FILE" value="/home/ubuntu/2025-PhotoGather/logs/prod.log"/>
+    <property name="DEV_LOG_BODY_FILE" value="/home/ubuntu/2025-PhotoGather/logs/dev-body.log"/>
+    <property name="PROD_LOG_BODY_FILE" value="/home/ubuntu/2025-PhotoGather/logs/prod-body.log"/>
 
     <!-- 로컬 프로필 -->
     <springProfile name="local">
@@ -20,6 +22,14 @@
                 <pattern>${DEV_COLOR_PATTERN}</pattern>
                 <charset>UTF-8</charset>
             </encoder>
+            <!-- BODY를 제외 -->
+            <filter class="ch.qos.logback.core.filter.EvaluatorFilter">
+                <evaluator class="ch.qos.logback.classic.boolex.OnMarkerEvaluator">
+                    <marker>BODY</marker>
+                </evaluator>
+                <OnMatch>DENY</OnMatch>
+                <OnMismatch>ACCEPT</OnMismatch>
+            </filter>
         </appender>
         <root>
             <appender-ref ref="CONSOLE_LOCAL"/>
@@ -35,9 +45,34 @@
                 <pattern>${DEV_PATTERN}</pattern>
                 <charset>UTF-8</charset>
             </encoder>
+            <!-- BODY를 제외 -->
+            <filter class="ch.qos.logback.core.filter.EvaluatorFilter">
+                <evaluator class="ch.qos.logback.classic.boolex.OnMarkerEvaluator">
+                    <marker>BODY</marker>
+                </evaluator>
+                <OnMatch>DENY</OnMatch>
+                <OnMismatch>ACCEPT</OnMismatch>
+            </filter>
+        </appender>
+        <!-- 요청 바디 파일 쓰기-->
+        <appender name="BODY_FILE_DEV" class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <file>${DEV_LOG_BODY_FILE}</file>
+            <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+                <pattern>${DEV_PATTERN}</pattern>
+                <charset>UTF-8</charset>
+            </encoder>
+            <!-- BODY 마커가 달린 로그에 대해서만 적용-->
+            <filter class="ch.qos.logback.core.filter.EvaluatorFilter">
+                <evaluator class="ch.qos.logback.classic.boolex.OnMarkerEvaluator">
+                    <marker>BODY</marker>
+                </evaluator>
+                <OnMatch>ACCEPT</OnMatch>
+                <OnMismatch>DENY</OnMismatch>
+            </filter>
         </appender>
         <root>
             <appender-ref ref="FILE_DEV"/>
+            <appender-ref ref="BODY_FILE_DEV"/>
         </root>
     </springProfile>
 
@@ -50,9 +85,34 @@
                 <pattern>${PROD_PATTERN}</pattern>
                 <charset>UTF-8</charset>
             </encoder>
+            <!-- BODY를 제외 -->
+            <filter class="ch.qos.logback.core.filter.EvaluatorFilter">
+                <evaluator class="ch.qos.logback.classic.boolex.OnMarkerEvaluator">
+                    <marker>BODY</marker>
+                </evaluator>
+                <OnMatch>DENY</OnMatch>
+                <OnMismatch>ACCEPT</OnMismatch>
+            </filter>
+        </appender>
+        <!-- 요청 바디 파일 쓰기-->
+        <appender name="BODY_FILE_PROD" class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <file>${PROD_LOG_BODY_FILE}</file>
+            <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+                <pattern>${PROD_PATTERN}</pattern>
+                <charset>UTF-8</charset>
+            </encoder>
+            <!-- BODY 마커가 달린 로그에 대해서만 적용-->
+            <filter class="ch.qos.logback.core.filter.EvaluatorFilter">
+                <evaluator class="ch.qos.logback.classic.boolex.OnMarkerEvaluator">
+                    <marker>BODY</marker>
+                </evaluator>
+                <OnMatch>ACCEPT</OnMatch>
+                <OnMismatch>DENY</OnMismatch>
+            </filter>
         </appender>
         <root>
             <appender-ref ref="FILE_PROD"/>
+            <appender-ref ref="BODY_FILE_PROD"/>
         </root>
     </springProfile>
 
