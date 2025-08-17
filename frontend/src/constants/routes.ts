@@ -13,6 +13,7 @@ export const ROUTES = {
     DOWNLOAD: '/complete/download',
     SPACE_CREATED: '/complete/space-created',
   },
+  MYPAGE: '/mypage',
   ERROR: {
     NETWORK: '/network-error',
   },
