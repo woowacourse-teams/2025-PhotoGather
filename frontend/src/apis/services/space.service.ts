@@ -7,7 +7,7 @@ import { http } from '../http';
 
 export const spaceService = {
   create: (data: SpaceCreateInfo) =>
-    http.post<{ spaceCode: string }>('/spaces', data),
+    http.post<{ spaceCode: string }>('/space', data),
 
   getInfoByCode: (spaceCode: string) => http.get<Space>(`/spaces/${spaceCode}`),
 

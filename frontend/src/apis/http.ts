@@ -83,6 +83,7 @@ const request = async <T>(
 
         return scope;
       });
+
       throw new HttpError(response.status, errorMessage);
     }
 

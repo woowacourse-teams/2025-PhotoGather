@@ -90,7 +90,7 @@ const useError = () => {
       return { success: true, data: response };
     } catch (e) {
       const error = e instanceof Error ? e : new Error(String(e));
-      console.log(error);
+
       if (
         error instanceof HttpError &&
         ERROR_CODES_TO_HANDLE.includes(error.status)
