@@ -48,7 +48,7 @@ const useDownload = ({
     window.URL.revokeObjectURL(url);
   };
 
-  const selectDownload = async (photoIds: number[]) => {
+  const selectDownload = async (photoIds: number[], fileName?: string) => {
     const taskResult = await tryTask({
       task: () => checkSelectedPhotoExist(photoIds),
       errorActions: ['toast'],
@@ -57,10 +57,12 @@ const useDownload = ({
 
     await tryTask({
       task: async () => {
-        await handleDownload(() =>
-          photoService.downloadPhotos(spaceCode, {
-            photoIds: photoIds,
-          }),
+        await handleDownload(
+          () =>
+            photoService.downloadPhotos(spaceCode, {
+              photoIds: photoIds,
+            }),
+          fileName,
         );
       },
       errorActions: ['toast', 'console'],
@@ -74,11 +76,12 @@ const useDownload = ({
     });
   };
 
-  const downloadSingle = async (photoId: number) => {
+  const downloadSingle = async (photoId: number, fileName?: string) => {
     await tryTask({
       task: async () => {
-        await handleDownload(() =>
-          photoService.downloadSinglePhoto(spaceCode, photoId),
+        await handleDownload(
+          () => photoService.downloadSinglePhoto(spaceCode, photoId),
+          fileName,
         );
       },
       errorActions: ['toast', 'console'],
@@ -92,11 +95,14 @@ const useDownload = ({
     });
   };
 
-  const downloadAll = async () => {
+  const downloadAll = async (fileName?: string) => {
     await tryTask({
       task: async () => {
         setIsDownloading(true);
-        await handleDownload(() => photoService.downloadAll(spaceCode));
+        await handleDownload(
+          () => photoService.downloadAll(spaceCode),
+          fileName,
+        );
         onDownloadSuccess?.();
       },
       errorActions: ['toast', 'console'],
