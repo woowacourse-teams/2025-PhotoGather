@@ -3,7 +3,8 @@ import styled from '@emotion/styled';
 export const Wrapper = styled.div`
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: start;
+  height: ${({ theme }) => theme.layout.headerHeight};
 `;
 
 export const ProfileImageButton = styled.button`
