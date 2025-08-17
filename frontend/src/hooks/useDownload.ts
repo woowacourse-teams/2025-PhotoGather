@@ -19,13 +19,22 @@ const useDownload = ({
   const [isDownloading, setIsDownloading] = useState(false);
   const { tryTask } = useError();
 
-  const downloadBlob = (blob: Blob) => {
+  const downloadBlob = (blob: Blob, fileName?: string) => {
     const url = URL.createObjectURL(blob);
 
     const a = document.createElement('a');
     document.body.appendChild(a);
     a.href = url;
-    a.download = `${spaceName}.zip`;
+    
+    if (fileName) {
+      a.download = fileName;
+    } else if (blob.type.includes('image/')) {
+      const extension = blob.type.split('/')[1];
+      a.download = `photo.${extension}`;
+    } else {
+      a.download = `${spaceName}.zip`;
+    }
+    
     a.click();
 
     document.body.removeChild(a);
@@ -99,6 +108,7 @@ const useDownload = ({
 
   const handleDownload = async (
     fetchFunction: () => Promise<ApiResponse<unknown>>,
+    fileName?: string,
   ) => {
     const response = await fetchFunction();
     if (!response) return;
@@ -107,7 +117,7 @@ const useDownload = ({
     await tryTask({
       task: () => {
         validateDownloadFormat(blob);
-        downloadBlob(blob as Blob);
+        downloadBlob(blob as Blob, fileName);
       },
       errorActions: ['console'],
       shouldLogToSentry: true,
