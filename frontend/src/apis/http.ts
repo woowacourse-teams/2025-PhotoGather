@@ -52,8 +52,7 @@ const request = async <T>(
 
   if (
     contentType?.includes('application/zip') ||
-    contentType?.includes('image/') ||
-    contentType?.includes('application/octet-stream')
+    contentType?.includes('image/')
   ) {
     const blob = await response.blob();
     return {
