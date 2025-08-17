@@ -1,8 +1,14 @@
 import { ReactComponent as Logo } from '@assets/icons/logo.svg';
+import { useEffect } from 'react';
 import { theme } from '../../styles/theme';
+import { goToTop } from '../../utils/goToTop';
 import * as S from './PrivacyPolicyPage.styles';
 
 const PrivacyPolicyPage = () => {
+  useEffect(() => {
+    goToTop();
+  }, []);
+
   return (
     <S.Wrapper>
       <S.Header>
