@@ -25,7 +25,7 @@ const useDownload = ({
     const a = document.createElement('a');
     document.body.appendChild(a);
     a.href = url;
-    
+
     if (fileName) {
       a.download = fileName;
     } else if (blob.type.includes('image/')) {
@@ -34,7 +34,7 @@ const useDownload = ({
     } else {
       a.download = `${spaceName}.zip`;
     }
-    
+
     a.click();
 
     document.body.removeChild(a);
