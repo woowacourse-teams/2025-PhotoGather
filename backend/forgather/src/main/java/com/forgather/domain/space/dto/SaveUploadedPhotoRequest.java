@@ -25,7 +25,7 @@ public record SaveUploadedPhotoRequest(
         @Schema(description = "업로드 파일 이름", example = "UUID1.png")
         String uploadFileName,
 
-        @Schema(description = "사진의 원본 이름", example = "IMG_992.jpeg")
+        @Schema(description = "사진의 원본 이름", example = "IMG_992.png")
         String originalName,
 
         @Schema(description = "사진 촬영 시간", example = "2023-10-01T12:00:00")
