@@ -1,18 +1,16 @@
 package com.forgather.domain.space.service;
 
-import static com.forgather.domain.space.service.FilePathGenerator.generateContentsFilePath;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Path;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
-import java.time.Duration;
 
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
