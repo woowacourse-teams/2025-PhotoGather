@@ -71,16 +71,16 @@ const router = createBrowserRouter([
         ],
       },
       {
+        path: 'privacy-policy',
+        element: <PrivacyPolicyPage />,
+      },
+      {
         path: 'network-error',
         element: <NetworkErrorPage />,
       },
       {
         path: '*',
         element: <NotFoundErrorPage />,
-      },
-      {
-        path: 'privacy-policy',
-        element: <PrivacyPolicyPage />,
       },
     ],
   },
