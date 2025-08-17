@@ -19,6 +19,21 @@ const useDownload = ({
   const [isDownloading, setIsDownloading] = useState(false);
   const { tryTask } = useError();
 
+  const getDownloadName = (
+    fileName: string | undefined,
+    blob: Blob,
+    spaceName: string,
+  ) => {
+    if (fileName) return fileName;
+
+    if (blob.type.includes('image/')) {
+      const extension = blob.type.split('/')[1];
+      return `photo.${extension}`;
+    }
+
+    return `${spaceName}.zip`;
+  };
+
   const downloadBlob = (blob: Blob, fileName?: string) => {
     const url = URL.createObjectURL(blob);
 
@@ -26,15 +41,7 @@ const useDownload = ({
     document.body.appendChild(a);
     a.href = url;
 
-    if (fileName) {
-      a.download = fileName;
-    } else if (blob.type.includes('image/')) {
-      const extension = blob.type.split('/')[1];
-      a.download = `photo.${extension}`;
-    } else {
-      a.download = `${spaceName}.zip`;
-    }
-
+    a.download = getDownloadName(fileName, blob, spaceName);
     a.click();
 
     document.body.removeChild(a);
