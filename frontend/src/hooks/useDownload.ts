@@ -58,6 +58,24 @@ const useDownload = ({
     });
   };
 
+  const downloadSingle = async (photoId: number) => {
+    await tryTask({
+      task: async () => {
+        await handleDownload(() =>
+          photoService.downloadSinglePhoto(spaceCode, photoId),
+        );
+      },
+      errorActions: ['toast', 'console'],
+      context: {
+        toast: {
+          text: '다운로드에 실패했습니다. 다시 시도해 주세요.',
+          type: 'error',
+        },
+      },
+      shouldLogToSentry: true,
+    });
+  };
+
   const downloadAll = async () => {
     await tryTask({
       task: async () => {
@@ -95,7 +113,8 @@ const useDownload = ({
       shouldLogToSentry: true,
     });
   };
-  return { isDownloading, downloadAll, selectDownload };
+
+  return { isDownloading, downloadAll, selectDownload, downloadSingle };
 };
 
 export default useDownload;
