@@ -99,6 +99,7 @@ export const theme = {
       topBottom: '32px',
       leftRight: '16px',
     },
+    headerHeight: '44px',
   },
   breakpoints: {
     desktop: '',

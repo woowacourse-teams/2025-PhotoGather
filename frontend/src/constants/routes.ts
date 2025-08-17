@@ -16,17 +16,7 @@ export const ROUTES = {
   MYPAGE: '/mypage',
   ERROR: {
     NETWORK: '/network-error',
+    NOT_FOUND: '*',
   },
   DEMO: '/demo',
 } as const;
-
-export const STAR_FIELD_PAGES: readonly string[] = [
-  ROUTES.MANAGER.SPACE_HOME(''),
-  ROUTES.GUEST.IMAGE_UPLOAD(''),
-];
-
-export const HIGHLIGHT_PAGES: readonly string[] = [
-  ROUTES.MANAGER.SPACE_HOME(''),
-  ROUTES.GUEST.IMAGE_UPLOAD(''),
-  ROUTES.MAIN,
-];
