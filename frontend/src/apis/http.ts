@@ -52,7 +52,10 @@ const request = async <T>(
 
     const contentType = response.headers.get('content-type');
 
-    if (contentType?.includes('application/zip')) {
+    if (
+      contentType?.includes('application/zip') ||
+      contentType?.includes('image/')
+    ) {
       const blob = await response.blob();
       return {
         success: response.ok,
