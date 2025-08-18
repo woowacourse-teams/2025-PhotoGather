@@ -14,7 +14,7 @@ export const Header = styled.div`
   align-items: center;
   margin: 0 -20px 30px -20px;
   padding: 0 20px 32px 20px;
-  border-bottom: 2px solid ${({ theme }) => theme.colors.primary20};
+  border-bottom: 1px solid ${({ theme }) => theme.colors.gray05};
   gap: 10px;
 `;
 
@@ -36,7 +36,7 @@ export const Section = styled.section`
   gap: 20px;
   padding: 24px;
   border-radius: 16px;
-  border: 1px solid ${({ theme }) => theme.colors.primary20};
+  border: 1px solid ${({ theme }) => theme.colors.gray05};
 `;
 
 export const SectionTitle = styled.h2`
