@@ -69,7 +69,6 @@ const routes: AppRouteObject[] = [
             path: 'image-upload/:spaceId',
             element: <ImageUploadPage />,
             handle: {
-              header: true,
               starField: true,
               highlight: true,
             },
