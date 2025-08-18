@@ -10,7 +10,9 @@ import ImageUploadPage from '../pages/guest/imageUploadPage/ImageUploadPage';
 import SharePage from '../pages/guest/sharePage/SharePage';
 import LandingPage from '../pages/landing/LandingPage';
 import SpaceHome from '../pages/manager/spaceHome/SpaceHome';
-import PrivacyPolicyPage from '../pages/privacyPolicy/PrivacyPolicyPage';
+import PrivacyConsent from '../pages/policies/PrivacyConsent';
+import PrivacyPolicyPage from '../pages/policies/PrivacyPolicyPage';
+import TermsOfService from '../pages/policies/TermsOfService';
 import type { AppRouteObject } from '../types/route.type';
 
 const routes: AppRouteObject[] = [
@@ -94,8 +96,12 @@ const routes: AppRouteObject[] = [
         ],
       },
       {
-        path: 'privacy-policy',
-        element: <PrivacyPolicyPage />,
+        path: 'policy',
+        children: [
+          { path: 'privacy-policy', element: <PrivacyPolicyPage /> },
+          { path: 'terms-of-service', element: <TermsOfService /> },
+          { path: 'privacy-consent', element: <PrivacyConsent /> },
+        ],
       },
       {
         path: 'network-error',
