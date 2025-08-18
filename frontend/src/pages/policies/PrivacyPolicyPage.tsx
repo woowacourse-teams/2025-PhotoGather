@@ -2,7 +2,7 @@ import { ReactComponent as Logo } from '@assets/icons/logo.svg';
 import { useEffect } from 'react';
 import { theme } from '../../styles/theme';
 import { goToTop } from '../../utils/goToTop';
-import * as S from './PrivacyPolicyPage.styles';
+import * as S from './PolicyPage.common.styles';
 
 const PrivacyPolicyPage = () => {
   useEffect(() => {

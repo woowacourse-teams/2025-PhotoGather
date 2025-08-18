@@ -1,6 +1,6 @@
 import { ReactComponent as Logo } from '@assets/icons/logo.svg';
 import { theme } from '../../styles/theme';
-import * as S from './PrivacyPolicyPage.styles';
+import * as S from './PolicyPage.common.styles';
 
 const PrivacyConsent = () => {
   return (
