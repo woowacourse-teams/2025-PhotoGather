@@ -1,5 +1,6 @@
 export const ROUTES = {
   MAIN: '/',
+  LOGIN: '/login',
   CREATE: '/create',
   MANAGER: {
     SPACE_HOME: (spaceId: string) => `/manager/space-home/${spaceId}`,

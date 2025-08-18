@@ -104,9 +104,13 @@ export const parseHeadersToObject = (headers: HeadersInit) => {
     return Object.fromEntries(headers.entries());
   }
   if (Array.isArray(headers)) {
-    return Object.fromEntries(headers);
+    return Object.fromEntries(
+      headers.map(([key, value]) => [key, String(value)]),
+    );
   }
-  return { ...headers };
+  return Object.fromEntries(
+    Object.entries(headers).map(([key, value]) => [key, String(value)]),
+  );
 };
 
 export const maskObject = (
