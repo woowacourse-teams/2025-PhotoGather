@@ -10,6 +10,7 @@ export interface SpaceFunnelInfo {
   date: string;
   time: string;
   isImmediateOpen: boolean | null;
+  agreements: boolean[] | null;
 }
 
 export interface Space {

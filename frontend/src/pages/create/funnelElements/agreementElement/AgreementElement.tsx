@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { INFORMATION } from '../../../../constants/messages';
 import { ROUTES } from '../../../../constants/routes';
@@ -5,28 +6,22 @@ import type { FunnelElementProps } from '../../../../types/funnel.type';
 import FunnelBasePage from '../../funnel/FunnelBasePage/FunnelBasePage';
 import * as S from './AgreementElement.styles';
 
-interface AgreementProps extends FunnelElementProps<boolean[]> {
-  value: boolean[];
-  onChange: (parma: [boolean, boolean]) => void;
-  onNext: () => void;
-}
-
-const AgreementElement = ({ value, onChange, onNext }: AgreementProps) => {
-  const [serviceAgreement, privacyAgreement] = value;
-  const isAllChecked = serviceAgreement && privacyAgreement;
+const AgreementElement = ({ onNext }: FunnelElementProps<boolean[]>) => {
+  const [agreement, setAgreement] = useState([false, false]);
+  const isAllChecked = agreement[0] && agreement[1];
   const navigate = useNavigate();
 
   const toggleAll = () => {
     const next = !isAllChecked;
-    onChange([next, next]);
+    setAgreement([next, next]);
   };
 
   const toggleAt = (idx: 0 | 1) => {
-    onChange(
-      idx === 0
-        ? [!serviceAgreement, privacyAgreement]
-        : [serviceAgreement, !privacyAgreement],
-    );
+    setAgreement((prev) => {
+      const copy = [...prev];
+      copy[idx] = !copy[idx];
+      return copy;
+    });
   };
 
   return (
@@ -49,7 +44,7 @@ const AgreementElement = ({ value, onChange, onNext }: AgreementProps) => {
           <S.AgreeRow>
             <S.AgreeCheckContainer>
               <S.AgreeCheckIcon
-                isChecked={serviceAgreement}
+                isChecked={agreement[0]}
                 onClick={() => toggleAt(0)}
                 type="button"
               />
@@ -67,7 +62,7 @@ const AgreementElement = ({ value, onChange, onNext }: AgreementProps) => {
           <S.AgreeRow>
             <S.AgreeCheckContainer>
               <S.AgreeCheckIcon
-                isChecked={privacyAgreement}
+                isChecked={agreement[1]}
                 onClick={() => toggleAt(1)}
                 type="button"
               />
@@ -86,7 +81,7 @@ const AgreementElement = ({ value, onChange, onNext }: AgreementProps) => {
           </S.AgreeRow>
         </S.Wrapper>
       }
-      onNextButtonClick={() => onNext()}
+      onNextButtonClick={() => onNext(agreement)}
       nextButtonDisabled={!isAllChecked}
     />
   );

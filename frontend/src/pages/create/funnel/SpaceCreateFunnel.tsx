@@ -13,6 +13,7 @@ import * as S from './SpaceCreateFunnel.styles';
 type STEP = 'agreement' | 'name' | 'date' | 'check';
 
 const needsAgreement = true; //TODO: 추후 서버에서 받아온 값으로 교체해주어야 함
+
 const PROGRESS_STEP_LIST: STEP[] = needsAgreement
   ? ['agreement', 'name', 'date', 'check']
   : ['name', 'date', 'check'];
@@ -21,6 +22,7 @@ const initialFunnelValue: SpaceFunnelInfo = {
   date: '',
   time: '',
   isImmediateOpen: null,
+  agreements: null, //TODO: null인 경우 첫번째 생성 X
 };
 
 const SpaceCreateFunnel = () => {
@@ -29,15 +31,10 @@ const SpaceCreateFunnel = () => {
   const [spaceInfo, setSpaceInfo] =
     useState<SpaceFunnelInfo>(initialFunnelValue);
   const { navigateToNext } = useFunnelHistory<STEP>(step, setStep);
-  const [agreements, setAgreements] = useState([false, false]);
 
   const goNextStep = (nextStep: STEP) => {
     navigateToNext(nextStep);
     setStep(nextStep);
-  };
-
-  const handleAgreements = (agreements: boolean[]) => {
-    setAgreements(agreements);
   };
 
   const currentStep =
@@ -59,10 +56,9 @@ const SpaceCreateFunnel = () => {
       <S.ContentContainer>
         {step === 'agreement' && (
           <AgreementElement
-            value={agreements}
-            onChange={handleAgreements}
-            onNext={() => {
+            onNext={(agreement) => {
               goNextStep('name');
+              setSpaceInfo((prev) => ({ ...prev, agreement }));
             }}
           />
         )}
