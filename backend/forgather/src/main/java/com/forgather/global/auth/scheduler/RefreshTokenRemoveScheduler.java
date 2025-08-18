@@ -1,4 +1,4 @@
-package com.forgather.global.auth.client.scheduler;
+package com.forgather.global.auth.scheduler;
 
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
