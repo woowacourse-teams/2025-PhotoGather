@@ -5,15 +5,15 @@ export const Wrapper = styled.div`
   flex-direction: column;
   margin: -32px -16px;
   padding: 48px 20px;
-  background-color: ${({ theme }) => theme.colors.primary10};
+  background-color: ${({ theme }) => theme.colors.white};
 `;
 
 export const Header = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 30px;
-  padding-bottom: 32px;
+  margin: 0 -20px 30px -20px;
+  padding: 0 20px 32px 20px;
   border-bottom: 2px solid ${({ theme }) => theme.colors.primary20};
   gap: 10px;
 `;
