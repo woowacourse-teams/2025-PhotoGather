@@ -17,7 +17,7 @@ const useDownload = ({
   onDownloadSuccess,
 }: UseDownloadProps) => {
   const [isDownloading, setIsDownloading] = useState(false);
-  const { tryTask } = useError();
+  const { tryTask, tryFetch } = useError();
 
   const getDownloadName = (
     fileName: string | undefined,
@@ -49,13 +49,13 @@ const useDownload = ({
   };
 
   const selectDownload = async (photoIds: number[], fileName?: string) => {
-    const taskResult = await tryTask({
+    const taskResult = tryTask({
       task: () => checkSelectedPhotoExist(photoIds),
       errorActions: ['toast'],
     });
     if (!taskResult.success) return;
 
-    await tryTask({
+    await tryFetch({
       task: async () => {
         await handleDownload(
           () =>
@@ -65,19 +65,18 @@ const useDownload = ({
           fileName,
         );
       },
-      errorActions: ['toast', 'console'],
+      errorActions: ['toast'],
       context: {
         toast: {
           text: '다운로드에 실패했습니다. 다시 시도해 주세요.',
           type: 'error',
         },
       },
-      shouldLogToSentry: true,
     });
   };
 
   const downloadSingle = async (photoId: number, fileName?: string) => {
-    await tryTask({
+    await tryFetch({
       task: async () => {
         await handleDownload(
           () => photoService.downloadSinglePhoto(spaceCode, photoId),
@@ -91,12 +90,11 @@ const useDownload = ({
           type: 'error',
         },
       },
-      shouldLogToSentry: true,
     });
   };
 
   const downloadAll = async (fileName?: string) => {
-    await tryTask({
+    await tryFetch({
       task: async () => {
         setIsDownloading(true);
         await handleDownload(
@@ -115,7 +113,6 @@ const useDownload = ({
       onFinally: () => {
         setIsDownloading(false);
       },
-      shouldLogToSentry: true,
     });
   };
 
@@ -127,13 +124,12 @@ const useDownload = ({
     if (!response) return;
     const blob = response.data;
 
-    await tryTask({
+    tryTask({
       task: () => {
         validateDownloadFormat(blob);
         downloadBlob(blob as Blob, fileName);
       },
       errorActions: ['console'],
-      shouldLogToSentry: true,
     });
   };
 

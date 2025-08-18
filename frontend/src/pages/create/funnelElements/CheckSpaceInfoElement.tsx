@@ -42,6 +42,8 @@ const CheckSpaceInfoElement = ({
       openedAt: calculatedOpenedAt,
       password: '',
     });
+    if (!spaceCode) return;
+
     onNext(isImmediateOpen);
     navigate(ROUTES.GUEST.SHARE, { state: spaceCode });
   };
