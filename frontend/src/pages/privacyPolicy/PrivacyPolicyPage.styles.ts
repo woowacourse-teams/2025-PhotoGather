@@ -12,9 +12,7 @@ export const Header = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin: 0 -20px 30px -20px;
-  padding: 0 20px 32px 20px;
-  border-bottom: 1px solid ${({ theme }) => theme.colors.gray05};
+  padding: 0 20px 40px 20px;
   gap: 10px;
 `;
 
@@ -36,7 +34,7 @@ export const Section = styled.section`
   gap: 20px;
   padding: 24px;
   border-radius: 16px;
-  border: 1px solid ${({ theme }) => theme.colors.gray05};
+  background-color: ${({ theme }) => theme.colors.grayBackground};
 `;
 
 export const SectionTitle = styled.h2`
