@@ -4,14 +4,18 @@ import ProgressBar from '../../../components/progressBar/ProgressBar';
 import useConfirmBeforeRefresh from '../../../hooks/@common/useConfirmBeforeRefresh';
 import useFunnelHistory from '../../../hooks/useFunnelHistory';
 import type { SpaceFunnelInfo } from '../../../types/space.type';
+import AgreementElement from '../funnelElements/agreementElement/AgreementElement';
 import CheckSpaceInfoElement from '../funnelElements/CheckSpaceInfoElement';
 import ImmediateOpenElement from '../funnelElements/immediateOpenElement/ImmediateOpenElement';
 import NameInputElement from '../funnelElements/NameInputElement';
 import * as S from './SpaceCreateFunnel.styles';
 
-const PROGRESS_STEP_LIST = ['name', 'date', 'check'] as const;
-const STEP_LIST = [...PROGRESS_STEP_LIST] as const;
-type STEP = (typeof STEP_LIST)[number];
+type STEP = 'agreement' | 'name' | 'date' | 'check';
+
+const needsAgreement = true; //TODO: 추후 서버에서 받아온 값으로 교체해주어야 함
+const PROGRESS_STEP_LIST: STEP[] = needsAgreement
+  ? ['agreement', 'name', 'date', 'check']
+  : ['name', 'date', 'check'];
 const initialFunnelValue: SpaceFunnelInfo = {
   name: '',
   date: '',
@@ -21,15 +25,19 @@ const initialFunnelValue: SpaceFunnelInfo = {
 
 const SpaceCreateFunnel = () => {
   useConfirmBeforeRefresh();
-  const [step, setStep] = useState<STEP>('name');
+  const [step, setStep] = useState<STEP>(needsAgreement ? 'agreement' : 'name');
   const [spaceInfo, setSpaceInfo] =
     useState<SpaceFunnelInfo>(initialFunnelValue);
-
   const { navigateToNext } = useFunnelHistory<STEP>(step, setStep);
+  const [agreements, setAgreements] = useState([false, false]);
 
   const goNextStep = (nextStep: STEP) => {
     navigateToNext(nextStep);
     setStep(nextStep);
+  };
+
+  const handleAgreements = (agreements: boolean[]) => {
+    setAgreements(agreements);
   };
 
   const currentStep =
@@ -49,6 +57,15 @@ const SpaceCreateFunnel = () => {
         </S.IconContainer>
       </S.TopContainer>
       <S.ContentContainer>
+        {step === 'agreement' && (
+          <AgreementElement
+            value={agreements}
+            onChange={handleAgreements}
+            onNext={() => {
+              goNextStep('name');
+            }}
+          />
+        )}
         {step === 'name' && (
           <NameInputElement
             onNext={(name) => {
