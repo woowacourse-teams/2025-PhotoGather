@@ -1,3 +1,9 @@
+import {
+  validateCanShareFile,
+  validateCanWebShare,
+} from '../validators/share.validator';
+import useError from './@common/useError';
+
 interface ShareOptions {
   title?: string;
   text?: string;
@@ -6,28 +12,21 @@ interface ShareOptions {
 }
 
 const useWebShareAPI = () => {
-  const handleWebShare = async ({ title, text, url, files }: ShareOptions) => {
-    if (!navigator.canShare) {
-      console.warn('Web Share API를 지원하지 않습니다.');
-      return false;
-    }
+  const { tryFetch } = useError();
 
-    if (files && !navigator.canShare({ files })) {
-      console.warn('파일 중 공유를 할 수 없는 파일이 있습니다.');
-      return false;
-    }
-
-    // TODO: tryTask로 변환
-    try {
-      await navigator.share({ title, text, url, files });
-      return true;
-    } catch (err) {
-      console.error('공유 취소 또는 오류:', err);
-      return false;
-    }
+  const share = async ({ title, text, url, files }: ShareOptions) => {
+    await tryFetch({
+      task: async () => {
+        validateCanWebShare();
+        validateCanShareFile(files);
+        await navigator.share({ title, text, url, files });
+      },
+      errorActions: ['toast'],
+      context: { toast: { text: '사진 공유 중 문제가 발생했어요.' } },
+    });
   };
 
-  return { handleWebShare };
+  return { share };
 };
 
 export default useWebShareAPI;
