@@ -138,8 +138,7 @@ const PrivacyPolicyPage = () => {
           </S.Paragraph>
           <S.List>
             <S.ListItem>개인정보 보호책임자: 포게더 운영팀</S.ListItem>
-            {/* TODO: 주소 추가 */}
-            <S.ListItem>이메일: privacy@photogather.com</S.ListItem>
+            <S.ListItem>이메일: forgather48@gmail.com</S.ListItem>
           </S.List>
         </S.Section>
 
