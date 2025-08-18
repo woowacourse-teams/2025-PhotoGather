@@ -1,5 +1,6 @@
 export const ROUTES = {
   MAIN: '/',
+  LOGIN: '/login',
   CREATE: '/create',
   MANAGER: {
     SPACE_HOME: (spaceId: string) => `/manager/space-home/${spaceId}`,
@@ -19,4 +20,5 @@ export const ROUTES = {
     NOT_FOUND: '*',
   },
   DEMO: '/demo',
+  PRIVACY_POLICY: '/privacy-policy',
 } as const;

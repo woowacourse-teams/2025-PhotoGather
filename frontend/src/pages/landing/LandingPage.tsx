@@ -1,20 +1,18 @@
 import { ReactComponent as SaveIcon } from '@assets/icons/download.svg';
 import { ReactComponent as InstagramIcon } from '@assets/icons/instagram.svg';
 import { ReactComponent as KakaoTalkIcon } from '@assets/icons/kakaotalk.svg';
-import { ReactComponent as Logo } from '@assets/icons/logo.svg';
 import { ReactComponent as QrcodeIcon } from '@assets/icons/qrCode.svg';
+import { ReactComponent as Logo } from '@assets/logo.svg';
 import { useNavigate } from 'react-router-dom';
 import FloatingActionButton from '../../components/@common/buttons/floatingActionButton/FloatingActionButton';
 import IconLabelButton from '../../components/@common/buttons/iconLabelButton/IconLabelButton';
+import Footer from '../../components/footer/Footer';
 import LeftTimeInformationBox from '../../components/leftTimeInformationBox/LeftTimeInformationBox';
 import { ROUTES } from '../../constants/routes';
 import useLandingScroll from '../../hooks/@common/useLandingScroll';
 import { theme } from '../../styles/theme';
 import { track } from '../../utils/googleAnalytics/track';
 import * as S from './LandingPage.styles';
-
-//TODO: 캐러셀 추가
-//TODO: 별 애니메이션 추가
 
 const LandingPage = () => {
   const navigate = useNavigate();
@@ -23,7 +21,7 @@ const LandingPage = () => {
     <S.Wrapper>
       <S.SectionContainer>
         <S.TextContainer>당신을 위한 순간, 흩어지지 않게</S.TextContainer>
-        <Logo />
+        <Logo fill={theme.colors.white} />
       </S.SectionContainer>
 
       <S.SectionContainer {...useLandingScroll({})}>
@@ -41,33 +39,6 @@ const LandingPage = () => {
         />
       </S.SectionContainer>
 
-      {/* <S.SectionContainer
-          {...useLandingScroll({
-            delay: 0.4,
-            onVisible: () => track.sectionView('first_section', 1),
-          })}
-        >
-          <S.TextContainer>지금 바로 생성하기</S.TextContainer>
-          <S.RowContainer>
-            <IconLabelButton
-              icon={<NaverIcon />}
-              style={{ backgroundColor: theme.colors.naver }}
-              onClick={() => {}}
-            />
-            <IconLabelButton
-              icon={<KakaoTalkIcon />}
-              style={{ backgroundColor: theme.colors.kakaoTalk }}
-              onClick={() => {
-                navigate(ROUTES.CREATE);
-              }}
-            />
-            <IconLabelButton
-              icon={<GoogleIcon />}
-              style={{ backgroundColor: theme.colors.white }}
-            />
-          </S.RowContainer>
-        </S.SectionContainer> */}
-
       <S.SectionContainer
         {...useLandingScroll({
           delay: 0.4,
@@ -78,7 +49,6 @@ const LandingPage = () => {
         <LeftTimeInformationBox
           title="나의 스페이스"
           leftTime="00:30:29"
-          //TODO: 현재 날짜로 넣어두기
           openDate={{ date: '2025년 7월 13일', time: '12시 30분' }}
         />
       </S.SectionContainer>
@@ -121,6 +91,7 @@ const LandingPage = () => {
           <IconLabelButton icon={<QrcodeIcon />} />
         </S.RowContainer>
       </S.SectionContainer>
+      <Footer />
     </S.Wrapper>
   );
 };
