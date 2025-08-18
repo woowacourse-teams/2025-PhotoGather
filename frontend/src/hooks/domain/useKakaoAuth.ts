@@ -2,7 +2,7 @@ import { authService } from '../../apis/services/auth.service';
 import useError from '../@common/useError';
 
 const useKakaoAuth = () => {
-  const { tryTask } = useError();
+  const { tryFetch } = useError();
 
   const requestKakaoURL = async () => {
     const response = await authService.getKakaoURL();
@@ -11,16 +11,17 @@ const useKakaoAuth = () => {
   };
 
   const handleKakaoLogin = async () => {
-    const taskResult = await tryTask({
+    const taskResult = await tryFetch({
       task: async () => requestKakaoURL(),
       errorActions: ['toast'],
     });
 
-    if (taskResult.success) window.location.href = taskResult.data;
+    if (taskResult.success && taskResult.data)
+      window.location.href = taskResult.data;
   };
 
   const handleKakaoLogout = async () => {
-    await tryTask({
+    await tryFetch({
       task: async () => await authService.logout(),
       errorActions: ['toast'],
     });
