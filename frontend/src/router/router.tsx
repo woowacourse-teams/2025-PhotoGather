@@ -10,6 +10,7 @@ import ImageUploadPage from '../pages/guest/imageUploadPage/ImageUploadPage';
 import SharePage from '../pages/guest/sharePage/SharePage';
 import LandingPage from '../pages/landing/LandingPage';
 import SpaceHome from '../pages/manager/spaceHome/SpaceHome';
+import PrivacyPolicyPage from '../pages/privacyPolicy/PrivacyPolicyPage';
 
 const router = createBrowserRouter([
   {
@@ -68,6 +69,10 @@ const router = createBrowserRouter([
             element: <DownloadCompletePage />,
           },
         ],
+      },
+      {
+        path: 'privacy-policy',
+        element: <PrivacyPolicyPage />,
       },
       {
         path: 'network-error',
