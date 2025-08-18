@@ -22,7 +22,7 @@ const SpaceHomeTopActionBar = ({
           text="전체 선택"
           onClick={onToggleAllSelected}
           variant={isAllSelected ? 'darkRoundedSelected' : 'darkRounded'}
-          icon={isAllSelected ? <CheckIcon /> : undefined}
+          icon={isAllSelected ? <CheckIcon width={16} /> : undefined}
         />
       )}
       <Button
