@@ -49,6 +49,7 @@ export const Paragraph = styled.p`
   color: ${({ theme }) => theme.colors.gray06};
   line-height: 1.8;
   letter-spacing: 0.02em;
+  white-space: pre-line;
 `;
 
 export const List = styled.ul`
