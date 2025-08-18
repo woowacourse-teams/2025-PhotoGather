@@ -14,20 +14,11 @@ export const ROUTES = {
     DOWNLOAD: '/complete/download',
     SPACE_CREATED: '/complete/space-created',
   },
+  MYPAGE: '/mypage',
   ERROR: {
     NETWORK: '/network-error',
+    NOT_FOUND: '*',
   },
   DEMO: '/demo',
   PRIVACY_POLICY: '/privacy-policy',
 } as const;
-
-export const STAR_FIELD_PAGES: readonly string[] = [
-  ROUTES.MANAGER.SPACE_HOME(''),
-  ROUTES.GUEST.IMAGE_UPLOAD(''),
-];
-
-export const HIGHLIGHT_PAGES: readonly string[] = [
-  ROUTES.MANAGER.SPACE_HOME(''),
-  ROUTES.GUEST.IMAGE_UPLOAD(''),
-  ROUTES.MAIN,
-];
