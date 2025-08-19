@@ -1,4 +1,4 @@
-import type { ReactElement } from 'react';
+import { type ReactElement, useState } from 'react';
 import { CONSTRAINTS } from '../../../../constants/constraints';
 import type { BaseModalProps } from '../../../../types/modal.type';
 import Button from '../../buttons/button/Button';
@@ -15,15 +15,15 @@ interface InputModalProps extends BaseModalProps {
   /** 입력 플레이스홀더 */
   placeholder: string;
   /** 입력 값 */
-  value: string;
-  /** 입력 값 변경 핸들러 */
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  initialValue: string;
   /** 입력 값 오류 메시지 */
   errorMessage?: string;
   /** 확인 버튼 텍스트 */
   confirmText?: string;
   /** 취소 버튼 텍스트 */
   cancelText?: string;
+  /** 입력 값 검증 함수 */
+  validation?: (value: string) => boolean;
 }
 
 const InputModal = ({
@@ -32,12 +32,23 @@ const InputModal = ({
   placeholder,
   confirmText,
   cancelText,
-  value,
-  onChange,
+  initialValue,
   errorMessage,
   onClose,
   onSubmit,
+  validation,
 }: InputModalProps) => {
+  const [value, setValue] = useState(initialValue);
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setValue(e.target.value);
+  };
+  const submitInput = () => {
+    if (validation && !validation(value)) {
+      return;
+    }
+    onSubmit?.({ value });
+  };
+  const isValid = validation ? validation(value) : false;
   return (
     <C.Wrapper>
       <S.DescriptionContainer>
@@ -50,8 +61,8 @@ const InputModal = ({
         placeholder={placeholder}
         maxCount={CONSTRAINTS.NAME_MAX_LENGTH}
         value={value}
-        onChange={onChange}
-        errorMessage={errorMessage}
+        onChange={handleChange}
+        errorMessage={validation ? (validation(value) ? '' : errorMessage) : ''}
       />
       <C.ButtonContainer>
         {cancelText && (
@@ -64,8 +75,9 @@ const InputModal = ({
         {confirmText && (
           <Button
             text={confirmText}
-            onClick={() => onSubmit?.(value)}
+            onClick={submitInput}
             variant="primary"
+            disabled={!isValid}
           />
         )}
       </C.ButtonContainer>
