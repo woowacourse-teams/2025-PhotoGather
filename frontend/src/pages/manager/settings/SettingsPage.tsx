@@ -1,13 +1,34 @@
+import { ReactComponent as WarningIcon } from '@assets/icons/warning.svg';
 import Button from '../../../components/@common/buttons/button/Button';
 import InfoBox from '../../../components/@common/infoBox/InfoBox';
 import DateTimeInput from '../../../components/@common/inputs/DateTimeInput';
 import TextInput from '../../../components/@common/inputs/textInput/TextInput';
+import ConfirmModal from '../../../components/@common/modal/confirmModal/ConfirmModal';
 import { INFORMATION } from '../../../constants/messages';
+import { useOverlay } from '../../../contexts/OverlayProvider';
 import useSpaceCodeFromPath from '../../../hooks/useSpaceCodeFromPath';
 import * as S from './SettingsPage.styles';
 
 const SettingsPage = () => {
   const { spaceCode } = useSpaceCodeFromPath();
+  const overlay = useOverlay();
+
+  const spaceDelete = async () => {
+    const confirmResult = await overlay(
+      <ConfirmModal
+        icon={<WarningIcon />}
+        title="정말 삭제하시겠어요?"
+        description="삭제 후에는 복구할 수 없어요"
+        confirmText="삭제"
+        cancelText="취소"
+        mode="error"
+      />,
+      {
+        clickOverlayClose: true,
+      },
+    );
+    if (!confirmResult) return;
+  };
 
   return (
     <S.Wrapper>
@@ -54,7 +75,7 @@ const SettingsPage = () => {
         </S.InputContainer>
       </S.InfoContainer>
       <S.SpaceDeleteButtonContainer>
-        <S.SpaceDeleteButton onClick={() => {}}>
+        <S.SpaceDeleteButton onClick={spaceDelete}>
           스페이스 삭제
         </S.SpaceDeleteButton>
       </S.SpaceDeleteButtonContainer>
