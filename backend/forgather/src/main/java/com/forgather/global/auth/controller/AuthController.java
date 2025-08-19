@@ -5,9 +5,9 @@ import java.net.URI;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,11 +16,11 @@ import com.forgather.global.auth.annotation.HostId;
 import com.forgather.global.auth.dto.HostResponse;
 import com.forgather.global.auth.dto.KakaoLoginUrlResponse;
 import com.forgather.global.auth.dto.LoginResponse;
+import com.forgather.global.auth.dto.RefreshRequest;
 import com.forgather.global.auth.service.AuthService;
 import com.forgather.global.config.LoginProperties;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -81,11 +81,10 @@ public class AuthController {
     @Operation(summary = "로그인 세션 갱신",
         description = "리프레시 토큰을 사용하여 로그인 세션을 갱신합니다. " +
             "로그인 이력이 있다면 재로그인 없이 로그인 세션을 갱신할 수 있습니다.")
-    public ResponseEntity<LoginResponse> refreshLoginSession(
-        @Parameter(hidden = true)
-        @CookieValue(name = "refresh_token") String refreshToken
+    public ResponseEntity<LoginResponse> refresh(
+        @RequestBody RefreshRequest request
     ) {
-        var response = authService.refresh(refreshToken);
+        var response = authService.refresh(request.refreshToken());
         return ResponseEntity.ok(response);
     }
 }
