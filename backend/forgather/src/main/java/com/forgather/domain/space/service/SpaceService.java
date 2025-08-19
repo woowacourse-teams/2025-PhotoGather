@@ -1,10 +1,12 @@
 package com.forgather.domain.space.service;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.forgather.domain.space.dto.CreateSpaceRequest;
 import com.forgather.domain.space.dto.CreateSpaceResponse;
 import com.forgather.domain.space.dto.SpaceResponse;
+import com.forgather.domain.space.dto.UpdateSpaceRequest;
 import com.forgather.domain.space.model.Space;
 import com.forgather.domain.space.repository.SpaceRepository;
 import com.forgather.global.util.RandomCodeGenerator;
@@ -26,6 +28,25 @@ public class SpaceService {
 
     public SpaceResponse getSpaceInformation(String spaceCode) {
         Space space = spaceRepository.getByCode(spaceCode);
+        return SpaceResponse.from(space);
+    }
+
+    @Transactional
+    public SpaceResponse update(String spaceCode, UpdateSpaceRequest request) {
+        Space space = spaceRepository.getByCode(spaceCode);
+        if (request.name() != null) {
+            space.setName(request.name());
+        }
+        if (request.validHours() != null) {
+            space.setValidHours(request.validHours());
+        }
+        if (request.openedAt() != null) {
+            space.setOpenedAt(request.openedAt());
+        }
+        if (request.password() != null) {
+            space.setPassword(request.password());
+        }
+
         return SpaceResponse.from(space);
     }
 }

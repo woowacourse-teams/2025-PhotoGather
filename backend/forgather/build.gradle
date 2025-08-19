@@ -44,6 +44,9 @@ dependencies {
 
 	// Swagger
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.7.0'
+
+	// hibernate validation
+	implementation("org.springframework.boot:spring-boot-starter-validation:3.4.7")
 }
 
 tasks.named('test') {
