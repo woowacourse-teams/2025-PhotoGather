@@ -144,7 +144,7 @@ class PhotoAcceptanceTest extends AcceptanceTest {
         // when
         var response = RestAssuredMockMvc.given()
             .when()
-            .post("/spaces/{spaceCode}/photos/download/{photoId}/urls", space.getCode(), photo.getId())
+            .post("/spaces/{spaceCode}/photos/issue/download-urls/{photoId}", space.getCode(), photo.getId())
             .then()
             .extract();
 
@@ -174,7 +174,7 @@ class PhotoAcceptanceTest extends AcceptanceTest {
             .accept("application/json")
             .body(request)
             .when()
-            .post("/spaces/{spaceCode}/photos/download/selected-urls", space.getCode())
+            .post("/spaces/{spaceCode}/photos/issue/download-urls/selected", space.getCode())
             .then()
             .extract();
 
@@ -198,7 +198,7 @@ class PhotoAcceptanceTest extends AcceptanceTest {
         // when
         var response = RestAssuredMockMvc.given()
             .when()
-            .post("/spaces/{spaceCode}/photos/download/urls", space.getCode())
+            .post("/spaces/{spaceCode}/photos/issue/download-urls", space.getCode())
             .then()
             .extract();
 
