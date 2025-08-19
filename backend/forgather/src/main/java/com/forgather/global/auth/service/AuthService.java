@@ -7,11 +7,12 @@ import org.springframework.stereotype.Service;
 
 import com.forgather.global.auth.client.KakaoAuthClient;
 import com.forgather.global.auth.client.KakaoTokenDto;
-import com.forgather.global.auth.domain.Host;
-import com.forgather.global.auth.domain.KakaoHost;
-import com.forgather.global.auth.domain.RefreshToken;
+import com.forgather.global.auth.dto.HostResponse;
 import com.forgather.global.auth.dto.KakaoLoginUrlResponse;
 import com.forgather.global.auth.dto.LoginResponse;
+import com.forgather.global.auth.model.Host;
+import com.forgather.global.auth.model.KakaoHost;
+import com.forgather.global.auth.model.RefreshToken;
 import com.forgather.global.auth.repository.KakaoHostRepository;
 import com.forgather.global.auth.repository.RefreshTokenRepository;
 import com.forgather.global.auth.util.JwtParser;
@@ -30,14 +31,14 @@ public class AuthService {
     private final RefreshTokenRepository refreshTokenRepository;
     private final RandomCodeGenerator randomCodeGenerator;
 
-    public KakaoLoginUrlResponse getKakaoLoginUrl() {
-        String kakaoLoginUrl = kakaoAuthClient.getKakaoLoginUrl();
+    public KakaoLoginUrlResponse getKakaoLoginUrl(String customUrl) {
+        String kakaoLoginUrl = kakaoAuthClient.getKakaoLoginUrl(customUrl);
         return KakaoLoginUrlResponse.from(kakaoLoginUrl);
     }
 
     @Transactional
-    public LoginResponse requestKakaoLoginToken(String authorizationCode) {
-        KakaoTokenDto.FullToken response = kakaoAuthClient.requestKakaoLoginToken(authorizationCode);
+    public LoginResponse requestKakaoLoginToken(String authorizationCode, String customUrl) {
+        KakaoTokenDto.FullToken response = kakaoAuthClient.requestKakaoLoginToken(authorizationCode, customUrl);
         KakaoHost kakaoHost = loginWithKakao(response);
         RefreshToken refreshToken = RefreshToken.generate(kakaoHost.getHost(), randomCodeGenerator);
         refreshTokenRepository.save(refreshToken);
@@ -70,5 +71,10 @@ public class AuthService {
             throw new IllegalArgumentException("리프레시 토큰이 만료되었습니다.");
         }
         return LoginResponse.of(refreshToken.getHost(), refreshToken);
+    }
+
+    public HostResponse getCurrentUser(Long hostId) {
+        KakaoHost kakaoHost = kakaoHostRepository.getById(hostId);
+        return HostResponse.from(kakaoHost.getHost());
     }
 }

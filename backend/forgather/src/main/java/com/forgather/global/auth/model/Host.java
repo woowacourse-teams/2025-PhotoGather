@@ -1,4 +1,4 @@
-package com.forgather.global.auth.domain;
+package com.forgather.global.auth.model;
 
 import com.forgather.domain.model.BaseTimeEntity;
 
