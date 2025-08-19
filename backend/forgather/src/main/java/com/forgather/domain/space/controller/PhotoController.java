@@ -56,7 +56,7 @@ public class PhotoController {
     public ResponseEntity<Void> saveAll(
         @PathVariable(name = "spaceCode") String spaceCode,
         @RequestPart(name = "files") List<MultipartFile> files,
-        @RequestParam(name = "guestId") Long guestId
+        @RequestParam(name = "guestId", required = false) Long guestId
     ) {
         photoService.saveAll(spaceCode, files, guestId);
         return ResponseEntity.ok().build();
