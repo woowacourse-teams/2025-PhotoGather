@@ -14,9 +14,8 @@ export const AllAgreeRow = styled.div`
   gap: 11px;
   align-items: center;
 `;
-export const AllAgreeIcon = styled(RoundCheckIcon)<{ isChecked: boolean }>`
+export const AllAgreeIcon = styled(RoundCheckIcon)`
   width: 28px;
-  color: ${({ isChecked, theme }) => (isChecked ? theme.colors.primary : theme.colors.gray03)};
   cursor: pointer;
 `;
 
@@ -37,15 +36,14 @@ export const AgreeCheckContainer = styled.div`
   align-items: center;
 `;
 
-export const AgreeCheckIcon = styled(CheckIcon)<{ isChecked: boolean }>`
+export const AgreeCheckIcon = styled(CheckIcon)`
   width: 24px;
-  color: ${({ isChecked, theme }) => (isChecked ? theme.colors.primary : theme.colors.gray03)};
   cursor: pointer;
 `;
 
-export const AgreeText = styled.p<{ showDetail: boolean }>`
+export const AgreeText = styled.p<{ $showDetail: boolean }>`
   ${({ theme }) => theme.typography.bodyRegular}
-  color: ${({ showDetail, theme }) => (showDetail ? theme.colors.gray03 : theme.colors.gray06)};
-  text-decoration: ${({ showDetail }) => (showDetail ? 'underline' : 'none')};
-  cursor: ${({ showDetail }) => (showDetail ? 'pointer' : 'default')};
+  color: ${({ $showDetail, theme }) => ($showDetail ? theme.colors.gray03 : theme.colors.gray06)};
+  text-decoration: ${({ $showDetail }) => ($showDetail ? 'underline' : 'none')};
+  cursor: ${({ $showDetail }) => ($showDetail ? 'pointer' : 'default')};
 `;

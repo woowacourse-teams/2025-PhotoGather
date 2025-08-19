@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { INFORMATION } from '../../../../constants/messages';
 import { ROUTES } from '../../../../constants/routes';
+import { theme } from '../../../../styles/theme';
 import type { FunnelElementProps } from '../../../../types/funnel.type';
 import type { Agreements } from '../../../../types/space.type';
 import FunnelBasePage from '../../funnel/FunnelBasePage/FunnelBasePage';
@@ -16,20 +17,20 @@ const AgreementElement = ({
   onChange,
   onNext,
 }: AgreementElementProps) => {
-  const { service, privacy } = value;
-  const isAllChecked = service && privacy;
+  const { agreedToService, agreedToPrivacy } = value;
+  const isAllChecked = agreedToService && agreedToPrivacy;
   const navigate = useNavigate();
 
   const toggleAll = () => {
     const next = !isAllChecked;
-    onChange({ service: next, privacy: next });
+    onChange({ agreedToService: next, agreedToPrivacy: next });
   };
 
   const toggleAt = (idx: 0 | 1) => {
     if (idx === 0) {
-      onChange({ ...value, service: !value.service });
+      onChange({ ...value, agreedToService: !value.agreedToService });
     } else {
-      onChange({ ...value, privacy: !value.privacy });
+      onChange({ ...value, agreedToPrivacy: !value.agreedToPrivacy });
     }
   };
 
@@ -44,7 +45,7 @@ const AgreementElement = ({
         <S.Wrapper>
           <S.AllAgreeRow>
             <S.AllAgreeIcon
-              isChecked={isAllChecked}
+              fill={isAllChecked ? theme.colors.primary : theme.colors.gray03}
               onClick={toggleAll}
               type="button"
             />
@@ -53,14 +54,18 @@ const AgreementElement = ({
           <S.AgreeRow>
             <S.AgreeCheckContainer>
               <S.AgreeCheckIcon
-                isChecked={service}
+                fill={
+                  agreedToService ? theme.colors.primary : theme.colors.gray03
+                }
                 onClick={() => toggleAt(0)}
                 type="button"
               />
-              <S.AgreeText showDetail={false}>서비스 이용약관 동의</S.AgreeText>
+              <S.AgreeText $showDetail={false}>
+                서비스 이용약관 동의
+              </S.AgreeText>
             </S.AgreeCheckContainer>
             <S.AgreeText
-              showDetail={true}
+              $showDetail={true}
               onClick={() => {
                 navigate(ROUTES.POLICY.TERMS_OF_SERVICE);
               }}
@@ -71,16 +76,18 @@ const AgreementElement = ({
           <S.AgreeRow>
             <S.AgreeCheckContainer>
               <S.AgreeCheckIcon
-                isChecked={privacy}
+                fill={
+                  agreedToPrivacy ? theme.colors.primary : theme.colors.gray03
+                }
                 onClick={() => toggleAt(1)}
                 type="button"
               />
-              <S.AgreeText showDetail={false}>
+              <S.AgreeText $showDetail={false}>
                 개인정보 수집 및 이용 동의
               </S.AgreeText>
             </S.AgreeCheckContainer>
             <S.AgreeText
-              showDetail={true}
+              $showDetail={true}
               onClick={() => {
                 navigate(ROUTES.POLICY.PRIVACY_CONSENT);
               }}

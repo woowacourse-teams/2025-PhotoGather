@@ -6,8 +6,8 @@ export interface SpaceCreateInfo {
 }
 
 export interface Agreements {
-  service: boolean;
-  privacy: boolean;
+  agreedToService: boolean;
+  agreedToPrivacy: boolean;
 }
 
 export interface SpaceFunnelInfo {
