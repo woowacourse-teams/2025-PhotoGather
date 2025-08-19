@@ -4,12 +4,15 @@ import type { ApiResponse } from '../types/api.type';
 import { validateDownloadFormat } from '../validators/fetch.validator';
 import { checkSelectedPhotoExist } from '../validators/photo.validator';
 import useError from './@common/useError';
+import useWebShareAPI from './useWebShareAPI';
 
 interface UseDownloadProps {
   spaceCode: string;
   spaceName: string;
   onDownloadSuccess?: () => void;
 }
+
+type DownloadMode = 'download' | 'share';
 
 const useDownload = ({
   spaceCode,
@@ -18,6 +21,7 @@ const useDownload = ({
 }: UseDownloadProps) => {
   const [isDownloading, setIsDownloading] = useState(false);
   const { tryTask, tryFetch } = useError();
+  const { share } = useWebShareAPI();
 
   const getDownloadName = (
     fileName: string | undefined,
@@ -48,7 +52,11 @@ const useDownload = ({
     window.URL.revokeObjectURL(url);
   };
 
-  const selectDownload = async (photoIds: number[], fileName?: string) => {
+  const selectDownload = async (
+    photoIds: number[],
+    fileName?: string,
+    mode?: DownloadMode,
+  ) => {
     const taskResult = tryTask({
       task: () => checkSelectedPhotoExist(photoIds),
       errorActions: ['toast'],
@@ -63,6 +71,7 @@ const useDownload = ({
               photoIds: photoIds,
             }),
           fileName,
+          mode,
         );
       },
       errorActions: ['toast'],
@@ -75,12 +84,17 @@ const useDownload = ({
     });
   };
 
-  const downloadSingle = async (photoId: number, fileName?: string) => {
+  const downloadSingle = async (
+    photoId: number,
+    fileName?: string,
+    mode?: DownloadMode,
+  ) => {
     await tryFetch({
       task: async () => {
         await handleDownload(
           () => photoService.downloadSinglePhoto(spaceCode, photoId),
           fileName,
+          mode,
         );
       },
       errorActions: ['toast', 'console'],
@@ -93,13 +107,14 @@ const useDownload = ({
     });
   };
 
-  const downloadAll = async (fileName?: string) => {
+  const downloadAll = async (fileName?: string, mode?: DownloadMode) => {
     await tryFetch({
       task: async () => {
         setIsDownloading(true);
         await handleDownload(
           () => photoService.downloadAll(spaceCode),
           fileName,
+          mode,
         );
         onDownloadSuccess?.();
       },
@@ -117,17 +132,27 @@ const useDownload = ({
   };
 
   const handleDownload = async (
-    fetchFunction: () => Promise<ApiResponse<unknown>>,
+    fetchFunction: () => Promise<ApiResponse<Blob>>,
     fileName?: string,
+    mode: DownloadMode = 'download',
   ) => {
     const response = await fetchFunction();
-    if (!response) return;
+    if (!response || !response.data) return;
     const blob = response.data;
 
     tryTask({
-      task: () => {
+      task: async () => {
         validateDownloadFormat(blob);
-        downloadBlob(blob as Blob, fileName);
+        if (mode === 'share') {
+          const file = new File(
+            [blob],
+            getDownloadName(undefined, blob, spaceName),
+            { type: blob.type },
+          );
+          await share({ files: [file] });
+        } else {
+          downloadBlob(blob, fileName);
+        }
       },
       errorActions: ['console'],
     });

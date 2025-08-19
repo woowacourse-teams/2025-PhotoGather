@@ -31,6 +31,7 @@ import useSpaceInfo from '../../../hooks/useSpaceInfo';
 import { ScrollableBlurArea } from '../../../styles/@common/ScrollableBlurArea';
 import { theme } from '../../../styles/theme';
 import { checkIsEarlyDate } from '../../../utils/checkIsEarlyTime';
+import { checkIsIos } from '../../../utils/checkIsIos';
 import { copyLinkToClipboard } from '../../../utils/copyLinkToClipboard';
 import { createShareUrl, createSpaceUrl } from '../../../utils/createSpaceUrl';
 import { track } from '../../../utils/googleAnalytics/track';
@@ -92,6 +93,7 @@ const SpaceHome = () => {
         });
       },
     });
+  const downloadMode = checkIsIos() ? 'share' : 'download';
 
   const {
     isSelectMode,
@@ -125,7 +127,7 @@ const SpaceHome = () => {
   };
 
   const downloadPhotoWithTracking = async (photoId: number) => {
-    await downloadSingle(photoId);
+    await downloadSingle(photoId, undefined, downloadMode);
     track.button('single_download_button', {
       page: 'space_home',
       section: 'photo_modal',
@@ -275,7 +277,7 @@ const SpaceHome = () => {
                   label="모두 저장하기"
                   icon={<SaveIcon fill={theme.colors.gray06} />}
                   onClick={() => {
-                    downloadAll();
+                    downloadAll(undefined, 'download');
                     track.button('all_download_button', {
                       page: 'space_home',
                       section: 'space_home',
@@ -298,7 +300,9 @@ const SpaceHome = () => {
                 <PhotoSelectionToolBar
                   selectedCount={selectedPhotosCount}
                   onDelete={() => tryDeleteSelectedPhotos(selectedPhotoIds)}
-                  onDownload={() => selectDownload(selectedPhotoIds)}
+                  onDownload={() =>
+                    selectDownload(selectedPhotoIds, undefined, downloadMode)
+                  }
                 />
               )}
             </S.BottomNavigatorContainer>
