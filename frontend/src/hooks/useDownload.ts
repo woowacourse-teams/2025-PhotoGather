@@ -150,9 +150,8 @@ const useDownload = ({
             { type: blob.type },
           );
           await share({ files: [file] });
-        } else {
-          downloadBlob(blob, fileName);
         }
+        if (mode === 'download') downloadBlob(blob, fileName);
       },
       errorActions: ['console'],
     });
