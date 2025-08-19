@@ -1,4 +1,5 @@
 import { ReactComponent as LinkIcon } from '@assets/icons/link.svg';
+import { ReactComponent as ShareIcon } from '@assets/icons/share.svg';
 import LinkImage from '@assets/images/rocket.png';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Button from '../../../components/@common/buttons/button/Button';
@@ -9,6 +10,7 @@ import { INFORMATION } from '../../../constants/messages';
 import { ROUTES } from '../../../constants/routes';
 import useError from '../../../hooks/@common/useError';
 import { useToast } from '../../../hooks/@common/useToast';
+import useWebShareAPI from '../../../hooks/useWebShareAPI';
 import { theme } from '../../../styles/theme';
 import { copyLinkToClipboard } from '../../../utils/copyLinkToClipboard';
 import { createShareUrl } from '../../../utils/createSpaceUrl';
@@ -19,7 +21,8 @@ const SharePage = () => {
   const location = useLocation();
   const spaceCode = location.state;
   const { showToast } = useToast();
-  const { tryTask } = useError();
+  const { tryTask, tryFetch } = useError();
+  const { share } = useWebShareAPI();
 
   const handleSpaceHomeButton = () => {
     navigate(`/manager/space-home/${spaceCode}`);
@@ -37,7 +40,7 @@ const SharePage = () => {
     });
   };
 
-  const handleCopyLink = async () => {
+  const handleCopyLink = () => {
     tryTask({
       task: copyShareLink,
       errorActions: ['toast'],
@@ -47,6 +50,18 @@ const SharePage = () => {
           position: 'top',
         },
       },
+    });
+  };
+
+  const handleShare = async () => {
+    await tryFetch({
+      task: async () =>
+        share({
+          title: '스페이스 업로드 링크 공유',
+          text: '스페이스에 사진을 업로드 할 수 있는 링크를 공유했어요!',
+          url: createShareUrl(spaceCode),
+        }),
+      errorActions: ['toast'],
     });
   };
 
@@ -81,6 +96,16 @@ const SharePage = () => {
               <IconLabelButton
                 icon={<LinkIcon fill={theme.colors.white} width="20px" />}
                 onClick={handleCopyLink}
+              />
+              <IconLabelButton
+                icon={
+                  <ShareIcon
+                    fill={theme.colors.white}
+                    stroke={theme.colors.gray06}
+                    width="20px"
+                  />
+                }
+                onClick={handleShare}
               />
             </S.IconLabelButtonContainer>
           </S.ShareContainer>
