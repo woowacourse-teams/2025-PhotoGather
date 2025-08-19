@@ -1,6 +1,6 @@
 import diamondImage from '@assets/images/diamond.png';
 import { useState } from 'react';
-import ProgressBar from '../../../components/progressBar/ProgressBar';
+import StepProgressBar from '../../../components/progressBar/step/StepProgressBar';
 import useConfirmBeforeRefresh from '../../../hooks/@common/useConfirmBeforeRefresh';
 import useFunnelHistory from '../../../hooks/useFunnelHistory';
 import type { SpaceFunnelInfo } from '../../../types/space.type';
@@ -42,7 +42,7 @@ const SpaceCreateFunnel = () => {
 
   return (
     <S.Wrapper>
-      <ProgressBar
+      <StepProgressBar
         currentStep={currentStep}
         maxStep={PROGRESS_STEP_LIST.length}
       />

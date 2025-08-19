@@ -37,7 +37,6 @@ const LoadingLayout = ({ loadingContents, percentage }: LoadingLayoutProps) => {
   return (
     <C.BackDrop>
       <S.Container>
-        <SparkleLightTrail />
         <S.ContentContainer>
           <S.IconTextContainer>
             <S.Icon
