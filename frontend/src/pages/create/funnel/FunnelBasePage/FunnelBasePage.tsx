@@ -9,6 +9,7 @@ const FunnelBasePage = ({
   element,
   onNextButtonClick: handleNextButtonClick,
   nextButtonDisabled,
+  buttonText = '다음으로',
 }: FunnelBaseElementProps) => {
   return (
     <S.Wrapper>
@@ -27,7 +28,7 @@ const FunnelBasePage = ({
       </S.TopContainer>
       <Button
         onClick={handleNextButtonClick}
-        text="다음으로"
+        text={buttonText}
         disabled={nextButtonDisabled}
       />
     </S.Wrapper>

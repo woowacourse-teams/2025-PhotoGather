@@ -6,7 +6,7 @@ import useError from './@common/useError';
 const useSpaceInfo = (spaceCode: string) => {
   const [spaceInfo, setSpaceInfo] = useState<Space>();
   const [isLoading, setIsLoading] = useState(false);
-  const { tryTask } = useError();
+  const { tryFetch } = useError();
 
   const requestSpaceInfo = async () => {
     setIsLoading(true);
@@ -18,7 +18,7 @@ const useSpaceInfo = (spaceCode: string) => {
   //biome-ignore lint/correctness/useExhaustiveDependencies: 무한 렌더링 방지
   useEffect(() => {
     const fetchSpaceInfo = async () => {
-      await tryTask({
+      await tryFetch({
         task: requestSpaceInfo,
         errorActions: ['toast'],
         context: {
@@ -27,7 +27,6 @@ const useSpaceInfo = (spaceCode: string) => {
           },
         },
         onFinally: () => setIsLoading(false),
-        shouldLogToSentry: true,
       });
     };
 

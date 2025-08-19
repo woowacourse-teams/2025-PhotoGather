@@ -58,7 +58,7 @@ const useFileUpload = ({
       fileType,
     );
 
-    await tryTask({
+    tryTask({
       task: () => {
         checkInvalidFileType(invalidFiles);
         checkUploadLimit(validFiles);
@@ -86,7 +86,7 @@ const useFileUpload = ({
     setPreviewData([]);
   };
 
-  const { tryTask } = useError();
+  const { tryTask, tryFetch } = useError();
 
   const fetchUploadFiles = async () => {
     const files = uploadFiles.map((file) => file.originFile);
@@ -97,13 +97,15 @@ const useFileUpload = ({
     toast: {
       text: '사진 업로드에 실패했습니다',
     },
-    afterAction: () => {
-      setIsUploading(false);
+    afterAction: {
+      action: () => {
+        setIsUploading(false);
+      },
     },
   };
 
   const submitFileUpload = async () => {
-    await tryTask({
+    await tryFetch({
       task: async () => {
         setIsUploading(true);
         await fetchUploadFiles();
@@ -115,7 +117,6 @@ const useFileUpload = ({
       onFinally: () => {
         setIsUploading(false);
       },
-      shouldLogToSentry: true,
     });
   };
 
