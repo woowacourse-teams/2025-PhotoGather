@@ -201,7 +201,7 @@ public class PhotoController {
 
     @PostMapping("/download/urls")
     @Operation(summary = "사진 일괄 다운로드 URL", description = "특정 공간의 모든 사진 다운로드 URL 목록을 생성합니다.")
-    public ResponseEntity<DownloadUrlsResponse> getSelectedDownloadUrls(
+    public ResponseEntity<DownloadUrlsResponse> getAllDownloadUrls(
         @PathVariable(name = "spaceCode") String spaceCode,
         @HostId Long hostId
     ) {
