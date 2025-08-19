@@ -48,7 +48,6 @@ const SpaceHome = () => {
   // TODO: NoData 시 표시할 Layout 필요
   const _isNoData = !spaceInfo;
   const isSpaceExpired = spaceInfo?.isExpired;
-  console.log(isSpaceExpired);
   const spaceName = spaceInfo?.name ?? '';
   const { targetRef: hideBlurAreaTriggerRef, isIntersecting: isAtPageBottom } =
     useIntersectionObserver({});
