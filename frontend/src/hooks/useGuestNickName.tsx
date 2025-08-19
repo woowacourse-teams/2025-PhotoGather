@@ -1,18 +1,33 @@
 import { useEffect, useState } from 'react';
+import { guestService } from '../apis/services/guest.service';
 import HighlightText from '../components/@common/highlightText/HighlightText';
 import InputModal from '../components/@common/modal/inputModal/InputModal';
 import { useOverlay } from '../contexts/OverlayProvider';
 import { createRandomNickName } from '../utils/createRandomNickName';
+import useError from './@common/useError';
 
-// import useError from './@common/useError';
+interface UseGuestNickNameProps {
+  spaceCode: string;
+}
 
-const useGuestNickName = () => {
+const useGuestNickName = ({ spaceCode }: UseGuestNickNameProps) => {
   const overlay = useOverlay();
-  // const { tryFetch } = useError();
+  const { tryFetch } = useError();
+
+  type NickNameModalMode = 'create' | 'edit';
+  const [nickName, setNickName] = useState('');
+
+  const guestId = localStorage.getItem('guestId');
+  const mode = guestId || nickName.length !== 0 ? 'edit' : 'create';
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: 초기 모달 표시
   useEffect(() => {
-    showNickNameModal('create');
+    if (guestId) {
+      // TODO : fetch 로직 넣기
+    }
+    if (mode === 'create') {
+      showNickNameModal('create');
+    }
   }, []);
 
   const createNickNameErrorMessage = (nickName: string) => {
@@ -25,8 +40,6 @@ const useGuestNickName = () => {
     return '';
   };
 
-  type NickNameModalMode = 'create' | 'edit';
-  const [nickName, setNickName] = useState('');
   const showNickNameModal = async (mode: NickNameModalMode) => {
     const defaultInputModalProps = {
       description: (
@@ -40,42 +53,46 @@ const useGuestNickName = () => {
       subDescription: '10자까지 입력할 수 있어요.',
       placeholder: '닉네임을 입력해 주세요',
       confirmText: '확인',
-      initialValue: createRandomNickName(),
+      cancelText: mode === 'create' ? '취소' : undefined,
+      initialValue: mode === 'create' ? createRandomNickName() : nickName,
       onSubmit: fetchGuestNickName,
       createErrorMessage: createNickNameErrorMessage,
     };
 
-    const editModeInputModalProps = {
-      ...defaultInputModalProps,
-      initialValue: nickName,
-      cancelText: '취소',
-    };
-
     const result = await overlay<{ value: string }>(
-      <InputModal
-        {...(mode === 'edit'
-          ? editModeInputModalProps
-          : defaultInputModalProps)}
-      />,
+      <InputModal {...defaultInputModalProps} />,
     );
     if (result) {
       setNickName(result.value);
     }
   };
 
+  const matchingToastText: Record<NickNameModalMode, string> = {
+    create: '닉네임을 저장하는 중 오류가 발생했어요. 다시 시도해 주세요.',
+    edit: '닉네임을 수정하는 중 오류가 발생했어요. 다시 시도해 주세요.',
+  };
+
   const fetchGuestNickName = async () => {
-    // const response = await tryFetch({
-    //   task: () => {
-    //     return api.get('/guest/nickname');
-    //   },
-    //   errorActions: ['toast'],
-    //   context: {
-    //     toast: {
-    //       text: '닉네임을 저장하는 중 오류가 발생했어요. 다시 시도해 주세요.',
-    //     },
-    //   },
-    // });
-    console.log('호출');
+    const taskResult = await tryFetch({
+      task: () => {
+        return guestService.createNickName({
+          spaceCode,
+          name: nickName,
+        });
+      },
+      errorActions: ['toast'],
+      context: {
+        toast: {
+          text: matchingToastText[mode],
+        },
+      },
+    });
+    if (taskResult.success) {
+      const guestId = taskResult.data?.data?.id;
+      if (guestId) {
+        localStorage.setItem('guestId', guestId.toString());
+      }
+    }
   };
 
   return { nickName, showNickNameModal };

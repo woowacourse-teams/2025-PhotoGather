@@ -39,7 +39,9 @@ const ImageUploadPage = () => {
   const overlay = useOverlay();
   const navigate = useNavigate();
 
-  const { nickName, showNickNameModal } = useGuestNickName();
+  const { nickName, showNickNameModal } = useGuestNickName({
+    spaceCode: spaceCode ?? '',
+  });
 
   const navigateToUploadComplete = () => {
     navigate(ROUTES.COMPLETE.UPLOAD, {
