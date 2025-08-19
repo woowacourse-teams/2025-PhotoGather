@@ -9,6 +9,7 @@ import NotFoundErrorPage from '../pages/error/NotFoundErrorPage';
 import ImageUploadPage from '../pages/guest/imageUploadPage/ImageUploadPage';
 import SharePage from '../pages/guest/sharePage/SharePage';
 import LandingPage from '../pages/landing/LandingPage';
+import Dashboard from '../pages/manager/dashboard/Dashboard';
 import SpaceHome from '../pages/manager/spaceHome/SpaceHome';
 import PrivacyPolicyPage from '../pages/privacyPolicy/PrivacyPolicyPage';
 import type { AppRouteObject } from '../types/route.type';
@@ -39,16 +40,6 @@ const routes: AppRouteObject[] = [
         element: <SpaceCreateFunnel />,
       },
       {
-        path: 'space-home/:spaceCode',
-        element: <SpaceHome />,
-        handle: {
-          header: true,
-          starField: true,
-          highlight: true,
-        },
-      },
-      {
-        // TODO : 데모 후 삭제
         path: 'manager',
         children: [
           {
@@ -58,6 +49,13 @@ const routes: AppRouteObject[] = [
               header: true,
               starField: true,
               highlight: true,
+            },
+          },
+          {
+            path: 'space-home/:spaceId/dashboard',
+            element: <Dashboard />,
+            handle: {
+              header: true,
             },
           },
         ],

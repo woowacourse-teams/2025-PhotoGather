@@ -4,6 +4,8 @@ export const ROUTES = {
   CREATE: '/create',
   MANAGER: {
     SPACE_HOME: (spaceId: string) => `/manager/space-home/${spaceId}`,
+    DASHBOARD: (spaceId: string) => `/manager/space-home/${spaceId}/dashboard`,
+    SETTING: (spaceId: string) => `/manager/space-home/${spaceId}/settings`,
   },
   GUEST: {
     IMAGE_UPLOAD: (spaceId: string) => `/guest/image-upload/${spaceId}`,
