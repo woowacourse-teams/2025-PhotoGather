@@ -64,7 +64,7 @@ public class PhotoController {
         @PathVariable(name = "spaceCode") String spaceCode,
         @RequestPart(name = "files") List<MultipartFile> files
     ) {
-        photoService.saveAll(spaceCode, files);
+        uploadService.saveAll(spaceCode, files);
         return ResponseEntity.ok().build();
     }
 
