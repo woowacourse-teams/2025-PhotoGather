@@ -138,6 +138,7 @@ public class PhotoService {
         Photo photo = photoRepository.getById(photoId);
         photo.validateSpace(space);
 
+        // TODO: 사진 원본 이름 추가
         URL downloadUrl = awsS3Cloud.issueDownloadUrl(photo.getPath());
         return new DownloadUrlsResponse(List.of(DownloadUrl.from(
             // photo.getOriginalName(),
@@ -149,8 +150,27 @@ public class PhotoService {
         // TODO: Space가 HostId의 소유인지 검증
         Space space = spaceRepository.getUnexpiredSpaceByCode(spaceCode);
         List<Photo> photos = photoRepository.findAllByIdIn(request.photoIds());
+        if (photos.isEmpty()) {
+            throw new IllegalStateException("현재 다운로드할 수 있는 사진이 존재하지 않습니다.");
+        }
         photos.forEach(photo -> photo.validateSpace(space));
 
+        return getDownloadUrlsResponse(photos);
+    }
+
+    public DownloadUrlsResponse getAllDownloadUrls(String spaceCode, Long hostId) {
+        // TODO: Space가 HostId의 소유인지 검증
+        Space space = spaceRepository.getUnexpiredSpaceByCode(spaceCode);
+        List<Photo> photos = photoRepository.findAllBySpace(space);
+        if (photos.isEmpty()) {
+            throw new IllegalStateException("현재 다운로드할 수 있는 사진이 존재하지 않습니다.");
+        }
+        photos.forEach(photo -> photo.validateSpace(space));
+
+        return getDownloadUrlsResponse(photos);
+    }
+
+    private DownloadUrlsResponse getDownloadUrlsResponse(List<Photo> photos) {
         // TODO: 사진 원본 이름 key로
         // Map<String, URL> downloadUrls = photos.stream()
         //     .collect(Collectors.toMap(

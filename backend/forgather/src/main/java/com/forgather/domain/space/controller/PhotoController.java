@@ -189,13 +189,23 @@ public class PhotoController {
     }
 
     @PostMapping("/download/selected-urls")
-    @Operation(summary = "사진 선택 다운로드 URL", description = "특정 공간의 단일 사진 다운로드 URL을 생성합니다.")
+    @Operation(summary = "사진 선택 다운로드 URL", description = "특정 공간의 선택된 사진 다운로드 URL 목록을 생성합니다.")
     public ResponseEntity<DownloadUrlsResponse> getSelectedDownloadUrls(
         @PathVariable(name = "spaceCode") String spaceCode,
         @RequestBody DownloadPhotosRequest request,
         @HostId Long hostId
     ) {
         var response = photoService.getSelectedDownloadUrls(spaceCode, request, hostId);
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/download/urls")
+    @Operation(summary = "사진 일괄 다운로드 URL", description = "특정 공간의 모든 사진 다운로드 URL 목록을 생성합니다.")
+    public ResponseEntity<DownloadUrlsResponse> getSelectedDownloadUrls(
+        @PathVariable(name = "spaceCode") String spaceCode,
+        @HostId Long hostId
+    ) {
+        var response = photoService.getAllDownloadUrls(spaceCode, hostId);
         return ResponseEntity.ok(response);
     }
 
