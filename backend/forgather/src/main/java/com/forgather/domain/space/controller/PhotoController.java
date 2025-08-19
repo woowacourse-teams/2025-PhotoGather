@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -54,9 +55,10 @@ public class PhotoController {
     @Operation(summary = "사진 일괄 업로드", description = "사진을 전부 업로드합니다.")
     public ResponseEntity<Void> saveAll(
         @PathVariable(name = "spaceCode") String spaceCode,
-        @RequestPart(name = "files") List<MultipartFile> files
+        @RequestPart(name = "files") List<MultipartFile> files,
+        @RequestParam(name = "guestId") Long guestId
     ) {
-        photoService.saveAll(spaceCode, files);
+        photoService.saveAll(spaceCode, files, guestId);
         return ResponseEntity.ok().build();
     }
 

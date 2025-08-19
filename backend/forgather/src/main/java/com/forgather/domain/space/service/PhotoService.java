@@ -14,6 +14,8 @@ import org.springframework.util.FileSystemUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.forgather.domain.guest.model.Guest;
+import com.forgather.domain.guest.repository.GuestRepository;
 import com.forgather.domain.space.dto.DeletePhotosRequest;
 import com.forgather.domain.space.dto.DownloadPhotoResponse;
 import com.forgather.domain.space.dto.DownloadPhotosRequest;
@@ -35,10 +37,11 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class PhotoService {
 
+    private final Path downloadTempPath;
+    private final AwsS3Cloud awsS3Cloud;
     private final PhotoRepository photoRepository;
     private final SpaceRepository spaceRepository;
-    private final AwsS3Cloud awsS3Cloud;
-    private final Path downloadTempPath;
+    private final GuestRepository guestRepository;
 
     public PhotoResponse get(String spaceCode, Long photoId) {
         Space space = spaceRepository.getUnexpiredSpaceByCode(spaceCode);
@@ -60,12 +63,14 @@ public class PhotoService {
      * (MVP아님)
      */
     @Transactional
-    public void saveAll(String spaceCode, List<MultipartFile> multipartFiles) {
+    public void saveAll(String spaceCode, List<MultipartFile> multipartFiles, Long guestId) {
         Space space = spaceRepository.getUnexpiredSpaceByCode(spaceCode);
+        Guest guest = guestRepository.getById(guestId);
+
         for (MultipartFile multipartFile : multipartFiles) {
             PhotoMetaData metaData = MetaDataExtractor.extractPhotoMetaData(multipartFile);
             String uploadedPath = upload(spaceCode, multipartFile);
-            photoRepository.save(new Photo(space, uploadedPath, metaData));
+            photoRepository.save(new Photo(space, guest, uploadedPath, metaData));
         }
     }
 

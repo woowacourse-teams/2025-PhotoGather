@@ -38,8 +38,9 @@ public abstract class SpaceContent {
     @OneToOne(fetch = FetchType.LAZY)
     protected Guest guest;
 
-    protected SpaceContent(Space space) {
+    protected SpaceContent(Space space, Guest guest) {
         this.space = space;
+        this.guest = guest;
     }
 
     @Override
