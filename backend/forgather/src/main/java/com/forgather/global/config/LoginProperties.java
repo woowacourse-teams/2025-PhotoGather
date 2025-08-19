@@ -12,11 +12,17 @@ public class LoginProperties {
     private final String callbackSuccessPath;
     private final String callbackFailurePath;
 
-    public String getCallbackSuccessUrl() {
+    public String getCallbackSuccessUrl(String baseUrl) {
+        if (baseUrl == null) {
+            return this.baseUrl + callbackSuccessPath;
+        }
         return baseUrl + callbackSuccessPath;
     }
 
-    public String getCallbackFailureUrl() {
+    public String getCallbackFailureUrl(String baseUrl) {
+        if (baseUrl == null) {
+            return this.baseUrl + callbackFailurePath;
+        }
         return baseUrl + callbackFailurePath;
     }
 }
