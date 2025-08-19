@@ -31,9 +31,9 @@ import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBo
 
 import com.forgather.domain.space.dto.DeletePhotosRequest;
 import com.forgather.domain.space.dto.DownloadPhotosRequest;
+import com.forgather.domain.space.dto.DownloadUrlsResponse;
 import com.forgather.domain.space.dto.IssueSignedUrlRequest;
 import com.forgather.domain.space.dto.IssueSignedUrlResponse;
-import com.forgather.domain.space.dto.DownloadUrlsResponse;
 import com.forgather.domain.space.dto.PhotoResponse;
 import com.forgather.domain.space.dto.PhotosResponse;
 import com.forgather.domain.space.dto.SaveUploadedPhotoRequest;
@@ -208,7 +208,7 @@ public class PhotoController {
             .body(responseBody);
     }
 
-    @PostMapping("/download/{photoId}/urls")
+    @PostMapping("/issue/download-urls/{photoId}")
     @Operation(summary = "사진 단일 다운로드 URL", description = "특정 공간의 단일 사진 다운로드 URL을 생성합니다.")
     public ResponseEntity<DownloadUrlsResponse> getDownloadUrl(
         @PathVariable(name = "spaceCode") String spaceCode,
@@ -219,7 +219,7 @@ public class PhotoController {
         return ResponseEntity.ok(response);
     }
 
-    @PostMapping("/download/selected-urls")
+    @PostMapping("/issue/download-urls/selected")
     @Operation(summary = "사진 선택 다운로드 URL", description = "특정 공간의 선택된 사진 다운로드 URL 목록을 생성합니다.")
     public ResponseEntity<DownloadUrlsResponse> getSelectedDownloadUrls(
         @PathVariable(name = "spaceCode") String spaceCode,
@@ -230,7 +230,7 @@ public class PhotoController {
         return ResponseEntity.ok(response);
     }
 
-    @PostMapping("/download/urls")
+    @PostMapping("/issue/download-urls")
     @Operation(summary = "사진 일괄 다운로드 URL", description = "특정 공간의 모든 사진 다운로드 URL 목록을 생성합니다.")
     public ResponseEntity<DownloadUrlsResponse> getAllDownloadUrls(
         @PathVariable(name = "spaceCode") String spaceCode,
