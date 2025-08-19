@@ -18,7 +18,7 @@ export const LogoContainer = styled.div`
 export const RowContainer = styled.div`
   display: flex;
   gap: 24px;
-align-items: center;
+  align-items: center;
 `;
 
 export const TextContainer = styled.p`
@@ -36,18 +36,20 @@ export const SectionContainer = styled.section`
 `;
 
 export const MockupScrollContainer = styled.section`
-  width: calc(${({ theme }) => theme.layout.width} - ${({ theme }) => theme.layout.padding.leftRight});
+  width: calc(
+    ${({ theme }) => theme.layout.width} - ${({ theme }) => theme.layout.padding.leftRight}
+  );
   display: flex;
   gap: 16px;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;     
-  -ms-overflow-style: none;   
-  &::-webkit-scrollbar { 
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  &::-webkit-scrollbar {
     display: none;
   }
   &::-webkit-scrollbar-thumb {
-    background: rgba(255,255,255,0.3);
+    background: rgba(255, 255, 255, 0.3);
     border-radius: 9999px;
   }
 `;
@@ -59,7 +61,7 @@ export const MockupItem = styled.div`
     margin-left: 30px;
   }
 
-  &:last-of-type{
+  &:last-of-type {
     margin-right: 30px;
   }
 `;
