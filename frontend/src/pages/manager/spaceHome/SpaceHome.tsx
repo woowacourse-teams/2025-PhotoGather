@@ -115,6 +115,15 @@ const SpaceHome = () => {
       photosList,
     });
 
+  const clickDashboardWithTracking = async () => {
+    navigate(ROUTES.MANAGER.DASHBOARD(spaceCode ?? ''));
+    track.button('space_setting_button', {
+      page: 'space_home',
+      section: 'space_home_header',
+      action: 'open_setting',
+    });
+  };
+
   const deletePhotoWithTracking = async (photoId: number) => {
     await tryDeleteSinglePhoto(photoId);
     track.button('single_delete_button', {
@@ -231,13 +240,7 @@ const SpaceHome = () => {
           icons={[
             {
               element: <SettingSvg fill={theme.colors.white} width="20px" />,
-              onClick: () => {
-                track.button('space_setting_button', {
-                  page: 'space_home',
-                  section: 'space_home_header',
-                  action: 'open_setting',
-                });
-              },
+              onClick: clickDashboardWithTracking,
               label: '설정',
             },
             {

@@ -63,10 +63,7 @@ export const BottomNavigatorContainer = styled.div`
   z-index: ${({ theme }) => theme.zIndex.floatingActionButton};
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
   width: ${({ theme }) => theme.layout.width};
-  display: flex;
   justify-content: right;
   align-items: end;
   gap: 12px;
