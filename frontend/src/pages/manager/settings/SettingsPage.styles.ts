@@ -36,7 +36,25 @@ export const InfoContainer = styled.div`
 export const InputContainer = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  width: 100%;
+`;
+
+export const InputWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+`;
+
+export const DateTimeContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+`;
+
+export const InputLabel = styled.label`
+  ${({ theme }) => ({ ...theme.typography.bodyRegular })};
+  color: ${({ theme }) => theme.colors.gray06};
+  font-weight: 500;
 `;
 
 export const SpaceDeleteButtonContainer = styled.div`
@@ -44,7 +62,7 @@ export const SpaceDeleteButtonContainer = styled.div`
   justify-content: flex-end;
   ${({ theme }) => ({ ...theme.typography.captionSmall })};
   color: ${({ theme }) => theme.colors.white};
-  margin-bottom: 32px;
+  margin-bottom: 16px;
 `;
 
 export const SpaceDeleteButton = styled.button`
