@@ -45,9 +45,6 @@ const SpaceHome = () => {
   const { spaceInfo } = useSpaceInfo(spaceCode ?? '');
   const isEarlyTime =
     spaceInfo?.openedAt && checkIsEarlyDate(spaceInfo.openedAt);
-
-  // TODO: NoData 시 표시할 Layout 필요
-  const _isNoData = !spaceInfo;
   const isSpaceExpired = spaceInfo?.isExpired;
   const spaceName = spaceInfo?.name ?? '';
   const { targetRef: hideBlurAreaTriggerRef, isIntersecting: isAtPageBottom } =
@@ -220,7 +217,6 @@ const SpaceHome = () => {
 
   return (
     <S.Wrapper>
-      {/* TODO: 버튼 지우기 */}
       {isEarlyTime && <EarlyPage openedAt={spaceInfo.openedAt} />}
       {(isDownloading || isDeleting) && (
         <LoadingLayout loadingContents={loadingContents} percentage={0} />
