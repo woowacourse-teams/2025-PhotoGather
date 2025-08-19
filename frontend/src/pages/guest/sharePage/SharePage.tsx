@@ -6,6 +6,7 @@ import IconLabelButton from '../../../components/@common/buttons/iconLabelButton
 import HighlightText from '../../../components/@common/highlightText/HighlightText';
 import InfoBox from '../../../components/@common/infoBox/InfoBox';
 import { INFORMATION } from '../../../constants/messages';
+import { ROUTES } from '../../../constants/routes';
 import useError from '../../../hooks/@common/useError';
 import { useToast } from '../../../hooks/@common/useToast';
 import { theme } from '../../../styles/theme';
@@ -22,6 +23,9 @@ const SharePage = () => {
 
   const handleSpaceHomeButton = () => {
     navigate(`/manager/space-home/${spaceCode}`);
+  };
+  const handleMainButton = () => {
+    navigate(ROUTES.MAIN);
   };
 
   const copyShareLink = () => {
@@ -69,18 +73,22 @@ const SharePage = () => {
           highlightTextArray={[INFORMATION.SHARE_WARNING.HIGHLIGHT_TEXT]}
         />
       </S.TopContainer>
-      <S.BottomContainer>
-        <S.ShareContainer>
-          <p>친구에게도 알려 주세요</p>
-          <S.IconLabelButtonContainer>
-            <IconLabelButton
-              icon={<LinkIcon fill={theme.colors.white} width="20px" />}
-              onClick={handleCopyLink}
-            />
-          </S.IconLabelButtonContainer>
-        </S.ShareContainer>
-        <Button text="나의 스페이스로 이동" onClick={handleSpaceHomeButton} />
-      </S.BottomContainer>
+      {spaceCode ? (
+        <S.BottomContainer>
+          <S.ShareContainer>
+            <S.ShareLabel>친구에게도 알려 주세요</S.ShareLabel>
+            <S.IconLabelButtonContainer>
+              <IconLabelButton
+                icon={<LinkIcon fill={theme.colors.white} width="20px" />}
+                onClick={handleCopyLink}
+              />
+            </S.IconLabelButtonContainer>
+          </S.ShareContainer>
+          <Button text="나의 스페이스로 이동" onClick={handleSpaceHomeButton} />
+        </S.BottomContainer>
+      ) : (
+        <Button text="메인 페이지로 이동" onClick={handleMainButton} />
+      )}
     </S.Wrapper>
   );
 };
