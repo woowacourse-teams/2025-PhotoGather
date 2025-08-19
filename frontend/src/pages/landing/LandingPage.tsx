@@ -97,7 +97,7 @@ const LandingPage = () => {
       <S.SectionContainer
         {...useLandingScroll({
           delay: 0.4,
-          onVisible: () => track.sectionView('u', 3),
+          onVisible: () => track.sectionView('mockup_section', 3),
         })}
       >
         <S.TextContainer>{`귀찮은 로그인 없이\n사진 업로드 가능`}</S.TextContainer>
