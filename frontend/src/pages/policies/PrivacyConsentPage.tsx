@@ -44,7 +44,7 @@ const PrivacyConsentPage = () => {
           </S.List>
           <S.Paragraph>선택항목</S.Paragraph>
           <S.List>
-            <S.ListItem>카카오 소셜 로그인 시: 프로필 사진 </S.ListItem>
+            <S.ListItem>카카오 소셜 로그인 시: 프로필 사진</S.ListItem>
           </S.List>
           <S.Paragraph>서비스 이용 과정에서 자동 수집되는 정보</S.Paragraph>
           <S.List>

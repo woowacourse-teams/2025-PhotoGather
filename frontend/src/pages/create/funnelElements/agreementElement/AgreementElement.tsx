@@ -39,7 +39,7 @@ const AgreementElement = ({
         text: INFORMATION.AGREEMENT.TITLE.TEXT,
         highlightTextArray: [INFORMATION.AGREEMENT.TITLE.HIGHLIGHT_TEXT],
       }}
-      description={INFORMATION.NAME_INPUT.DESCRIPTION}
+      description={INFORMATION.AGREEMENT.DESCRIPTION}
       element={
         <S.Wrapper>
           <S.AllAgreeRow>
