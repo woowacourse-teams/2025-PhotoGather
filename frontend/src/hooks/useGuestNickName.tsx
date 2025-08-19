@@ -51,7 +51,6 @@ const useGuestNickName = () => {
         {...(mode === 'edit'
           ? editModeInputModalProps
           : defaultInputModalProps)}
-        initialValue=""
         onSubmit={fetchGuestNickName}
         createErrorMessage={createNickNameErrorMessage}
       />,

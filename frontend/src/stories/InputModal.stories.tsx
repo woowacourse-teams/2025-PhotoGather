@@ -45,7 +45,7 @@ export const Default: Story = {
           alignItems: 'center',
         }}
       >
-        <InputModal {...args} initialValue={''} />
+        <InputModal {...args} />
       </div>
     );
   },

@@ -1,6 +1,7 @@
 import { type ReactElement, useState } from 'react';
 import { CONSTRAINTS } from '../../../../constants/constraints';
 import type { BaseModalProps } from '../../../../types/modal.type';
+import { createRandomNickName } from '../../../../utils/createRandomNickName';
 import Button from '../../buttons/button/Button';
 import type HighlightText from '../../highlightText/HighlightText';
 import TextInput from '../../inputs/textInput/TextInput';
@@ -14,8 +15,6 @@ interface InputModalProps extends BaseModalProps {
   subDescription?: string;
   /** 입력 플레이스홀더 */
   placeholder: string;
-  /** 입력 값 */
-  initialValue: string;
   /** 입력 값 오류 메시지 생성 함수 */
   createErrorMessage: (value: string) => string;
   /** 확인 버튼 텍스트 */
@@ -30,12 +29,11 @@ const InputModal = ({
   placeholder,
   confirmText,
   cancelText,
-  initialValue,
   createErrorMessage,
   onClose,
   onSubmit,
 }: InputModalProps) => {
-  const [value, setValue] = useState(initialValue);
+  const [value, setValue] = useState(createRandomNickName());
   const [errorMessage, setErrorMessage] = useState('');
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
