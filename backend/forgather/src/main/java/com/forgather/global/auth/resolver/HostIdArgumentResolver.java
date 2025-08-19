@@ -33,7 +33,10 @@ public class HostIdArgumentResolver implements HandlerMethodArgumentResolver {
         HttpServletRequest request = (HttpServletRequest) webRequest.getNativeRequest();
 
         String jwtToken = request.getHeader(AUTHORIZATION_HEADER_NAME);
-        if (jwtToken == null || !jwtToken.startsWith(BEARER)) {
+        if (jwtToken == null) {
+            return null;
+        }
+        if (!jwtToken.startsWith(BEARER)) {
             throw new IllegalArgumentException("Authorization header is missing or invalid");
         }
         jwtToken = jwtToken.substring(BEARER.length());
