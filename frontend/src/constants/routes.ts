@@ -15,6 +15,7 @@ export const ROUTES = {
     SPACE_CREATED: '/complete/space-created',
   },
   MYPAGE: '/mypage',
+  LOGOUT: '/logout',
   ERROR: {
     NETWORK: '/network-error',
     NOT_FOUND: '*',

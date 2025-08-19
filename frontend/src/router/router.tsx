@@ -9,7 +9,9 @@ import NotFoundErrorPage from '../pages/error/NotFoundErrorPage';
 import ImageUploadPage from '../pages/guest/imageUploadPage/ImageUploadPage';
 import SharePage from '../pages/guest/sharePage/SharePage';
 import LandingPage from '../pages/landing/LandingPage';
+import LogoutPage from '../pages/logout/LogoutPage';
 import SpaceHome from '../pages/manager/spaceHome/SpaceHome';
+import MyPage from '../pages/mypage/MyPage';
 import PrivacyPolicyPage from '../pages/privacyPolicy/PrivacyPolicyPage';
 import type { AppRouteObject } from '../types/route.type';
 
@@ -79,6 +81,24 @@ const routes: AppRouteObject[] = [
             element: <SharePage />,
           },
         ],
+      },
+      {
+        path: 'mypage',
+        element: <MyPage />,
+        handle: {
+          header: true,
+          starField: true,
+          highlight: true,
+        },
+      },
+      {
+        path: 'logout',
+        element: <LogoutPage />,
+        handle: {
+          header: true,
+          starField: true,
+          highlight: true,
+        },
       },
       {
         path: 'complete',
