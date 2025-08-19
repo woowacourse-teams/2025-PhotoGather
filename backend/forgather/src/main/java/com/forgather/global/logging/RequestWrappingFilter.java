@@ -16,7 +16,12 @@ public class RequestWrappingFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
         FilterChain filterChain) throws ServletException, IOException {
-        HttpServletRequest customWrapper = new CustomRequestBodyWrapper(request);
-        filterChain.doFilter(customWrapper, response);
+        String contentType = request.getContentType();
+        if (contentType != null && contentType.toLowerCase().startsWith("application/json")) {
+            HttpServletRequest customWrapper = new CustomRequestBodyWrapper(request);
+            filterChain.doFilter(customWrapper, response);
+        } else {
+            filterChain.doFilter(request, response);
+        }
     }
 }
