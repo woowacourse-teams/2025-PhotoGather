@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ROUTES } from '../../constants/routes';
-import { setCookie } from '../../utils/setCookie';
+import { CookieUtils } from '../../utils/CookieUtils';
 
 const AuthPage = () => {
   const [tokenReady, setTokenReady] = useState(false);
@@ -13,14 +13,14 @@ const AuthPage = () => {
     const refreshToken = params.get('refreshToken');
 
     if (accessToken) {
-      setCookie('access_token', accessToken, {
+      CookieUtils.set('access_token', accessToken, {
         path: '/',
         secure: true,
         sameSite: 'Lax',
       });
     }
     if (refreshToken) {
-      setCookie('refresh_token', refreshToken, {
+      CookieUtils.set('refresh_token', refreshToken, {
         path: '/',
         secure: true,
         sameSite: 'Lax',

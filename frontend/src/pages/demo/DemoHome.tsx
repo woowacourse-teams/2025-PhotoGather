@@ -5,7 +5,7 @@ import Button from '../../components/@common/buttons/button/Button';
 import KakaoLoginButton from '../../components/kakaoLoginButton/KakaoLoginButton';
 import { ROUTES } from '../../constants/routes';
 import useKakaoAuth from '../../hooks/domain/useKakaoAuth';
-import { hasCookie } from '../../utils/hasCookie';
+import { CookieUtils } from '../../utils/CookieUtils';
 import * as S from './DemoHome.styles';
 
 const DemoHome = () => {
@@ -27,7 +27,7 @@ const DemoHome = () => {
     <S.Wrapper>
       <S.Icon src={rocketImage} alt="데모 페이지 아이콘"></S.Icon>
       <S.Title>Forgather DEMO</S.Title>
-      {hasCookie('JSESSIONID') ? (
+      {CookieUtils.has('JSESSIONID') ? (
         <Button
           text="로그아웃"
           variant="secondary"
