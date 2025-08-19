@@ -62,14 +62,3 @@ CREATE TABLE host_kakao
     user_id VARCHAR(100) NOT NULL,
     CONSTRAINT fk_host_kakao_host FOREIGN KEY (host_id) REFERENCES host (id)
 );
-
--- 7. refresh_token
-CREATE TABLE refresh_token
-(
-    id         BIGINT AUTO_INCREMENT PRIMARY KEY,
-    host_id    BIGINT       NOT NULL,
-    token      VARCHAR(255) NOT NULL,
-    expired_at TIMESTAMP    NOT NULL,
-    created_at TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT fk_login_host FOREIGN KEY (host_id) REFERENCES host (id)
-);
