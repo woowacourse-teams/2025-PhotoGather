@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import HighlightText from '../components/@common/highlightText/HighlightText';
 import InputModal from '../components/@common/modal/inputModal/InputModal';
 import { useOverlay } from '../contexts/OverlayProvider';
+import { createRandomNickName } from '../utils/createRandomNickName';
 
 // import useError from './@common/useError';
 
@@ -39,10 +40,14 @@ const useGuestNickName = () => {
       subDescription: '10자까지 입력할 수 있어요.',
       placeholder: '닉네임을 입력해 주세요',
       confirmText: '확인',
+      initialValue: createRandomNickName(),
+      onSubmit: fetchGuestNickName,
+      createErrorMessage: createNickNameErrorMessage,
     };
 
     const editModeInputModalProps = {
       ...defaultInputModalProps,
+      initialValue: nickName,
       cancelText: '취소',
     };
 
@@ -51,8 +56,6 @@ const useGuestNickName = () => {
         {...(mode === 'edit'
           ? editModeInputModalProps
           : defaultInputModalProps)}
-        onSubmit={fetchGuestNickName}
-        createErrorMessage={createNickNameErrorMessage}
       />,
     );
     if (result) {
