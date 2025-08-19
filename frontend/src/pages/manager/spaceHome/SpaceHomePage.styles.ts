@@ -81,6 +81,7 @@ export const TopButtonContainer = styled.div<{ $isVisible: boolean }>`
 `;
 
 export const NoImageContainer = styled.div`
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;

@@ -228,11 +228,9 @@ const SpaceHomePage = () => {
   return (
     <S.Wrapper>
       {/* TODO: 버튼 지우기 */}
-      {isEarlyTime && <EarlyPage openedAt={spaceInfo.openedAt} />}
       {(isDownloading || isDeleting) && (
         <LoadingLayout loadingContents={loadingContents} percentage={0} />
       )}
-      {isSpaceExpired && <ExpiredPage />}
       <S.InfoContainer ref={scrollTopTriggerRef}>
         <SpaceHeader
           title={spaceName}
@@ -308,8 +306,14 @@ const SpaceHomePage = () => {
           </>
         ) : (
           <S.NoImageContainer>
-            <S.Icon />
-            <S.NoImageText>{INFORMATION.NO_IMAGE}</S.NoImageText>
+            {isEarlyTime && <EarlyPage openedAt={spaceInfo.openedAt} />}
+            {isSpaceExpired && <ExpiredPage />}
+            {!isEarlyTime && !isSpaceExpired && (
+              <>
+                <S.Icon />
+                <S.NoImageText>{INFORMATION.NO_IMAGE}</S.NoImageText>
+              </>
+            )}
           </S.NoImageContainer>
         ))}
 
