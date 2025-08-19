@@ -25,6 +25,6 @@ echo "📁 로그 디렉토리 생성..."
 sudo -u ubuntu mkdir -p "$LOG_DIR"
 
 echo "🚀 ubuntu 사용자로 애플리케이션 실행 (포트: $PORT)..."
-sudo -u ubuntu nohup java -jar "$JAR_PATH" --server.port=$PORT &
+sudo -u ubuntu nohup java -jar "$JAR_PATH" --server.port=$PORT >> "$LOG_FILE" 2>&1 &
 
 echo "✅ 배포 완료. 로그: $LOG_FILE"

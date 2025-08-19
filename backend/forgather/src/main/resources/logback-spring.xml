@@ -1,88 +1,14 @@
 <configuration>
-    <!-- 로그 메세지 커스텀 변환기 -->
+    <!-- 로그 메세지 커스텀 변환기 등록 -->
     <conversionRule conversionWord="msg" class="com.forgather.global.logging.LogMessageConverter"/>
-
-    <!-- yml 로그 패턴 -->
-    <springProperty scope="context" name="CONSOLE_PATTERN" source="logging.pattern.console"
-                    defaultValue="%d{yyyy-MM-dd HH:mm:ss.SSS} %highlight(%-5level) %cyan(%logger{36}) %marker %mdc %kvp %msg%n"/>
-    <springProperty scope="context" name="FILE_PATTERN" source="logging.pattern.file"
-                    defaultValue="%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %logger{36} %marker %mdc %kvp %msg%n"/>
-
-    <!-- yml 파일 경로 -->
-    <springProperty scope="context" name="FILE_PATH" source="logging.file.path" defaultValue="/var/log"/>
-    <springProperty scope="context" name="FILE_NAME" source="logging.file.name" defaultValue="app.log"/>
-    <springProperty scope="context" name="BODY_FILE_PATH" source="logging.file.body.path" defaultValue="/var/log"/>
-    <springProperty scope="context" name="BODY_FILE_NAME" source="logging.file.body.name" defaultValue="app-body.log"/>
-
-    <!--콘솔 Appender -->
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-            <pattern>${CONSOLE_PATTERN}</pattern>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %logger{36} %marker %mdc %kvp %msg%n</pattern>
             <charset>UTF-8</charset>
         </encoder>
-        <!-- REQUEST BODY를 제외 -->
-        <filter class="ch.qos.logback.core.filter.EvaluatorFilter">
-            <evaluator class="ch.qos.logback.classic.boolex.OnMarkerEvaluator">
-                <marker>BODY</marker>
-            </evaluator>
-            <OnMatch>DENY</OnMatch>
-            <OnMismatch>ACCEPT</OnMismatch>
-        </filter>
     </appender>
 
-    <!-- 로컬 프로필 -->
-    <springProfile name="local">
-        <root>
-            <appender-ref ref="CONSOLE"/>
-        </root>
-    </springProfile>
-
-    <!-- 개발, 운영 프로필 -->
-    <springProfile name="dev | prod">
-        <!-- 파일 Appender -->
-        <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-            <file>${FILE_PATH}/${FILE_NAME}</file>
-            <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-                <pattern>${FILE_PATTERN}</pattern>
-                <charset>UTF-8</charset>
-            </encoder>
-            <!-- BODY를 제외 -->
-            <filter class="ch.qos.logback.core.filter.EvaluatorFilter">
-                <evaluator class="ch.qos.logback.classic.boolex.OnMarkerEvaluator">
-                    <marker>BODY</marker>
-                </evaluator>
-                <OnMatch>DENY</OnMatch>
-                <OnMismatch>ACCEPT</OnMismatch>
-            </filter>
-        </appender>
-
-        <!-- REQUEST BODY 파일 Appender -->
-        <appender name="BODY_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-            <file>${BODY_FILE_PATH}/${BODY_FILE_NAME}</file>
-            <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-                <pattern>${FILE_PATTERN}</pattern>
-                <charset>UTF-8</charset>
-            </encoder>
-            <!-- BODY 마커가 달린 로그에 대해서만 적용-->
-            <filter class="ch.qos.logback.core.filter.EvaluatorFilter">
-                <evaluator class="ch.qos.logback.classic.boolex.OnMarkerEvaluator">
-                    <marker>BODY</marker>
-                </evaluator>
-                <OnMatch>ACCEPT</OnMatch>
-                <OnMismatch>DENY</OnMismatch>
-            </filter>
-        </appender>
-        <root>
-            <appender-ref ref="FILE"/>
-            <appender-ref ref="BODY_FILE"/>
-        </root>
-    </springProfile>
-
-    <!-- 기타 프로필 -->
-    <springProfile name="!(dev | local | prod)">
-        <!-- 콘솔 출력-->
-        <root level="INFO">
-            <appender-ref ref="CONSOLE"/>
-        </root>
-    </springProfile>
+    <root>
+        <appender-ref ref="CONSOLE"/>
+    </root>
 </configuration>

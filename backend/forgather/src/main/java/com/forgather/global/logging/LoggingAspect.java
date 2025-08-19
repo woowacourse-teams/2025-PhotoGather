@@ -18,33 +18,19 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class LoggingAspect {
 
-    @Around("@within(org.springframework.stereotype.Service))")
-    public Object loggingService(final ProceedingJoinPoint joinPoint) throws Throwable {
-        return logging(joinPoint);
-    }
-
-    @Around("execution(* com.forgather.domain.space.service.AwsS3Cloud.*(..))")
-    public Object loggingCloudStorage(final ProceedingJoinPoint joinPoint) throws Throwable {
-        return logging(joinPoint);
-    }
-
-    @Around("execution(* com.forgather..repository..*(..))")
-    public Object loggingRepository(final ProceedingJoinPoint joinPoint) throws Throwable {
-        return logging(joinPoint);
-    }
-
+    @Around("@within(org.springframework.stereotype.Service) || "
+        + "execution(* com.forgather.domain.space.service.AwsS3Cloud.*(..))")
     public Object logging(final ProceedingJoinPoint joinPoint) throws Throwable {
         long startMillis = System.currentTimeMillis();
-        try {
-            return joinPoint.proceed();
-        } finally {
-            long durationMillis = System.currentTimeMillis() - startMillis;
-            log.atDebug()
-                .addKeyValue("event", getMethodName(joinPoint))
-                .addKeyValue("params", getMethodParams(joinPoint))
-                .addKeyValue("duration", durationMillis + "ms")
-                .log();
-        }
+        Object result = joinPoint.proceed();
+        long durationMillis = System.currentTimeMillis() - startMillis;
+
+        log.atDebug()
+            .addKeyValue("event", getMethodName(joinPoint))
+            .addKeyValue("params", getMethodParams(joinPoint))
+            .addKeyValue("duration", durationMillis + "ms")
+            .log();
+        return result;
     }
 
     public String getMethodName(JoinPoint joinPoint) {
