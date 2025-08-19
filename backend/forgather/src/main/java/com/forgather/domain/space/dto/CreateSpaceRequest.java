@@ -3,7 +3,7 @@ package com.forgather.domain.space.dto;
 import java.time.LocalDateTime;
 
 import com.forgather.domain.space.model.Space;
-import com.forgather.global.auth.domain.Host;
+import com.forgather.global.auth.model.Host;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
@@ -16,10 +16,7 @@ public record CreateSpaceRequest(
     int validHours,
 
     @Schema(description = "스페이스 오픈 시간(현재 혹은 미래)", example = "2023-10-01T10:00:00")
-    LocalDateTime openedAt,
-
-    @Schema(description = "스페이스 비밀번호", example = "password123")
-    String password
+    LocalDateTime openedAt
 ) {
 
     public Space toEntity(String spaceCode, Host host) {

@@ -21,12 +21,10 @@ import com.forgather.domain.space.dto.PhotosResponse;
 import com.forgather.domain.space.dto.SaveUploadedPhotoRequest;
 import com.forgather.domain.space.model.Photo;
 import com.forgather.domain.space.model.Space;
-import com.forgather.domain.space.repository.HostRepository;
 import com.forgather.domain.space.repository.PhotoRepository;
 import com.forgather.domain.space.repository.SpaceRepository;
 import com.forgather.domain.space.util.ZipGenerator;
-import com.forgather.global.auth.domain.Host;
-import com.forgather.global.logging.Logger;
+import com.forgather.global.auth.model.Host;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -39,8 +37,6 @@ public class PhotoService {
     private final PhotoRepository photoRepository;
     private final SpaceRepository spaceRepository;
     private final ContentsStorage contentsStorage;
-    private final HostRepository hostRepository;
-    private final AwsS3Cloud awsS3Cloud;
     private final Path downloadTempPath;
 
     public PhotoResponse get(String spaceCode, Long photoId, Host host) {

@@ -7,7 +7,7 @@ import com.forgather.domain.space.dto.CreateSpaceResponse;
 import com.forgather.domain.space.dto.SpaceResponse;
 import com.forgather.domain.space.model.Space;
 import com.forgather.domain.space.repository.SpaceRepository;
-import com.forgather.global.auth.domain.Host;
+import com.forgather.global.auth.model.Host;
 import com.forgather.global.util.RandomCodeGenerator;
 
 import lombok.RequiredArgsConstructor;

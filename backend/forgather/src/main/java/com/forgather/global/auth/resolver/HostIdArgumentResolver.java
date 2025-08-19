@@ -1,5 +1,7 @@
 package com.forgather.global.auth.resolver;
 
+import java.util.Objects;
+
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.support.WebDataBinderFactory;
@@ -7,7 +9,9 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
+import com.forgather.domain.space.repository.HostRepository;
 import com.forgather.global.auth.annotation.HostId;
+import com.forgather.global.auth.model.Host;
 import com.forgather.global.auth.util.JwtTokenProvider;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -21,6 +25,7 @@ public class HostIdArgumentResolver implements HandlerMethodArgumentResolver {
     private static final String AUTHORIZATION_HEADER_NAME = "Authorization";
 
     private final JwtTokenProvider jwtTokenProvider;
+    private final HostRepository hostRepository;
 
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
@@ -28,16 +33,28 @@ public class HostIdArgumentResolver implements HandlerMethodArgumentResolver {
     }
 
     @Override
-    public Long resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
+    public Host resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
         NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
+        HostId annotation = parameter.getParameterAnnotation(HostId.class);
+        boolean required = Objects.requireNonNull(annotation).required();
         HttpServletRequest request = (HttpServletRequest) webRequest.getNativeRequest();
 
         String jwtToken = request.getHeader(AUTHORIZATION_HEADER_NAME);
         if (jwtToken == null || !jwtToken.startsWith(BEARER)) {
-            throw new IllegalArgumentException("Authorization header is missing or invalid");
+            throwExceptionIfRequired(required);
+            return null;
         }
+
         jwtToken = jwtToken.substring(BEARER.length());
         jwtTokenProvider.validateToken(jwtToken);
-        return jwtTokenProvider.getUserId(jwtToken);
+
+        Long hostId = jwtTokenProvider.getHostId(jwtToken);
+        return hostRepository.getById(hostId);
+    }
+
+    private void throwExceptionIfRequired(boolean required) {
+        if (required) {
+            throw new IllegalArgumentException("필수 로그인 정보가 잘못되었습니다.");
+        }
     }
 }

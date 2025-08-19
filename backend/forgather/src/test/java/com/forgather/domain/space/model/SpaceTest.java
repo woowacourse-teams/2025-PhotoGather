@@ -11,7 +11,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.test.util.ReflectionTestUtils;
 
-import com.forgather.global.auth.domain.Host;
+import com.forgather.global.auth.model.Host;
 
 class SpaceTest {
 
@@ -22,7 +22,8 @@ class SpaceTest {
         String spaceCode = "1234567890";
         int validHours = 48;
         LocalDateTime openedAt = LocalDateTime.now();
-        Space space = new Space(spaceCode, "password", "name", validHours, openedAt);
+        Host host = new Host("moko", "pictureUrl");
+        Space space = new Space(host, spaceCode, "name", validHours, openedAt);
         LocalDateTime testDateTime = openedAt.plusHours(validHours + 1);
 
         // when & then
@@ -38,7 +39,8 @@ class SpaceTest {
         String spaceCode = "1234567890";
         int validHours = 48;
         LocalDateTime openedAt = LocalDateTime.now().minusDays(1);
-        Space space = new Space(spaceCode, "0000", "name", validHours, openedAt);
+        Host host = new Host("moko", "pictureUrl");
+        Space space = new Space(host, spaceCode, "name", validHours, openedAt);
 
         // when & then
         assertThatIllegalArgumentException().isThrownBy(() -> ReflectionTestUtils.invokeMethod(space, "validate"))
@@ -51,7 +53,8 @@ class SpaceTest {
     @ValueSource(strings = {"", " ", "          "})
     void spaceNameValidationTest(String invalidName) {
         // given
-        Space space = new Space("1234567890", "0000", invalidName, 48, LocalDateTime.now());
+        Host host = new Host("moko", "pictureUrl");
+        Space space = new Space(host, "1234567890", invalidName, 48, LocalDateTime.now());
 
         // when & then
         assertThatIllegalArgumentException().isThrownBy(

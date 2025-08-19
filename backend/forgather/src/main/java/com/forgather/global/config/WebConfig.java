@@ -9,10 +9,7 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import com.forgather.global.auth.resolver.SessionHostArgumentResolver;
-import com.forgather.global.logging.TraceIdInterceptor;
 import com.forgather.global.auth.resolver.HostIdArgumentResolver;
-
 import com.forgather.global.logging.LoggingInterceptor;
 
 import lombok.RequiredArgsConstructor;
@@ -22,8 +19,6 @@ import lombok.RequiredArgsConstructor;
 public class WebConfig implements WebMvcConfigurer {
 
     private final CorsProperties corsProperties;
-    private final TraceIdInterceptor traceIdInterceptor;
-    private final SessionHostArgumentResolver sessionHostArgumentResolver;
     private final LoggingInterceptor loggingInterceptor;
     private final HostIdArgumentResolver hostIdArgumentResolver;
 
@@ -42,12 +37,11 @@ public class WebConfig implements WebMvcConfigurer {
         PageableHandlerMethodArgumentResolver pageableResolver = new PageableHandlerMethodArgumentResolver();
         pageableResolver.setOneIndexedParameters(true); // 1부터 시작
         resolvers.add(pageableResolver);
-        resolvers.add(sessionHostArgumentResolver);
+        resolvers.add(hostIdArgumentResolver);
     }
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(loggingInterceptor)
-            .excludePathPatterns("/swagger-ui/**", "/v3/api-docs/**");
+        registry.addInterceptor(loggingInterceptor);
     }
 }

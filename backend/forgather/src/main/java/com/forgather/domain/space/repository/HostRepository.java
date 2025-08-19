@@ -4,7 +4,7 @@ import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.forgather.global.auth.domain.Host;
+import com.forgather.global.auth.model.Host;
 
 public interface HostRepository extends JpaRepository<Host, Long> {
 

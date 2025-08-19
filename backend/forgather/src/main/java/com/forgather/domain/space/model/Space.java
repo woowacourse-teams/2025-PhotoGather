@@ -6,8 +6,8 @@ import java.util.List;
 import java.util.Objects;
 
 import com.forgather.domain.model.BaseTimeEntity;
-import com.forgather.global.auth.domain.Host;
-import com.forgather.global.auth.domain.SpaceHostMap;
+import com.forgather.global.auth.model.Host;
+import com.forgather.global.auth.model.SpaceHostMap;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -19,13 +19,11 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
 @Entity
-@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Space extends BaseTimeEntity {
 
@@ -72,14 +70,6 @@ public class Space extends BaseTimeEntity {
             throw new IllegalArgumentException(
                 "해당 호스트는 이 스페이스의 호스트가 아닙니다. host id: " + host.getId() + ", spaceCode:" + code);
         }
-    }
-
-    public boolean isExpired(LocalDateTime now) {
-        return getExpiredAt().isBefore(now);
-    }
-
-    public LocalDateTime getExpiredAt() {
-        return openedAt.plusHours(validHours);
     }
 
     public boolean isExpired(LocalDateTime now) {

@@ -13,7 +13,9 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 
 import com.forgather.domain.space.dto.CreateSpaceRequest;
+import com.forgather.domain.space.repository.HostRepository;
 import com.forgather.domain.space.repository.SpaceRepository;
+import com.forgather.global.auth.model.Host;
 
 @ActiveProfiles("test")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -22,11 +24,13 @@ class SpaceServiceTest {
 
     private final SpaceService spaceService;
     private final SpaceRepository spaceRepository;
+    private final HostRepository hostRepository;
 
     @Autowired
-    public SpaceServiceTest(SpaceService spaceService, SpaceRepository spaceRepository) {
+    public SpaceServiceTest(SpaceService spaceService, SpaceRepository spaceRepository, HostRepository hostRepository) {
         this.spaceService = spaceService;
         this.spaceRepository = spaceRepository;
+        this.hostRepository = hostRepository;
     }
 
     @DisplayName("스페이스 생성 시, 검증에 실패하면 스페이스가 DB에 저장되지 않는다.")
@@ -37,12 +41,12 @@ class SpaceServiceTest {
         CreateSpaceRequest request = new CreateSpaceRequest(
             invalidSpaceName,
             48,
-            LocalDateTime.now().plusDays(1),
-            "password"
+            LocalDateTime.now().plusDays(1)
         );
+        Host host = hostRepository.save(new Host("testHost", "testPictureUrl"));
 
         assertThatException().isThrownBy(
-            () -> spaceService.create(request)
+            () -> spaceService.create(request, host)
         );
 
         Assertions.assertThat(spaceRepository.findAll()).isEmpty();

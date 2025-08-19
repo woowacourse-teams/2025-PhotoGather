@@ -53,7 +53,7 @@ public class AuthService {
 
     public LoginResponse refresh(String refreshToken) {
         jwtTokenProvider.validateToken(refreshToken);
-        Long hostId = jwtTokenProvider.getUserId(refreshToken);
+        Long hostId = jwtTokenProvider.getHostId(refreshToken);
         KakaoHost kakaoHost = kakaoHostRepository.getById(hostId);
         String accessToken = jwtTokenProvider.generateAccessToken(kakaoHost.getHost().getId());
         return LoginResponse.of(accessToken, refreshToken);

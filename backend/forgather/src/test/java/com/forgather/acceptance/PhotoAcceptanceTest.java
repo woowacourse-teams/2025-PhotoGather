@@ -24,7 +24,8 @@ import com.forgather.domain.space.repository.HostRepository;
 import com.forgather.domain.space.repository.PhotoRepository;
 import com.forgather.domain.space.repository.SpaceRepository;
 import com.forgather.domain.space.service.AwsS3Cloud;
-import com.forgather.global.auth.domain.Host;
+import com.forgather.global.auth.model.Host;
+import com.forgather.global.auth.util.JwtTokenProvider;
 
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
 
@@ -47,6 +48,9 @@ class PhotoAcceptanceTest extends AcceptanceTest {
     @Autowired
     private HostRepository hostRepository;
 
+    @Autowired
+    private JwtTokenProvider jwtTokenProvider;
+
     @BeforeEach
     void setUp() {
         RestAssuredMockMvc.mockMvc(mockMvc);
@@ -60,13 +64,14 @@ class PhotoAcceptanceTest extends AcceptanceTest {
     void getPhoto() {
         // given
         var host = hostRepository.save(new Host("모코", "pictureUrl"));
-        var space = spaceRepository.save(new Space("space-code", "1234", "test-space", 3, LocalDateTime.now()));
+        var space = spaceRepository.save(new Space(host, "space-code", "test-space", 3, LocalDateTime.now()));
         var photo = photoRepository.save(new Photo(space, "originalName.jpg", "path",
             new PhotoMetaData(LocalDateTime.now())));
+        String token = jwtTokenProvider.generateAccessToken(host.getId());
 
         // when
         var response = RestAssuredMockMvc.given()
-            .sessionAttr("host_id", host.getId())
+            .header("Authorization", "Bearer " + token)
             .when()
             .get("/spaces/{spaceCode}/photos/{photoId}", space.getCode(), photo.getId())
             .then()
@@ -84,7 +89,8 @@ class PhotoAcceptanceTest extends AcceptanceTest {
     @DisplayName("사진 업로드를 위한 서명된 URL을 발급한다.")
     void issuePreSignedUrls() {
         // given
-        var space = spaceRepository.save(new Space("space-code", "1234", "test-space", 3, LocalDateTime.now()));
+        var host = hostRepository.save(new Host("모코", "pictureUrl"));
+        var space = spaceRepository.save(new Space(host, "space-code", "test-space", 3, LocalDateTime.now()));
         var request = new IssueSignedUrlRequest(List.of("UUID1.png", "UUID2.png", "UUID3.png"));
 
         // when
@@ -109,7 +115,8 @@ class PhotoAcceptanceTest extends AcceptanceTest {
     @DisplayName("최대 발급 개수를 초과하면 서명된 URL 발급에 실패한다.")
     void issueExceedPreSignedUrls() {
         // given
-        var space = spaceRepository.save(new Space("space-code", "1234", "test-space", 3, LocalDateTime.now()));
+        var host = hostRepository.save(new Host("모코", "pictureUrl"));
+        var space = spaceRepository.save(new Space(host, "space-code", "test-space", 3, LocalDateTime.now()));
         var request = new IssueSignedUrlRequest(IntStream.range(0, 101)
             .mapToObj(i -> "UUID" + (i + 1) + ".png")
             .toList());
