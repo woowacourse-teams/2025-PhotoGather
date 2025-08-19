@@ -2,7 +2,7 @@ import { ReactComponent as Logo } from '@assets/icons/logo.svg';
 import { theme } from '../../styles/theme';
 import * as S from './PolicyPage.common.styles';
 
-const PrivacyConsent = () => {
+const PrivacyConsentPage = () => {
   return (
     <S.Wrapper>
       <S.Header>
@@ -86,4 +86,4 @@ const PrivacyConsent = () => {
   );
 };
 
-export default PrivacyConsent;
+export default PrivacyConsentPage;

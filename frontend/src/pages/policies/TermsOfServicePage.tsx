@@ -2,7 +2,7 @@ import { ReactComponent as Logo } from '@assets/icons/logo.svg';
 import { theme } from '../../styles/theme';
 import * as S from './PolicyPage.common.styles';
 
-const TermsOfService = () => {
+const TermsOfServicePage = () => {
   return (
     <S.Wrapper>
       <S.Header>
@@ -193,4 +193,4 @@ const TermsOfService = () => {
   );
 };
 
-export default TermsOfService;
+export default TermsOfServicePage;
