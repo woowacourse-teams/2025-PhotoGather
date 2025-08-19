@@ -3,12 +3,13 @@ export const ROUTES = {
   LOGIN: '/login',
   CREATE: '/create',
   MANAGER: {
-    SPACE_HOME: (spaceId: string) => `/manager/space-home/${spaceId}`,
-    DASHBOARD: (spaceId: string) => `/manager/space-home/${spaceId}/dashboard`,
-    SETTING: (spaceId: string) => `/manager/space-home/${spaceId}/settings`,
+    SPACE_HOME: (spaceCode: string) => `/manager/space-home/${spaceCode}`,
+    DASHBOARD: (spaceCode: string) =>
+      `/manager/space-home/${spaceCode}/dashboard`,
+    SETTING: (spaceCode: string) => `/manager/space-home/${spaceCode}/settings`,
   },
   GUEST: {
-    IMAGE_UPLOAD: (spaceId: string) => `/guest/image-upload/${spaceId}`,
+    IMAGE_UPLOAD: (spaceCode: string) => `/guest/image-upload/${spaceCode}`,
     SHARE: '/guest/share',
   },
   COMPLETE: {
