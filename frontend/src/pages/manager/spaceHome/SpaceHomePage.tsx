@@ -162,9 +162,16 @@ const SpaceHomePage = () => {
 
   //biome-ignore lint/correctness/useExhaustiveDependencies: isFetchSectionVisible 변경 시 호출
   useEffect(() => {
-    if (!isFetchSectionVisible || isEndPage || isLoading) return;
+    if (
+      !isFetchSectionVisible ||
+      isEndPage ||
+      isLoading ||
+      isSpaceExpired ||
+      isEarlyTime
+    )
+      return;
     tryFetchPhotosList();
-  }, [isFetchSectionVisible, isEndPage]);
+  }, [isFetchSectionVisible, isEndPage, isSpaceExpired, isEarlyTime]);
 
   const loadingContents = [
     {
@@ -250,7 +257,13 @@ const SpaceHomePage = () => {
         />
       </S.InfoContainer>
 
-      {photosList &&
+      {isEarlyTime || isSpaceExpired ? (
+        <S.NoImageContainer>
+          {isEarlyTime && <EarlyPage openedAt={spaceInfo.openedAt} />}
+          {isSpaceExpired && <ExpiredPage />}
+        </S.NoImageContainer>
+      ) : (
+        photosList &&
         (photosList.length > 0 ? (
           <>
             <S.ImageManagementContainer>
@@ -306,16 +319,11 @@ const SpaceHomePage = () => {
           </>
         ) : (
           <S.NoImageContainer>
-            {isEarlyTime && <EarlyPage openedAt={spaceInfo.openedAt} />}
-            {isSpaceExpired && <ExpiredPage />}
-            {!isEarlyTime && !isSpaceExpired && (
-              <>
-                <S.Icon />
-                <S.NoImageText>{INFORMATION.NO_IMAGE}</S.NoImageText>
-              </>
-            )}
+            <S.Icon />
+            <S.NoImageText>{INFORMATION.NO_IMAGE}</S.NoImageText>
           </S.NoImageContainer>
-        ))}
+        ))
+      )}
 
       <S.IntersectionArea ref={hideBlurAreaTriggerRef} />
       <S.IntersectionArea ref={fetchTriggerRef} />
