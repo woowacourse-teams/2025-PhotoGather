@@ -73,7 +73,8 @@ public class LoggingInterceptor implements HandlerInterceptor {
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler,
         Exception exception) {
-        if (request.getMethod().equals("POST")) { // requestBody 로깅
+        boolean isGetRequest = request.getMethod().equals("GET");
+        if (!isGetRequest) { // requestBody 로깅
             logRequestBody(request);
         }
 
