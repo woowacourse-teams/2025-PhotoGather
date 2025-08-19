@@ -188,9 +188,9 @@ public class PhotoController {
         return ResponseEntity.ok(response);
     }
 
-    @PostMapping("/download/urls")
+    @PostMapping("/download/selected-urls")
     @Operation(summary = "사진 선택 다운로드 URL", description = "특정 공간의 단일 사진 다운로드 URL을 생성합니다.")
-    public ResponseEntity<DownloadUrlsResponse> getDownloadUrls(
+    public ResponseEntity<DownloadUrlsResponse> getSelectedDownloadUrls(
         @PathVariable(name = "spaceCode") String spaceCode,
         @RequestBody DownloadPhotosRequest request,
         @HostId Long hostId
