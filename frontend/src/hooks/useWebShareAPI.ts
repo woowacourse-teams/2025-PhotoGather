@@ -22,7 +22,7 @@ const useWebShareAPI = () => {
         await navigator.share({ title, text, url, files });
       },
       errorActions: ['toast'],
-      context: { toast: { text: '사진 공유 중 문제가 발생했어요.' } },
+      context: { toast: { text: '공유가 취소되었어요.' } },
     });
   };
 
