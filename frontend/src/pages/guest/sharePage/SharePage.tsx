@@ -57,8 +57,8 @@ const SharePage = () => {
     await tryFetch({
       task: async () =>
         share({
-          title: '스페이스 업로드 링크 공유',
-          text: '스페이스에 사진을 업로드 할 수 있는 링크를 공유했어요!',
+          title: INFORMATION.SHARE_LINK_API.TITLE,
+          text: INFORMATION.SHARE_LINK_API.TEXT,
           url: createShareUrl(spaceCode),
         }),
       errorActions: ['toast'],
