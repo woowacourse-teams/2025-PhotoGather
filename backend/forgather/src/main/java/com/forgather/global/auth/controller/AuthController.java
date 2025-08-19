@@ -115,7 +115,7 @@ public class AuthController {
         HttpServletResponse httpServletResponse,
         HttpSession session
     ) {
-        var response = authService.refreshLoginSession(refreshToken);
+        var response = authService.refresh(refreshToken);
         session.setAttribute("host_id", response.hostId());
         ResponseCookie newRefreshToken = createRefreshCookie(refreshToken, response.expirationDays());
         httpServletResponse.addHeader(HttpHeaders.SET_COOKIE, newRefreshToken.toString());

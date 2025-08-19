@@ -1,15 +1,16 @@
 package com.forgather.global.auth.dto;
 
-import com.forgather.global.auth.model.Host;
-import com.forgather.global.auth.model.RefreshToken;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 public record LoginResponse(
-    Long hostId,
-    String refreshToken,
-    Long expirationDays
+
+    @Schema(description = "Access Token", example = "eyJraWQiOiJrYWthby1hY2Nlc3MtdG9rZW4iLCJ0eXAiOiJKV1QifQ...")
+    String accessToken,
+    @Schema(description = "Refresh Token", example = "eyJraWQiOiJrYWthby1yZWZyZXNoLXRva2VuIiwidHlwIjoiSldUIn0...")
+    String refreshToken
 ) {
 
-    public static LoginResponse of(Host host, RefreshToken refreshToken) {
-        return new LoginResponse(host.getId(), refreshToken.getToken(), 90L);
+    public static LoginResponse of(String accessToken, String refreshToken) {
+        return new LoginResponse(accessToken, refreshToken);
     }
 }
