@@ -11,7 +11,7 @@ export const ADJECTIVES_1 = [
   '깊고',
   '높고',
   '낯설고',
-  '잊히고',
+  '크고',
   '빛나고',
   '젊고',
   '짙고',
@@ -21,6 +21,11 @@ export const ADJECTIVES_1 = [
   '굳고',
   '가볍고',
   '여리고',
+  '둥글고',
+  '맑고',
+  '춥고',
+  '뜨겁고',
+  '무겁고',
 ];
 
 export const ADJECTIVES_2 = [
@@ -41,6 +46,7 @@ export const ADJECTIVES_2 = [
   '차분한',
   '부드러운',
   '거대한',
+  '예쁜',
 ];
 
 export const NOUNS = [
