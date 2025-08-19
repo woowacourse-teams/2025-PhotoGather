@@ -7,12 +7,10 @@ import { ROUTES } from '../../constants/routes';
 const UploadCompletePage = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const spaceId = location.state?.spaceId;
-
-  console.log(spaceId);
+  const spaceCode = location.state?.spaceCode;
 
   const handleButtonClick = () => {
-    navigate(ROUTES.GUEST.IMAGE_UPLOAD(spaceId ?? ''));
+    navigate(ROUTES.GUEST.IMAGE_UPLOAD(spaceCode ?? ''));
   };
 
   return (

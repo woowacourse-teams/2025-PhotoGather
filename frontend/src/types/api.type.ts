@@ -14,6 +14,14 @@ export interface ApiResponse<T> {
   data?: T;
   error?: string;
   message?: string;
+  sentryContext?: {
+    request: {
+      url: string;
+      method: string;
+      headers: Record<string, unknown>;
+      requestBody: Record<string, unknown> | undefined;
+    };
+  };
 }
 
 export interface PhotoListResponse {
@@ -25,4 +33,8 @@ export interface PhotoListResponse {
 
 export interface PhotoIds {
   photoIds: number[];
+}
+
+export interface PhotoId {
+  photoId: number;
 }

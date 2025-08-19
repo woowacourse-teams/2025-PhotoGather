@@ -11,6 +11,9 @@ public record PhotoResponse(
     @Schema(description = "사진 ID", example = "1")
     Long id,
 
+    @Schema(description = "사진 원본 이름과 확장자", example = "IMG_992.jpeg")
+    String originalName,
+
     @Schema(description = "사진 경로", example = "contents/fqvtn394y0/photo1.jpg")
     String path,
 
@@ -24,6 +27,7 @@ public record PhotoResponse(
     public static PhotoResponse from(Photo photo) {
         return new PhotoResponse(
             photo.getId(),
+            photo.getOriginalName(),
             photo.getPath(),
             photo.getCapturedAt(),
             photo.getCreatedAt()

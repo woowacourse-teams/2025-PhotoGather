@@ -36,8 +36,14 @@ export const photoService = {
   downloadPhotos: (spaceCode: string, photoIds: PhotoIds) =>
     http.post<Blob>(`/spaces/${spaceCode}/photos/download/selected`, photoIds),
 
+  downloadSinglePhoto: (spaceCode: string, photoId: number) =>
+    http.post<Blob>(`/spaces/${spaceCode}/photos/download/${photoId}`, photoId),
+
   deletePhotos: (spaceCode: string, photoIds: PhotoIds) =>
     http.delete<void>(`/spaces/${spaceCode}/photos/selected`, photoIds, 'json'),
+
+  deletePhoto: (spaceCode: string, photoId: number) =>
+    http.delete<void>(`/spaces/${spaceCode}/photos/${photoId}`),
 
   getWithContent: (photoId: number) =>
     http.get<PhotoWithContent>(`/photos/${photoId}/content`),

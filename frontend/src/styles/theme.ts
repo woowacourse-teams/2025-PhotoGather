@@ -88,9 +88,9 @@ export const theme = {
     scrollableArea: 3,
     topActionButton: 4,
     loadingSpinner: 5,
+    floatingActionButton: 6,
     backdrop: 100,
     backdropContainer: 101,
-    floatingActionButton: 400,
     toast: 500,
   },
   layout: {
@@ -99,6 +99,7 @@ export const theme = {
       topBottom: '32px',
       leftRight: '16px',
     },
+    headerHeight: '44px',
   },
   breakpoints: {
     desktop: '',

@@ -18,6 +18,13 @@ export const INFORMATION = {
     DESCRIPTION: `내 스페이스 관리 페이지에서도\n스페이스 링크를 확인할 수 있어요`,
     HIGHLIGHT_TEXT: '스페이스 링크',
   },
+  AGREEMENT: {
+    TITLE: {
+      TEXT: '서비스 사용을 위해\n약관에 동의해주세요',
+      HIGHLIGHT_TEXT: '약관에 동의',
+    },
+    DESCRIPTION: '첫 스페이스 생성시에만 동의가 필요해요',
+  },
   NAME_INPUT: {
     TITLE: {
       TEXT: '스페이스 이름을 정해볼까요?',
@@ -49,6 +56,13 @@ export const INFORMATION = {
   },
   WAIT_PAGE: {
     TITLE_LIST: ['조금만 기다려주세요', '곧 스페이스 생성이 끝나요'],
+  },
+  LOGIN: {
+    TITLE: {
+      TEXT: '로그인 후 서비스를 이용해주세요',
+      HIGHLIGHT_TEXT: '로그인',
+    },
+    DESCRIPTION: '당신의 사진을 모아 드릴게요',
   },
 } as const;
 
@@ -90,6 +104,12 @@ export const ERROR = {
     NAME: `${CONSTRAINTS.NAME_MAX_LENGTH}자 까지 입력할 수 있어요.`,
     DATE: '오늘 이전 날짜는 선택할 수 없어요.',
     TIME: '현재 시간 이후 시간대를 입력해주세요.',
+  },
+  NOT_FOUND: {
+    TITLE: '페이지를 찾을 수 없습니다',
+    DESCRIPTION: '잘못된 경로이거나 페이지가 삭제되었어요.',
+    BUTTON_TEXT: '홈으로 이동',
+    HIGHLIGHT_WORDS: [''],
   },
   DOWNLOAD: {
     NO_SELECTED_PHOTO: '선택된 사진이 없습니다.',

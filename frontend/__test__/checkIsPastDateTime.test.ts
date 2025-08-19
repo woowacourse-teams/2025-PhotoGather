@@ -2,7 +2,7 @@ import { checkIsPastDateTime } from '../src/utils/checkIsPastDateTime';
 
 beforeAll(() => {
   jest.useFakeTimers();
-  jest.setSystemTime(new Date('2025-07-31T10:00:00Z'));
+  jest.setSystemTime(new Date('2025-07-31T10:00:30Z'));
 });
 
 afterAll(() => {

@@ -1,91 +1,139 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { photoService } from '../apis/services/photo.service';
-import { DEBUG_MESSAGES } from '../constants/debugMessages';
-import { NETWORK } from '../constants/errors';
-import { ERROR } from '../constants/messages';
-import { ROUTES } from '../constants/routes';
 import type { ApiResponse } from '../types/api.type';
-import useApiCall from './@common/useApiCall';
-import { useToast } from './@common/useToast';
+import { validateDownloadFormat } from '../validators/fetch.validator';
+import { checkSelectedPhotoExist } from '../validators/photo.validator';
+import useError from './@common/useError';
 
 interface UseDownloadProps {
   spaceCode: string;
   spaceName: string;
+  onDownloadSuccess?: () => void;
 }
 
-const useDownload = ({ spaceCode, spaceName }: UseDownloadProps) => {
+const useDownload = ({
+  spaceCode,
+  spaceName,
+  onDownloadSuccess,
+}: UseDownloadProps) => {
   const [isDownloading, setIsDownloading] = useState(false);
-  const navigate = useNavigate();
-  const { safeApiCall } = useApiCall();
-  const { showToast } = useToast();
+  const { tryTask, tryFetch } = useError();
 
-  const downloadBlob = (blob: Blob) => {
+  const getDownloadName = (
+    fileName: string | undefined,
+    blob: Blob,
+    spaceName: string,
+  ) => {
+    if (fileName) return fileName;
+
+    if (blob.type.includes('image/')) {
+      const extension = blob.type.split('/')[1];
+      return `photo.${extension}`;
+    }
+
+    return `${spaceName}.zip`;
+  };
+
+  const downloadBlob = (blob: Blob, fileName?: string) => {
     const url = URL.createObjectURL(blob);
 
     const a = document.createElement('a');
     document.body.appendChild(a);
     a.href = url;
-    // TODO : 스페이스명 연동 후 변경
-    a.download = `${spaceName}.zip`;
+
+    a.download = getDownloadName(fileName, blob, spaceName);
     a.click();
 
     document.body.removeChild(a);
     window.URL.revokeObjectURL(url);
   };
 
-  const selectDownload = async (photoIds: number[]) => {
-    if (photoIds.length === 0) {
-      showToast({
-        text: ERROR.DOWNLOAD.NO_SELECTED_PHOTO,
-        type: 'error',
-      });
-      return;
-    }
-    await handleDownload(() =>
-      photoService.downloadPhotos(spaceCode, {
-        photoIds: photoIds,
-      }),
-    );
+  const selectDownload = async (photoIds: number[], fileName?: string) => {
+    const taskResult = tryTask({
+      task: () => checkSelectedPhotoExist(photoIds),
+      errorActions: ['toast'],
+    });
+    if (!taskResult.success) return;
+
+    await tryFetch({
+      task: async () => {
+        await handleDownload(
+          () =>
+            photoService.downloadPhotos(spaceCode, {
+              photoIds: photoIds,
+            }),
+          fileName,
+        );
+      },
+      errorActions: ['toast'],
+      context: {
+        toast: {
+          text: '다운로드에 실패했습니다. 다시 시도해 주세요.',
+          type: 'error',
+        },
+      },
+    });
   };
 
-  const downloadAll = async () => {
-    setIsDownloading(true);
-    await handleDownload(() => photoService.downloadAll(spaceCode));
-    setIsDownloading(false);
+  const downloadSingle = async (photoId: number, fileName?: string) => {
+    await tryFetch({
+      task: async () => {
+        await handleDownload(
+          () => photoService.downloadSinglePhoto(spaceCode, photoId),
+          fileName,
+        );
+      },
+      errorActions: ['toast', 'console'],
+      context: {
+        toast: {
+          text: '다운로드에 실패했습니다. 다시 시도해 주세요.',
+          type: 'error',
+        },
+      },
+    });
+  };
+
+  const downloadAll = async (fileName?: string) => {
+    await tryFetch({
+      task: async () => {
+        setIsDownloading(true);
+        await handleDownload(
+          () => photoService.downloadAll(spaceCode),
+          fileName,
+        );
+        onDownloadSuccess?.();
+      },
+      errorActions: ['toast', 'console'],
+      context: {
+        toast: {
+          text: '다운로드에 실패했습니다. 다시 시도해 주세요.',
+          type: 'error',
+        },
+      },
+      onFinally: () => {
+        setIsDownloading(false);
+      },
+    });
   };
 
   const handleDownload = async (
     fetchFunction: () => Promise<ApiResponse<unknown>>,
+    fileName?: string,
   ) => {
-    try {
-      const response = await safeApiCall(fetchFunction);
+    const response = await fetchFunction();
+    if (!response) return;
+    const blob = response.data;
 
-      if (response.success && response.data) {
-        const blob = response.data;
-        if (!(blob instanceof Blob)) {
-          throw new Error(DEBUG_MESSAGES.NO_BLOB_INSTANCE);
-        }
-        downloadBlob(blob);
-        navigate(ROUTES.COMPLETE.DOWNLOAD, {
-          state: {
-            spaceCode,
-          },
-        });
-      } else {
-        if (
-          !response.error?.toLowerCase().includes(NETWORK.DEFAULT.toLowerCase())
-        ) {
-          console.error('다운로드에 실패했습니다.');
-        }
-      }
-    } catch (error) {
-      console.error('다운로드 실패:', error);
-    } finally {
-      setIsDownloading(false);
-    }
+    tryTask({
+      task: () => {
+        validateDownloadFormat(blob);
+        downloadBlob(blob as Blob, fileName);
+      },
+      errorActions: ['console'],
+    });
   };
-  return { isDownloading, downloadAll, selectDownload };
+
+  return { isDownloading, downloadAll, selectDownload, downloadSingle };
 };
 
 export default useDownload;

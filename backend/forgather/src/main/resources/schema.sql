@@ -22,10 +22,11 @@ CREATE TABLE space_content
 -- 3. photo
 CREATE TABLE photo
 (
-    id          BIGINT       NOT NULL AUTO_INCREMENT,
-    path        VARCHAR(255) NOT NULL,
-    captured_at TIMESTAMP    NULL     DEFAULT NULL,
-    created_at  TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    id            BIGINT       NOT NULL AUTO_INCREMENT,
+    original_name VARCHAR(255) NOT NULL,
+    path          VARCHAR(255) NOT NULL,
+    captured_at   TIMESTAMP    NULL     DEFAULT NULL,
+    created_at    TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (id),
     CONSTRAINT photo_space_content_fk FOREIGN KEY (id) REFERENCES space_content (id)
 );
@@ -33,11 +34,11 @@ CREATE TABLE photo
 -- 4. host
 CREATE TABLE host
 (
-    id           BIGINT AUTO_INCREMENT PRIMARY KEY,
-    name         VARCHAR(100),
-    picture_url  VARCHAR(255),
-    created_at   TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at   TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+    id          BIGINT AUTO_INCREMENT PRIMARY KEY,
+    name        VARCHAR(100),
+    picture_url VARCHAR(255),
+    created_at  TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at  TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 -- 5. space_host_map

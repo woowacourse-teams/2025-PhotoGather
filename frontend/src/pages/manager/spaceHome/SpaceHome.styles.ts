@@ -5,7 +5,8 @@ import { hexToRgba } from '../../../utils/hexToRgba';
 
 export const Wrapper = styled.div`
   width: 100%;
-  min-height: ${({ theme }) => `calc(100vh - ${parseInt(theme.layout.padding.topBottom)}*2px)`};
+  min-height: ${({ theme }) =>
+    `calc(100vh - ${parseInt(theme.layout.padding.topBottom) * 2}px - ${theme.layout.headerHeight})`};
   position: relative;
   display: flex;
   flex-direction: column;
@@ -109,4 +110,9 @@ export const LoadingSpinnerContainer = styled.div`
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: ${({ theme }) => theme.zIndex.loadingSpinner};
+`;
+
+export const ModalContentContainer = styled.div`
+  display: flex;
+  gap: 24px;
 `;

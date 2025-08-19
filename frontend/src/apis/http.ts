@@ -1,10 +1,12 @@
-import { NETWORK } from '../constants/errors';
+import * as Sentry from '@sentry/react';
+import { HTTP_STATUS_MESSAGES } from '../constants/errors';
 import type {
   ApiResponse,
   BodyContentType,
   requestOptionsType,
 } from '../types/api.type';
-import { isNetworkError } from '../utils/isNetworkError';
+import { HttpError } from '../types/error.type';
+import { makeSentryRequestContext } from '../utils/sentry/sentryRequestContext';
 import { BASE_URL } from './config';
 import { createBody } from './createBody';
 import { createHeaders } from './createHeaders';
@@ -41,7 +43,6 @@ const request = async <T>(
   const headers = createHeaders(bodyContentType, token);
   const requestBody = createBody(body, bodyContentType);
 
-  // TODO : try catch 유틸 분리
   try {
     const response = await fetch(url, {
       method,
@@ -51,7 +52,10 @@ const request = async <T>(
 
     const contentType = response.headers.get('content-type');
 
-    if (contentType?.includes('application/zip')) {
+    if (
+      contentType?.includes('application/zip') ||
+      contentType?.includes('image/')
+    ) {
       const blob = await response.blob();
       return {
         success: response.ok,
@@ -64,10 +68,26 @@ const request = async <T>(
     const data = text ? JSON.parse(text) : null;
 
     if (!response.ok) {
-      return {
-        success: false,
-        error: data?.message || `Error: ${response.status}`,
-      };
+      const errorMessage = `[ErrorCode ${response.status}] ${
+        data?.message ? data.message : HTTP_STATUS_MESSAGES[response.status]
+      }`;
+      const error = new Error(errorMessage);
+
+      const sentryContext = makeSentryRequestContext(
+        url,
+        method,
+        headers,
+        requestBody,
+      );
+      Sentry.captureException(error, (scope) => {
+        scope.setContext('http', {
+          ...sentryContext,
+        });
+
+        return scope;
+      });
+
+      throw new HttpError(response.status, errorMessage);
     }
 
     return {
@@ -75,20 +95,13 @@ const request = async <T>(
       data: data as T,
     };
   } catch (error) {
-    const getErrorMessage = (error: unknown): string => {
-      if (isNetworkError(error)) {
-        return NETWORK.DEFAULT;
-      }
-      if (error instanceof Error) {
-        return error.message;
-      }
-      return 'Unknown error';
-    };
-
-    return {
-      success: false,
-      error: getErrorMessage(error),
-    };
+    if (error instanceof HttpError) {
+      throw error;
+    }
+    if (error instanceof Error) {
+      throw new Error(`네트워크 에러가 발생했습니다. 다시 시도해 주세요.`);
+    }
+    throw error;
   }
 };
 

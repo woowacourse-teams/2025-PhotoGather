@@ -7,9 +7,16 @@ export interface FunnelBaseElementProps {
   element: React.ReactNode;
   onNextButtonClick: () => void;
   nextButtonDisabled?: boolean;
+  buttonText?: string;
 }
 
-export interface FunnelElementProps {
-  onNext: (data: string) => void;
-  initialValue?: string;
+export interface FunnelElementProps<T = string> {
+  onNext: (data: T) => void;
+  initialValue?: T;
+}
+
+export interface ImmediateOpenElementInitialValue {
+  date: string;
+  time: string;
+  isImmediateOpen: boolean | null;
 }
