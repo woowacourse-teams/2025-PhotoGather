@@ -20,25 +20,25 @@ public class JwtTokenProvider {
 
     private final JwtProperties jwtProperties;
 
-    public String generateAccessToken(Long userId) {
+    public String generateAccessToken(Long hostId) {
         Date now = new Date();
         Date expiry = new Date(now.getTime() + (jwtProperties.getAccessTokenExpiration() * 1000));
 
         return Jwts.builder()
-            .subject(String.valueOf(userId))
-            .claim("userId", userId)
+            .subject(String.valueOf(hostId))
+            .claim("hostId", hostId)
             .issuedAt(now)
             .expiration(expiry)
             .signWith(getSigningKey())
             .compact();
     }
 
-    public String generateRefreshToken(Long userId) {
+    public String generateRefreshToken(Long hostId) {
         Date now = new Date();
         Date expiry = new Date(now.getTime() + (jwtProperties.getRefreshTokenExpiration() * 1000L));
 
         return Jwts.builder()
-            .subject(String.valueOf(userId))
+            .subject(String.valueOf(hostId))
             .issuedAt(now)
             .expiration(expiry)
             .signWith(getSigningKey())
@@ -68,15 +68,6 @@ public class JwtTokenProvider {
             .build()
             .parseSignedClaims(token)
             .getPayload();
-    }
-
-    public boolean isTokenExpired(String token) {
-        try {
-            Claims claims = getClaims(token);
-            return claims.getExpiration().before(new Date());
-        } catch (JwtException | IllegalArgumentException e) {
-            return true;
-        }
     }
 
     private SecretKey getSigningKey() {

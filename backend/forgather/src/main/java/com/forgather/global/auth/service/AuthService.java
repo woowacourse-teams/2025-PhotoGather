@@ -1,6 +1,5 @@
 package com.forgather.global.auth.service;
 
-import java.time.LocalDateTime;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
@@ -16,7 +15,6 @@ import com.forgather.global.auth.repository.KakaoHostRepository;
 import com.forgather.global.auth.repository.RefreshTokenRepository;
 import com.forgather.global.auth.util.JwtParser;
 import com.forgather.global.auth.util.JwtTokenProvider;
-import com.forgather.global.util.RandomCodeGenerator;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -30,20 +28,16 @@ public class AuthService {
     private final KakaoAuthClient kakaoAuthClient;
     private final KakaoHostRepository kakaoHostRepository;
     private final RefreshTokenRepository refreshTokenRepository;
-    private final RandomCodeGenerator randomCodeGenerator;
 
-    public KakaoLoginUrlResponse getKakaoLoginUrl(String customUrl) {
-        String kakaoLoginUrl = kakaoAuthClient.getKakaoLoginUrl(customUrl);
+    public KakaoLoginUrlResponse getKakaoLoginUrl() {
+        String kakaoLoginUrl = kakaoAuthClient.getKakaoLoginUrl();
         return KakaoLoginUrlResponse.from(kakaoLoginUrl);
     }
 
     @Transactional
-    public LoginResponse requestKakaoLoginToken(String authorizationCode, String customUrl) {
-        KakaoTokenDto.FullToken response = kakaoAuthClient.requestKakaoLoginToken(authorizationCode, customUrl);
+    public LoginResponse requestKakaoLoginToken(String authorizationCode) {
+        KakaoTokenDto.FullToken response = kakaoAuthClient.requestKakaoLoginToken(authorizationCode);
         KakaoHost kakaoHost = loginWithKakao(response);
-        // RefreshToken refreshToken = RefreshToken.generate(kakaoHost.getHost(), randomCodeGenerator);
-        // refreshTokenRepository.save(refreshToken);
-        // return LoginResponse.of(kakaoHost.getHost(), refreshToken);
         String accessToken = jwtTokenProvider.generateAccessToken(kakaoHost.getHost().getId());
         String refreshToken= jwtTokenProvider.generateRefreshToken(kakaoHost.getHost().getId());
         return LoginResponse.of(accessToken, refreshToken);
@@ -57,23 +51,7 @@ public class AuthService {
         return kakaoHost.orElseGet(() -> kakaoHostRepository.save(new KakaoHost(host, idToken.sub())));
     }
 
-    @Transactional
-    public void logout(String refreshToken) {
-        refreshTokenRepository.findByToken(refreshToken)
-            .ifPresent(refreshTokenRepository::delete);
-    }
-
-    @Transactional
-    public void removeExpiredRefreshTokens() {
-        refreshTokenRepository.deleteAllByExpiredBefore(LocalDateTime.now());
-    }
-
     public LoginResponse refresh(String refreshToken) {
-        // RefreshToken refreshToken = refreshTokenRepository.getByToken(refreshTokenStr);
-        // if (refreshToken.isExpired(LocalDateTime.now())) {
-        //     throw new IllegalArgumentException("리프레시 토큰이 만료되었습니다.");
-        // }
-        // return LoginResponse.of(refreshToken.getHost(), refreshToken);
         jwtTokenProvider.validateToken(refreshToken);
         Long hostId = jwtTokenProvider.getUserId(refreshToken);
         KakaoHost kakaoHost = kakaoHostRepository.getById(hostId);

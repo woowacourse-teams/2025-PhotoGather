@@ -33,25 +33,19 @@ public class KakaoAuthClient {
         updateKakaoKeys();
     }
 
-    public String getKakaoLoginUrl(String customUrl) {
+    public String getKakaoLoginUrl() {
         StringBuilder urlBuilder = new StringBuilder("https://kauth.kakao.com/oauth/authorize");
         urlBuilder.append("?client_id=").append(kakaoProperties.getClientId());
         urlBuilder.append("&redirect_uri=").append(kakaoProperties.getRedirectUri());
-        if (customUrl != null) {
-            urlBuilder.append("?url=" + customUrl);
-        }
         urlBuilder.append("&response_type=code");
         return urlBuilder.toString();
     }
 
-    public KakaoTokenDto.FullToken requestKakaoLoginToken(String authorizationCode, String customUrl) {
+    public KakaoTokenDto.FullToken requestKakaoLoginToken(String authorizationCode) {
         StringBuilder urlBuilder = new StringBuilder("https://kauth.kakao.com/oauth/token");
         urlBuilder.append("?grant_type=authorization_code");
         urlBuilder.append("&client_id=").append(kakaoProperties.getClientId());
         urlBuilder.append("&redirect_uri=").append(kakaoProperties.getRedirectUri());
-        if (customUrl != null) {
-            urlBuilder.append("?url=" + customUrl);
-        }
         urlBuilder.append("&code=").append(authorizationCode);
 
         return restClient.post()
