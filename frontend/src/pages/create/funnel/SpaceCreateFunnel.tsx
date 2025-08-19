@@ -56,7 +56,7 @@ const SpaceCreateFunnel = () => {
       <S.ContentContainer>
         {step === 'agreement' && (
           <AgreementElement
-            value={spaceInfo.agreements ?? [false, false]}
+            value={spaceInfo.agreements ?? { service: false, privacy: false }}
             onChange={(agreements) => {
               setSpaceInfo((prev) => ({ ...prev, agreements }));
             }}

@@ -2,12 +2,13 @@ import { useNavigate } from 'react-router-dom';
 import { INFORMATION } from '../../../../constants/messages';
 import { ROUTES } from '../../../../constants/routes';
 import type { FunnelElementProps } from '../../../../types/funnel.type';
+import type { Agreements } from '../../../../types/space.type';
 import FunnelBasePage from '../../funnel/FunnelBasePage/FunnelBasePage';
 import * as S from './AgreementElement.styles';
 
-interface AgreementElementProps extends FunnelElementProps<boolean[]> {
-  value: boolean[];
-  onChange: (next: boolean[]) => void;
+interface AgreementElementProps extends FunnelElementProps<Agreements> {
+  value: Agreements;
+  onChange: (next: Agreements) => void;
 }
 
 const AgreementElement = ({
@@ -15,19 +16,21 @@ const AgreementElement = ({
   onChange,
   onNext,
 }: AgreementElementProps) => {
-  const [serviceAgreement, privacyAgreement] = value;
-  const isAllChecked = serviceAgreement && privacyAgreement;
+  const { service, privacy } = value;
+  const isAllChecked = service && privacy;
   const navigate = useNavigate();
 
   const toggleAll = () => {
     const next = !isAllChecked;
-    onChange([next, next]);
+    onChange({ service: next, privacy: next });
   };
 
   const toggleAt = (idx: 0 | 1) => {
-    const copy = [...value];
-    copy[idx] = !copy[idx];
-    onChange(copy);
+    if (idx === 0) {
+      onChange({ ...value, service: !value.service });
+    } else {
+      onChange({ ...value, privacy: !value.privacy });
+    }
   };
 
   return (
@@ -50,7 +53,7 @@ const AgreementElement = ({
           <S.AgreeRow>
             <S.AgreeCheckContainer>
               <S.AgreeCheckIcon
-                isChecked={serviceAgreement}
+                isChecked={service}
                 onClick={() => toggleAt(0)}
                 type="button"
               />
@@ -68,7 +71,7 @@ const AgreementElement = ({
           <S.AgreeRow>
             <S.AgreeCheckContainer>
               <S.AgreeCheckIcon
-                isChecked={privacyAgreement}
+                isChecked={privacy}
                 onClick={() => toggleAt(1)}
                 type="button"
               />

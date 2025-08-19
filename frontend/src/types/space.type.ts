@@ -5,12 +5,17 @@ export interface SpaceCreateInfo {
   password: string;
 }
 
+export interface Agreements {
+  service: boolean;
+  privacy: boolean;
+}
+
 export interface SpaceFunnelInfo {
   name: string;
   date: string;
   time: string;
   isImmediateOpen: boolean | null;
-  agreements: boolean[] | null;
+  agreements: Agreements | null;
 }
 
 export interface Space {
