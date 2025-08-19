@@ -10,7 +10,7 @@ module.exports = (_, argv) => {
     mode: isProduction ? 'production' : 'development',
     entry: './src/index.tsx',
     output: {
-      filename: 'bundle.js',
+      filename: '[name].[contenthash].js',
       path: path.resolve(__dirname, 'dist'),
       publicPath: '/',
       clean: true,
