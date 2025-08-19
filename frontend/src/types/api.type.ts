@@ -38,3 +38,12 @@ export interface PhotoIds {
 export interface PhotoId {
   photoId: number;
 }
+
+export interface GuestCreate {
+  spaceCode: string;
+  name: string;
+}
+
+export interface GuestNickName {
+  name: string;
+}
