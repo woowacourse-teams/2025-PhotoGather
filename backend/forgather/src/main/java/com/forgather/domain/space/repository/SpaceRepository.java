@@ -11,6 +11,8 @@ public interface SpaceRepository extends JpaRepository<Space, Long> {
 
     Optional<Space> findByCode(String spaceCode);
 
+    void deleteByCode(String spaceCode);
+
     default Space getByCode(String spaceCode) {
         return findByCode(spaceCode)
             .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 스페이스입니다. 스페이스 코드: " + spaceCode));
@@ -21,6 +23,4 @@ public interface SpaceRepository extends JpaRepository<Space, Long> {
         space.validateExpiration(LocalDateTime.now());
         return space;
     }
-
-    void deleteByCode(String spaceCode);
 }
