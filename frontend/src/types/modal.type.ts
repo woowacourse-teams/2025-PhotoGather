@@ -1,4 +1,9 @@
 export interface BaseModalProps {
-  onClose?: () => void;
-  onSubmit?: (result: unknown) => void;
+  confirmButtonProps?: ModalButtonProps;
+  cancelButtonProps?: ModalButtonProps;
+}
+
+export interface ModalButtonProps {
+  text: string;
+  onClick: () => void;
 }
