@@ -300,9 +300,16 @@ const SpaceHome = () => {
                 <PhotoSelectionToolBar
                   selectedCount={selectedPhotosCount}
                   onDelete={() => tryDeleteSelectedPhotos(selectedPhotoIds)}
-                  onDownload={() =>
-                    selectDownload(selectedPhotoIds, undefined, downloadMode)
-                  }
+                  onDownload={() => {
+                    if (selectedPhotosCount === 1)
+                      downloadSingle(
+                        selectedPhotoIds[0],
+                        undefined,
+                        downloadMode,
+                      );
+                    else
+                      selectDownload(selectedPhotoIds, undefined, 'download');
+                  }}
                 />
               )}
             </S.BottomNavigatorContainer>
