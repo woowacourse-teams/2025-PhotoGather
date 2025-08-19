@@ -110,7 +110,6 @@ const useDownload = ({
   const downloadAll = async (fileName?: string, mode?: DownloadMode) => {
     await tryFetch({
       task: async () => {
-        setIsDownloading(true);
         await handleDownload(
           () => photoService.downloadAll(spaceCode),
           fileName,
@@ -124,9 +123,6 @@ const useDownload = ({
           text: '다운로드에 실패했습니다. 다시 시도해 주세요.',
           type: 'error',
         },
-      },
-      onFinally: () => {
-        setIsDownloading(false);
       },
     });
   };
@@ -142,6 +138,7 @@ const useDownload = ({
 
     tryTask({
       task: async () => {
+        setIsDownloading(true);
         validateDownloadFormat(blob);
         if (mode === 'share') {
           const file = new File(
@@ -154,6 +151,9 @@ const useDownload = ({
         if (mode === 'download') downloadBlob(blob, fileName);
       },
       errorActions: ['console'],
+      onFinally: () => {
+        setIsDownloading(false);
+      },
     });
   };
 
