@@ -16,14 +16,12 @@ interface InputModalProps extends BaseModalProps {
   placeholder: string;
   /** 입력 값 */
   initialValue: string;
-  /** 입력 값 오류 메시지 */
-  errorMessage?: string;
+  /** 입력 값 오류 메시지 생성 함수 */
+  createErrorMessage: (value: string) => string;
   /** 확인 버튼 텍스트 */
   confirmText?: string;
   /** 취소 버튼 텍스트 */
   cancelText?: string;
-  /** 입력 값 검증 함수 */
-  validation?: (value: string) => boolean;
 }
 
 const InputModal = ({
@@ -33,22 +31,22 @@ const InputModal = ({
   confirmText,
   cancelText,
   initialValue,
-  errorMessage,
+  createErrorMessage,
   onClose,
   onSubmit,
-  validation,
 }: InputModalProps) => {
   const [value, setValue] = useState(initialValue);
+  const [errorMessage, setErrorMessage] = useState('');
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setErrorMessage(createErrorMessage(e.target.value));
     setValue(e.target.value);
   };
   const submitInput = () => {
-    if (validation && !validation(value)) {
-      return;
-    }
     onSubmit?.({ value });
   };
-  const isValid = validation ? validation(value) : false;
+  const isValid = errorMessage.length === 0;
+
   return (
     <C.Wrapper>
       <S.DescriptionContainer>
@@ -62,7 +60,7 @@ const InputModal = ({
         maxCount={CONSTRAINTS.NAME_MAX_LENGTH}
         value={value}
         onChange={handleChange}
-        errorMessage={validation ? (validation(value) ? '' : errorMessage) : ''}
+        errorMessage={errorMessage}
       />
       <C.ButtonContainer>
         {cancelText && (

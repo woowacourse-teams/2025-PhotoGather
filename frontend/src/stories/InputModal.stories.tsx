@@ -21,7 +21,10 @@ const meta: Meta<typeof InputModal> = {
     subDescription: '공백 없이 10자까지 입력할 수 있어요.',
     confirmText: '확인',
     cancelText: '취소',
-    errorMessage: `${CONSTRAINTS.NAME_MAX_LENGTH}자 이하로 입력해주세요.`,
+    createErrorMessage: (value) =>
+      value.length > CONSTRAINTS.NAME_MAX_LENGTH
+        ? `${CONSTRAINTS.NAME_MAX_LENGTH}자 이하로 입력해주세요.`
+        : '',
   },
 };
 
