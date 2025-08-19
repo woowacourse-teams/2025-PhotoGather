@@ -1,6 +1,7 @@
 package com.forgather.domain.space.service;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.forgather.domain.space.dto.CreateSpaceRequest;
 import com.forgather.domain.space.dto.CreateSpaceResponse;
@@ -27,5 +28,11 @@ public class SpaceService {
     public SpaceResponse getSpaceInformation(String spaceCode) {
         Space space = spaceRepository.getByCode(spaceCode);
         return SpaceResponse.from(space);
+    }
+
+    @Transactional
+    public void delete(String spaceCode, Long hostId) {
+        // TODO: hostId가 Space의 HostId와 일치하는지 검증 로직 추가 필요
+        spaceRepository.deleteByCode(spaceCode);
     }
 }

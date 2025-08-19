@@ -21,4 +21,6 @@ public interface SpaceRepository extends JpaRepository<Space, Long> {
         space.validateExpiration(LocalDateTime.now());
         return space;
     }
+
+    void deleteByCode(String spaceCode);
 }
