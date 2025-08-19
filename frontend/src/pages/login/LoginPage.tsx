@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import Button from '../../components/@common/buttons/button/Button';
 import IconLabelButton from '../../components/@common/buttons/iconLabelButton/IconLabelButton';
 import HighlightText from '../../components/@common/highlightText/HighlightText';
+import { INFORMATION } from '../../constants/messages';
 import { ROUTES } from '../../constants/routes';
 import { theme } from '../../styles/theme';
 import * as S from './LoginPage.styles';
@@ -17,12 +18,12 @@ const LoginPage = () => {
         <S.LoginImage src={LoginImage} alt="로그인" />
         <S.TextContainer>
           <HighlightText
-            text="로그인 후 서비스를 이용해주세요"
-            highlightTextArray={['로그인']}
+            text={INFORMATION.LOGIN.TITLE.TEXT}
+            highlightTextArray={[INFORMATION.LOGIN.TITLE.HIGHLIGHT_TEXT]}
             fontStyle="header02"
             highlightColorStyle="primary"
           />
-          <S.LoginLabel>당신의 사진을 모아 드릴게요</S.LoginLabel>
+          <S.LoginLabel>{INFORMATION.LOGIN.DESCRIPTION}</S.LoginLabel>
         </S.TextContainer>
       </S.TopContainer>
       <S.BottomContainer>
