@@ -1,6 +1,7 @@
+import type { HTMLAttributes } from 'react';
 import * as S from './DashboardBox.styles';
 
-interface DashboardBoxProps {
+interface DashboardBoxProps extends HTMLAttributes<HTMLDivElement> {
   /** 박스 내 들어갈 텍스트 */
   title: string;
   /** 박스 내 들어갈 설명 */
@@ -9,9 +10,14 @@ interface DashboardBoxProps {
   isClosed: boolean;
 }
 
-const DashboardBox = ({ title, description, isClosed }: DashboardBoxProps) => {
+const DashboardBox = ({ 
+  title, 
+  description, 
+  isClosed, 
+  ...restProps 
+}: DashboardBoxProps) => {
   return (
-    <S.Wrapper $isClosed={isClosed}>
+    <S.Wrapper $isClosed={isClosed} {...restProps}>
       <S.Title $isClosed={isClosed}>{title}</S.Title>
       <S.Description>{description}</S.Description>
     </S.Wrapper>
