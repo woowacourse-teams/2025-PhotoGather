@@ -7,11 +7,58 @@ export const Wrapper = styled.div`
   position: relative;
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 16px;
   z-index: ${({ theme }) => theme.zIndex.imageGrid};
+`;
+
+export const InfoBoxContainer = styled.div`
+  white-space: pre-line;
+  text-align: center;
 `;
 
 export const Title = styled.h2`
   ${({ theme }) => ({ ...theme.typography.header02 })}
   color: ${({ theme }) => theme.colors.white};
+`;
+
+export const InfoContainer = styled.div`
+  width: auto;
+  display: flex;
+  padding: 20px 16px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  border-radius: 12px;
+  background-color: ${({ theme }) => theme.colors.white};
+`;
+
+export const InputContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+`;
+
+export const SpaceDeleteButtonContainer = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  ${({ theme }) => ({ ...theme.typography.captionSmall })};
+  color: ${({ theme }) => theme.colors.white};
+  margin-bottom: 32px;
+`;
+
+export const SpaceDeleteButton = styled.button`
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 4px;
+  width: 90px;
+  height: 30px;
+  color: ${({ theme }) => theme.colors.error};
+
+  cursor: pointer;
+  transition: color 0.2s ease;
+  &:hover {
+    color: ${({ theme }) => theme.colors.lightError};
+  }
 `;
