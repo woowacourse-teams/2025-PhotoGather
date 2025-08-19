@@ -9,6 +9,7 @@ import NotFoundErrorPage from '../pages/error/NotFoundErrorPage';
 import ImageUploadPage from '../pages/guest/imageUploadPage/ImageUploadPage';
 import SharePage from '../pages/guest/sharePage/SharePage';
 import LandingPage from '../pages/landing/LandingPage';
+import LoginPage from '../pages/login/LoginPage';
 import SpaceHome from '../pages/manager/spaceHome/SpaceHome';
 import PrivacyConsentPage from '../pages/policies/PrivacyConsentPage';
 import PrivacyPolicyPage from '../pages/policies/PrivacyPolicyPage';
@@ -94,6 +95,10 @@ const routes: AppRouteObject[] = [
             element: <DownloadCompletePage />,
           },
         ],
+      },
+      {
+        path: 'login',
+        element: <LoginPage />,
       },
       {
         path: 'policy',

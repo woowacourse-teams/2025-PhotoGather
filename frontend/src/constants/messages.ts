@@ -57,6 +57,13 @@ export const INFORMATION = {
   WAIT_PAGE: {
     TITLE_LIST: ['조금만 기다려주세요', '곧 스페이스 생성이 끝나요'],
   },
+  LOGIN: {
+    TITLE: {
+      TEXT: '로그인 후 서비스를 이용해주세요',
+      HIGHLIGHT_TEXT: '로그인',
+    },
+    DESCRIPTION: '당신의 사진을 모아 드릴게요',
+  },
 } as const;
 
 export const createSpaceHomeInfoMessage = (
