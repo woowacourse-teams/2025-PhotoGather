@@ -20,5 +20,9 @@ export const ROUTES = {
     NOT_FOUND: '*',
   },
   DEMO: '/demo',
-  PRIVACY_POLICY: '/privacy-policy',
+  POLICY: {
+    PRIVACY_POLICY: '/policy/privacy-policy',
+    TERMS_OF_SERVICE: '/policy/terms-of-service',
+    PRIVACY_CONSENT: '/policy/privacy-consent',
+  },
 } as const;
