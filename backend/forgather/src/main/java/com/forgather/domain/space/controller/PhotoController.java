@@ -82,6 +82,7 @@ public class PhotoController {
         return ResponseEntity.ok(response);
     }
 
+    @Deprecated
     @PostMapping("/download/{photoId}")
     @Operation(summary = "사진 단일 다운로드", description = "특정 공간의 선택된 단일 사진을 다운로드합니다.")
     public ResponseEntity<Resource> download(
@@ -103,6 +104,7 @@ public class PhotoController {
             .body(body);
     }
 
+    @Deprecated
     @PostMapping(value = "/download/selected", produces = ZIP_CONTENT_TYPE)
     @Operation(summary = "사진 zip 선택 다운로드", description = "특정 공간의 선택된 사진을 zip 파일로 다운로드합니다.")
     public ResponseEntity<StreamingResponseBody> downloadSelected(
@@ -139,6 +141,7 @@ public class PhotoController {
             .body(responseBody);
     }
 
+    @Deprecated
     @PostMapping(value = "/download", produces = ZIP_CONTENT_TYPE)
     @Operation(summary = "사진 zip 일괄 다운로드", description = "특정 공간의 사진 목록을 zip 파일로 다운로드합니다.")
     public ResponseEntity<StreamingResponseBody> downloadAll(
