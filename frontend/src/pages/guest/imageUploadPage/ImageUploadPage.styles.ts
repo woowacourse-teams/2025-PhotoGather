@@ -6,7 +6,7 @@ export const Wrapper = styled.div<{ $hasImages: boolean }>`
   width: 100%;
   height: 100%;
   min-height: ${({ theme }) =>
-    `calc(100dvh - ${parseInt(theme.layout.padding.topBottom) * 2}px - ${theme.layout.headerHeight})`};
+    `calc(100dvh - ${parseInt(theme.layout.padding.topBottom) * 2}px)`};
   border-radius: 12px;
   display: flex;
   flex-direction: column;
