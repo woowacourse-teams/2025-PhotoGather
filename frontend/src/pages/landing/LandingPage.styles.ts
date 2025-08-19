@@ -18,6 +18,7 @@ export const LogoContainer = styled.div`
 export const RowContainer = styled.div`
   display: flex;
   gap: 24px;
+align-items: center;
 `;
 
 export const TextContainer = styled.p`

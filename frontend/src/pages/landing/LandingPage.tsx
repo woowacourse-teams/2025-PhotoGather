@@ -72,6 +72,7 @@ const LandingPage = () => {
         <FloatingActionButton
           label="모두 저장하기"
           icon={<SaveIcon fill={theme.colors.gray06} />}
+          style={{ cursor: 'default', pointerEvents: 'none' }}
         />
       </S.SectionContainer>
 
@@ -83,12 +84,30 @@ const LandingPage = () => {
       >
         <S.TextContainer>{`인스타그램, 카카오톡, QR코드\n빠르게 공유하고 사진을 모아보세요`}</S.TextContainer>
         <S.RowContainer>
-          <InstagramIcon />
+          <InstagramIcon
+            style={{
+              height: '44px',
+              marginBottom: '4px',
+              cursor: 'default',
+              pointerEvents: 'none',
+            }}
+          />
           <IconLabelButton
             icon={<KakaoTalkIcon />}
-            style={{ backgroundColor: theme.colors.kakaoTalk }}
+            style={{
+              backgroundColor: theme.colors.kakaoTalk,
+              cursor: 'default',
+              pointerEvents: 'none',
+            }}
           />
-          <IconLabelButton icon={<QrcodeIcon />} />
+          <IconLabelButton
+            icon={<QrcodeIcon />}
+            style={{
+              width: '44px',
+              cursor: 'default',
+              pointerEvents: 'none',
+            }}
+          />
         </S.RowContainer>
       </S.SectionContainer>
       <Footer />
