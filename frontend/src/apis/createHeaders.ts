@@ -1,4 +1,3 @@
-import crypto from 'node:crypto';
 import type { BodyContentType } from '../types/api.type';
 
 export const createHeaders = (
@@ -6,8 +5,10 @@ export const createHeaders = (
   token?: string,
 ): HeadersInit => {
   // TODO : 저장된 토큰 들고오기
+  const traceId = crypto.randomUUID().slice(0, 6);
+
   const headers: HeadersInit = {
-    'trace-id': crypto.randomUUID(),
+    'trace-id': traceId,
   };
 
   if (token) {
