@@ -137,6 +137,7 @@ public class AwsS3Cloud {
             );
     }
 
+    // TODO: 추후 스케줄로 DB에 존재하지 않는 S3 객체 삭제 기능 필요
     public void deleteContent(String contentPath) {
         List<String> deletePaths = getPathWithThumbnails(contentPath);
         deleteCloudContents(deletePaths);
