@@ -18,6 +18,13 @@ export const INFORMATION = {
     DESCRIPTION: `내 스페이스 관리 페이지에서도\n스페이스 링크를 확인할 수 있어요`,
     HIGHLIGHT_TEXT: '스페이스 링크',
   },
+  AGREEMENT: {
+    TITLE: {
+      TEXT: '서비스 사용을 위해\n약관에 동의해주세요',
+      HIGHLIGHT_TEXT: '약관에 동의',
+    },
+    DESCRIPTION: '첫 스페이스 생성시에만 동의가 필요해요',
+  },
   NAME_INPUT: {
     TITLE: {
       TEXT: '스페이스 이름을 정해볼까요?',

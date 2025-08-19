@@ -1,5 +1,7 @@
 package com.forgather.domain.space.controller;
 
+import static org.springframework.http.HttpStatus.CREATED;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -29,9 +31,13 @@ import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBo
 
 import com.forgather.domain.space.dto.DeletePhotosRequest;
 import com.forgather.domain.space.dto.DownloadPhotosRequest;
+import com.forgather.domain.space.dto.IssueSignedUrlRequest;
+import com.forgather.domain.space.dto.IssueSignedUrlResponse;
 import com.forgather.domain.space.dto.PhotoResponse;
 import com.forgather.domain.space.dto.PhotosResponse;
+import com.forgather.domain.space.dto.SaveUploadedPhotoRequest;
 import com.forgather.domain.space.service.PhotoService;
+import com.forgather.domain.space.service.UploadService;
 import com.forgather.global.auth.annotation.HostId;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -49,15 +55,37 @@ public class PhotoController {
     private static final String ZIP_CONTENT_TYPE = "application/zip";
 
     private final PhotoService photoService;
+    private final UploadService uploadService;
 
+    @Deprecated
     @PostMapping(path = "/upload", consumes = {"multipart/form-data"})
-    @Operation(summary = "사진 일괄 업로드", description = "사진을 전부 업로드합니다.")
-    public ResponseEntity<Void> saveAll(
+    @Operation(summary = "사진 일괄 업로드", description = "클라우드 저장소와 DB에 사진을 전부 업로드합니다.")
+    public ResponseEntity<Void> uploadAll(
         @PathVariable(name = "spaceCode") String spaceCode,
         @RequestPart(name = "files") List<MultipartFile> files
     ) {
-        photoService.saveAll(spaceCode, files);
+        uploadService.saveAll(spaceCode, files);
         return ResponseEntity.ok().build();
+    }
+
+    @PostMapping(path = "/issue/upload-urls")
+    @Operation(summary = "업로드 URL 일괄 발급", description = "업로드 사진 별 서명된 URL을 발급합니다.")
+    public ResponseEntity<IssueSignedUrlResponse> issuePreSignedUrls(
+        @PathVariable(name = "spaceCode") String spaceCode,
+        @RequestBody IssueSignedUrlRequest request
+    ) {
+        var response = uploadService.issueSignedUrls(spaceCode, request);
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping
+    @Operation(summary = "업로드 된 사진 정보 일괄 저장", description = "업로드 된 사진 정보를 DB에 저장합니다.")
+    public ResponseEntity<Void> saveAll(
+        @PathVariable(name = "spaceCode") String spaceCode,
+        @RequestBody SaveUploadedPhotoRequest request
+    ) {
+        photoService.saveUploadedPhotos(spaceCode, request);
+        return ResponseEntity.status(CREATED).build();
     }
 
     @GetMapping("/{photoId}")

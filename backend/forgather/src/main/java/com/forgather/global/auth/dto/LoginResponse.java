@@ -1,7 +1,7 @@
 package com.forgather.global.auth.dto;
 
-import com.forgather.global.auth.domain.Host;
-import com.forgather.global.auth.domain.RefreshToken;
+import com.forgather.global.auth.model.Host;
+import com.forgather.global.auth.model.RefreshToken;
 
 public record LoginResponse(
     Long hostId,
