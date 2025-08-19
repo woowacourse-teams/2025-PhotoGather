@@ -32,7 +32,8 @@ public class SpaceService {
     }
 
     @Transactional
-    public SpaceResponse update(String spaceCode, UpdateSpaceRequest request) {
+    public SpaceResponse update(String spaceCode, UpdateSpaceRequest request, Long hostId) {
+        // TODO: hostId가 해당 스페이스의 소유자인지 검증하는 로직 추가 필요
         Space space = spaceRepository.getByCode(spaceCode);
         if (request.name() != null) {
             space.setName(request.name());

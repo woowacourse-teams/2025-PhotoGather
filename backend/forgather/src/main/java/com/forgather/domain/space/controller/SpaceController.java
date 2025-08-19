@@ -17,6 +17,7 @@ import com.forgather.domain.space.dto.CreateSpaceResponse;
 import com.forgather.domain.space.dto.SpaceResponse;
 import com.forgather.domain.space.dto.UpdateSpaceRequest;
 import com.forgather.domain.space.service.SpaceService;
+import com.forgather.global.auth.annotation.HostId;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -46,9 +47,11 @@ public class SpaceController {
 
     @PatchMapping("/{spaceCode}")
     @Operation(summary = "스페이스 정보 수정", description = "해당 스페이스 코드의 정보를 수정합니다.")
-    public ResponseEntity<SpaceResponse> update(@PathVariable(name = "spaceCode") String spaceCode,
-        @RequestBody @Validated UpdateSpaceRequest request) {
-        var response = spaceService.update(spaceCode, request);
+    public ResponseEntity<SpaceResponse> update(
+        @PathVariable(name = "spaceCode") String spaceCode,
+        @RequestBody @Validated UpdateSpaceRequest request,
+        @HostId Long hostId) {
+        var response = spaceService.update(spaceCode, request, hostId);
         return ResponseEntity.ok(response);
     }
 }
