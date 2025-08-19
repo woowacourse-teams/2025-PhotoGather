@@ -6,6 +6,7 @@ import IconLabelButton from '../../../components/@common/buttons/iconLabelButton
 import HighlightText from '../../../components/@common/highlightText/HighlightText';
 import InfoBox from '../../../components/@common/infoBox/InfoBox';
 import { INFORMATION } from '../../../constants/messages';
+import { ROUTES } from '../../../constants/routes';
 import useError from '../../../hooks/@common/useError';
 import { useToast } from '../../../hooks/@common/useToast';
 import { theme } from '../../../styles/theme';
@@ -21,7 +22,7 @@ const SharePage = () => {
   const { tryTask } = useError();
 
   const handleSpaceHomeButton = () => {
-    navigate(`/manager/space-home/${spaceCode}`);
+    navigate(ROUTES.MANAGER.SPACE_HOME(spaceCode));
   };
 
   const copyShareLink = () => {

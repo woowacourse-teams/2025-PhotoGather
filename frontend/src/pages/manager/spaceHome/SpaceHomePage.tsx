@@ -37,9 +37,9 @@ import { track } from '../../../utils/googleAnalytics/track';
 import { goToTop } from '../../../utils/goToTop';
 import EarlyPage from '../../status/earlyPage/EarlyPage';
 import ExpiredPage from '../../status/expiredPage/ExpiredPage';
-import * as S from './SpaceHome.styles';
+import * as S from './SpaceHomePage.styles';
 
-const SpaceHome = () => {
+const SpaceHomePage = () => {
   const { spaceCode } = useSpaceCodeFromPath();
   const { spaceInfo } = useSpaceInfo(spaceCode ?? '');
   const isEarlyTime =
@@ -321,4 +321,4 @@ const SpaceHome = () => {
   );
 };
 
-export default SpaceHome;
+export default SpaceHomePage;
