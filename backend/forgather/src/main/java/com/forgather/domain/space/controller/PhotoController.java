@@ -57,6 +57,7 @@ public class PhotoController {
     private final PhotoService photoService;
     private final UploadService uploadService;
 
+    @Deprecated
     @PostMapping(path = "/upload", consumes = {"multipart/form-data"})
     @Operation(summary = "사진 일괄 업로드", description = "클라우드 저장소와 DB에 사진을 전부 업로드합니다.")
     public ResponseEntity<Void> uploadAll(
