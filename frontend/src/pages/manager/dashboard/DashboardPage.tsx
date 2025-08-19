@@ -40,16 +40,13 @@ const DashboardPage = () => {
           />
         </S.DashboardInfoContainer>
       </S.DashboardContainer>
-
-      <S.ContentContainer>
-        <DashboardBox title="Coming Soon" isClosed={true} />
-        <S.SettingsButtonContainer>
-          <S.SettingsButton onClick={handleSettingsButton}>
-            스페이스 정보 수정
-            <EditIcon />
-          </S.SettingsButton>
-        </S.SettingsButtonContainer>
-      </S.ContentContainer>
+      <DashboardBox title="Coming Soon" isClosed={true} />
+      <S.SettingsButtonContainer>
+        <S.SettingsButton onClick={handleSettingsButton}>
+          스페이스 정보 수정
+          <EditIcon />
+        </S.SettingsButton>
+      </S.SettingsButtonContainer>
     </S.Wrapper>
   );
 };

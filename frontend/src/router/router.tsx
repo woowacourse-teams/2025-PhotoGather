@@ -57,7 +57,6 @@ const routes: AppRouteObject[] = [
             element: <DashboardPage />,
             handle: {
               header: true,
-              starField: true,
               highlight: true,
             },
           },
@@ -66,7 +65,6 @@ const routes: AppRouteObject[] = [
             element: <SettingsPage />,
             handle: {
               header: true,
-              starField: true,
               highlight: true,
             },
           },

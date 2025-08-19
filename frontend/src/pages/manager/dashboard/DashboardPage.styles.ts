@@ -7,7 +7,7 @@ export const Wrapper = styled.div`
   position: relative;
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 16px;
   z-index: ${({ theme }) => theme.zIndex.imageGrid};
 `;
 
@@ -32,12 +32,6 @@ export const DashboardInfoContainer = styled.div`
   gap: 16px;
 `;
 
-export const ContentContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-`;
-
 export const SettingsButtonContainer = styled.div`
   display: flex;
   justify-content: flex-end;
@@ -51,10 +45,10 @@ export const SettingsButton = styled.button`
   align-items: center;
   gap: 4px;
   width: 140px;
-  height: 40px;
+  height: 30px;
   color: ${({ theme }) => theme.colors.white};
   cursor: pointer;
-    
+
   transition: color 0.2s ease;
   &:hover {
     color: ${({ theme }) => theme.colors.gray01};
