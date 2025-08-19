@@ -1,5 +1,4 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { useState } from 'react';
 import HighlightText from '../components/@common/highlightText/HighlightText';
 import InputModal from '../components/@common/modal/inputModal/InputModal';
 import { CONSTRAINTS } from '../constants/constraints';
@@ -22,8 +21,6 @@ const meta: Meta<typeof InputModal> = {
     subDescription: '공백 없이 10자까지 입력할 수 있어요.',
     confirmText: '확인',
     cancelText: '취소',
-    onSubmit: () => {},
-    onClose: () => {},
     errorMessage: `${CONSTRAINTS.NAME_MAX_LENGTH}자 이하로 입력해주세요.`,
   },
 };
@@ -34,16 +31,6 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   render: (args) => {
-    const [value, setValue] = useState('');
-    const [isError, setIsError] = useState(false);
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-      setValue(e.target.value);
-      if (e.target.value.length > CONSTRAINTS.NAME_MAX_LENGTH) {
-        setIsError(true);
-        return;
-      }
-      setIsError(false);
-    };
     return (
       <div
         style={{
@@ -55,12 +42,7 @@ export const Default: Story = {
           alignItems: 'center',
         }}
       >
-        <InputModal
-          {...args}
-          value={value}
-          onChange={handleChange}
-          errorMessage={isError ? args.errorMessage : ''}
-        />
+        <InputModal {...args} initialValue={''} />
       </div>
     );
   },

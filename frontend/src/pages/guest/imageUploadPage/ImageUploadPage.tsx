@@ -1,5 +1,5 @@
 import rocketIcon from '@assets/images/rocket.png';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ReactComponent as ArrowUpSvg } from '../../../@assets/icons/upwardArrow.svg';
 import FloatingActionButton from '../../../components/@common/buttons/floatingActionButton/FloatingActionButton';
@@ -11,6 +11,7 @@ import PhotoModal from '../../../components/@common/modal/photoModal/PhotoModal'
 import SpaceHeader from '../../../components/header/spaceHeader/SpaceHeader';
 import LoadingLayout from '../../../components/layout/loadingLayout/LoadingLayout';
 import UploadBox from '../../../components/uploadBox/UploadBox';
+import UserBadge from '../../../components/userBadge/UserBadge';
 import { ROUTES } from '../../../constants/routes';
 import { useOverlay } from '../../../contexts/OverlayProvider';
 import useFileUpload from '../../../hooks/@common/useFileUpload';
@@ -41,40 +42,63 @@ const ImageUploadPage = () => {
   const navigate = useNavigate();
 
   // // TODO : 처음에는 확인만, 그 수정에서는 취소가 보이도록
-  // const showNickNameModal = async (isEditMode: boolean) => {
-  //   const defaultInputModalProps = {
-  //     description: '닉네임을 입력해 주세요',
-  //     subDescription: '공백 없이 10자까지 입력할 수 있어요.',
-  //     placeholder: '닉네임을 입력해 주세요',
-  //     confirmButtonProps: {
-  //       text: '확인',
-  //       onClick: () => {},
-  //     },
-  //   };
+  // TODO : 랜덤 닉네임 제공
 
-  //   const editModeInputModalProps = {
-  //     ...defaultInputModalProps,
-  //     cancelButtonProps: {
-  //       text: '취소',
-  //       onClick: () => {},
-  //     },
-  //   };
+  const checkNickNameLength = (nickName: string) => {
+    if (nickName.length > 10) {
+      return false;
+    }
+    return true;
+  };
 
-  //   return await overlay(
-  //     <InputModal
-  //       {...(isEditMode ? editModeInputModalProps : defaultInputModalProps)}
-  //       value=""
-  //       onChange={() => {}}
-  //     />,
-  //     {
-  //       clickOverlayClose: true,
-  //     },
-  //   );
+  type NickNameModalMode = 'create' | 'edit';
+  const [nickName, setNickName] = useState('');
+  const showNickNameModal = async (mode: NickNameModalMode) => {
+    const defaultInputModalProps = {
+      description: (
+        <HighlightText
+          text="닉네임을 입력해 주세요"
+          highlightTextArray={['닉네임']}
+          fontStyle="header03"
+          highlightColorStyle="primary"
+        />
+      ),
+      subDescription: '공백 없이 10자까지 입력할 수 있어요.',
+      placeholder: '닉네임을 입력해 주세요',
+      confirmText: '확인',
+    };
+
+    const editModeInputModalProps = {
+      ...defaultInputModalProps,
+      cancelText: '취소',
+    };
+
+    const result = await overlay<{ value: string }>(
+      <InputModal
+        {...(mode === 'edit'
+          ? editModeInputModalProps
+          : defaultInputModalProps)}
+        initialValue=""
+        validation={checkNickNameLength}
+        errorMessage="10자 이하로 입력해주세요."
+      />,
+      {
+        clickOverlayClose: true,
+      },
+    );
+    if (result) {
+      setNickName(result.value);
+    }
+  };
+
+  // const submitNickName = () => {
+  //   // TODO : api 연동
   // };
 
-  // useEffect(() => {
-  //   showNickNameModal(false);
-  // }, []);
+  //biome-ignore lint/correctness/useExhaustiveDependencies: 초기 모달 표시
+  useEffect(() => {
+    showNickNameModal('create');
+  }, []);
 
   const navigateToUploadComplete = () => {
     navigate(ROUTES.COMPLETE.UPLOAD, {
@@ -160,6 +184,10 @@ const ImageUploadPage = () => {
       )}
       <S.ScrollTopAnchor ref={scrollTopTriggerRef} />
       <SpaceHeader title={spaceName} timer={leftTime} />
+      <UserBadge
+        nickName={nickName}
+        onBadgeClick={() => showNickNameModal('edit')}
+      />
       <S.UploadContainer $hasImages={hasImages}>
         {shouldShowFakeUploadBox ? (
           <UploadBox

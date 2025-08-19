@@ -3,6 +3,7 @@ import { hexToRgba } from '../../utils/hexToRgba';
 
 export const Wrapper = styled.button`
   display: inline-flex;
+  width: fit-content;
   justify-content: center;
   align-items: center;
   background: ${({ theme }) => hexToRgba(theme.colors.gray06, 0.7)};
