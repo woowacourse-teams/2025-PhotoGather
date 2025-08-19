@@ -1,6 +1,9 @@
 package com.forgather.global.auth.controller;
 
+import java.net.URI;
+
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CookieValue;
@@ -12,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.forgather.global.auth.dto.KakaoLoginUrlResponse;
 import com.forgather.global.auth.service.AuthService;
+import com.forgather.global.config.LoginProperties;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -27,6 +31,7 @@ import lombok.RequiredArgsConstructor;
 public class AuthController {
 
     private final AuthService authService;
+    private final LoginProperties loginProperties;
 
     @GetMapping("/login/kakao")
     @Operation(summary = "Kakao 로그인 URL 요청",
@@ -44,11 +49,17 @@ public class AuthController {
         HttpServletResponse httpServletResponse,
         HttpSession session
     ) {
-        var response = authService.requestKakaoLoginToken(authorizationCode);
-        session.setAttribute("host_id", response.hostId());
-        ResponseCookie refreshToken = createRefreshCookie(response.refreshToken(), response.expirationDays());
-        httpServletResponse.addHeader(HttpHeaders.SET_COOKIE, refreshToken.toString());
-        return ResponseEntity.ok().build();
+        HttpHeaders headers = new HttpHeaders();
+        try {
+            var response = authService.requestKakaoLoginToken(authorizationCode);
+            session.setAttribute("host_id", response.hostId());
+            ResponseCookie refreshToken = createRefreshCookie(response.refreshToken(), response.expirationDays());
+            httpServletResponse.addHeader(HttpHeaders.SET_COOKIE, refreshToken.toString());
+            headers.setLocation(URI.create(loginProperties.getCallbackSuccessUrl()));
+        } catch (Exception e) {
+            headers.setLocation(URI.create(loginProperties.getCallbackFailureUrl()));
+        }
+        return new ResponseEntity<>(headers, HttpStatus.FOUND);
     }
 
     @PostMapping("/logout/kakao")
