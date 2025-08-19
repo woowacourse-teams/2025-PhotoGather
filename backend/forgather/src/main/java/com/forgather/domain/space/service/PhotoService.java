@@ -7,7 +7,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.nio.file.Path;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -117,12 +120,8 @@ public class PhotoService {
         Photo photo = photoRepository.getById(photoId);
         photo.validateSpace(space);
 
-        // TODO: 사진 원본 이름 추가
         URL downloadUrl = contentsStorage.issueDownloadUrl(photo.getPath());
-        return new DownloadUrlsResponse(List.of(DownloadUrl.from(
-            // photo.getOriginalName(),
-            downloadUrl)
-        ));
+        return new DownloadUrlsResponse(List.of(DownloadUrl.from(photo.getOriginalName(), downloadUrl.toString())));
     }
 
     public DownloadUrlsResponse getSelectedDownloadUrls(String spaceCode, DownloadPhotosRequest request, Long hostId) {
@@ -150,17 +149,26 @@ public class PhotoService {
     }
 
     private DownloadUrlsResponse getDownloadUrlsResponse(List<Photo> photos) {
-        // TODO: 사진 원본 이름 key로
-        // Map<String, URL> downloadUrls = photos.stream()
-        //     .collect(Collectors.toMap(
-        //         photo -> photo.getOriginalName(),
-        //         photo -> awsS3Cloud.issueDownloadUrl(photo.getPath())
-        //     ));
-        List<URL> downloadUrls = photos.stream()
-            .map(photo -> contentsStorage.issueDownloadUrl(photo.getPath()))
-            .toList();
-        return new DownloadUrlsResponse(downloadUrls.stream()
-            .map(DownloadUrl::from)
+        Map<String, String> downloadUrls = new LinkedHashMap<>();
+        Map<String, Integer> originalNameCounts = new HashMap<>();
+        for (Photo photo : photos) {
+            String originalName = photo.getOriginalName();
+            int extensionStartIndex = originalName.lastIndexOf('.');
+            String baseName = originalName.substring(0, extensionStartIndex);
+            String extension = originalName.substring(extensionStartIndex + 1);
+            if (originalNameCounts.containsKey(baseName)) {
+                int count = originalNameCounts.get(baseName);
+                baseName = String.format("%s(%d).%s", baseName, count + 1, extension);
+                originalNameCounts.put(baseName, count + 1);
+            } else {
+                originalNameCounts.put(baseName, 0);
+            }
+            String downloadUrl = contentsStorage.issueDownloadUrl(photo.getPath()).toString();
+            downloadUrls.put(String.format("%s.%s", baseName, extension), downloadUrl);
+        }
+
+        return new DownloadUrlsResponse(downloadUrls.entrySet().stream()
+            .map(entry -> DownloadUrl.from(entry.getValue(), entry.getKey()))
             .toList());
     }
 
