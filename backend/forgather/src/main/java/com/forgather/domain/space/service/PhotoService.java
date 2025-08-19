@@ -1,5 +1,7 @@
 package com.forgather.domain.space.service;
 
+import static com.forgather.domain.space.dto.DownloadUrlsResponse.DownloadUrl;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -137,7 +139,10 @@ public class PhotoService {
         photo.validateSpace(space);
 
         URL downloadUrl = awsS3Cloud.issueDownloadUrl(photo.getPath());
-        return new DownloadUrlsResponse(List.of(downloadUrl.toString()));
+        return new DownloadUrlsResponse(List.of(DownloadUrl.from(
+            // photo.getOriginalName(),
+            downloadUrl)
+        ));
     }
 
     public DownloadUrlsResponse getSelectedDownloadUrls(String spaceCode, DownloadPhotosRequest request, Long hostId) {
@@ -146,11 +151,17 @@ public class PhotoService {
         List<Photo> photos = photoRepository.findAllByIdIn(request.photoIds());
         photos.forEach(photo -> photo.validateSpace(space));
 
+        // TODO: 사진 원본 이름 key로
+        // Map<String, URL> downloadUrls = photos.stream()
+        //     .collect(Collectors.toMap(
+        //         photo -> photo.getOriginalName(),
+        //         photo -> awsS3Cloud.issueDownloadUrl(photo.getPath())
+        //     ));
         List<URL> downloadUrls = photos.stream()
             .map(photo -> awsS3Cloud.issueDownloadUrl(photo.getPath()))
             .toList();
         return new DownloadUrlsResponse(downloadUrls.stream()
-            .map(URL::toString)
+            .map(DownloadUrl::from)
             .toList());
     }
 
