@@ -6,9 +6,10 @@ public enum FileExtension {
     JPG("jpg"),
     JPEG("jpeg"),
     PNG("png"),
-    HEIC("HEIC"),
-    HEIF("HEIF"),
+    HEIC("heic"),
+    HEIF("heif"),
     WEBP("webp"),
+    AVIF("avif"),
     ;
 
     private final String value;
@@ -25,6 +26,6 @@ public enum FileExtension {
 
     private static boolean isExists(String extension) {
         return Arrays.stream(values())
-            .anyMatch(ext -> ext.value.equals(extension));
+            .anyMatch(ext -> ext.value.equalsIgnoreCase(extension));
     }
 }
