@@ -86,7 +86,7 @@ class PhotoAcceptanceTest extends AcceptanceTest {
             .accept("application/json")
             .body(request)
             .when()
-            .post("/spaces/{spaceCode}/photos/upload/urls", space.getCode())
+            .post("/spaces/{spaceCode}/photos/issue/upload-urls", space.getCode())
             .then()
             .extract();
 
@@ -113,7 +113,7 @@ class PhotoAcceptanceTest extends AcceptanceTest {
             .accept("application/json")
             .body(request)
             .when()
-            .post("/spaces/{spaceCode}/photos/upload/urls", space.getCode())
+            .post("/spaces/{spaceCode}/photos/issue/upload-urls", space.getCode())
             .then()
             .extract();
 

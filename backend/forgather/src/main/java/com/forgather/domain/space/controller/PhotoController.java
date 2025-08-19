@@ -68,7 +68,7 @@ public class PhotoController {
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping(path = "/upload/urls")
+    @PostMapping(path = "/issue/upload-urls")
     @Operation(summary = "업로드 URL 일괄 발급", description = "업로드 사진 별 서명된 URL을 발급합니다.")
     public ResponseEntity<IssueSignedUrlResponse> issuePreSignedUrls(
         @PathVariable(name = "spaceCode") String spaceCode,
