@@ -48,10 +48,6 @@ export const MockupScrollContainer = styled.section`
   &::-webkit-scrollbar {
     display: none;
   }
-  &::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.3);
-    border-radius: 9999px;
-  }
 `;
 
 export const MockupItem = styled.div`
