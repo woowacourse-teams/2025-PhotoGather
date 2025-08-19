@@ -16,7 +16,8 @@ export const INFORMATION = {
   },
   SHARE_LINK_API: {
     TITLE: '스페이스 업로드 링크 공유',
-    TEXT: '스페이스에 사진을 업로드 할 수 있는 링크를 공유했어요!',
+    CREATE_TEXT: (spaceName: string) =>
+      `${spaceName}에 사진을 업로드 할 수 있는 링크를 공유했어요!`,
   },
   SHARE_WARNING: {
     DESCRIPTION: `내 스페이스 관리 페이지에서도\n스페이스 링크를 확인할 수 있어요`,

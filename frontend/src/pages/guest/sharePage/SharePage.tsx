@@ -19,7 +19,7 @@ import * as S from './SharePage.styles';
 const SharePage = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const spaceCode = location.state;
+  const { name, spaceCode } = location.state;
   const { showToast } = useToast();
   const { tryTask, tryFetch } = useError();
   const { share } = useWebShareAPI();
@@ -58,7 +58,7 @@ const SharePage = () => {
       task: async () =>
         share({
           title: INFORMATION.SHARE_LINK_API.TITLE,
-          text: INFORMATION.SHARE_LINK_API.TEXT,
+          text: INFORMATION.SHARE_LINK_API.CREATE_TEXT(name),
           url: createShareUrl(spaceCode),
         }),
       errorActions: ['toast'],
