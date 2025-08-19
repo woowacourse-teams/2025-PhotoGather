@@ -46,7 +46,7 @@ public class SpaceController {
 
     @PatchMapping("/{spaceCode}")
     @Operation(summary = "스페이스 정보 수정", description = "해당 스페이스 코드의 정보를 수정합니다.")
-    public ResponseEntity<Object> update(@PathVariable(name = "spaceCode") String spaceCode,
+    public ResponseEntity<SpaceResponse> update(@PathVariable(name = "spaceCode") String spaceCode,
         @RequestBody @Validated UpdateSpaceRequest request) {
         var response = spaceService.update(spaceCode, request);
         return ResponseEntity.ok(response);
