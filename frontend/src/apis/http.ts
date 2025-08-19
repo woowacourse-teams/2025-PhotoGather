@@ -11,16 +11,6 @@ import { BASE_URL } from './config';
 import { createBody } from './createBody';
 import { createHeaders } from './createHeaders';
 
-// const defaultHeaders: Record<string, string> = {};
-
-// export const setAuthToken = (token: string | null) => {
-//   if (token) {
-//     defaultHeaders.Authorization = `Bearer ${token}`;
-//   } else {
-//     delete defaultHeaders.Authorization;
-//   }
-// };
-
 const buildQueryString = (params?: Record<string, unknown>): string => {
   if (!params) return '';
 
@@ -105,45 +95,67 @@ const request = async <T>(
   }
 };
 
-export const http = {
+const createHttpClient = (getToken?: () => string | undefined) => ({
   get: <T>(
     endpoint: string,
     params?: Record<string, unknown>,
     bodyContentType?: BodyContentType,
-    token?: string,
   ) =>
     request<T>(endpoint, {
       method: 'GET',
       params,
       bodyContentType,
-      token,
+      token: getToken?.(),
     }),
 
   post: <T>(
     endpoint: string,
     body?: unknown,
     bodyContentType: BodyContentType = 'json',
-    token?: string,
-  ) => request<T>(endpoint, { method: 'POST', body, bodyContentType, token }),
+  ) =>
+    request<T>(endpoint, {
+      method: 'POST',
+      body,
+      bodyContentType,
+      token: getToken?.(),
+    }),
 
   put: <T>(
     endpoint: string,
     body?: unknown,
     bodyContentType: BodyContentType = 'json',
-    token?: string,
-  ) => request<T>(endpoint, { method: 'PUT', body, bodyContentType, token }),
+  ) =>
+    request<T>(endpoint, {
+      method: 'PUT',
+      body,
+      bodyContentType,
+      token: getToken?.(),
+    }),
 
   patch: <T>(
     endpoint: string,
     body?: unknown,
     bodyContentType: BodyContentType = 'json',
-    token?: string,
-  ) => request<T>(endpoint, { method: 'PATCH', body, bodyContentType, token }),
+  ) =>
+    request<T>(endpoint, {
+      method: 'PATCH',
+      body,
+      bodyContentType,
+      token: getToken?.(),
+    }),
 
   delete: <T>(
     endpoint: string,
     body?: unknown,
     bodyContentType: BodyContentType = 'json',
-    token?: string,
-  ) => request<T>(endpoint, { method: 'DELETE', body, bodyContentType, token }),
-};
+  ) =>
+    request<T>(endpoint, {
+      method: 'DELETE',
+      body,
+      bodyContentType,
+      token: getToken?.(),
+    }),
+});
+
+export const http = createHttpClient();
+export const authHttp = createHttpClient(() => '1234567890');
