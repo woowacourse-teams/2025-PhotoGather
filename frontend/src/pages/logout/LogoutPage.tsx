@@ -4,7 +4,7 @@ import { track } from '../../utils/googleAnalytics/track';
 import * as S from './LogoutPage.styles';
 
 // TODO: 기능 구현 후 제거
-const profileImage =
+export const profileImage =
   'https://mblogthumb-phinf.pstatic.net/MjAyMTA0MTlfOTMg/MDAxNjE4ODIyODEyNjIy.PlBJ_yLT_0RQxDVzmDuEWrIioxajvdDqzG3nVK3qJQ0g.Ya7t_4dySMXtr2YT-p326Z1odr5MVxg_rBKZBPtHKp8g.JPEG.dochiqueens/april-blog-1.jpg?type=w800';
 
 const LogoutPage = () => {

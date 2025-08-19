@@ -32,7 +32,7 @@ export const ProfileImage = styled.img`
 `;
 
 export const Name = styled.p`
-  color: #fff;
+  color: ${({ theme }) => theme.colors.white};
   ${({ theme }) => ({ ...theme.typography.header03 })};
 `;
 
