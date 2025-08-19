@@ -80,17 +80,18 @@ const SpaceHome = () => {
 
   const navigate = useNavigate();
 
-  const { isDownloading, downloadAll, selectDownload } = useDownload({
-    spaceCode: spaceCode ?? '',
-    spaceName,
-    onDownloadSuccess: () => {
-      navigate(ROUTES.COMPLETE.DOWNLOAD, {
-        state: {
-          spaceCode: spaceCode ?? '',
-        },
-      });
-    },
-  });
+  const { isDownloading, downloadAll, selectDownload, downloadSingle } =
+    useDownload({
+      spaceCode: spaceCode ?? '',
+      spaceName,
+      onDownloadSuccess: () => {
+        navigate(ROUTES.COMPLETE.DOWNLOAD, {
+          state: {
+            spaceCode: spaceCode ?? '',
+          },
+        });
+      },
+    });
 
   const {
     isSelectMode,
@@ -124,7 +125,7 @@ const SpaceHome = () => {
   };
 
   const downloadPhotoWithTracking = async (photoId: number) => {
-    await selectDownload([photoId]);
+    await downloadSingle(photoId);
     track.button('single_download_button', {
       page: 'space_home',
       section: 'photo_modal',

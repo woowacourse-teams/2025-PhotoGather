@@ -17,34 +17,70 @@ const useDownload = ({
   onDownloadSuccess,
 }: UseDownloadProps) => {
   const [isDownloading, setIsDownloading] = useState(false);
-  const { tryTask } = useError();
+  const { tryTask, tryFetch } = useError();
 
-  const downloadBlob = (blob: Blob) => {
+  const getDownloadName = (
+    fileName: string | undefined,
+    blob: Blob,
+    spaceName: string,
+  ) => {
+    if (fileName) return fileName;
+
+    if (blob.type.includes('image/')) {
+      const extension = blob.type.split('/')[1];
+      return `photo.${extension}`;
+    }
+
+    return `${spaceName}.zip`;
+  };
+
+  const downloadBlob = (blob: Blob, fileName?: string) => {
     const url = URL.createObjectURL(blob);
 
     const a = document.createElement('a');
     document.body.appendChild(a);
     a.href = url;
-    a.download = `${spaceName}.zip`;
+
+    a.download = getDownloadName(fileName, blob, spaceName);
     a.click();
 
     document.body.removeChild(a);
     window.URL.revokeObjectURL(url);
   };
 
-  const selectDownload = async (photoIds: number[]) => {
-    const taskResult = await tryTask({
+  const selectDownload = async (photoIds: number[], fileName?: string) => {
+    const taskResult = tryTask({
       task: () => checkSelectedPhotoExist(photoIds),
       errorActions: ['toast'],
     });
     if (!taskResult.success) return;
 
-    await tryTask({
+    await tryFetch({
       task: async () => {
-        await handleDownload(() =>
-          photoService.downloadPhotos(spaceCode, {
-            photoIds: photoIds,
-          }),
+        await handleDownload(
+          () =>
+            photoService.downloadPhotos(spaceCode, {
+              photoIds: photoIds,
+            }),
+          fileName,
+        );
+      },
+      errorActions: ['toast'],
+      context: {
+        toast: {
+          text: '다운로드에 실패했습니다. 다시 시도해 주세요.',
+          type: 'error',
+        },
+      },
+    });
+  };
+
+  const downloadSingle = async (photoId: number, fileName?: string) => {
+    await tryFetch({
+      task: async () => {
+        await handleDownload(
+          () => photoService.downloadSinglePhoto(spaceCode, photoId),
+          fileName,
         );
       },
       errorActions: ['toast', 'console'],
@@ -54,15 +90,17 @@ const useDownload = ({
           type: 'error',
         },
       },
-      shouldLogToSentry: true,
     });
   };
 
-  const downloadAll = async () => {
-    await tryTask({
+  const downloadAll = async (fileName?: string) => {
+    await tryFetch({
       task: async () => {
         setIsDownloading(true);
-        await handleDownload(() => photoService.downloadAll(spaceCode));
+        await handleDownload(
+          () => photoService.downloadAll(spaceCode),
+          fileName,
+        );
         onDownloadSuccess?.();
       },
       errorActions: ['toast', 'console'],
@@ -75,27 +113,27 @@ const useDownload = ({
       onFinally: () => {
         setIsDownloading(false);
       },
-      shouldLogToSentry: true,
     });
   };
 
   const handleDownload = async (
     fetchFunction: () => Promise<ApiResponse<unknown>>,
+    fileName?: string,
   ) => {
     const response = await fetchFunction();
     if (!response) return;
     const blob = response.data;
 
-    await tryTask({
+    tryTask({
       task: () => {
         validateDownloadFormat(blob);
-        downloadBlob(blob as Blob);
+        downloadBlob(blob as Blob, fileName);
       },
       errorActions: ['console'],
-      shouldLogToSentry: true,
     });
   };
-  return { isDownloading, downloadAll, selectDownload };
+
+  return { isDownloading, downloadAll, selectDownload, downloadSingle };
 };
 
 export default useDownload;

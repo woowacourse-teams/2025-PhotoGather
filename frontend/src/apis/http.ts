@@ -1,9 +1,11 @@
+import * as Sentry from '@sentry/react';
 import { HTTP_STATUS_MESSAGES } from '../constants/errors';
 import type {
   ApiResponse,
   BodyContentType,
   requestOptionsType,
 } from '../types/api.type';
+import { HttpError } from '../types/error.type';
 import { makeSentryRequestContext } from '../utils/sentry/sentryRequestContext';
 import { BASE_URL } from './config';
 import { createBody } from './createBody';
@@ -41,46 +43,66 @@ const request = async <T>(
   const headers = createHeaders(bodyContentType, token);
   const requestBody = createBody(body, bodyContentType);
 
-  const response = await fetch(url, {
-    method,
-    headers,
-    body: requestBody,
-  });
-  // TODO: response가 없는 경우 (단순 네트워크 에러) 대응 - Failed To Fetch
+  try {
+    const response = await fetch(url, {
+      method,
+      headers,
+      body: requestBody,
+    });
 
-  const contentType = response.headers.get('content-type');
+    const contentType = response.headers.get('content-type');
 
-  if (contentType?.includes('application/zip')) {
-    const blob = await response.blob();
+    if (
+      contentType?.includes('application/zip') ||
+      contentType?.includes('image/')
+    ) {
+      const blob = await response.blob();
+      return {
+        success: response.ok,
+        data: blob as unknown as T,
+        error: !response.ok ? `Error: ${response.status}` : undefined,
+      };
+    }
+
+    const text = await response.text();
+    const data = text ? JSON.parse(text) : null;
+
+    if (!response.ok) {
+      const errorMessage = `[ErrorCode ${response.status}] ${
+        data?.message ? data.message : HTTP_STATUS_MESSAGES[response.status]
+      }`;
+      const error = new Error(errorMessage);
+
+      const sentryContext = makeSentryRequestContext(
+        url,
+        method,
+        headers,
+        requestBody,
+      );
+      Sentry.captureException(error, (scope) => {
+        scope.setContext('http', {
+          ...sentryContext,
+        });
+
+        return scope;
+      });
+
+      throw new HttpError(response.status, errorMessage);
+    }
+
     return {
-      success: response.ok,
-      data: blob as unknown as T,
-      error: !response.ok ? `Error: ${response.status}` : undefined,
+      success: true,
+      data: data as T,
     };
+  } catch (error) {
+    if (error instanceof HttpError) {
+      throw error;
+    }
+    if (error instanceof Error) {
+      throw new Error(`네트워크 에러가 발생했습니다. 다시 시도해 주세요.`);
+    }
+    throw error;
   }
-
-  const text = await response.text();
-  const data = text ? JSON.parse(text) : null;
-
-  if (!response.ok) {
-    const message =
-      HTTP_STATUS_MESSAGES[response.status] || `Error: ${response.status}`;
-
-    const err = new Error(message) as Error & {
-      sentryContext?: Record<string, unknown>;
-    };
-
-    err.sentryContext = {
-      request: makeSentryRequestContext(url, method, headers, requestBody),
-    };
-
-    throw err;
-  }
-
-  return {
-    success: true,
-    data: data as T,
-  };
 };
 
 export const http = {

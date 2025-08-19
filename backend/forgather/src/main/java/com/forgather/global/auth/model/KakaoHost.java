@@ -1,4 +1,4 @@
-package com.forgather.global.auth.domain;
+package com.forgather.global.auth.model;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
