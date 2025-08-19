@@ -9,6 +9,7 @@ import { INFORMATION } from '../../../constants/messages';
 import { useOverlay } from '../../../contexts/OverlayProvider';
 import useSpaceCodeFromPath from '../../../hooks/useSpaceCodeFromPath';
 import useSpaceInfo from '../../../hooks/useSpaceInfo';
+import { track } from '../../../utils/googleAnalytics/track';
 import * as S from './SettingsPage.styles';
 
 const SettingsPage = () => {
@@ -80,6 +81,13 @@ const SettingsPage = () => {
       },
     );
     if (!confirmResult) return;
+
+    // TODO: 삭제 API 호출
+    track.button('space_delete_button', {
+      page: 'settings',
+      section: 'settings_danger_zone',
+      action: 'delete_space',
+    });
   };
 
   return (
