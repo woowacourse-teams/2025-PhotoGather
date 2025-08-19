@@ -52,7 +52,7 @@ const useDownload = ({
     window.URL.revokeObjectURL(url);
   };
 
-  const selectDownload = async (
+  const downloadSelected = async (
     photoIds: number[],
     fileName?: string,
     mode?: DownloadMode,
@@ -158,7 +158,12 @@ const useDownload = ({
     });
   };
 
-  return { isDownloading, downloadAll, selectDownload, downloadSingle };
+  return {
+    isDownloading,
+    downloadAll,
+    downloadSelected,
+    downloadSingle,
+  };
 };
 
 export default useDownload;

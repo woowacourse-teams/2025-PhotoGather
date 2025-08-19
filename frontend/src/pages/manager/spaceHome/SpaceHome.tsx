@@ -78,7 +78,7 @@ const SpaceHome = () => {
 
   const navigate = useNavigate();
 
-  const { isDownloading, downloadAll, selectDownload, downloadSingle } =
+  const { isDownloading, downloadAll, downloadSelected, downloadSingle } =
     useDownload({
       spaceCode: spaceCode ?? '',
       spaceName,
@@ -304,7 +304,7 @@ const SpaceHome = () => {
                         downloadMode,
                       );
                     else
-                      selectDownload(selectedPhotoIds, undefined, 'download');
+                      downloadSelected(selectedPhotoIds, undefined, 'download');
                   }}
                 />
               )}
