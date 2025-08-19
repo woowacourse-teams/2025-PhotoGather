@@ -1,4 +1,5 @@
 import { ReactComponent as WarningIcon } from '@assets/icons/warning.svg';
+import { useEffect, useState } from 'react';
 import Button from '../../../components/@common/buttons/button/Button';
 import InfoBox from '../../../components/@common/infoBox/InfoBox';
 import DateTimeInput from '../../../components/@common/inputs/DateTimeInput';
@@ -7,11 +8,62 @@ import ConfirmModal from '../../../components/@common/modal/confirmModal/Confirm
 import { INFORMATION } from '../../../constants/messages';
 import { useOverlay } from '../../../contexts/OverlayProvider';
 import useSpaceCodeFromPath from '../../../hooks/useSpaceCodeFromPath';
+import useSpaceInfo from '../../../hooks/useSpaceInfo';
 import * as S from './SettingsPage.styles';
 
 const SettingsPage = () => {
   const { spaceCode } = useSpaceCodeFromPath();
+  const { spaceInfo } = useSpaceInfo(spaceCode || '');
   const overlay = useOverlay();
+
+  const [spaceName, setSpaceName] = useState('');
+  const [date, setDate] = useState('');
+  const [time, setTime] = useState('');
+  const [hasChanges, setHasChanges] = useState(false);
+
+  const isDateTimeDisabled = () => {
+    if (!spaceInfo) return false;
+
+    const now = new Date();
+    const openedAt = new Date(spaceInfo.openedAt);
+
+    return now >= openedAt || spaceInfo.isExpired;
+  };
+
+  useEffect(() => {
+    if (spaceInfo) {
+      setSpaceName(spaceInfo.name);
+
+      const openedAtDate = new Date(spaceInfo.openedAt);
+      const dateString = openedAtDate.toISOString().split('T')[0];
+      const timeString = openedAtDate.toTimeString().slice(0, 5);
+
+      setDate(dateString);
+      setTime(timeString);
+    }
+  }, [spaceInfo]);
+
+  useEffect(() => {
+    if (!spaceInfo) {
+      setHasChanges(false);
+      return;
+    }
+
+    const openedAtDate = new Date(spaceInfo.openedAt);
+    const originalDate = openedAtDate.toISOString().split('T')[0];
+    const originalTime = openedAtDate.toTimeString().slice(0, 5);
+
+    const hasNameChanged = spaceName !== spaceInfo.name;
+    const hasDateChanged = date !== originalDate;
+    const hasTimeChanged = time !== originalTime;
+
+    setHasChanges(hasNameChanged || hasDateChanged || hasTimeChanged);
+  }, [spaceName, date, time, spaceInfo]);
+
+  const handleUpdate = () => {
+    // TODO: 수정 API 호출
+    console.log('수정하기', { spaceName, date, time });
+  };
 
   const spaceDelete = async () => {
     const confirmResult = await overlay(
@@ -45,8 +97,8 @@ const SettingsPage = () => {
             <S.InputLabel>스페이스 이름</S.InputLabel>
             <TextInput
               placeholder="스페이스 이름을 입력하세요"
-              value=""
-              onChange={() => {}}
+              value={spaceName}
+              onChange={(e) => setSpaceName(e.target.value)}
               maxCount={10}
             />
           </S.InputWrapper>
@@ -55,9 +107,9 @@ const SettingsPage = () => {
               <S.InputLabel>시작 날짜</S.InputLabel>
               <DateTimeInput
                 inputType="date"
-                // value={date}
-                // min={kstDateString}
-                // onChange={handleDateChange}
+                value={date}
+                onChange={(e) => setDate(e.target.value)}
+                disabled={isDateTimeDisabled()}
                 data-testid="date-input"
               />
             </S.InputWrapper>
@@ -65,10 +117,10 @@ const SettingsPage = () => {
               <S.InputLabel>시작 시간</S.InputLabel>
               <DateTimeInput
                 inputType="time"
-                // value={time}
-                // onChange={handleTimeChange}
+                value={time}
+                onChange={(e) => setTime(e.target.value)}
+                disabled={isDateTimeDisabled()}
                 data-testid="time-input"
-                // errorMessage={isPastTime ? ERROR.INPUT.TIME : ''}
               />
             </S.InputWrapper>
           </S.DateTimeContainer>
@@ -79,7 +131,7 @@ const SettingsPage = () => {
           스페이스 삭제
         </S.SpaceDeleteButton>
       </S.SpaceDeleteButtonContainer>
-      <Button text="수정하기" onClick={() => {}} disabled={false} />
+      <Button text="수정하기" onClick={handleUpdate} disabled={!hasChanges} />
     </S.Wrapper>
   );
 };
