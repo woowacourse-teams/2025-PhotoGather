@@ -31,7 +31,6 @@ import useSpaceInfo from '../../../hooks/useSpaceInfo';
 import { ScrollableBlurArea } from '../../../styles/@common/ScrollableBlurArea';
 import { theme } from '../../../styles/theme';
 import { checkIsEarlyDate } from '../../../utils/checkIsEarlyTime';
-import { checkIsIos } from '../../../utils/checkIsIos';
 import { copyLinkToClipboard } from '../../../utils/copyLinkToClipboard';
 import { createShareUrl, createSpaceUrl } from '../../../utils/createSpaceUrl';
 import { track } from '../../../utils/googleAnalytics/track';
@@ -78,19 +77,23 @@ const SpaceHome = () => {
 
   const navigate = useNavigate();
 
-  const { isDownloading, downloadAll, downloadSelected, downloadSingle } =
-    useDownload({
-      spaceCode: spaceCode ?? '',
-      spaceName,
-      onDownloadSuccess: () => {
-        navigate(ROUTES.COMPLETE.DOWNLOAD, {
-          state: {
-            spaceCode: spaceCode ?? '',
-          },
-        });
-      },
-    });
-  const downloadMode = checkIsIos() ? 'share' : 'download';
+  const {
+    downloadMode,
+    isDownloading,
+    downloadAll,
+    downloadSelected,
+    downloadSingle,
+  } = useDownload({
+    spaceCode: spaceCode ?? '',
+    spaceName,
+    onDownloadSuccess: () => {
+      navigate(ROUTES.COMPLETE.DOWNLOAD, {
+        state: {
+          spaceCode: spaceCode ?? '',
+        },
+      });
+    },
+  });
 
   const {
     isSelectMode,

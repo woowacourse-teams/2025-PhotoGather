@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { photoService } from '../apis/services/photo.service';
 import type { ApiResponse } from '../types/api.type';
+import { checkIsIos } from '../utils/checkIsIos';
 import { validateDownloadFormat } from '../validators/fetch.validator';
 import { checkSelectedPhotoExist } from '../validators/photo.validator';
 import useError from './@common/useError';
@@ -22,6 +23,8 @@ const useDownload = ({
   const [isDownloading, setIsDownloading] = useState(false);
   const { tryTask, tryFetch } = useError();
   const { share } = useWebShareAPI();
+
+  const downloadMode: DownloadMode = checkIsIos() ? 'share' : 'download';
 
   const getDownloadName = (
     fileName: string | undefined,
@@ -158,6 +161,7 @@ const useDownload = ({
   };
 
   return {
+    downloadMode,
     isDownloading,
     downloadAll,
     downloadSelected,
