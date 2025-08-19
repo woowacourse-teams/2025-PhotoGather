@@ -2,49 +2,48 @@
     <!-- 로그 메세지 커스텀 변환기 -->
     <conversionRule conversionWord="msg" class="com.forgather.global.logging.LogMessageConverter"/>
 
-    <!-- 환경 별 로그 포맷 -->
-    <property name="DEV_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %logger{36} %marker %mdc %kvp %msg%n"/>
-    <property name="DEV_COLOR_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS} %highlight(%-5level) %cyan(%logger{36}) %marker %mdc %kvp %msg%n"/>
+    <!-- yml 로그 패턴 -->
+    <springProperty scope="context" name="CONSOLE_PATTERN" source="logging.pattern.console"
+                    defaultValue="%d{yyyy-MM-dd HH:mm:ss.SSS} %highlight(%-5level) %cyan(%logger{36}) %marker %mdc %kvp %msg%n"/>
+    <springProperty scope="context" name="FILE_PATTERN" source="logging.pattern.file"
+                    defaultValue="%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %logger{36} %marker %mdc %kvp %msg%n"/>
 
-    <property name="PROD_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %logger{36} %marker %mdc %kvp %msg%n"/>
-    <property name="PROD_COLOR_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS} %highlight(%-5level) %cyan(%logger{36}) %marker %mdc %kvp %msg%n"/>
+    <!-- yml 파일 경로 -->
+    <springProperty scope="context" name="FILE_PATH" source="logging.file.path" defaultValue="/var/log"/>
+    <springProperty scope="context" name="FILE_NAME" source="logging.file.name" defaultValue="app.log"/>
+    <springProperty scope="context" name="BODY_FILE_PATH" source="logging.file.body.path" defaultValue="/var/log"/>
+    <springProperty scope="context" name="BODY_FILE_NAME" source="logging.file.body.name" defaultValue="app-body.log"/>
 
-    <!-- 환경 별 로그 파일 경로-->
-    <property name="DEV_LOG_FILE" value="/home/ubuntu/2025-PhotoGather/logs/dev.log"/>
-    <property name="DEV_LOG_BODY_FILE" value="/home/ubuntu/2025-PhotoGather/logs/dev-body.log"/>
-
-    <property name="PROD_LOG_FILE" value="/home/ubuntu/2025-PhotoGather/logs/prod.log"/>
-    <property name="PROD_LOG_BODY_FILE" value="/home/ubuntu/2025-PhotoGather/logs/prod-body.log"/>
+    <!--콘솔 Appender -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>${CONSOLE_PATTERN}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+        <!-- REQUEST BODY를 제외 -->
+        <filter class="ch.qos.logback.core.filter.EvaluatorFilter">
+            <evaluator class="ch.qos.logback.classic.boolex.OnMarkerEvaluator">
+                <marker>BODY</marker>
+            </evaluator>
+            <OnMatch>DENY</OnMatch>
+            <OnMismatch>ACCEPT</OnMismatch>
+        </filter>
+    </appender>
 
     <!-- 로컬 프로필 -->
     <springProfile name="local">
-        <!--로컬 콘솔 출력 -->
-        <appender name="CONSOLE_LOCAL" class="ch.qos.logback.core.ConsoleAppender">
-            <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-                <pattern>${DEV_COLOR_PATTERN}</pattern>
-                <charset>UTF-8</charset>
-            </encoder>
-            <!-- BODY를 제외 -->
-            <filter class="ch.qos.logback.core.filter.EvaluatorFilter">
-                <evaluator class="ch.qos.logback.classic.boolex.OnMarkerEvaluator">
-                    <marker>BODY</marker>
-                </evaluator>
-                <OnMatch>DENY</OnMatch>
-                <OnMismatch>ACCEPT</OnMismatch>
-            </filter>
-        </appender>
         <root>
-            <appender-ref ref="CONSOLE_LOCAL"/>
+            <appender-ref ref="CONSOLE"/>
         </root>
     </springProfile>
 
-    <!-- 개발 프로필 -->
-    <springProfile name="dev">
-        <!-- 파일 쓰기 -->
-        <appender name="FILE_DEV" class="ch.qos.logback.core.rolling.RollingFileAppender">
-            <file>${DEV_LOG_FILE}</file>
+    <!-- 개발, 운영 프로필 -->
+    <springProfile name="dev | prod">
+        <!-- 파일 Appender -->
+        <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <file>${FILE_PATH}/${FILE_NAME}</file>
             <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-                <pattern>${DEV_PATTERN}</pattern>
+                <pattern>${FILE_PATTERN}</pattern>
                 <charset>UTF-8</charset>
             </encoder>
             <!-- BODY를 제외 -->
@@ -56,11 +55,12 @@
                 <OnMismatch>ACCEPT</OnMismatch>
             </filter>
         </appender>
-        <!-- 요청 바디 파일 쓰기-->
-        <appender name="BODY_FILE_DEV" class="ch.qos.logback.core.rolling.RollingFileAppender">
-            <file>${DEV_LOG_BODY_FILE}</file>
+
+        <!-- REQUEST BODY 파일 Appender -->
+        <appender name="BODY_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <file>${BODY_FILE_PATH}/${BODY_FILE_NAME}</file>
             <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-                <pattern>${DEV_PATTERN}</pattern>
+                <pattern>${FILE_PATTERN}</pattern>
                 <charset>UTF-8</charset>
             </encoder>
             <!-- BODY 마커가 달린 로그에 대해서만 적용-->
@@ -73,62 +73,16 @@
             </filter>
         </appender>
         <root>
-            <appender-ref ref="FILE_DEV"/>
-            <appender-ref ref="BODY_FILE_DEV"/>
-        </root>
-    </springProfile>
-
-    <!-- 운영 프로필 -->
-    <springProfile name="prod">
-        <!-- 파일 쓰기 -->
-        <appender name="FILE_PROD" class="ch.qos.logback.core.rolling.RollingFileAppender">
-            <file>${PROD_LOG_FILE}</file>
-            <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-                <pattern>${PROD_PATTERN}</pattern>
-                <charset>UTF-8</charset>
-            </encoder>
-            <!-- BODY를 제외 -->
-            <filter class="ch.qos.logback.core.filter.EvaluatorFilter">
-                <evaluator class="ch.qos.logback.classic.boolex.OnMarkerEvaluator">
-                    <marker>BODY</marker>
-                </evaluator>
-                <OnMatch>DENY</OnMatch>
-                <OnMismatch>ACCEPT</OnMismatch>
-            </filter>
-        </appender>
-        <!-- 요청 바디 파일 쓰기-->
-        <appender name="BODY_FILE_PROD" class="ch.qos.logback.core.rolling.RollingFileAppender">
-            <file>${PROD_LOG_BODY_FILE}</file>
-            <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-                <pattern>${PROD_PATTERN}</pattern>
-                <charset>UTF-8</charset>
-            </encoder>
-            <!-- BODY 마커가 달린 로그에 대해서만 적용-->
-            <filter class="ch.qos.logback.core.filter.EvaluatorFilter">
-                <evaluator class="ch.qos.logback.classic.boolex.OnMarkerEvaluator">
-                    <marker>BODY</marker>
-                </evaluator>
-                <OnMatch>ACCEPT</OnMatch>
-                <OnMismatch>DENY</OnMismatch>
-            </filter>
-        </appender>
-        <root>
-            <appender-ref ref="FILE_PROD"/>
-            <appender-ref ref="BODY_FILE_PROD"/>
+            <appender-ref ref="FILE"/>
+            <appender-ref ref="BODY_FILE"/>
         </root>
     </springProfile>
 
     <!-- 기타 프로필 -->
     <springProfile name="!(dev | local | prod)">
         <!-- 콘솔 출력-->
-        <appender name="CONSOLE_DEFAULT" class="ch.qos.logback.core.ConsoleAppender">
-            <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-                <pattern>${PROD_COLOR_PATTERN}</pattern>
-                <charset>UTF-8</charset>
-            </encoder>
-        </appender>
         <root level="INFO">
-            <appender-ref ref="CONSOLE_DEFAULT"/>
+            <appender-ref ref="CONSOLE"/>
         </root>
     </springProfile>
 </configuration>
