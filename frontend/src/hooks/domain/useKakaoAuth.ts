@@ -1,4 +1,5 @@
 import { authService } from '../../apis/services/auth.service';
+import { CookieUtils } from '../../utils/CookieUtils';
 import useError from '../@common/useError';
 
 const useKakaoAuth = () => {
@@ -20,14 +21,13 @@ const useKakaoAuth = () => {
       window.location.href = taskResult.data;
   };
 
-  const handleKakaoLogout = async () => {
-    await tryFetch({
-      task: async () => await authService.logout(),
-      errorActions: ['toast'],
-    });
+  const handleLogout = async () => {
+    await CookieUtils.delete('access_token');
+    await CookieUtils.delete('refresh_token');
+    location.reload();
   };
 
-  return { handleKakaoLogin, handleKakaoLogout };
+  return { handleKakaoLogin, handleLogout };
 };
 
 export default useKakaoAuth;

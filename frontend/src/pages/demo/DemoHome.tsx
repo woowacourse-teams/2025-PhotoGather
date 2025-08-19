@@ -21,18 +21,14 @@ const DemoHome = () => {
       Sentry.captureMessage('가짜 축하');
     }
   };
-  const { handleKakaoLogin, handleKakaoLogout } = useKakaoAuth();
+  const { handleKakaoLogin, handleLogout } = useKakaoAuth();
 
   return (
     <S.Wrapper>
       <S.Icon src={rocketImage} alt="데모 페이지 아이콘"></S.Icon>
       <S.Title>Forgather DEMO</S.Title>
-      {CookieUtils.has('JSESSIONID') ? (
-        <Button
-          text="로그아웃"
-          variant="secondary"
-          onClick={handleKakaoLogout}
-        />
+      {CookieUtils.has('access_token') ? (
+        <Button text="로그아웃" variant="secondary" onClick={handleLogout} />
       ) : (
         <KakaoLoginButton onClick={handleKakaoLogin} />
       )}
