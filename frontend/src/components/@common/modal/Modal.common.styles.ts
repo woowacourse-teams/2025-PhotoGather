@@ -5,7 +5,7 @@ export const Wrapper = styled.div`
   flex-direction: column;
   align-items: center;
   gap: 20px;
-  padding: 28px 40px;
+  padding: 32px 32px;
   min-width: 320px;
   border-radius: 12px;
   background: ${({ theme }) => theme.colors.white};
@@ -13,7 +13,7 @@ export const Wrapper = styled.div`
 
 export const Description = styled.p`
   ${({ theme }) => ({ ...theme.typography.header03 })}
-  color: ${({ theme }) => theme.colors.gray04};
+  color: ${({ theme }) => theme.colors.gray06};
 `;
 
 export const ButtonContainer = styled.div`

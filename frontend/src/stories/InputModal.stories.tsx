@@ -50,7 +50,14 @@ export const Default: Story = {
     };
     return (
       <div
-        style={{ width: '100vw', height: '100vh', backgroundColor: 'black' }}
+        style={{
+          width: '100vw',
+          height: '100vh',
+          backgroundColor: 'black',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
       >
         <InputModal
           {...args}

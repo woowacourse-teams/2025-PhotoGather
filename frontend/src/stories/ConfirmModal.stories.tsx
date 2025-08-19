@@ -8,6 +8,22 @@ const meta: Meta<typeof ConfirmModal> = {
   parameters: {
     layout: 'centered',
   },
+  render: (args) => {
+    return (
+      <div
+        style={{
+          width: '100vw',
+          height: '100vh',
+          backgroundColor: 'black',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+      >
+        <ConfirmModal {...args} />
+      </div>
+    );
+  },
 };
 
 export default meta;
