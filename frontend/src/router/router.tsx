@@ -9,8 +9,9 @@ import NotFoundErrorPage from '../pages/error/NotFoundErrorPage';
 import ImageUploadPage from '../pages/guest/imageUploadPage/ImageUploadPage';
 import SharePage from '../pages/guest/sharePage/SharePage';
 import LandingPage from '../pages/landing/LandingPage';
-import Dashboard from '../pages/manager/dashboard/Dashboard';
-import SpaceHome from '../pages/manager/spaceHome/SpaceHome';
+import DashboardPage from '../pages/manager/dashboard/DashboardPage';
+import SettingsPage from '../pages/manager/settings/SettingsPage';
+import SpaceHomePage from '../pages/manager/spaceHome/SpaceHomePage';
 import PrivacyPolicyPage from '../pages/privacyPolicy/PrivacyPolicyPage';
 import type { AppRouteObject } from '../types/route.type';
 
@@ -43,8 +44,8 @@ const routes: AppRouteObject[] = [
         path: 'manager',
         children: [
           {
-            path: 'space-home/:spaceId',
-            element: <SpaceHome />,
+            path: 'space-home/:spaceCode',
+            element: <SpaceHomePage />,
             handle: {
               header: true,
               starField: true,
@@ -52,10 +53,21 @@ const routes: AppRouteObject[] = [
             },
           },
           {
-            path: 'space-home/:spaceId/dashboard',
-            element: <Dashboard />,
+            path: 'space-home/:spaceCode/dashboard',
+            element: <DashboardPage />,
             handle: {
               header: true,
+              starField: true,
+              highlight: true,
+            },
+          },
+          {
+            path: 'space-home/:spaceCode/settings',
+            element: <SettingsPage />,
+            handle: {
+              header: true,
+              starField: true,
+              highlight: true,
             },
           },
         ],
@@ -65,7 +77,7 @@ const routes: AppRouteObject[] = [
         path: 'guest',
         children: [
           {
-            path: 'image-upload/:spaceId',
+            path: 'image-upload/:spaceCode',
             element: <ImageUploadPage />,
             handle: {
               starField: true,
