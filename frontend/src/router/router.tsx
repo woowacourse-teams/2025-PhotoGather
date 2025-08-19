@@ -87,7 +87,6 @@ const routes: AppRouteObject[] = [
         element: <MyPage />,
         handle: {
           header: true,
-          starField: true,
           highlight: true,
         },
       },
@@ -96,7 +95,6 @@ const routes: AppRouteObject[] = [
         element: <LogoutPage />,
         handle: {
           header: true,
-          starField: true,
           highlight: true,
         },
       },
