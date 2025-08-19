@@ -1,6 +1,6 @@
 package com.forgather.domain.space.service;
 
-import static com.forgather.domain.space.service.FilePathGenerator.generateContentsFilePath;
+import static com.forgather.domain.space.util.FilePathGenerator.generateContentsFilePath;
 
 import java.util.HashMap;
 import java.util.Map;

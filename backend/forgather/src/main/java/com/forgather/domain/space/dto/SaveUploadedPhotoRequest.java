@@ -1,6 +1,6 @@
 package com.forgather.domain.space.dto;
 
-import static com.forgather.domain.space.service.FilePathGenerator.generateContentsFilePath;
+import static com.forgather.domain.space.util.FilePathGenerator.generateContentsFilePath;
 
 import java.time.LocalDateTime;
 import java.util.List;
