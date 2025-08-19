@@ -3,6 +3,7 @@ package com.forgather.domain.space.service;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -26,6 +27,7 @@ import software.amazon.awssdk.services.s3.model.Delete;
 import software.amazon.awssdk.services.s3.model.DeleteObjectsRequest;
 import software.amazon.awssdk.services.s3.model.DeleteObjectsResponse;
 import software.amazon.awssdk.services.s3.model.GetObjectRequest;
+import software.amazon.awssdk.services.s3.model.GetUrlRequest;
 import software.amazon.awssdk.services.s3.model.ObjectIdentifier;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 import software.amazon.awssdk.services.s3.model.S3Error;
@@ -124,6 +126,15 @@ public class AwsS3Cloud {
             .destination(localPath)
             .build();
         return transferManager.downloadFile(request).completionFuture();
+    }
+
+    public URL issueDownloadUrl(String photoPath) {
+        return s3Client.utilities()
+            .getUrl(GetUrlRequest.builder()
+                .bucket(s3Properties.getBucketName())
+                .key(photoPath)
+                .build()
+            );
     }
 
     public void deleteContent(String contentPath) {

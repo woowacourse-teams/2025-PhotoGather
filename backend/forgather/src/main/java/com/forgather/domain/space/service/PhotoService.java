@@ -3,6 +3,7 @@ package com.forgather.domain.space.service;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.nio.file.Path;
 import java.util.List;
 
@@ -17,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.forgather.domain.space.dto.DeletePhotosRequest;
 import com.forgather.domain.space.dto.DownloadPhotoResponse;
 import com.forgather.domain.space.dto.DownloadPhotosRequest;
+import com.forgather.domain.space.dto.DownloadUrlsResponse;
 import com.forgather.domain.space.dto.PhotoResponse;
 import com.forgather.domain.space.dto.PhotosResponse;
 import com.forgather.domain.space.model.Photo;
@@ -126,6 +128,16 @@ public class PhotoService {
         File zipFile = ZipGenerator.generate(downloadTempPath, spaceContents, spaceCode);
         FileSystemUtils.deleteRecursively(spaceContents);
         return zipFile;
+    }
+
+    public DownloadUrlsResponse getDownloadUrl(String spaceCode, Long photoId, Long hostId) {
+        // TODO: Space가 HostId의 소유인지 검증
+        Space space = spaceRepository.getUnexpiredSpaceByCode(spaceCode);
+        Photo photo = photoRepository.getById(photoId);
+        photo.validateSpace(space);
+
+        URL downloadUrl = awsS3Cloud.issueDownloadUrl(photo.getPath());
+        return new DownloadUrlsResponse(List.of(downloadUrl.toString()));
     }
 
     @Transactional

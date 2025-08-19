@@ -29,6 +29,7 @@ import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBo
 
 import com.forgather.domain.space.dto.DeletePhotosRequest;
 import com.forgather.domain.space.dto.DownloadPhotosRequest;
+import com.forgather.domain.space.dto.DownloadUrlsResponse;
 import com.forgather.domain.space.dto.PhotoResponse;
 import com.forgather.domain.space.dto.PhotosResponse;
 import com.forgather.domain.space.service.PhotoService;
@@ -174,6 +175,17 @@ public class PhotoController {
         return ResponseEntity.ok()
             .headers(httpHeaders)
             .body(responseBody);
+    }
+
+    @PostMapping("/download/{photoId}/urls")
+    @Operation(summary = "사진 단일 다운로드 URL", description = "특정 공간의 단일 사진 다운로드 URL을 생성합니다.")
+    public ResponseEntity<DownloadUrlsResponse> getDownloadUrl(
+        @PathVariable(name = "spaceCode") String spaceCode,
+        @PathVariable(name = "photoId") Long photoId,
+        @HostId Long hostId
+    ) {
+        var response = photoService.getDownloadUrl(spaceCode, photoId, hostId);
+        return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/{photoId}")
