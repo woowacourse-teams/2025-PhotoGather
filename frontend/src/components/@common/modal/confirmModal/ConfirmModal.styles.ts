@@ -23,7 +23,7 @@ export const Icon = styled.img`
   object-fit: contain;
 `;
 
-export const TextContainer = styled.p`
+export const TextContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -35,7 +35,7 @@ export const Title = styled.p`
   color: ${({ theme }) => theme.colors.gray06};
 `;
 
-export const Description = styled.p<{ $isError: boolean }>`
+export const Description = styled.span<{ $isError: boolean }>`
   ${({ theme }) => ({ ...theme.typography.bodyLarge })}
   color: ${({ theme, $isError }) => ($isError ? theme.colors.error : theme.colors.gray04)};
   margin-top: 4px;
