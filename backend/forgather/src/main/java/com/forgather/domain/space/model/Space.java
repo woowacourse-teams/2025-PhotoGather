@@ -48,6 +48,7 @@ public class Space extends BaseTimeEntity {
     private LocalDateTime openedAt;
 
     public Space(String code, String password, String name, int validHours, LocalDateTime openedAt) {
+        validate(code, name, validHours, openedAt);
         this.code = code;
         this.password = password;
         this.name = name;
@@ -67,7 +68,7 @@ public class Space extends BaseTimeEntity {
     }
 
     public boolean isOpened(LocalDateTime now) {
-        return openedAt.isAfter(now);
+        return openedAt.isBefore(now);
     }
 
     public LocalDateTime getExpiredAt() {
@@ -83,6 +84,19 @@ public class Space extends BaseTimeEntity {
             throw new IllegalArgumentException("이미 열린 스페이스의 오픈 시각을 변경할 수 없습니다.");
         }
         this.openedAt = newOpenedAt;
+    }
+
+    private void validate(String code, String name, int validHours, LocalDateTime openedAt) {
+        if (code == null || code.length() != 10) {
+            throw new IllegalArgumentException("스페이스 코드는 10자리여야 합니다. 생성 시도 코드: " + code);
+        }
+        if (name == null || name.isBlank() || name.length() > 10) {
+            throw new IllegalArgumentException("스페이스 이름은 비어있을 수 없고, 최대 10자여야 합니다. 생성 시도 이름: " + name);
+        }
+        if (validHours <= 0) {
+            throw new IllegalArgumentException("스페이스 유효 시간은 1시간 이상이어야 합니다. 생성 시도 유효 시간: " + validHours);
+        }
+        validateOpenedAt(openedAt);
     }
 
     private void validateOpenedAt(LocalDateTime openedAt) {
