@@ -140,6 +140,20 @@ public class PhotoService {
         return new DownloadUrlsResponse(List.of(downloadUrl.toString()));
     }
 
+    public DownloadUrlsResponse getSelectedDownloadUrls(String spaceCode, DownloadPhotosRequest request, Long hostId) {
+        // TODO: Space가 HostId의 소유인지 검증
+        Space space = spaceRepository.getUnexpiredSpaceByCode(spaceCode);
+        List<Photo> photos = photoRepository.findAllByIdIn(request.photoIds());
+        photos.forEach(photo -> photo.validateSpace(space));
+
+        List<URL> downloadUrls = photos.stream()
+            .map(photo -> awsS3Cloud.issueDownloadUrl(photo.getPath()))
+            .toList();
+        return new DownloadUrlsResponse(downloadUrls.stream()
+            .map(URL::toString)
+            .toList());
+    }
+
     @Transactional
     public void delete(String spaceCode, Long photoId) {
         Space space = spaceRepository.getUnexpiredSpaceByCode(spaceCode);

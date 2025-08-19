@@ -188,6 +188,17 @@ public class PhotoController {
         return ResponseEntity.ok(response);
     }
 
+    @PostMapping("/download/urls")
+    @Operation(summary = "사진 선택 다운로드 URL", description = "특정 공간의 단일 사진 다운로드 URL을 생성합니다.")
+    public ResponseEntity<DownloadUrlsResponse> getDownloadUrls(
+        @PathVariable(name = "spaceCode") String spaceCode,
+        @RequestBody DownloadPhotosRequest request,
+        @HostId Long hostId
+    ) {
+        var response = photoService.getSelectedDownloadUrls(spaceCode, request, hostId);
+        return ResponseEntity.ok(response);
+    }
+
     @DeleteMapping("/{photoId}")
     @Operation(summary = "사진 단건 삭제", description = "특정 공간의 단건 사진을 삭제합니다.")
     public ResponseEntity<Void> delete(
