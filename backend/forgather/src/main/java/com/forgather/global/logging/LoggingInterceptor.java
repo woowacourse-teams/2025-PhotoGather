@@ -20,6 +20,8 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class LoggingInterceptor implements HandlerInterceptor {
 
+    private static final String TRACE_ID_HEADER = "trace-id";
+    private static final String MDC_TRACE_ID_KEY = "traceId";
     private static final int TRACE_ID_LENGTH = 8;
     private static final Marker BODY_MARKER = MarkerFactory.getMarker("BODY");
 
@@ -29,12 +31,10 @@ public class LoggingInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         request.setAttribute("com.forgather.startTime", System.currentTimeMillis());
 
-        // TODO 클라이언트에게서 traceId를 받기
-        String traceId = randomCodeGenerator.generate(TRACE_ID_LENGTH);
+        String traceId = extractTraceId(request);
         String formattedTraceId = "\"" + traceId + "\"";
 
-        // 이후 해당 쓰레드에서 발생하는 모든 로그에 대해 자동으로 추가됨
-        MDC.put("traceId", formattedTraceId);
+        MDC.put(MDC_TRACE_ID_KEY, formattedTraceId); // 해당 쓰레드에서 발생하는 모든 로그에 포함
 
         log.atInfo()
             .addKeyValue("event", "REQUEST")
@@ -44,6 +44,14 @@ public class LoggingInterceptor implements HandlerInterceptor {
             .addKeyValue("userAgent", getUserAgent(request))
             .log();
         return true;
+    }
+
+    private String extractTraceId(HttpServletRequest request) {
+        String traceId = request.getHeader(TRACE_ID_HEADER);
+        if (traceId == null) {
+            return randomCodeGenerator.generate(TRACE_ID_LENGTH);
+        }
+        return traceId;
     }
 
     private String getClientIp(HttpServletRequest request) {
@@ -65,8 +73,7 @@ public class LoggingInterceptor implements HandlerInterceptor {
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler,
         Exception exception) {
-        // requestBody 로깅
-        if (request.getMethod().equals("POST")) {
+        if (request.getMethod().equals("POST")) { // requestBody 로깅
             logRequestBody(request);
         }
 
@@ -78,8 +85,8 @@ public class LoggingInterceptor implements HandlerInterceptor {
             .addKeyValue("duration", durationMillis + "ms")
             .log();
 
-        // 쓰레드 종료 시 MDC 초기화
-        MDC.clear();
+        setTraceIdHeader(response);
+        MDC.clear(); // 쓰레드 종료 시 MDC 초기화
     }
 
     private void logRequestBody(HttpServletRequest request) {
@@ -91,5 +98,11 @@ public class LoggingInterceptor implements HandlerInterceptor {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private void setTraceIdHeader(HttpServletResponse response) {
+        String formattedTraceId = MDC.get(MDC_TRACE_ID_KEY);
+        String traceId = formattedTraceId.substring(1, TRACE_ID_LENGTH + 1);
+        response.setHeader(TRACE_ID_HEADER, traceId);
     }
 }
