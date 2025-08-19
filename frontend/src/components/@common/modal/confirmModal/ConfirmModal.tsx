@@ -15,20 +15,26 @@ interface ConfirmModalProps extends BaseModalProps {
   image?: ImageProps;
   /** 확인 메시지 - 문자열 또는 highlightText 컴포넌트 */
   description?: string | ReactElement<typeof HighlightText>;
+  /** 확인 버튼 텍스트 */
+  confirmText?: string;
+  /** 취소 버튼 텍스트 */
+  cancelText?: string;
 }
 
 const ConfirmModal = ({
   image,
   description = '계속 진행할까요?',
-  confirmButtonProps,
-  cancelButtonProps,
+  confirmText = '확인',
+  cancelText = '취소',
+  onClose,
+  onSubmit,
 }: ConfirmModalProps) => {
   const handleCancel = () => {
-    cancelButtonProps?.onClick();
+    onClose?.();
   };
 
   const handleConfirm = () => {
-    confirmButtonProps?.onClick();
+    onSubmit?.(true);
   };
 
   return (
@@ -44,20 +50,8 @@ const ConfirmModal = ({
         description
       )}
       <C.ButtonContainer>
-        {cancelButtonProps && (
-          <Button
-            text={cancelButtonProps.text}
-            variant="secondary"
-            onClick={handleCancel}
-          />
-        )}
-        {confirmButtonProps && (
-          <Button
-            text={confirmButtonProps.text}
-            variant="primary"
-            onClick={handleConfirm}
-          />
-        )}
+        <Button text={cancelText} variant="secondary" onClick={handleCancel} />
+        <Button text={confirmText} variant="primary" onClick={handleConfirm} />
       </C.ButtonContainer>
     </C.Wrapper>
   );

@@ -20,17 +20,23 @@ interface InputModalProps extends BaseModalProps {
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   /** 입력 값 오류 메시지 */
   errorMessage?: string;
+  /** 확인 버튼 텍스트 */
+  confirmText?: string;
+  /** 취소 버튼 텍스트 */
+  cancelText?: string;
 }
 
 const InputModal = ({
   description,
   subDescription,
   placeholder,
-  confirmButtonProps,
-  cancelButtonProps,
+  confirmText,
+  cancelText,
   value,
   onChange,
   errorMessage,
+  onClose,
+  onSubmit,
 }: InputModalProps) => {
   return (
     <C.Wrapper>
@@ -48,18 +54,18 @@ const InputModal = ({
         errorMessage={errorMessage}
       />
       <C.ButtonContainer>
-        {confirmButtonProps && (
+        {cancelText && (
           <Button
-            text={confirmButtonProps.text}
-            onClick={confirmButtonProps.onClick}
-            variant="primary"
+            text={cancelText}
+            onClick={() => onClose?.()}
+            variant="secondary"
           />
         )}
-        {cancelButtonProps && (
+        {confirmText && (
           <Button
-            text={cancelButtonProps.text}
-            onClick={cancelButtonProps.onClick}
-            variant="secondary"
+            text={confirmText}
+            onClick={() => onSubmit?.(value)}
+            variant="primary"
           />
         )}
       </C.ButtonContainer>

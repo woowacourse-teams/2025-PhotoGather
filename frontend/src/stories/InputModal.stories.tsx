@@ -20,14 +20,10 @@ const meta: Meta<typeof InputModal> = {
       />
     ),
     subDescription: '공백 없이 10자까지 입력할 수 있어요.',
-    confirmButtonProps: {
-      text: '확인',
-      onClick: () => {},
-    },
-    cancelButtonProps: {
-      text: '취소',
-      onClick: () => {},
-    },
+    confirmText: '확인',
+    cancelText: '취소',
+    onSubmit: () => {},
+    onClose: () => {},
     errorMessage: `${CONSTRAINTS.NAME_MAX_LENGTH}자 이하로 입력해주세요.`,
   },
 };

@@ -33,14 +33,10 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   args: {
     description: '계속 진행할까요?',
-    confirmButtonProps: {
-      text: '확인',
-      onClick: () => {},
-    },
-    cancelButtonProps: {
-      text: '취소',
-      onClick: () => {},
-    },
+    confirmText: '확인',
+    cancelText: '취소',
+    onSubmit: () => {},
+    onClose: () => {},
   },
 };
 
@@ -51,14 +47,10 @@ export const UploadConfirm: Story = {
       alt: 'rocket',
     },
     description: '100장의 사진을 업로드할까요?',
-    confirmButtonProps: {
-      text: '업로드',
-      onClick: () => {},
-    },
-    cancelButtonProps: {
-      text: '취소',
-      onClick: () => {},
-    },
+    confirmText: '업로드',
+    cancelText: '취소',
+    onSubmit: () => {},
+    onClose: () => {},
   },
 };
 
@@ -69,14 +61,10 @@ export const DownloadConfirm: Story = {
       alt: 'rocket',
     },
     description: '선택한 사진을 다운로드할까요?',
-    confirmButtonProps: {
-      text: '다운로드',
-      onClick: () => {},
-    },
-    cancelButtonProps: {
-      text: '취소',
-      onClick: () => {},
-    },
+    confirmText: '다운로드',
+    cancelText: '취소',
+    onSubmit: () => {},
+    onClose: () => {},
   },
 };
 
@@ -87,13 +75,9 @@ export const DeleteConfirm: Story = {
       alt: 'rocket',
     },
     description: '정말로 삭제할까요?',
-    confirmButtonProps: {
-      text: '삭제',
-      onClick: () => {},
-    },
-    cancelButtonProps: {
-      text: '취소',
-      onClick: () => {},
-    },
+    confirmText: '삭제',
+    cancelText: '취소',
+    onSubmit: () => {},
+    onClose: () => {},
   },
 };

@@ -1,10 +1,12 @@
 import rocketIcon from '@assets/images/rocket.png';
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ReactComponent as ArrowUpSvg } from '../../../@assets/icons/upwardArrow.svg';
 import FloatingActionButton from '../../../components/@common/buttons/floatingActionButton/FloatingActionButton';
 import FloatingIconButton from '../../../components/@common/buttons/floatingIconButton/FloatingIconButton';
 import HighlightText from '../../../components/@common/highlightText/HighlightText';
 import GuestImageGrid from '../../../components/@common/imageLayout/imageGrid/guestImageGrid/GuestImageGrid';
+import InputModal from '../../../components/@common/modal/inputModal/InputModal';
 import PhotoModal from '../../../components/@common/modal/photoModal/PhotoModal';
 import SpaceHeader from '../../../components/header/spaceHeader/SpaceHeader';
 import LoadingLayout from '../../../components/layout/loadingLayout/LoadingLayout';
@@ -34,7 +36,45 @@ const ImageUploadPage = () => {
     spaceInfo?.openedAt && checkIsEarlyDate(spaceInfo.openedAt);
   const shouldShowFakeUploadBox = isNoData || isEarlyTime || isSpaceExpired;
 
+  const overlay = useOverlay();
+
   const navigate = useNavigate();
+
+  // // TODO : 처음에는 확인만, 그 수정에서는 취소가 보이도록
+  // const showNickNameModal = async (isEditMode: boolean) => {
+  //   const defaultInputModalProps = {
+  //     description: '닉네임을 입력해 주세요',
+  //     subDescription: '공백 없이 10자까지 입력할 수 있어요.',
+  //     placeholder: '닉네임을 입력해 주세요',
+  //     confirmButtonProps: {
+  //       text: '확인',
+  //       onClick: () => {},
+  //     },
+  //   };
+
+  //   const editModeInputModalProps = {
+  //     ...defaultInputModalProps,
+  //     cancelButtonProps: {
+  //       text: '취소',
+  //       onClick: () => {},
+  //     },
+  //   };
+
+  //   return await overlay(
+  //     <InputModal
+  //       {...(isEditMode ? editModeInputModalProps : defaultInputModalProps)}
+  //       value=""
+  //       onChange={() => {}}
+  //     />,
+  //     {
+  //       clickOverlayClose: true,
+  //     },
+  //   );
+  // };
+
+  // useEffect(() => {
+  //   showNickNameModal(false);
+  // }, []);
 
   const navigateToUploadComplete = () => {
     navigate(ROUTES.COMPLETE.UPLOAD, {
@@ -45,7 +85,6 @@ const ImageUploadPage = () => {
   };
 
   const spaceName = spaceInfo?.name ?? '';
-  const overlay = useOverlay();
   const {
     previewData,
     isUploading,

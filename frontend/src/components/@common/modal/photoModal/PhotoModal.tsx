@@ -39,7 +39,7 @@ interface ManagerPhotoModalProps extends BasePhotoModalProps {
 type PhotoModalProps = GuestPhotoModalProps | ManagerPhotoModalProps;
 
 const PhotoModal = (props: PhotoModalProps) => {
-  const { mode, confirmButtonProps, cancelButtonProps } = props;
+  const { mode, onClose, onSubmit } = props;
   const [, setIsLoading] = useState(false);
   const [photo, setPhoto] = useState<Photo | null>(null);
   // TODO : 중복 상태 여부 확인 필요
@@ -98,8 +98,10 @@ const PhotoModal = (props: PhotoModalProps) => {
     const confirmResult = await overlay(
       <ConfirmModal
         description="정말 삭제하시겠어요?"
-        confirmButtonProps={confirmButtonProps}
-        cancelButtonProps={cancelButtonProps}
+        confirmText="삭제"
+        cancelText="취소"
+        onClose={onClose}
+        onSubmit={onSubmit}
       />,
       {
         clickOverlayClose: true,
@@ -108,7 +110,7 @@ const PhotoModal = (props: PhotoModalProps) => {
     if (!confirmResult) return;
 
     props.onDelete(props.previewFile.id);
-    cancelButtonProps?.onClick?.();
+    onClose?.();
   };
 
   const managerModeDelete = async () => {
@@ -118,8 +120,10 @@ const PhotoModal = (props: PhotoModalProps) => {
     const confirmResult = await overlay(
       <ConfirmModal
         description="정말 삭제하시겠어요?"
-        confirmButtonProps={confirmButtonProps}
-        cancelButtonProps={cancelButtonProps}
+        confirmText="삭제"
+        cancelText="취소"
+        onClose={onClose}
+        onSubmit={onSubmit}
       />,
       {
         clickOverlayClose: true,
@@ -128,7 +132,7 @@ const PhotoModal = (props: PhotoModalProps) => {
     if (!confirmResult) return;
 
     props.onDelete(props.photoId);
-    cancelButtonProps?.onClick?.();
+    onClose?.();
   };
 
   const handleDelete = () => {
@@ -144,14 +148,14 @@ const PhotoModal = (props: PhotoModalProps) => {
     if (!props.onDownload) return;
 
     props.onDownload();
-    confirmButtonProps?.onClick?.();
+    onSubmit?.(true);
   };
 
   return (
     <S.Wrapper
       onMouseDown={(e) => {
         if (e.target === e.currentTarget) {
-          cancelButtonProps?.onClick?.();
+          onClose?.();
         }
       }}
     >
