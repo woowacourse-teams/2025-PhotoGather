@@ -67,9 +67,11 @@ public class AuthController {
         description = "로그아웃합니다. 리프레시 토큰을 쿠키에서 제거하고, 서버에서 해당 토큰을 삭제합니다.")
     public ResponseEntity<Void> logout(
         @Parameter(hidden = true)
-        @CookieValue(name = "refresh_token") String refreshToken,
-        HttpServletResponse httpServletResponse
+        @CookieValue(name = "refresh_token", required = false) String refreshToken,
+        HttpServletResponse httpServletResponse,
+        HttpSession session
     ) {
+        session.removeAttribute("host_id");
         authService.logout(refreshToken);
         ResponseCookie cookie = ResponseCookie.from("refresh_token", "")
             .httpOnly(true)
