@@ -11,7 +11,7 @@ export const Wrapper = styled.button`
   border-radius: 50px;
   padding: 4px 8px;
   gap: 8px;
-  &:active{
+  &:active {
     scale: 0.99;
   }
 `;
