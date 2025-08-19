@@ -2,7 +2,7 @@ package com.forgather.domain.space.dto;
 
 import java.time.LocalDateTime;
 
-import com.forgather.domain.space.model.Guest;
+import com.forgather.domain.guest.model.Guest;
 import com.forgather.domain.space.model.Photo;
 
 import io.swagger.v3.oas.annotations.media.Schema;

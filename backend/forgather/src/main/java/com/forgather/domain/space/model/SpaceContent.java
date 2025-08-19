@@ -2,6 +2,8 @@ package com.forgather.domain.space.model;
 
 import java.util.Objects;
 
+import com.forgather.domain.guest.model.Guest;
+
 import jakarta.persistence.DiscriminatorColumn;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
