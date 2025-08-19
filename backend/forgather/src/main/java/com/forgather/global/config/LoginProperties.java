@@ -16,13 +16,13 @@ public class LoginProperties {
         if (baseUrl == null) {
             return this.baseUrl + callbackSuccessPath;
         }
-        return baseUrl + callbackSuccessPath;
+        return "https://" + baseUrl + callbackSuccessPath;
     }
 
     public String getCallbackFailureUrl(String baseUrl) {
         if (baseUrl == null) {
             return this.baseUrl + callbackFailurePath;
         }
-        return baseUrl + callbackFailurePath;
+        return "https://" + baseUrl + callbackFailurePath;
     }
 }
