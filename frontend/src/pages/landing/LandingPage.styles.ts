@@ -35,4 +35,31 @@ export const SectionContainer = styled.section`
   gap: 28px;
 `;
 
-export const ImageContainer = styled.img``;
+export const MockupScrollContainer = styled.section`
+  width: calc(${({ theme }) => theme.layout.width} - ${({ theme }) => theme.layout.padding.leftRight});
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;     
+  -ms-overflow-style: none;   
+  &::-webkit-scrollbar { 
+    display: none;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: rgba(255,255,255,0.3);
+    border-radius: 9999px;
+  }
+`;
+
+export const MockupItem = styled.div`
+  flex: 0 0 auto;
+
+  &:first-of-type {
+    margin-left: 30px;
+  }
+
+  &:last-of-type{
+    margin-right: 30px;
+  }
+`;
