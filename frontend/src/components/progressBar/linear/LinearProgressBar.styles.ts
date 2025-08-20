@@ -36,7 +36,10 @@ export const GlowElement = styled.div<{
   height: ${16}px;
   border-radius: 50%;
   background: ${({ theme }) => theme.colors.primary10};
-  box-shadow: 0 0 7.56px 0 #F0EBFC, 0 0 2.16px 0 #F0EBFC, 0 0 1.08px 0 #F0EBFC;
+  box-shadow:
+    0 0 7.56px 0 #f0ebfc,
+    0 0 2.16px 0 #f0ebfc,
+    0 0 1.08px 0 #f0ebfc;
   pointer-events: none;
   z-index: 2;
 
