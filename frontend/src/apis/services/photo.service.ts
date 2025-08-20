@@ -31,13 +31,16 @@ export const photoService = {
   },
 
   downloadAll: (spaceCode: string) =>
-    http.post<Blob>(`/spaces/${spaceCode}/photos/download`, undefined),
+    http.post<Blob>(`/spaces/${spaceCode}/photos/download/urls`, undefined),
 
   downloadPhotos: (spaceCode: string, photoIds: PhotoIds) =>
     http.post<Blob>(`/spaces/${spaceCode}/photos/download/selected`, photoIds),
 
   downloadSinglePhoto: (spaceCode: string, photoId: number) =>
-    http.post<Blob>(`/spaces/${spaceCode}/photos/download/${photoId}`, photoId),
+    http.post<Blob>(
+      `/spaces/${spaceCode}/photos/download/${photoId}/urls`,
+      undefined,
+    ),
 
   deletePhotos: (spaceCode: string, photoIds: PhotoIds) =>
     http.delete<void>(`/spaces/${spaceCode}/photos/selected`, photoIds, 'json'),
