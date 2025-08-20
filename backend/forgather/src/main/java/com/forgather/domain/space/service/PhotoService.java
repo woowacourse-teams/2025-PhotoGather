@@ -158,13 +158,13 @@ public class PhotoService {
             String extension = originalName.substring(extensionStartIndex + 1);
             if (originalNameCounts.containsKey(baseName)) {
                 int count = originalNameCounts.get(baseName);
-                baseName = String.format("%s(%d).%s", baseName, count + 1, extension);
+                baseName = String.format("%s(%d)", baseName, count + 1);
                 originalNameCounts.put(baseName, count + 1);
             } else {
                 originalNameCounts.put(baseName, 0);
             }
             String downloadUrl = contentsStorage.issueDownloadUrl(photo.getPath()).toString();
-            downloadUrls.put(String.format("%s.%s", baseName, extension), downloadUrl);
+            downloadUrls.put(downloadUrl, String.format("%s.%s", baseName, extension));
         }
 
         return new DownloadUrlsResponse(downloadUrls.entrySet().stream()
