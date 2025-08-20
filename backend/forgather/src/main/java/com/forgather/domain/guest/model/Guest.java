@@ -11,7 +11,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.validation.constraints.Size;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -30,16 +31,31 @@ public class Guest extends BaseTimeEntity {
     @JoinColumn(name = "space_id", nullable = false)
     private Space space;
 
-    @Size(max = 100)
     @Column(name = "name", length = 100)
     private String name;
 
     public Guest(Space space, String name) {
         this.space = space;
         this.name = name;
+        validate();
     }
 
     public void rename(String name) {
         this.name = name;
+        validate();
+    }
+
+    @PrePersist
+    @PreUpdate
+    private void validate() {
+        if (space == null) {
+            throw new IllegalArgumentException("스페이스가 설정되지 않았습니다.");
+        }
+        if (name == null || name.isEmpty()) {
+            throw new IllegalArgumentException("게스트 이름이 비어있습니다.");
+        }
+        if (name.length() > 10) {
+            throw new IllegalArgumentException("게스트 이름은 10자를 초과할 수 없습니다.");
+        }
     }
 }
