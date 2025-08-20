@@ -2,6 +2,8 @@ package com.forgather.global.exception;
 
 import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MissingRequestCookieException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
@@ -18,6 +20,20 @@ public class GlobalExceptionHandler {
         InvalidDataAccessApiUsageException.class})
     public ResponseEntity<ErrorResponse> handleIllegalException(RuntimeException e) {
         var errorResponse = ErrorResponse.from(e.getMessage());
+        log.atWarn().log(e.getClass() + ": " + e.getMessage());
+        return ResponseEntity.badRequest().body(errorResponse);
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
+        var errorResponse = ErrorResponse.from(e.getMessage());
+        log.atWarn().log(e.getClass() + ": " + e.getMessage());
+        return ResponseEntity.badRequest().body(errorResponse);
+    }
+
+    @ExceptionHandler(MissingRequestCookieException.class)
+    public ResponseEntity<ErrorResponse> handleMissingRequestCookieException(MissingRequestCookieException e) {
+        var errorResponse = ErrorResponse.from("필요한 쿠키가 누락되었습니다: " + e.getCookieName());
         log.atWarn().log(e.getClass() + ": " + e.getMessage());
         return ResponseEntity.badRequest().body(errorResponse);
     }

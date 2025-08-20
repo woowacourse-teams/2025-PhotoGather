@@ -9,7 +9,7 @@ const Footer = () => {
   const navigate = useNavigate();
 
   const handlePrivacyPolicyClick = () => {
-    navigate(ROUTES.PRIVACY_POLICY);
+    navigate(ROUTES.POLICY.PRIVACY_POLICY);
     track.button('privacy_policy_link', {
       page: 'footer',
       section: 'footer',
