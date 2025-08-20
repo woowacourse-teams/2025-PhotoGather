@@ -3,6 +3,7 @@ package com.forgather.global.exception;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MissingRequestCookieException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
@@ -18,6 +19,13 @@ public class GlobalExceptionHandler {
     @ExceptionHandler({IllegalArgumentException.class, IllegalStateException.class,
         InvalidDataAccessApiUsageException.class})
     public ResponseEntity<ErrorResponse> handleIllegalException(RuntimeException e) {
+        var errorResponse = ErrorResponse.from(e.getMessage());
+        log.atWarn().log(e.getClass() + ": " + e.getMessage());
+        return ResponseEntity.badRequest().body(errorResponse);
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
         var errorResponse = ErrorResponse.from(e.getMessage());
         log.atWarn().log(e.getClass() + ": " + e.getMessage());
         return ResponseEntity.badRequest().body(errorResponse);
