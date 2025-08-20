@@ -1,5 +1,6 @@
 import HighlightText from '../../components/@common/highlightText/HighlightText';
 import Profile from '../../components/profile/Profile';
+import SpaceCard from '../../components/spaceCard/SpaceCard';
 import { profileImage } from '../logout/LogoutPage';
 import * as S from './MyPage.styles';
 
@@ -16,6 +17,16 @@ const MyPage = () => {
           fontStyle="bodyRegular"
         />
       </S.CreateSpaceButton>
+      <S.SpaceList>
+        <SpaceCard
+          name="강릉 여행"
+          validHours={2022}
+          openedAt="2002"
+          totalParticipants={11}
+          totalImages={23}
+          variant="default"
+        />
+      </S.SpaceList>
     </S.Wrapper>
   );
 };
