@@ -35,8 +35,8 @@ const useError = () => {
     redirect: (path: RedirectPath) => {
       navigate(path.path);
     },
-    console: (message: string) => {
-      console.error(message);
+    console: (error: Error) => {
+      console.error(error);
     },
   };
 
@@ -131,7 +131,7 @@ const useError = () => {
       errorHandler.redirect(redirectPath);
     }
     if (errorActions.includes('console')) {
-      errorHandler.console(error.message);
+      errorHandler.console(error);
     }
   };
 
