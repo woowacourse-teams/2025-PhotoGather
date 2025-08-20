@@ -19,33 +19,36 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/guests")
+@RequestMapping("/spaces/{spaceCode}/guests")
 public class GuestController {
 
     private final GuestService guestService;
 
     @GetMapping("/{guestId}")
     public ResponseEntity<GuestResponse> getGuest(
+        @PathVariable String spaceCode,
         @PathVariable Long guestId
     ) {
-        var response = guestService.getGuest(guestId);
+        var response = guestService.getGuest(spaceCode, guestId);
         return ResponseEntity.ok(response);
     }
 
     @PostMapping
     public ResponseEntity<GuestResponse> createGuest(
+        @PathVariable String spaceCode,
         @RequestBody CreateGuestRequest request
     ) {
-        var response = guestService.createGuest(request);
+        var response = guestService.createGuest(spaceCode, request);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @PatchMapping("/{guestId}")
     public ResponseEntity<GuestResponse> updateGuest(
+        @PathVariable String spaceCode,
         @PathVariable Long guestId,
         @RequestBody UpdateGuestRequest request
     ) {
-        var response = guestService.updateGuest(guestId, request);
+        var response = guestService.updateGuest(spaceCode, guestId, request);
         return ResponseEntity.ok(response);
     }
 }

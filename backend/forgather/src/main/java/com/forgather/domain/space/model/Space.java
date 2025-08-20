@@ -96,4 +96,10 @@ public class Space extends BaseTimeEntity {
     public int hashCode() {
         return Objects.hashCode(id);
     }
+
+    public void validateCode(String code) {
+        if (!this.code.equals(code)) {
+            throw new IllegalArgumentException("스페이스 코드가 잘못되었습니다.");
+        }
+    }
 }

@@ -21,21 +21,25 @@ public class GuestService {
     private final SpaceRepository spaceRepository;
 
     @Transactional
-    public GuestResponse createGuest(CreateGuestRequest request) {
-        Space space = spaceRepository.getByCode(request.spaceCode());
+    public GuestResponse createGuest(String spaceCode, CreateGuestRequest request) {
+        Space space = spaceRepository.getByCode(spaceCode);
         Guest guest = guestRepository.save(new Guest(space, request.name()));
         return GuestResponse.from(guest);
     }
 
     @Transactional
-    public GuestResponse updateGuest(Long guestId, UpdateGuestRequest request) {
+    public GuestResponse updateGuest(String spaceCode, Long guestId, UpdateGuestRequest request) {
         Guest guest = guestRepository.getById(guestId);
+        Space space = guest.getSpace();
+        space.validateCode(spaceCode);
         guest.rename(request.name());
         return GuestResponse.from(guest);
     }
 
-    public GuestResponse getGuest(Long guestId) {
+    public GuestResponse getGuest(String spaceCode, Long guestId) {
         Guest guest = guestRepository.getById(guestId);
+        Space space = guest.getSpace();
+        space.validateCode(spaceCode);
         return GuestResponse.from(guest);
     }
 }
