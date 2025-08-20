@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import com.forgather.domain.guest.model.Guest;
 import com.forgather.domain.model.BaseTimeEntity;
 import com.forgather.global.auth.model.Host;
 import com.forgather.global.auth.model.SpaceHostMap;
@@ -176,6 +177,15 @@ public class Space extends BaseTimeEntity {
     public void validateCode(String code) {
         if (!this.code.equals(code)) {
             throw new IllegalArgumentException("스페이스 코드가 잘못되었습니다.");
+        }
+    }
+
+    public void validateGuest(Guest guest) {
+        if (guest == null) {
+            throw new IllegalArgumentException("게스트 정보가 없습니다.");
+        }
+        if (guest.getSpace() == null || !Objects.equals(guest.getSpace().getId(), this.id)) {
+            throw new IllegalArgumentException("해당 게스트는 이 스페이스에 속하지 않습니다. 게스트 ID: " + guest.getId() + ", 스페이스 ID: " + this.id);
         }
     }
 }

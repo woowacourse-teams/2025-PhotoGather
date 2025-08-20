@@ -37,11 +37,9 @@ import lombok.extern.slf4j.Slf4j;
 public class PhotoService {
 
     private final Path downloadTempPath;
-    private final AwsS3Cloud awsS3Cloud;
     private final PhotoRepository photoRepository;
     private final SpaceRepository spaceRepository;
     private final ContentsStorage contentsStorage;
-    private final Path downloadTempPath;
     private final GuestRepository guestRepository;
 
     public PhotoResponse get(String spaceCode, Long photoId, Host host) {
@@ -63,6 +61,7 @@ public class PhotoService {
     public void saveUploadedPhotos(String spaceCode, SaveUploadedPhotoRequest request, Long guestId) {
         Space space = spaceRepository.getUnexpiredSpaceByCode(spaceCode);
         Guest guest = guestRepository.getById(guestId);
+        space.validateGuest(guest);
 
         List<Photo> photos = request.uploadedPhotos().stream()
             .map(uploadedPhoto -> uploadedPhoto.toEntity(space, guest, contentsStorage.getRootDirectory()))

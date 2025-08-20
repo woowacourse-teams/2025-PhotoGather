@@ -85,9 +85,10 @@ public class PhotoController {
     @Operation(summary = "업로드 된 사진 정보 일괄 저장", description = "업로드 된 사진 정보를 DB에 저장합니다.")
     public ResponseEntity<Void> saveAll(
         @PathVariable(name = "spaceCode") String spaceCode,
-        @RequestBody SaveUploadedPhotoRequest request
+        @RequestBody SaveUploadedPhotoRequest request,
+        @RequestParam(name = "guestId", required = false) Long guestId
     ) {
-        photoService.saveUploadedPhotos(spaceCode, request);
+        photoService.saveUploadedPhotos(spaceCode, request, guestId);
         return ResponseEntity.status(CREATED).build();
     }
 
