@@ -4,6 +4,7 @@ import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MissingRequestCookieException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
@@ -25,6 +26,13 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest()
             .contentType(org.springframework.http.MediaType.APPLICATION_JSON)
             .body(errorResponse);
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
+        var errorResponse = ErrorResponse.from(e.getMessage());
+        log.atWarn().log(e.getClass() + ": " + e.getMessage());
+        return ResponseEntity.badRequest().body(errorResponse);
     }
 
     @ExceptionHandler(MissingRequestCookieException.class)

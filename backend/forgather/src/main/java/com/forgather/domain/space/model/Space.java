@@ -48,6 +48,7 @@ public class Space extends BaseTimeEntity {
     private LocalDateTime openedAt;
 
     public Space(Host host, String code, String name, int validHours, LocalDateTime openedAt) {
+        validate(code, name, validHours, openedAt);
         spaceHostMap.add(new SpaceHostMap(this, host));
         this.code = code;
         this.name = name;
@@ -77,26 +78,95 @@ public class Space extends BaseTimeEntity {
         return getExpiredAt().isBefore(now);
     }
 
+    public boolean isOpened(LocalDateTime now) {
+        return openedAt.isBefore(now);
+    }
+
     public LocalDateTime getExpiredAt() {
         return openedAt.plusHours(validHours);
     }
 
-    @PrePersist
-    @PreUpdate
-    void validate() {
-        if (name == null || name.isBlank()) {
-            throw new IllegalArgumentException("스페이스 이름은 비어있을 수 없습니다. 생성 시도 이름: " + name);
+    public void update(String name, Integer validHours, LocalDateTime openedAt, String password) {
+        if (name != null) {
+            setName(name);
         }
-        if (name.length() > 10) {
-            throw new IllegalArgumentException("스페이스 이름은 10자를 초과할 수 없습니다. 생성 시도 이름: " + name);
+        if (validHours != null) {
+            setValidHours(validHours);
         }
+        if (openedAt != null) {
+            setOpenedAt(openedAt);
+        }
+        if (password != null) {
+            setPassword(password);
+        }
+    }
+
+    private void setName(String name) {
+        if (name.isBlank() || name.length() > 10) {
+            throw new IllegalArgumentException("스페이스 이름은 비어있을 수 없고, 최대 10자여야 합니다. 생성 시도 이름: " + name);
+        }
+        this.name = name;
+    }
+
+    private void setValidHours(Integer validHours) {
+        if (validHours <= 0) {
+            throw new IllegalArgumentException("스페이스 유효 시간은 1시간 이상이어야 합니다. 생성 시도 유효 시간: " + validHours);
+        }
+        this.validHours = validHours;
+    }
+
+    private void setOpenedAt(LocalDateTime newOpenedAt) {
+        validateOpenedAt(newOpenedAt);
+        if (isExpired(LocalDateTime.now())) {
+            throw new IllegalArgumentException("만료된 스페이스의 오픈 시각을 변경할 수 없습니다.");
+        }
+        if (isOpened(LocalDateTime.now())) {
+            throw new IllegalArgumentException("이미 열린 스페이스의 오픈 시각을 변경할 수 없습니다.");
+        }
+        this.openedAt = newOpenedAt;
+    }
+
+    private void setPassword(String password) {
+        if (password.isBlank()) {
+            throw new IllegalArgumentException("스페이스 비밀번호는 비어있을 수 없습니다.");
+        }
+        this.password = password;
+    }
+
+    private void validate(String code, String name, int validHours, LocalDateTime openedAt) {
+        if (code == null || code.length() != 10) {
+            throw new IllegalArgumentException("스페이스 코드는 10자리여야 합니다. 생성 시도 코드: " + code);
+        }
+        if (name == null || name.isBlank() || name.length() > 10) {
+            throw new IllegalArgumentException("스페이스 이름은 비어있을 수 없고, 최대 10자여야 합니다. 생성 시도 이름: " + name);
+        }
+        if (validHours <= 0) {
+            throw new IllegalArgumentException("스페이스 유효 시간은 1시간 이상이어야 합니다. 생성 시도 유효 시간: " + validHours);
+        }
+        validateOpenedAt(openedAt);
+    }
+
+    private void validateOpenedAt(LocalDateTime openedAt) {
         if (openedAt == null) {
             throw new IllegalArgumentException("스페이스 오픈 시각은 비어있을 수 없습니다.");
         }
-
         // 네트워크 지연 고려해서 1시간 과거 생성까지는 허용
         if (openedAt.isBefore(LocalDateTime.now().minusHours(1L))) {
             throw new IllegalArgumentException("스페이스 오픈 시각은 현재 시각 이후여야 합니다. 생성 시도 시각: " + openedAt);
+        }
+    }
+
+    @PrePersist
+    @PreUpdate
+    private void validateBeforeSave() {
+        if (code == null || code.isBlank()) {
+            throw new IllegalArgumentException("스페이스 코드는 비어있을 수 없습니다. 생성 시도 코드: " + code);
+        }
+        if (name == null || name.isBlank()) {
+            throw new IllegalArgumentException("스페이스 이름은 비어있을 수 없습니다. 생성 시도 이름: " + name);
+        }
+        if (openedAt == null) {
+            throw new IllegalArgumentException("스페이스 오픈 시각은 비어있을 수 없습니다.");
         }
     }
 

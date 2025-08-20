@@ -1,10 +1,10 @@
 package com.forgather.domain.space.service;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatException;
 
 import java.time.LocalDateTime;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,6 +49,6 @@ class SpaceServiceTest {
             () -> spaceService.create(request, host)
         );
 
-        Assertions.assertThat(spaceRepository.findAll()).isEmpty();
+        assertThat(spaceRepository.findAll()).isEmpty();
     }
 }
