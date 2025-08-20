@@ -62,8 +62,8 @@ const useKakaoAuth = () => {
 
         if (!authResponse || !authResponse.data) return;
 
-        await CookieUtils.set('access', authResponse.data.accessToken);
-        await CookieUtils.set('refresh', authResponse.data.refreshToken);
+        CookieUtils.set('access', authResponse.data.accessToken);
+        CookieUtils.set('refresh', authResponse.data.refreshToken);
 
         navigate('/');
       },
@@ -77,8 +77,8 @@ const useKakaoAuth = () => {
   };
 
   const handleLogout = async () => {
-    await CookieUtils.delete('access_token');
-    await CookieUtils.delete('refresh_token');
+    CookieUtils.delete('access_token');
+    CookieUtils.delete('refresh_token');
     location.reload();
   };
 
