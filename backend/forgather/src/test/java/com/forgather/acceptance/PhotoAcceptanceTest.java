@@ -44,7 +44,7 @@ class PhotoAcceptanceTest extends AcceptanceTest {
     void getPhoto() {
         // given
         var space = spaceRepository.save(new Space("space-code", "1234", "test-space", 3, LocalDateTime.now()));
-        var photo = photoRepository.save(new Photo(space, "path", new PhotoMetaData(LocalDateTime.now())));
+        var photo = photoRepository.save(new Photo(space, "path", new PhotoMetaData(LocalDateTime.now()), 1024L));
 
         // when
         var response = RestAssuredMockMvc.given()

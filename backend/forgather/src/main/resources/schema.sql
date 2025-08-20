@@ -24,10 +24,11 @@ CREATE TABLE space_content
 -- 3. photo
 CREATE TABLE photo
 (
-    id          BIGINT       NOT NULL AUTO_INCREMENT,
-    path        VARCHAR(255) NOT NULL,
-    captured_at TIMESTAMP    NULL     DEFAULT NULL,
-    created_at  TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    id             BIGINT       NOT NULL AUTO_INCREMENT,
+    path           VARCHAR(255) NOT NULL,
+    captured_at    TIMESTAMP    NULL     DEFAULT NULL,
+    capacity_value BIGINT       NOT NULL,
+    created_at     TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (id),
     CONSTRAINT photo_space_content_fk FOREIGN KEY (id) REFERENCES space_content (id)
 );
