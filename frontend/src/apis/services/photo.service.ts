@@ -1,4 +1,10 @@
-import type { PhotoIds, PhotoListResponse } from '../../types/api.type';
+import type {
+  PhotoIds,
+  PhotoListResponse,
+  PresignedUrlsResponse,
+  UploadedPhotos,
+} from '../../types/api.type';
+import { UploadFile } from '../../types/file.type';
 import type { CreatePhotoInput, Photo } from '../../types/photo.type';
 import { authHttp, http } from '../http';
 
@@ -25,6 +31,18 @@ export const photoService = {
       'form-data',
     );
   },
+
+  getPresignedUrls: (spaceCode: string, uploadFileNames: string[]) =>
+    http.post<PresignedUrlsResponse>(
+      `/spaces/${spaceCode}/photos/issue/upload-urls`,
+      { uploadFileNames },
+    ),
+
+  notifyUploadComplete: (spaceCode: string, uploadedPhotos: UploadedPhotos[]) =>
+    http.post(`/spaces/${spaceCode}/photos`, { uploadedPhotos }),
+
+  uploadPhotosToS3: async (presignedUrl: string, file: File) =>
+    http.putToS3(presignedUrl, file),
 
   downloadAll: (spaceCode: string) =>
     authHttp.post<Blob>(`/spaces/${spaceCode}/photos/download`, undefined),

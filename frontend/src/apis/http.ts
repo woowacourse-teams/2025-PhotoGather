@@ -28,10 +28,21 @@ const buildQueryString = (params?: Record<string, unknown>): string => {
 
 const request = async <T>(
   endpoint: string,
-  { method, body, params, bodyContentType = 'json', token }: requestOptionsType,
+  {
+    method,
+    body,
+    params,
+    bodyContentType = 'json',
+    withTraceId,
+    token,
+    fullUrl,
+    headersOverride,
+  }: requestOptionsType,
 ): Promise<ApiResponse<T>> => {
-  const url = `${BASE_URL}${endpoint}${buildQueryString(params)}`;
-  const headers = createHeaders(bodyContentType, token);
+  const url = fullUrl ?? `${BASE_URL}${endpoint}${buildQueryString(params)}`;
+  const baseHeaders = createHeaders(bodyContentType, token, withTraceId);
+  const headers = { ...baseHeaders, ...headersOverride };
+
   const requestBody = createBody(body, bodyContentType);
 
   try {
@@ -96,7 +107,14 @@ const request = async <T>(
   }
 };
 
-const createHttpClient = (getToken?: () => string | undefined) => ({
+interface createHttpClientProps {
+  withTraceId?: boolean;
+  getToken?: () => string | undefined;
+}
+const createHttpClient = ({
+  withTraceId,
+  getToken,
+}: createHttpClientProps) => ({
   get: <T>(
     endpoint: string,
     params?: Record<string, unknown>,
@@ -106,6 +124,7 @@ const createHttpClient = (getToken?: () => string | undefined) => ({
       method: 'GET',
       params,
       bodyContentType,
+      withTraceId: withTraceId ?? true,
       token: getToken?.(),
     }),
 
@@ -118,6 +137,7 @@ const createHttpClient = (getToken?: () => string | undefined) => ({
       method: 'POST',
       body,
       bodyContentType,
+      withTraceId: withTraceId ?? true,
       token: getToken?.(),
     }),
 
@@ -130,6 +150,7 @@ const createHttpClient = (getToken?: () => string | undefined) => ({
       method: 'PUT',
       body,
       bodyContentType,
+      withTraceId: withTraceId ?? true,
       token: getToken?.(),
     }),
 
@@ -142,6 +163,7 @@ const createHttpClient = (getToken?: () => string | undefined) => ({
       method: 'PATCH',
       body,
       bodyContentType,
+      withTraceId: withTraceId ?? true,
       token: getToken?.(),
     }),
 
@@ -154,9 +176,25 @@ const createHttpClient = (getToken?: () => string | undefined) => ({
       method: 'DELETE',
       body,
       bodyContentType,
+      withTraceId: withTraceId ?? true,
       token: getToken?.(),
+    }),
+  putToS3: <T>(url: string, file: File) =>
+    request<T>('', {
+      method: 'PUT',
+      body: file,
+      bodyContentType: 'blob',
+      withTraceId: false,
+      fullUrl: url,
+      headersOverride: {
+        'Content-Type': file.type || 'application/octet-stream',
+        'x-amz-tagging':
+          'Service=techcourse&Role=techcourse-etc&ProjectTeam=PhotoGather',
+      },
     }),
 });
 
-export const http = createHttpClient();
-export const authHttp = createHttpClient(() => CookieUtils.get('access') ?? '');
+export const http = createHttpClient({});
+export const authHttp = createHttpClient({
+  getToken: () => CookieUtils.get('access') ?? '',
+});
