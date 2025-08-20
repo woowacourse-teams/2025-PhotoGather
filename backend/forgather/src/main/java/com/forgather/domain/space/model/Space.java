@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import com.forgather.domain.guest.model.Guest;
 import com.forgather.domain.model.BaseTimeEntity;
 import com.forgather.global.auth.model.Host;
 import com.forgather.global.auth.model.SpaceHostMap;
@@ -17,8 +18,10 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.PostLoad;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
+import jakarta.persistence.Transient;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -47,6 +50,18 @@ public class Space extends BaseTimeEntity {
     @Column(name = "opened_at", nullable = false)
     private LocalDateTime openedAt;
 
+    @OneToMany(mappedBy = "space")
+    private List<Guest> guests = new ArrayList<>();
+
+    @OneToMany(mappedBy = "space")
+    private List<SpaceContent> contents = new ArrayList<>();
+
+    @Transient
+    private long guestCount = 0;
+
+    @Transient
+    private long photoCount = 0;
+
     public Space(Host host, String code, String name, int validHours, LocalDateTime openedAt) {
         validate(code, name, validHours, openedAt);
         spaceHostMap.add(new SpaceHostMap(this, host));
@@ -54,6 +69,14 @@ public class Space extends BaseTimeEntity {
         this.name = name;
         this.openedAt = openedAt;
         this.validHours = validHours;
+    }
+
+    @PostLoad
+    private void postLoad() {
+        this.guestCount = guests.size();
+        this.photoCount = contents.stream()
+            .filter(content -> content instanceof Photo)
+            .count();
     }
 
     public void validateExpiration(LocalDateTime currentDateTime) {
@@ -171,5 +194,20 @@ public class Space extends BaseTimeEntity {
     @Override
     public int hashCode() {
         return Objects.hashCode(id);
+    }
+
+    public void validateCode(String code) {
+        if (!this.code.equals(code)) {
+            throw new IllegalArgumentException("스페이스 코드가 잘못되었습니다.");
+        }
+    }
+
+    public void validateGuest(Guest guest) {
+        if (guest == null) {
+            throw new IllegalArgumentException("게스트 정보가 없습니다.");
+        }
+        if (guest.getSpace() == null || !Objects.equals(guest.getSpace().getId(), this.id)) {
+            throw new IllegalArgumentException("해당 게스트는 이 스페이스에 속하지 않습니다. 게스트 ID: " + guest.getId() + ", 스페이스 ID: " + this.id);
+        }
     }
 }

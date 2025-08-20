@@ -1,4 +1,4 @@
-import rocketIcon from '@assets/images/rocket.png';
+import messageIcon from '@assets/images/message.png';
 import { useNavigate } from 'react-router-dom';
 import { ReactComponent as ArrowUpSvg } from '../../../@assets/icons/upwardArrow.svg';
 import FloatingActionButton from '../../../components/@common/buttons/floatingActionButton/FloatingActionButton';
@@ -95,19 +95,19 @@ const ImageUploadPage = () => {
 
   const loadingContents = [
     {
-      icon: { src: rocketIcon, alt: '데모 페이지 아이콘' },
+      icon: { src: messageIcon, alt: '데모 페이지 아이콘' },
       description: '추억 담는 중',
     },
     {
-      icon: { src: rocketIcon, alt: '데모 페이지 아이콘' },
+      icon: { src: messageIcon, alt: '데모 페이지 아이콘' },
       description: '선물 상자 포장하는 중',
     },
     {
-      icon: { src: rocketIcon, alt: '데모 페이지 아이콘' },
+      icon: { src: messageIcon, alt: '데모 페이지 아이콘' },
       description: '배달 가는 중',
     },
     {
-      icon: { src: rocketIcon, alt: '데모 페이지 아이콘' },
+      icon: { src: messageIcon, alt: '데모 페이지 아이콘' },
       description: '당신에게 전달 중',
     },
   ];
@@ -117,7 +117,11 @@ const ImageUploadPage = () => {
       {isEarlyTime && <EarlyPage openedAt={spaceInfo.openedAt} />}
       {isSpaceExpired && <ExpiredPage />}
       {isUploading && (
-        <LoadingLayout loadingContents={loadingContents} percentage={0} />
+        <LoadingLayout
+          loadingContents={loadingContents}
+          totalAmount={10}
+          currentAmount={9}
+        />
       )}
       <S.ScrollTopAnchor ref={scrollTopTriggerRef} />
       <SpaceHeader title={spaceName} timer={leftTime} />

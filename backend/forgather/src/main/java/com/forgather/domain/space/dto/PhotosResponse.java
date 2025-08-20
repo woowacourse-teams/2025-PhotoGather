@@ -32,7 +32,7 @@ public record PhotosResponse(
         );
     }
 
-    public record InnerPhoto(
+    private record InnerPhoto(
 
         @Schema(description = "사진 ID", example = "1")
         Long id,

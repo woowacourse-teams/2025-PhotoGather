@@ -62,10 +62,14 @@ const useKakaoAuth = () => {
 
         if (!authResponse || !authResponse.data) return;
 
-        CookieUtils.set('access', authResponse.data.accessToken);
-        CookieUtils.set('refresh', authResponse.data.refreshToken);
+        CookieUtils.set('access', authResponse.data.accessToken, { path: '/' });
+        CookieUtils.set('refresh', authResponse.data.refreshToken, {
+          path: '/',
+        });
 
-        navigate('/');
+        setTimeout(() => {
+          navigate('/');
+        }, 0);
       },
       errorActions: ['toast', 'redirect'],
       context: {
@@ -77,9 +81,11 @@ const useKakaoAuth = () => {
   };
 
   const handleLogout = async () => {
-    CookieUtils.delete('access_token');
-    CookieUtils.delete('refresh_token');
-    location.reload();
+    CookieUtils.delete('access');
+    CookieUtils.delete('refresh');
+    setTimeout(() => {
+      location.reload();
+    }, 0);
   };
 
   return { handleKakaoLogin, getAuth, handleLogout };

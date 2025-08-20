@@ -1,10 +1,16 @@
 package com.forgather.domain.space.service;
 
+import static com.forgather.domain.space.dto.DownloadUrlsResponse.DownloadUrl;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.nio.file.Path;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,9 +19,12 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.FileSystemUtils;
 import org.springframework.util.StringUtils;
 
+import com.forgather.domain.guest.model.Guest;
+import com.forgather.domain.guest.repository.GuestRepository;
 import com.forgather.domain.space.dto.DeletePhotosRequest;
 import com.forgather.domain.space.dto.DownloadPhotoResponse;
 import com.forgather.domain.space.dto.DownloadPhotosRequest;
+import com.forgather.domain.space.dto.DownloadUrlsResponse;
 import com.forgather.domain.space.dto.PhotoResponse;
 import com.forgather.domain.space.dto.PhotosResponse;
 import com.forgather.domain.space.dto.SaveUploadedPhotoRequest;
@@ -34,10 +43,11 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class PhotoService {
 
+    private final Path downloadTempPath;
     private final PhotoRepository photoRepository;
     private final SpaceRepository spaceRepository;
     private final ContentsStorage contentsStorage;
-    private final Path downloadTempPath;
+    private final GuestRepository guestRepository;
 
     public PhotoResponse get(String spaceCode, Long photoId, Host host) {
         Space space = spaceRepository.getUnexpiredSpaceByCode(spaceCode);
@@ -55,10 +65,13 @@ public class PhotoService {
     }
 
     @Transactional
-    public void saveUploadedPhotos(String spaceCode, SaveUploadedPhotoRequest request) {
+    public void saveUploadedPhotos(String spaceCode, SaveUploadedPhotoRequest request, Long guestId) {
         Space space = spaceRepository.getUnexpiredSpaceByCode(spaceCode);
+        Guest guest = guestRepository.getById(guestId);
+        space.validateGuest(guest);
+
         List<Photo> photos = request.uploadedPhotos().stream()
-            .map(uploadedPhoto -> uploadedPhoto.toEntity(space, contentsStorage.getRootDirectory()))
+            .map(uploadedPhoto -> uploadedPhoto.toEntity(space, guest, contentsStorage.getRootDirectory()))
             .toList();
         photoRepository.saveAll(photos);
     }
@@ -108,6 +121,64 @@ public class PhotoService {
         File zipFile = ZipGenerator.generate(downloadTempPath, spaceContents, spaceCode);
         FileSystemUtils.deleteRecursively(spaceContents);
         return zipFile;
+    }
+
+    public DownloadUrlsResponse getDownloadUrl(String spaceCode, Long photoId, Host host) {
+        Space space = spaceRepository.getUnexpiredSpaceByCode(spaceCode);
+        space.validateHost(host);
+        Photo photo = photoRepository.getById(photoId);
+        photo.validateSpace(space);
+
+        URL downloadUrl = contentsStorage.issueDownloadUrl(photo.getPath());
+        return new DownloadUrlsResponse(List.of(DownloadUrl.from(photo.getOriginalName(), downloadUrl.toString())));
+    }
+
+    public DownloadUrlsResponse getSelectedDownloadUrls(String spaceCode, DownloadPhotosRequest request, Host host) {
+        Space space = spaceRepository.getUnexpiredSpaceByCode(spaceCode);
+        space.validateHost(host);
+        List<Photo> photos = photoRepository.findAllByIdIn(request.photoIds());
+        if (photos.isEmpty()) {
+            throw new IllegalStateException("현재 다운로드할 수 있는 사진이 존재하지 않습니다.");
+        }
+        photos.forEach(photo -> photo.validateSpace(space));
+
+        return getDownloadUrlsResponse(photos);
+    }
+
+    public DownloadUrlsResponse getAllDownloadUrls(String spaceCode, Host host) {
+        Space space = spaceRepository.getUnexpiredSpaceByCode(spaceCode);
+        space.validateHost(host);
+        List<Photo> photos = photoRepository.findAllBySpace(space);
+        if (photos.isEmpty()) {
+            throw new IllegalStateException("현재 다운로드할 수 있는 사진이 존재하지 않습니다.");
+        }
+        photos.forEach(photo -> photo.validateSpace(space));
+
+        return getDownloadUrlsResponse(photos);
+    }
+
+    private DownloadUrlsResponse getDownloadUrlsResponse(List<Photo> photos) {
+        Map<String, String> downloadUrls = new LinkedHashMap<>();
+        Map<String, Integer> originalNameCounts = new HashMap<>();
+        for (Photo photo : photos) {
+            String originalName = photo.getOriginalName();
+            int extensionStartIndex = originalName.lastIndexOf('.');
+            String baseName = originalName.substring(0, extensionStartIndex);
+            String extension = originalName.substring(extensionStartIndex + 1);
+            if (originalNameCounts.containsKey(originalName)) {
+                int count = originalNameCounts.get(originalName);
+                originalNameCounts.put(originalName, count + 1);
+                baseName = String.format("%s(%d)", baseName, originalNameCounts.get(originalName));
+            } else {
+                originalNameCounts.put(originalName, 0);
+            }
+            String downloadUrl = contentsStorage.issueDownloadUrl(photo.getPath()).toString();
+            downloadUrls.put(String.format("%s.%s", baseName, extension), downloadUrl);
+        }
+
+        return new DownloadUrlsResponse(downloadUrls.entrySet().stream()
+            .map(entry -> DownloadUrl.from(entry.getKey(), entry.getValue()))
+            .toList());
     }
 
     @Transactional
