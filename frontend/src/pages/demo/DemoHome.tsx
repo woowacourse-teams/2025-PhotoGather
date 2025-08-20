@@ -27,7 +27,7 @@ const DemoHome = () => {
     <S.Wrapper>
       <S.Icon src={rocketImage} alt="데모 페이지 아이콘"></S.Icon>
       <S.Title>Forgather DEMO</S.Title>
-      {CookieUtils.has('access_token') ? (
+      {CookieUtils.has('access') ? (
         <Button text="로그아웃" variant="secondary" onClick={handleLogout} />
       ) : (
         <KakaoLoginButton onClick={handleKakaoLogin} />
