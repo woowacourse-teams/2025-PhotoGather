@@ -6,6 +6,7 @@ import type {
   requestOptionsType,
 } from '../types/api.type';
 import { HttpError } from '../types/error.type';
+import { CookieUtils } from '../utils/CookieUtils';
 import { makeSentryRequestContext } from '../utils/sentry/sentryRequestContext';
 import { BASE_URL } from './config';
 import { createBody } from './createBody';
@@ -158,4 +159,4 @@ const createHttpClient = (getToken?: () => string | undefined) => ({
 });
 
 export const http = createHttpClient();
-export const authHttp = createHttpClient(() => '1234567890');
+export const authHttp = createHttpClient(() => CookieUtils.get('access') ?? '');
