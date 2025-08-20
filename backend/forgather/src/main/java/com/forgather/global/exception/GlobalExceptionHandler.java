@@ -20,7 +20,9 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleIllegalException(RuntimeException e) {
         var errorResponse = ErrorResponse.from(e.getMessage());
         log.atWarn().log(e.getClass() + ": " + e.getMessage());
-        return ResponseEntity.badRequest().body(errorResponse);
+        return ResponseEntity.badRequest()
+            .contentType(org.springframework.http.MediaType.APPLICATION_JSON)
+            .body(errorResponse);
     }
 
     @ExceptionHandler(MissingRequestCookieException.class)
@@ -36,7 +38,9 @@ public class GlobalExceptionHandler {
         log.atError()
             .setCause(e)
             .log("500 INTERNAL SERVER ERROR");
-        return ResponseEntity.internalServerError().body(errorResponse);
+        return ResponseEntity.internalServerError()
+            .contentType(org.springframework.http.MediaType.APPLICATION_JSON)
+            .body(errorResponse);
     }
 
     // 정적 리소스를 찾지 못해서 발생하는 예외는, WARN 레벨로 로깅. (favicon 때문에 항상 뜸)
