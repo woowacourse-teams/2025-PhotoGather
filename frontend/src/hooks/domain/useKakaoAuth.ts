@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom';
+import { DOMAIN } from '../../apis/config';
 import { authService } from '../../apis/services/auth.service';
 import { CookieUtils } from '../../utils/CookieUtils';
 import useError from '../@common/useError';
@@ -6,7 +7,7 @@ import useError from '../@common/useError';
 const useKakaoAuth = () => {
   const navigate = useNavigate();
   const { tryTask, tryFetch } = useError();
-  const REQUEST_URI = 'http://localhost:3000/auth/login/kakao';
+  const REQUEST_URI = `${DOMAIN}/auth/login/kakao`;
 
   const createGetKakaoCodeUrl = (clientId: string, redirectUri: string) =>
     `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${clientId}&redirect_uri=${redirectUri}`;

@@ -4,10 +4,16 @@ const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const DotenvPlugin = require('dotenv-webpack');
 
 module.exports = (_, argv) => {
-  const isProduction = argv.mode === 'production';
+  let envFile = '.env.local';
+
+  if (argv.mode === 'development') {
+    envFile = '.env.development';
+  }
+  if (argv.mode === 'production') {
+    envFile = '.env.production';
+  }
 
   return {
-    mode: isProduction ? 'production' : 'development',
     entry: './src/index.tsx',
     output: {
       filename: '[name].[contenthash].js',
@@ -75,7 +81,7 @@ module.exports = (_, argv) => {
     },
     plugins: [
       new DotenvPlugin({
-        path: isProduction ? './.env.production' : './.env',
+        path: envFile,
       }),
       new HtmlWebpackPlugin({
         template: './public/index.html',
