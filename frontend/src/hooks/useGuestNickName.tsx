@@ -5,7 +5,6 @@ import InputModal from '../components/@common/modal/inputModal/InputModal';
 import { FAILED_GUEST_ID } from '../constants/errors';
 import { useOverlay } from '../contexts/OverlayProvider';
 import { createRandomNickName } from '../utils/createRandomNickName';
-import { validateGuestId } from '../validators/guest.validator';
 import useError from './@common/useError';
 
 interface UseGuestNickNameProps {
@@ -14,11 +13,13 @@ interface UseGuestNickNameProps {
 
 const useGuestNickName = ({ spaceCode }: UseGuestNickNameProps) => {
   const overlay = useOverlay();
-  const { tryFetch, tryTask } = useError();
+  const { tryFetch } = useError();
 
   const [nickName, setNickName] = useState('');
 
-  const guestId = Number(localStorage.getItem('guestId'));
+  const rawGuestId = localStorage.getItem('guestId');
+  const guestId: number = rawGuestId ? Number(rawGuestId) : FAILED_GUEST_ID;
+
   const mode = guestId || nickName.length > 0 ? 'edit' : 'create';
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: 초기 모달 표시
@@ -93,28 +94,10 @@ const useGuestNickName = ({ spaceCode }: UseGuestNickNameProps) => {
     }
   };
 
-  const tryValidateGuestId = () => {
-    const taskResult = tryTask({
-      task: () => validateGuestId(),
-      errorActions: ['console'],
-      context: {
-        console: {
-          text: 'guestId가 없습니다. create 요청이 필요합니다.',
-        },
-      },
-    });
-
-    return taskResult;
-  };
-
   const tryGetNickName = async () => {
-    const validateResult = tryValidateGuestId();
-    if (!validateResult.success) return;
-    const validGuestId = validateResult.data;
-
     const taskResult = await tryFetch({
       task: async () => {
-        const response = await guestService.getGuestId(spaceCode, validGuestId);
+        const response = await guestService.getGuestId(spaceCode, guestId);
         if (!response.success) return;
 
         const guestNickName = response?.data?.name;
@@ -131,7 +114,7 @@ const useGuestNickName = ({ spaceCode }: UseGuestNickNameProps) => {
     return taskResult.data ?? FAILED_GUEST_ID;
   };
 
-  const tryCreateNickName = async (): Promise<number> => {
+  const tryCreateNickName = async () => {
     const taskResult = await tryFetch({
       task: async () => {
         const response = await guestService.createNickName(spaceCode, {
@@ -139,12 +122,12 @@ const useGuestNickName = ({ spaceCode }: UseGuestNickNameProps) => {
         });
         if (!response.success) return;
 
-        const guestId = response.data?.id;
-        if (guestId) {
-          storageGuestNickName(String(guestId));
+        const newGuestId = response.data?.id;
+        if (newGuestId) {
+          storageGuestNickName(String(newGuestId));
         }
 
-        return guestId;
+        return newGuestId;
       },
       errorActions: ['toast'],
       context: {
@@ -158,27 +141,19 @@ const useGuestNickName = ({ spaceCode }: UseGuestNickNameProps) => {
   };
 
   const tryChangeNickName = async (nickName: string) => {
-    const validateResult = tryValidateGuestId();
-    if (!validateResult.success) return FAILED_GUEST_ID;
-    const validGuestId = validateResult.data;
-
     const taskResult = await tryFetch({
       task: async () => {
-        const response = await guestService.patchNickName(
-          spaceCode,
-          validGuestId,
-          {
-            name: nickName,
-          },
-        );
+        const response = await guestService.patchNickName(spaceCode, guestId, {
+          name: nickName,
+        });
         if (!response.success) return;
 
-        const guestId = response.data?.id;
-        if (guestId) {
-          storageGuestNickName(String(guestId));
+        const newGuestId = response.data?.id;
+        if (newGuestId) {
+          storageGuestNickName(String(newGuestId));
         }
 
-        return guestId;
+        return newGuestId;
       },
       errorActions: ['toast'],
       context: {
