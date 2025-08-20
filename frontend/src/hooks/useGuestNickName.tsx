@@ -18,12 +18,13 @@ const useGuestNickName = ({ spaceCode }: UseGuestNickNameProps) => {
   const [nickName, setNickName] = useState('');
 
   const guestId = localStorage.getItem('guestId');
-  const mode = guestId || nickName.length !== 0 ? 'edit' : 'create';
+  const mode = guestId ? 'edit' : 'create';
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: 초기 모달 표시
   useEffect(() => {
     if (guestId) {
       // TODO : 게스트 닉네임 fetch 로직 넣기
+      setNickName('예시 닉네임');
     }
     if (mode === 'create') {
       showNickNameModal('create');
