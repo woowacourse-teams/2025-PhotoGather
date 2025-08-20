@@ -1,3 +1,4 @@
+import * as exifr from 'exifr';
 import { useState } from 'react';
 import { photoService } from '../../apis/services/photo.service';
 import { CONSTRAINTS } from '../../constants/constraints';
@@ -9,7 +10,7 @@ import {
 } from '../../validators/photo.validator';
 import useError from './useError';
 
-interface UseFileUploadProps {
+interface UseLocalFileProps {
   spaceCode: string;
   fileType: string;
   onUploadSuccess?: () => void;
@@ -19,7 +20,7 @@ const useLocalFile = ({
   spaceCode,
   fileType,
   onUploadSuccess,
-}: UseFileUploadProps) => {
+}: UseLocalFileProps) => {
   const [localFiles, setLocalFiles] = useState<LocalFile[]>([]);
   const previewFile = localFiles.map((file) => ({
     id: file.id,
@@ -27,13 +28,24 @@ const useLocalFile = ({
   }));
   const [isUploading, setIsUploading] = useState(false);
 
-  const addPreviewUrlsFromFiles = (files: File[]) => {
+  const extractDateTimeOriginal = async (file: File) => {
+    const metadata = await exifr.parse(file, ['DateTimeOriginal']);
+    return metadata?.DateTimeOriginal
+      ? (metadata.DateTimeOriginal as Date).toISOString()
+      : null;
+  };
+
+  const addPreviewUrlsFromFiles = async (files: File[]) => {
     const startIndex = localFiles.length;
-    const tmpFiles = files.map((file, index) => ({
-      id: startIndex + index,
-      originFile: file,
-      previewUrl: URL.createObjectURL(file),
-    }));
+
+    const tmpFiles = await Promise.all(
+      files.map(async (file, index) => ({
+        id: startIndex + index,
+        originFile: file,
+        capturedAt: await extractDateTimeOriginal(file),
+        previewUrl: URL.createObjectURL(file),
+      })),
+    );
 
     setLocalFiles((prev) => [...prev, ...tmpFiles]);
   };
@@ -66,6 +78,15 @@ const useLocalFile = ({
 
     const limitedValidFiles = validFiles.slice(0, CONSTRAINTS.MAX_FILE_COUNT);
     addPreviewUrlsFromFiles(limitedValidFiles);
+  };
+
+  const deleteFile = (id: number) => {
+    setLocalFiles((prev) => {
+      const updated = prev.filter((item) => item.id !== id);
+      const deleted = prev.find((item) => item.id === id);
+      if (deleted) URL.revokeObjectURL(deleted.previewUrl);
+      return updated;
+    });
   };
 
   const handleFilesUploadClick = (
@@ -117,16 +138,8 @@ const useLocalFile = ({
     });
   };
 
-  const deleteFile = (id: number) => {
-    setLocalFiles((prev) => {
-      const updated = prev.filter((item) => item.id !== id);
-      const deleted = prev.find((item) => item.id === id);
-      if (deleted) URL.revokeObjectURL(deleted.previewUrl);
-      return updated;
-    });
-  };
-
   return {
+    localFiles,
     previewFile,
     isUploading,
     submitFileUpload,
