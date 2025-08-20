@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { photoService } from '../../apis/services/photo.service';
 import { CONSTRAINTS } from '../../constants/constraints';
-import type { PreviewFile, UploadFile } from '../../types/file.type';
+import type { LocalFile } from '../../types/file.type';
 import { isValidFileType } from '../../utils/isValidFileType';
 import {
   checkInvalidFileType,
@@ -20,24 +20,22 @@ const useLocalFile = ({
   fileType,
   onUploadSuccess,
 }: UseFileUploadProps) => {
-  const [uploadFiles, setUploadFiles] = useState<UploadFile[]>([]);
-  const [previewData, setPreviewData] = useState<PreviewFile[]>([]);
+  const [localFiles, setLocalFiles] = useState<LocalFile[]>([]);
+  const previewFile = localFiles.map((file) => ({
+    id: file.id,
+    previewUrl: file.previewUrl,
+  }));
   const [isUploading, setIsUploading] = useState(false);
 
   const addPreviewUrlsFromFiles = (files: File[]) => {
-    const startIndex = previewData.length;
-    const urls = files.map((file, index) => ({
-      id: startIndex + index,
-      path: URL.createObjectURL(file),
-    }));
-
+    const startIndex = localFiles.length;
     const tmpFiles = files.map((file, index) => ({
       id: startIndex + index,
       originFile: file,
+      previewUrl: URL.createObjectURL(file),
     }));
 
-    setPreviewData((prev) => [...prev, ...urls]);
-    setUploadFiles((prev) => [...prev, ...tmpFiles]);
+    setLocalFiles((prev) => [...prev, ...tmpFiles]);
   };
 
   const splitValidFilesByType = (files: File[], type: string) => {
@@ -81,15 +79,14 @@ const useLocalFile = ({
   };
 
   const clearFiles = () => {
-    previewData.forEach((data) => URL.revokeObjectURL(data.path));
-    setUploadFiles([]);
-    setPreviewData([]);
+    localFiles.forEach((data) => URL.revokeObjectURL(data.previewUrl));
+    setLocalFiles([]);
   };
 
   const { tryTask, tryFetch } = useError();
 
   const fetchUploadFiles = async () => {
-    const files = uploadFiles.map((file) => file.originFile);
+    const files = localFiles.map((file) => file.originFile);
     await photoService.uploadFiles(spaceCode, files);
   };
 
@@ -121,21 +118,16 @@ const useLocalFile = ({
   };
 
   const deleteFile = (id: number) => {
-    setPreviewData((prev) => {
+    setLocalFiles((prev) => {
       const updated = prev.filter((item) => item.id !== id);
       const deleted = prev.find((item) => item.id === id);
-      if (deleted) URL.revokeObjectURL(deleted.path);
+      if (deleted) URL.revokeObjectURL(deleted.previewUrl);
       return updated;
-    });
-
-    setUploadFiles((prev) => {
-      return prev.filter((file) => file.id !== id);
     });
   };
 
   return {
-    uploadFiles,
-    previewData,
+    previewFile,
     isUploading,
     submitFileUpload,
     deleteFile,

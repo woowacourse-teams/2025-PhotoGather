@@ -59,7 +59,7 @@ const PhotoModal = (props: PhotoModalProps) => {
       fetchPhoto();
       return;
     }
-    setDisplayPath(props.previewFile.path);
+    setDisplayPath(props.previewFile.previewUrl);
   }, []);
 
   const fetchPhoto = async () => {

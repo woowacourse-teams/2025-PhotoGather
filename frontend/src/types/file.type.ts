@@ -1,9 +1,10 @@
-export interface UploadFile {
+export interface LocalFile {
   id: number;
   originFile: File;
+  previewUrl: string;
 }
 
 export interface PreviewFile {
   id: number;
-  path: string;
+  previewUrl: string;
 }

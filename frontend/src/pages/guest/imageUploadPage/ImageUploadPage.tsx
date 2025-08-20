@@ -47,7 +47,7 @@ const ImageUploadPage = () => {
   const spaceName = spaceInfo?.name ?? '';
   const overlay = useOverlay();
   const {
-    previewData,
+    previewFile,
     isUploading,
     handleFilesUploadClick,
     handleFilesDrop,
@@ -59,7 +59,7 @@ const ImageUploadPage = () => {
     onUploadSuccess: navigateToUploadComplete,
   });
 
-  const hasImages = Array.isArray(previewData) && previewData.length > 0;
+  const hasImages = Array.isArray(previewFile) && previewFile.length > 0;
   const { targetRef: hideBlurAreaTriggerRef, isIntersecting: isAtPageBottom } =
     useIntersectionObserver({});
   const { targetRef: scrollTopTriggerRef, isIntersecting: isAtPageTop } =
@@ -78,7 +78,7 @@ const ImageUploadPage = () => {
   };
 
   const handleImageClick = async (photoId: number) => {
-    const selectedPhoto = previewData.find((photo) => photo.id === photoId);
+    const selectedPhoto = previewFile.find((photo) => photo.id === photoId);
     if (!selectedPhoto) return;
 
     await overlay(
@@ -151,10 +151,10 @@ const ImageUploadPage = () => {
             <FloatingActionButton
               label={
                 <HighlightText
-                  text={`사진 ${previewData.length}장 업로드하기`}
+                  text={`사진 ${previewFile.length}장 업로드하기`}
                   fontStyle="buttonPrimary"
                   highlightColorStyle="gray04"
-                  highlightTextArray={[`사진 ${previewData.length}장`]}
+                  highlightTextArray={[`사진 ${previewFile.length}장`]}
                 />
               }
               onClick={submitFileUpload}
@@ -162,7 +162,7 @@ const ImageUploadPage = () => {
             />
           </S.ButtonContainer>
           <GuestImageGrid
-            photoData={previewData}
+            photoData={previewFile}
             rowImageAmount={3}
             onImageClick={handleImageClick}
             onDeleteClick={(id: number) => {

@@ -47,7 +47,7 @@ const GuestImageElement = ({
       onKeyDown={handleEnterKeyDown}
     >
       <C.Image
-        src={data.path}
+        src={data.previewUrl}
         alt={alt}
         onError={handleError}
         className="clarity-mask-photo"
