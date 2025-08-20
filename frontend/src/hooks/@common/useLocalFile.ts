@@ -15,7 +15,7 @@ interface UseFileUploadProps {
   onUploadSuccess?: () => void;
 }
 
-const useFileUpload = ({
+const useLocalFile = ({
   spaceCode,
   fileType,
   onUploadSuccess,
@@ -144,4 +144,4 @@ const useFileUpload = ({
   };
 };
 
-export default useFileUpload;
+export default useLocalFile;

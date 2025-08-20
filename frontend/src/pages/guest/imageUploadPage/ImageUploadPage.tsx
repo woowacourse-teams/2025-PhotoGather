@@ -11,9 +11,9 @@ import LoadingLayout from '../../../components/layout/loadingLayout/LoadingLayou
 import UploadBox from '../../../components/uploadBox/UploadBox';
 import { ROUTES } from '../../../constants/routes';
 import { useOverlay } from '../../../contexts/OverlayProvider';
-import useFileUpload from '../../../hooks/@common/useFileUpload';
 import useIntersectionObserver from '../../../hooks/@common/useIntersectionObserver';
 import useLeftTimer from '../../../hooks/@common/useLeftTimer';
+import useLocalFile from '../../../hooks/@common/useLocalFile';
 import useSpaceCodeFromPath from '../../../hooks/useSpaceCodeFromPath';
 import useSpaceInfo from '../../../hooks/useSpaceInfo';
 import { ScrollableBlurArea } from '../../../styles/@common/ScrollableBlurArea';
@@ -53,7 +53,7 @@ const ImageUploadPage = () => {
     handleFilesDrop,
     submitFileUpload,
     deleteFile,
-  } = useFileUpload({
+  } = useLocalFile({
     spaceCode: spaceCode ?? '',
     fileType: 'image',
     onUploadSuccess: navigateToUploadComplete,
