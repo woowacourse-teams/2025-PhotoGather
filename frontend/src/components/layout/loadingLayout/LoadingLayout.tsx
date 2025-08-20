@@ -1,5 +1,5 @@
 import * as C from '../../../styles/@common/BackDrop.styles';
-import SparkleLightTrail from '../../@common/sparkleLightTrail/SparkleLightTrail';
+import LinearProgressBar from '../../progressBar/linear/LinearProgressBar';
 import * as S from './LoadingLayout.styles';
 
 interface LoadingLayoutProps {
@@ -10,8 +10,10 @@ interface LoadingLayoutProps {
     /** 로딩 텍스트 리스트 */
     description: string;
   }[];
-  /** 로딩 퍼센트 */
-  percentage: number;
+  /** 현재 진행된 양 */
+  currentAmount: number;
+  /** 전체 진행해야 할 양 */
+  totalAmount: number;
 }
 
 interface IconProps {
@@ -19,20 +21,20 @@ interface IconProps {
   alt: string;
 }
 
-const LoadingLayout = ({ loadingContents, percentage }: LoadingLayoutProps) => {
-  const interval = 100 / loadingContents.length;
-
-  const loadingContentMapping = new Map(
-    loadingContents.map(({ icon, description }, index) => [
-      index,
-      { icon, description },
-    ]),
-  );
+const LoadingLayout = ({
+  loadingContents,
+  currentAmount,
+  totalAmount,
+}: LoadingLayoutProps) => {
+  const progress =
+    totalAmount > 0 ? Math.min(currentAmount / totalAmount, 1) : 0;
+  const percentage = Math.round(progress * 100);
 
   const currentRange = Math.min(
-    Math.floor(percentage / interval),
+    Math.floor(progress * loadingContents.length),
     loadingContents.length - 1,
   );
+  const currentContent = loadingContents[currentRange];
 
   return (
     <C.BackDrop>
@@ -40,14 +42,13 @@ const LoadingLayout = ({ loadingContents, percentage }: LoadingLayoutProps) => {
         <S.ContentContainer>
           <S.IconTextContainer>
             <S.Icon
-              src={loadingContentMapping.get(currentRange)?.icon.src}
-              alt={loadingContentMapping.get(currentRange)?.icon.alt}
+              src={currentContent.icon.src}
+              alt={currentContent.icon.alt}
             />
-            <S.Text>
-              {loadingContentMapping.get(currentRange)?.description}
-            </S.Text>
+            <S.Text>{currentContent.description}</S.Text>
           </S.IconTextContainer>
           <S.Percentage>{percentage}%</S.Percentage>
+          <LinearProgressBar percentage={percentage} />
         </S.ContentContainer>
       </S.Container>
     </C.BackDrop>

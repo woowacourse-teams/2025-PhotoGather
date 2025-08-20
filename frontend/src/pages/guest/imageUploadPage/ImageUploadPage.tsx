@@ -117,7 +117,11 @@ const ImageUploadPage = () => {
       {isEarlyTime && <EarlyPage openedAt={spaceInfo.openedAt} />}
       {isSpaceExpired && <ExpiredPage />}
       {isUploading && (
-        <LoadingLayout loadingContents={loadingContents} percentage={0} />
+        <LoadingLayout
+          loadingContents={loadingContents}
+          totalAmount={10}
+          currentAmount={9}
+        />
       )}
       <S.ScrollTopAnchor ref={scrollTopTriggerRef} />
       <SpaceHeader title={spaceName} timer={leftTime} />

@@ -221,7 +221,11 @@ const SpaceHome = () => {
       {/* TODO: 버튼 지우기 */}
       {isEarlyTime && <EarlyPage openedAt={spaceInfo.openedAt} />}
       {(isDownloading || isDeleting) && (
-        <LoadingLayout loadingContents={loadingContents} percentage={0} />
+        <LoadingLayout
+          loadingContents={loadingContents}
+          totalAmount={10}
+          currentAmount={9}
+        />
       )}
       {isSpaceExpired && <ExpiredPage />}
       <S.InfoContainer ref={scrollTopTriggerRef}>
