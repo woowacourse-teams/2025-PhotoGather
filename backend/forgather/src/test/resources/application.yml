@@ -59,3 +59,8 @@ app:
   download:
     temp:
       path: ./temp
+
+jwt:
+  access-token-expiration: 7776000 # 90 days
+  refresh-token-expiration: 7776000 # 90 days
+  secret: mokohistaleopostymingobluelunapongjumokohistaleopostymingobluelunapongjumokohistaleopostymingobluelunapongju

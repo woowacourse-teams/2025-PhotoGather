@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.FileSystemUtils;
 import org.springframework.util.StringUtils;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.forgather.domain.guest.model.Guest;
 import com.forgather.domain.guest.repository.GuestRepository;
@@ -21,13 +20,13 @@ import com.forgather.domain.space.dto.DownloadPhotoResponse;
 import com.forgather.domain.space.dto.DownloadPhotosRequest;
 import com.forgather.domain.space.dto.PhotoResponse;
 import com.forgather.domain.space.dto.PhotosResponse;
+import com.forgather.domain.space.dto.SaveUploadedPhotoRequest;
 import com.forgather.domain.space.model.Photo;
-import com.forgather.domain.space.model.PhotoMetaData;
 import com.forgather.domain.space.model.Space;
 import com.forgather.domain.space.repository.PhotoRepository;
 import com.forgather.domain.space.repository.SpaceRepository;
-import com.forgather.domain.space.util.MetaDataExtractor;
 import com.forgather.domain.space.util.ZipGenerator;
+import com.forgather.global.auth.model.Host;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -41,60 +40,45 @@ public class PhotoService {
     private final AwsS3Cloud awsS3Cloud;
     private final PhotoRepository photoRepository;
     private final SpaceRepository spaceRepository;
+    private final ContentsStorage contentsStorage;
+    private final Path downloadTempPath;
     private final GuestRepository guestRepository;
 
-    public PhotoResponse get(String spaceCode, Long photoId) {
+    public PhotoResponse get(String spaceCode, Long photoId, Host host) {
         Space space = spaceRepository.getUnexpiredSpaceByCode(spaceCode);
+        space.validateHost(host);
         Photo photo = photoRepository.getById(photoId);
         photo.validateSpace(space);
         return PhotoResponse.from(photo);
     }
 
-    public PhotosResponse getAll(String spaceCode, Pageable pageable, Long hostId) {
-        // TODO: Space가 HostId의 소유인지 검증
+    public PhotosResponse getAll(String spaceCode, Pageable pageable, Host host) {
         Space space = spaceRepository.getUnexpiredSpaceByCode(spaceCode);
+        space.validateHost(host);
         Page<Photo> photos = photoRepository.findAllBySpace(space, pageable);
         return PhotosResponse.from(photos);
     }
 
-    /**
-     * TODO
-     * S3 업로드 이후 실패 시 롤백 고려
-     * (MVP아님)
-     */
     @Transactional
-    public void saveAll(String spaceCode, List<MultipartFile> multipartFiles, Long guestId) {
+    public void saveUploadedPhotos(String spaceCode, SaveUploadedPhotoRequest request, Long guestId) {
         Space space = spaceRepository.getUnexpiredSpaceByCode(spaceCode);
         Guest guest = guestRepository.getById(guestId);
 
-        for (MultipartFile multipartFile : multipartFiles) {
-            PhotoMetaData metaData = MetaDataExtractor.extractPhotoMetaData(multipartFile);
-            String uploadedPath = upload(spaceCode, multipartFile);
-            photoRepository.save(new Photo(space, guest, uploadedPath, metaData));
-        }
+        List<Photo> photos = request.uploadedPhotos().stream()
+            .map(uploadedPhoto -> uploadedPhoto.toEntity(space, guest, contentsStorage.getRootDirectory()))
+            .toList();
+        photoRepository.saveAll(photos);
     }
 
-    private String upload(String spaceCode, MultipartFile multipartFile) {
-        try {
-            log.atDebug()
-                .addKeyValue("spaceCode", spaceCode)
-                .addKeyValue("originalName", multipartFile.getOriginalFilename())
-                .log("파일 업로드 시작");
-            return awsS3Cloud.upload(spaceCode, multipartFile);
-        } catch (IOException e) {
-            throw new IllegalArgumentException(
-                "파일 업로드에 실패했습니다. 파일 이름: " + multipartFile.getOriginalFilename(), e);
-        }
-    }
-
-    public File compressSelected(String spaceCode, DownloadPhotosRequest request) throws IOException {
+    public File compressSelected(String spaceCode, DownloadPhotosRequest request, Host host) throws IOException {
         Space space = spaceRepository.getUnexpiredSpaceByCode(spaceCode);
+        space.validateHost(host);
         List<Photo> photos = photoRepository.findAllByIdIn(request.photoIds());
         photos.forEach(photo -> photo.validateSpace(space));
         return compressPhotoFile(spaceCode, photos);
     }
 
-    public DownloadPhotoResponse download(String spaceCode, Long photoId, Long hostId) {
+    public DownloadPhotoResponse download(String spaceCode, Long photoId, Host host) {
         Space space = spaceRepository.getUnexpiredSpaceByCode(spaceCode);
         Photo photo = photoRepository.getById(photoId);
         photo.validateSpace(space);
@@ -102,7 +86,7 @@ public class PhotoService {
         String photoPath = photo.getPath();
         String extension = StringUtils.getFilenameExtension(photoPath);
         String name = String.format("%s-%d.%s", spaceCode, photo.getId(), extension);
-        InputStream photoFile = awsS3Cloud.download(photoPath);
+        InputStream photoFile = contentsStorage.download(photoPath);
         return new DownloadPhotoResponse(extension, name, photoFile);
     }
 
@@ -111,9 +95,9 @@ public class PhotoService {
      * 파일 삭제 트랜잭션 분리
      * 사진 원본 이름 대신 유의미한 이름 변경 추가 논의
      */
-    public File compressAll(String spaceCode, Long hostId) throws IOException {
-        // TODO: Space가 HostId의 소유인지 검증
+    public File compressAll(String spaceCode, Host host) throws IOException {
         Space space = spaceRepository.getUnexpiredSpaceByCode(spaceCode);
+        space.validateHost(host);
         List<Photo> photos = photoRepository.findAllBySpace(space);
         return compressPhotoFile(spaceCode, photos);
     }
@@ -126,7 +110,7 @@ public class PhotoService {
 
     private File compressPhotoFile(String spaceCode, List<Photo> photos) throws IOException {
         List<String> photoPaths = getPhotoPaths(photos);
-        File spaceContents = awsS3Cloud.downloadSelected(downloadTempPath.toString(), spaceCode, photoPaths);
+        File spaceContents = contentsStorage.downloadSelected(downloadTempPath.toString(), spaceCode, photoPaths);
 
         File zipFile = ZipGenerator.generate(downloadTempPath, spaceContents, spaceCode);
         FileSystemUtils.deleteRecursively(spaceContents);
@@ -134,18 +118,20 @@ public class PhotoService {
     }
 
     @Transactional
-    public void delete(String spaceCode, Long photoId) {
+    public void delete(String spaceCode, Long photoId, Host host) {
         Space space = spaceRepository.getUnexpiredSpaceByCode(spaceCode);
+        space.validateHost(host);
         Photo photo = photoRepository.getById(photoId);
         photo.validateSpace(space);
 
         photoRepository.delete(photo);
-        awsS3Cloud.deleteContent(photo.getPath());
+        contentsStorage.deleteContent(photo.getPath());
     }
 
     @Transactional
-    public void deleteSelected(String spaceCode, DeletePhotosRequest request) {
+    public void deleteSelected(String spaceCode, DeletePhotosRequest request, Host host) {
         Space space = spaceRepository.getUnexpiredSpaceByCode(spaceCode);
+        space.validateHost(host);
         List<Photo> photos = photoRepository.findAllByIdIn(request.photoIds());
         photos.forEach(photo -> photo.validateSpace(space));
         List<String> paths = photos.stream()
@@ -153,6 +139,6 @@ public class PhotoService {
             .toList();
 
         photoRepository.deleteAll(photos);
-        awsS3Cloud.deleteSelectedContents(paths);
+        contentsStorage.deleteSelectedContents(paths);
     }
 }
