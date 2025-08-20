@@ -7,6 +7,7 @@ import java.util.List;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingRequestCookieException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -27,7 +28,8 @@ public class GlobalExceptionHandler {
         IllegalStateException.class,
         InvalidDataAccessApiUsageException.class,
         MethodArgumentNotValidException.class,
-        NoResourceFoundException.class
+        NoResourceFoundException.class,
+        HttpRequestMethodNotSupportedException.class
     );
 
     @ExceptionHandler(MissingRequestCookieException.class)
