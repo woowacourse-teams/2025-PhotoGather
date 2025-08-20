@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import { hexToRgba } from '../../utils/hexToRgba';
 
 export const Wrapper = styled.div`
   display: flex;
@@ -11,16 +12,101 @@ export const Wrapper = styled.div`
   background-color: ${({ theme }) => theme.colors.white};
 `;
 
-export const ImageContainer = styled.div`
-  width: 96px;
+export const ImageContainer = styled.div<{
+  $isBlurred?: boolean;
+  $isEarly?: boolean;
+}>`
+  position: relative;
+  width: ${({ $isEarly }) => ($isEarly ? '100%' : '98px')};
   height: 106px;
-  border-radius: 10px 0 0 10px;
+  border-radius: ${({ $isEarly }) => ($isEarly ? '10px' : '10px 0 0 10px')};
+  overflow: hidden;
+  ${({ $isEarly, theme }) =>
+    $isEarly &&
+    `
+    background-color: ${theme.colors.white};
+  `}
+  
+  ${({ $isBlurred, theme }) =>
+    $isBlurred &&
+    `
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: ${hexToRgba(theme.colors.gray06, 0.6)};
+      backdrop-filter: blur(2px);
+    }
+  `}
+  
+  ${({ $isEarly, theme }) =>
+    $isEarly &&
+    `
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: ${hexToRgba(theme.colors.gray06, 0.6)};
+      backdrop-filter: blur(3px);
+    }
+  `}
 `;
 
-export const CardImage = styled.img`
+export const CardImage = styled.img<{
+  $isBlurred?: boolean;
+  $isEarly?: boolean;
+}>`
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: ${({ $isEarly }) => ($isEarly ? 'contain' : 'cover')};
+  ${({ $isBlurred }) =>
+    $isBlurred &&
+    `
+    filter: blur(2px);
+  `}
+`;
+
+export const ImageOverlayText = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: ${({ theme }) => theme.colors.accent};
+  ${({ theme }) => ({ ...theme.typography.captionSmall })};
+  white-space: pre-line;
+  text-align: center;
+  z-index: ${({ theme }) => theme.zIndex.overlayIcon};
+`;
+
+export const EarlyOverlayContainer = styled.div`
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+  z-index: 1;
+  border-radius: 10px;
+`;
+
+export const EarlyOverlayTitle = styled.div`
+  color: ${({ theme }) => theme.colors.white};
+  ${({ theme }) => ({ ...theme.typography.header03 })};
+`;
+
+export const EarlyOverlayDate = styled.div`
+  color: ${({ theme }) => theme.colors.white};
+  ${({ theme }) => ({ ...theme.typography.bodyLarge })};
 `;
 
 export const ContentContainer = styled.div`
