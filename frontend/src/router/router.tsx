@@ -9,8 +9,11 @@ import NotFoundErrorPage from '../pages/error/NotFoundErrorPage';
 import ImageUploadPage from '../pages/guest/imageUploadPage/ImageUploadPage';
 import SharePage from '../pages/guest/sharePage/SharePage';
 import LandingPage from '../pages/landing/LandingPage';
+import LoginPage from '../pages/login/LoginPage';
 import SpaceHome from '../pages/manager/spaceHome/SpaceHome';
-import PrivacyPolicyPage from '../pages/privacyPolicy/PrivacyPolicyPage';
+import PrivacyConsentPage from '../pages/policies/PrivacyConsentPage';
+import PrivacyPolicyPage from '../pages/policies/PrivacyPolicyPage';
+import TermsOfServicePage from '../pages/policies/TermsOfServicePage';
 import type { AppRouteObject } from '../types/route.type';
 
 const routes: AppRouteObject[] = [
@@ -94,8 +97,16 @@ const routes: AppRouteObject[] = [
         ],
       },
       {
-        path: 'privacy-policy',
-        element: <PrivacyPolicyPage />,
+        path: 'login',
+        element: <LoginPage />,
+      },
+      {
+        path: 'policy',
+        children: [
+          { path: 'privacy-policy', element: <PrivacyPolicyPage /> },
+          { path: 'terms-of-service', element: <TermsOfServicePage /> },
+          { path: 'privacy-consent', element: <PrivacyConsentPage /> },
+        ],
       },
       {
         path: 'network-error',

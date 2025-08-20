@@ -2,7 +2,7 @@ import { ReactComponent as Logo } from '@assets/icons/logo.svg';
 import { useEffect } from 'react';
 import { theme } from '../../styles/theme';
 import { goToTop } from '../../utils/goToTop';
-import * as S from './PrivacyPolicyPage.styles';
+import * as S from './PolicyPage.common.styles';
 
 const PrivacyPolicyPage = () => {
   useEffect(() => {
@@ -138,8 +138,7 @@ const PrivacyPolicyPage = () => {
           </S.Paragraph>
           <S.List>
             <S.ListItem>개인정보 보호책임자: 포게더 운영팀</S.ListItem>
-            {/* TODO: 주소 추가 */}
-            <S.ListItem>이메일: privacy@photogather.com</S.ListItem>
+            <S.ListItem>이메일: forgather48@gmail.com</S.ListItem>
           </S.List>
         </S.Section>
 
