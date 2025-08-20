@@ -6,7 +6,7 @@ CREATE TABLE space
     name           VARCHAR(255) CHARACTER SET utf8mb4 NOT NULL,
     valid_hours    INT                                NOT NULL,
     opened_at      TIMESTAMP                          NOT NULL,
- capacity_value BIGINT                             NOT NULL DEFAULT 10737418240, -- 10GB default
+    capacity_value BIGINT                             NOT NULL DEFAULT 10737418240, -- 10GB default
     created_at     TIMESTAMP                          NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at     TIMESTAMP                          NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
@@ -71,7 +71,7 @@ CREATE TABLE host_kakao
 CREATE TABLE guest
 (
     id         BIGINT AUTO_INCREMENT PRIMARY KEY,
-    space_id  BIGINT NOT NULL,
+    space_id   BIGINT    NOT NULL,
     name       VARCHAR(100),
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,

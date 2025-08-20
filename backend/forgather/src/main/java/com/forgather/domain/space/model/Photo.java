@@ -42,7 +42,8 @@ public class Photo extends SpaceContent {
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    public Photo(Space space, Guest guest, String originalName, String path, PhotoMetaData metaData, long capacityValue) {
+    public Photo(Space space, Guest guest, String originalName, String path, PhotoMetaData metaData,
+        long capacityValue) {
         super(space, guest);
         this.originalName = originalName;
         this.path = path;

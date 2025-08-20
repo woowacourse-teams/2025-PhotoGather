@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.forgather.domain.space.dto.CreateSpaceRequest;
 import com.forgather.domain.space.dto.CreateSpaceResponse;
+import com.forgather.domain.space.dto.SpaceCapacityResponse;
 import com.forgather.domain.space.dto.SpaceResponse;
 import com.forgather.domain.space.dto.UpdateSpaceRequest;
 import com.forgather.domain.space.service.SpaceService;
@@ -64,6 +65,16 @@ public class SpaceController {
         @RequestBody @Validated UpdateSpaceRequest request,
         @LoginHost Host host) {
         var response = spaceService.update(spaceCode, request, host);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/{spaceCode}/capacity")
+    @Operation(summary = "스페이스 용량 조회", description = "스페이스의 총, 현재 사용 용량을 조회합니다.")
+    public ResponseEntity<SpaceCapacityResponse> getSpaceCapacity(
+        @PathVariable(name = "spaceCode") String spaceCode,
+        @LoginHost Host host
+    ) {
+        var response = spaceService.getSpaceCapacity(spaceCode, host);
         return ResponseEntity.ok(response);
     }
 }
