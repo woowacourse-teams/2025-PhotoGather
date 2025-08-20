@@ -69,10 +69,9 @@ CREATE TABLE host_kakao
 CREATE TABLE guest
 (
     id         BIGINT AUTO_INCREMENT PRIMARY KEY,
-    space_id  BIGINT NOT NULL,
+    space_id   BIGINT    NOT NULL,
     name       VARCHAR(100),
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT guest_space_fk FOREIGN KEY (space_id) REFERENCES space (id)
 );
-
