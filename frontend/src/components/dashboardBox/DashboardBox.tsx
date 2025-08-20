@@ -10,11 +10,11 @@ interface DashboardBoxProps extends HTMLAttributes<HTMLDivElement> {
   isClosed: boolean;
 }
 
-const DashboardBox = ({ 
-  title, 
-  description, 
-  isClosed, 
-  ...restProps 
+const DashboardBox = ({
+  title,
+  description,
+  isClosed,
+  ...restProps
 }: DashboardBoxProps) => {
   return (
     <S.Wrapper $isClosed={isClosed} {...restProps}>
