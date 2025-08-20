@@ -1,5 +1,7 @@
 package com.forgather.domain.space.service;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -51,5 +53,13 @@ public class SpaceService {
         Space space = spaceRepository.getByCode(spaceCode);
         space.validateHost(host);
         spaceRepository.delete(space);
+    }
+
+    public List<SpaceResponse> getSpacesInformation(Host host) {
+        return host.getSpaceHostMap().stream()
+            .map(spaceHostMap ->
+                SpaceResponse.from(spaceHostMap.getSpace())
+            )
+            .toList();
     }
 }
