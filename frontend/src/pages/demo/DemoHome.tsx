@@ -2,7 +2,10 @@ import rocketImage from '@assets/images/rocket.png';
 import * as Sentry from '@sentry/react';
 import { useNavigate } from 'react-router-dom';
 import Button from '../../components/@common/buttons/button/Button';
+import KakaoLoginButton from '../../components/kakaoLoginButton/KakaoLoginButton';
 import { ROUTES } from '../../constants/routes';
+import useKakaoAuth from '../../hooks/domain/useKakaoAuth';
+import { CookieUtils } from '../../utils/CookieUtils';
 import * as S from './DemoHome.styles';
 
 const DemoHome = () => {
@@ -18,10 +21,17 @@ const DemoHome = () => {
       Sentry.captureMessage('가짜 축하');
     }
   };
+  const { handleKakaoLogin, handleLogout } = useKakaoAuth();
+
   return (
     <S.Wrapper>
       <S.Icon src={rocketImage} alt="데모 페이지 아이콘"></S.Icon>
       <S.Title>Forgather DEMO</S.Title>
+      {CookieUtils.has('access_token') ? (
+        <Button text="로그아웃" variant="secondary" onClick={handleLogout} />
+      ) : (
+        <KakaoLoginButton onClick={handleKakaoLogin} />
+      )}
       <Button
         text="(CREATE) 스페이스 생성 퍼널"
         onClick={() => navigate(ROUTES.CREATE)}

@@ -20,9 +20,3 @@ export const validateNetworkError = (response: ApiResponse<unknown>) => {
     throw new Error(NETWORK_ERROR.DEFAULT);
   }
 };
-
-export const validateDownloadFormat = async (data: unknown) => {
-  if (!(data instanceof Blob)) {
-    throw new Error(DEBUG_MESSAGES.NO_BLOB_INSTANCE);
-  }
-};

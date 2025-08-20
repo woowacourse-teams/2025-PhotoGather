@@ -80,18 +80,22 @@ const SpaceHome = () => {
 
   const navigate = useNavigate();
 
-  const { isDownloading, downloadAll, selectDownload, downloadSingle } =
-    useDownload({
-      spaceCode: spaceCode ?? '',
-      spaceName,
-      onDownloadSuccess: () => {
-        navigate(ROUTES.COMPLETE.DOWNLOAD, {
-          state: {
-            spaceCode: spaceCode ?? '',
-          },
-        });
-      },
-    });
+  const {
+    isDownloading,
+    tryAllDownload,
+    trySelectedDownload,
+    trySingleDownload,
+  } = useDownload({
+    spaceCode: spaceCode ?? '',
+    spaceName,
+    onDownloadSuccess: () => {
+      navigate(ROUTES.COMPLETE.DOWNLOAD, {
+        state: {
+          spaceCode: spaceCode ?? '',
+        },
+      });
+    },
+  });
 
   const {
     isSelectMode,
@@ -125,7 +129,7 @@ const SpaceHome = () => {
   };
 
   const downloadPhotoWithTracking = async (photoId: number) => {
-    await downloadSingle(photoId);
+    await trySingleDownload(photoId);
     track.button('single_download_button', {
       page: 'space_home',
       section: 'photo_modal',
@@ -275,7 +279,7 @@ const SpaceHome = () => {
                   label="모두 저장하기"
                   icon={<SaveIcon fill={theme.colors.gray06} />}
                   onClick={() => {
-                    downloadAll();
+                    tryAllDownload();
                     track.button('all_download_button', {
                       page: 'space_home',
                       section: 'space_home',
@@ -298,7 +302,7 @@ const SpaceHome = () => {
                 <PhotoSelectionToolBar
                   selectedCount={selectedPhotosCount}
                   onDelete={() => tryDeleteSelectedPhotos(selectedPhotoIds)}
-                  onDownload={() => selectDownload(selectedPhotoIds)}
+                  onDownload={() => trySelectedDownload(selectedPhotoIds)}
                 />
               )}
             </S.BottomNavigatorContainer>

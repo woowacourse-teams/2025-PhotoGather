@@ -24,6 +24,7 @@ import com.forgather.domain.space.model.Space;
 import com.forgather.domain.space.repository.PhotoRepository;
 import com.forgather.domain.space.repository.SpaceRepository;
 import com.forgather.domain.space.util.ZipGenerator;
+import com.forgather.global.auth.model.Host;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -38,16 +39,17 @@ public class PhotoService {
     private final ContentsStorage contentsStorage;
     private final Path downloadTempPath;
 
-    public PhotoResponse get(String spaceCode, Long photoId) {
+    public PhotoResponse get(String spaceCode, Long photoId, Host host) {
         Space space = spaceRepository.getUnexpiredSpaceByCode(spaceCode);
+        space.validateHost(host);
         Photo photo = photoRepository.getById(photoId);
         photo.validateSpace(space);
         return PhotoResponse.from(photo);
     }
 
-    public PhotosResponse getAll(String spaceCode, Pageable pageable, Long hostId) {
-        // TODO: Space가 HostId의 소유인지 검증
+    public PhotosResponse getAll(String spaceCode, Pageable pageable, Host host) {
         Space space = spaceRepository.getUnexpiredSpaceByCode(spaceCode);
+        space.validateHost(host);
         Page<Photo> photos = photoRepository.findAllBySpace(space, pageable);
         return PhotosResponse.from(photos);
     }
@@ -61,14 +63,15 @@ public class PhotoService {
         photoRepository.saveAll(photos);
     }
 
-    public File compressSelected(String spaceCode, DownloadPhotosRequest request) throws IOException {
+    public File compressSelected(String spaceCode, DownloadPhotosRequest request, Host host) throws IOException {
         Space space = spaceRepository.getUnexpiredSpaceByCode(spaceCode);
+        space.validateHost(host);
         List<Photo> photos = photoRepository.findAllByIdIn(request.photoIds());
         photos.forEach(photo -> photo.validateSpace(space));
         return compressPhotoFile(spaceCode, photos);
     }
 
-    public DownloadPhotoResponse download(String spaceCode, Long photoId, Long hostId) {
+    public DownloadPhotoResponse download(String spaceCode, Long photoId, Host host) {
         Space space = spaceRepository.getUnexpiredSpaceByCode(spaceCode);
         Photo photo = photoRepository.getById(photoId);
         photo.validateSpace(space);
@@ -85,9 +88,9 @@ public class PhotoService {
      * 파일 삭제 트랜잭션 분리
      * 사진 원본 이름 대신 유의미한 이름 변경 추가 논의
      */
-    public File compressAll(String spaceCode, Long hostId) throws IOException {
-        // TODO: Space가 HostId의 소유인지 검증
+    public File compressAll(String spaceCode, Host host) throws IOException {
         Space space = spaceRepository.getUnexpiredSpaceByCode(spaceCode);
+        space.validateHost(host);
         List<Photo> photos = photoRepository.findAllBySpace(space);
         return compressPhotoFile(spaceCode, photos);
     }
@@ -108,8 +111,9 @@ public class PhotoService {
     }
 
     @Transactional
-    public void delete(String spaceCode, Long photoId) {
+    public void delete(String spaceCode, Long photoId, Host host) {
         Space space = spaceRepository.getUnexpiredSpaceByCode(spaceCode);
+        space.validateHost(host);
         Photo photo = photoRepository.getById(photoId);
         photo.validateSpace(space);
 
@@ -118,8 +122,9 @@ public class PhotoService {
     }
 
     @Transactional
-    public void deleteSelected(String spaceCode, DeletePhotosRequest request) {
+    public void deleteSelected(String spaceCode, DeletePhotosRequest request, Host host) {
         Space space = spaceRepository.getUnexpiredSpaceByCode(spaceCode);
+        space.validateHost(host);
         List<Photo> photos = photoRepository.findAllByIdIn(request.photoIds());
         photos.forEach(photo -> photo.validateSpace(space));
         List<String> paths = photos.stream()

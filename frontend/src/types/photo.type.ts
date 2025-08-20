@@ -17,3 +17,23 @@ export interface CreatePhotoInput {
   originalName: string;
   capturedAt?: Date | string | null;
 }
+
+export interface AllDownloadInfos {
+  downloadUrls: {
+    url: string;
+  }[];
+}
+
+export interface SelectedDownloadInfos {
+  downloadUrls: {
+    originalName: string;
+    url: string;
+  }[];
+}
+
+export interface SingleDownloadInfos {
+  downloadUrls: {
+    originalName: string;
+    url: string;
+  };
+}
