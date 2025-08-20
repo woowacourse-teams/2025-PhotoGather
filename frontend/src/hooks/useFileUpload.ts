@@ -8,7 +8,6 @@ interface Batch {
   total: number;
   success: number;
   failed: number;
-  inProgress: number;
   uploadFiles: UploadFile[];
 }
 
@@ -16,18 +15,25 @@ interface Session {
   total: number;
   success: number;
   failed: number;
-  inProgress: number;
   batches: Batch[];
 }
 
 interface UseFileUploadProps {
   spaceCode: string;
   localFiles: LocalFile[];
+  onUploadSuccess: () => void;
+  clearFiles: () => void;
 }
-const useFileUpload = ({ spaceCode, localFiles }: UseFileUploadProps) => {
+const useFileUpload = ({
+  spaceCode,
+  localFiles,
+  onUploadSuccess,
+  clearFiles,
+}: UseFileUploadProps) => {
   const [uploadFiles, setUploadFiles] = useState<UploadFile[]>([]);
   const [batches, setBatches] = useState<Batch[]>();
   const [session, setSession] = useState<Session>();
+  const [isUploading, setIsUploading] = useState(false);
   const { tryTask, tryFetch } = useError();
 
   useEffect(() => {
@@ -64,7 +70,6 @@ const useFileUpload = ({ spaceCode, localFiles }: UseFileUploadProps) => {
         total: chunk.length,
         success: 0,
         failed: 0,
-        inProgress: 0,
         uploadFiles: uploadFiles.slice(i, i + chunkSize),
       });
     }
@@ -83,7 +88,6 @@ const useFileUpload = ({ spaceCode, localFiles }: UseFileUploadProps) => {
       total: newBatches.length,
       success: 0,
       failed: 0,
-      inProgress: 0,
       batches: newBatches,
     };
     setSession(newSession);
@@ -143,7 +147,7 @@ const useFileUpload = ({ spaceCode, localFiles }: UseFileUploadProps) => {
     });
   };
 
-  const uploadBatch = async (batch: Batch) => {
+  const uploadSingleBatch = async (batch: Batch) => {
     const presignedUrls = await tryFetch({
       task: async () => await fetchPresignedUrls(batch.uploadFiles),
       errorActions: ['console'],
@@ -177,7 +181,9 @@ const useFileUpload = ({ spaceCode, localFiles }: UseFileUploadProps) => {
 
     calculateSuccessFiles(batch, updatedBatchFiles);
 
-    const successFiles = updatedBatchFiles.filter((f) => f.state === 'success');
+    const successFiles = updatedBatchFiles.filter(
+      (f) => f.state === 'uploaded',
+    );
     await notifySuccessFiles(successFiles);
   };
 
@@ -186,21 +192,17 @@ const useFileUpload = ({ spaceCode, localFiles }: UseFileUploadProps) => {
     batch: Batch,
     updatedBatchFiles: UploadFile[],
   ) => {
-    const successCount = updatedBatchFiles.filter(
-      (f) => f.state === 'success',
+    const uploadedCount = updatedBatchFiles.filter(
+      (f) => f.state === 'uploaded',
     ).length;
     const failedCount = updatedBatchFiles.filter(
       (f) => f.state === 'failed',
     ).length;
-    const inProgressCount = updatedBatchFiles.filter(
-      (f) => f.state === 'uploaded',
-    ).length;
 
     const updatedBatch: Batch = {
       ...batch,
-      success: successCount,
+      success: uploadedCount,
       failed: failedCount,
-      inProgress: inProgressCount,
       uploadFiles: updatedBatchFiles,
     };
 
@@ -217,43 +219,65 @@ const useFileUpload = ({ spaceCode, localFiles }: UseFileUploadProps) => {
 
       const totalSuccess = newBatches.reduce((acc, b) => acc + b.success, 0);
       const totalFailed = newBatches.reduce((acc, b) => acc + b.failed, 0);
-      const totalInProgress = newBatches.reduce(
-        (acc, b) => acc + b.inProgress,
-        0,
-      );
 
       return {
         ...prev,
         success: totalSuccess,
         failed: totalFailed,
-        inProgress: totalInProgress,
         batches: newBatches,
       };
     });
   };
 
+  const uploadBatches = async (currentSession: Session) => {
+    await tryFetch({
+      task: async () => {
+        for (const batch of currentSession.batches) {
+          await tryFetch({
+            task: async () => {
+              await uploadSingleBatch(batch);
+            },
+            errorActions: ['console'],
+          });
+        }
+      },
+      errorActions: ['console'],
+    });
+  };
+
   // "진짜" 업로드
   const submitFileUpload = async () => {
-    if (!session) createSession(localFiles);
+    const currentSession = session ?? createSession(localFiles);
 
-    for (const batch of session?.batches ?? []) {
-      await tryFetch({
-        task: async () => {
-          await uploadBatch(batch);
+    setIsUploading(true);
+    const response = await tryFetch({
+      task: async () => {
+        await uploadBatches(currentSession);
+      },
+      errorActions: ['toast', 'console'],
+      context: {
+        toast: {
+          text: '업로드에 실패했습니다. 다시 시도해주세요.',
+          type: 'error',
         },
-        errorActions: ['toast', 'console'],
-        context: {
-          toast: {
-            text: '업로드에 실패했습니다. 다시 시도해주세요.',
-            type: 'error',
-          },
-        },
-      });
-      //TODO: 실패한 경우 전체 삭제 로직 추가 예정
+      },
+      onFinally: () => {
+        setIsUploading(false);
+      },
+    });
+
+    if (response.success && currentSession.total === currentSession.success) {
+      onUploadSuccess();
+      clearFiles();
     }
   };
 
-  return { submitFileUpload, total: session?.total, success: session?.success };
+  return {
+    submitFileUpload,
+    total: session?.total,
+    success: session?.success,
+    isUploading,
+  };
 };
 
 export default useFileUpload;

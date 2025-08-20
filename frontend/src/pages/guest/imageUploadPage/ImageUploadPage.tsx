@@ -50,19 +50,19 @@ const ImageUploadPage = () => {
   const {
     localFiles,
     previewFile,
-    isUploading,
     handleFilesUploadClick,
     handleFilesDrop,
     deleteFile,
+    clearFiles,
   } = useLocalFile({
-    spaceCode: spaceCode ?? '',
     fileType: 'image',
-    onUploadSuccess: navigateToUploadComplete,
   });
 
-  const { submitFileUpload } = useFileUpload({
+  const { submitFileUpload, isUploading } = useFileUpload({
     localFiles: localFiles,
     spaceCode: spaceCode ?? '',
+    onUploadSuccess: navigateToUploadComplete,
+    clearFiles: clearFiles,
   });
 
   const hasImages = Array.isArray(previewFile) && previewFile.length > 0;

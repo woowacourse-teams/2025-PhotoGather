@@ -1,6 +1,5 @@
 import * as exifr from 'exifr';
 import { useState } from 'react';
-import { photoService } from '../../apis/services/photo.service';
 import { CONSTRAINTS } from '../../constants/constraints';
 import type { LocalFile } from '../../types/file.type';
 import { isValidFileType } from '../../utils/isValidFileType';
@@ -11,22 +10,16 @@ import {
 import useError from './useError';
 
 interface UseLocalFileProps {
-  spaceCode: string;
   fileType: string;
-  onUploadSuccess?: () => void;
 }
 
-const useLocalFile = ({
-  spaceCode,
-  fileType,
-  onUploadSuccess,
-}: UseLocalFileProps) => {
+const useLocalFile = ({ fileType }: UseLocalFileProps) => {
   const [localFiles, setLocalFiles] = useState<LocalFile[]>([]);
   const previewFile = localFiles.map((file) => ({
     id: file.id,
     previewUrl: file.previewUrl,
   }));
-  const [isUploading, setIsUploading] = useState(false);
+  const { tryTask } = useError();
 
   const extractDateTimeOriginal = async (file: File) => {
     const metadata = await exifr.parse(file, ['DateTimeOriginal']);
@@ -104,48 +97,13 @@ const useLocalFile = ({
     setLocalFiles([]);
   };
 
-  const { tryTask, tryFetch } = useError();
-
-  const fetchUploadFiles = async () => {
-    const files = localFiles.map((file) => file.originFile);
-    await photoService.uploadFiles(spaceCode, files);
-  };
-
-  const errorOption = {
-    toast: {
-      text: '사진 업로드에 실패했습니다',
-    },
-    afterAction: {
-      action: () => {
-        setIsUploading(false);
-      },
-    },
-  };
-
-  const submitFileUpload = async () => {
-    await tryFetch({
-      task: async () => {
-        setIsUploading(true);
-        await fetchUploadFiles();
-        onUploadSuccess?.();
-        clearFiles();
-      },
-      errorActions: ['toast', 'afterAction'],
-      context: errorOption,
-      onFinally: () => {
-        setIsUploading(false);
-      },
-    });
-  };
-
   return {
     localFiles,
     previewFile,
-    isUploading,
-    submitFileUpload,
     deleteFile,
     handleFilesUploadClick,
     handleFilesDrop,
+    clearFiles,
   };
 };
 
