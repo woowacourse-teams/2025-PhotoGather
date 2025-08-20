@@ -1,15 +1,15 @@
 import defaultImage from '@assets/images/default_image.png';
 import { useEffect, useState } from 'react';
-import { photoService } from '../../../apis/services/photo.service';
-import { useOverlay } from '../../../contexts/OverlayProvider';
-import useError from '../../../hooks/@common/useError';
-import type { PreviewFile } from '../../../types/file.type';
-import type { BaseModalProps } from '../../../types/modal.type';
-import type { Photo } from '../../../types/photo.type';
-import { buildOriginalImageUrl } from '../../../utils/buildImageUrl';
-import { createImageErrorHandler } from '../../../utils/createImageErrorHandler';
-import IconLabelButton from '../buttons/iconLabelButton/IconLabelButton';
-import ConfirmModal from '../modal/confirmModal/ConfirmModal';
+import { photoService } from '../../../../apis/services/photo.service';
+import { useOverlay } from '../../../../contexts/OverlayProvider';
+import useError from '../../../../hooks/@common/useError';
+import type { PreviewFile } from '../../../../types/file.type';
+import type { BaseModalProps } from '../../../../types/modal.type';
+import type { Photo } from '../../../../types/photo.type';
+import { buildOriginalImageUrl } from '../../../../utils/buildImageUrl';
+import { createImageErrorHandler } from '../../../../utils/createImageErrorHandler';
+import IconLabelButton from '../../buttons/iconLabelButton/IconLabelButton';
+import ConfirmModal from '../confirmModal/ConfirmModal';
 import * as S from './PhotoModal.styles';
 
 interface BasePhotoModalProps extends BaseModalProps {
@@ -100,6 +100,8 @@ const PhotoModal = (props: PhotoModalProps) => {
         description="정말 삭제하시겠어요?"
         confirmText="삭제"
         cancelText="취소"
+        onClose={onClose}
+        onSubmit={onSubmit}
       />,
       {
         clickOverlayClose: true,
@@ -120,6 +122,8 @@ const PhotoModal = (props: PhotoModalProps) => {
         description="정말 삭제하시겠어요?"
         confirmText="삭제"
         cancelText="취소"
+        onClose={onClose}
+        onSubmit={onSubmit}
       />,
       {
         clickOverlayClose: true,

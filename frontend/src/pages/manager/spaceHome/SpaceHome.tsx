@@ -10,8 +10,8 @@ import FloatingActionButton from '../../../components/@common/buttons/floatingAc
 import FloatingIconButton from '../../../components/@common/buttons/floatingIconButton/FloatingIconButton';
 import IconLabelButton from '../../../components/@common/buttons/iconLabelButton/IconLabelButton';
 import SpaceManagerImageGrid from '../../../components/@common/imageLayout/imageGrid/spaceManagerImageGrid/SpaceManagerImageGrid';
-import BaseModal from '../../../components/@common/modal/baseModal/BaseModal';
-import PhotoModal from '../../../components/@common/modal/PhotoModal';
+import * as C from '../../../components/@common/modal/Modal.common.styles';
+import PhotoModal from '../../../components/@common/modal/photoModal/PhotoModal';
 import SpaceHeader from '../../../components/header/spaceHeader/SpaceHeader';
 import LoadingLayout from '../../../components/layout/loadingLayout/LoadingLayout';
 import PhotoSelectionToolBar from '../../../components/photoSelectionToolBar/PhotoSelectionToolBar';
@@ -28,7 +28,7 @@ import usePhotosBySpaceCode from '../../../hooks/usePhotosBySpaceCode';
 import usePhotosDelete from '../../../hooks/usePhotosDelete';
 import useSpaceCodeFromPath from '../../../hooks/useSpaceCodeFromPath';
 import useSpaceInfo from '../../../hooks/useSpaceInfo';
-import { ScrollableBlurArea } from '../../../styles/@common/ScrollableBlurArea';
+import { ScrollableBlurArea } from '../../../styles/@common/ScrollableBlurArea.styles';
 import { theme } from '../../../styles/theme';
 import { checkIsEarlyDate } from '../../../utils/checkIsEarlyTime';
 import { copyLinkToClipboard } from '../../../utils/copyLinkToClipboard';
@@ -183,7 +183,7 @@ const SpaceHome = () => {
   const toggleShareModal = async () => {
     try {
       await overlay(
-        <BaseModal>
+        <C.Wrapper>
           <S.ModalContentContainer>
             <IconLabelButton
               icon={<LinkIcon fill={theme.colors.white} width="20px" />}
@@ -210,7 +210,7 @@ const SpaceHome = () => {
               label="스페이스 링크"
             />
           </S.ModalContentContainer>
-        </BaseModal>,
+        </C.Wrapper>,
         {
           clickOverlayClose: true,
         },
