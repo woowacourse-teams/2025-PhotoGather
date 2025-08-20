@@ -64,9 +64,11 @@ const useKakaoAuth = () => {
 
         if (!authResponse || !authResponse.data) return;
 
-        CookieUtils.set('access', authResponse.data.accessToken, { path: '/' });
+        CookieUtils.set('access', authResponse.data.accessToken, {
+          path: ROUTES.MAIN,
+        });
         CookieUtils.set('refresh', authResponse.data.refreshToken, {
-          path: '/',
+          path: ROUTES.MAIN,
         });
 
         setTimeout(() => {
@@ -76,15 +78,15 @@ const useKakaoAuth = () => {
       errorActions: ['toast', 'redirect'],
       context: {
         redirect: {
-          path: '/login',
+          path: ROUTES.LOGIN,
         },
       },
     });
   };
 
   const handleLogout = async () => {
-    CookieUtils.delete('access', { path: '/' });
-    CookieUtils.delete('refresh', { path: '/' });
+    CookieUtils.delete('access', { path: ROUTES.MAIN });
+    CookieUtils.delete('refresh', { path: ROUTES.MAIN });
     location.reload();
   };
 
