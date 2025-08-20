@@ -1,5 +1,6 @@
 import { createBrowserRouter } from 'react-router-dom';
 import Layout from '../components/layout/Layout';
+import KakaoAuthPage from '../pages/auth/KakaoAuthPage';
 import DownloadCompletePage from '../pages/complete/DownloadCompletePage';
 import UploadCompletePage from '../pages/complete/UploadCompletePage';
 import SpaceCreateFunnel from '../pages/create/funnel/SpaceCreateFunnel';
@@ -9,6 +10,7 @@ import NotFoundErrorPage from '../pages/error/NotFoundErrorPage';
 import ImageUploadPage from '../pages/guest/imageUploadPage/ImageUploadPage';
 import SharePage from '../pages/guest/sharePage/SharePage';
 import LandingPage from '../pages/landing/LandingPage';
+import LoginPage from '../pages/login/LoginPage';
 import SpaceHome from '../pages/manager/spaceHome/SpaceHome';
 import PrivacyConsentPage from '../pages/policies/PrivacyConsentPage';
 import PrivacyPolicyPage from '../pages/policies/PrivacyPolicyPage';
@@ -92,6 +94,24 @@ const routes: AppRouteObject[] = [
           {
             path: 'download',
             element: <DownloadCompletePage />,
+          },
+        ],
+      },
+      {
+        path: 'login',
+        element: <LoginPage />,
+      },
+      {
+        path: 'auth',
+        children: [
+          {
+            path: 'login',
+            children: [
+              {
+                path: 'kakao',
+                element: <KakaoAuthPage />,
+              },
+            ],
           },
         ],
       },

@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.forgather.domain.guest.model.Guest;
+import com.forgather.domain.guest.repository.GuestRepository;
 import com.forgather.domain.space.dto.IssueSignedUrlRequest;
 import com.forgather.domain.space.dto.IssueSignedUrlResponse;
 import com.forgather.domain.space.model.Photo;
@@ -33,6 +35,7 @@ public class UploadService {
     private final SpaceRepository spaceRepository;
     private final PhotoRepository photoRepository;
     private final ContentsStorage contentsStorage;
+    private final GuestRepository guestRepository;
 
     /**
      * TODO
@@ -40,12 +43,14 @@ public class UploadService {
      * (MVP아님)
      */
     @Transactional
-    public void saveAll(String spaceCode, List<MultipartFile> multipartFiles) {
+    public void saveAll(String spaceCode, List<MultipartFile> multipartFiles, Long guestId) {
         Space space = spaceRepository.getUnexpiredSpaceByCode(spaceCode);
+        Guest guest = guestRepository.getById(guestId);
+        space.validateGuest(guest);
         for (MultipartFile multipartFile : multipartFiles) {
             PhotoMetaData metaData = MetaDataExtractor.extractPhotoMetaData(multipartFile);
             String uploadedPath = upload(spaceCode, multipartFile);
-            photoRepository.save(new Photo(space, multipartFile.getOriginalFilename(), uploadedPath, metaData));
+            photoRepository.save(new Photo(space, guest, multipartFile.getOriginalFilename(), uploadedPath, metaData));
         }
     }
 

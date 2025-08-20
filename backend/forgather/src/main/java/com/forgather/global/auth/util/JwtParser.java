@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.forgather.global.auth.client.KakaoAuthClient;
-import com.forgather.global.auth.client.KakaoTokenDto;
+import com.forgather.global.auth.dto.KakaoIdToken;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -21,7 +21,7 @@ public class JwtParser {
     private final ObjectMapper objectMapper;
     private final KakaoAuthClient kakaoAuthClient;
 
-    public KakaoTokenDto.IdToken parseIdToken(String idToken) {
+    public KakaoIdToken parseIdToken(String idToken) {
         try {
             String[] parts = idToken.split("\\.");
             if (parts.length != 3) {
@@ -45,9 +45,9 @@ public class JwtParser {
                     .parseSignedClaims(idToken)
                     .getPayload();
 
-            return objectMapper.convertValue(claims, KakaoTokenDto.IdToken.class);
+            return objectMapper.convertValue(claims, KakaoIdToken.class);
         } catch (Exception e) {
-            throw new RuntimeException("Failed to parse and verify JWT", e);
+            throw new IllegalArgumentException("ID Token이 잘못되었습니다.", e);
         }
     }
 }
