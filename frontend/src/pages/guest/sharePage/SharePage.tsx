@@ -27,6 +27,7 @@ const SharePage = () => {
   const handleSpaceHomeButton = () => {
     navigate(`/manager/space-home/${spaceCode}`);
   };
+
   const handleMainButton = () => {
     navigate(ROUTES.MAIN);
   };
