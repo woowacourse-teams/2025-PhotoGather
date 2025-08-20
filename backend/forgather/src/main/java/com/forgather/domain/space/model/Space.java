@@ -23,6 +23,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Space extends BaseTimeEntity {
 
+    private static final long DEFAULT_CAPACITY_VALUE = 10_737_418_240L; // 10GB
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -42,12 +44,26 @@ public class Space extends BaseTimeEntity {
     @Column(name = "opened_at", nullable = false)
     private LocalDateTime openedAt;
 
+    @Column(name = "capacity_value", nullable = false)
+    private long capacityValue; // bytes
+
     public Space(String code, String password, String name, int validHours, LocalDateTime openedAt) {
         this.code = code;
         this.password = password;
         this.name = name;
         this.openedAt = openedAt;
         this.validHours = validHours;
+        this.capacityValue = DEFAULT_CAPACITY_VALUE;
+    }
+
+    public Space(String code, String password, String name, int validHours, LocalDateTime openedAt,
+        long capacityValue) {
+        this.code = code;
+        this.password = password;
+        this.name = name;
+        this.openedAt = openedAt;
+        this.validHours = validHours;
+        this.capacityValue = capacityValue;
     }
 
     public void validateExpiration(LocalDateTime currentDateTime) {
@@ -81,6 +97,10 @@ public class Space extends BaseTimeEntity {
         // 네트워크 지연 고려해서 1시간 과거 생성까지는 허용
         if (openedAt.isBefore(LocalDateTime.now().minusHours(1L))) {
             throw new IllegalArgumentException("스페이스 오픈 시각은 현재 시각 이후여야 합니다. 생성 시도 시각: " + openedAt);
+        }
+
+        if (capacityValue <= 0L) {
+            throw new IllegalArgumentException("스페이스 용량은 0보다 커야 합니다. 생성 시도 용량: " + capacityValue);
         }
     }
 
