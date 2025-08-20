@@ -25,8 +25,8 @@ export const ImageContainer = styled.div<{
     $isEarly &&
     `
     background-color: ${theme.colors.white};
-  `}
-  
+    `}
+
   ${({ $isBlurred, theme }) =>
     $isBlurred &&
     `
@@ -40,7 +40,7 @@ export const ImageContainer = styled.div<{
       background: ${hexToRgba(theme.colors.gray06, 0.6)};
       backdrop-filter: blur(2px);
     }
-  `}
+    `}
   
   ${({ $isEarly, theme }) =>
     $isEarly &&
