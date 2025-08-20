@@ -83,7 +83,9 @@ const useKakaoAuth = () => {
   const handleLogout = async () => {
     CookieUtils.delete('access');
     CookieUtils.delete('refresh');
-    location.reload();
+    setTimeout(() => {
+      location.reload();
+    }, 0);
   };
 
   return { handleKakaoLogin, getAuth, handleLogout };
