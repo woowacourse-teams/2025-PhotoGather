@@ -1,7 +1,6 @@
 import { downloadZip } from 'client-zip';
 import { useState } from 'react';
 import { photoService } from '../apis/services/photo.service';
-import type { AllDownloadInfos } from '../types/photo.type';
 import { checkSelectedPhotoExist } from '../validators/photo.validator';
 import useError from './@common/useError';
 
@@ -32,10 +31,10 @@ const useDownload = ({
     document.body.removeChild(link);
   };
 
-  const downloadAsZip = async (allDownloadInfos: AllDownloadInfos[]) => {
+  const downloadAsZip = async (urls: string[]) => {
     const files = await Promise.all(
-      allDownloadInfos.map(async (allDownloadInfo, index) => {
-        const response = await fetch(allDownloadInfo.url);
+      urls.map(async (url, index) => {
+        const response = await fetch(url);
         const blob = await response.blob();
         const filename = `image_${index + 1}.${blob.type.split('/')[1]}`;
 
@@ -66,8 +65,9 @@ const useDownload = ({
         });
         if (!response.data) return;
         const data = response.data;
-
-        downloadAsZip(data);
+        const { downloadUrls } = data;
+        const urlArray = downloadUrls.map((downloadInfo) => downloadInfo.url);
+        downloadAsZip(urlArray);
       },
       errorActions: ['toast'],
       context: {
@@ -87,9 +87,9 @@ const useDownload = ({
           photoId,
         );
         if (!response.data) return;
-        const data = response.data;
+        const { downloadUrls } = response.data;
 
-        downloadAsImage(data.url, data.originalName);
+        downloadAsImage(downloadUrls.url, downloadUrls.originalName);
       },
       errorActions: ['toast', 'console'],
       context: {
@@ -108,8 +108,10 @@ const useDownload = ({
         const response = await photoService.downloadAll(spaceCode);
         if (!response.data) return;
         const data = response.data;
+        const { downloadUrls } = data;
+        const urlArray = downloadUrls.map((downloadInfo) => downloadInfo.url);
 
-        downloadAsZip(data.downloadUrls);
+        downloadAsZip(urlArray);
         onDownloadSuccess?.();
       },
       errorActions: ['toast', 'console'],
