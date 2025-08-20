@@ -33,4 +33,9 @@ public class GuestService {
         guest.rename(request.name());
         return GuestResponse.from(guest);
     }
+
+    public GuestResponse getGuest(Long guestId) {
+        Guest guest = guestRepository.getById(guestId);
+        return GuestResponse.from(guest);
+    }
 }
