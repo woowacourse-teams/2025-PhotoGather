@@ -17,8 +17,7 @@ const useGuestNickName = ({ spaceCode }: UseGuestNickNameProps) => {
 
   const [nickName, setNickName] = useState('');
 
-  const rawGuestId = localStorage.getItem('guestId');
-  const guestId: number = rawGuestId ? Number(rawGuestId) : FAILED_GUEST_ID;
+  const guestId = Number(localStorage.getItem('guestId'));
 
   const mode = guestId || nickName.length > 0 ? 'edit' : 'create';
 
@@ -98,6 +97,7 @@ const useGuestNickName = ({ spaceCode }: UseGuestNickNameProps) => {
     const taskResult = await tryFetch({
       task: async () => {
         const response = await guestService.getGuestId(spaceCode, guestId);
+
         if (!response.success) return;
 
         const guestNickName = response?.data?.name;
