@@ -1,4 +1,5 @@
 import ConfirmModal from '../../components/@common/modal/confirmModal/ConfirmModal';
+import Profile from '../../components/profile/Profile';
 import { useOverlay } from '../../contexts/OverlayProvider';
 import { track } from '../../utils/googleAnalytics/track';
 import * as S from './LogoutPage.styles';
@@ -36,12 +37,7 @@ const LogoutPage = () => {
 
   return (
     <S.Wrapper>
-      <S.ProfileContainer>
-        <S.ProfileImageContainer>
-          <S.ProfileImage src={profileImage} alt="profile" />
-        </S.ProfileImageContainer>
-        <S.Name>밍고의매복사랑니</S.Name>
-      </S.ProfileContainer>
+      <Profile profileImage={profileImage} name={'이름'} />
       <S.LogoutButtonContainer>
         <S.LogoutButton onClick={handleLogout}>로그아웃</S.LogoutButton>
       </S.LogoutButtonContainer>
