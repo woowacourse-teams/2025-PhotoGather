@@ -18,8 +18,10 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.PostLoad;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
+import jakarta.persistence.Transient;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -48,6 +50,18 @@ public class Space extends BaseTimeEntity {
     @Column(name = "opened_at", nullable = false)
     private LocalDateTime openedAt;
 
+    @OneToMany(mappedBy = "space")
+    private List<Guest> guests = new ArrayList<>();
+
+    @OneToMany(mappedBy = "space")
+    private List<SpaceContent> contents = new ArrayList<>();
+
+    @Transient
+    private long guestCount = 0;
+
+    @Transient
+    private long photoCount = 0;
+
     public Space(Host host, String code, String name, int validHours, LocalDateTime openedAt) {
         validate(code, name, validHours, openedAt);
         spaceHostMap.add(new SpaceHostMap(this, host));
@@ -55,6 +69,14 @@ public class Space extends BaseTimeEntity {
         this.name = name;
         this.openedAt = openedAt;
         this.validHours = validHours;
+    }
+
+    @PostLoad
+    private void postLoad() {
+        this.guestCount = guests.size();
+        this.photoCount = contents.stream()
+            .filter(content -> content instanceof Photo)
+            .count();
     }
 
     public void validateExpiration(LocalDateTime currentDateTime) {
