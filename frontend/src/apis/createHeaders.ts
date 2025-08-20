@@ -5,7 +5,11 @@ export const createHeaders = (
   token?: string,
 ): HeadersInit => {
   // TODO : 저장된 토큰 들고오기
-  const headers: HeadersInit = {};
+  const traceId = crypto.randomUUID().slice(0, 8);
+
+  const headers: HeadersInit = {
+    'trace-id': traceId,
+  };
 
   if (token) {
     headers.Authorization = `Bearer ${token}`;

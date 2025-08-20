@@ -5,6 +5,8 @@ import java.time.LocalDateTime;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import com.forgather.domain.guest.model.Guest;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Embedded;
@@ -23,6 +25,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Photo extends SpaceContent {
 
+    @Column(name = "original_name", nullable = false)
+    private String originalName;
+
     @Column(name = "path", nullable = false)
     private String path;
 
@@ -33,8 +38,9 @@ public class Photo extends SpaceContent {
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    public Photo(Space space, String path, PhotoMetaData metaData) {
-        super(space);
+    public Photo(Space space, Guest guest, String originalName, String path, PhotoMetaData metaData) {
+        super(space, guest);
+        this.originalName = originalName;
         this.path = path;
         this.metaData = metaData;
     }

@@ -1,30 +1,35 @@
 import diamondImage from '@assets/images/diamond.png';
 import { useState } from 'react';
-import ProgressBar from '../../../components/progressBar/ProgressBar';
+import StepProgressBar from '../../../components/progressBar/step/StepProgressBar';
 import useConfirmBeforeRefresh from '../../../hooks/@common/useConfirmBeforeRefresh';
 import useFunnelHistory from '../../../hooks/useFunnelHistory';
 import type { SpaceFunnelInfo } from '../../../types/space.type';
+import AgreementElement from '../funnelElements/agreementElement/AgreementElement';
 import CheckSpaceInfoElement from '../funnelElements/CheckSpaceInfoElement';
 import ImmediateOpenElement from '../funnelElements/immediateOpenElement/ImmediateOpenElement';
 import NameInputElement from '../funnelElements/NameInputElement';
 import * as S from './SpaceCreateFunnel.styles';
 
-const PROGRESS_STEP_LIST = ['name', 'date', 'check'] as const;
-const STEP_LIST = [...PROGRESS_STEP_LIST] as const;
-type STEP = (typeof STEP_LIST)[number];
+type STEP = 'agreement' | 'name' | 'date' | 'check';
+
+const needsAgreement = true; //TODO: 추후 서버에서 받아온 값으로 교체해주어야 함
+
+const PROGRESS_STEP_LIST: STEP[] = needsAgreement
+  ? ['agreement', 'name', 'date', 'check']
+  : ['name', 'date', 'check'];
 const initialFunnelValue: SpaceFunnelInfo = {
   name: '',
   date: '',
   time: '',
   isImmediateOpen: null,
+  agreements: null, //TODO: null인 경우 첫번째 생성 X
 };
 
 const SpaceCreateFunnel = () => {
   useConfirmBeforeRefresh();
-  const [step, setStep] = useState<STEP>('name');
+  const [step, setStep] = useState<STEP>(needsAgreement ? 'agreement' : 'name');
   const [spaceInfo, setSpaceInfo] =
     useState<SpaceFunnelInfo>(initialFunnelValue);
-
   const { navigateToNext } = useFunnelHistory<STEP>(step, setStep);
 
   const goNextStep = (nextStep: STEP) => {
@@ -37,7 +42,7 @@ const SpaceCreateFunnel = () => {
 
   return (
     <S.Wrapper>
-      <ProgressBar
+      <StepProgressBar
         currentStep={currentStep}
         maxStep={PROGRESS_STEP_LIST.length}
       />
@@ -49,6 +54,23 @@ const SpaceCreateFunnel = () => {
         </S.IconContainer>
       </S.TopContainer>
       <S.ContentContainer>
+        {step === 'agreement' && (
+          <AgreementElement
+            value={
+              spaceInfo.agreements ?? {
+                agreedToService: false,
+                agreedToPrivacy: false,
+              }
+            }
+            onChange={(agreements) => {
+              setSpaceInfo((prev) => ({ ...prev, agreements }));
+            }}
+            onNext={(agreement) => {
+              setSpaceInfo((prev) => ({ ...prev, agreement }));
+              goNextStep('name');
+            }}
+          />
+        )}
         {step === 'name' && (
           <NameInputElement
             onNext={(name) => {

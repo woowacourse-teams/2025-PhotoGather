@@ -1,6 +1,6 @@
 import { ReactComponent as LinkIcon } from '@assets/icons/link.svg';
 import { ReactComponent as ShareIcon } from '@assets/icons/share.svg';
-import rocketIcon from '@assets/images/rocket.png';
+import messageIcon from '@assets/images/message.png';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ReactComponent as SaveIcon } from '../../../@assets/icons/download.svg';
@@ -175,19 +175,19 @@ const SpaceHomePage = () => {
 
   const loadingContents = [
     {
-      icon: { src: rocketIcon, alt: '데모 페이지 아이콘' },
+      icon: { src: messageIcon, alt: '데모 페이지 아이콘' },
       description: '추억 담는 중',
     },
     {
-      icon: { src: rocketIcon, alt: '데모 페이지 아이콘' },
+      icon: { src: messageIcon, alt: '데모 페이지 아이콘' },
       description: '선물 상자 포장하는 중',
     },
     {
-      icon: { src: rocketIcon, alt: '데모 페이지 아이콘' },
+      icon: { src: messageIcon, alt: '데모 페이지 아이콘' },
       description: '배달 가는 중',
     },
     {
-      icon: { src: rocketIcon, alt: '데모 페이지 아이콘' },
+      icon: { src: messageIcon, alt: '데모 페이지 아이콘' },
       description: '당신에게 전달 중',
     },
   ];
@@ -236,7 +236,11 @@ const SpaceHomePage = () => {
     <S.Wrapper>
       {/* TODO: 버튼 지우기 */}
       {(isDownloading || isDeleting) && (
-        <LoadingLayout loadingContents={loadingContents} percentage={0} />
+        <LoadingLayout
+          loadingContents={loadingContents}
+          totalAmount={10}
+          currentAmount={9}
+        />
       )}
       <S.InfoContainer ref={scrollTopTriggerRef}>
         <SpaceHeader

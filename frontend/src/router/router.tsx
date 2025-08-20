@@ -1,5 +1,6 @@
 import { createBrowserRouter } from 'react-router-dom';
 import Layout from '../components/layout/Layout';
+import KakaoAuthPage from '../pages/auth/KakaoAuthPage';
 import DownloadCompletePage from '../pages/complete/DownloadCompletePage';
 import UploadCompletePage from '../pages/complete/UploadCompletePage';
 import SpaceCreateFunnel from '../pages/create/funnel/SpaceCreateFunnel';
@@ -9,10 +10,13 @@ import NotFoundErrorPage from '../pages/error/NotFoundErrorPage';
 import ImageUploadPage from '../pages/guest/imageUploadPage/ImageUploadPage';
 import SharePage from '../pages/guest/sharePage/SharePage';
 import LandingPage from '../pages/landing/LandingPage';
+import LoginPage from '../pages/login/LoginPage';
 import DashboardPage from '../pages/manager/dashboard/DashboardPage';
 import SettingsPage from '../pages/manager/settings/SettingsPage';
 import SpaceHomePage from '../pages/manager/spaceHome/SpaceHomePage';
-import PrivacyPolicyPage from '../pages/privacyPolicy/PrivacyPolicyPage';
+import PrivacyConsentPage from '../pages/policies/PrivacyConsentPage';
+import PrivacyPolicyPage from '../pages/policies/PrivacyPolicyPage';
+import TermsOfServicePage from '../pages/policies/TermsOfServicePage';
 import type { AppRouteObject } from '../types/route.type';
 
 const routes: AppRouteObject[] = [
@@ -102,8 +106,30 @@ const routes: AppRouteObject[] = [
         ],
       },
       {
-        path: 'privacy-policy',
-        element: <PrivacyPolicyPage />,
+        path: 'login',
+        element: <LoginPage />,
+      },
+      {
+        path: 'auth',
+        children: [
+          {
+            path: 'login',
+            children: [
+              {
+                path: 'kakao',
+                element: <KakaoAuthPage />,
+              },
+            ],
+          },
+        ],
+      },
+      {
+        path: 'policy',
+        children: [
+          { path: 'privacy-policy', element: <PrivacyPolicyPage /> },
+          { path: 'terms-of-service', element: <TermsOfServicePage /> },
+          { path: 'privacy-consent', element: <PrivacyConsentPage /> },
+        ],
       },
       {
         path: 'network-error',

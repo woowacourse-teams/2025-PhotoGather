@@ -18,6 +18,13 @@ export const INFORMATION = {
     DESCRIPTION: `내 스페이스 관리 페이지에서도\n스페이스 링크를 확인할 수 있어요`,
     HIGHLIGHT_TEXT: '스페이스 링크',
   },
+  AGREEMENT: {
+    TITLE: {
+      TEXT: '서비스 사용을 위해\n약관에 동의해주세요',
+      HIGHLIGHT_TEXT: '약관에 동의',
+    },
+    DESCRIPTION: '첫 스페이스 생성시에만 동의가 필요해요',
+  },
   NAME_INPUT: {
     TITLE: {
       TEXT: '스페이스 이름을 정해볼까요?',
@@ -53,6 +60,13 @@ export const INFORMATION = {
   SETTINGS: {
     DESCRIPTION: `사진이 업로드된 이후에는\n시작 날짜 / 시간을 수정할 수 없어요.`,
     HIGHLIGHT_TEXT: '시작 날짜 / 시간',
+  },
+  LOGIN: {
+    TITLE: {
+      TEXT: '로그인 후 서비스를 이용해주세요',
+      HIGHLIGHT_TEXT: '로그인',
+    },
+    DESCRIPTION: '당신의 사진을 모아 드릴게요',
   },
 } as const;
 

@@ -3,16 +3,16 @@ import type {
   SpaceCreateInfo,
   UpdateSpaceInput,
 } from '../../types/space.type';
-import { http } from '../http';
+import { authHttp, http } from '../http';
 
 export const spaceService = {
   create: (data: SpaceCreateInfo) =>
-    http.post<{ spaceCode: string }>('/spaces', data),
+    authHttp.post<{ spaceCode: string }>('/spaces', data),
 
   getInfoByCode: (spaceCode: string) => http.get<Space>(`/spaces/${spaceCode}`),
 
   update: (id: number, data: UpdateSpaceInput) =>
-    http.patch<Space>(`/spaces/${id}`, data),
+    authHttp.patch<Space>(`/spaces/${id}`, data),
 
-  delete: (id: number) => http.delete<void>(`/spaces/${id}`),
+  delete: (id: number) => authHttp.delete<void>(`/spaces/${id}`),
 };
