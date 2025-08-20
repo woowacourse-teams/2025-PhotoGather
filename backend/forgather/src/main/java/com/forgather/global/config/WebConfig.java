@@ -9,7 +9,7 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import com.forgather.global.auth.resolver.HostIdArgumentResolver;
+import com.forgather.global.auth.resolver.LoginHostArgumentResolver;
 import com.forgather.global.logging.LoggingInterceptor;
 
 import lombok.RequiredArgsConstructor;
@@ -20,7 +20,7 @@ public class WebConfig implements WebMvcConfigurer {
 
     private final CorsProperties corsProperties;
     private final LoggingInterceptor loggingInterceptor;
-    private final HostIdArgumentResolver hostIdArgumentResolver;
+    private final LoginHostArgumentResolver loginHostArgumentResolver;
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
@@ -37,7 +37,7 @@ public class WebConfig implements WebMvcConfigurer {
         PageableHandlerMethodArgumentResolver pageableResolver = new PageableHandlerMethodArgumentResolver();
         pageableResolver.setOneIndexedParameters(true); // 1부터 시작
         resolvers.add(pageableResolver);
-        resolvers.add(hostIdArgumentResolver);
+        resolvers.add(loginHostArgumentResolver);
     }
 
     @Override

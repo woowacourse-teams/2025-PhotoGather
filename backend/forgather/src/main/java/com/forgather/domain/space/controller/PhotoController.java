@@ -38,7 +38,7 @@ import com.forgather.domain.space.dto.PhotosResponse;
 import com.forgather.domain.space.dto.SaveUploadedPhotoRequest;
 import com.forgather.domain.space.service.PhotoService;
 import com.forgather.domain.space.service.UploadService;
-import com.forgather.global.auth.annotation.HostId;
+import com.forgather.global.auth.annotation.LoginHost;
 import com.forgather.global.auth.model.Host;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -94,7 +94,7 @@ public class PhotoController {
     public ResponseEntity<PhotoResponse> get(
         @PathVariable(name = "spaceCode") String spaceCode,
         @PathVariable(name = "photoId") Long photoId,
-        @HostId Host host
+        @LoginHost Host host
     ) {
         var response = photoService.get(spaceCode, photoId, host);
         return ResponseEntity.ok(response);
@@ -105,7 +105,7 @@ public class PhotoController {
     public ResponseEntity<PhotosResponse> getAll(
         @PathVariable(name = "spaceCode") String spaceCode,
         @PageableDefault(size = 15, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable,
-        @HostId Host host
+        @LoginHost Host host
     ) {
         var response = photoService.getAll(spaceCode, pageable, host);
         return ResponseEntity.ok(response);
@@ -116,9 +116,9 @@ public class PhotoController {
     public ResponseEntity<Resource> download(
         @PathVariable(name = "spaceCode") String spaceCode,
         @PathVariable(name = "photoId") Long photoId,
-        @HostId Long hostId
+        @LoginHost Host host
     ) {
-        var response = photoService.download(spaceCode, photoId, hostId);
+        var response = photoService.download(spaceCode, photoId, host);
         ContentDisposition contentDisposition = ContentDisposition.attachment()
             .filename(response.name(), StandardCharsets.UTF_8)
             .build();
@@ -137,7 +137,7 @@ public class PhotoController {
     public ResponseEntity<StreamingResponseBody> downloadSelected(
         @PathVariable(name = "spaceCode") String spaceCode,
         @RequestBody DownloadPhotosRequest request,
-        @HostId Host host
+        @LoginHost Host host
     ) throws IOException {
         File zipFile = photoService.compressSelected(spaceCode, request, host);
 
@@ -173,7 +173,7 @@ public class PhotoController {
     @Operation(summary = "사진 zip 일괄 다운로드", description = "특정 공간의 사진 목록을 zip 파일로 다운로드합니다.")
     public ResponseEntity<StreamingResponseBody> downloadAll(
         @PathVariable(name = "spaceCode") String spaceCode,
-        @HostId Host host
+        @LoginHost Host host
     ) throws IOException {
         File zipFile = photoService.compressAll(spaceCode, host);
 
@@ -212,7 +212,7 @@ public class PhotoController {
     public ResponseEntity<Void> delete(
         @PathVariable(name = "spaceCode") String spaceCode,
         @PathVariable(name = "photoId") Long photoId,
-        @HostId Host host
+        @LoginHost Host host
     ) {
         photoService.delete(spaceCode, photoId, host);
         return ResponseEntity.noContent()
@@ -224,7 +224,7 @@ public class PhotoController {
     public ResponseEntity<Void> deleteSelected(
         @PathVariable(name = "spaceCode") String spaceCode,
         @RequestBody DeletePhotosRequest request,
-        @HostId Host host
+        @LoginHost Host host
     ) {
         photoService.deleteSelected(spaceCode, request, host);
         return ResponseEntity.noContent()

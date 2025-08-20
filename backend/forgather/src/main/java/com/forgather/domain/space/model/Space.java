@@ -8,6 +8,7 @@ import java.util.Objects;
 import com.forgather.domain.model.BaseTimeEntity;
 import com.forgather.global.auth.model.Host;
 import com.forgather.global.auth.model.SpaceHostMap;
+import com.forgather.global.exception.ForbiddenException;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -67,7 +68,7 @@ public class Space extends BaseTimeEntity {
         }
         if (spaceHostMap.stream()
             .noneMatch(map -> Objects.equals(map.getHost().getId(), host.getId()))) {
-            throw new IllegalArgumentException(
+            throw new ForbiddenException(
                 "해당 호스트는 이 스페이스의 호스트가 아닙니다. host id: " + host.getId() + ", spaceCode:" + code);
         }
     }

@@ -10,16 +10,18 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
 import com.forgather.domain.space.repository.HostRepository;
-import com.forgather.global.auth.annotation.HostId;
+import com.forgather.global.auth.annotation.LoginHost;
 import com.forgather.global.auth.model.Host;
 import com.forgather.global.auth.util.JwtTokenProvider;
+import com.forgather.global.exception.UnauthorizedException;
 
+import io.jsonwebtoken.JwtException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
-public class HostIdArgumentResolver implements HandlerMethodArgumentResolver {
+public class LoginHostArgumentResolver implements HandlerMethodArgumentResolver {
 
     private static final String BEARER = "Bearer ";
     private static final String AUTHORIZATION_HEADER_NAME = "Authorization";
@@ -29,13 +31,13 @@ public class HostIdArgumentResolver implements HandlerMethodArgumentResolver {
 
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
-        return parameter.hasParameterAnnotation(HostId.class);
+        return parameter.hasParameterAnnotation(LoginHost.class);
     }
 
     @Override
     public Host resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
         NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
-        HostId annotation = parameter.getParameterAnnotation(HostId.class);
+        LoginHost annotation = parameter.getParameterAnnotation(LoginHost.class);
         boolean required = Objects.requireNonNull(annotation).required();
         HttpServletRequest request = (HttpServletRequest) webRequest.getNativeRequest();
 
@@ -45,7 +47,7 @@ public class HostIdArgumentResolver implements HandlerMethodArgumentResolver {
             return null;
         }
         if (!jwtToken.startsWith(BEARER)) {
-            throw new IllegalArgumentException("Authorization header is missing or invalid");
+            throw new JwtException("Invalid JWT token format");
         }
 
         jwtToken = jwtToken.substring(BEARER.length());
@@ -57,7 +59,7 @@ public class HostIdArgumentResolver implements HandlerMethodArgumentResolver {
 
     private void throwExceptionIfRequired(boolean required) {
         if (required) {
-            throw new IllegalArgumentException("필수 로그인 정보가 잘못되었습니다.");
+            throw new UnauthorizedException();
         }
     }
 }

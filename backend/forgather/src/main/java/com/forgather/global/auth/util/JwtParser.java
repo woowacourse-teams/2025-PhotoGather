@@ -47,7 +47,7 @@ public class JwtParser {
 
             return objectMapper.convertValue(claims, KakaoIdToken.class);
         } catch (Exception e) {
-            throw new RuntimeException("Failed to parse and verify JWT", e);
+            throw new IllegalArgumentException("ID Token이 잘못되었습니다.", e);
         }
     }
 }

@@ -14,6 +14,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.forgather.domain.space.dto.CreateSpaceRequest;
 import com.forgather.domain.space.repository.HostRepository;
 import com.forgather.global.auth.model.Host;
+import com.forgather.global.auth.util.JwtTokenProvider;
 
 import io.restassured.http.ContentType;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
@@ -28,6 +29,9 @@ class SpaceAcceptanceTest extends AcceptanceTest {
     @Autowired
     private HostRepository hostRepository;
 
+    @Autowired
+    private JwtTokenProvider jwtTokenProvider;
+
     @BeforeEach
     void setUp() {
         RestAssuredMockMvc.mockMvc(mockMvc);
@@ -39,10 +43,12 @@ class SpaceAcceptanceTest extends AcceptanceTest {
         // given
         var host = hostRepository.save(new Host("모코", "pictureUrl"));
         var request = new CreateSpaceRequest("test-space", 72, LocalDateTime.now().plusDays(3));
+        String token = jwtTokenProvider.generateAccessToken(host.getId());
 
         // when
         var response = RestAssuredMockMvc.given()
             .contentType(ContentType.JSON)
+            .header("Authorization", "Bearer " + token)
             .body(request)
             .sessionAttr("host_id", host.getId())
             .when()

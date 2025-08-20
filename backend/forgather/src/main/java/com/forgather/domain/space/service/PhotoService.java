@@ -71,7 +71,7 @@ public class PhotoService {
         return compressPhotoFile(spaceCode, photos);
     }
 
-    public DownloadPhotoResponse download(String spaceCode, Long photoId, Long hostId) {
+    public DownloadPhotoResponse download(String spaceCode, Long photoId, Host host) {
         Space space = spaceRepository.getUnexpiredSpaceByCode(spaceCode);
         Photo photo = photoRepository.getById(photoId);
         photo.validateSpace(space);
