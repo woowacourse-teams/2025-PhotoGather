@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import com.forgather.domain.space.repository.HostRepository;
 import com.forgather.global.auth.client.KakaoAuthClient;
 import com.forgather.global.auth.dto.HostResponse;
 import com.forgather.global.auth.dto.KakaoIdToken;
@@ -27,6 +28,7 @@ public class AuthService {
     private final JwtTokenProvider jwtTokenProvider;
     private final KakaoAuthClient kakaoAuthClient;
     private final KakaoHostRepository kakaoHostRepository;
+    private final HostRepository hostRepository;
 
     public KakaoLoginTokenResponse getKakaoLoginToken() {
         return new KakaoLoginTokenResponse(kakaoAuthClient.getKakaoClientId());
@@ -50,14 +52,13 @@ public class AuthService {
 
     public LoginResponse refresh(String refreshToken) {
         jwtTokenProvider.validateToken(refreshToken);
-        Long hostId = jwtTokenProvider.getUserId(refreshToken);
-        KakaoHost kakaoHost = kakaoHostRepository.getById(hostId);
-        String accessToken = jwtTokenProvider.generateAccessToken(kakaoHost.getHost().getId());
+        Long hostId = jwtTokenProvider.getHostId(refreshToken);
+        Host host = hostRepository.getById(hostId);
+        String accessToken = jwtTokenProvider.generateAccessToken(host.getId());
         return LoginResponse.of(accessToken, refreshToken);
     }
 
-    public HostResponse getCurrentUser(Long hostId) {
-        KakaoHost kakaoHost = kakaoHostRepository.getById(hostId);
-        return HostResponse.from(kakaoHost.getHost());
+    public HostResponse getCurrentUser(Host host) {
+        return HostResponse.from(host);
     }
 }

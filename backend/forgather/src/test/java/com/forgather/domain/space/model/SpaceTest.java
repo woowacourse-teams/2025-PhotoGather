@@ -11,6 +11,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import com.forgather.global.auth.model.Host;
+
 class SpaceTest {
 
     @Test
@@ -20,7 +22,8 @@ class SpaceTest {
         String spaceCode = "1234567890";
         int validHours = 48;
         LocalDateTime openedAt = LocalDateTime.now();
-        Space space = new Space(spaceCode, "password", "name", validHours, openedAt);
+        Host host = new Host("moko", "pictureUrl");
+        Space space = new Space(host, spaceCode, "name", validHours, openedAt);
         LocalDateTime testDateTime = openedAt.plusHours(validHours + 1);
 
         // when & then
@@ -36,10 +39,11 @@ class SpaceTest {
         String spaceCode = "1234567890";
         int validHours = 48;
         LocalDateTime openedAt = LocalDateTime.now().minusDays(1);
+        Host host = new Host("moko", "pictureUrl");
 
         // when & then
         assertThatIllegalArgumentException().isThrownBy(
-            () -> new Space(spaceCode, "password", "name", validHours, openedAt)
+            () -> new Space(host, spaceCode, "name", validHours, openedAt)
         );
     }
 
@@ -47,10 +51,12 @@ class SpaceTest {
     @ParameterizedTest
     @ValueSource(strings = {"", " ", "12345678901"})
     void spaceNameValidationTest(String invalidName) {
+        // given
+        Host host = new Host("moko", "pictureUrl");
 
         // when & then
         assertThatIllegalArgumentException().isThrownBy(
-            () -> new Space("1234567890", "password", invalidName, 48, LocalDateTime.now())
+            () -> new Space(host, "1234567890", invalidName, 48, LocalDateTime.now())
         ).withMessageContaining("스페이스 이름");
     }
 
@@ -61,7 +67,8 @@ class SpaceTest {
         String spaceCode = "1234567890";
         int validHours = 48;
         LocalDateTime openedAt = LocalDateTime.now();
-        Space space = new Space(spaceCode, "password", "name", validHours, openedAt);
+        Host host = new Host("moko", "pictureUrl");
+        Space space = new Space(host, spaceCode, "name", validHours, openedAt);
 
         // when
         boolean isOpened = space.isOpened(LocalDateTime.now().plusHours(1));
@@ -77,7 +84,8 @@ class SpaceTest {
         String spaceCode = "1234567890";
         int validHours = 48;
         LocalDateTime openedAt = LocalDateTime.now();
-        Space space = new Space(spaceCode, "password", "name", validHours, openedAt);
+        Host host = new Host("moko", "pictureUrl");
+        Space space = new Space(host, spaceCode, "name", validHours, openedAt);
 
         // when
         boolean isExpired = space.isExpired(LocalDateTime.now().plusHours(validHours + 1));
@@ -93,7 +101,8 @@ class SpaceTest {
         String spaceCode = "1234567890";
         int validHours = 48;
         LocalDateTime openedAt = LocalDateTime.now();
-        Space space = new Space(spaceCode, "password", "name", validHours, openedAt);
+        Host host = new Host("moko", "pictureUrl");
+        Space space = new Space(host, spaceCode, "name", validHours, openedAt);
 
         // when & then
         assertThatIllegalArgumentException().isThrownBy(
@@ -104,18 +113,24 @@ class SpaceTest {
     @DisplayName("스페이스 유효 시간은 1시간 이상이어야 한다")
     @Test
     void validHoursValidationTest() {
+        // given
+        Host host = new Host("moko", "pictureUrl");
+
         // when & then
         assertThatIllegalArgumentException().isThrownBy(
-                () -> new Space("1234567890", "password", "name", 0, LocalDateTime.now()))
+                () -> new Space(host, "1234567890", "name", 0, LocalDateTime.now()))
             .withMessageContaining("스페이스 유효 시간");
     }
 
     @DisplayName("스페이스 코드는 10자리여야 한다")
     @Test
     void spaceCodeValidationTest() {
+        // given
+        Host host = new Host("moko", "pictureUrl");
+
         // when & then
         assertThatIllegalArgumentException().isThrownBy(
-                () -> new Space("123456789", "password", "name", 48, LocalDateTime.now()))
+                () -> new Space(host, "123456789", "name", 48, LocalDateTime.now()))
             .withMessageContaining("스페이스 코드");
     }
 }

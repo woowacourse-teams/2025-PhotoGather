@@ -9,5 +9,7 @@ import io.swagger.v3.oas.annotations.Hidden;
 @Hidden
 @Target({java.lang.annotation.ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface HostId {
+public @interface LoginHost {
+
+    boolean required() default true;
 }
