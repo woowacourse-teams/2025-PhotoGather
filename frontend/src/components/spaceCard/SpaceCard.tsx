@@ -11,14 +11,20 @@ import * as S from './SpaceCard.styles';
 
 type SpaceCardVariant = 'default' | 'expired' | 'early';
 
-// SpaceCreateInfo 참고
 interface SpaceCardProps {
+  /** 스페이스 이름 */
   name: string;
+  /** 남은 유효 시간 (시간 단위)*/
   validHours: number;
+  /** 스페이스 오픈 시간 */
   openedAt: string;
+  /** 스페이스 만료 시간 */
   expiredAt?: string;
-  totalParticipants?: number;
-  totalImages?: number;
+  /** 참여자 수 */
+  guestCount?: number;
+  /** 이미지 수 */
+  photoCount?: number;
+  /** 카드 타입 */
   variant: SpaceCardVariant;
 }
 
@@ -27,8 +33,8 @@ const SpaceCard = ({
   validHours,
   openedAt,
   expiredAt,
-  totalParticipants,
-  totalImages,
+  guestCount = 0,
+  photoCount = 0,
   variant,
 }: SpaceCardProps) => {
   if (variant === 'expired') {
@@ -44,11 +50,11 @@ const SpaceCard = ({
           <S.InfoContainer>
             <S.InfoItem>
               <GroupIcon />
-              <S.InfoText>{totalParticipants}명</S.InfoText>
+              <S.InfoText>{guestCount}명</S.InfoText>
             </S.InfoItem>
             <S.InfoItem>
               <DefaultImageIcon />
-              <S.InfoText>{totalImages}장</S.InfoText>
+              <S.InfoText>{photoCount}장</S.InfoText>
             </S.InfoItem>
           </S.InfoContainer>
         </S.ContentContainer>
@@ -83,11 +89,11 @@ const SpaceCard = ({
         <S.InfoContainer>
           <S.InfoItem>
             <GroupIcon />
-            <S.InfoText>{totalParticipants}명</S.InfoText>
+            <S.InfoText>{guestCount}명</S.InfoText>
           </S.InfoItem>
           <S.InfoItem>
             <DefaultImageIcon />
-            <S.InfoText>{totalImages}장</S.InfoText>
+            <S.InfoText>{photoCount}장</S.InfoText>
           </S.InfoItem>
         </S.InfoContainer>
       </S.ContentContainer>
