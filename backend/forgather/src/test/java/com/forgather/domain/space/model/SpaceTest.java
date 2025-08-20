@@ -1,11 +1,11 @@
 package com.forgather.domain.space.model;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.time.LocalDateTime;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -38,14 +38,14 @@ class SpaceTest {
         LocalDateTime openedAt = LocalDateTime.now().minusDays(1);
 
         // when & then
-        Assertions.assertThatIllegalArgumentException().isThrownBy(
+        assertThatIllegalArgumentException().isThrownBy(
             () -> new Space(spaceCode, "password", "name", validHours, openedAt)
         );
     }
 
     @DisplayName("스페이스 이름이 비어있거나, 10자 초과면 예외를 던진다")
     @ParameterizedTest
-    @ValueSource(strings = {"", " ", "          "})
+    @ValueSource(strings = {"", " ", "12345678901"})
     void spaceNameValidationTest(String invalidName) {
 
         // when & then
@@ -67,7 +67,7 @@ class SpaceTest {
         boolean isOpened = space.isOpened(LocalDateTime.now().plusHours(1));
 
         // then
-        Assertions.assertThat(isOpened).isTrue();
+        assertThat(isOpened).isTrue();
     }
 
     @DisplayName("스페이스가 만료되면 .isExpired() 메서드가 true를 반환한다")
@@ -83,7 +83,7 @@ class SpaceTest {
         boolean isExpired = space.isExpired(LocalDateTime.now().plusHours(validHours + 1));
 
         // then
-        Assertions.assertThat(isExpired).isTrue();
+        assertThat(isExpired).isTrue();
     }
 
     @DisplayName("스페이스 오픈 시각을 변경할 때, 이미 오픈 된 스페이스는 예외를 던진다")
@@ -97,8 +97,8 @@ class SpaceTest {
 
         // when & then
         assertThatIllegalArgumentException().isThrownBy(
-            () -> space.setOpenedAt(LocalDateTime.now().plusHours(1))
-        ).withMessageContaining("이미 열린");
+                () -> space.update(null, null, LocalDateTime.now().plusSeconds(1), null))
+            .withMessageContaining("이미 열린");
     }
 
     @DisplayName("스페이스 유효 시간은 1시간 이상이어야 한다")

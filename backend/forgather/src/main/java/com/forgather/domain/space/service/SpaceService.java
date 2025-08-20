@@ -35,18 +35,12 @@ public class SpaceService {
     public SpaceResponse update(String spaceCode, UpdateSpaceRequest request, Long hostId) {
         // TODO: hostId가 해당 스페이스의 소유자인지 검증하는 로직 추가 필요
         Space space = spaceRepository.getByCode(spaceCode);
-        if (request.name() != null) {
-            space.setName(request.name());
-        }
-        if (request.validHours() != null) {
-            space.setValidHours(request.validHours());
-        }
-        if (request.openedAt() != null) {
-            space.setOpenedAt(request.openedAt());
-        }
-        if (request.password() != null) {
-            space.setPassword(request.password());
-        }
+        space.update(
+            request.name(),
+            request.validHours(),
+            request.openedAt(),
+            request.password()
+        );
 
         return SpaceResponse.from(space);
     }

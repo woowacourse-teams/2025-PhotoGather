@@ -16,7 +16,6 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Getter
 @Entity
@@ -29,19 +28,15 @@ public class Space extends BaseTimeEntity {
     private Long id;
 
     @Column(name = "code", nullable = false, length = 64)
-    @Setter
     private String code;
 
     @Column(name = "password", length = 64)
-    @Setter
     private String password;
 
     @Column(name = "name", nullable = false)
-    @Setter
     private String name;
 
     @Column(name = "valid_hours", nullable = false)
-    @Setter
     private int validHours;
 
     @Column(name = "opened_at", nullable = false)
@@ -75,7 +70,36 @@ public class Space extends BaseTimeEntity {
         return openedAt.plusHours(validHours);
     }
 
-    public void setOpenedAt(LocalDateTime newOpenedAt) {
+    public void update(String name, Integer validHours, LocalDateTime openedAt, String password) {
+        if (name != null) {
+            setName(name);
+        }
+        if (validHours != null) {
+            setValidHours(validHours);
+        }
+        if (openedAt != null) {
+            setOpenedAt(openedAt);
+        }
+        if (password != null) {
+            setPassword(password);
+        }
+    }
+
+    private void setName(String name) {
+        if (name.isBlank() || name.length() > 10) {
+            throw new IllegalArgumentException("스페이스 이름은 비어있을 수 없고, 최대 10자여야 합니다. 생성 시도 이름: " + name);
+        }
+        this.name = name;
+    }
+
+    private void setValidHours(Integer validHours) {
+        if (validHours <= 0) {
+            throw new IllegalArgumentException("스페이스 유효 시간은 1시간 이상이어야 합니다. 생성 시도 유효 시간: " + validHours);
+        }
+        this.validHours = validHours;
+    }
+
+    private void setOpenedAt(LocalDateTime newOpenedAt) {
         validateOpenedAt(newOpenedAt);
         if (isExpired(LocalDateTime.now())) {
             throw new IllegalArgumentException("만료된 스페이스의 오픈 시각을 변경할 수 없습니다.");
@@ -84,6 +108,13 @@ public class Space extends BaseTimeEntity {
             throw new IllegalArgumentException("이미 열린 스페이스의 오픈 시각을 변경할 수 없습니다.");
         }
         this.openedAt = newOpenedAt;
+    }
+
+    private void setPassword(String password) {
+        if (password.isBlank()) {
+            throw new IllegalArgumentException("스페이스 비밀번호는 비어있을 수 없습니다.");
+        }
+        this.password = password;
     }
 
     private void validate(String code, String name, int validHours, LocalDateTime openedAt) {
