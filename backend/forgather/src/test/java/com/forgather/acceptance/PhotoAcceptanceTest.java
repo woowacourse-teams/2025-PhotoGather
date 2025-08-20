@@ -2,6 +2,8 @@ package com.forgather.acceptance;
 
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
+import java.net.MalformedURLException;
+import java.net.URI;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.IntStream;
@@ -18,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.forgather.domain.guest.model.Guest;
 import com.forgather.domain.guest.repository.GuestRepository;
+import com.forgather.domain.space.dto.DownloadPhotosRequest;
 import com.forgather.domain.space.dto.IssueSignedUrlRequest;
 import com.forgather.domain.space.model.Photo;
 import com.forgather.domain.space.model.PhotoMetaData;
@@ -61,6 +64,12 @@ class PhotoAcceptanceTest extends AcceptanceTest {
         RestAssuredMockMvc.mockMvc(mockMvc);
         Mockito.when(awsS3Cloud.issueSignedUrl(Mockito.anyString()))
             .thenReturn("url");
+        try {
+            Mockito.when(awsS3Cloud.issueDownloadUrl(Mockito.anyString()))
+                .thenReturn(URI.create("https://example.com/dummy.jpg").toURL());
+        } catch (MalformedURLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Test
@@ -140,6 +149,90 @@ class PhotoAcceptanceTest extends AcceptanceTest {
         // then
         assertSoftly(softly -> {
             softly.assertThat(response.statusCode()).isEqualTo(400);
+        });
+    }
+
+    @Test
+    @Transactional
+    @DisplayName("사진 단일 다운로드를 위한 URL을 발급한다.")
+    void issueSingleDownloadUrl() {
+        // given
+        var host = hostRepository.save(new Host("모코", "pictureUrl"));
+        var space = spaceRepository.save(new Space(host, "space-code", "test-space", 3, LocalDateTime.now()));
+        var guest = guestRepository.save(new Guest(space, "guest"));
+        var photo = photoRepository.save(new Photo(space, guest, "origin1.png", "path",
+            new PhotoMetaData(LocalDateTime.now()), 1024L));
+        String token = jwtTokenProvider.generateAccessToken(host.getId());
+
+        // when
+        var response = RestAssuredMockMvc.given()
+            .header("Authorization", "Bearer " + token)
+            .when()
+            .post("/spaces/{spaceCode}/photos/issue/download-urls/{photoId}", space.getCode(), photo.getId())
+            .then()
+            .extract();
+
+        // then
+        assertSoftly(softly -> {
+            softly.assertThat(response.statusCode()).isEqualTo(200);
+            softly.assertThat(response.body().jsonPath().getList("downloadUrls")).hasSize(1);
+        });
+    }
+
+    @Test
+    @Transactional
+    @DisplayName("사진 선택 다운로드를 위한 URL을 발급한다.")
+    void issueSelectedDownloadUrl() {
+        // given
+        var host = hostRepository.save(new Host("모코", "pictureUrl"));
+        var space = spaceRepository.save(new Space(host, "space-code", "test-space", 3, LocalDateTime.now()));
+        var guest = guestRepository.save(new Guest(space, "guest"));
+        Photo photo = photoRepository.save(
+            new Photo(space, guest, "origin1.png", "path1", new PhotoMetaData(LocalDateTime.now()), 1024L));
+        var request = new DownloadPhotosRequest(List.of(photo.getId()));
+        String token = jwtTokenProvider.generateAccessToken(host.getId());
+
+        // when
+        var response = RestAssuredMockMvc.given()
+            .header("Authorization", "Bearer " + token)
+            .contentType("application/json")
+            .accept("application/json")
+            .body(request)
+            .when()
+            .post("/spaces/{spaceCode}/photos/issue/download-urls/selected", space.getCode())
+            .then()
+            .extract();
+
+        // then
+        assertSoftly(softly -> {
+            softly.assertThat(response.statusCode()).isEqualTo(200);
+            softly.assertThat(response.body().jsonPath().getList("downloadUrls")).hasSize(1);
+        });
+    }
+
+    @Test
+    @Transactional
+    @DisplayName("사진 일괄 다운로드를 위한 URL을 발급한다.")
+    void issueAllDownloadUrl() {
+        // given
+        var host = hostRepository.save(new Host("모코", "pictureUrl"));
+        var space = spaceRepository.save(new Space(host, "space-code", "test-space", 3, LocalDateTime.now()));
+        var guest = guestRepository.save(new Guest(space, "guest"));
+        photoRepository.save(new Photo(space, guest, "origin1.png", "path1", new PhotoMetaData(LocalDateTime.now()), 1024L));
+        String token = jwtTokenProvider.generateAccessToken(host.getId());
+
+        // when
+        var response = RestAssuredMockMvc.given()
+            .header("Authorization", "Bearer " + token)
+            .when()
+            .post("/spaces/{spaceCode}/photos/issue/download-urls", space.getCode())
+            .then()
+            .extract();
+
+        // then
+        assertSoftly(softly -> {
+            softly.assertThat(response.statusCode()).isEqualTo(200);
+            softly.assertThat(response.body().jsonPath().getList("downloadUrls")).hasSize(1);
         });
     }
 }

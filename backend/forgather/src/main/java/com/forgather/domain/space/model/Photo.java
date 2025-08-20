@@ -36,7 +36,7 @@ public class Photo extends SpaceContent {
     private PhotoMetaData metaData;
 
     @Column(name = "capacity_value", nullable = false)
-    private long capacityValue; // bytes
+    private Long capacityValue; // bytes
 
     @CreatedDate
     @Column(name = "created_at", nullable = false, updatable = false)

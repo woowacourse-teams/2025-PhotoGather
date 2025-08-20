@@ -32,6 +32,7 @@ import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBo
 
 import com.forgather.domain.space.dto.DeletePhotosRequest;
 import com.forgather.domain.space.dto.DownloadPhotosRequest;
+import com.forgather.domain.space.dto.DownloadUrlsResponse;
 import com.forgather.domain.space.dto.IssueSignedUrlRequest;
 import com.forgather.domain.space.dto.IssueSignedUrlResponse;
 import com.forgather.domain.space.dto.PhotoResponse;
@@ -114,6 +115,7 @@ public class PhotoController {
         return ResponseEntity.ok(response);
     }
 
+    @Deprecated
     @PostMapping("/download/{photoId}")
     @Operation(summary = "사진 단일 다운로드", description = "특정 공간의 선택된 단일 사진을 다운로드합니다.")
     public ResponseEntity<Resource> download(
@@ -135,6 +137,7 @@ public class PhotoController {
             .body(body);
     }
 
+    @Deprecated
     @PostMapping(value = "/download/selected", produces = ZIP_CONTENT_TYPE)
     @Operation(summary = "사진 zip 선택 다운로드", description = "특정 공간의 선택된 사진을 zip 파일로 다운로드합니다.")
     public ResponseEntity<StreamingResponseBody> downloadSelected(
@@ -172,6 +175,7 @@ public class PhotoController {
             .body(responseBody);
     }
 
+    @Deprecated
     @PostMapping(value = "/download", produces = ZIP_CONTENT_TYPE)
     @Operation(summary = "사진 zip 일괄 다운로드", description = "특정 공간의 사진 목록을 zip 파일로 다운로드합니다.")
     public ResponseEntity<StreamingResponseBody> downloadAll(
@@ -208,6 +212,38 @@ public class PhotoController {
         return ResponseEntity.ok()
             .headers(httpHeaders)
             .body(responseBody);
+    }
+
+    @PostMapping("/issue/download-urls/{photoId}")
+    @Operation(summary = "사진 단일 다운로드 URL", description = "특정 공간의 단일 사진 다운로드 URL을 생성합니다.")
+    public ResponseEntity<DownloadUrlsResponse> getDownloadUrl(
+        @PathVariable(name = "spaceCode") String spaceCode,
+        @PathVariable(name = "photoId") Long photoId,
+        @LoginHost Host host
+    ) {
+        var response = photoService.getDownloadUrl(spaceCode, photoId, host);
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/issue/download-urls/selected")
+    @Operation(summary = "사진 선택 다운로드 URL", description = "특정 공간의 선택된 사진 다운로드 URL 목록을 생성합니다.")
+    public ResponseEntity<DownloadUrlsResponse> getSelectedDownloadUrls(
+        @PathVariable(name = "spaceCode") String spaceCode,
+        @RequestBody DownloadPhotosRequest request,
+        @LoginHost Host host
+    ) {
+        var response = photoService.getSelectedDownloadUrls(spaceCode, request, host);
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/issue/download-urls")
+    @Operation(summary = "사진 일괄 다운로드 URL", description = "특정 공간의 모든 사진 다운로드 URL 목록을 생성합니다.")
+    public ResponseEntity<DownloadUrlsResponse> getAllDownloadUrls(
+        @PathVariable(name = "spaceCode") String spaceCode,
+        @LoginHost Host host
+    ) {
+        var response = photoService.getAllDownloadUrls(spaceCode, host);
+        return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/{photoId}")
