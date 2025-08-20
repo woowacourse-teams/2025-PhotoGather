@@ -39,9 +39,10 @@ const ImageUploadPage = () => {
   const overlay = useOverlay();
   const navigate = useNavigate();
 
-  const { nickName, showNickNameModal, saveGuestId } = useGuestNickName({
-    spaceCode: spaceCode ?? '',
-  });
+  const { nickName, guestId, showNickNameEditModal, tryCreateNickName } =
+    useGuestNickName({
+      spaceCode: spaceCode ?? '',
+    });
 
   const navigateToUploadComplete = () => {
     navigate(ROUTES.COMPLETE.UPLOAD, {
@@ -63,7 +64,8 @@ const ImageUploadPage = () => {
     spaceCode: spaceCode ?? '',
     fileType: 'image',
     onUploadSuccess: navigateToUploadComplete,
-    saveGuestId,
+    guestId,
+    tryCreateNickName,
   });
 
   const hasImages = Array.isArray(previewData) && previewData.length > 0;
@@ -130,7 +132,7 @@ const ImageUploadPage = () => {
       <SpaceHeader title={spaceName} timer={leftTime} />
       <UserBadge
         nickName={nickName}
-        onBadgeClick={() => showNickNameModal('edit')}
+        onBadgeClick={() => showNickNameEditModal()}
       />
       <S.UploadContainer $hasImages={hasImages}>
         {shouldShowFakeUploadBox ? (

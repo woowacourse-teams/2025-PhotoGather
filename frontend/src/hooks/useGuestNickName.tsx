@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { guestService } from '../apis/services/guest.service';
 import HighlightText from '../components/@common/highlightText/HighlightText';
 import InputModal from '../components/@common/modal/inputModal/InputModal';
+import { FAILED_GUEST_ID } from '../constants/errors';
 import { useOverlay } from '../contexts/OverlayProvider';
 import { createRandomNickName } from '../utils/createRandomNickName';
 import { validateGuestId } from '../validators/guest.validator';
@@ -15,12 +16,10 @@ const useGuestNickName = ({ spaceCode }: UseGuestNickNameProps) => {
   const overlay = useOverlay();
   const { tryFetch, tryTask } = useError();
 
-  type NickNameModalMode = 'create' | 'edit';
   const [nickName, setNickName] = useState('');
 
-  const FAILED_GUEST_ID = -1;
-  const guestId = localStorage.getItem('guestId');
-  const mode = guestId ? 'edit' : 'create';
+  const guestId = Number(localStorage.getItem('guestId'));
+  const mode = guestId || nickName.length > 0 ? 'edit' : 'create';
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: 초기 모달 표시
   useEffect(() => {
@@ -32,7 +31,7 @@ const useGuestNickName = ({ spaceCode }: UseGuestNickNameProps) => {
       fetchNickName();
     }
     if (mode === 'create') {
-      showNickNameModal('create');
+      showNickNameCreateModal();
     }
   }, []);
 
@@ -49,26 +48,45 @@ const useGuestNickName = ({ spaceCode }: UseGuestNickNameProps) => {
     return '';
   };
 
-  const showNickNameModal = async (mode: NickNameModalMode) => {
-    const defaultInputModalProps = {
-      description: (
-        <HighlightText
-          text="닉네임을 입력해 주세요"
-          highlightTextArray={['닉네임']}
-          fontStyle="header03"
-          highlightColorStyle="primary"
-        />
-      ),
-      subDescription: '10자까지 입력할 수 있어요.',
-      placeholder: '닉네임을 입력해 주세요',
-      confirmText: '확인',
-      cancelText: mode === 'create' ? '취소' : undefined,
-      initialValue: mode === 'create' ? createRandomNickName() : nickName,
-      createErrorMessage: createNickNameErrorMessage,
+  const defaultInputModalProps = {
+    description: (
+      <HighlightText
+        text="닉네임을 입력해 주세요"
+        highlightTextArray={['닉네임']}
+        fontStyle="header03"
+        highlightColorStyle="primary"
+      />
+    ),
+    subDescription: '10자까지 입력할 수 있어요.',
+    placeholder: '닉네임을 입력해 주세요',
+    confirmText: '확인',
+    createErrorMessage: createNickNameErrorMessage,
+  };
+
+  const showNickNameEditModal = async () => {
+    const editInputModalProps = {
+      ...defaultInputModalProps,
+      initialValue: nickName,
+      cancelText: '취소',
     };
 
     const result = await overlay<{ value: string }>(
-      <InputModal {...defaultInputModalProps} />,
+      <InputModal {...editInputModalProps} />,
+    );
+    if (result) {
+      setNickName(result.value);
+      tryChangeNickName(result.value);
+    }
+  };
+
+  const showNickNameCreateModal = async () => {
+    const createInputModalProps = {
+      ...defaultInputModalProps,
+      initialValue: createRandomNickName(),
+    };
+
+    const result = await overlay<{ value: string }>(
+      <InputModal {...createInputModalProps} />,
     );
     if (result) {
       setNickName(result.value);
@@ -139,7 +157,7 @@ const useGuestNickName = ({ spaceCode }: UseGuestNickNameProps) => {
     return taskResult.data ?? FAILED_GUEST_ID;
   };
 
-  const tryChangeNickName = async () => {
+  const tryChangeNickName = async (nickName: string) => {
     const validateResult = tryValidateGuestId();
     if (!validateResult.success) return FAILED_GUEST_ID;
     const validGuestId = validateResult.data;
@@ -173,18 +191,17 @@ const useGuestNickName = ({ spaceCode }: UseGuestNickNameProps) => {
     return taskResult.data ?? FAILED_GUEST_ID;
   };
 
-  const saveGuestId = async () => {
-    if (nickName.length !== 0) {
-      return await tryChangeNickName();
-    }
-    return await tryCreateNickName();
-  };
-
   const storageGuestNickName = (guestId: string) => {
     localStorage.setItem('guestId', guestId);
   };
 
-  return { nickName, showNickNameModal, saveGuestId };
+  return {
+    nickName,
+    guestId,
+    showNickNameEditModal,
+    showNickNameCreateModal,
+    tryCreateNickName,
+  };
 };
 
 export default useGuestNickName;

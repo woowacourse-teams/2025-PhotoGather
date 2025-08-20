@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { photoService } from '../../apis/services/photo.service';
 import { CONSTRAINTS } from '../../constants/constraints';
+import { FAILED_GUEST_ID } from '../../constants/errors';
 import type { PreviewFile, UploadFile } from '../../types/file.type';
 import { isValidFileType } from '../../utils/isValidFileType';
 import {
@@ -13,14 +14,16 @@ interface UseFileUploadProps {
   spaceCode: string;
   fileType: string;
   onUploadSuccess?: () => void;
-  saveGuestId: () => Promise<number>;
+  guestId: number;
+  tryCreateNickName: () => Promise<number>;
 }
 
 const useFileUpload = ({
   spaceCode,
   fileType,
   onUploadSuccess,
-  saveGuestId,
+  guestId,
+  tryCreateNickName,
 }: UseFileUploadProps) => {
   const [uploadFiles, setUploadFiles] = useState<UploadFile[]>([]);
   const [previewData, setPreviewData] = useState<PreviewFile[]>([]);
@@ -92,7 +95,7 @@ const useFileUpload = ({
 
   const fetchUploadFiles = async () => {
     const files = uploadFiles.map((file) => file.originFile);
-    await photoService.uploadFiles(spaceCode, files);
+    await photoService.uploadFiles(spaceCode, files, guestId);
   };
 
   const errorOption = {
@@ -110,8 +113,10 @@ const useFileUpload = ({
     await tryFetch({
       task: async () => {
         setIsUploading(true);
+        if (!guestId || guestId === FAILED_GUEST_ID) {
+          await tryCreateNickName();
+        }
         await fetchUploadFiles();
-        await saveGuestId();
         onUploadSuccess?.();
         clearFiles();
       },

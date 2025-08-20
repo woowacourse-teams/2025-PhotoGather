@@ -20,11 +20,11 @@ export const photoService = {
 
   create: (data: CreatePhotoInput) => http.post<Photo>('/photos', data),
 
-  uploadFiles: (spaceCode: string, files: File[]) => {
+  uploadFiles: (spaceCode: string, files: File[], guestId: number) => {
     const formData = new FormData();
     files.forEach((file) => formData.append('files', file));
     return http.post(
-      `/spaces/${spaceCode}/photos/upload`,
+      `/spaces/${spaceCode}/photos/upload?guestId=${guestId}`,
       formData,
       'form-data',
     );
