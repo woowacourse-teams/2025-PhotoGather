@@ -1,12 +1,17 @@
-import * as Sentry from '@sentry/react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { ROUTES } from '../../constants/routes';
 import type { TryTaskResultType } from '../../types/common.type';
+import { HttpError } from '../../types/error.type';
 import type { ToastBase } from '../../types/toast.type';
 import { useToast } from './useToast';
 
-type AfterAction = () => void;
-type RedirectPath = string;
+interface AfterAction {
+  action: () => void;
+}
+interface RedirectPath {
+  path: string;
+}
 type ToastOptions = Omit<ToastBase, 'text'> & { text?: string };
 
 interface ErrorRequiredProps {
@@ -25,10 +30,10 @@ const useError = () => {
       showToast(toastBase);
     },
     afterAction: (afterAction: AfterAction) => {
-      afterAction();
+      afterAction.action();
     },
     redirect: (path: RedirectPath) => {
-      navigate(path);
+      navigate(path.path);
     },
     console: (message: string) => {
       console.error(message);
@@ -38,43 +43,25 @@ const useError = () => {
   type ErrorType = keyof typeof errorHandler;
 
   interface TryTaskProps<T> {
-    task: () => T | Promise<T>;
+    task: () => T;
     errorActions: ErrorType[];
     context?: ErrorRequiredProps;
     onFinally?: () => void;
-    shouldLogToSentry?: boolean;
   }
 
-  const tryTask = async <T>({
+  const tryTask = <T>({
     task,
     errorActions,
     context,
     onFinally,
-    shouldLogToSentry = false,
-  }: TryTaskProps<T>): Promise<TryTaskResultType<T>> => {
+  }: TryTaskProps<T>): TryTaskResultType<T> => {
     try {
       setIsError(false);
-      const data = await Promise.resolve(task());
+      const data = task();
       return { success: true, data };
     } catch (e) {
       setIsError(true);
       const error = e instanceof Error ? e : new Error(String(e));
-      const extraLogData = (error as any).sentryContext;
-
-      if (shouldLogToSentry) {
-        Sentry.captureException(error, (scope) => {
-          const { headers, requestBody, ...rest } = extraLogData || {};
-
-          scope.setContext('http', {
-            ...rest,
-            headers: headers ? JSON.stringify(headers) : undefined,
-            requestBody: requestBody ? JSON.stringify(requestBody) : undefined,
-          });
-
-          return scope;
-        });
-      }
-
       matchingErrorHandler(errorActions, context, error);
 
       return { success: false, data: null };
@@ -83,6 +70,41 @@ const useError = () => {
     }
   };
 
+  interface TryFetchProps<T> {
+    task: () => Promise<T>;
+    errorActions: ErrorType[];
+    context?: ErrorRequiredProps;
+    onFinally?: () => void;
+  }
+
+  const ERROR_CODES_TO_HANDLE = [401, 403];
+
+  const tryFetch = async <T>({
+    task,
+    errorActions,
+    context,
+    onFinally,
+  }: TryFetchProps<T>) => {
+    try {
+      const response = await task();
+      return { success: true, data: response };
+    } catch (e) {
+      const error = e instanceof Error ? e : new Error(String(e));
+
+      if (
+        error instanceof HttpError &&
+        ERROR_CODES_TO_HANDLE.includes(error.status)
+      ) {
+        matchingErrorHandlerByCode(error.status);
+        return { success: false, data: null };
+      }
+
+      matchingErrorHandler(errorActions, context, error);
+      return { success: false, data: null };
+    } finally {
+      onFinally?.();
+    }
+  };
   const baseToastSetting = {
     type: 'error',
     position: 'bottom',
@@ -105,14 +127,33 @@ const useError = () => {
       errorHandler.afterAction(context.afterAction);
     }
     if (errorActions.includes('redirect') && context?.redirect) {
-      errorHandler.redirect(context.redirect);
+      const redirectPath = context.redirect;
+      errorHandler.redirect(redirectPath);
     }
     if (errorActions.includes('console')) {
       errorHandler.console(error.message);
     }
   };
 
-  return { isError, tryTask };
+  const matchingErrorHandlerByCode = (errorCode: number) => {
+    if (errorCode === 401) {
+      errorHandler.toast({
+        ...baseToastSetting,
+        text: '로그인이 필요합니다.',
+      });
+      errorHandler.redirect({ path: ROUTES.LOGIN });
+    }
+    if (errorCode === 403) {
+      errorHandler.toast({
+        ...baseToastSetting,
+        text: '접근 권한이 없습니다.',
+      });
+    }
+
+    return;
+  };
+
+  return { isError, tryTask, tryFetch };
 };
 
 export default useError;

@@ -1,24 +1,20 @@
 import type { PhotoIds, PhotoListResponse } from '../../types/api.type';
-import type {
-  CreatePhotoInput,
-  Photo,
-  PhotoWithContent,
-} from '../../types/photo.type';
-import { http } from '../http';
+import type { CreatePhotoInput, Photo } from '../../types/photo.type';
+import { authHttp, http } from '../http';
 
 export const photoService = {
   getAll: (params?: { page?: number; pageSize?: number }) =>
-    http.get<PhotoListResponse>('/photos', params),
+    authHttp.get<PhotoListResponse>('/photos', params),
 
   getById: (spaceCode: string, photoId: number) =>
-    http.get<Photo>(`/spaces/${spaceCode}/photos/${photoId}`),
+    authHttp.get<Photo>(`/spaces/${spaceCode}/photos/${photoId}`),
 
   getBySpaceCode: (
     spaceCode: string,
     params?: { page?: number; size?: number },
-  ) => http.get<PhotoListResponse>(`/spaces/${spaceCode}/photos`, params),
+  ) => authHttp.get<PhotoListResponse>(`/spaces/${spaceCode}/photos`, params),
 
-  create: (data: CreatePhotoInput) => http.post<Photo>('/photos', data),
+  create: (data: CreatePhotoInput) => authHttp.post<Photo>('/photos', data),
 
   uploadFiles: (spaceCode: string, files: File[]) => {
     const formData = new FormData();
@@ -31,17 +27,27 @@ export const photoService = {
   },
 
   downloadAll: (spaceCode: string) =>
-    http.post<Blob>(`/spaces/${spaceCode}/photos/download`, undefined),
+    authHttp.post<Blob>(`/spaces/${spaceCode}/photos/download`, undefined),
 
   downloadPhotos: (spaceCode: string, photoIds: PhotoIds) =>
-    http.post<Blob>(`/spaces/${spaceCode}/photos/download/selected`, photoIds),
+    authHttp.post<Blob>(
+      `/spaces/${spaceCode}/photos/download/selected`,
+      photoIds,
+    ),
+
+  downloadSinglePhoto: (spaceCode: string, photoId: number) =>
+    authHttp.post<Blob>(
+      `/spaces/${spaceCode}/photos/download/${photoId}`,
+      photoId,
+    ),
 
   deletePhotos: (spaceCode: string, photoIds: PhotoIds) =>
-    http.delete<void>(`/spaces/${spaceCode}/photos/selected`, photoIds, 'json'),
+    authHttp.delete<void>(
+      `/spaces/${spaceCode}/photos/selected`,
+      photoIds,
+      'json',
+    ),
 
   deletePhoto: (spaceCode: string, photoId: number) =>
-    http.delete<void>(`/spaces/${spaceCode}/photos/${photoId}`),
-
-  getWithContent: (photoId: number) =>
-    http.get<PhotoWithContent>(`/photos/${photoId}/content`),
+    authHttp.delete<void>(`/spaces/${spaceCode}/photos/${photoId}`),
 };

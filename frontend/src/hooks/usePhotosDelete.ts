@@ -26,7 +26,7 @@ const usePhotosDelete = ({
 }: UsePhotosDeleteProps) => {
   const [isDeleting, setIsDeleting] = useState(false);
   const overlay = useOverlay();
-  const { tryTask } = useError();
+  const { tryTask, tryFetch } = useError();
   const { showToast } = useToast();
 
   const showDeleteConfirmModal = async (message: string) => {
@@ -57,7 +57,7 @@ const usePhotosDelete = ({
   };
 
   const tryDeleteSelectedPhotos = async (photoIds: number[]) => {
-    const taskResult = await tryTask({
+    const taskResult = tryTask({
       task: () => checkSelectedPhotoExist(photoIds),
       errorActions: ['toast'],
     });
@@ -68,7 +68,7 @@ const usePhotosDelete = ({
     );
     if (!result) return;
 
-    tryTask({
+    tryFetch({
       task: async () => {
         return await deleteSelectedPhotos(photoIds);
       },
@@ -81,7 +81,6 @@ const usePhotosDelete = ({
       onFinally: () => {
         setIsDeleting(false);
       },
-      shouldLogToSentry: true,
     });
   };
 
@@ -99,7 +98,7 @@ const usePhotosDelete = ({
   };
 
   const tryDeleteSinglePhoto = async (photoId: number) => {
-    tryTask({
+    await tryFetch({
       task: async () => {
         return await deleteSinglePhoto(photoId);
       },
@@ -112,7 +111,6 @@ const usePhotosDelete = ({
       onFinally: () => {
         setIsDeleting(false);
       },
-      shouldLogToSentry: true,
     });
 
     return true;
