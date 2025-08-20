@@ -93,9 +93,9 @@ const useFileUpload = ({
 
   const { tryTask, tryFetch } = useError();
 
-  const fetchUploadFiles = async () => {
+  const fetchUploadFiles = async (validGuestId: number) => {
     const files = uploadFiles.map((file) => file.originFile);
-    await photoService.uploadFiles(spaceCode, files, guestId);
+    await photoService.uploadFiles(spaceCode, files, validGuestId);
   };
 
   const errorOption = {
@@ -108,15 +108,24 @@ const useFileUpload = ({
       },
     },
   };
+  //guestID가 없으면 생성하고 업로드
+  //있으면 기존의 걸로 업로드
+
+  const ensureGuestId = async () => {
+    if (guestId && guestId !== FAILED_GUEST_ID) return guestId;
+
+    const newGuestId = await tryCreateNickName();
+    if (!newGuestId) return FAILED_GUEST_ID;
+
+    return newGuestId;
+  };
 
   const submitFileUpload = async () => {
     await tryFetch({
       task: async () => {
         setIsUploading(true);
-        if (!guestId || guestId === FAILED_GUEST_ID) {
-          await tryCreateNickName();
-        }
-        await fetchUploadFiles();
+        const validGuestId = await ensureGuestId();
+        await fetchUploadFiles(validGuestId);
         onUploadSuccess?.();
         clearFiles();
       },
