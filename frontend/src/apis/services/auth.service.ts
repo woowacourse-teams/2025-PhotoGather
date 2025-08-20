@@ -1,7 +1,15 @@
-import type { KakaoLoginURL } from '../../types/auth.type';
-import { http } from '../http';
+import type {
+  AuthTokenResponse,
+  KakaoClientId,
+  KakaoTokenResponse,
+} from '../../types/auth.type';
+import { authHttp, http } from '../http';
 
 export const authService = {
-  getKakaoURL: () => http.get<KakaoLoginURL>('/auth/login/kakao'),
+  getKakaoClientId: () => http.get<KakaoClientId>('/auth/login/kakao'),
+  getAuth: (requestBody: KakaoTokenResponse) =>
+    http.post<AuthTokenResponse>('/auth/login/kakao/confirm', requestBody),
   refresh: () => http.post('/auth/refresh'),
+  status: () => authHttp.get('/auth/me'),
+  callback: (code: string) => http.post<AuthTokenResponse>('', { code }),
 };

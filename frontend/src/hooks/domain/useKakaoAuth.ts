@@ -1,24 +1,79 @@
+import { useNavigate } from 'react-router-dom';
 import { authService } from '../../apis/services/auth.service';
 import { CookieUtils } from '../../utils/CookieUtils';
 import useError from '../@common/useError';
 
 const useKakaoAuth = () => {
-  const { tryFetch } = useError();
+  const navigate = useNavigate();
+  const { tryTask, tryFetch } = useError();
+  const REQUEST_URI = 'http://localhost:3000/auth/login/kakao';
 
-  const requestKakaoURL = async () => {
-    const response = await authService.getKakaoURL();
+  const createGetKakaoCodeUrl = (clientId: string, redirectUri: string) =>
+    `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${clientId}&redirect_uri=${redirectUri}`;
+
+  const createGetKakaoAuthUrl = (
+    clientId: string,
+    redirectUri: string,
+    code: string,
+  ) =>
+    `https://kauth.kakao.com/oauth/token?grant_type=authorization_code&client_id=${clientId}&redirect_uri=${redirectUri}&code=${code}`;
+
+  const requestKakaoClientId = async () => {
+    const response = await authService.getKakaoClientId();
     if (!response || !response.data) return '';
-    return response.data.loginUrl;
+    return response.data.clientId;
   };
 
   const handleKakaoLogin = async () => {
-    const taskResult = await tryFetch({
-      task: async () => requestKakaoURL(),
+    const clientIdTaskResult = await tryFetch({
+      task: async () => await requestKakaoClientId(),
       errorActions: ['toast'],
     });
 
-    if (taskResult.success && taskResult.data)
-      window.location.href = taskResult.data;
+    if (!clientIdTaskResult || !clientIdTaskResult.data) return;
+
+    tryTask({
+      task: () => {
+        location.href = createGetKakaoCodeUrl(
+          clientIdTaskResult.data,
+          REQUEST_URI,
+        );
+      },
+      errorActions: ['toast'],
+    });
+  };
+
+  const getAuth = async (code: string) => {
+    const clientIdTaskResult = await tryFetch({
+      task: async () => await requestKakaoClientId(),
+      errorActions: ['toast'],
+    });
+
+    if (!clientIdTaskResult || !clientIdTaskResult.data) return;
+    const clientId = clientIdTaskResult.data;
+
+    await tryFetch({
+      task: async () => {
+        const response = await fetch(
+          createGetKakaoAuthUrl(clientId, REQUEST_URI, code),
+        );
+        const kakaoToken = await response.json();
+        const authResponse = await authService.getAuth(kakaoToken);
+
+        if (!authResponse || !authResponse.data) return;
+
+        await CookieUtils.set('access', authResponse.data.accessToken);
+        await CookieUtils.set('refresh', authResponse.data.refreshToken);
+
+        navigate('/');
+      },
+      errorActions: ['toast', 'redirect'],
+      context: {
+        redirect: {
+          path: '/login',
+        },
+      },
+    });
   };
 
   const handleLogout = async () => {
@@ -27,7 +82,7 @@ const useKakaoAuth = () => {
     location.reload();
   };
 
-  return { handleKakaoLogin, handleLogout };
+  return { handleKakaoLogin, getAuth, handleLogout };
 };
 
 export default useKakaoAuth;
