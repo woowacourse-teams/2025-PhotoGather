@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 
 export const Wrapper = styled.div`
   width: ${({ theme }) =>
-    `${parseInt(theme.layout.width) - parseInt(theme.layout.padding.leftRight) * 2}px`};
+    `${parseInt(theme.layout.width) - parseInt(theme.layout.padding.leftRight) * 8}px`};
   height: 8px;
   background-color: #f5f5f5;
   border-radius: 50px;
