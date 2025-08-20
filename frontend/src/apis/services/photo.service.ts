@@ -1,10 +1,8 @@
 import type { PhotoIds, PhotoListResponse } from '../../types/api.type';
 import type {
-  AllDownloadInfos,
   CreatePhotoInput,
+  DownloadInfoList,
   Photo,
-  SelectedDownloadInfos,
-  SingleDownloadInfos,
 } from '../../types/photo.type';
 import { authHttp, http } from '../http';
 
@@ -33,19 +31,19 @@ export const photoService = {
   },
 
   downloadAll: (spaceCode: string) =>
-    authHttp.post<AllDownloadInfos>(
+    authHttp.post<DownloadInfoList>(
       `/spaces/${spaceCode}/photos/issue/download-urls`,
       undefined,
     ),
 
   downloadPhotos: (spaceCode: string, photoIds: PhotoIds) =>
-    authHttp.post<SelectedDownloadInfos>(
+    authHttp.post<DownloadInfoList>(
       `/spaces/${spaceCode}/photos/issue/download-urls/selected`,
       photoIds,
     ),
 
   downloadSinglePhoto: (spaceCode: string, photoId: number) =>
-    authHttp.post<SingleDownloadInfos>(
+    authHttp.post<DownloadInfoList>(
       `/spaces/${spaceCode}/photos/issue/download-urls/${photoId}`,
       photoId,
     ),

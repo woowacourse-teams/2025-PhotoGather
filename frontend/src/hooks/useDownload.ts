@@ -1,6 +1,7 @@
 import { downloadZip } from 'client-zip';
 import { useState } from 'react';
 import { photoService } from '../apis/services/photo.service';
+import type { DownloadInfo } from '../types/photo.type';
 import { checkSelectedPhotoExist } from '../validators/photo.validator';
 import useError from './@common/useError';
 
@@ -19,28 +20,37 @@ const useDownload = ({
   const [isDownloading, setIsDownloading] = useState(false);
   const { tryTask, tryFetch } = useError();
 
-  const downloadAsImage = (url: string, fileName?: string) => {
-    const link = document.createElement('a');
+  const downloadAsImage = async (url: string, fileName: string) => {
+    const response = await fetch(url);
+    const blob = await response.blob();
 
-    link.href = url;
-    // TODO : 확장자 찾는 로직
-    link.download = `${fileName}.png`;
+    const objectUrl = URL.createObjectURL(blob);
+
+    const link = document.createElement('a');
+    link.href = objectUrl;
+    link.download = `${fileName}`;
 
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+
+    URL.revokeObjectURL(objectUrl);
   };
 
-  const downloadAsZip = async (urls: string[]) => {
+  const downloadAsZip = async (downloadInfos: DownloadInfo[]) => {
     const files = await Promise.all(
-      urls.map(async (url, index) => {
-        const response = await fetch(url);
+      downloadInfos.map(async (downloadInfo) => {
+        const response = await fetch(downloadInfo.url);
         const blob = await response.blob();
-        const filename = `image_${index + 1}.${blob.type.split('/')[1]}`;
 
-        return { name: filename, blob };
+        return {
+          name: downloadInfo.originalName,
+          input: blob,
+          lastModified: new Date(),
+        };
       }),
     );
+
     const zipBlob = await downloadZip(files).blob();
 
     const link = document.createElement('a');
@@ -66,8 +76,7 @@ const useDownload = ({
         if (!response.data) return;
         const data = response.data;
         const { downloadUrls } = data;
-        const urlArray = downloadUrls.map((downloadInfo) => downloadInfo.url);
-        downloadAsZip(urlArray);
+        downloadAsZip(downloadUrls);
       },
       errorActions: ['toast'],
       context: {
@@ -89,7 +98,7 @@ const useDownload = ({
         if (!response.data) return;
         const { downloadUrls } = response.data;
 
-        downloadAsImage(downloadUrls.url, downloadUrls.originalName);
+        downloadAsImage(downloadUrls[0].url, downloadUrls[0].originalName);
       },
       errorActions: ['toast', 'console'],
       context: {
@@ -106,13 +115,12 @@ const useDownload = ({
       task: async () => {
         setIsDownloading(true);
         const response = await photoService.downloadAll(spaceCode);
-        console.log(response);
+
         if (!response.data) return;
         const data = response.data;
         const { downloadUrls } = data;
-        const urlArray = downloadUrls.map((downloadInfo) => downloadInfo.url);
 
-        downloadAsZip(urlArray);
+        downloadAsZip(downloadUrls);
         onDownloadSuccess?.();
       },
       errorActions: ['toast', 'console'],
