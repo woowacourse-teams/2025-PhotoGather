@@ -14,6 +14,7 @@ import { useOverlay } from '../../../contexts/OverlayProvider';
 import useIntersectionObserver from '../../../hooks/@common/useIntersectionObserver';
 import useLeftTimer from '../../../hooks/@common/useLeftTimer';
 import useLocalFile from '../../../hooks/@common/useLocalFile';
+import useFileUpload from '../../../hooks/useFileUpload';
 import useSpaceCodeFromPath from '../../../hooks/useSpaceCodeFromPath';
 import useSpaceInfo from '../../../hooks/useSpaceInfo';
 import { ScrollableBlurArea } from '../../../styles/@common/ScrollableBlurArea';
@@ -47,16 +48,21 @@ const ImageUploadPage = () => {
   const spaceName = spaceInfo?.name ?? '';
   const overlay = useOverlay();
   const {
+    localFiles,
     previewFile,
     isUploading,
     handleFilesUploadClick,
     handleFilesDrop,
-    submitFileUpload,
     deleteFile,
   } = useLocalFile({
     spaceCode: spaceCode ?? '',
     fileType: 'image',
     onUploadSuccess: navigateToUploadComplete,
+  });
+
+  const { submitFileUpload } = useFileUpload({
+    localFiles: localFiles,
+    spaceCode: spaceCode ?? '',
   });
 
   const hasImages = Array.isArray(previewFile) && previewFile.length > 0;
