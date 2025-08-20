@@ -14,9 +14,9 @@ interface InputModalProps extends BaseModalProps {
   subDescription?: string;
   /** 입력 플레이스홀더 */
   placeholder: string;
-  /** 입력 값 오류 메시지 생성 함수 */
   /** 초기 입력 값*/
   initialValue?: string;
+  /** 입력 값 오류 메시지 생성 함수 */
   createErrorMessage: (value: string) => string;
   /** 확인 버튼 텍스트 */
   confirmText?: string;

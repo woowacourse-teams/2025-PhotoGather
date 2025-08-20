@@ -23,7 +23,7 @@ const useGuestNickName = ({ spaceCode }: UseGuestNickNameProps) => {
   // biome-ignore lint/correctness/useExhaustiveDependencies: 초기 모달 표시
   useEffect(() => {
     if (guestId) {
-      // TODO : fetch 로직 넣기
+      // TODO : 게스트 닉네임 fetch 로직 넣기
     }
     if (mode === 'create') {
       showNickNameModal('create');
@@ -36,6 +36,9 @@ const useGuestNickName = ({ spaceCode }: UseGuestNickNameProps) => {
     }
     if (nickName.length === 0) {
       return '닉네임을 입력해주세요.';
+    }
+    if (nickName.startsWith(' ')) {
+      return '공백으로 시작할 수 없어요.';
     }
     return '';
   };
@@ -95,7 +98,7 @@ const useGuestNickName = ({ spaceCode }: UseGuestNickNameProps) => {
     }
   };
 
-  return { nickName, showNickNameModal };
+  return { nickName, showNickNameModal, fetchGuestNickName };
 };
 
 export default useGuestNickName;
