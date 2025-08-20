@@ -44,4 +44,11 @@ public class SpaceService {
 
         return SpaceResponse.from(space);
     }
+
+    @Transactional
+    public void delete(String spaceCode, Long hostId) {
+        // TODO: hostId가 Space의 HostId와 일치하는지 검증 로직 추가 필요
+        Space space = spaceRepository.getByCode(spaceCode);
+        spaceRepository.delete(space);
+    }
 }

@@ -3,6 +3,7 @@ package com.forgather.domain.space.controller;
 import static org.springframework.http.HttpStatus.CREATED;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -43,6 +44,13 @@ public class SpaceController {
     public ResponseEntity<SpaceResponse> getSpaceInformation(@PathVariable(name = "spaceCode") String spaceCode) {
         var response = spaceService.getSpaceInformation(spaceCode);
         return ResponseEntity.ok(response);
+    }
+
+    @DeleteMapping("/{spaceCode}")
+    @Operation(summary = "스페이스 삭제", description = "스페이스를 삭제합니다.")
+    public ResponseEntity<Void> delete(@PathVariable(name = "spaceCode") String spaceCode, @HostId Long hostId) {
+        spaceService.delete(spaceCode, hostId);
+        return ResponseEntity.noContent().build();
     }
 
     @PatchMapping("/{spaceCode}")
