@@ -96,9 +96,6 @@ public class Space extends BaseTimeEntity {
         if (openedAt != null) {
             setOpenedAt(openedAt);
         }
-        if (password != null) {
-            setPassword(password);
-        }
     }
 
     private void setName(String name) {
@@ -124,13 +121,6 @@ public class Space extends BaseTimeEntity {
             throw new IllegalArgumentException("이미 열린 스페이스의 오픈 시각을 변경할 수 없습니다.");
         }
         this.openedAt = newOpenedAt;
-    }
-
-    private void setPassword(String password) {
-        if (password.isBlank()) {
-            throw new IllegalArgumentException("스페이스 비밀번호는 비어있을 수 없습니다.");
-        }
-        this.password = password;
     }
 
     private void validate(String code, String name, int validHours, LocalDateTime openedAt) {

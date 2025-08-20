@@ -40,7 +40,6 @@ class SpaceTest {
         int validHours = 48;
         LocalDateTime openedAt = LocalDateTime.now().minusDays(1);
         Host host = new Host("moko", "pictureUrl");
-        Space space = new Space(host, spaceCode, "name", validHours, openedAt);
 
         // when & then
         assertThatIllegalArgumentException().isThrownBy(

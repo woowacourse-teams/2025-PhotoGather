@@ -33,9 +33,9 @@ public class SpaceService {
     }
 
     @Transactional
-    public SpaceResponse update(String spaceCode, UpdateSpaceRequest request, Long hostId) {
-        // TODO: hostId가 해당 스페이스의 소유자인지 검증하는 로직 추가 필요
+    public SpaceResponse update(String spaceCode, UpdateSpaceRequest request, Host host) {
         Space space = spaceRepository.getByCode(spaceCode);
+        space.validateHost(host);
         space.update(
             request.name(),
             request.validHours(),
@@ -47,9 +47,9 @@ public class SpaceService {
     }
 
     @Transactional
-    public void delete(String spaceCode, Long hostId) {
-        // TODO: hostId가 Space의 HostId와 일치하는지 검증 로직 추가 필요
+    public void delete(String spaceCode, Host host) {
         Space space = spaceRepository.getByCode(spaceCode);
+        space.validateHost(host);
         spaceRepository.delete(space);
     }
 }
