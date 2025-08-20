@@ -13,12 +13,14 @@ interface UseFileUploadProps {
   spaceCode: string;
   fileType: string;
   onUploadSuccess?: () => void;
+  saveGuestId: () => Promise<number>;
 }
 
 const useFileUpload = ({
   spaceCode,
   fileType,
   onUploadSuccess,
+  saveGuestId,
 }: UseFileUploadProps) => {
   const [uploadFiles, setUploadFiles] = useState<UploadFile[]>([]);
   const [previewData, setPreviewData] = useState<PreviewFile[]>([]);
@@ -109,6 +111,7 @@ const useFileUpload = ({
       task: async () => {
         setIsUploading(true);
         await fetchUploadFiles();
+        await saveGuestId();
         onUploadSuccess?.();
         clearFiles();
       },

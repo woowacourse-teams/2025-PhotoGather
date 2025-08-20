@@ -38,7 +38,3 @@ export interface PhotoIds {
 export interface PhotoId {
   photoId: number;
 }
-
-export interface GuestNickName {
-  name: string;
-}

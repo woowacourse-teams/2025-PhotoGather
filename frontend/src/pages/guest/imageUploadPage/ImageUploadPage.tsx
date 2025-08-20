@@ -39,7 +39,7 @@ const ImageUploadPage = () => {
   const overlay = useOverlay();
   const navigate = useNavigate();
 
-  const { nickName, showNickNameModal } = useGuestNickName({
+  const { nickName, showNickNameModal, saveGuestId } = useGuestNickName({
     spaceCode: spaceCode ?? '',
   });
 
@@ -63,6 +63,7 @@ const ImageUploadPage = () => {
     spaceCode: spaceCode ?? '',
     fileType: 'image',
     onUploadSuccess: navigateToUploadComplete,
+    saveGuestId,
   });
 
   const hasImages = Array.isArray(previewData) && previewData.length > 0;
