@@ -106,6 +106,7 @@ const useDownload = ({
       task: async () => {
         setIsDownloading(true);
         const response = await photoService.downloadAll(spaceCode);
+        console.log(response);
         if (!response.data) return;
         const data = response.data;
         const { downloadUrls } = data;

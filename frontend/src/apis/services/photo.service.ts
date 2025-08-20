@@ -34,20 +34,19 @@ export const photoService = {
 
   downloadAll: (spaceCode: string) =>
     authHttp.post<AllDownloadInfos>(
-      `/spaces/${spaceCode}/photos/download`,
+      `/spaces/${spaceCode}/photos/issue/download-urls`,
       undefined,
     ),
 
-  // TODO : 반환값 타입 수정
   downloadPhotos: (spaceCode: string, photoIds: PhotoIds) =>
     authHttp.post<SelectedDownloadInfos>(
-      `/spaces/${spaceCode}/photos/download/selected`,
+      `/spaces/${spaceCode}/photos/issue/download-urls/selected`,
       photoIds,
     ),
 
   downloadSinglePhoto: (spaceCode: string, photoId: number) =>
     authHttp.post<SingleDownloadInfos>(
-      `/spaces/${spaceCode}/photos/download/${photoId}`,
+      `/spaces/${spaceCode}/photos/issue/download-urls/${photoId}`,
       photoId,
     ),
 
