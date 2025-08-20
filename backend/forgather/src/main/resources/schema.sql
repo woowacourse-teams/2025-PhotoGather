@@ -3,7 +3,6 @@ CREATE TABLE space
 (
     id          BIGINT AUTO_INCREMENT PRIMARY KEY,
     code        VARCHAR(64)                        NOT NULL,
-    password    VARCHAR(64),
     name        VARCHAR(255) CHARACTER SET utf8mb4 NOT NULL,
     valid_hours INT                                NOT NULL,
     opened_at   TIMESTAMP                          NOT NULL,
@@ -42,7 +41,20 @@ CREATE TABLE host
     updated_at  TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
--- 5. host_kakao
+-- 5. space_host_map
+CREATE TABLE space_host_map
+(
+    id         BIGINT    NOT NULL AUTO_INCREMENT,
+    space_id   BIGINT    NOT NULL,
+    host_id    BIGINT    NOT NULL,
+    created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (id),
+    CONSTRAINT space_host_map_space_fk FOREIGN KEY (space_id) REFERENCES space (id),
+    CONSTRAINT space_host_map_host_fk FOREIGN KEY (host_id) REFERENCES host (id)
+);
+
+-- 6. host_kakao
 CREATE TABLE host_kakao
 (
     id      BIGINT AUTO_INCREMENT PRIMARY KEY,

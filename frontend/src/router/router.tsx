@@ -1,5 +1,6 @@
 import { createBrowserRouter } from 'react-router-dom';
 import Layout from '../components/layout/Layout';
+import KakaoAuthPage from '../pages/auth/KakaoAuthPage';
 import DownloadCompletePage from '../pages/complete/DownloadCompletePage';
 import UploadCompletePage from '../pages/complete/UploadCompletePage';
 import SpaceCreateFunnel from '../pages/create/funnel/SpaceCreateFunnel';
@@ -99,6 +100,20 @@ const routes: AppRouteObject[] = [
       {
         path: 'login',
         element: <LoginPage />,
+      },
+      {
+        path: 'auth',
+        children: [
+          {
+            path: 'login',
+            children: [
+              {
+                path: 'kakao',
+                element: <KakaoAuthPage />,
+              },
+            ],
+          },
+        ],
       },
       {
         path: 'policy',

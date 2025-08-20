@@ -57,7 +57,7 @@ public class JwtTokenProvider {
         }
     }
 
-    public Long getUserId(String token) {
+    public Long getHostId(String token) {
         Claims claims = getClaims(token);
         return Long.parseLong(claims.getSubject());
     }
