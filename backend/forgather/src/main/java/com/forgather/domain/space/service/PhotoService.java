@@ -158,8 +158,8 @@ public class PhotoService {
             String extension = originalName.substring(extensionStartIndex + 1);
             if (originalNameCounts.containsKey(originalName)) {
                 int count = originalNameCounts.get(originalName);
-                baseName = String.format("%s(%d)", baseName, count + 1);
                 originalNameCounts.put(originalName, count + 1);
+                baseName = String.format("%s(%d)", baseName, originalNameCounts.get(originalName));
             } else {
                 originalNameCounts.put(originalName, 0);
             }
