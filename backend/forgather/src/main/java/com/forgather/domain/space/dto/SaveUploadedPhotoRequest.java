@@ -5,6 +5,7 @@ import static com.forgather.domain.space.util.FilePathGenerator.generateContents
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.forgather.domain.guest.model.Guest;
 import com.forgather.domain.space.model.Photo;
 import com.forgather.domain.space.model.PhotoMetaData;
 import com.forgather.domain.space.model.Space;
@@ -32,9 +33,9 @@ public record SaveUploadedPhotoRequest(
         LocalDateTime capturedAt
     ) {
 
-        public Photo toEntity(Space space, String rootDirectory) {
+        public Photo toEntity(Space space, Guest guest, String rootDirectory) {
             String path = generateContentsFilePath(rootDirectory, space.getCode(), uploadFileName);
-            return new Photo(space, originalName, path, new PhotoMetaData(capturedAt));
+            return new Photo(space, guest, originalName, path, new PhotoMetaData(capturedAt));
         }
     }
 }

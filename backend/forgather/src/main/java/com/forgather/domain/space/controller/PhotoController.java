@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -63,9 +64,10 @@ public class PhotoController {
     @Operation(summary = "사진 일괄 업로드", description = "클라우드 저장소와 DB에 사진을 전부 업로드합니다.")
     public ResponseEntity<Void> uploadAll(
         @PathVariable(name = "spaceCode") String spaceCode,
-        @RequestPart(name = "files") List<MultipartFile> files
+        @RequestPart(name = "files") List<MultipartFile> files,
+        @RequestParam(name = "guestId", required = false) Long guestId
     ) {
-        uploadService.saveAll(spaceCode, files);
+        uploadService.saveAll(spaceCode, files, guestId);
         return ResponseEntity.ok().build();
     }
 
@@ -83,9 +85,10 @@ public class PhotoController {
     @Operation(summary = "업로드 된 사진 정보 일괄 저장", description = "업로드 된 사진 정보를 DB에 저장합니다.")
     public ResponseEntity<Void> saveAll(
         @PathVariable(name = "spaceCode") String spaceCode,
-        @RequestBody SaveUploadedPhotoRequest request
+        @RequestBody SaveUploadedPhotoRequest request,
+        @RequestParam(name = "guestId", required = false) Long guestId
     ) {
-        photoService.saveUploadedPhotos(spaceCode, request);
+        photoService.saveUploadedPhotos(spaceCode, request, guestId);
         return ResponseEntity.status(CREATED).build();
     }
 

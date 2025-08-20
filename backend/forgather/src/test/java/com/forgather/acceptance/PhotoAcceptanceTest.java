@@ -16,6 +16,8 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.forgather.domain.guest.model.Guest;
+import com.forgather.domain.guest.repository.GuestRepository;
 import com.forgather.domain.space.dto.IssueSignedUrlRequest;
 import com.forgather.domain.space.model.Photo;
 import com.forgather.domain.space.model.PhotoMetaData;
@@ -46,6 +48,9 @@ class PhotoAcceptanceTest extends AcceptanceTest {
     private PhotoRepository photoRepository;
 
     @Autowired
+    private GuestRepository guestRepository;
+
+    @Autowired
     private HostRepository hostRepository;
 
     @Autowired
@@ -65,7 +70,8 @@ class PhotoAcceptanceTest extends AcceptanceTest {
         // given
         var host = hostRepository.save(new Host("모코", "pictureUrl"));
         var space = spaceRepository.save(new Space(host, "space-code", "test-space", 3, LocalDateTime.now()));
-        var photo = photoRepository.save(new Photo(space, "originalName.jpg", "path",
+        var guest = guestRepository.save(new Guest(space, "guest"));
+        var photo = photoRepository.save(new Photo(space, guest, "originalName.jpg", "path",
             new PhotoMetaData(LocalDateTime.now())));
         String token = jwtTokenProvider.generateAccessToken(host.getId());
 

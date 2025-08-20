@@ -16,7 +16,9 @@ CREATE TABLE space_content
     id           BIGINT AUTO_INCREMENT PRIMARY KEY,
     content_type VARCHAR(16) NOT NULL,
     space_id     BIGINT      NOT NULL,
-    FOREIGN KEY (space_id) REFERENCES space (id)
+    guest_id     BIGINT      NULL DEFAULT NULL,
+    CONSTRAINT space_content_space_fk FOREIGN KEY (space_id) REFERENCES space (id),
+    CONSTRAINT space_content_guest_fk FOREIGN KEY (guest_id) REFERENCES guest (id)
 );
 
 -- 3. photo
@@ -62,3 +64,15 @@ CREATE TABLE host_kakao
     user_id VARCHAR(100) NOT NULL,
     CONSTRAINT fk_host_kakao_host FOREIGN KEY (host_id) REFERENCES host (id)
 );
+
+-- 7. guest
+CREATE TABLE guest
+(
+    id         BIGINT AUTO_INCREMENT PRIMARY KEY,
+    space_id  BIGINT NOT NULL,
+    name       VARCHAR(100),
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT guest_space_fk FOREIGN KEY (space_id) REFERENCES space (id)
+);
+
