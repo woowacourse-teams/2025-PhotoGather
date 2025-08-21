@@ -78,7 +78,8 @@ const useGuestNickName = ({ spaceCode }: UseGuestNickNameProps) => {
     const result = await overlay<{ value: string }>(
       <InputModal {...editInputModalProps} />,
     );
-    if (result && isValidSpaceGuest) {
+    if (!result) return;
+    if (isValidSpaceGuest) {
       tryChangeNickName(result.value);
       setNickName(result.value);
       return;
