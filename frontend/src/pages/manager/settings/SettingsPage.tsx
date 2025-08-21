@@ -15,6 +15,7 @@ import useGraphemeInput from '../../../hooks/@common/useGraphemeInput';
 import { useToast } from '../../../hooks/@common/useToast';
 import useSpaceCodeFromPath from '../../../hooks/useSpaceCodeFromPath';
 import useSpaceInfo from '../../../hooks/useSpaceInfo';
+import type { SpaceCreateInfo } from '../../../types/space.type';
 import { track } from '../../../utils/googleAnalytics/track';
 import { parseIsoStringFromDateTime } from '../../../utils/parseIsoStringFromDateTime';
 import * as S from './SettingsPage.styles';
@@ -75,22 +76,31 @@ const SettingsPage = () => {
   const handleUpdateSpaceInfo = async () => {
     if (!spaceCode || !spaceInfo) return;
 
-    const openedAt = parseIsoStringFromDateTime(date, time);
+    const updateData: Partial<SpaceCreateInfo> = { password: '' };
 
-    const openedDate = new Date(spaceInfo.openedAt);
-    const expiredDate = new Date(spaceInfo.expiredAt);
-    const validHours = Math.round(
-      (expiredDate.getTime() - openedDate.getTime()) / (1000 * 60 * 60),
-    );
+    if (validValue !== spaceInfo.name) {
+      updateData.name = validValue;
+    }
+
+    if (!isDateTimeDisabled()) {
+      const openedAtDate = new Date(spaceInfo.openedAt);
+      const originalDate = openedAtDate.toISOString().split('T')[0];
+      const originalTime = openedAtDate.toTimeString().slice(0, 5);
+
+      if (date !== originalDate || time !== originalTime) {
+        updateData.openedAt = parseIsoStringFromDateTime(date, time);
+
+        const newOpenedDate = new Date(updateData.openedAt);
+        const expiredDate = new Date(spaceInfo.expiredAt);
+        const newValidHours = Math.round(
+          (expiredDate.getTime() - newOpenedDate.getTime()) / (1000 * 60 * 60),
+        );
+        updateData.validHours = newValidHours > 0 ? newValidHours : 72;
+      }
+    }
 
     const result = await tryFetch({
-      task: () =>
-        spaceService.update(spaceCode, {
-          name: validValue,
-          validHours: validHours || 72,
-          openedAt: openedAt,
-          password: '',
-        }),
+      task: () => spaceService.update(spaceCode, updateData),
       errorActions: ['toast'],
       context: {
         toast: {
