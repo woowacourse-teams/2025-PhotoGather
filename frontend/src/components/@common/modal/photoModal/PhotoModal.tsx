@@ -158,10 +158,10 @@ const PhotoModal = (props: PhotoModalProps) => {
         }
       }}
     >
-      {isManagerMode && (
+      {isManagerMode && photo && (
         <S.FromContainer onMouseDown={(e) => e.stopPropagation()}>
           <S.FromMessage>From.</S.FromMessage>
-          {photo?.guest.name ?? '익명의 우주여행자'}
+          {photo.guest.name ?? '익명의 우주여행자'}
         </S.FromContainer>
       )}
       <S.PhotoContainer onMouseDown={(e) => e.stopPropagation()}>
