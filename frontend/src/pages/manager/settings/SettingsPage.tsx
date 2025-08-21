@@ -20,7 +20,6 @@ const SettingsPage = () => {
   const [spaceName, setSpaceName] = useState('');
   const [date, setDate] = useState('');
   const [time, setTime] = useState('');
-  const [hasChanges, setHasChanges] = useState(false);
 
   const isDateTimeDisabled = () => {
     if (!spaceInfo) return false;
@@ -44,22 +43,19 @@ const SettingsPage = () => {
     }
   }, [spaceInfo]);
 
-  useEffect(() => {
-    if (!spaceInfo) {
-      setHasChanges(false);
-      return;
-    }
+  const hasChanges = (() => {
+    if (!spaceInfo) return false;
 
     const openedAtDate = new Date(spaceInfo.openedAt);
     const originalDate = openedAtDate.toISOString().split('T')[0];
     const originalTime = openedAtDate.toTimeString().slice(0, 5);
 
-    const hasNameChanged = spaceName !== spaceInfo.name;
-    const hasDateChanged = date !== originalDate;
-    const hasTimeChanged = time !== originalTime;
-
-    setHasChanges(hasNameChanged || hasDateChanged || hasTimeChanged);
-  }, [spaceName, date, time, spaceInfo]);
+    return (
+      spaceName !== spaceInfo.name ||
+      date !== originalDate ||
+      time !== originalTime
+    );
+  })();
 
   const handleUpdate = () => {
     // TODO: 수정 API 호출
