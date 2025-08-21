@@ -1,6 +1,6 @@
 import { ReactComponent as LinkIcon } from '@assets/icons/link.svg';
 import { ReactComponent as ShareIcon } from '@assets/icons/share.svg';
-import rocketIcon from '@assets/images/rocket.png';
+import messageIcon from '@assets/images/message.png';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ReactComponent as SaveIcon } from '../../../@assets/icons/download.svg';
@@ -37,16 +37,13 @@ import { track } from '../../../utils/googleAnalytics/track';
 import { goToTop } from '../../../utils/goToTop';
 import EarlyPage from '../../status/earlyPage/EarlyPage';
 import ExpiredPage from '../../status/expiredPage/ExpiredPage';
-import * as S from './SpaceHome.styles';
+import * as S from './SpaceHomePage.styles';
 
-const SpaceHome = () => {
+const SpaceHomePage = () => {
   const { spaceCode } = useSpaceCodeFromPath();
   const { spaceInfo } = useSpaceInfo(spaceCode ?? '');
   const isEarlyTime =
     spaceInfo?.openedAt && checkIsEarlyDate(spaceInfo.openedAt);
-
-  // TODO: NoData 시 표시할 Layout 필요
-  const _isNoData = !spaceInfo;
   const isSpaceExpired = spaceInfo?.isExpired;
   const spaceName = spaceInfo?.name ?? '';
   const { targetRef: hideBlurAreaTriggerRef, isIntersecting: isAtPageBottom } =
@@ -80,18 +77,24 @@ const SpaceHome = () => {
 
   const navigate = useNavigate();
 
-  const { isDownloading, downloadAll, selectDownload, downloadSingle } =
-    useDownload({
-      spaceCode: spaceCode ?? '',
-      spaceName,
-      onDownloadSuccess: () => {
-        navigate(ROUTES.COMPLETE.DOWNLOAD, {
-          state: {
-            spaceCode: spaceCode ?? '',
-          },
-        });
-      },
-    });
+  const {
+    isDownloading,
+    tryAllDownload,
+    trySelectedDownload,
+    trySingleDownload,
+    totalProgress,
+    currentProgress,
+  } = useDownload({
+    spaceCode: spaceCode ?? '',
+    spaceName,
+    onDownloadSuccess: () => {
+      navigate(ROUTES.COMPLETE.DOWNLOAD, {
+        state: {
+          spaceCode: spaceCode ?? '',
+        },
+      });
+    },
+  });
 
   const {
     isSelectMode,
@@ -115,6 +118,15 @@ const SpaceHome = () => {
       photosList,
     });
 
+  const clickDashboardWithTracking = () => {
+    navigate(ROUTES.MANAGER.DASHBOARD(spaceCode ?? ''));
+    track.button('space_setting_button', {
+      page: 'space_home',
+      section: 'space_home_header',
+      action: 'open_setting',
+    });
+  };
+
   const deletePhotoWithTracking = async (photoId: number) => {
     await tryDeleteSinglePhoto(photoId);
     track.button('single_delete_button', {
@@ -125,7 +137,7 @@ const SpaceHome = () => {
   };
 
   const downloadPhotoWithTracking = async (photoId: number) => {
-    await downloadSingle(photoId);
+    await trySingleDownload(photoId);
     track.button('single_download_button', {
       page: 'space_home',
       section: 'photo_modal',
@@ -152,25 +164,32 @@ const SpaceHome = () => {
 
   //biome-ignore lint/correctness/useExhaustiveDependencies: isFetchSectionVisible 변경 시 호출
   useEffect(() => {
-    if (!isFetchSectionVisible || isEndPage || isLoading) return;
+    if (
+      !isFetchSectionVisible ||
+      isEndPage ||
+      isLoading ||
+      isSpaceExpired ||
+      isEarlyTime
+    )
+      return;
     tryFetchPhotosList();
-  }, [isFetchSectionVisible, isEndPage]);
+  }, [isFetchSectionVisible, isEndPage, isSpaceExpired, isEarlyTime]);
 
   const loadingContents = [
     {
-      icon: { src: rocketIcon, alt: '데모 페이지 아이콘' },
+      icon: { src: messageIcon, alt: '데모 페이지 아이콘' },
       description: '추억 담는 중',
     },
     {
-      icon: { src: rocketIcon, alt: '데모 페이지 아이콘' },
+      icon: { src: messageIcon, alt: '데모 페이지 아이콘' },
       description: '선물 상자 포장하는 중',
     },
     {
-      icon: { src: rocketIcon, alt: '데모 페이지 아이콘' },
+      icon: { src: messageIcon, alt: '데모 페이지 아이콘' },
       description: '배달 가는 중',
     },
     {
-      icon: { src: rocketIcon, alt: '데모 페이지 아이콘' },
+      icon: { src: messageIcon, alt: '데모 페이지 아이콘' },
       description: '당신에게 전달 중',
     },
   ];
@@ -217,12 +236,14 @@ const SpaceHome = () => {
 
   return (
     <S.Wrapper>
-      {/* TODO: 버튼 지우기 */}
       {isEarlyTime && <EarlyPage openedAt={spaceInfo.openedAt} />}
       {(isDownloading || isDeleting) && (
-        <LoadingLayout loadingContents={loadingContents} percentage={0} />
+        <LoadingLayout
+          loadingContents={loadingContents}
+          totalAmount={totalProgress}
+          currentAmount={currentProgress}
+        />
       )}
-      {isSpaceExpired && <ExpiredPage />}
       <S.InfoContainer ref={scrollTopTriggerRef}>
         <SpaceHeader
           title={spaceName}
@@ -230,13 +251,7 @@ const SpaceHome = () => {
           icons={[
             {
               element: <SettingSvg fill={theme.colors.white} width="20px" />,
-              onClick: () => {
-                track.button('space_setting_button', {
-                  page: 'space_home',
-                  section: 'space_home_header',
-                  action: 'open_setting',
-                });
-              },
+              onClick: clickDashboardWithTracking,
               label: '설정',
             },
             {
@@ -248,7 +263,13 @@ const SpaceHome = () => {
         />
       </S.InfoContainer>
 
-      {photosList &&
+      {isEarlyTime || isSpaceExpired ? (
+        <S.NoImageContainer>
+          {isEarlyTime && <EarlyPage openedAt={spaceInfo.openedAt} />}
+          {isSpaceExpired && <ExpiredPage />}
+        </S.NoImageContainer>
+      ) : (
+        photosList &&
         (photosList.length > 0 ? (
           <>
             <S.ImageManagementContainer>
@@ -274,7 +295,7 @@ const SpaceHome = () => {
                   label="모두 저장하기"
                   icon={<SaveIcon fill={theme.colors.gray06} />}
                   onClick={() => {
-                    downloadAll();
+                    tryAllDownload();
                     track.button('all_download_button', {
                       page: 'space_home',
                       section: 'space_home',
@@ -297,7 +318,7 @@ const SpaceHome = () => {
                 <PhotoSelectionToolBar
                   selectedCount={selectedPhotosCount}
                   onDelete={() => tryDeleteSelectedPhotos(selectedPhotoIds)}
-                  onDownload={() => selectDownload(selectedPhotoIds)}
+                  onDownload={() => trySelectedDownload(selectedPhotoIds)}
                 />
               )}
             </S.BottomNavigatorContainer>
@@ -307,7 +328,8 @@ const SpaceHome = () => {
             <S.Icon />
             <S.NoImageText>{INFORMATION.NO_IMAGE}</S.NoImageText>
           </S.NoImageContainer>
-        ))}
+        ))
+      )}
 
       <S.IntersectionArea ref={hideBlurAreaTriggerRef} />
       <S.IntersectionArea ref={fetchTriggerRef} />
@@ -317,4 +339,4 @@ const SpaceHome = () => {
   );
 };
 
-export default SpaceHome;
+export default SpaceHomePage;

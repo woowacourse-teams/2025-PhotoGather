@@ -4,7 +4,9 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
-    "start": "webpack serve --mode development",
+    "start": "webpack serve --mode none",
+    "start:dev": "webpack serve --mode development",
+    "start:prod": "webpack serve --mode production",
     "build:dev": "webpack --mode development",
     "build:prod": "webpack --mode production",
     "format:styles": "prettier --write 'src/styles/**/*.{ts,tsx,js,jsx}' 'src/**/*.styles.{ts,tsx,js,jsx}'",
@@ -58,6 +60,7 @@
     "@microsoft/clarity": "^1.0.0",
     "@sentry/react": "^10.1.0",
     "exifr": "^7.1.3",
+    "client-zip": "^2.5.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-ga4": "^2.1.0",

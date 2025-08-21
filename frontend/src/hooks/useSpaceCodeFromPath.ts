@@ -4,7 +4,7 @@ const useSpaceCodeFromPath = () => {
   const { pathname } = useLocation();
 
   const match = pathname.match(
-    /^\/(manager|guest)\/(space-home|image-upload)\/([^/]+)$/,
+    /^\/(manager|guest)\/(space-home|image-upload)\/([^/]+)/,
   );
 
   const spaceCode = match ? match[3] : null;

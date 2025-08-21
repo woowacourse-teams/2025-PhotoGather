@@ -4,9 +4,9 @@ export const buildThumbnailUrl = (
   preset: string,
 ) => {
   const basePath =
-    process.env.ENVIRONMENT === 'development'
-      ? 'photogather/dev/contents'
-      : 'photogather/contents';
+    process.env.ENVIRONMENT === 'production'
+      ? 'photogather/contents'
+      : 'photogather/dev/contents';
 
   return `${process.env.IMAGE_BASE_URL}/${basePath}/${spaceCode}/thumbnails/${fileName}_${preset}.webp`;
 };

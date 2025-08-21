@@ -1,13 +1,13 @@
-import * as S from './ProgressBar.styles';
+import * as S from './StepProgressBar.styles';
 
-interface ProgressBarProps {
+interface StepProgressBarProps {
   /** 현재 단계값 */
   currentStep: number;
   /** 모든 단계값 */
   maxStep: number;
 }
 
-const ProgressBar = ({ currentStep, maxStep }: ProgressBarProps) => {
+const StepProgressBar = ({ currentStep, maxStep }: StepProgressBarProps) => {
   return (
     <S.Wrapper>
       {Array.from({ length: maxStep }).map((_, index) => {
@@ -24,4 +24,4 @@ const ProgressBar = ({ currentStep, maxStep }: ProgressBarProps) => {
   );
 };
 
-export default ProgressBar;
+export default StepProgressBar;

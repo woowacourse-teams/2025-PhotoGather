@@ -30,6 +30,7 @@ export const Default: Story = {
         description: '당신에게 전달 중',
       },
     ],
-    percentage: 30,
+    totalAmount: 24,
+    currentAmount: 17,
   },
 };

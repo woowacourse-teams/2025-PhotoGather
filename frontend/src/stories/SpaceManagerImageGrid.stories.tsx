@@ -46,5 +46,8 @@ export const Default: Story = {
         'https://velog.velcdn.com/images/minsungje/post/e84b8e68-0f4b-4d5c-a9ab-f2c9a6a48c3e/image.jpg',
       ],
     ]),
+    isSelectMode: false,
+    selectedPhotoMap: new Map(),
+    onImageClick: (id: number) => console.log('Image clicked:', id),
   },
 };

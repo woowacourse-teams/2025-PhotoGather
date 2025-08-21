@@ -19,7 +19,9 @@ interface Session {
   batches: Batch[];
 }
 
-// progress를 따로 관리하도록 설계
+// TODO: progress를 따로 관리하도록 설계
+// TODO: fetchPresignedUrls, uploadPhotosToS3, notifyUploadComplete을 호출만하고 외부에서 사용할 수 있도록 리팩토링 ?
+// TODO: reducer로 상태값 변경하도록 리팩토링
 
 interface UseFileUploadProps {
   spaceCode: string;
@@ -46,9 +48,9 @@ const useFileUpload = ({
   const { tryTask, tryFetch } = useError();
 
   //TODO: 진행률 확인하고 제거
-  useEffect(() => {
-    console.log(session);
-  }, [session]);
+  // useEffect(() => {
+  //   console.log(session);
+  // }, [session]);
 
   const ensureGuestId = async () => {
     if (guestId && guestId !== FAILED_GUEST_ID) return guestId;
@@ -104,9 +106,8 @@ const useFileUpload = ({
     const newFiles = createUploadFiles(localFiles);
     const newBatches = createBatches(newFiles);
 
-    // 세션도 초기화
     const newSession: Session = {
-      total: newBatches.length,
+      total: localFiles.length,
       success: 0,
       failed: 0,
       batches: newBatches,
@@ -257,6 +258,7 @@ const useFileUpload = ({
 
       return {
         ...prev,
+        total: newBatches.reduce((acc, b) => acc + b.total, 0),
         success: totalSuccess,
         failed: totalFailed,
         batches: newBatches,
@@ -306,7 +308,7 @@ const useFileUpload = ({
       },
     });
 
-    if (response.success && currentSession.total === currentSession.success) {
+    if (response.success && session?.total === session?.success) {
       onUploadSuccess();
       clearFiles();
     }

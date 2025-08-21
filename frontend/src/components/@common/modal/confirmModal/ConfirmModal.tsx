@@ -11,21 +11,30 @@ interface ImageProps {
 }
 
 interface ConfirmModalProps extends BaseModalProps {
-  /** 모달에 표시할 이미지 URL */
+  /** 모달에 표시할 아이콘 */
+  icon?: React.ReactNode;
+  /** 모달에 표시할 이미지 */
   image?: ImageProps;
-  /** 확인 메시지 - 문자열 또는 highlightText 컴포넌트 */
-  description?: string | ReactElement<typeof HighlightText>;
+  /** 모달 제목 */
+  title: string | ReactElement<typeof HighlightText>;
+  /** 확인 메시지 */
+  description?: string;
   /** 확인 버튼 텍스트 */
   confirmText?: string;
   /** 취소 버튼 텍스트 */
   cancelText?: string;
+  /** 모달 모드 */
+  mode?: 'default' | 'error';
 }
 
 const ConfirmModal = ({
+  icon,
   image,
-  description = '계속 진행할까요?',
+  title = '계속 진행할까요?',
+  description,
   confirmText = '확인',
   cancelText = '취소',
+  mode = 'default',
   onClose,
   onSubmit,
 }: ConfirmModalProps) => {
@@ -39,16 +48,21 @@ const ConfirmModal = ({
 
   return (
     <C.Wrapper>
+      {icon && <S.IconContainer>{icon}</S.IconContainer>}
       {image && (
-        <S.IconContainer>
+        <S.ImageContainer>
           <S.Icon src={image.src} alt={image.alt} />
-        </S.IconContainer>
+        </S.ImageContainer>
       )}
-      {typeof description === 'string' ? (
-        <C.Description>{description}</C.Description>
-      ) : (
-        description
-      )}
+      <S.TextContainer>
+        <C.Title>{title}</C.Title>
+        {description ? (
+          <S.Description $isError={mode === 'error'}>
+            {description}
+          </S.Description>
+        ) : null}
+      </S.TextContainer>
+
       <C.ButtonContainer>
         <Button text={cancelText} variant="secondary" onClick={handleCancel} />
         <Button text={confirmText} variant="primary" onClick={handleConfirm} />

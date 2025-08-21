@@ -1,3 +1,5 @@
+import type { Guest } from './guest.type';
+
 export interface Photo {
   id: number;
   path: string;
@@ -19,7 +21,11 @@ export interface CreatePhotoInput {
   capturedAt?: Date | string | null;
 }
 
-export interface Guest {
-  id: number;
-  name: string;
+export interface DownloadInfo {
+  originalName: string;
+  url: string;
+}
+
+export interface DownloadInfoList {
+  downloadUrls: DownloadInfo[];
 }
