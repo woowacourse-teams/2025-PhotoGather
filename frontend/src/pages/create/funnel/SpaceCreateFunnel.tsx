@@ -1,5 +1,5 @@
 import diamondImage from '@assets/images/diamond.png';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import StepProgressBar from '../../../components/progressBar/step/StepProgressBar';
 import { ROUTES } from '../../../constants/routes';
@@ -29,13 +29,9 @@ const SpaceCreateFunnel = () => {
   const { handleAgree, isAgree } = useAgreements();
   const needsAgreement = !isAgree;
   const PROGRESS_STEP_LIST: STEP[] = needsAgreement
-    ? ['agreement', 'name', 'date', 'check']
+    ? ['name', 'date', 'agreement', 'check']
     : ['name', 'date', 'check'];
-  const [step, setStep] = useState<STEP>('agreement');
-
-  useEffect(() => {
-    if (!needsAgreement) setStep('name');
-  }, [needsAgreement]);
+  const [step, setStep] = useState<STEP>('name');
 
   const [spaceInfo, setSpaceInfo] =
     useState<SpaceFunnelInfo>(initialFunnelValue);
