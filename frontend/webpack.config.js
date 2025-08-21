@@ -2,6 +2,7 @@ const path = require('node:path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const DotenvPlugin = require('dotenv-webpack');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = (_, argv) => {
   let envFile = '.env.local';
@@ -92,9 +93,25 @@ module.exports = (_, argv) => {
       new ForkTsCheckerWebpackPlugin({
         async: true,
       }),
+      new CopyWebpackPlugin({
+        patterns: [
+          { from: 'public/favicon.ico', to: 'favicon.ico' },
+          { from: 'public/favicon-32x32.png', to: 'favicon-32x32.png' },
+          { from: 'public/favicon-16x16.png', to: 'favicon-16x16.png' },
+          { from: 'public/apple-touch-icon.png', to: 'apple-touch-icon.png' },
+        ],
+      }),
     ],
     devServer: {
-      static: './dist',
+      static: [
+        {
+          directory: path.join(__dirname, 'dist'),
+        },
+        {
+          directory: path.join(__dirname, 'public'),
+          publicPath: '/',
+        },
+      ],
       port: 3000,
       hot: true,
       open: true,
