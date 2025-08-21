@@ -4,6 +4,7 @@ import HighlightText from '../components/@common/highlightText/HighlightText';
 import InputModal from '../components/@common/modal/inputModal/InputModal';
 import { FAILED_GUEST_ID } from '../constants/errors';
 import { useOverlay } from '../contexts/OverlayProvider';
+import { CookieUtils } from '../utils/CookieUtils';
 import { createRandomNickName } from '../utils/createRandomNickName';
 import useError from './@common/useError';
 
@@ -17,7 +18,7 @@ const useGuestNickName = ({ spaceCode }: UseGuestNickNameProps) => {
 
   const [nickName, setNickName] = useState('');
 
-  const guestInfo = JSON.parse(localStorage.getItem('guestInfo') ?? '{}');
+  const guestInfo = JSON.parse(CookieUtils.get(spaceCode) ?? '{}');
   const guestId = Number(guestInfo?.guestId);
 
   const isValidSpaceGuest =
@@ -175,13 +176,17 @@ const useGuestNickName = ({ spaceCode }: UseGuestNickNameProps) => {
     return taskResult.data ?? FAILED_GUEST_ID;
   };
 
+  const EXPIRED_DATE_TOMORROW = new Date(Date.now() + 1000 * 60 * 60 * 24);
   const storageGuestInfo = (guestId: string) => {
-    localStorage.setItem(
-      'guestInfo',
+    CookieUtils.set(
+      spaceCode,
       JSON.stringify({
         spaceCode,
         guestId,
       }),
+      {
+        expires: EXPIRED_DATE_TOMORROW,
+      },
     );
   };
 
