@@ -68,10 +68,17 @@ export const Carousel = ({ slides, pauseOnHover = true }: CarouselProps) => {
     isPaused,
   ]);
 
+  const isTouchDevice =
+    typeof window !== 'undefined' && 'ontouchstart' in window;
+
   return (
     <S.Wrapper
-      onMouseEnter={() => pauseOnHover && setIsPaused(true)}
-      onMouseLeave={() => pauseOnHover && setIsPaused(false)}
+      onMouseEnter={() => {
+        if (!isTouchDevice && pauseOnHover) setIsPaused(true);
+      }}
+      onMouseLeave={() => {
+        if (!isTouchDevice && pauseOnHover) setIsPaused(false);
+      }}
     >
       <S.SlidesContainer
         $currentIndex={currentIndex}
