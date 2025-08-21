@@ -29,7 +29,7 @@ const NameInputElement = ({
           value={validValue}
           placeholder={INFORMATION.NAME_INPUT.PLACEHOLDER}
           onChange={handleChange}
-          errorMessage={isError ? ERROR.INPUT.NAME : ''}
+          errorMessage={isError ? ERROR.INPUT.NAME_LENGTH : ''}
         />
       }
       onNextButtonClick={() => onNext(validValue)}

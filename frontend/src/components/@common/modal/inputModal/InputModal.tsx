@@ -47,6 +47,15 @@ const InputModal = ({
   const submitInput = () => {
     onSubmit?.({ value: validValue });
   };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      e.currentTarget.blur();
+      submitInput();
+    }
+  };
+
   const isValid = errorMessage.length === 0;
 
   return (
@@ -64,6 +73,7 @@ const InputModal = ({
         onChange={handleChange}
         errorMessage={errorMessage}
         validLength={validLength}
+        onKeyDown={handleKeyDown}
       />
       <C.ButtonContainer>
         {cancelText && (

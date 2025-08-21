@@ -99,7 +99,6 @@ const routes: AppRouteObject[] = [
         handle: {
           header: true,
           highlight: true,
-          headerMode: 'setting',
         },
       },
       {
@@ -108,7 +107,6 @@ const routes: AppRouteObject[] = [
         handle: {
           header: true,
           highlight: true,
-          headerMode: 'none',
         },
       },
       {
