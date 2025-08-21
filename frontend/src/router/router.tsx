@@ -11,9 +11,11 @@ import ImageUploadPage from '../pages/guest/imageUploadPage/ImageUploadPage';
 import SharePage from '../pages/guest/sharePage/SharePage';
 import LandingPage from '../pages/landing/LandingPage';
 import LoginPage from '../pages/login/LoginPage';
+import LogoutPage from '../pages/logout/LogoutPage';
 import DashboardPage from '../pages/manager/dashboard/DashboardPage';
 import SettingsPage from '../pages/manager/settings/SettingsPage';
 import SpaceHomePage from '../pages/manager/spaceHome/SpaceHomePage';
+import MyPage from '../pages/mypage/MyPage';
 import PrivacyConsentPage from '../pages/policies/PrivacyConsentPage';
 import PrivacyPolicyPage from '../pages/policies/PrivacyPolicyPage';
 import TermsOfServicePage from '../pages/policies/TermsOfServicePage';
@@ -91,6 +93,24 @@ const routes: AppRouteObject[] = [
             element: <SharePage />,
           },
         ],
+      },
+      {
+        path: 'mypage',
+        element: <MyPage />,
+        handle: {
+          header: true,
+          highlight: true,
+          headerMode: 'setting',
+        },
+      },
+      {
+        path: 'logout',
+        element: <LogoutPage />,
+        handle: {
+          header: true,
+          highlight: true,
+          headerMode: 'none',
+        },
       },
       {
         path: 'complete',
