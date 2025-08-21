@@ -35,13 +35,13 @@ const routes: AppRouteObject[] = [
           highlight: true,
         },
       },
-      {
-        path: '/demo',
-        element: <DemoHome />,
-        handle: {
-          header: true,
-        },
-      },
+      // {
+      //   path: '/demo',
+      //   element: <DemoHome />,
+      //   handle: {
+      //     header: true,
+      //   },
+      // },
       {
         path: 'create',
         element: <SpaceCreateFunnel />,
