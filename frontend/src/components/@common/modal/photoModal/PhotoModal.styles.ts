@@ -14,7 +14,7 @@ export const Wrapper = styled.div`
   max-height: 80vh;
   overflow: hidden;
   padding: 0 16px;
-  
+
   @media (max-width: 480px) {
     gap: 16px;
     padding: 0 12px;
