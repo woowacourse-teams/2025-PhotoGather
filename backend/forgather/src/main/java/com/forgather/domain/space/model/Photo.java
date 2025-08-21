@@ -12,6 +12,7 @@ import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.PrimaryKeyJoinColumn;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -34,15 +35,27 @@ public class Photo extends SpaceContent {
     @Embedded
     private PhotoMetaData metaData;
 
+    @Column(name = "capacity", nullable = false)
+    private Long capacity; // bytes
+
     @CreatedDate
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    public Photo(Space space, Guest guest, String originalName, String path, PhotoMetaData metaData) {
+    public Photo(Space space, Guest guest, String originalName, String path, PhotoMetaData metaData,
+        Long capacity) {
         super(space, guest);
         this.originalName = originalName;
         this.path = path;
         this.metaData = metaData;
+        this.capacity = capacity;
+    }
+
+    @PrePersist
+    void validate() {
+        if (capacity == null || capacity <= 0L) {
+            throw new IllegalArgumentException("사진 용량은 비어있을 수 없고, 0보다 커야 합니다. 생성 시도 용량: " + capacity);
+        }
     }
 
     public void validateSpace(Space other) {

@@ -81,7 +81,7 @@ class PhotoAcceptanceTest extends AcceptanceTest {
         var space = spaceRepository.save(new Space(host, "space-code", "test-space", 3, LocalDateTime.now()));
         var guest = guestRepository.save(new Guest(space, "guest"));
         var photo = photoRepository.save(new Photo(space, guest, "originalName.jpg", "path",
-            new PhotoMetaData(LocalDateTime.now())));
+            new PhotoMetaData(LocalDateTime.now()), 1024L));
         String token = jwtTokenProvider.generateAccessToken(host.getId());
 
         // when
@@ -161,7 +161,7 @@ class PhotoAcceptanceTest extends AcceptanceTest {
         var space = spaceRepository.save(new Space(host, "space-code", "test-space", 3, LocalDateTime.now()));
         var guest = guestRepository.save(new Guest(space, "guest"));
         var photo = photoRepository.save(new Photo(space, guest, "origin1.png", "path",
-            new PhotoMetaData(LocalDateTime.now())));
+            new PhotoMetaData(LocalDateTime.now()), 1024L));
         String token = jwtTokenProvider.generateAccessToken(host.getId());
 
         // when
@@ -188,7 +188,7 @@ class PhotoAcceptanceTest extends AcceptanceTest {
         var space = spaceRepository.save(new Space(host, "space-code", "test-space", 3, LocalDateTime.now()));
         var guest = guestRepository.save(new Guest(space, "guest"));
         Photo photo = photoRepository.save(
-            new Photo(space, guest, "origin1.png", "path1", new PhotoMetaData(LocalDateTime.now())));
+            new Photo(space, guest, "origin1.png", "path1", new PhotoMetaData(LocalDateTime.now()), 1024L));
         var request = new DownloadPhotosRequest(List.of(photo.getId()));
         String token = jwtTokenProvider.generateAccessToken(host.getId());
 
@@ -218,7 +218,7 @@ class PhotoAcceptanceTest extends AcceptanceTest {
         var host = hostRepository.save(new Host("모코", "pictureUrl"));
         var space = spaceRepository.save(new Space(host, "space-code", "test-space", 3, LocalDateTime.now()));
         var guest = guestRepository.save(new Guest(space, "guest"));
-        photoRepository.save(new Photo(space, guest, "origin1.png", "path1", new PhotoMetaData(LocalDateTime.now())));
+        photoRepository.save(new Photo(space, guest, "origin1.png", "path1", new PhotoMetaData(LocalDateTime.now()), 1024L));
         String token = jwtTokenProvider.generateAccessToken(host.getId());
 
         // when
