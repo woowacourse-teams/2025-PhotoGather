@@ -13,6 +13,6 @@ export const authService = {
     http.post<AuthTokenResponse>('/auth/login/kakao/confirm', requestBody),
 
   refresh: () => http.post('/auth/refresh'),
-  
+
   status: () => authHttp.get<MyInfo>('/auth/me'),
 };

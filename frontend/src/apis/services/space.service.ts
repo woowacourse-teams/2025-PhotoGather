@@ -1,9 +1,4 @@
-import type {
-  MySpace,
-  Space,
-  SpaceCreateInfo,
-  UpdateSpaceInput,
-} from '../../types/space.type';
+import type { MySpace, Space, SpaceCreateInfo } from '../../types/space.type';
 import { authHttp, http } from '../http';
 
 export const spaceService = {
@@ -14,7 +9,7 @@ export const spaceService = {
 
   update: (spaceCode: string, data: SpaceCreateInfo) =>
     authHttp.patch<SpaceCreateInfo>(`/spaces/${spaceCode}`, data),
-  
+
   delete: (spaceCode: string) => authHttp.delete<void>(`/spaces/${spaceCode}`),
 
   getMySpaces: () => authHttp.get<MySpace[]>('/spaces/me'),
