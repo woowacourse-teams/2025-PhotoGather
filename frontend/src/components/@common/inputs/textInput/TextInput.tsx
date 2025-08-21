@@ -6,15 +6,15 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   maxCount: number;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   value: string;
+  validLength: number;
 }
 
-const TextInput = ({ errorMessage, maxCount, ...inputProps }: InputProps) => {
-  const segmenter = new Intl.Segmenter('und', { granularity: 'grapheme' });
-  const graphemes = Array.from(
-    segmenter.segment(inputProps.value),
-    (word) => word.segment,
-  );
-
+const TextInput = ({
+  errorMessage,
+  maxCount,
+  validLength,
+  ...inputProps
+}: InputProps) => {
   return (
     <C.Wrapper>
       <C.InputField
@@ -27,7 +27,7 @@ const TextInput = ({ errorMessage, maxCount, ...inputProps }: InputProps) => {
       <S.InputFooterContainer>
         <C.ErrorMessage>{errorMessage ? errorMessage : ''}</C.ErrorMessage>
         <S.InputCount>
-          {maxCount && `${graphemes.length} / ${maxCount}`}
+          {maxCount && `${validLength} / ${maxCount}`}
         </S.InputCount>
       </S.InputFooterContainer>
     </C.Wrapper>

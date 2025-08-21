@@ -11,6 +11,7 @@ import { INFORMATION } from '../../../constants/messages';
 import { ROUTES } from '../../../constants/routes';
 import { useOverlay } from '../../../contexts/OverlayProvider';
 import useError from '../../../hooks/@common/useError';
+import useGraphemeInput from '../../../hooks/@common/useGraphemeInput';
 import { useToast } from '../../../hooks/@common/useToast';
 import useSpaceCodeFromPath from '../../../hooks/useSpaceCodeFromPath';
 import useSpaceInfo from '../../../hooks/useSpaceInfo';
@@ -38,6 +39,10 @@ const SettingsPage = () => {
 
     return now >= openedAt || spaceInfo.isExpired;
   };
+
+  const { handleChange, validValue, validLength } = useGraphemeInput({
+    initialValue: spaceName,
+  });
 
   useEffect(() => {
     if (spaceInfo) {
@@ -170,9 +175,10 @@ const SettingsPage = () => {
             <S.InputLabel>스페이스 이름</S.InputLabel>
             <TextInput
               placeholder="스페이스 이름을 입력하세요"
-              value={spaceName}
-              onChange={(e) => setSpaceName(e.target.value)}
+              value={validValue}
+              onChange={handleChange}
               maxCount={10}
+              validLength={validLength}
             />
           </S.InputWrapper>
           <S.DateTimeContainer>

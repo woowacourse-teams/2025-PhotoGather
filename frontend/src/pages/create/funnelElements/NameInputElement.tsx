@@ -1,7 +1,7 @@
-import { useState } from 'react';
 import TextInput from '../../../components/@common/inputs/textInput/TextInput';
 import { CONSTRAINTS } from '../../../constants/constraints';
 import { ERROR, INFORMATION } from '../../../constants/messages';
+import useGraphemeInput from '../../../hooks/@common/useGraphemeInput';
 import type { FunnelElementProps } from '../../../types/funnel.type';
 import FunnelBasePage from '../funnel/FunnelBasePage/FunnelBasePage';
 
@@ -9,16 +9,11 @@ const NameInputElement = ({
   onNext,
   initialValue = '',
 }: FunnelElementProps) => {
-  const [name, setName] = useState(initialValue);
-  const isOverLength = name.length > CONSTRAINTS.NAME_MAX_LENGTH;
-  const isStartWithBlank = name.startsWith(' ');
-  const isDisabled = isOverLength || isStartWithBlank || name.length === 0;
-
-  const createNameErrorMessage = () => {
-    if (isStartWithBlank) return ERROR.INPUT.NAME_BLANK;
-    if (isOverLength) return ERROR.INPUT.NAME_LENGTH;
-    return '';
-  };
+  const { handleChange, validValue, validLength } = useGraphemeInput({
+    initialValue,
+  });
+  const isError = validLength > CONSTRAINTS.NAME_MAX_LENGTH;
+  const isDisabled = isError || validLength === 0;
 
   return (
     <FunnelBasePage
@@ -30,13 +25,14 @@ const NameInputElement = ({
       element={
         <TextInput
           maxCount={CONSTRAINTS.NAME_MAX_LENGTH}
-          value={name}
+          validLength={validLength}
+          value={validValue}
           placeholder={INFORMATION.NAME_INPUT.PLACEHOLDER}
-          onChange={(e) => setName(e.target.value)}
-          errorMessage={createNameErrorMessage()}
+          onChange={handleChange}
+          errorMessage={isError ? ERROR.INPUT.NAME_LENGTH : ''}
         />
       }
-      onNextButtonClick={() => onNext(name)}
+      onNextButtonClick={() => onNext(validValue)}
       nextButtonDisabled={isDisabled}
     />
   );
