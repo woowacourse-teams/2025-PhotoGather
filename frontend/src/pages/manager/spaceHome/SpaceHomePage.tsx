@@ -235,7 +235,6 @@ const SpaceHomePage = () => {
 
   return (
     <S.Wrapper>
-      {isEarlyTime && <EarlyPage openedAt={spaceInfo.openedAt} />}
       {isDownloading && (
         <LoadingLayout
           loadingContents={loadingContents}

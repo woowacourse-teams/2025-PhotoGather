@@ -22,7 +22,7 @@ export const ImageGridBackDrop = styled.div`
   width: 100%;
   height: 100%;
   border-radius: 12px;
-  background: ${({ theme }) => hexToRgba(theme.colors.overlay, 0.7)};
+  background: ${({ theme }) => hexToRgba(theme.colors.overlay, 0.3)};
   backdrop-filter: blur(1.5px);
   display: flex;
   justify-content: center;
