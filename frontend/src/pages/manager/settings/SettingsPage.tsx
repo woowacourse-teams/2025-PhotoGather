@@ -105,7 +105,6 @@ const SettingsPage = () => {
       context: {
         toast: {
           text: '스페이스 정보 수정에 실패했어요.',
-          position: 'top',
         },
       },
     });
@@ -119,7 +118,7 @@ const SettingsPage = () => {
 
       showToast({
         text: '스페이스 정보가 수정되었어요.',
-        position: 'top',
+        type: 'info',
       });
 
       await refetchSpaceInfo();
@@ -150,7 +149,6 @@ const SettingsPage = () => {
       context: {
         toast: {
           text: '스페이스 삭제에 실패했어요.',
-          position: 'top',
         },
       },
     });
@@ -164,7 +162,7 @@ const SettingsPage = () => {
 
       showToast({
         text: '스페이스가 성공적으로 삭제됐어요.',
-        position: 'top',
+        type: 'info',
       });
 
       navigate(ROUTES.MAIN);
