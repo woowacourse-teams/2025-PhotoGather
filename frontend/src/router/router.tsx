@@ -11,6 +11,7 @@ import SharePage from '../pages/guest/sharePage/SharePage';
 import LandingPage from '../pages/landing/LandingPage';
 import LoginPage from '../pages/login/LoginPage';
 import LogoutPage from '../pages/logout/LogoutPage';
+import MainPage from '../pages/MainPage';
 import DashboardPage from '../pages/manager/dashboard/DashboardPage';
 import SettingsPage from '../pages/manager/settings/SettingsPage';
 import SpaceHomePage from '../pages/manager/spaceHome/SpaceHomePage';
@@ -27,7 +28,7 @@ const routes: AppRouteObject[] = [
     children: [
       {
         path: '/',
-        element: <LandingPage />,
+        element: <MainPage />,
         handle: {
           header: true,
           starField: true,

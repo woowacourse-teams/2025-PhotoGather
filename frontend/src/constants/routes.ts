@@ -1,5 +1,6 @@
 export const ROUTES = {
   MAIN: '/',
+  LANDING: '/landing',
   LOGIN: '/login',
   AUTH: {
     KAKAO: '/auth/login/kakao',
