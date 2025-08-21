@@ -1,5 +1,5 @@
 import * as exifr from 'exifr';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { CONSTRAINTS } from '../../constants/constraints';
 import type { LocalFile } from '../../types/file.type';
 import { isValidFileType } from '../../utils/isValidFileType';
@@ -36,6 +36,7 @@ const useLocalFile = ({ fileType }: UseLocalFileProps) => {
         id: startIndex + index,
         originFile: file,
         capturedAt: await extractDateTimeOriginal(file),
+        capacityValue: file.size,
         previewUrl: URL.createObjectURL(file),
       })),
     );

@@ -22,7 +22,6 @@ export const Default: Story = {
           name: '스토리북 사용자',
         },
         capturedAt: '2025-07-31',
-        createdAt: '2025-07-31',
       },
       {
         id: 2,
@@ -33,7 +32,6 @@ export const Default: Story = {
           name: '스토리북 사용자2',
         },
         capturedAt: '2025-07-31',
-        createdAt: '2025-07-31',
       },
     ],
     thumbnailUrlList: new Map([

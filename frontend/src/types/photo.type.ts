@@ -6,7 +6,6 @@ export interface Photo {
   originalName: string;
   guest: Guest;
   capturedAt: Date | string | null;
-  createdAt: Date | string;
 }
 
 export interface PhotoWithContent extends Photo {
