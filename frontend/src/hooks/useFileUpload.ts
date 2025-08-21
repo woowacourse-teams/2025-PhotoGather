@@ -18,6 +18,8 @@ interface Session {
   batches: Batch[];
 }
 
+// progress를 따로 관리하도록 설계
+
 interface UseFileUploadProps {
   spaceCode: string;
   localFiles: LocalFile[];
@@ -36,6 +38,7 @@ const useFileUpload = ({
   const [isUploading, setIsUploading] = useState(false);
   const { tryTask, tryFetch } = useError();
 
+  //TODO: 진행률 확인하고 제거
   useEffect(() => {
     console.log(session);
   }, [session]);
@@ -212,6 +215,7 @@ const useFileUpload = ({
       prev?.map((b) => (b.id === batch.id ? updatedBatch : b)),
     );
 
+    // 단일 기준이고
     setSession((prev) => {
       if (!prev) return prev;
 
