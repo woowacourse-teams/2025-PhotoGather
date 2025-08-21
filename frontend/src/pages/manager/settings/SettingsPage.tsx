@@ -1,12 +1,17 @@
 import { ReactComponent as WarningIcon } from '@assets/icons/warning.svg';
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { spaceService } from '../../../apis/services/space.service';
 import Button from '../../../components/@common/buttons/button/Button';
 import InfoBox from '../../../components/@common/infoBox/InfoBox';
 import DateTimeInput from '../../../components/@common/inputs/DateTimeInput';
 import TextInput from '../../../components/@common/inputs/textInput/TextInput';
 import ConfirmModal from '../../../components/@common/modal/confirmModal/ConfirmModal';
 import { INFORMATION } from '../../../constants/messages';
+import { ROUTES } from '../../../constants/routes';
 import { useOverlay } from '../../../contexts/OverlayProvider';
+import useError from '../../../hooks/@common/useError';
+import { useToast } from '../../../hooks/@common/useToast';
 import useSpaceCodeFromPath from '../../../hooks/useSpaceCodeFromPath';
 import useSpaceInfo from '../../../hooks/useSpaceInfo';
 import { track } from '../../../utils/googleAnalytics/track';
@@ -15,7 +20,10 @@ import * as S from './SettingsPage.styles';
 const SettingsPage = () => {
   const { spaceCode } = useSpaceCodeFromPath();
   const { spaceInfo } = useSpaceInfo(spaceCode || '');
+  const { tryFetch } = useError();
   const overlay = useOverlay();
+  const navigate = useNavigate();
+  const { showToast } = useToast();
 
   const [spaceName, setSpaceName] = useState('');
   const [date, setDate] = useState('');
@@ -78,12 +86,33 @@ const SettingsPage = () => {
     );
     if (!confirmResult) return;
 
-    // TODO: 삭제 API 호출
-    track.button('space_delete_button', {
-      page: 'settings',
-      section: 'settings_danger_zone',
-      action: 'delete_space',
+    if (!spaceCode) return;
+
+    const result = await tryFetch({
+      task: () => spaceService.delete(spaceCode),
+      errorActions: ['toast'],
+      context: {
+        toast: {
+          text: '스페이스 삭제에 실패했어요.',
+          position: 'top',
+        },
+      },
     });
+
+    if (result.success) {
+      track.button('space_delete_button', {
+        page: 'settings',
+        section: 'settings_danger_zone',
+        action: 'delete_space',
+      });
+
+      showToast({
+        text: '스페이스가 성공적으로 삭제됐어요.',
+        position: 'top',
+      });
+
+      navigate(ROUTES.MAIN);
+    }
   };
 
   return (

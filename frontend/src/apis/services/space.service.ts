@@ -14,5 +14,5 @@ export const spaceService = {
   update: (id: number, data: UpdateSpaceInput) =>
     authHttp.patch<Space>(`/spaces/${id}`, data),
 
-  delete: (id: number) => authHttp.delete<void>(`/spaces/${id}`),
+  delete: (spaceCode: string) => authHttp.delete<void>(`/spaces/${spaceCode}`),
 };
