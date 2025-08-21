@@ -7,14 +7,11 @@ import { checkSelectedPhotoExist } from '../validators/photo.validator';
 import useError from './@common/useError';
 import useWebShareAPI from './useWebShareAPI';
 
-// TODO : validate 함수 삭제
 interface UseDownloadProps {
   spaceCode: string;
   spaceName: string;
   onDownloadSuccess?: () => void;
 }
-
-type DownloadMode = 'download' | 'share';
 
 const useDownload = ({
   spaceCode,
@@ -27,9 +24,6 @@ const useDownload = ({
   const { share } = useWebShareAPI();
 
   const { tryTask, tryFetch } = useError();
-  const { share } = useWebShareAPI();
-
-  const downloadMode: DownloadMode = checkIsIos() ? 'share' : 'download';
 
   const downloadAsImage = async (url: string, fileName: string) => {
     const response = await fetch(url);
@@ -151,7 +145,6 @@ const useDownload = ({
     });
   };
 
-
   const tryAllDownload = async () => {
     await tryFetch({
       task: async () => {
@@ -176,7 +169,6 @@ const useDownload = ({
       },
     });
   };
-
 
   return {
     isDownloading,

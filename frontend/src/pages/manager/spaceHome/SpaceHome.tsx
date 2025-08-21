@@ -152,14 +152,6 @@ const SpaceHome = () => {
     );
   };
 
-  const handleSelectDelete = () => tryDeleteSelectedPhotos(selectedPhotoIds);
-
-  const handleSelectDownload = () => {
-    if (selectedPhotosCount === 1)
-      downloadSingle(selectedPhotoIds[0], undefined, downloadMode);
-    else downloadSelected(selectedPhotoIds, undefined, 'download');
-  };
-
   const handleImageClick = isSelectMode ? toggleSelectedPhoto : openPhotoModal;
 
   //biome-ignore lint/correctness/useExhaustiveDependencies: isFetchSectionVisible 변경 시 호출
