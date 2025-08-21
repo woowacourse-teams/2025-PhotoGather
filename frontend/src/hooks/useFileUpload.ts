@@ -179,21 +179,7 @@ const useFileUpload = ({
     }
   };
 
-  const uploadSingleBatch = async (
-    batch: Batch,
-    validGuestId: number,
-    nickName: string,
-  ) => {
-    const presignedUrls = await tryFetch({
-      task: async () => await fetchPresignedUrls(batch.uploadFiles),
-      errorActions: ['console'],
-    });
-
-    const updatedBatchFiles = addPresignedUrls(
-      presignedUrls.data ?? {},
-      batch.uploadFiles,
-    );
-
+  const uploadToS3 = async (updatedBatchFiles: UploadFile[]) => {
     await Promise.allSettled(
       updatedBatchFiles.map(async (file) => {
         try {
@@ -209,6 +195,24 @@ const useFileUpload = ({
         }
       }),
     );
+  };
+
+  const uploadSingleBatch = async (
+    batch: Batch,
+    validGuestId: number,
+    nickName: string,
+  ) => {
+    const presignedUrls = await tryFetch({
+      task: async () => await fetchPresignedUrls(batch.uploadFiles),
+      errorActions: ['console'],
+    });
+
+    const updatedBatchFiles = addPresignedUrls(
+      presignedUrls.data ?? {},
+      batch.uploadFiles,
+    );
+
+    await uploadToS3(updatedBatchFiles);
 
     setUploadFiles((prev) =>
       prev.map((file) => {
