@@ -21,7 +21,7 @@ import * as S from './SettingsPage.styles';
 
 const SettingsPage = () => {
   const { spaceCode } = useSpaceCodeFromPath();
-  const { spaceInfo } = useSpaceInfo(spaceCode || '');
+  const { spaceInfo, refetchSpaceInfo } = useSpaceInfo(spaceCode || '');
   const { tryFetch } = useError();
   const overlay = useOverlay();
   const navigate = useNavigate();
@@ -42,6 +42,7 @@ const SettingsPage = () => {
 
   const { handleChange, validValue, validLength } = useGraphemeInput({
     initialValue: spaceName,
+    onChange: (e) => setSpaceName(e.target.value),
   });
 
   useEffect(() => {
@@ -65,7 +66,7 @@ const SettingsPage = () => {
     const originalTime = openedAtDate.toTimeString().slice(0, 5);
 
     return (
-      spaceName !== spaceInfo.name ||
+      validValue !== spaceInfo.name ||
       date !== originalDate ||
       time !== originalTime
     );
@@ -85,7 +86,7 @@ const SettingsPage = () => {
     const result = await tryFetch({
       task: () =>
         spaceService.update(spaceCode, {
-          name: spaceName,
+          name: validValue,
           validHours: validHours || 72,
           openedAt: openedAt,
           password: '',
@@ -111,7 +112,7 @@ const SettingsPage = () => {
         position: 'top',
       });
 
-      window.location.reload();
+      await refetchSpaceInfo();
     }
   };
 
