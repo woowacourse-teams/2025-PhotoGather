@@ -103,7 +103,8 @@ export const ERROR = {
     HIGHLIGHT_WORDS: [''],
   },
   INPUT: {
-    NAME: `${CONSTRAINTS.NAME_MAX_LENGTH}자 까지 입력할 수 있어요.`,
+    NAME_LENGTH: `${CONSTRAINTS.NAME_MAX_LENGTH}자 까지 입력할 수 있어요.`,
+    NAME_BLANK: '스페이스 이름은 공백으로 시작할 수 없어요.',
     DATE: '오늘 이전 날짜는 선택할 수 없어요.',
     TIME: '현재 시간 이후 시간대를 입력해주세요.',
   },

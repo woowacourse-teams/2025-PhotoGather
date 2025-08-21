@@ -10,8 +10,15 @@ const NameInputElement = ({
   initialValue = '',
 }: FunnelElementProps) => {
   const [name, setName] = useState(initialValue);
-  const isError = name.length > CONSTRAINTS.NAME_MAX_LENGTH;
-  const isDisabled = isError || name.length === 0;
+  const isOverLength = name.length > CONSTRAINTS.NAME_MAX_LENGTH;
+  const isStartWithBlank = name.startsWith(' ');
+  const isDisabled = isOverLength || isStartWithBlank || name.length === 0;
+
+  const createNameErrorMessage = () => {
+    if (isStartWithBlank) return ERROR.INPUT.NAME_BLANK;
+    if (isOverLength) return ERROR.INPUT.NAME_LENGTH;
+    return '';
+  };
 
   return (
     <FunnelBasePage
@@ -26,7 +33,7 @@ const NameInputElement = ({
           value={name}
           placeholder={INFORMATION.NAME_INPUT.PLACEHOLDER}
           onChange={(e) => setName(e.target.value)}
-          errorMessage={isError ? ERROR.INPUT.NAME : ''}
+          errorMessage={createNameErrorMessage()}
         />
       }
       onNextButtonClick={() => onNext(name)}
