@@ -1,5 +1,6 @@
 import { createBrowserRouter } from 'react-router-dom';
 import Layout from '../components/layout/Layout';
+import KakaoAuthPage from '../pages/auth/KakaoAuthPage';
 import DownloadCompletePage from '../pages/complete/DownloadCompletePage';
 import UploadCompletePage from '../pages/complete/UploadCompletePage';
 import SpaceCreateFunnel from '../pages/create/funnel/SpaceCreateFunnel';
@@ -12,7 +13,13 @@ import LandingPage from '../pages/landing/LandingPage';
 import LogoutPage from '../pages/logout/LogoutPage';
 import SpaceHome from '../pages/manager/spaceHome/SpaceHome';
 import MyPage from '../pages/mypage/MyPage';
-import PrivacyPolicyPage from '../pages/privacyPolicy/PrivacyPolicyPage';
+import LoginPage from '../pages/login/LoginPage';
+import DashboardPage from '../pages/manager/dashboard/DashboardPage';
+import SettingsPage from '../pages/manager/settings/SettingsPage';
+import SpaceHomePage from '../pages/manager/spaceHome/SpaceHomePage';
+import PrivacyConsentPage from '../pages/policies/PrivacyConsentPage';
+import PrivacyPolicyPage from '../pages/policies/PrivacyPolicyPage';
+import TermsOfServicePage from '../pages/policies/TermsOfServicePage';
 import type { AppRouteObject } from '../types/route.type';
 
 const routes: AppRouteObject[] = [
@@ -41,24 +48,30 @@ const routes: AppRouteObject[] = [
         element: <SpaceCreateFunnel />,
       },
       {
-        path: 'space-home/:spaceCode',
-        element: <SpaceHome />,
-        handle: {
-          header: true,
-          starField: true,
-          highlight: true,
-        },
-      },
-      {
-        // TODO : 데모 후 삭제
         path: 'manager',
         children: [
           {
-            path: 'space-home/:spaceId',
-            element: <SpaceHome />,
+            path: 'space-home/:spaceCode',
+            element: <SpaceHomePage />,
             handle: {
               header: true,
               starField: true,
+              highlight: true,
+            },
+          },
+          {
+            path: 'space-home/:spaceCode/dashboard',
+            element: <DashboardPage />,
+            handle: {
+              header: true,
+              highlight: true,
+            },
+          },
+          {
+            path: 'space-home/:spaceCode/settings',
+            element: <SettingsPage />,
+            handle: {
+              header: true,
               highlight: true,
             },
           },
@@ -69,7 +82,7 @@ const routes: AppRouteObject[] = [
         path: 'guest',
         children: [
           {
-            path: 'image-upload/:spaceId',
+            path: 'image-upload/:spaceCode',
             element: <ImageUploadPage />,
             handle: {
               starField: true,
@@ -114,8 +127,30 @@ const routes: AppRouteObject[] = [
         ],
       },
       {
-        path: 'privacy-policy',
-        element: <PrivacyPolicyPage />,
+        path: 'login',
+        element: <LoginPage />,
+      },
+      {
+        path: 'auth',
+        children: [
+          {
+            path: 'login',
+            children: [
+              {
+                path: 'kakao',
+                element: <KakaoAuthPage />,
+              },
+            ],
+          },
+        ],
+      },
+      {
+        path: 'policy',
+        children: [
+          { path: 'privacy-policy', element: <PrivacyPolicyPage /> },
+          { path: 'terms-of-service', element: <TermsOfServicePage /> },
+          { path: 'privacy-consent', element: <PrivacyConsentPage /> },
+        ],
       },
       {
         path: 'network-error',

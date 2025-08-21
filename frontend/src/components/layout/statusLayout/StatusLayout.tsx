@@ -16,12 +16,12 @@ interface StatusBackdropProps {
 const StatusLayout = ({ image, element }: StatusBackdropProps) => {
   useScrollLock();
   return (
-    <C.BackDrop onTouchMove={(e) => e.preventDefault()}>
+    <C.ImageGridBackDrop onTouchMove={(e) => e.preventDefault()}>
       <S.Wrapper>
         <S.Icon src={image.src} alt={image.alt} />
         {element}
       </S.Wrapper>
-    </C.BackDrop>
+    </C.ImageGridBackDrop>
   );
 };
 

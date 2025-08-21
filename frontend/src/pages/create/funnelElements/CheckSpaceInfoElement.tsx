@@ -27,6 +27,7 @@ const CheckSpaceInfoElement = ({
   const { leftTime } = useLeftTimer({ targetTime: openedAt });
   const formattedLeftTime = formatTimer(leftTime);
   const isImmediateOpen = formattedLeftTime === '00:00:00';
+  //TODO: agreements api 호출 필요
 
   const { isCreating, fetchCreateSpace } = useCreateSpace();
   const { kstDateString, kstTimeString } = calculateKstToday();
@@ -45,7 +46,9 @@ const CheckSpaceInfoElement = ({
     if (!spaceCode) return;
 
     onNext(isImmediateOpen);
-    navigate(ROUTES.GUEST.SHARE, { state: spaceCode });
+    navigate(ROUTES.GUEST.SHARE, {
+      state: { name: spaceInfo.name, spaceCode },
+    });
   };
 
   return (

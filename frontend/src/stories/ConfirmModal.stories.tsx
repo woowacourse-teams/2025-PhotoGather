@@ -1,3 +1,4 @@
+import { ReactComponent as WarningIcon } from '@assets/icons/warning.svg';
 import rocketImage from '@assets/images/rocket.png';
 import type { Meta, StoryObj } from '@storybook/react';
 import ConfirmModal from '../components/@common/modal/confirmModal/ConfirmModal';
@@ -16,35 +17,51 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
-    description: '계속 진행할까요?',
+    title: '계속 진행하시겠습니까?',
+    description: '이 작업은 되돌릴 수 없습니다.',
     confirmText: '확인',
     cancelText: '취소',
+    mode: 'default',
   },
 };
 
-export const UploadConfirm: Story = {
+export const WithoutDescription: Story = {
+  args: {
+    title: '계속 진행하시겠습니까?',
+    confirmText: '확인',
+    cancelText: '취소',
+    mode: 'default',
+  },
+};
+
+export const WithImage: Story = {
   args: {
     image: rocketImage,
+    title: '업로드 확인',
     description: '100장의 사진을 업로드할까요?',
     confirmText: '업로드',
     cancelText: '취소',
+    mode: 'default',
   },
 };
 
-export const DownloadConfirm: Story = {
+export const ErrorMode: Story = {
   args: {
-    image: rocketImage,
-    description: '선택한 사진을 다운로드할까요?',
-    confirmText: '다운로드',
-    cancelText: '취소',
-  },
-};
-
-export const DeleteConfirm: Story = {
-  args: {
-    image: rocketImage,
-    description: '정말로 삭제할까요?',
+    title: '정말 삭제하시겠어요?',
+    description: '삭제 후에는 복구할 수 없어요',
     confirmText: '삭제',
     cancelText: '취소',
+    mode: 'error',
+  },
+};
+
+export const ErrorWithIcon: Story = {
+  args: {
+    icon: <WarningIcon />,
+    title: '정말 삭제하시겠어요?',
+    description: '삭제 후에는 복구할 수 없어요',
+    confirmText: '삭제',
+    cancelText: '취소',
+    mode: 'error',
   },
 };

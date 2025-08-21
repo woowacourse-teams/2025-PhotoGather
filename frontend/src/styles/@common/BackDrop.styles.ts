@@ -15,6 +15,21 @@ export const BackDrop = styled.div`
   z-index: ${({ theme }) => theme.zIndex.backdrop};
 `;
 
+export const ImageGridBackDrop = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 12px;
+  background: ${({ theme }) => hexToRgba(theme.colors.overlay, 0.7)};
+  backdrop-filter: blur(1.5px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: ${({ theme }) => theme.zIndex.backdrop};
+`;
+
 export const BackDropContainer = styled.div`
   width: auto;
   z-index: ${({ theme }) => theme.zIndex.backdropContainer};
