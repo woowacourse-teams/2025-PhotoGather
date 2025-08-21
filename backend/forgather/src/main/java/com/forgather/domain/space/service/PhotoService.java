@@ -189,6 +189,7 @@ public class PhotoService {
         photo.validateSpace(space);
 
         photoRepository.delete(photo);
+        space.getContents().remove(photo);
         contentsStorage.deleteContent(photo.getPath());
     }
 
@@ -203,6 +204,7 @@ public class PhotoService {
             .toList();
 
         photoRepository.deleteAll(photos);
+        space.getContents().removeAll(photos);
         contentsStorage.deleteSelectedContents(paths);
     }
 }
