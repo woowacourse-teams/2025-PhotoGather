@@ -35,7 +35,7 @@ VALUES ('PHOTO', '1'),
        ('PHOTO', '1'),
        ('PHOTO', '1');
 
-INSERT INTO `forgather`.`photo` (`id`, `original_name`, `path`, `captured_at`, `created_at`, `capacity_value`)
+INSERT INTO `forgather`.`photo` (`id`, `original_name`, `path`, `captured_at`, `created_at`, `capacity`)
 VALUES (1, 'ss1.png', '1234567890/blue.png', '2025-04-16', NOW(), 1024),
        (2, 'ss2.jpeg', '1234567890/hista.jpeg', '2025-04-17', NOW(), 1024),
        (3, 'ss3.jpeg', '1234567890/leo.jpeg', '2025-04-18', NOW(), 1024),

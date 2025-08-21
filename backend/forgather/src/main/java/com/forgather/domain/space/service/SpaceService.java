@@ -44,7 +44,7 @@ public class SpaceService {
         space.validateHost(host);
         long usedValue = photoRepository.findAllBySpace(space)
             .stream()
-            .mapToLong(Photo::getCapacityValue)
+            .mapToLong(Photo::getCapacity)
             .sum();
         return new SpaceCapacityResponse(space.getMaxCapacity(), usedValue);
     }

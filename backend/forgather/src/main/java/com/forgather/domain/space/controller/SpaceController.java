@@ -79,8 +79,8 @@ public class SpaceController {
     }
 
     @GetMapping("/{spaceCode}/capacity")
-    @Operation(summary = "스페이스 용량 조회", description = "스페이스의 총, 현재 사용 용량을 조회합니다.")
-    public ResponseEntity<SpaceCapacityResponse> getSpaceCapacity(
+    @Operation(summary = "스페이스 용량 조회", description = "스페이스의 최대 용량과 현재 사용중인 용량을 조회합니다.")
+    public ResponseEntity<SpaceCapacityResponse> getSpaceCapacities(
         @PathVariable(name = "spaceCode") String spaceCode,
         @LoginHost Host host
     ) {

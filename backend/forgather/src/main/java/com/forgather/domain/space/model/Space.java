@@ -64,7 +64,7 @@ public class Space extends BaseTimeEntity {
     @Transient
     private long photoCount = 0;
 
-    @Column(name = "capacity_value", nullable = false)
+    @Column(name = "max_capacity", nullable = false)
     private Long maxCapacity; // bytes
 
     public Space(Host host, String code, String name, int validHours, LocalDateTime openedAt) {
@@ -173,7 +173,7 @@ public class Space extends BaseTimeEntity {
             throw new IllegalArgumentException("스페이스 유효 시간은 1시간 이상이어야 합니다. 생성 시도 유효 시간: " + validHours);
         }
         if (maxCapacity == null || maxCapacity <= 0L) {
-            throw new IllegalArgumentException("스페이스 용량은 비어있을 수 없고, 0보다 커야 합니다. 생성 시도 용량: " + maxCapacity);
+            throw new IllegalArgumentException("스페이스 최대 용량은 비어있을 수 없고, 0보다 커야 합니다. 생성 시도 용량: " + maxCapacity);
         }
         validateOpenedAt(openedAt);
     }
@@ -204,7 +204,7 @@ public class Space extends BaseTimeEntity {
             throw new IllegalArgumentException("스페이스 오픈 시각은 비어있을 수 없습니다.");
         }
         if (maxCapacity == null || maxCapacity <= 0L) {
-            throw new IllegalArgumentException("스페이스 용량은 비어있을 수 없고, 0보다 커야 합니다. 생성 시도 용량: " + maxCapacity);
+            throw new IllegalArgumentException("스페이스 최대 용량은 비어있을 수 없고, 0보다 커야 합니다. 생성 시도 용량: " + maxCapacity);
         }
     }
 

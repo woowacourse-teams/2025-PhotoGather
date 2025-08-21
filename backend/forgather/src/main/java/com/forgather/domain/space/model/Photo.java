@@ -35,26 +35,26 @@ public class Photo extends SpaceContent {
     @Embedded
     private PhotoMetaData metaData;
 
-    @Column(name = "capacity_value", nullable = false)
-    private Long capacityValue; // bytes
+    @Column(name = "capacity", nullable = false)
+    private Long capacity; // bytes
 
     @CreatedDate
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
     public Photo(Space space, Guest guest, String originalName, String path, PhotoMetaData metaData,
-        long capacityValue) {
+        Long capacity) {
         super(space, guest);
         this.originalName = originalName;
         this.path = path;
         this.metaData = metaData;
-        this.capacityValue = capacityValue;
+        this.capacity = capacity;
     }
 
     @PrePersist
     void validate() {
-        if (capacityValue <= 0L) {
-            throw new IllegalArgumentException("사진 용량은 0보다 커야 합니다. 생성 시도 용량: " + capacityValue);
+        if (capacity == null || capacity <= 0L) {
+            throw new IllegalArgumentException("사진 용량은 비어있을 수 없고, 0보다 커야 합니다. 생성 시도 용량: " + capacity);
         }
     }
 
