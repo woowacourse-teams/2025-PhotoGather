@@ -10,9 +10,15 @@ export const Wrapper = styled.div`
   align-items: center;
   gap: 20px;
   width: 100%;
-  max-width: min(calc(100vw - 32px), calc(${({ theme }) => theme.layout.width} - 32px));
+  max-width: min(calc(100vw - 32px), 400px);
   max-height: 80vh;
   overflow: hidden;
+  padding: 0 16px;
+  
+  @media (max-width: 480px) {
+    gap: 16px;
+    padding: 0 12px;
+  }
 `;
 
 export const FromContainer = styled.div`
