@@ -1,8 +1,16 @@
 import { ReactComponent as Logo } from '@assets/icons/logo.svg';
+import { useNavigate } from 'react-router-dom';
+import Button from '../../components/@common/buttons/button/Button';
 import { theme } from '../../styles/theme';
 import * as S from './PolicyPage.common.styles';
 
 const PrivacyConsentPage = () => {
+  const navigate = useNavigate();
+
+  const navigateBack = () => {
+    navigate(-1);
+  };
+
   return (
     <S.Wrapper>
       <S.Header>
@@ -82,6 +90,11 @@ const PrivacyConsentPage = () => {
           </S.Paragraph>
         </S.Section>
       </S.Content>
+      <Button
+        text={'확인했어요'}
+        onClick={navigateBack}
+        style={{ marginTop: '30px' }}
+      />
     </S.Wrapper>
   );
 };

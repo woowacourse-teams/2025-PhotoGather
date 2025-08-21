@@ -19,8 +19,9 @@ export const AllAgreeIcon = styled(RoundCheckIcon)`
   cursor: pointer;
 `;
 
-export const AllAgreeText = styled.p`
+export const AllAgreeText = styled.p<{ $canClick?: boolean }>`
   ${({ theme }) => theme.typography.header03}
+  cursor: ${({ $canClick = false }) => ($canClick ? 'pointer' : 'default')};
 `;
 
 export const AgreeRow = styled.div`
@@ -41,9 +42,13 @@ export const AgreeCheckIcon = styled(CheckIcon)`
   cursor: pointer;
 `;
 
-export const AgreeText = styled.p<{ $showDetail: boolean }>`
+export const AgreeText = styled.p<{
+  $showDetail: boolean;
+  $canClick?: boolean;
+}>`
   ${({ theme }) => theme.typography.bodyRegular}
   color: ${({ $showDetail, theme }) => ($showDetail ? theme.colors.gray03 : theme.colors.gray06)};
   text-decoration: ${({ $showDetail }) => ($showDetail ? 'underline' : 'none')};
-  cursor: ${({ $showDetail }) => ($showDetail ? 'pointer' : 'default')};
+  cursor: ${({ $showDetail, $canClick = false }) =>
+    $showDetail || $canClick ? 'pointer' : 'default'};
 `;
