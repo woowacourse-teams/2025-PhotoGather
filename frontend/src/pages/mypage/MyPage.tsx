@@ -1,10 +1,12 @@
-import defaultImage from '@assets/images/img_default.png';
+import defaultImage from '@assets/images/default_image.png';
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { authService } from '../../apis/services/auth.service';
 import { spaceService } from '../../apis/services/space.service';
 import HighlightText from '../../components/@common/highlightText/HighlightText';
 import Profile from '../../components/profile/Profile';
 import SpaceCard from '../../components/spaceCard/SpaceCard';
+import { ROUTES } from '../../constants/routes';
 import type { MyInfo } from '../../types/api.type';
 import type { MySpace } from '../../types/space.type';
 import * as S from './MyPage.styles';
@@ -13,8 +15,10 @@ type FilterType = 'all' | 'open' | 'closed' | 'upcoming';
 
 const MyPage = () => {
   const [activeFilter, setActiveFilter] = useState<FilterType>('all');
+  const [isLoading, setIsLoading] = useState(false);
   const [mySpaces, setMySpaces] = useState<MySpace[]>([]);
   const [myInfo, setMyInfo] = useState<MyInfo | null>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchMySpaces = async () => {
@@ -25,8 +29,10 @@ const MyPage = () => {
       const response = await authService.status();
       setMyInfo(response.data ?? null);
     };
+    setIsLoading(true);
     fetchAuthStatus();
     fetchMySpaces();
+    setIsLoading(false);
   }, []);
 
   const checkIsEarly = (space: MySpace) => {
@@ -75,10 +81,12 @@ const MyPage = () => {
   return (
     <S.Wrapper>
       <Profile
-        profileImage={myInfo?.pictureUrl ?? defaultImage}
-        name={myInfo?.name ?? '이름'}
+        profileImage={
+          isLoading || !myInfo?.pictureUrl ? defaultImage : myInfo?.pictureUrl
+        }
+        name={isLoading || !myInfo?.name ? '이름' : myInfo?.name}
       />
-      <S.CreateSpaceButton>
+      <S.CreateSpaceButton onClick={() => navigate(ROUTES.CREATE)}>
         <HighlightText
           text="＋ 스페이스 생성"
           highlightTextArray={['＋']}
