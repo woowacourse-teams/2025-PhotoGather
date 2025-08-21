@@ -31,6 +31,6 @@ export const ImageGridBackDrop = styled.div`
 `;
 
 export const BackDropContainer = styled.div`
-  width: auto;
+  /* width: auto; */
   z-index: ${({ theme }) => theme.zIndex.backdropContainer};
 `;

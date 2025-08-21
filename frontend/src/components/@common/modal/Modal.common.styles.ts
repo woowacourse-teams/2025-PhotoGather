@@ -10,6 +10,8 @@ export const Wrapper = styled.div`
   width: 100%;
   border-radius: 12px;
   background: ${({ theme }) => theme.colors.white};
+  margin: 0 16px;
+  border: 2px solid red;
 `;
 
 export const Title = styled.span`

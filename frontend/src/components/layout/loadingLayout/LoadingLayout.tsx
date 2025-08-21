@@ -1,3 +1,4 @@
+import useScrollLock from '../../../hooks/@common/useScrollLock';
 import * as C from '../../../styles/@common/BackDrop.styles';
 import LinearProgressBar from '../../progressBar/linear/LinearProgressBar';
 import * as S from './LoadingLayout.styles';
@@ -26,6 +27,7 @@ const LoadingLayout = ({
   currentAmount,
   totalAmount,
 }: LoadingLayoutProps) => {
+  useScrollLock();
   const progress =
     totalAmount > 0 ? Math.min(currentAmount / totalAmount, 1) : 0;
   const percentage = Math.round(progress * 100);
