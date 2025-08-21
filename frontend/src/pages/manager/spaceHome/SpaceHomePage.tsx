@@ -108,15 +108,14 @@ const SpaceHomePage = () => {
     toggleAllSelected,
   } = usePhotoSelect({ photosList: photosList ?? [] });
 
-  const { tryDeleteSelectedPhotos, tryDeleteSinglePhoto, isDeleting } =
-    usePhotosDelete({
-      spaceCode: spaceCode ?? '',
-      toggleSelectMode,
-      updatePhotos,
-      tryFetchPhotosList,
-      extractUnselectedPhotos,
-      photosList,
-    });
+  const { tryDeleteSelectedPhotos, tryDeleteSinglePhoto } = usePhotosDelete({
+    spaceCode: spaceCode ?? '',
+    toggleSelectMode,
+    updatePhotos,
+    tryFetchPhotosList,
+    extractUnselectedPhotos,
+    photosList,
+  });
 
   const clickDashboardWithTracking = () => {
     navigate(ROUTES.MANAGER.DASHBOARD(spaceCode ?? ''));
@@ -237,7 +236,7 @@ const SpaceHomePage = () => {
   return (
     <S.Wrapper>
       {isEarlyTime && <EarlyPage openedAt={spaceInfo.openedAt} />}
-      {(isDownloading || isDeleting) && (
+      {isDownloading && (
         <LoadingLayout
           loadingContents={loadingContents}
           totalAmount={totalProgress}

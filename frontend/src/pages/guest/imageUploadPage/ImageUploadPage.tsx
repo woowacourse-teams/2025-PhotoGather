@@ -1,4 +1,5 @@
 import messageIcon from '@assets/images/message.png';
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ReactComponent as ArrowUpSvg } from '../../../@assets/icons/upwardArrow.svg';
 import FloatingActionButton from '../../../components/@common/buttons/floatingActionButton/FloatingActionButton';
@@ -65,7 +66,7 @@ const ImageUploadPage = () => {
     fileType: 'image',
   });
 
-  const { submitFileUpload, isUploading } = useFileUpload({
+  const { submitFileUpload, isUploading, total, success } = useFileUpload({
     localFiles: localFiles,
     spaceCode: spaceCode ?? '',
     onUploadSuccess: navigateToUploadComplete,
@@ -109,6 +110,8 @@ const ImageUploadPage = () => {
     );
   };
 
+  //TODO: 진행률 아이콘 업데이트
+
   const loadingContents = [
     {
       icon: { src: messageIcon, alt: '데모 페이지 아이콘' },
@@ -128,6 +131,10 @@ const ImageUploadPage = () => {
     },
   ];
 
+  useEffect(() => {
+    console.log(total, success);
+  }, [total, success]);
+
   return (
     <S.Wrapper $hasImages={hasImages}>
       {isEarlyTime && <EarlyPage openedAt={spaceInfo.openedAt} />}
@@ -135,8 +142,8 @@ const ImageUploadPage = () => {
       {isUploading && (
         <LoadingLayout
           loadingContents={loadingContents}
-          totalAmount={10}
-          currentAmount={9}
+          totalAmount={total ?? 10}
+          currentAmount={success ?? 5}
         />
       )}
       <S.ScrollTopAnchor ref={scrollTopTriggerRef} />
