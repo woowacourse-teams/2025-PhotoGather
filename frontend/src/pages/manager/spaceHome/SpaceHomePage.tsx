@@ -37,9 +37,9 @@ import { track } from '../../../utils/googleAnalytics/track';
 import { goToTop } from '../../../utils/goToTop';
 import EarlyPage from '../../status/earlyPage/EarlyPage';
 import ExpiredPage from '../../status/expiredPage/ExpiredPage';
-import * as S from './SpaceHome.styles';
+import * as S from './SpaceHomePage.styles';
 
-const SpaceHome = () => {
+const SpaceHomePage = () => {
   const { spaceCode } = useSpaceCodeFromPath();
   const { spaceInfo } = useSpaceInfo(spaceCode ?? '');
   const isEarlyTime =
@@ -117,6 +117,15 @@ const SpaceHome = () => {
       photosList,
     });
 
+  const clickDashboardWithTracking = () => {
+    navigate(ROUTES.MANAGER.DASHBOARD(spaceCode ?? ''));
+    track.button('space_setting_button', {
+      page: 'space_home',
+      section: 'space_home_header',
+      action: 'open_setting',
+    });
+  };
+
   const deletePhotoWithTracking = async (photoId: number) => {
     await tryDeleteSinglePhoto(photoId);
     track.button('single_delete_button', {
@@ -163,9 +172,16 @@ const SpaceHome = () => {
 
   //biome-ignore lint/correctness/useExhaustiveDependencies: isFetchSectionVisible 변경 시 호출
   useEffect(() => {
-    if (!isFetchSectionVisible || isEndPage || isLoading) return;
+    if (
+      !isFetchSectionVisible ||
+      isEndPage ||
+      isLoading ||
+      isSpaceExpired ||
+      isEarlyTime
+    )
+      return;
     tryFetchPhotosList();
-  }, [isFetchSectionVisible, isEndPage]);
+  }, [isFetchSectionVisible, isEndPage, isSpaceExpired, isEarlyTime]);
 
   const loadingContents = [
     {
@@ -236,7 +252,6 @@ const SpaceHome = () => {
           currentAmount={9}
         />
       )}
-      {isSpaceExpired && <ExpiredPage />}
       <S.InfoContainer ref={scrollTopTriggerRef}>
         <SpaceHeader
           title={spaceName}
@@ -244,13 +259,7 @@ const SpaceHome = () => {
           icons={[
             {
               element: <SettingSvg fill={theme.colors.white} width="20px" />,
-              onClick: () => {
-                track.button('space_setting_button', {
-                  page: 'space_home',
-                  section: 'space_home_header',
-                  action: 'open_setting',
-                });
-              },
+              onClick: clickDashboardWithTracking,
               label: '설정',
             },
             {
@@ -262,7 +271,13 @@ const SpaceHome = () => {
         />
       </S.InfoContainer>
 
-      {photosList &&
+      {isEarlyTime || isSpaceExpired ? (
+        <S.NoImageContainer>
+          {isEarlyTime && <EarlyPage openedAt={spaceInfo.openedAt} />}
+          {isSpaceExpired && <ExpiredPage />}
+        </S.NoImageContainer>
+      ) : (
+        photosList &&
         (photosList.length > 0 ? (
           <>
             <S.ImageManagementContainer>
@@ -321,7 +336,8 @@ const SpaceHome = () => {
             <S.Icon />
             <S.NoImageText>{INFORMATION.NO_IMAGE}</S.NoImageText>
           </S.NoImageContainer>
-        ))}
+        ))
+      )}
 
       <S.IntersectionArea ref={hideBlurAreaTriggerRef} />
       <S.IntersectionArea ref={fetchTriggerRef} />
@@ -331,4 +347,4 @@ const SpaceHome = () => {
   );
 };
 
-export default SpaceHome;
+export default SpaceHomePage;

@@ -32,7 +32,7 @@ const usePhotosDelete = ({
   const showDeleteConfirmModal = async (message: string) => {
     const result = await overlay(
       React.createElement(ConfirmModal, {
-        description: message,
+        title: message,
         confirmText: '삭제',
         cancelText: '취소',
       }),
