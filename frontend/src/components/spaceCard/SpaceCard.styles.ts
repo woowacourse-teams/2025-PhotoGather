@@ -12,6 +12,7 @@ export const Wrapper = styled.button`
   background-color: ${({ theme }) => theme.colors.white};
   text-align: left;
   cursor: pointer;
+  overflow: hidden;
 `;
 
 export const ImageContainer = styled.div<{
@@ -107,7 +108,7 @@ export const EarlyOverlayTitle = styled.div`
 `;
 
 export const EarlyOverlayDate = styled.div`
-  color: ${({ theme }) => theme.colors.white};
+  color: ${({ theme }) => theme.colors.accent};
   ${({ theme }) => ({ ...theme.typography.bodyLarge })};
 `;
 
