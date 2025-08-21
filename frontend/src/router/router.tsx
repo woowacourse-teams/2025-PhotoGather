@@ -34,6 +34,15 @@ const routes: AppRouteObject[] = [
           highlight: true,
         },
       },
+      {
+        path: '/landing',
+        element: <LandingPage />,
+        handle: {
+          header: true,
+          starField: true,
+          highlight: true,
+        },
+      },
       // {
       //   path: '/demo',
       //   element: <DemoHome />,
