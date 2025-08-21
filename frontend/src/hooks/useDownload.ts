@@ -131,7 +131,10 @@ const useDownload = ({
         if (!response.data) return;
         const { downloadUrls } = response.data;
 
-        downloadAsImage(downloadUrls[0].url, downloadUrls[0].originalName);
+        await downloadAsImage(
+          downloadUrls[0].url,
+          downloadUrls[0].originalName,
+        );
       },
       errorActions: ['toast', 'console'],
       context: {
