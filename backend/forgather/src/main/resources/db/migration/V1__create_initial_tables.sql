@@ -29,6 +29,7 @@ CREATE TABLE photo
     original_name VARCHAR(255) NOT NULL,
     path          VARCHAR(255) NOT NULL,
     captured_at   TIMESTAMP    NULL     DEFAULT NULL,
+    capacity      BIGINT       NOT NULL,
     created_at    TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (id),
     CONSTRAINT photo_space_content_fk FOREIGN KEY (id) REFERENCES space_content (id)
