@@ -32,5 +32,8 @@ export const ImageGridBackDrop = styled.div`
 
 export const BackDropContainer = styled.div`
   width: auto;
+  max-width: calc(100vw - 32px);
   z-index: ${({ theme }) => theme.zIndex.backdropContainer};
+  padding: 0 16px;
+  box-sizing: border-box;
 `;
