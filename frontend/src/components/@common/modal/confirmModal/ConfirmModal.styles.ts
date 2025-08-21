@@ -14,17 +14,3 @@ export const Icon = styled.img`
   height: 100%;
   object-fit: contain;
 `;
-
-export const Description = styled.p`
-  ${({ theme }) => ({ ...theme.typography.header03 })}
-  color: ${({ theme }) => theme.colors.gray04};
-`;
-
-export const ButtonContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  gap: 12px;
-  width: 100%;
-  margin: 14px 0 0 0;
-  justify-content: center;
-`;

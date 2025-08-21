@@ -4,7 +4,6 @@ import type {
   PresignedUrlsResponse,
   UploadedPhotos,
 } from '../../types/api.type';
-import { UploadFile } from '../../types/file.type';
 import type { CreatePhotoInput, Photo } from '../../types/photo.type';
 import { authHttp, http } from '../http';
 
@@ -22,11 +21,11 @@ export const photoService = {
 
   create: (data: CreatePhotoInput) => authHttp.post<Photo>('/photos', data),
 
-  uploadFiles: (spaceCode: string, files: File[]) => {
+  uploadFiles: (spaceCode: string, files: File[], guestId: number) => {
     const formData = new FormData();
     files.forEach((file) => formData.append('files', file));
     return http.post(
-      `/spaces/${spaceCode}/photos/upload`,
+      `/spaces/${spaceCode}/photos/upload?guestId=${guestId}`,
       formData,
       'form-data',
     );
@@ -38,8 +37,16 @@ export const photoService = {
       { uploadFileNames },
     ),
 
-  notifyUploadComplete: (spaceCode: string, uploadedPhotos: UploadedPhotos[]) =>
-    http.post(`/spaces/${spaceCode}/photos`, { uploadedPhotos }),
+  notifyUploadComplete: (
+    spaceCode: string,
+    uploadedPhotos: UploadedPhotos[],
+    validGuestId: number,
+    nickName: string,
+  ) =>
+    http.post(`/spaces/${spaceCode}/photos?guestId=${validGuestId}`, {
+      nickName,
+      uploadedPhotos,
+    }),
 
   uploadPhotosToS3: async (presignedUrl: string, file: File) =>
     http.putToS3(presignedUrl, file),

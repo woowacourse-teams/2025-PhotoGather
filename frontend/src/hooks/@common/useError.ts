@@ -12,12 +12,16 @@ interface AfterAction {
 interface RedirectPath {
   path: string;
 }
+interface ConsoleOptions {
+  text: string;
+}
 type ToastOptions = Omit<ToastBase, 'text'> & { text?: string };
 
 interface ErrorRequiredProps {
   toast?: ToastOptions;
   afterAction?: AfterAction;
   redirect?: RedirectPath;
+  console?: ConsoleOptions;
 }
 
 const useError = () => {

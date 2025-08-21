@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { photoService } from '../apis/services/photo.service';
+import { FAILED_GUEST_ID } from '../constants/errors';
 import type { LocalFile, UploadFile } from '../types/file.type';
 import useError from './@common/useError';
 
@@ -25,12 +26,18 @@ interface UseFileUploadProps {
   localFiles: LocalFile[];
   onUploadSuccess: () => void;
   clearFiles: () => void;
+  nickName: string;
+  guestId: number;
+  tryCreateNickName: () => Promise<number>;
 }
 const useFileUpload = ({
   spaceCode,
   localFiles,
   onUploadSuccess,
   clearFiles,
+  nickName,
+  guestId,
+  tryCreateNickName,
 }: UseFileUploadProps) => {
   const [uploadFiles, setUploadFiles] = useState<UploadFile[]>([]);
   const [batches, setBatches] = useState<Batch[]>();
@@ -42,6 +49,15 @@ const useFileUpload = ({
   useEffect(() => {
     console.log(session);
   }, [session]);
+
+  const ensureGuestId = async () => {
+    if (guestId && guestId !== FAILED_GUEST_ID) return guestId;
+
+    const newGuestId = await tryCreateNickName();
+    if (!newGuestId) return FAILED_GUEST_ID;
+
+    return newGuestId;
+  };
 
   const createUploadFiles = (localFiles: LocalFile[]) => {
     const newUploadFiles: UploadFile[] = localFiles.map((file) => {
@@ -133,7 +149,11 @@ const useFileUpload = ({
     if (successFiles.length === 0) throw new Error('성공한 파일이 없습니다.');
   };
 
-  const notifySuccessFiles = async (successFiles: UploadFile[]) => {
+  const notifySuccessFiles = async (
+    successFiles: UploadFile[],
+    validGuestId: number,
+    nickName: string,
+  ) => {
     tryTask({
       task: () => canNotifySuccess(successFiles),
       errorActions: ['console'],
@@ -147,12 +167,21 @@ const useFileUpload = ({
 
     await tryFetch({
       task: async () =>
-        await photoService.notifyUploadComplete(spaceCode, uploadedPhotos),
+        await photoService.notifyUploadComplete(
+          spaceCode,
+          uploadedPhotos,
+          validGuestId,
+          nickName,
+        ),
       errorActions: ['console'],
     });
   };
 
-  const uploadSingleBatch = async (batch: Batch) => {
+  const uploadSingleBatch = async (
+    batch: Batch,
+    validGuestId: number,
+    nickName: string,
+  ) => {
     const presignedUrls = await tryFetch({
       task: async () => await fetchPresignedUrls(batch.uploadFiles),
       errorActions: ['console'],
@@ -189,7 +218,7 @@ const useFileUpload = ({
     const successFiles = updatedBatchFiles.filter(
       (f) => f.state === 'uploaded',
     );
-    await notifySuccessFiles(successFiles);
+    await notifySuccessFiles(successFiles, validGuestId, nickName);
   };
 
   //TODO: 구조 정리하기 닉네임 연결 후 통계가 정상동작하는지 확인
@@ -235,13 +264,17 @@ const useFileUpload = ({
     });
   };
 
-  const uploadBatches = async (currentSession: Session) => {
+  const uploadBatches = async (
+    currentSession: Session,
+    validGuestId: number,
+    nickName: string,
+  ) => {
     await tryFetch({
       task: async () => {
         for (const batch of currentSession.batches) {
           await tryFetch({
             task: async () => {
-              await uploadSingleBatch(batch);
+              await uploadSingleBatch(batch, validGuestId, nickName);
             },
             errorActions: ['console'],
           });
@@ -258,7 +291,8 @@ const useFileUpload = ({
     setIsUploading(true);
     const response = await tryFetch({
       task: async () => {
-        await uploadBatches(currentSession);
+        const validGuestId = await ensureGuestId();
+        await uploadBatches(currentSession, validGuestId, nickName);
       },
       errorActions: ['toast', 'console'],
       context: {
