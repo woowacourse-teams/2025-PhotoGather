@@ -21,7 +21,7 @@ const usePhotosBySpaceCode = ({
   const [photosList, setPhotosList] = useState<Photo[] | null>(null);
   const currentPage = useRef(1);
   const totalPages = useRef(1);
-  const { tryTask } = useError();
+  const { tryFetch } = useError();
 
   const thumbnailPhotoMap = useMemo(() => {
     // TODO : thumbnail 이미지 참조 실패시 원본 이미지 참조하도록 설정
@@ -65,6 +65,7 @@ const usePhotosBySpaceCode = ({
     currentPage.current += 1;
 
     const { photos, totalPages } = response.data;
+    console.log(photos);
     appendPhotosList(photos, totalPages);
     requestAnimationFrame(() => {
       reObserve();
@@ -72,7 +73,7 @@ const usePhotosBySpaceCode = ({
   };
 
   const tryFetchPhotosList = async () => {
-    await tryTask({
+    await tryFetch({
       task: fetchPhotosList,
       errorActions: ['toast', 'console'],
       context: {
@@ -84,7 +85,6 @@ const usePhotosBySpaceCode = ({
       onFinally: () => {
         setIsLoading(false);
       },
-      shouldLogToSentry: true,
     });
   };
 

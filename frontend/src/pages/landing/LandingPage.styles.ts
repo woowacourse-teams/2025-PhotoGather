@@ -5,7 +5,7 @@ export const Wrapper = styled.div`
   flex-direction: column;
   align-items: center;
   gap: 200px;
-  padding: 120px 0px;
+  padding: 120px 0;
 `;
 
 export const LogoContainer = styled.div`
@@ -18,6 +18,7 @@ export const LogoContainer = styled.div`
 export const RowContainer = styled.div`
   display: flex;
   gap: 24px;
+  align-items: center;
 `;
 
 export const TextContainer = styled.p`
@@ -34,4 +35,29 @@ export const SectionContainer = styled.section`
   gap: 28px;
 `;
 
-export const ImageContainer = styled.img``;
+export const MockupScrollContainer = styled.section`
+  width: calc(
+    ${({ theme }) => theme.layout.width} - ${({ theme }) => theme.layout.padding.leftRight}
+  );
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+`;
+
+export const MockupItem = styled.div`
+  flex: 0 0 auto;
+
+  &:first-of-type {
+    margin-left: 30px;
+  }
+
+  &:last-of-type {
+    margin-right: 30px;
+  }
+`;

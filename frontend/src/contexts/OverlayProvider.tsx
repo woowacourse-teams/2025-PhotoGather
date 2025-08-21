@@ -22,22 +22,22 @@ type OverlayOptions = {
   clickOverlayClose?: boolean;
 };
 
-type OverlayOpenFn = (
+type OverlayOpenFn = <T = unknown>(
   children: ReactElement,
   options?: OverlayOptions,
-) => Promise<OverlaySubmitResult>;
+) => Promise<T>;
 
-interface OverlayState {
+interface OverlayState<T> {
   content: ReactElement;
   options: OverlayOptions;
-  resolver?: (value: OverlaySubmitResult) => void;
+  resolver?: (value: T) => void;
   id: number;
 }
 
 export const OverlayContext = createContext<OverlayOpenFn | null>(null);
 
 const OverlayProvider = ({ children }: PropsWithChildren) => {
-  const [overlayStack, setOverlayStack] = useState<OverlayState[]>([]);
+  const [overlayStack, setOverlayStack] = useState<OverlayState<any>[]>([]);
   const nextIdRef = useRef(0);
 
   const openOverlay: OverlayOpenFn = (children, options) => {

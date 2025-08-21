@@ -31,7 +31,7 @@ export const theme = {
       default: '#F0EBFC66',
     },
     overlay: '#000000B3',
-    kakaoTalk: '#FFEB00',
+    kakaoTalk: '#FEE500',
     naver: '#03C75A',
   },
   typography: {
@@ -99,6 +99,7 @@ export const theme = {
       topBottom: '32px',
       leftRight: '16px',
     },
+    headerHeight: '44px',
   },
   breakpoints: {
     desktop: '',

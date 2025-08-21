@@ -46,7 +46,12 @@ const GuestImageElement = ({
       onClick={() => onImageClick(data.id)}
       onKeyDown={handleEnterKeyDown}
     >
-      <C.Image src={data.path} alt={alt} onError={handleError} />
+      <C.Image
+        src={data.previewUrl}
+        alt={alt}
+        onError={handleError}
+        className="clarity-mask-photo"
+      />
       <S.CloseButton onClick={handleDeleteClick}>
         <S.Icon />
       </S.CloseButton>

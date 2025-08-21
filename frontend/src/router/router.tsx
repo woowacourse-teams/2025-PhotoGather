@@ -1,5 +1,6 @@
 import { createBrowserRouter } from 'react-router-dom';
 import Layout from '../components/layout/Layout';
+import KakaoAuthPage from '../pages/auth/KakaoAuthPage';
 import DownloadCompletePage from '../pages/complete/DownloadCompletePage';
 import UploadCompletePage from '../pages/complete/UploadCompletePage';
 import SpaceCreateFunnel from '../pages/create/funnel/SpaceCreateFunnel';
@@ -9,9 +10,18 @@ import NotFoundErrorPage from '../pages/error/NotFoundErrorPage';
 import ImageUploadPage from '../pages/guest/imageUploadPage/ImageUploadPage';
 import SharePage from '../pages/guest/sharePage/SharePage';
 import LandingPage from '../pages/landing/LandingPage';
-import SpaceHome from '../pages/manager/spaceHome/SpaceHome';
+import LoginPage from '../pages/login/LoginPage';
+import LogoutPage from '../pages/logout/LogoutPage';
+import DashboardPage from '../pages/manager/dashboard/DashboardPage';
+import SettingsPage from '../pages/manager/settings/SettingsPage';
+import SpaceHomePage from '../pages/manager/spaceHome/SpaceHomePage';
+import MyPage from '../pages/mypage/MyPage';
+import PrivacyConsentPage from '../pages/policies/PrivacyConsentPage';
+import PrivacyPolicyPage from '../pages/policies/PrivacyPolicyPage';
+import TermsOfServicePage from '../pages/policies/TermsOfServicePage';
+import type { AppRouteObject } from '../types/route.type';
 
-const router = createBrowserRouter([
+const routes: AppRouteObject[] = [
   {
     path: '/',
     element: <Layout />,
@@ -19,26 +29,50 @@ const router = createBrowserRouter([
       {
         path: '/',
         element: <LandingPage />,
+        handle: {
+          header: true,
+          starField: true,
+          highlight: true,
+        },
       },
       {
         path: '/demo',
         element: <DemoHome />,
+        handle: {
+          header: true,
+        },
       },
       {
         path: 'create',
         element: <SpaceCreateFunnel />,
       },
       {
-        path: 'space-home/:spaceCode',
-        element: <SpaceHome />,
-      },
-      {
-        // TODO : 데모 후 삭제
         path: 'manager',
         children: [
           {
-            path: 'space-home/:spaceId',
-            element: <SpaceHome />,
+            path: 'space-home/:spaceCode',
+            element: <SpaceHomePage />,
+            handle: {
+              header: true,
+              starField: true,
+              highlight: true,
+            },
+          },
+          {
+            path: 'space-home/:spaceCode/dashboard',
+            element: <DashboardPage />,
+            handle: {
+              header: true,
+              highlight: true,
+            },
+          },
+          {
+            path: 'space-home/:spaceCode/settings',
+            element: <SettingsPage />,
+            handle: {
+              header: true,
+              highlight: true,
+            },
           },
         ],
       },
@@ -47,14 +81,36 @@ const router = createBrowserRouter([
         path: 'guest',
         children: [
           {
-            path: 'image-upload/:spaceId',
+            path: 'image-upload/:spaceCode',
             element: <ImageUploadPage />,
+            handle: {
+              starField: true,
+              highlight: true,
+            },
           },
           {
             path: 'share',
             element: <SharePage />,
           },
         ],
+      },
+      {
+        path: 'mypage',
+        element: <MyPage />,
+        handle: {
+          header: true,
+          highlight: true,
+          headerMode: 'setting',
+        },
+      },
+      {
+        path: 'logout',
+        element: <LogoutPage />,
+        handle: {
+          header: true,
+          highlight: true,
+          headerMode: 'none',
+        },
       },
       {
         path: 'complete',
@@ -70,6 +126,32 @@ const router = createBrowserRouter([
         ],
       },
       {
+        path: 'login',
+        element: <LoginPage />,
+      },
+      {
+        path: 'auth',
+        children: [
+          {
+            path: 'login',
+            children: [
+              {
+                path: 'kakao',
+                element: <KakaoAuthPage />,
+              },
+            ],
+          },
+        ],
+      },
+      {
+        path: 'policy',
+        children: [
+          { path: 'privacy-policy', element: <PrivacyPolicyPage /> },
+          { path: 'terms-of-service', element: <TermsOfServicePage /> },
+          { path: 'privacy-consent', element: <PrivacyConsentPage /> },
+        ],
+      },
+      {
         path: 'network-error',
         element: <NetworkErrorPage />,
       },
@@ -79,6 +161,8 @@ const router = createBrowserRouter([
       },
     ],
   },
-]);
+];
+
+const router = createBrowserRouter(routes);
 
 export default router;

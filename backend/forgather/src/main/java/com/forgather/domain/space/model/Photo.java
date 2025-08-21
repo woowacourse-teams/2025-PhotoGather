@@ -5,11 +5,14 @@ import java.time.LocalDateTime;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import com.forgather.domain.guest.model.Guest;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.PrimaryKeyJoinColumn;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -23,20 +26,36 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Photo extends SpaceContent {
 
+    @Column(name = "original_name", nullable = false)
+    private String originalName;
+
     @Column(name = "path", nullable = false)
     private String path;
 
     @Embedded
     private PhotoMetaData metaData;
 
+    @Column(name = "capacity", nullable = false)
+    private Long capacity; // bytes
+
     @CreatedDate
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    public Photo(Space space, String path, PhotoMetaData metaData) {
-        super(space);
+    public Photo(Space space, Guest guest, String originalName, String path, PhotoMetaData metaData,
+        Long capacity) {
+        super(space, guest);
+        this.originalName = originalName;
         this.path = path;
         this.metaData = metaData;
+        this.capacity = capacity;
+    }
+
+    @PrePersist
+    void validate() {
+        if (capacity == null || capacity <= 0L) {
+            throw new IllegalArgumentException("사진 용량은 비어있을 수 없고, 0보다 커야 합니다. 생성 시도 용량: " + capacity);
+        }
     }
 
     public void validateSpace(Space other) {

@@ -17,6 +17,10 @@ export const Default: Story = {
         id: 1,
         path: 'https://avatars.githubusercontent.com/MinSungJe',
         originalName: '스페이스 이미지',
+        guest: {
+          id: 1,
+          name: '스토리북 사용자',
+        },
         capturedAt: '2025-07-31',
         createdAt: '2025-07-31',
       },
@@ -24,6 +28,10 @@ export const Default: Story = {
         id: 2,
         path: 'https://avatars.githubusercontent.com/ShinjungOh',
         originalName: '스페이스 이미지',
+        guest: {
+          id: 1,
+          name: '스토리북 사용자2',
+        },
         capturedAt: '2025-07-31',
         createdAt: '2025-07-31',
       },
@@ -38,5 +46,8 @@ export const Default: Story = {
         'https://velog.velcdn.com/images/minsungje/post/e84b8e68-0f4b-4d5c-a9ab-f2c9a6a48c3e/image.jpg',
       ],
     ]),
+    isSelectMode: false,
+    selectedPhotoMap: new Map(),
+    onImageClick: (id: number) => console.log('Image clicked:', id),
   },
 };
