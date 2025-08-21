@@ -1,10 +1,10 @@
 #!/bin/bash
 
 JAR_NAME="forgather-0.0.1-SNAPSHOT.jar"
-PORT=8090
+PORT=8080
 LOG_DIR="/home/ubuntu/2025-PhotoGather/logs"
 JAR_PATH="/home/ubuntu/2025-PhotoGather/$JAR_NAME"
-LOG_FILE="$LOG_DIR/dev.log"
+LOG_FILE="$LOG_DIR/app.log"
 
 echo "🛑 기존 $PORT 포트 프로세스 종료 시도..."
 PID=$(sudo lsof -t -i:$PORT)

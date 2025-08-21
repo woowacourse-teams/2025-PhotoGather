@@ -46,6 +46,7 @@ const useFileUpload = ({
   const [session, setSession] = useState<Session>();
   const [isUploading, setIsUploading] = useState(false);
   const { tryTask, tryFetch } = useError();
+  const [progress, setProgress] = useState(0);
 
   //TODO: 진행률 확인하고 제거
   // useEffect(() => {
@@ -203,6 +204,7 @@ const useFileUpload = ({
             file.originFile,
           );
           file.state = 'uploaded';
+          setProgress((prev) => prev + 1);
         } catch {
           file.state = 'failed';
         }
@@ -310,6 +312,11 @@ const useFileUpload = ({
       },
     });
 
+    console.log('File upload response:', response);
+    console.log('Session state:', session);
+    console.log('Session total:', session?.total);
+    console.log('Session success:', session?.success);
+
     if (response.success && session?.total === session?.success) {
       onUploadSuccess();
       clearFiles();
@@ -319,7 +326,7 @@ const useFileUpload = ({
   return {
     submitFileUpload,
     total: session?.total,
-    success: session?.success,
+    success: progress,
     isUploading,
   };
 };

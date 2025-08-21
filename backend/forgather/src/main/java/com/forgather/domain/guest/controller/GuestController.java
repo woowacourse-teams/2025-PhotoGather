@@ -15,16 +15,23 @@ import com.forgather.domain.guest.dto.GuestResponse;
 import com.forgather.domain.guest.dto.UpdateGuestRequest;
 import com.forgather.domain.guest.service.GuestService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/spaces/{spaceCode}/guests")
+@Tag(name = "Guest: 게스트", description = "게스트 관련 API")
 public class GuestController {
 
     private final GuestService guestService;
 
     @GetMapping("/{guestId}")
+    @Operation(
+        summary = "게스트 조회",
+        description = "스페이스 코드와 게스트 ID를 통해 게스트 정보를 조회합니다."
+    )
     public ResponseEntity<GuestResponse> getGuest(
         @PathVariable String spaceCode,
         @PathVariable Long guestId
@@ -34,6 +41,11 @@ public class GuestController {
     }
 
     @PostMapping
+    @Operation(
+        summary = "게스트 생성",
+        description = "스페이스 코드에 새로운 게스트를 생성합니다. " +
+            "성공 시, 생성된 게스트 정보를 반환합니다."
+    )
     public ResponseEntity<GuestResponse> createGuest(
         @PathVariable String spaceCode,
         @RequestBody CreateGuestRequest request
@@ -43,6 +55,11 @@ public class GuestController {
     }
 
     @PatchMapping("/{guestId}")
+    @Operation(
+        summary = "게스트 정보 수정",
+        description = "스페이스 코드와 게스트 ID를 통해 게스트 정보를 수정합니다. " +
+            "성공 시, 수정된 게스트 정보를 반환합니다."
+    )
     public ResponseEntity<GuestResponse> updateGuest(
         @PathVariable String spaceCode,
         @PathVariable Long guestId,

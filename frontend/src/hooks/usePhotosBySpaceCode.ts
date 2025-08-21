@@ -65,7 +65,6 @@ const usePhotosBySpaceCode = ({
     currentPage.current += 1;
 
     const { photos, totalPages } = response.data;
-    console.log(photos);
     appendPhotosList(photos, totalPages);
     requestAnimationFrame(() => {
       reObserve();

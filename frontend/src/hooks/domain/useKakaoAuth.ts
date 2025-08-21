@@ -72,7 +72,7 @@ const useKakaoAuth = () => {
         });
 
         setTimeout(() => {
-          navigate('/');
+          navigate(ROUTES.MAIN);
         }, 0);
       },
       errorActions: ['toast', 'redirect'],
@@ -87,7 +87,7 @@ const useKakaoAuth = () => {
   const handleLogout = async () => {
     CookieUtils.delete('access', { path: ROUTES.MAIN });
     CookieUtils.delete('refresh', { path: ROUTES.MAIN });
-    location.reload();
+    navigate(ROUTES.MAIN);
   };
 
   return { handleKakaoLogin, getAuth, handleLogout };

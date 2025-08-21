@@ -1,6 +1,7 @@
 package com.forgather.domain.space.model;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -14,6 +15,21 @@ import org.junit.jupiter.params.provider.ValueSource;
 import com.forgather.global.auth.model.Host;
 
 class SpaceTest {
+
+    @DisplayName("스페이스 이름 이모지 1글자 처리")
+    @Test
+    void createSpaceWithEmoji() {
+        // given
+        String spaceCode = "1234567890";
+        String emoji = "\uD83D\uDC68\u200D\uD83D\uDC69\u200D\uD83D\uDC67\u200D\uD83D\uDC66"; // // 가족 이모지, length 11
+        String name = "우리의 모임123" + emoji; // 스페이스 이름에 이모지 포함
+        int validHours = 48;
+        LocalDateTime openedAt = LocalDateTime.now();
+        Host host = new Host("moko", "pictureUrl");
+
+        // when & then
+        assertThatCode(() -> new Space(host, spaceCode, name, validHours, openedAt)).doesNotThrowAnyException();
+    }
 
     @Test
     @DisplayName("주어진 날짜가 만료 시간을 지나면 .validateExpiration() 메서드가 예외를 던진다")

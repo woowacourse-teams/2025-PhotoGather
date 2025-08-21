@@ -1,5 +1,6 @@
 package com.forgather.domain.space.model;
 
+import java.text.BreakIterator;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -138,7 +139,7 @@ public class Space extends BaseTimeEntity {
     }
 
     private void setName(String name) {
-        if (name.isBlank() || name.length() > 10) {
+        if (name.isBlank() || getCharacterCount(name) > 10) {
             throw new IllegalArgumentException("스페이스 이름은 비어있을 수 없고, 최대 10자여야 합니다. 생성 시도 이름: " + name);
         }
         this.name = name;
@@ -166,7 +167,7 @@ public class Space extends BaseTimeEntity {
         if (code == null || code.length() != 10) {
             throw new IllegalArgumentException("스페이스 코드는 10자리여야 합니다. 생성 시도 코드: " + code);
         }
-        if (name == null || name.isBlank() || name.length() > 10) {
+        if (name == null || name.isBlank() || getCharacterCount(name) > 10) {
             throw new IllegalArgumentException("스페이스 이름은 비어있을 수 없고, 최대 10자여야 합니다. 생성 시도 이름: " + name);
         }
         if (validHours <= 0) {
@@ -197,7 +198,7 @@ public class Space extends BaseTimeEntity {
         if (name == null || name.isBlank()) {
             throw new IllegalArgumentException("스페이스 이름은 비어있을 수 없습니다. 생성 시도 이름: " + name);
         }
-        if (name.length() > 10) {
+        if (getCharacterCount(name) > 10) {
             throw new IllegalArgumentException("스페이스 이름은 10자를 초과할 수 없습니다. 생성 시도 이름: " + name);
         }
         if (openedAt == null) {
@@ -206,6 +207,17 @@ public class Space extends BaseTimeEntity {
         if (maxCapacity == null || maxCapacity <= 0L) {
             throw new IllegalArgumentException("스페이스 최대 용량은 비어있을 수 없고, 0보다 커야 합니다. 생성 시도 용량: " + maxCapacity);
         }
+    }
+
+    // 이모지의 길이를 1로 처리
+    private int getCharacterCount(String text) {
+        BreakIterator iterator = BreakIterator.getCharacterInstance();
+        iterator.setText(text);
+        int count = 0;
+        while (iterator.next() != BreakIterator.DONE) {
+            count++;
+        }
+        return count;
     }
 
     public void validateCode(String code) {
