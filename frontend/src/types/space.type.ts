@@ -43,3 +43,8 @@ export interface UpdateSpaceInput {
   openedAt?: Date | string;
   expiredAt?: Date | string;
 }
+
+export interface SpaceCapacity {
+  maxCapacity: number;
+  usedCapacity: number;
+}
