@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 import { hexToRgba } from '../../utils/hexToRgba';
 
-export const Wrapper = styled.div`
+export const Wrapper = styled.button`
   display: flex;
   justify-content: center;
   align-items: flex-start;
@@ -10,6 +10,8 @@ export const Wrapper = styled.div`
   border-radius: 10px;
   border: 1px solid ${({ theme }) => theme.colors.gray01};
   background-color: ${({ theme }) => theme.colors.white};
+  text-align: left;
+  cursor: pointer;
 `;
 
 export const ImageContainer = styled.div<{

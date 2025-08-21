@@ -1,6 +1,7 @@
 import { ReactComponent as DefaultImageIcon } from '@assets/icons/defaultImage.svg';
 import { ReactComponent as GroupIcon } from '@assets/icons/group.svg';
 import loadingImage from '@assets/images/loading.png';
+import { useNavigate } from 'react-router-dom';
 import { profileImage } from '../../pages/logout/LogoutPage';
 import {
   formatExpiredDate,
@@ -26,6 +27,8 @@ interface SpaceCardProps {
   photoCount?: number;
   /** 카드 타입 */
   variant: SpaceCardVariant;
+  /** 카드 클릭 시 이동할 경로 */
+  route: string;
 }
 
 const SpaceCard = ({
@@ -36,10 +39,13 @@ const SpaceCard = ({
   guestCount = 0,
   photoCount = 0,
   variant,
+  route,
 }: SpaceCardProps) => {
+  const navigate = useNavigate();
+
   if (variant === 'expired') {
     return (
-      <S.Wrapper>
+      <S.Wrapper onClick={() => navigate(route)}>
         <S.ImageContainer $isBlurred>
           <S.CardImage src={profileImage} alt={name} $isBlurred />
           <S.ImageOverlayText>{`만료된\n스페이스`}</S.ImageOverlayText>
@@ -64,7 +70,7 @@ const SpaceCard = ({
 
   if (variant === 'early') {
     return (
-      <S.Wrapper>
+      <S.Wrapper onClick={() => navigate(route)}>
         <S.ImageContainer $isEarly>
           <S.CardImage src={loadingImage} alt="로딩 이미지" $isEarly />
           <S.EarlyOverlayContainer>
@@ -79,7 +85,7 @@ const SpaceCard = ({
   }
 
   return (
-    <S.Wrapper>
+    <S.Wrapper onClick={() => navigate(route)}>
       <S.ImageContainer>
         <S.CardImage src={profileImage} alt={name} />
       </S.ImageContainer>

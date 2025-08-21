@@ -19,7 +19,11 @@ const MyPage = () => {
   const [mySpaces, setMySpaces] = useState<MySpace[]>([]);
   const [myInfo, setMyInfo] = useState<MyInfo | null>(null);
   const navigate = useNavigate();
+  // const { leftTime } = useLeftTimer({
+  //   targetTime: mySpaces.openedAt ?? '',
+  // });
 
+  // TODO : 로딩시 스켈레톤 제작
   useEffect(() => {
     const fetchMySpaces = async () => {
       const response = await spaceService.getMySpaces();
@@ -125,6 +129,7 @@ const MyPage = () => {
               guestCount={space.guestCount}
               photoCount={space.photoCount}
               variant={matchSpaceCardVariant(space)}
+              route={ROUTES.MANAGER.SPACE_HOME(String(space.id))}
             />
           ))}
         </S.SpaceList>

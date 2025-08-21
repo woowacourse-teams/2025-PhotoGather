@@ -2,6 +2,7 @@ import styled from '@emotion/styled';
 import { theme } from '../../styles/theme';
 import { hexToRgba } from '../../utils/hexToRgba';
 
+// TODO : 마이페이지 스크롤 높이 조절 필요
 export const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
