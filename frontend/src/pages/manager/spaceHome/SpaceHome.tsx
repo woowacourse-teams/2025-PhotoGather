@@ -85,6 +85,8 @@ const SpaceHome = () => {
     tryAllDownload,
     trySelectedDownload,
     trySingleDownload,
+    totalProgress,
+    currentProgress,
   } = useDownload({
     spaceCode: spaceCode ?? '',
     spaceName,
@@ -227,8 +229,8 @@ const SpaceHome = () => {
       {(isDownloading || isDeleting) && (
         <LoadingLayout
           loadingContents={loadingContents}
-          totalAmount={10}
-          currentAmount={9}
+          totalAmount={totalProgress}
+          currentAmount={currentProgress}
         />
       )}
       {isSpaceExpired && <ExpiredPage />}

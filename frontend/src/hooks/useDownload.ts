@@ -18,6 +18,9 @@ const useDownload = ({
   onDownloadSuccess,
 }: UseDownloadProps) => {
   const [isDownloading, setIsDownloading] = useState(false);
+  const [totalProgress, setTotalProgress] = useState(0);
+  const [currentProgress, setCurrentProgress] = useState(0);
+
   const { tryTask, tryFetch } = useError();
 
   const downloadAsImage = async (url: string, fileName: string) => {
@@ -38,10 +41,14 @@ const useDownload = ({
   };
 
   const downloadAsZip = async (downloadInfos: DownloadInfo[]) => {
-    const files = await Promise.all(
+    const files = await Promise.allSettled(
       downloadInfos.map(async (downloadInfo) => {
         const response = await fetch(downloadInfo.url);
+        if (!response.ok) {
+          throw new Error(`다운로드 실패: ${downloadInfo.originalName}`);
+        }
         const blob = await response.blob();
+        setCurrentProgress((prev) => prev + 1);
 
         return {
           name: downloadInfo.originalName,
@@ -51,7 +58,22 @@ const useDownload = ({
       }),
     );
 
-    const zipBlob = await downloadZip(files).blob();
+    const failed = files.find((r) => r.status === 'rejected');
+    if (failed) {
+      throw new Error('다운로드가 실패했습니다.');
+    }
+
+    const validFiles = files.map(
+      (r) =>
+        (
+          r as PromiseFulfilledResult<{
+            name: string;
+            input: Blob;
+            lastModified: Date;
+          }>
+        ).value,
+    );
+    const zipBlob = await downloadZip(validFiles).blob();
 
     const link = document.createElement('a');
     link.href = URL.createObjectURL(zipBlob);
@@ -76,7 +98,9 @@ const useDownload = ({
         if (!response.data) return;
         const data = response.data;
         const { downloadUrls } = data;
-        downloadAsZip(downloadUrls);
+
+        setTotalProgress(downloadUrls.length);
+        await downloadAsZip(downloadUrls);
       },
       errorActions: ['toast'],
       context: {
@@ -120,7 +144,9 @@ const useDownload = ({
         const data = response.data;
         const { downloadUrls } = data;
 
-        downloadAsZip(downloadUrls);
+        setTotalProgress(downloadUrls.length);
+        await downloadAsZip(downloadUrls);
+
         onDownloadSuccess?.();
       },
       errorActions: ['toast', 'console'],
@@ -141,6 +167,8 @@ const useDownload = ({
     tryAllDownload,
     trySingleDownload,
     trySelectedDownload,
+    totalProgress,
+    currentProgress,
   };
 };
 
