@@ -46,7 +46,7 @@ public class SpaceService {
             .stream()
             .mapToLong(Photo::getCapacityValue)
             .sum();
-        return new SpaceCapacityResponse(space.getCapacityValue(), usedValue);
+        return new SpaceCapacityResponse(space.getMaxCapacity(), usedValue);
     }
 
     @Transactional

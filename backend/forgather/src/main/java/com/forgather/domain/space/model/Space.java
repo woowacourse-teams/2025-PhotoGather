@@ -31,7 +31,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Space extends BaseTimeEntity {
 
-    private static final long DEFAULT_CAPACITY_VALUE = 10_737_418_240L; // 10GB
+    private static final long DEFAULT_MAX_CAPACITY_VALUE = 10_737_418_240L; // 10GB
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -65,26 +65,26 @@ public class Space extends BaseTimeEntity {
     private long photoCount = 0;
 
     @Column(name = "capacity_value", nullable = false)
-    private Long capacityValue; // bytes
+    private Long maxCapacity; // bytes
 
     public Space(Host host, String code, String name, int validHours, LocalDateTime openedAt) {
-        validate(code, name, validHours, openedAt, DEFAULT_CAPACITY_VALUE);
+        validate(code, name, validHours, openedAt, DEFAULT_MAX_CAPACITY_VALUE);
         spaceHostMap.add(new SpaceHostMap(this, host));
         this.code = code;
         this.name = name;
         this.openedAt = openedAt;
         this.validHours = validHours;
-        this.capacityValue = DEFAULT_CAPACITY_VALUE;
+        this.maxCapacity = DEFAULT_MAX_CAPACITY_VALUE;
     }
 
-    public Space(Host host, String code, String name, int validHours, LocalDateTime openedAt, long capacityValue) {
-        validate(code, name, validHours, openedAt, capacityValue);
+    public Space(Host host, String code, String name, int validHours, LocalDateTime openedAt, Long capacity) {
+        validate(code, name, validHours, openedAt, capacity);
         spaceHostMap.add(new SpaceHostMap(this, host));
         this.code = code;
         this.name = name;
         this.openedAt = openedAt;
         this.validHours = validHours;
-        this.capacityValue = capacityValue;
+        this.maxCapacity = capacity;
     }
 
     @PostLoad
@@ -162,7 +162,7 @@ public class Space extends BaseTimeEntity {
         this.openedAt = newOpenedAt;
     }
 
-    private void validate(String code, String name, int validHours, LocalDateTime openedAt, long capacityValue) {
+    private void validate(String code, String name, int validHours, LocalDateTime openedAt, Long maxCapacity) {
         if (code == null || code.length() != 10) {
             throw new IllegalArgumentException("스페이스 코드는 10자리여야 합니다. 생성 시도 코드: " + code);
         }
@@ -172,8 +172,8 @@ public class Space extends BaseTimeEntity {
         if (validHours <= 0) {
             throw new IllegalArgumentException("스페이스 유효 시간은 1시간 이상이어야 합니다. 생성 시도 유효 시간: " + validHours);
         }
-        if (capacityValue <= 0L) {
-            throw new IllegalArgumentException("스페이스 용량은 0보다 커야 합니다. 생성 시도 용량: " + capacityValue);
+        if (maxCapacity == null || maxCapacity <= 0L) {
+            throw new IllegalArgumentException("스페이스 용량은 비어있을 수 없고, 0보다 커야 합니다. 생성 시도 용량: " + maxCapacity);
         }
         validateOpenedAt(openedAt);
     }
@@ -203,8 +203,8 @@ public class Space extends BaseTimeEntity {
         if (openedAt == null) {
             throw new IllegalArgumentException("스페이스 오픈 시각은 비어있을 수 없습니다.");
         }
-        if (capacityValue <= 0L) {
-            throw new IllegalArgumentException("스페이스 용량은 0보다 커야 합니다. 생성 시도 용량: " + capacityValue);
+        if (maxCapacity == null || maxCapacity <= 0L) {
+            throw new IllegalArgumentException("스페이스 용량은 비어있을 수 없고, 0보다 커야 합니다. 생성 시도 용량: " + maxCapacity);
         }
     }
 
