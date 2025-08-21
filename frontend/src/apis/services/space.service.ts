@@ -1,8 +1,4 @@
-import type {
-  Space,
-  SpaceCreateInfo,
-  UpdateSpaceInput,
-} from '../../types/space.type';
+import type { Space, SpaceCreateInfo } from '../../types/space.type';
 import { authHttp, http } from '../http';
 
 export const spaceService = {
@@ -11,8 +7,8 @@ export const spaceService = {
 
   getInfoByCode: (spaceCode: string) => http.get<Space>(`/spaces/${spaceCode}`),
 
-  update: (id: number, data: UpdateSpaceInput) =>
-    authHttp.patch<Space>(`/spaces/${id}`, data),
+  update: (spaceCode: string, data: SpaceCreateInfo) =>
+    authHttp.patch<SpaceCreateInfo>(`/spaces/${spaceCode}`, data),
 
   delete: (spaceCode: string) => authHttp.delete<void>(`/spaces/${spaceCode}`),
 };

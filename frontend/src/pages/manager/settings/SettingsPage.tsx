@@ -15,6 +15,7 @@ import { useToast } from '../../../hooks/@common/useToast';
 import useSpaceCodeFromPath from '../../../hooks/useSpaceCodeFromPath';
 import useSpaceInfo from '../../../hooks/useSpaceInfo';
 import { track } from '../../../utils/googleAnalytics/track';
+import { parseIsoStringFromDateTime } from '../../../utils/parseIsoStringFromDateTime';
 import * as S from './SettingsPage.styles';
 
 const SettingsPage = () => {
@@ -65,12 +66,51 @@ const SettingsPage = () => {
     );
   })();
 
-  const handleUpdate = () => {
-    // TODO: 수정 API 호출
-    console.log('수정하기', { spaceName, date, time });
+  const handleUpdateSpaceInfo = async () => {
+    if (!spaceCode || !spaceInfo) return;
+
+    const openedAt = parseIsoStringFromDateTime(date, time);
+
+    const openedDate = new Date(spaceInfo.openedAt);
+    const expiredDate = new Date(spaceInfo.expiredAt);
+    const validHours = Math.round(
+      (expiredDate.getTime() - openedDate.getTime()) / (1000 * 60 * 60),
+    );
+
+    const result = await tryFetch({
+      task: () =>
+        spaceService.update(spaceCode, {
+          name: spaceName,
+          validHours: validHours || 72,
+          openedAt: openedAt,
+          password: '',
+        }),
+      errorActions: ['toast'],
+      context: {
+        toast: {
+          text: '스페이스 정보 수정에 실패했어요.',
+          position: 'top',
+        },
+      },
+    });
+
+    if (result.success) {
+      track.button('space_update_button', {
+        page: 'settings',
+        section: 'settings_space_info',
+        action: 'update_space',
+      });
+
+      showToast({
+        text: '스페이스 정보가 수정되었어요.',
+        position: 'top',
+      });
+
+      window.location.reload();
+    }
   };
 
-  const spaceDelete = async () => {
+  const handleDeleteSpace = async () => {
     const confirmResult = await overlay(
       <ConfirmModal
         icon={<WarningIcon />}
@@ -160,11 +200,15 @@ const SettingsPage = () => {
         </S.InputContainer>
       </S.InfoContainer>
       <S.SpaceDeleteButtonContainer>
-        <S.SpaceDeleteButton onClick={spaceDelete}>
+        <S.SpaceDeleteButton onClick={handleDeleteSpace}>
           스페이스 삭제
         </S.SpaceDeleteButton>
       </S.SpaceDeleteButtonContainer>
-      <Button text="수정하기" onClick={handleUpdate} disabled={!hasChanges} />
+      <Button
+        text="수정하기"
+        onClick={handleUpdateSpaceInfo}
+        disabled={!hasChanges}
+      />
     </S.Wrapper>
   );
 };
