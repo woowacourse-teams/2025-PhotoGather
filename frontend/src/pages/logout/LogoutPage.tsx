@@ -1,6 +1,7 @@
 import ConfirmModal from '../../components/@common/modal/confirmModal/ConfirmModal';
 import Profile from '../../components/profile/Profile';
 import { useOverlay } from '../../contexts/OverlayProvider';
+import useKakaoAuth from '../../hooks/domain/useKakaoAuth';
 import { track } from '../../utils/googleAnalytics/track';
 import * as S from './LogoutPage.styles';
 
@@ -10,13 +11,13 @@ export const profileImage =
 
 const LogoutPage = () => {
   const overlay = useOverlay();
+  const { handleLogout: logout } = useKakaoAuth();
 
   const handleLogout = async () => {
-    console.log('로그아웃');
     const confirmResult = await overlay(
       <ConfirmModal
         title="로그아웃 할까요?"
-        confirmText="삭제"
+        confirmText="확인"
         cancelText="취소"
         mode="error"
       />,
@@ -26,12 +27,13 @@ const LogoutPage = () => {
     );
     if (!confirmResult) return;
 
-    // TODO: 로그아웃 API 호출
     track.button('logout_button', {
       page: 'logout',
       section: 'logout',
       action: 'logout',
     });
+
+    await logout();
   };
 
   return (
