@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { photoService } from '../apis/services/photo.service';
 import { FAILED_GUEST_ID } from '../constants/errors';
 import type { LocalFile, UploadFile } from '../types/file.type';
@@ -20,7 +20,6 @@ interface Session {
 }
 
 // TODO: progress를 따로 관리하도록 설계
-// TODO: fetchPresignedUrls, uploadPhotosToS3, notifyUploadComplete을 호출만하고 외부에서 사용할 수 있도록 리팩토링 ?
 // TODO: reducer로 상태값 변경하도록 리팩토링
 
 interface UseFileUploadProps {
@@ -45,7 +44,7 @@ const useFileUpload = ({
   const [batches, setBatches] = useState<Batch[]>();
   const [session, setSession] = useState<Session>();
   const [isUploading, setIsUploading] = useState(false);
-  const { tryTask, tryFetch } = useError();
+  const { tryFetch } = useError();
   const [progress, setProgress] = useState(0);
 
   //TODO: 진행률 확인하고 제거
@@ -148,19 +147,14 @@ const useFileUpload = ({
     return updated;
   };
 
-  const canNotifySuccess = (successFiles: UploadFile[]) => {
-    if (successFiles.length === 0) throw new Error('성공한 파일이 없습니다.');
-  };
-
   const notifySuccessFiles = async (
     successFiles: UploadFile[],
     validGuestId: number,
     nickName: string,
   ) => {
-    tryTask({
-      task: () => canNotifySuccess(successFiles),
-      errorActions: ['console'],
-    });
+    if (successFiles.length !== localFiles.length) {
+      throw new Error('성공한 파일이 없습니다.');
+    }
 
     const uploadedPhotos = successFiles.map((file) => ({
       uploadFileName: file.objectKey,
@@ -169,7 +163,7 @@ const useFileUpload = ({
       capacityValue: file.capacityValue,
     }));
 
-    await tryFetch({
+    const response = await tryFetch({
       task: async () =>
         await photoService.notifyUploadComplete(
           spaceCode,
@@ -179,6 +173,28 @@ const useFileUpload = ({
         ),
       errorActions: ['console'],
     });
+
+    if (!response.success) {
+      throw new Error('서버에게 성공 알림에 실패했습니다.');
+    }
+  };
+
+  const uploadToS3 = async (updatedBatchFiles: UploadFile[]) => {
+    await Promise.allSettled(
+      updatedBatchFiles.map(async (file) => {
+        try {
+          await photoService.uploadPhotosToS3(
+            file.presignedUrl,
+            file.originFile,
+          );
+          file.state = 'uploaded';
+          setProgress((prev) => prev + 1);
+        } catch {
+          file.state = 'failed';
+          throw new Error('S3에 업로드하는데 실패했습니다.');
+        }
+      }),
+    );
   };
 
   const uploadSingleBatch = async (
@@ -196,20 +212,7 @@ const useFileUpload = ({
       batch.uploadFiles,
     );
 
-    await Promise.allSettled(
-      updatedBatchFiles.map(async (file) => {
-        try {
-          await photoService.uploadPhotosToS3(
-            file.presignedUrl,
-            file.originFile,
-          );
-          file.state = 'uploaded';
-          setProgress((prev) => prev + 1);
-        } catch {
-          file.state = 'failed';
-        }
-      }),
-    );
+    await uploadToS3(updatedBatchFiles);
 
     setUploadFiles((prev) =>
       prev.map((file) => {
@@ -226,7 +229,6 @@ const useFileUpload = ({
     await notifySuccessFiles(successFiles, validGuestId, nickName);
   };
 
-  //TODO: 구조 정리하기 닉네임 연결 후 통계가 정상동작하는지 확인
   const calculateSuccessFiles = (
     batch: Batch,
     updatedBatchFiles: UploadFile[],
@@ -275,19 +277,25 @@ const useFileUpload = ({
     validGuestId: number,
     nickName: string,
   ) => {
-    await tryFetch({
+    const response = await tryFetch({
       task: async () => {
         for (const batch of currentSession.batches) {
-          await tryFetch({
+          const response = await tryFetch({
             task: async () => {
               await uploadSingleBatch(batch, validGuestId, nickName);
             },
             errorActions: ['console'],
           });
+          if (!response.success) {
+            throw new Error('배치 업로드 중 오류 발생');
+          }
         }
       },
       errorActions: ['console'],
     });
+    if (!response.success) {
+      throw new Error('배치 업로드 실패');
+    }
   };
 
   // "진짜" 업로드
@@ -312,12 +320,7 @@ const useFileUpload = ({
       },
     });
 
-    console.log('File upload response:', response);
-    console.log('Session state:', session);
-    console.log('Session total:', session?.total);
-    console.log('Session success:', session?.success);
-
-    if (response.success && session?.total === session?.success) {
+    if (response.success) {
       onUploadSuccess();
       clearFiles();
     }
