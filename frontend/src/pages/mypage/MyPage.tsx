@@ -7,6 +7,7 @@ import HighlightText from '../../components/@common/highlightText/HighlightText'
 import Profile from '../../components/profile/Profile';
 import SpaceCard from '../../components/spaceCard/SpaceCard';
 import { ROUTES } from '../../constants/routes';
+import useAuthConditionTasks from '../../hooks/@common/useAuthConditionTasks';
 import type { MyInfo } from '../../types/api.type';
 import type { MySpace } from '../../types/space.type';
 import * as S from './MyPage.styles';
@@ -19,6 +20,7 @@ const MyPage = () => {
   const [mySpaces, setMySpaces] = useState<MySpace[]>([]);
   const [myInfo, setMyInfo] = useState<MyInfo | null>(null);
   const navigate = useNavigate();
+  useAuthConditionTasks({ taskWhenNoAuth: () => navigate(ROUTES.MAIN) });
   // const { leftTime } = useLeftTimer({
   //   targetTime: mySpaces.openedAt ?? '',
   // });
