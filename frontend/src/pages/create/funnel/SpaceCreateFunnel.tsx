@@ -46,11 +46,9 @@ const SpaceCreateFunnel = () => {
         currentStep={currentStep}
         maxStep={PROGRESS_STEP_LIST.length}
       />
-
       <S.TopContainer>
         <S.IconContainer>
           <S.Icon src={diamondImage} alt="다이아몬드 이미지" />
-          <S.UnderBar />
         </S.IconContainer>
       </S.TopContainer>
       <S.ContentContainer>
