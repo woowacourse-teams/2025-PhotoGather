@@ -4,7 +4,7 @@ export const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 200px;
+  gap: 250px;
   padding: 120px 0;
 `;
 
@@ -33,4 +33,17 @@ export const SectionContainer = styled.section`
   flex-direction: column;
   align-items: center;
   gap: 28px;
+`;
+
+export const LoginSection = styled.section`
+display: flex;
+flex-direction: column;
+align-items: center;
+gap: 40px;
+`;
+
+export const TopContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 125px;
 `;
