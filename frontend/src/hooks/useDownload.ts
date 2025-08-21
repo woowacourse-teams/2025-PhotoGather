@@ -24,7 +24,6 @@ const useDownload = ({
 
   const downloadAsImage = async (url: string, fileName: string) => {
     const response = await fetch(url);
-    console.log('response', response);
     const blob = await response.blob();
 
     const objectUrl = URL.createObjectURL(blob);
