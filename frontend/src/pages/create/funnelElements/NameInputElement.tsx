@@ -9,7 +9,7 @@ const NameInputElement = ({
   onNext,
   initialValue = '',
 }: FunnelElementProps) => {
-  const { onChange, validValue, validLength } = useGraphemeInput({
+  const { handleChange, validValue, validLength } = useGraphemeInput({
     initialValue,
   });
   const isError = validLength > CONSTRAINTS.NAME_MAX_LENGTH;
@@ -25,9 +25,10 @@ const NameInputElement = ({
       element={
         <TextInput
           maxCount={CONSTRAINTS.NAME_MAX_LENGTH}
+          validLength={validLength}
           value={validValue}
           placeholder={INFORMATION.NAME_INPUT.PLACEHOLDER}
-          onChange={onChange}
+          onChange={handleChange}
           errorMessage={isError ? ERROR.INPUT.NAME : ''}
         />
       }

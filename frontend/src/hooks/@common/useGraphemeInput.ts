@@ -4,9 +4,13 @@ const segmenter = new Intl.Segmenter('und', { granularity: 'grapheme' });
 
 interface UseGraphemeInputProps {
   initialValue?: string;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-const useGraphemeInput = ({ initialValue = '' }: UseGraphemeInputProps) => {
+const useGraphemeInput = ({
+  initialValue = '',
+  onChange,
+}: UseGraphemeInputProps) => {
   const [value, setValue] = useState(initialValue);
   const graphemes = Array.from(
     segmenter.segment(value),
@@ -15,13 +19,14 @@ const useGraphemeInput = ({ initialValue = '' }: UseGraphemeInputProps) => {
 
   const validValue = graphemes.join('');
 
-  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value);
+    onChange?.(e);
   };
 
   const validLength = graphemes.length;
 
-  return { onChange, validValue, validLength };
+  return { handleChange, validValue, validLength };
 };
 
 export default useGraphemeInput;
