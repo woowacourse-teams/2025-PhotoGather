@@ -23,7 +23,7 @@ const Header = ({ profileImageSrc, mode = 'default' }: HeaderProps) => {
 
   return (
     <S.Wrapper>
-      <button type="button" onClick={() => navigate(ROUTES.MAIN)}>
+      <button type="button" onClick={() => navigate(ROUTES.LANDING)}>
         <Logo fill={theme.colors.white} width={100} />
       </button>
       {noneMode && null}
