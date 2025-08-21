@@ -49,5 +49,6 @@ export const AgreeText = styled.p<{
   ${({ theme }) => theme.typography.bodyRegular}
   color: ${({ $showDetail, theme }) => ($showDetail ? theme.colors.gray03 : theme.colors.gray06)};
   text-decoration: ${({ $showDetail }) => ($showDetail ? 'underline' : 'none')};
-  cursor: ${({ $showDetail, $canClick = false }) => ($showDetail || $canClick ? 'pointer' : 'default')};
+  cursor: ${({ $showDetail, $canClick = false }) =>
+    $showDetail || $canClick ? 'pointer' : 'default'};
 `;
