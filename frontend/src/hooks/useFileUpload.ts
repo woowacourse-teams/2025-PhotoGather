@@ -62,17 +62,19 @@ const useFileUpload = ({
   const createBatches = (uploadFiles: UploadFile[]) => {
     // 100개 단위로 나누어 배치 생성
     const chunkSize = 100;
-    const newBatches: Batch[] = [];
-    for (let i = 0; i < uploadFiles.length; i += chunkSize) {
-      const chunk = uploadFiles.slice(i, i + chunkSize);
-      newBatches.push({
-        id: i,
-        total: chunk.length,
-        success: 0,
-        failed: 0,
-        uploadFiles: uploadFiles.slice(i, i + chunkSize),
-      });
-    }
+    const newBatches = Array.from(
+      { length: Math.ceil(uploadFiles.length / chunkSize) },
+      (_, i) => {
+        const chunk = uploadFiles.slice(i * chunkSize, (i + 1) * chunkSize);
+        return {
+          id: i * chunkSize,
+          total: chunk.length,
+          success: 0,
+          failed: 0,
+          uploadFiles: chunk,
+        };
+      },
+    );
 
     setBatches(newBatches);
     return newBatches;
