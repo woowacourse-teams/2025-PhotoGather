@@ -14,6 +14,8 @@ interface UseDownloadProps {
   onDownloadSuccess?: () => void;
 }
 
+type DownloadMode = 'download' | 'share';
+
 const useDownload = ({
   spaceCode,
   spaceName,
@@ -25,6 +27,9 @@ const useDownload = ({
   const { share } = useWebShareAPI();
 
   const { tryTask, tryFetch } = useError();
+  const { share } = useWebShareAPI();
+
+  const downloadMode: DownloadMode = checkIsIos() ? 'share' : 'download';
 
   const downloadAsImage = async (url: string, fileName: string) => {
     const response = await fetch(url);
@@ -146,6 +151,7 @@ const useDownload = ({
     });
   };
 
+
   const tryAllDownload = async () => {
     await tryFetch({
       task: async () => {
@@ -168,11 +174,9 @@ const useDownload = ({
           type: 'error',
         },
       },
-      onFinally: () => {
-        setIsDownloading(false);
-      },
     });
   };
+
 
   return {
     isDownloading,

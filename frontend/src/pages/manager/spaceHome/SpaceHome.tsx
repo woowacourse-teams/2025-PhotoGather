@@ -44,9 +44,6 @@ const SpaceHome = () => {
   const { spaceInfo } = useSpaceInfo(spaceCode ?? '');
   const isEarlyTime =
     spaceInfo?.openedAt && checkIsEarlyDate(spaceInfo.openedAt);
-
-  // TODO: NoData 시 표시할 Layout 필요
-  const _isNoData = !spaceInfo;
   const isSpaceExpired = spaceInfo?.isExpired;
   const spaceName = spaceInfo?.name ?? '';
   const { targetRef: hideBlurAreaTriggerRef, isIntersecting: isAtPageBottom } =
@@ -155,6 +152,14 @@ const SpaceHome = () => {
     );
   };
 
+  const handleSelectDelete = () => tryDeleteSelectedPhotos(selectedPhotoIds);
+
+  const handleSelectDownload = () => {
+    if (selectedPhotosCount === 1)
+      downloadSingle(selectedPhotoIds[0], undefined, downloadMode);
+    else downloadSelected(selectedPhotoIds, undefined, 'download');
+  };
+
   const handleImageClick = isSelectMode ? toggleSelectedPhoto : openPhotoModal;
 
   //biome-ignore lint/correctness/useExhaustiveDependencies: isFetchSectionVisible 변경 시 호출
@@ -224,7 +229,6 @@ const SpaceHome = () => {
 
   return (
     <S.Wrapper>
-      {/* TODO: 버튼 지우기 */}
       {isEarlyTime && <EarlyPage openedAt={spaceInfo.openedAt} />}
       {(isDownloading || isDeleting) && (
         <LoadingLayout
