@@ -13,10 +13,13 @@ public record HostResponse(
     String name,
 
     @Schema(description = "호스트 프로필 사진 URL", example = "https://example.com/profile.jpg")
-    String pictureUrl
+    String pictureUrl,
+
+    @Schema(description = "약관 동의 여부", example = "true")
+    boolean agreedTerms
 ) {
 
     public static HostResponse from(Host host) {
-        return new HostResponse(host.getId(), host.getName(), host.getPictureUrl());
+        return new HostResponse(host.getId(), host.getName(), host.getPictureUrl(), host.getAgreedTerms());
     }
 }

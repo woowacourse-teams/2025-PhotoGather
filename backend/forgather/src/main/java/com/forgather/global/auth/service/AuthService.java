@@ -61,4 +61,9 @@ public class AuthService {
     public HostResponse getCurrentUser(Host host) {
         return HostResponse.from(host);
     }
+
+    @Transactional
+    public void agreeTerms(Host host) {
+        host.agreeTerms();
+    }
 }
