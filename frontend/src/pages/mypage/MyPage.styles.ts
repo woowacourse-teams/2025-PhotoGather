@@ -67,9 +67,11 @@ export const TabButton = styled.button<{ isActive: boolean }>`
   display: flex;
   padding: 2px 12px;
   align-items: center;
-  border-radius: 12px;
   border: 1px solid ${({ theme }) => theme.colors.gray01};
-  background: #fff;
+  border-radius: 500px;
+  color: ${({ theme }) => theme.colors.white};
+  background-color: ${({ theme }) => theme.colors.white};
+  font: ${({ theme }) => theme.typography.captionSmall};
   cursor: pointer;
   transition: all 0.2s ease;
 
@@ -77,7 +79,6 @@ export const TabButton = styled.button<{ isActive: boolean }>`
     isActive
       ? `
     background-color: #7c3aed;
-    color: white;
   `
       : `
     background-color: transparent;
