@@ -90,7 +90,9 @@ const MyPage = () => {
       <S.SpaceContainer>
         <S.SpaceList>
           <S.FilterContainer>
-            <S.TotalCount>총 {mySpaces.length}개</S.TotalCount>
+            <S.TotalCount>
+              총 {matchingFilterFunc[activeFilter]().length}개
+            </S.TotalCount>
             <S.TabContainer>
               {filters.map((filter) => (
                 <S.TabButton
