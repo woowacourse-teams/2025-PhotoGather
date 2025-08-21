@@ -28,7 +28,7 @@ public class Host extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany(mappedBy = "host", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "host", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<SpaceHostMap> spaceHostMap = new ArrayList<>();
 
     @Column(name = "name")

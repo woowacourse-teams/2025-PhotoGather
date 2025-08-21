@@ -1,3 +1,5 @@
+import type { MyInfo } from './api.type';
+
 export interface SpaceCreateInfo {
   name: string;
   validHours: number;
@@ -16,6 +18,12 @@ export interface SpaceFunnelInfo {
   time: string;
   isImmediateOpen: boolean | null;
   agreements: Agreements | null;
+}
+
+export interface MySpace extends Space {
+  host: MyInfo;
+  guestCount: number;
+  photoCount: number;
 }
 
 export interface Space {

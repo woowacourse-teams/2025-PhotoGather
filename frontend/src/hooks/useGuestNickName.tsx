@@ -17,9 +17,13 @@ const useGuestNickName = ({ spaceCode }: UseGuestNickNameProps) => {
 
   const [nickName, setNickName] = useState('');
 
-  const guestId = Number(localStorage.getItem('guestId'));
+  const guestInfo = JSON.parse(localStorage.getItem('guestInfo') ?? '{}');
+  const guestId = Number(guestInfo?.guestId);
 
-  const mode = guestId || nickName.length > 0 ? 'edit' : 'create';
+  const isValidSpaceGuest =
+    spaceCode === guestInfo?.spaceCode && guestInfo.guestId;
+
+  const mode = isValidSpaceGuest || nickName.length > 0 ? 'edit' : 'create';
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: 초기 모달 표시
   useEffect(() => {
@@ -27,7 +31,7 @@ const useGuestNickName = ({ spaceCode }: UseGuestNickNameProps) => {
       const fetchedNickName = await tryGetNickName();
       setNickName(String(fetchedNickName));
     };
-    if (guestId) {
+    if (isValidSpaceGuest) {
       fetchNickName();
     }
     if (mode === 'create') {
@@ -73,10 +77,11 @@ const useGuestNickName = ({ spaceCode }: UseGuestNickNameProps) => {
     const result = await overlay<{ value: string }>(
       <InputModal {...editInputModalProps} />,
     );
-    if (result) {
-      setNickName(result.value);
+    if (result && isValidSpaceGuest) {
       tryChangeNickName(result.value);
+      return;
     }
+    setNickName(result.value);
   };
 
   const showNickNameCreateModal = async () => {
@@ -124,7 +129,7 @@ const useGuestNickName = ({ spaceCode }: UseGuestNickNameProps) => {
 
         const newGuestId = response.data?.id;
         if (newGuestId) {
-          storageGuestNickName(String(newGuestId));
+          storageGuestInfo(String(newGuestId));
         }
 
         return newGuestId;
@@ -143,14 +148,18 @@ const useGuestNickName = ({ spaceCode }: UseGuestNickNameProps) => {
   const tryChangeNickName = async (nickName: string) => {
     const taskResult = await tryFetch({
       task: async () => {
-        const response = await guestService.patchNickName(spaceCode, guestId, {
-          name: nickName,
-        });
+        const response = await guestService.patchNickName(
+          guestInfo.spaceCode,
+          guestId,
+          {
+            name: nickName,
+          },
+        );
         if (!response.success) return;
 
         const newGuestId = response.data?.id;
         if (newGuestId) {
-          storageGuestNickName(String(newGuestId));
+          storageGuestInfo(String(newGuestId));
         }
 
         return newGuestId;
@@ -166,8 +175,14 @@ const useGuestNickName = ({ spaceCode }: UseGuestNickNameProps) => {
     return taskResult.data ?? FAILED_GUEST_ID;
   };
 
-  const storageGuestNickName = (guestId: string) => {
-    localStorage.setItem('guestId', guestId);
+  const storageGuestInfo = (guestId: string) => {
+    localStorage.setItem(
+      'guestInfo',
+      JSON.stringify({
+        spaceCode,
+        guestId,
+      }),
+    );
   };
 
   return {

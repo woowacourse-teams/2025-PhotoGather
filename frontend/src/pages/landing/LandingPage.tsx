@@ -16,6 +16,7 @@ import Footer from '../../components/footer/Footer';
 import KakaoLoginButton from '../../components/kakaoLoginButton/KakaoLoginButton';
 import LeftTimeInformationBox from '../../components/leftTimeInformationBox/LeftTimeInformationBox';
 import { ROUTES } from '../../constants/routes';
+import useAuthConditionTasks from '../../hooks/@common/useAuthConditionTasks';
 import useLandingScroll from '../../hooks/@common/useLandingScroll';
 import useLeftTimer from '../../hooks/@common/useLeftTimer';
 import useKakaoAuth from '../../hooks/domain/useKakaoAuth';
@@ -39,6 +40,8 @@ const LandingPage = () => {
   const { date, time } = formatDate(mockDate.toISOString());
   const mockupRef = useRef<HTMLDivElement>(null);
   const { handleKakaoLogin, handleLogout } = useKakaoAuth();
+
+  useAuthConditionTasks({ taskWhenAuth: () => navigate(ROUTES.MYPAGE) });
 
   useEffect(() => {
     const target = mockupRef.current;
@@ -69,17 +72,6 @@ const LandingPage = () => {
 
       <S.SectionContainer {...useLandingScroll({})}>
         <S.TextContainer>{`주인공은 당신이니까,\n당신을 위한 순간, 흩어지지 않게`}</S.TextContainer>
-        <FloatingActionButton
-          label="스페이스 생성하기"
-          onClick={() => {
-            navigate(ROUTES.CREATE);
-            track.button('create_space_button', {
-              page: 'landing_page',
-              section: 'landing_page',
-              action: 'create_space',
-            });
-          }}
-        />
         {CookieUtils.has('access') ? (
           <Button text="로그아웃" variant="secondary" onClick={handleLogout} />
         ) : (

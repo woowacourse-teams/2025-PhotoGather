@@ -32,7 +32,7 @@ const LoginPage = () => {
         <S.LoginButtonContainer>
           <IconLabelButton
             icon={<KakaoLogo />}
-            style={{ backgroundColor: theme.colors.kakaoTalk }}
+            style={{ backgroundColor: theme.colors.kakaoTalk, border: 'none' }}
             onClick={handleKakaoLogin}
           />
         </S.LoginButtonContainer>

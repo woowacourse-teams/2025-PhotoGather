@@ -3,6 +3,7 @@ export interface LocalFile {
   originFile: File;
   previewUrl: string;
   capturedAt: string | null;
+  capacityValue: number;
 }
 
 export interface PreviewFile {
@@ -23,5 +24,6 @@ export interface UploadFile {
   objectKey: string;
   presignedUrl: string;
   capturedAt: string | null;
+  capacityValue: number;
   state: UploadFileState;
 }

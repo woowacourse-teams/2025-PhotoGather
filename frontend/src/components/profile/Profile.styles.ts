@@ -27,6 +27,7 @@ export const ProfileImage = styled.img`
   height: 100%;
   border-radius: 50%;
   object-fit: cover;
+  background-color: ${({ theme }) => theme.colors.white};
 `;
 
 export const Name = styled.p`

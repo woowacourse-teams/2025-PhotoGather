@@ -20,7 +20,6 @@ export const Default: Story = {
         name: '스토리북 사용자',
       },
       capturedAt: '2025-07-31',
-      createdAt: '2025-07-31',
     },
     alt: '스페이스 이미지',
     ratio: 1,
