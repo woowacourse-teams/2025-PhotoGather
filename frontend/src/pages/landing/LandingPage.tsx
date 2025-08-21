@@ -11,6 +11,7 @@ import { useEffect, useMemo, useRef } from 'react';
 import Button from '../../components/@common/buttons/button/Button';
 import FloatingActionButton from '../../components/@common/buttons/floatingActionButton/FloatingActionButton';
 import IconLabelButton from '../../components/@common/buttons/iconLabelButton/IconLabelButton';
+import { Carousel } from '../../components/carousel/Carousel';
 import Footer from '../../components/footer/Footer';
 import KakaoLoginButton from '../../components/kakaoLoginButton/KakaoLoginButton';
 import LeftTimeInformationBox from '../../components/leftTimeInformationBox/LeftTimeInformationBox';
@@ -96,27 +97,38 @@ const LandingPage = () => {
           onVisible: () => track.sectionView('mockup_section', 3),
         })}
       >
-        <S.TextContainer>{`귀찮은 로그인 없이\n사진 업로드 가능`}</S.TextContainer>
-        <S.MockupScrollContainer ref={mockupRef}>
-          <S.MockupItem>
-            <MockupOne width={'280px'} />
-          </S.MockupItem>
-          <S.MockupItem>
-            <MockupTwo width={'280px'} />
-          </S.MockupItem>
-          <S.MockupItem>
-            <MockupThree width={'280px'} />
-          </S.MockupItem>
-          <S.MockupItem>
-            <MockupFour width={'280px'} />
-          </S.MockupItem>
-        </S.MockupScrollContainer>
+        <S.TextContainer>{`화질 걱정 없이,\n원본 그대로 보관하세요`}</S.TextContainer>
+        <Carousel
+          slides={[
+            <MockupOne key="one" width={'280px'} />,
+            <MockupTwo key="two" width={'280px'} />,
+            <MockupThree key="three" width={'280px'} />,
+            <MockupFour key="four" width={'280px'} />,
+          ]}
+        />
       </S.SectionContainer>
 
       <S.SectionContainer
         {...useLandingScroll({
           delay: 0.4,
-          onVisible: () => track.sectionView('third_section', 4),
+          onVisible: () => track.sectionView('mockup_section', 4),
+        })}
+      >
+        <S.TextContainer>{`귀찮은 로그인 없이\n사진 업로드 가능`}</S.TextContainer>
+        <Carousel
+          slides={[
+            <MockupOne key="one" width={'280px'} />,
+            <MockupTwo key="two" width={'280px'} />,
+            <MockupThree key="three" width={'280px'} />,
+            <MockupFour key="four" width={'280px'} />,
+          ]}
+        />
+      </S.SectionContainer>
+
+      <S.SectionContainer
+        {...useLandingScroll({
+          delay: 0.4,
+          onVisible: () => track.sectionView('third_section', 5),
         })}
       >
         <S.TextContainer>{`한번에 사진 다운로드\n클릭 한번으로 추억 정리 끝`}</S.TextContainer>
@@ -130,7 +142,7 @@ const LandingPage = () => {
       <S.SectionContainer
         {...useLandingScroll({
           delay: 0.4,
-          onVisible: () => track.sectionView('last_section', 5),
+          onVisible: () => track.sectionView('last_section', 6),
         })}
       >
         <S.TextContainer>{`인스타그램, 카카오톡, QR코드\n빠르게 공유하고 사진을 모아보세요`}</S.TextContainer>
