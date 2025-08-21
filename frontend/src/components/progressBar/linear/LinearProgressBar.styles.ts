@@ -42,6 +42,7 @@ export const GlowElement = styled.div<{
     0 0 1.08px 0 #f0ebfc;
   pointer-events: none;
   z-index: 2;
+  transition: left 0.3s ease;
 
   left: ${({ $variant, $percentage }) => {
     if ($variant === 'start') return '0';
