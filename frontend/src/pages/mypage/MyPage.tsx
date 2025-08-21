@@ -1,4 +1,4 @@
-import defaultImage from '@assets/images/default_image.png';
+import defaultImage from '@assets/images/loading.png';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { authService } from '../../apis/services/auth.service';
