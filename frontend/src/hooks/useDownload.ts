@@ -2,10 +2,8 @@ import { downloadZip } from 'client-zip';
 import { useState } from 'react';
 import { photoService } from '../apis/services/photo.service';
 import type { DownloadInfo } from '../types/photo.type';
-import { checkIsIos } from '../utils/checkIsIos';
 import { checkSelectedPhotoExist } from '../validators/photo.validator';
 import useError from './@common/useError';
-import useWebShareAPI from './useWebShareAPI';
 
 interface UseDownloadProps {
   spaceCode: string;
@@ -21,7 +19,6 @@ const useDownload = ({
   const [isDownloading, setIsDownloading] = useState(false);
   const [totalProgress, setTotalProgress] = useState(0);
   const [currentProgress, setCurrentProgress] = useState(0);
-  const { share } = useWebShareAPI();
 
   const { tryTask, tryFetch } = useError();
 
@@ -30,12 +27,6 @@ const useDownload = ({
     const blob = await response.blob();
 
     const objectUrl = URL.createObjectURL(blob);
-
-    if (checkIsIos()) {
-      const file = new File([blob], fileName, { type: blob.type });
-      await share({ files: [file] });
-      return;
-    }
 
     const link = document.createElement('a');
     link.href = objectUrl;
