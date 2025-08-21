@@ -56,7 +56,7 @@ public class Space extends BaseTimeEntity {
     @OneToMany(mappedBy = "space")
     private List<Guest> guests = new ArrayList<>();
 
-    @OneToMany(mappedBy = "space")
+    @OneToMany(mappedBy = "space", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<SpaceContent> contents = new ArrayList<>();
 
     @Transient
