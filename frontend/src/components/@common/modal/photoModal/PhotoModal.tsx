@@ -70,7 +70,6 @@ const PhotoModal = (props: PhotoModalProps) => {
           managerSpaceCode,
           managerPhotoId,
         );
-        console.log(response);
 
         if (!response || !response.data) return;
         const data = response.data;
