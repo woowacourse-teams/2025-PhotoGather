@@ -12,12 +12,16 @@ interface AfterAction {
 interface RedirectPath {
   path: string;
 }
+interface ConsoleOptions {
+  text: string;
+}
 type ToastOptions = Omit<ToastBase, 'text'> & { text?: string };
 
 interface ErrorRequiredProps {
   toast?: ToastOptions;
   afterAction?: AfterAction;
   redirect?: RedirectPath;
+  console?: ConsoleOptions;
 }
 
 const useError = () => {
@@ -35,8 +39,8 @@ const useError = () => {
     redirect: (path: RedirectPath) => {
       navigate(path.path);
     },
-    console: (message: string) => {
-      console.error(message);
+    console: (error: Error) => {
+      console.error(error);
     },
   };
 
@@ -131,7 +135,7 @@ const useError = () => {
       errorHandler.redirect(redirectPath);
     }
     if (errorActions.includes('console')) {
-      errorHandler.console(error.message);
+      errorHandler.console(error);
     }
   };
 

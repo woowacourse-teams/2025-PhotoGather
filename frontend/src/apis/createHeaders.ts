@@ -3,13 +3,15 @@ import type { BodyContentType } from '../types/api.type';
 export const createHeaders = (
   bodyContentType: BodyContentType,
   token?: string,
+  withTraceId: boolean = true,
 ): HeadersInit => {
-  // TODO : 저장된 토큰 들고오기
   const traceId = crypto.randomUUID().slice(0, 8);
 
-  const headers: HeadersInit = {
-    'trace-id': traceId,
-  };
+  const headers: HeadersInit = withTraceId
+    ? {
+        'trace-id': traceId,
+      }
+    : {};
 
   if (token) {
     headers.Authorization = `Bearer ${token}`;

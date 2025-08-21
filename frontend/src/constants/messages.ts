@@ -14,6 +14,11 @@ export const INFORMATION = {
     DESCRIPTION: '스페이스 링크를 공유해 보세요',
     HIGHLIGHT_TEXT: '스페이스 링크',
   },
+  SHARE_LINK_API: {
+    TITLE: '스페이스 업로드 링크 공유',
+    CREATE_TEXT: (spaceName: string) =>
+      `${spaceName}에 사진을 업로드 할 수 있는 링크를 공유했어요!`,
+  },
   SHARE_WARNING: {
     DESCRIPTION: `내 스페이스 관리 페이지에서도\n스페이스 링크를 확인할 수 있어요`,
     HIGHLIGHT_TEXT: '스페이스 링크',
@@ -56,6 +61,10 @@ export const INFORMATION = {
   },
   WAIT_PAGE: {
     TITLE_LIST: ['조금만 기다려주세요', '곧 스페이스 생성이 끝나요'],
+  },
+  SETTINGS: {
+    DESCRIPTION: `사진이 업로드된 이후에는\n시작 날짜 / 시간을 수정할 수 없어요.`,
+    HIGHLIGHT_TEXT: '시작 날짜 / 시간',
   },
   LOGIN: {
     TITLE: {

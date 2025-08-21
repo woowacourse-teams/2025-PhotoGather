@@ -3,7 +3,7 @@ spring:
     name: forgather
 
   datasource:
-    url: jdbc:h2:mem:testdb
+    url: jdbc:h2:mem:testdb;MODE=MySQL;DATABASE_TO_LOWER=TRUE;DEFAULT_NULL_ORDERING=HIGH
     driver-class-name: org.h2.Driver
     username: sa
     password:
@@ -19,6 +19,9 @@ spring:
   sql:
     init:
       mode: never
+
+  flyway:
+    enabled: false
 
   servlet:
     multipart:

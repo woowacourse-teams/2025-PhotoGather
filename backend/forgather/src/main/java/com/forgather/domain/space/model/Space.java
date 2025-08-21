@@ -31,11 +31,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Space extends BaseTimeEntity {
 
+    private static final long DEFAULT_MAX_CAPACITY_VALUE = 10_737_418_240L; // 10GB
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany(mappedBy = "space", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "space", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<SpaceHostMap> spaceHostMap = new ArrayList<>();
 
     @Column(name = "code", nullable = false, length = 64)
@@ -62,13 +64,27 @@ public class Space extends BaseTimeEntity {
     @Transient
     private long photoCount = 0;
 
+    @Column(name = "max_capacity", nullable = false)
+    private Long maxCapacity; // bytes
+
     public Space(Host host, String code, String name, int validHours, LocalDateTime openedAt) {
-        validate(code, name, validHours, openedAt);
+        validate(code, name, validHours, openedAt, DEFAULT_MAX_CAPACITY_VALUE);
         spaceHostMap.add(new SpaceHostMap(this, host));
         this.code = code;
         this.name = name;
         this.openedAt = openedAt;
         this.validHours = validHours;
+        this.maxCapacity = DEFAULT_MAX_CAPACITY_VALUE;
+    }
+
+    public Space(Host host, String code, String name, int validHours, LocalDateTime openedAt, Long capacity) {
+        validate(code, name, validHours, openedAt, capacity);
+        spaceHostMap.add(new SpaceHostMap(this, host));
+        this.code = code;
+        this.name = name;
+        this.openedAt = openedAt;
+        this.validHours = validHours;
+        this.maxCapacity = capacity;
     }
 
     @PostLoad
@@ -146,7 +162,7 @@ public class Space extends BaseTimeEntity {
         this.openedAt = newOpenedAt;
     }
 
-    private void validate(String code, String name, int validHours, LocalDateTime openedAt) {
+    private void validate(String code, String name, int validHours, LocalDateTime openedAt, Long maxCapacity) {
         if (code == null || code.length() != 10) {
             throw new IllegalArgumentException("스페이스 코드는 10자리여야 합니다. 생성 시도 코드: " + code);
         }
@@ -155,6 +171,9 @@ public class Space extends BaseTimeEntity {
         }
         if (validHours <= 0) {
             throw new IllegalArgumentException("스페이스 유효 시간은 1시간 이상이어야 합니다. 생성 시도 유효 시간: " + validHours);
+        }
+        if (maxCapacity == null || maxCapacity <= 0L) {
+            throw new IllegalArgumentException("스페이스 최대 용량은 비어있을 수 없고, 0보다 커야 합니다. 생성 시도 용량: " + maxCapacity);
         }
         validateOpenedAt(openedAt);
     }
@@ -178,8 +197,30 @@ public class Space extends BaseTimeEntity {
         if (name == null || name.isBlank()) {
             throw new IllegalArgumentException("스페이스 이름은 비어있을 수 없습니다. 생성 시도 이름: " + name);
         }
+        if (name.length() > 10) {
+            throw new IllegalArgumentException("스페이스 이름은 10자를 초과할 수 없습니다. 생성 시도 이름: " + name);
+        }
         if (openedAt == null) {
             throw new IllegalArgumentException("스페이스 오픈 시각은 비어있을 수 없습니다.");
+        }
+        if (maxCapacity == null || maxCapacity <= 0L) {
+            throw new IllegalArgumentException("스페이스 최대 용량은 비어있을 수 없고, 0보다 커야 합니다. 생성 시도 용량: " + maxCapacity);
+        }
+    }
+
+    public void validateCode(String code) {
+        if (!this.code.equals(code)) {
+            throw new IllegalArgumentException("스페이스 코드가 잘못되었습니다.");
+        }
+    }
+
+    public void validateGuest(Guest guest) {
+        if (guest == null) {
+            throw new IllegalArgumentException("게스트 정보가 없습니다.");
+        }
+        if (guest.getSpace() == null || !Objects.equals(guest.getSpace().getId(), this.id)) {
+            throw new IllegalArgumentException(
+                "해당 게스트는 이 스페이스에 속하지 않습니다. 게스트 ID: " + guest.getId() + ", 스페이스 ID: " + this.id);
         }
     }
 
@@ -194,20 +235,5 @@ public class Space extends BaseTimeEntity {
     @Override
     public int hashCode() {
         return Objects.hashCode(id);
-    }
-
-    public void validateCode(String code) {
-        if (!this.code.equals(code)) {
-            throw new IllegalArgumentException("스페이스 코드가 잘못되었습니다.");
-        }
-    }
-
-    public void validateGuest(Guest guest) {
-        if (guest == null) {
-            throw new IllegalArgumentException("게스트 정보가 없습니다.");
-        }
-        if (guest.getSpace() == null || !Objects.equals(guest.getSpace().getId(), this.id)) {
-            throw new IllegalArgumentException("해당 게스트는 이 스페이스에 속하지 않습니다. 게스트 ID: " + guest.getId() + ", 스페이스 ID: " + this.id);
-        }
     }
 }

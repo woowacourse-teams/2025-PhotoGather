@@ -30,12 +30,15 @@ public record SaveUploadedPhotoRequest(
         String originalName,
 
         @Schema(description = "사진 촬영 시간", example = "2023-10-01T12:00:00")
-        LocalDateTime capturedAt
+        LocalDateTime capturedAt,
+
+        @Schema(description = "사진 용량(바이트 단위)", example = "1048576")
+        Long capacityValue
     ) {
 
         public Photo toEntity(Space space, Guest guest, String rootDirectory) {
             String path = generateContentsFilePath(rootDirectory, space.getCode(), uploadFileName);
-            return new Photo(space, guest, originalName, path, new PhotoMetaData(capturedAt));
+            return new Photo(space, guest, originalName, path, new PhotoMetaData(capturedAt), capacityValue);
         }
     }
 }

@@ -28,7 +28,7 @@ public class Host extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany(mappedBy = "host", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "host", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<SpaceHostMap> spaceHostMap = new ArrayList<>();
 
     @Column(name = "name")
@@ -37,8 +37,15 @@ public class Host extends BaseTimeEntity {
     @Column(name = "picture_url")
     private String pictureUrl;
 
+    @Column(name = "agreed_terms")
+    private Boolean agreedTerms = false;
+
     public Host(String name, String pictureUrl) {
         this.name = name;
         this.pictureUrl = pictureUrl;
+    }
+
+    public void agreeTerms() {
+        this.agreedTerms = true;
     }
 }

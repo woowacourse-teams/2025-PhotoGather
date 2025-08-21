@@ -1,22 +1,26 @@
-import rocketIcon from '@assets/images/rocket.png';
+import messageIcon from '@assets/images/message.png';
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ReactComponent as ArrowUpSvg } from '../../../@assets/icons/upwardArrow.svg';
 import FloatingActionButton from '../../../components/@common/buttons/floatingActionButton/FloatingActionButton';
 import FloatingIconButton from '../../../components/@common/buttons/floatingIconButton/FloatingIconButton';
 import HighlightText from '../../../components/@common/highlightText/HighlightText';
 import GuestImageGrid from '../../../components/@common/imageLayout/imageGrid/guestImageGrid/GuestImageGrid';
-import PhotoModal from '../../../components/@common/modal/PhotoModal';
+import PhotoModal from '../../../components/@common/modal/photoModal/PhotoModal';
 import SpaceHeader from '../../../components/header/spaceHeader/SpaceHeader';
 import LoadingLayout from '../../../components/layout/loadingLayout/LoadingLayout';
 import UploadBox from '../../../components/uploadBox/UploadBox';
+import UserBadge from '../../../components/userBadge/UserBadge';
 import { ROUTES } from '../../../constants/routes';
 import { useOverlay } from '../../../contexts/OverlayProvider';
-import useFileUpload from '../../../hooks/@common/useFileUpload';
 import useIntersectionObserver from '../../../hooks/@common/useIntersectionObserver';
 import useLeftTimer from '../../../hooks/@common/useLeftTimer';
+import useLocalFile from '../../../hooks/@common/useLocalFile';
+import useFileUpload from '../../../hooks/useFileUpload';
+import useGuestNickName from '../../../hooks/useGuestNickName';
 import useSpaceCodeFromPath from '../../../hooks/useSpaceCodeFromPath';
 import useSpaceInfo from '../../../hooks/useSpaceInfo';
-import { ScrollableBlurArea } from '../../../styles/@common/ScrollableBlurArea';
+import { ScrollableBlurArea } from '../../../styles/@common/ScrollableBlurArea.styles';
 import { theme } from '../../../styles/theme';
 import { checkIsEarlyDate } from '../../../utils/checkIsEarlyTime';
 import { track } from '../../../utils/googleAnalytics/track';
@@ -34,7 +38,13 @@ const ImageUploadPage = () => {
     spaceInfo?.openedAt && checkIsEarlyDate(spaceInfo.openedAt);
   const shouldShowFakeUploadBox = isNoData || isEarlyTime || isSpaceExpired;
 
+  const overlay = useOverlay();
   const navigate = useNavigate();
+
+  const { nickName, guestId, showNickNameEditModal, tryCreateNickName } =
+    useGuestNickName({
+      spaceCode: spaceCode ?? '',
+    });
 
   const navigateToUploadComplete = () => {
     navigate(ROUTES.COMPLETE.UPLOAD, {
@@ -45,21 +55,28 @@ const ImageUploadPage = () => {
   };
 
   const spaceName = spaceInfo?.name ?? '';
-  const overlay = useOverlay();
   const {
-    previewData,
-    isUploading,
+    localFiles,
+    previewFile,
     handleFilesUploadClick,
     handleFilesDrop,
-    submitFileUpload,
     deleteFile,
-  } = useFileUpload({
-    spaceCode: spaceCode ?? '',
+    clearFiles,
+  } = useLocalFile({
     fileType: 'image',
-    onUploadSuccess: navigateToUploadComplete,
   });
 
-  const hasImages = Array.isArray(previewData) && previewData.length > 0;
+  const { submitFileUpload, isUploading, total, success } = useFileUpload({
+    localFiles: localFiles,
+    spaceCode: spaceCode ?? '',
+    onUploadSuccess: navigateToUploadComplete,
+    nickName,
+    clearFiles: clearFiles,
+    guestId,
+    tryCreateNickName,
+  });
+
+  const hasImages = Array.isArray(previewFile) && previewFile.length > 0;
   const { targetRef: hideBlurAreaTriggerRef, isIntersecting: isAtPageBottom } =
     useIntersectionObserver({});
   const { targetRef: scrollTopTriggerRef, isIntersecting: isAtPageTop } =
@@ -78,7 +95,7 @@ const ImageUploadPage = () => {
   };
 
   const handleImageClick = async (photoId: number) => {
-    const selectedPhoto = previewData.find((photo) => photo.id === photoId);
+    const selectedPhoto = previewFile.find((photo) => photo.id === photoId);
     if (!selectedPhoto) return;
 
     await overlay(
@@ -93,34 +110,48 @@ const ImageUploadPage = () => {
     );
   };
 
+  //TODO: 진행률 아이콘 업데이트
+
   const loadingContents = [
     {
-      icon: { src: rocketIcon, alt: '데모 페이지 아이콘' },
+      icon: { src: messageIcon, alt: '데모 페이지 아이콘' },
       description: '추억 담는 중',
     },
     {
-      icon: { src: rocketIcon, alt: '데모 페이지 아이콘' },
+      icon: { src: messageIcon, alt: '데모 페이지 아이콘' },
       description: '선물 상자 포장하는 중',
     },
     {
-      icon: { src: rocketIcon, alt: '데모 페이지 아이콘' },
+      icon: { src: messageIcon, alt: '데모 페이지 아이콘' },
       description: '배달 가는 중',
     },
     {
-      icon: { src: rocketIcon, alt: '데모 페이지 아이콘' },
+      icon: { src: messageIcon, alt: '데모 페이지 아이콘' },
       description: '당신에게 전달 중',
     },
   ];
+
+  useEffect(() => {
+    console.log(total, success);
+  }, [total, success]);
 
   return (
     <S.Wrapper $hasImages={hasImages}>
       {isEarlyTime && <EarlyPage openedAt={spaceInfo.openedAt} />}
       {isSpaceExpired && <ExpiredPage />}
       {isUploading && (
-        <LoadingLayout loadingContents={loadingContents} percentage={0} />
+        <LoadingLayout
+          loadingContents={loadingContents}
+          totalAmount={total ?? 10}
+          currentAmount={success ?? 5}
+        />
       )}
       <S.ScrollTopAnchor ref={scrollTopTriggerRef} />
       <SpaceHeader title={spaceName} timer={leftTime} />
+      <UserBadge
+        nickName={nickName}
+        onBadgeClick={() => showNickNameEditModal()}
+      />
       <S.UploadContainer $hasImages={hasImages}>
         {shouldShowFakeUploadBox ? (
           <UploadBox
@@ -151,10 +182,10 @@ const ImageUploadPage = () => {
             <FloatingActionButton
               label={
                 <HighlightText
-                  text={`사진 ${previewData.length}장 업로드하기`}
+                  text={`사진 ${previewFile.length}장 업로드하기`}
                   fontStyle="buttonPrimary"
                   highlightColorStyle="gray04"
-                  highlightTextArray={[`사진 ${previewData.length}장`]}
+                  highlightTextArray={[`사진 ${previewFile.length}장`]}
                 />
               }
               onClick={submitFileUpload}
@@ -162,7 +193,7 @@ const ImageUploadPage = () => {
             />
           </S.ButtonContainer>
           <GuestImageGrid
-            photoData={previewData}
+            photoData={previewFile}
             rowImageAmount={3}
             onImageClick={handleImageClick}
             onDeleteClick={(id: number) => {
