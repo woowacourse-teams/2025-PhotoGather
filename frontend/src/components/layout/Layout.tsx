@@ -29,12 +29,15 @@ const Layout = () => {
     const fetchAuthStatus = async () => {
       setIsLoading(true);
       const result = await tryFetch({
-        task: () => authService.status(),
-        errorActions: [], // 401 에러 무시
+        task: async () => {
+          const response = await authService.status();
+          return response.data;
+        },
+        errorActions: [],
         onFinally: () => setIsLoading(false),
+        useCommonCodeErrorHandler: false,
       });
-
-      setMyInfo(result.success && result.data?.data ? result.data.data : null);
+      setMyInfo(result.data ? result.data : null);
     };
     fetchAuthStatus();
   }, []);

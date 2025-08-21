@@ -22,41 +22,37 @@ const Header = ({
   const navigate = useNavigate();
   const location = useLocation();
 
-  const isMainPage = location.pathname === ROUTES.MAIN;
-  const isLogoutPage = location.pathname === ROUTES.LOGOUT;
   const isMyPage = location.pathname === ROUTES.MYPAGE;
+
+  const createActionButton = () => {
+    if (isMyPage) {
+      return (
+        <S.SettingButton type="button" onClick={() => navigate(ROUTES.LOGOUT)}>
+          <SettingSvg fill={theme.colors.white} />
+        </S.SettingButton>
+      );
+    }
+
+    if (!isLoggedIn || isLoading) {
+      return null;
+    }
+
+    return (
+      <S.ProfileImageButton
+        type="button"
+        onClick={() => navigate(ROUTES.MYPAGE)}
+      >
+        <img src={profileImageSrc} alt="프로필 이미지" />
+      </S.ProfileImageButton>
+    );
+  };
 
   return (
     <S.Wrapper>
       <button type="button" onClick={() => navigate(ROUTES.LANDING)}>
         <Logo fill={theme.colors.white} width={100} />
       </button>
-
-      {isLogoutPage && null}
-      {isMainPage && !isLoggedIn && null}
-      {isMainPage && isLoggedIn && !isLoading && (
-        <S.ProfileImageButton
-          type="button"
-          onClick={() => navigate(ROUTES.MYPAGE)}
-        >
-          <img src={profileImageSrc} alt="프로필 이미지" />
-        </S.ProfileImageButton>
-      )}
-
-      {isMyPage && (
-        <S.SettingButton type="button" onClick={() => navigate(ROUTES.LOGOUT)}>
-          <SettingSvg fill={theme.colors.white} />
-        </S.SettingButton>
-      )}
-
-      {!isMainPage && !isLogoutPage && !isMyPage && (
-        <S.ProfileImageButton
-          type="button"
-          onClick={() => navigate(ROUTES.MYPAGE)}
-        >
-          <img src={profileImageSrc} alt="프로필 이미지" />
-        </S.ProfileImageButton>
-      )}
+      {createActionButton()}
     </S.Wrapper>
   );
 };
