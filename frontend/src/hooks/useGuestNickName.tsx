@@ -80,6 +80,7 @@ const useGuestNickName = ({ spaceCode }: UseGuestNickNameProps) => {
     );
     if (result && isValidSpaceGuest) {
       tryChangeNickName(result.value);
+      setNickName(result.value);
       return;
     }
     setNickName(result.value);
