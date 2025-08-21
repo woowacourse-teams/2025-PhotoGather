@@ -145,10 +145,6 @@ const ImageUploadPage = () => {
         nickName={nickName}
         onBadgeClick={() => showNickNameEditModal()}
       />
-      <UserBadge
-        nickName={nickName}
-        onBadgeClick={() => showNickNameEditModal()}
-      />
       <S.UploadContainer $hasImages={hasImages}>
         {shouldShowFakeUploadBox ? (
           <UploadBox
