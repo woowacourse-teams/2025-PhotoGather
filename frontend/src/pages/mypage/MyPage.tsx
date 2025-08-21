@@ -29,20 +29,40 @@ const MyPage = () => {
     fetchMySpaces();
   }, []);
 
-  const matchSpaceCardVariant = (space: MySpace) => {
+  const checkIsEarly = (space: MySpace) => {
     const now = new Date();
     const openedAt = new Date(space.openedAt);
-
-    if (space.isExpired) return 'expired';
-    if (now >= openedAt) return 'default';
-    return 'early';
+    return now < openedAt;
   };
 
-  const filterCounts = {
-    all: 16,
-    open: 8,
-    closed: 5,
-    upcoming: 3,
+  const filterClosedSpaces = () => {
+    const cloneMySpaces = [...mySpaces];
+    return cloneMySpaces.filter((space) => space.isExpired);
+  };
+
+  const filterOpenSpaces = () => {
+    const cloneMySpaces = [...mySpaces];
+    return cloneMySpaces.filter(
+      (space) => !space.isExpired && !checkIsEarly(space),
+    );
+  };
+
+  const filterUpcomingSpaces = () => {
+    const cloneMySpaces = [...mySpaces];
+    return cloneMySpaces.filter((space) => checkIsEarly(space));
+  };
+
+  const matchingFilterFunc = {
+    all: () => mySpaces,
+    open: filterOpenSpaces,
+    closed: filterClosedSpaces,
+    upcoming: filterUpcomingSpaces,
+  };
+
+  const matchSpaceCardVariant = (space: MySpace) => {
+    if (space.isExpired) return 'expired';
+    if (checkIsEarly(space)) return 'early';
+    return 'default';
   };
 
   const filters: { key: FilterType; label: string }[] = [
@@ -70,13 +90,15 @@ const MyPage = () => {
       <S.SpaceContainer>
         <S.SpaceList>
           <S.FilterContainer>
-            <S.TotalCount>총 {filterCounts.all}개</S.TotalCount>
+            <S.TotalCount>총 {mySpaces.length}개</S.TotalCount>
             <S.TabContainer>
               {filters.map((filter) => (
                 <S.TabButton
                   key={filter.key}
                   isActive={activeFilter === filter.key}
-                  onClick={() => setActiveFilter(filter.key)}
+                  onClick={() => {
+                    setActiveFilter(filter.key);
+                  }}
                 >
                   {filter.label}
                 </S.TabButton>
@@ -84,7 +106,7 @@ const MyPage = () => {
             </S.TabContainer>
           </S.FilterContainer>
 
-          {mySpaces.map((space) => (
+          {matchingFilterFunc[activeFilter]().map((space) => (
             <SpaceCard
               key={space.id}
               name={space.name}
