@@ -139,7 +139,6 @@ const SpaceHome = () => {
         mode="manager"
         photoId={photoId}
         spaceCode={spaceCode ?? ''}
-        uploaderName="익명의 우주여행자"
         onDownload={async () => await downloadPhotoWithTracking(photoId)}
         onDelete={async () => await deletePhotoWithTracking(photoId)}
       />,

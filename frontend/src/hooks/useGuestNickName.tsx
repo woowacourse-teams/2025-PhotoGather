@@ -143,7 +143,6 @@ const useGuestNickName = ({ spaceCode }: UseGuestNickNameProps) => {
   const tryChangeNickName = async (nickName: string) => {
     const taskResult = await tryFetch({
       task: async () => {
-        console.log(guestId, 'DFFDSAFASF');
         const response = await guestService.patchNickName(spaceCode, guestId, {
           name: nickName,
         });

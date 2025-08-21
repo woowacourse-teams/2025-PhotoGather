@@ -30,8 +30,6 @@ interface ManagerPhotoModalProps extends BasePhotoModalProps {
   photoId: number;
   /** 스페이스 코드 */
   spaceCode: string;
-  /** 업로드한 사람 */
-  uploaderName?: string;
   /** 다운로드 핸들러 */
   onDownload?: () => void;
 }
@@ -72,6 +70,7 @@ const PhotoModal = (props: PhotoModalProps) => {
           managerSpaceCode,
           managerPhotoId,
         );
+        console.log(response);
 
         if (!response || !response.data) return;
         const data = response.data;
@@ -159,10 +158,10 @@ const PhotoModal = (props: PhotoModalProps) => {
         }
       }}
     >
-      {isManagerMode && 'uploaderName' in props && (
+      {isManagerMode && (
         <S.FromContainer onMouseDown={(e) => e.stopPropagation()}>
           <S.FromMessage>From.</S.FromMessage>
-          {props.uploaderName || '익명의 우주여행자'}
+          {photo?.guest.name ?? '익명의 우주여행자'}
         </S.FromContainer>
       )}
       <S.PhotoContainer onMouseDown={(e) => e.stopPropagation()}>
