@@ -1,4 +1,4 @@
-import defaultImage from '@assets/images/diamond.png';
+import defaultProfile from '@assets/images/default_profile.png';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { authService } from '../../apis/services/auth.service';
@@ -88,7 +88,7 @@ const MyPage = () => {
     <S.Wrapper>
       <Profile
         profileImage={
-          isLoading || !myInfo?.pictureUrl ? defaultImage : myInfo?.pictureUrl
+          isLoading || !myInfo?.pictureUrl ? defaultProfile : myInfo?.pictureUrl
         }
         name={isLoading || !myInfo?.name ? '이름' : myInfo?.name}
       />

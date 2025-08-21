@@ -1,3 +1,4 @@
+import defaultProfile from '@assets/images/default_profile.png';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { authService } from '../../apis/services/auth.service';
@@ -10,10 +11,6 @@ import useKakaoAuth from '../../hooks/domain/useKakaoAuth';
 import type { MyInfo } from '../../types/api.type';
 import { track } from '../../utils/googleAnalytics/track';
 import * as S from './LogoutPage.styles';
-
-// TODO: 기능 구현 후 제거
-export const profileImage =
-  'https://mblogthumb-phinf.pstatic.net/MjAyMTA0MTlfOTMg/MDAxNjE4ODIyODEyNjIy.PlBJ_yLT_0RQxDVzmDuEWrIioxajvdDqzG3nVK3qJQ0g.Ya7t_4dySMXtr2YT-p326Z1odr5MVxg_rBKZBPtHKp8g.JPEG.dochiqueens/april-blog-1.jpg?type=w800';
 
 const LogoutPage = () => {
   const overlay = useOverlay();
@@ -60,7 +57,7 @@ const LogoutPage = () => {
     <S.Wrapper>
       <Profile
         profileImage={
-          isLoading || !myInfo?.pictureUrl ? profileImage : myInfo?.pictureUrl
+          isLoading || !myInfo?.pictureUrl ? defaultProfile : myInfo?.pictureUrl
         }
         name={isLoading || !myInfo?.name ? '이름' : myInfo?.name}
       />
