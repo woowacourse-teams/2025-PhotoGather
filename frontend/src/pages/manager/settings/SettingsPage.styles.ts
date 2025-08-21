@@ -52,16 +52,14 @@ export const DateTimeContainer = styled.div`
 `;
 
 export const InputLabel = styled.label`
-  ${({ theme }) => ({ ...theme.typography.bodyRegular })};
+  ${({ theme }) => ({ ...theme.typography.bodyLarge })};
   color: ${({ theme }) => theme.colors.gray06};
-  font-weight: 500;
 `;
 
 export const SpaceDeleteButtonContainer = styled.div`
   display: flex;
   justify-content: flex-end;
   ${({ theme }) => ({ ...theme.typography.captionSmall })};
-  color: ${({ theme }) => theme.colors.white};
   margin-bottom: 16px;
 `;
 

@@ -117,7 +117,7 @@ const SpaceHomePage = () => {
       photosList,
     });
 
-  const clickDashboardWithTracking = async () => {
+  const clickDashboardWithTracking = () => {
     navigate(ROUTES.MANAGER.DASHBOARD(spaceCode ?? ''));
     track.button('space_setting_button', {
       page: 'space_home',

@@ -14,9 +14,7 @@ export const Wrapper = styled.div<{ $isClosed: boolean }>`
   text-align: center;
   gap: ${({ $isClosed }) => ($isClosed ? 0 : 12)};
   background-color: ${({ $isClosed }) =>
-    $isClosed
-      ? hexToRgba(theme.colors.white, 0.1)
-      : theme.colors.grayBackground};
+    $isClosed ? hexToRgba(theme.colors.white, 0.1) : theme.colors.grayBackground};
   border-radius: 12px;
   font: ${({ theme }) => theme.typography.bodyLarge};
 `;
