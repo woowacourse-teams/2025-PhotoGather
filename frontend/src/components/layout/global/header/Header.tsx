@@ -14,6 +14,7 @@ const Header = ({ profileImageSrc }: HeaderProps) => {
   const navigate = useNavigate();
   const location = useLocation();
 
+  const isMainPage = location.pathname === ROUTES.MAIN;
   const isLogoutPage = location.pathname === ROUTES.LOGOUT;
   const isMyPage = location.pathname === ROUTES.MYPAGE;
 
@@ -22,13 +23,13 @@ const Header = ({ profileImageSrc }: HeaderProps) => {
       <button type="button" onClick={() => navigate(ROUTES.MAIN)}>
         <Logo fill={theme.colors.white} width={100} />
       </button>
-      {isLogoutPage && null}
+      {(isLogoutPage || isMainPage) && null}
       {isMyPage && (
         <S.SettingButton type="button" onClick={() => navigate(ROUTES.LOGOUT)}>
           <SettingSvg fill={theme.colors.white} />
         </S.SettingButton>
       )}
-      {!isLogoutPage && !isMyPage && (
+      {!isMainPage && !isLogoutPage && !isMyPage && (
         <S.ProfileImageButton
           type="button"
           onClick={() => navigate(ROUTES.MYPAGE)}
