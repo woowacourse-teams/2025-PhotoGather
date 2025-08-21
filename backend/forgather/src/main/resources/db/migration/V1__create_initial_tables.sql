@@ -1,13 +1,14 @@
 -- 1. space
 CREATE TABLE space
 (
-    id          BIGINT AUTO_INCREMENT PRIMARY KEY,
-    code        VARCHAR(64)                        NOT NULL,
-    name        VARCHAR(255) CHARACTER SET utf8mb4 NOT NULL,
-    valid_hours INT                                NOT NULL,
-    opened_at   TIMESTAMP                          NOT NULL,
-    created_at  TIMESTAMP                          NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at  TIMESTAMP                          NOT NULL DEFAULT CURRENT_TIMESTAMP
+    id           BIGINT AUTO_INCREMENT PRIMARY KEY,
+    code         VARCHAR(64)                        NOT NULL,
+    name         VARCHAR(255) CHARACTER SET utf8mb4 NOT NULL,
+    valid_hours  INT                                NOT NULL,
+    opened_at    TIMESTAMP                          NOT NULL,
+    max_capacity BIGINT                             NOT NULL DEFAULT 10737418240, -- 10GB default
+    created_at   TIMESTAMP                          NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at   TIMESTAMP                          NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 -- 2. space_content
