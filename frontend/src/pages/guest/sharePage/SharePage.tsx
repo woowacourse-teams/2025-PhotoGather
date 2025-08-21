@@ -25,7 +25,7 @@ const SharePage = () => {
   const { share } = useWebShareAPI();
 
   const handleSpaceHomeButton = () => {
-    navigate(`/manager/space-home/${spaceCode}`);
+    navigate(ROUTES.MANAGER.SPACE_HOME(spaceCode));
   };
 
   const handleMainButton = () => {

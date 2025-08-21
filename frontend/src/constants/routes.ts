@@ -6,10 +6,13 @@ export const ROUTES = {
   },
   CREATE: '/create',
   MANAGER: {
-    SPACE_HOME: (spaceId: string) => `/manager/space-home/${spaceId}`,
+    SPACE_HOME: (spaceCode: string) => `/manager/space-home/${spaceCode}`,
+    DASHBOARD: (spaceCode: string) =>
+      `/manager/space-home/${spaceCode}/dashboard`,
+    SETTING: (spaceCode: string) => `/manager/space-home/${spaceCode}/settings`,
   },
   GUEST: {
-    IMAGE_UPLOAD: (spaceId: string) => `/guest/image-upload/${spaceId}`,
+    IMAGE_UPLOAD: (spaceCode: string) => `/guest/image-upload/${spaceCode}`,
     SHARE: '/guest/share',
   },
   COMPLETE: {

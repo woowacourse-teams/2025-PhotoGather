@@ -50,7 +50,7 @@ const InputModal = ({
   return (
     <C.Wrapper>
       <S.DescriptionContainer>
-        <C.Description>{description}</C.Description>
+        <C.Title>{description}</C.Title>
         {subDescription && (
           <S.SubDescription>{subDescription}</S.SubDescription>
         )}

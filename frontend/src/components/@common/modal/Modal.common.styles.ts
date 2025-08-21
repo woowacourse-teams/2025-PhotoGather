@@ -12,7 +12,7 @@ export const Wrapper = styled.div`
   background: ${({ theme }) => theme.colors.white};
 `;
 
-export const Description = styled.span`
+export const Title = styled.span`
   ${({ theme }) => ({ ...theme.typography.header03 })}
   color: ${({ theme }) => theme.colors.gray06};
 `;

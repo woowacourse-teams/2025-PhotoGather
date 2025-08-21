@@ -97,7 +97,7 @@ const PhotoModal = (props: PhotoModalProps) => {
 
     const confirmResult = await overlay(
       <ConfirmModal
-        description="정말 삭제하시겠어요?"
+        title="정말 삭제하시겠어요?"
         confirmText="삭제"
         cancelText="취소"
         onClose={onClose}
@@ -119,7 +119,7 @@ const PhotoModal = (props: PhotoModalProps) => {
     // TODO : usePhotosDelete로 모달 로직 이동
     const confirmResult = await overlay(
       <ConfirmModal
-        description="정말 삭제하시겠어요?"
+        title="정말 삭제하시겠어요?"
         confirmText="삭제"
         cancelText="취소"
         onClose={onClose}
