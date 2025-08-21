@@ -14,7 +14,6 @@ const Layout = () => {
   const isHighlightPage = current?.handle?.highlight;
   const isStarFieldPage = current?.handle?.starField;
   const isHeaderExistPage = current?.handle?.header;
-  const headerMode = current?.handle?.headerMode || 'default';
 
   // TODO: 기능 구현 후 제거
   const MOCK_PROFILE_IMAGE_SRC =
@@ -24,7 +23,7 @@ const Layout = () => {
     <OverlayProvider>
       <S.Container $isHighlightPage={isHighlightPage}>
         {isHeaderExistPage && (
-          <Header profileImageSrc={MOCK_PROFILE_IMAGE_SRC} mode={headerMode} />
+          <Header profileImageSrc={MOCK_PROFILE_IMAGE_SRC} />
         )}
         {isStarFieldPage && <StarField />}
         <Outlet />
