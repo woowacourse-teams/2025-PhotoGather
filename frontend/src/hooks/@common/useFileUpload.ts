@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { photoService } from '../../apis/services/photo.service';
 import { CONSTRAINTS } from '../../constants/constraints';
+import { FAILED_GUEST_ID } from '../../constants/errors';
 import type { PreviewFile, UploadFile } from '../../types/file.type';
 import { isValidFileType } from '../../utils/isValidFileType';
 import {
@@ -13,12 +14,16 @@ interface UseFileUploadProps {
   spaceCode: string;
   fileType: string;
   onUploadSuccess?: () => void;
+  guestId: number;
+  tryCreateNickName: () => Promise<number>;
 }
 
 const useFileUpload = ({
   spaceCode,
   fileType,
   onUploadSuccess,
+  guestId,
+  tryCreateNickName,
 }: UseFileUploadProps) => {
   const [uploadFiles, setUploadFiles] = useState<UploadFile[]>([]);
   const [previewData, setPreviewData] = useState<PreviewFile[]>([]);
@@ -88,9 +93,9 @@ const useFileUpload = ({
 
   const { tryTask, tryFetch } = useError();
 
-  const fetchUploadFiles = async () => {
+  const fetchUploadFiles = async (validGuestId: number) => {
     const files = uploadFiles.map((file) => file.originFile);
-    await photoService.uploadFiles(spaceCode, files);
+    await photoService.uploadFiles(spaceCode, files, validGuestId);
   };
 
   const errorOption = {
@@ -103,12 +108,24 @@ const useFileUpload = ({
       },
     },
   };
+  //guestID가 없으면 생성하고 업로드
+  //있으면 기존의 걸로 업로드
+
+  const ensureGuestId = async () => {
+    if (guestId && guestId !== FAILED_GUEST_ID) return guestId;
+
+    const newGuestId = await tryCreateNickName();
+    if (!newGuestId) return FAILED_GUEST_ID;
+
+    return newGuestId;
+  };
 
   const submitFileUpload = async () => {
     await tryFetch({
       task: async () => {
         setIsUploading(true);
-        await fetchUploadFiles();
+        const validGuestId = await ensureGuestId();
+        await fetchUploadFiles(validGuestId);
         onUploadSuccess?.();
         clearFiles();
       },

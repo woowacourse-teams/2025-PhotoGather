@@ -5,18 +5,20 @@ import FloatingActionButton from '../../../components/@common/buttons/floatingAc
 import FloatingIconButton from '../../../components/@common/buttons/floatingIconButton/FloatingIconButton';
 import HighlightText from '../../../components/@common/highlightText/HighlightText';
 import GuestImageGrid from '../../../components/@common/imageLayout/imageGrid/guestImageGrid/GuestImageGrid';
-import PhotoModal from '../../../components/@common/modal/PhotoModal';
+import PhotoModal from '../../../components/@common/modal/photoModal/PhotoModal';
 import SpaceHeader from '../../../components/header/spaceHeader/SpaceHeader';
 import LoadingLayout from '../../../components/layout/loadingLayout/LoadingLayout';
 import UploadBox from '../../../components/uploadBox/UploadBox';
+import UserBadge from '../../../components/userBadge/UserBadge';
 import { ROUTES } from '../../../constants/routes';
 import { useOverlay } from '../../../contexts/OverlayProvider';
 import useFileUpload from '../../../hooks/@common/useFileUpload';
 import useIntersectionObserver from '../../../hooks/@common/useIntersectionObserver';
 import useLeftTimer from '../../../hooks/@common/useLeftTimer';
+import useGuestNickName from '../../../hooks/useGuestNickName';
 import useSpaceCodeFromPath from '../../../hooks/useSpaceCodeFromPath';
 import useSpaceInfo from '../../../hooks/useSpaceInfo';
-import { ScrollableBlurArea } from '../../../styles/@common/ScrollableBlurArea';
+import { ScrollableBlurArea } from '../../../styles/@common/ScrollableBlurArea.styles';
 import { theme } from '../../../styles/theme';
 import { checkIsEarlyDate } from '../../../utils/checkIsEarlyTime';
 import { track } from '../../../utils/googleAnalytics/track';
@@ -34,7 +36,13 @@ const ImageUploadPage = () => {
     spaceInfo?.openedAt && checkIsEarlyDate(spaceInfo.openedAt);
   const shouldShowFakeUploadBox = isNoData || isEarlyTime || isSpaceExpired;
 
+  const overlay = useOverlay();
   const navigate = useNavigate();
+
+  const { nickName, guestId, showNickNameEditModal, tryCreateNickName } =
+    useGuestNickName({
+      spaceCode: spaceCode ?? '',
+    });
 
   const navigateToUploadComplete = () => {
     navigate(ROUTES.COMPLETE.UPLOAD, {
@@ -45,7 +53,6 @@ const ImageUploadPage = () => {
   };
 
   const spaceName = spaceInfo?.name ?? '';
-  const overlay = useOverlay();
   const {
     previewData,
     isUploading,
@@ -57,6 +64,8 @@ const ImageUploadPage = () => {
     spaceCode: spaceCode ?? '',
     fileType: 'image',
     onUploadSuccess: navigateToUploadComplete,
+    guestId,
+    tryCreateNickName,
   });
 
   const hasImages = Array.isArray(previewData) && previewData.length > 0;
@@ -125,6 +134,10 @@ const ImageUploadPage = () => {
       )}
       <S.ScrollTopAnchor ref={scrollTopTriggerRef} />
       <SpaceHeader title={spaceName} timer={leftTime} />
+      <UserBadge
+        nickName={nickName}
+        onBadgeClick={() => showNickNameEditModal()}
+      />
       <S.UploadContainer $hasImages={hasImages}>
         {shouldShowFakeUploadBox ? (
           <UploadBox

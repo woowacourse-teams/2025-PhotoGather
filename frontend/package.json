@@ -59,6 +59,7 @@
     "@emotion/styled": "^11.14.1",
     "@microsoft/clarity": "^1.0.0",
     "@sentry/react": "^10.1.0",
+    "client-zip": "^2.5.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-ga4": "^2.1.0",

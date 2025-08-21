@@ -4,6 +4,7 @@ import ComingSoonBox from '../../../components/comingSoonBox/ComingSoonBox';
 import DashboardBox from '../../../components/dashboardBox/DashboardBox';
 import { ROUTES } from '../../../constants/routes';
 import useSpaceCodeFromPath from '../../../hooks/useSpaceCodeFromPath';
+import { theme } from '../../../styles/theme';
 import * as S from './DashboardPage.styles';
 
 const DashboardPage = () => {
@@ -36,7 +37,7 @@ const DashboardPage = () => {
       <S.ModifyButtonContainer>
         <S.ModifyButton onClick={handleModifyButton}>
           스페이스 정보 수정
-          <EditIcon />
+          <EditIcon fill={theme.colors.white} width={16} />
         </S.ModifyButton>
       </S.ModifyButtonContainer>
     </S.Wrapper>

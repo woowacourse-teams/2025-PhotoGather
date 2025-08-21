@@ -9,6 +9,22 @@ const meta: Meta<typeof ConfirmModal> = {
   parameters: {
     layout: 'centered',
   },
+  render: (args) => {
+    return (
+      <div
+        style={{
+          width: '100vw',
+          height: '100vh',
+          backgroundColor: 'black',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+      >
+        <ConfirmModal {...args} />
+      </div>
+    );
+  },
 };
 
 export default meta;
@@ -36,7 +52,10 @@ export const WithoutDescription: Story = {
 
 export const WithImage: Story = {
   args: {
-    image: rocketImage,
+    image: {
+      src: rocketImage,
+      alt: 'rocket',
+    },
     title: '업로드 확인',
     description: '100장의 사진을 업로드할까요?',
     confirmText: '업로드',

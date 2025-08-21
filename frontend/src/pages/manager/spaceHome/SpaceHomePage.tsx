@@ -10,8 +10,8 @@ import FloatingActionButton from '../../../components/@common/buttons/floatingAc
 import FloatingIconButton from '../../../components/@common/buttons/floatingIconButton/FloatingIconButton';
 import IconLabelButton from '../../../components/@common/buttons/iconLabelButton/IconLabelButton';
 import SpaceManagerImageGrid from '../../../components/@common/imageLayout/imageGrid/spaceManagerImageGrid/SpaceManagerImageGrid';
-import BaseModal from '../../../components/@common/modal/baseModal/BaseModal';
-import PhotoModal from '../../../components/@common/modal/PhotoModal';
+import * as C from '../../../components/@common/modal/Modal.common.styles';
+import PhotoModal from '../../../components/@common/modal/photoModal/PhotoModal';
 import SpaceHeader from '../../../components/header/spaceHeader/SpaceHeader';
 import LoadingLayout from '../../../components/layout/loadingLayout/LoadingLayout';
 import PhotoSelectionToolBar from '../../../components/photoSelectionToolBar/PhotoSelectionToolBar';
@@ -28,7 +28,7 @@ import usePhotosBySpaceCode from '../../../hooks/usePhotosBySpaceCode';
 import usePhotosDelete from '../../../hooks/usePhotosDelete';
 import useSpaceCodeFromPath from '../../../hooks/useSpaceCodeFromPath';
 import useSpaceInfo from '../../../hooks/useSpaceInfo';
-import { ScrollableBlurArea } from '../../../styles/@common/ScrollableBlurArea';
+import { ScrollableBlurArea } from '../../../styles/@common/ScrollableBlurArea.styles';
 import { theme } from '../../../styles/theme';
 import { checkIsEarlyDate } from '../../../utils/checkIsEarlyTime';
 import { copyLinkToClipboard } from '../../../utils/copyLinkToClipboard';
@@ -78,11 +78,12 @@ const SpaceHomePage = () => {
   const navigate = useNavigate();
 
   const {
-    downloadMode,
     isDownloading,
-    downloadAll,
-    downloadSelected,
-    downloadSingle,
+    tryAllDownload,
+    trySelectedDownload,
+    trySingleDownload,
+    totalProgress,
+    currentProgress,
   } = useDownload({
     spaceCode: spaceCode ?? '',
     spaceName,
@@ -136,7 +137,7 @@ const SpaceHomePage = () => {
   };
 
   const downloadPhotoWithTracking = async (photoId: number) => {
-    await downloadSingle(photoId, undefined, downloadMode);
+    await trySingleDownload(photoId);
     track.button('single_download_button', {
       page: 'space_home',
       section: 'photo_modal',
@@ -158,14 +159,6 @@ const SpaceHomePage = () => {
         clickOverlayClose: true,
       },
     );
-  };
-
-  const handleSelectDelete = () => tryDeleteSelectedPhotos(selectedPhotoIds);
-
-  const handleSelectDownload = () => {
-    if (selectedPhotosCount === 1)
-      downloadSingle(selectedPhotoIds[0], undefined, downloadMode);
-    else downloadSelected(selectedPhotoIds, undefined, 'download');
   };
 
   const handleImageClick = isSelectMode ? toggleSelectedPhoto : openPhotoModal;
@@ -205,7 +198,7 @@ const SpaceHomePage = () => {
   const toggleShareModal = async () => {
     try {
       await overlay(
-        <BaseModal>
+        <C.Wrapper>
           <S.ModalContentContainer>
             <IconLabelButton
               icon={<LinkIcon fill={theme.colors.white} width="20px" />}
@@ -232,7 +225,7 @@ const SpaceHomePage = () => {
               label="스페이스 링크"
             />
           </S.ModalContentContainer>
-        </BaseModal>,
+        </C.Wrapper>,
         {
           clickOverlayClose: true,
         },
@@ -248,8 +241,8 @@ const SpaceHomePage = () => {
       {(isDownloading || isDeleting) && (
         <LoadingLayout
           loadingContents={loadingContents}
-          totalAmount={10}
-          currentAmount={9}
+          totalAmount={totalProgress}
+          currentAmount={currentProgress}
         />
       )}
       <S.InfoContainer ref={scrollTopTriggerRef}>
@@ -303,7 +296,7 @@ const SpaceHomePage = () => {
                   label="모두 저장하기"
                   icon={<SaveIcon fill={theme.colors.gray06} />}
                   onClick={() => {
-                    downloadAll(undefined, 'download');
+                    tryAllDownload();
                     track.button('all_download_button', {
                       page: 'space_home',
                       section: 'space_home',
@@ -325,8 +318,8 @@ const SpaceHomePage = () => {
               {isSelectMode && (
                 <PhotoSelectionToolBar
                   selectedCount={selectedPhotosCount}
-                  onDelete={handleSelectDelete}
-                  onDownload={handleSelectDownload}
+                  onDelete={() => tryDeleteSelectedPhotos(selectedPhotoIds)}
+                  onDownload={() => trySelectedDownload(selectedPhotoIds)}
                 />
               )}
             </S.BottomNavigatorContainer>

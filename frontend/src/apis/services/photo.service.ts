@@ -1,5 +1,9 @@
 import type { PhotoIds, PhotoListResponse } from '../../types/api.type';
-import type { CreatePhotoInput, Photo } from '../../types/photo.type';
+import type {
+  CreatePhotoInput,
+  DownloadInfoList,
+  Photo,
+} from '../../types/photo.type';
 import { authHttp, http } from '../http';
 
 export const photoService = {
@@ -16,28 +20,31 @@ export const photoService = {
 
   create: (data: CreatePhotoInput) => authHttp.post<Photo>('/photos', data),
 
-  uploadFiles: (spaceCode: string, files: File[]) => {
+  uploadFiles: (spaceCode: string, files: File[], guestId: number) => {
     const formData = new FormData();
     files.forEach((file) => formData.append('files', file));
     return http.post(
-      `/spaces/${spaceCode}/photos/upload`,
+      `/spaces/${spaceCode}/photos/upload?guestId=${guestId}`,
       formData,
       'form-data',
     );
   },
 
   downloadAll: (spaceCode: string) =>
-    authHttp.post<Blob>(`/spaces/${spaceCode}/photos/download`, undefined),
+    authHttp.post<DownloadInfoList>(
+      `/spaces/${spaceCode}/photos/issue/download-urls`,
+      undefined,
+    ),
 
   downloadPhotos: (spaceCode: string, photoIds: PhotoIds) =>
-    authHttp.post<Blob>(
-      `/spaces/${spaceCode}/photos/download/selected`,
+    authHttp.post<DownloadInfoList>(
+      `/spaces/${spaceCode}/photos/issue/download-urls/selected`,
       photoIds,
     ),
 
   downloadSinglePhoto: (spaceCode: string, photoId: number) =>
-    authHttp.post<Blob>(
-      `/spaces/${spaceCode}/photos/download/${photoId}`,
+    authHttp.post<DownloadInfoList>(
+      `/spaces/${spaceCode}/photos/issue/download-urls/${photoId}`,
       photoId,
     ),
 

@@ -17,3 +17,12 @@ export interface CreatePhotoInput {
   originalName: string;
   capturedAt?: Date | string | null;
 }
+
+export interface DownloadInfo {
+  originalName: string;
+  url: string;
+}
+
+export interface DownloadInfoList {
+  downloadUrls: DownloadInfo[];
+}

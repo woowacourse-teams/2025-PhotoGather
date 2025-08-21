@@ -15,3 +15,5 @@ export const HTTP_STATUS_MESSAGES: Record<number, string> = {
   502: '서버 통신에 문제가 발생했습니다.',
   503: '서버가 일시적으로 장애가 발생했습니다.',
 };
+
+export const FAILED_GUEST_ID = -1;

@@ -1,11 +1,9 @@
+import { downloadZip } from 'client-zip';
 import { useState } from 'react';
 import { photoService } from '../apis/services/photo.service';
-import type { ApiResponse } from '../types/api.type';
-import { checkIsIos } from '../utils/checkIsIos';
-import { validateDownloadFormat } from '../validators/fetch.validator';
+import type { DownloadInfo } from '../types/photo.type';
 import { checkSelectedPhotoExist } from '../validators/photo.validator';
 import useError from './@common/useError';
-import useWebShareAPI from './useWebShareAPI';
 
 interface UseDownloadProps {
   spaceCode: string;
@@ -13,53 +11,78 @@ interface UseDownloadProps {
   onDownloadSuccess?: () => void;
 }
 
-type DownloadMode = 'download' | 'share';
-
 const useDownload = ({
   spaceCode,
   spaceName,
   onDownloadSuccess,
 }: UseDownloadProps) => {
   const [isDownloading, setIsDownloading] = useState(false);
+  const [totalProgress, setTotalProgress] = useState(0);
+  const [currentProgress, setCurrentProgress] = useState(0);
+
   const { tryTask, tryFetch } = useError();
-  const { share } = useWebShareAPI();
 
-  const downloadMode: DownloadMode = checkIsIos() ? 'share' : 'download';
+  const downloadAsImage = async (url: string, fileName: string) => {
+    const response = await fetch(url);
+    const blob = await response.blob();
 
-  const getDownloadName = (
-    fileName: string | undefined,
-    blob: Blob,
-    spaceName: string,
-  ) => {
-    if (fileName) return fileName;
+    const objectUrl = URL.createObjectURL(blob);
 
-    if (blob.type.includes('image/')) {
-      const extension = blob.type.split('/')[1];
-      return `photo.${extension}`;
+    const link = document.createElement('a');
+    link.href = objectUrl;
+    link.download = `${fileName}`;
+
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    URL.revokeObjectURL(objectUrl);
+  };
+
+  const downloadAsZip = async (downloadInfos: DownloadInfo[]) => {
+    const files = await Promise.allSettled(
+      downloadInfos.map(async (downloadInfo) => {
+        const response = await fetch(downloadInfo.url);
+        if (!response.ok) {
+          throw new Error(`다운로드 실패: ${downloadInfo.originalName}`);
+        }
+        const blob = await response.blob();
+        setCurrentProgress((prev) => prev + 1);
+
+        return {
+          name: downloadInfo.originalName,
+          input: blob,
+          lastModified: new Date(),
+        };
+      }),
+    );
+
+    const failed = files.find((r) => r.status === 'rejected');
+    if (failed) {
+      throw new Error('다운로드가 실패했습니다.');
     }
 
-    return `${spaceName}.zip`;
+    const validFiles = files.map(
+      (r) =>
+        (
+          r as PromiseFulfilledResult<{
+            name: string;
+            input: Blob;
+            lastModified: Date;
+          }>
+        ).value,
+    );
+    const zipBlob = await downloadZip(validFiles).blob();
+
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(zipBlob);
+    link.download = `${spaceName}.zip`;
+    link.click();
+
+    URL.revokeObjectURL(link.href);
   };
 
-  const downloadBlob = (blob: Blob, fileName?: string) => {
-    const url = URL.createObjectURL(blob);
-
-    const a = document.createElement('a');
-    document.body.appendChild(a);
-    a.href = url;
-
-    a.download = getDownloadName(fileName, blob, spaceName);
-    a.click();
-
-    document.body.removeChild(a);
-    window.URL.revokeObjectURL(url);
-  };
-
-  const downloadSelected = async (
-    photoIds: number[],
-    fileName?: string,
-    mode?: DownloadMode,
-  ) => {
+  const trySelectedDownload = async (photoIds: number[]) => {
     const taskResult = tryTask({
       task: () => checkSelectedPhotoExist(photoIds),
       errorActions: ['toast'],
@@ -68,14 +91,15 @@ const useDownload = ({
 
     await tryFetch({
       task: async () => {
-        await handleDownload(
-          () =>
-            photoService.downloadPhotos(spaceCode, {
-              photoIds: photoIds,
-            }),
-          fileName,
-          mode,
-        );
+        const response = await photoService.downloadPhotos(spaceCode, {
+          photoIds: photoIds,
+        });
+        if (!response.data) return;
+        const data = response.data;
+        const { downloadUrls } = data;
+
+        setTotalProgress(downloadUrls.length);
+        downloadAsZip(downloadUrls);
       },
       errorActions: ['toast'],
       context: {
@@ -87,17 +111,19 @@ const useDownload = ({
     });
   };
 
-  const downloadSingle = async (
-    photoId: number,
-    fileName?: string,
-    mode?: DownloadMode,
-  ) => {
+  const trySingleDownload = async (photoId: number) => {
     await tryFetch({
       task: async () => {
-        await handleDownload(
-          () => photoService.downloadSinglePhoto(spaceCode, photoId),
-          fileName,
-          mode,
+        const response = await photoService.downloadSinglePhoto(
+          spaceCode,
+          photoId,
+        );
+        if (!response.data) return;
+        const { downloadUrls } = response.data;
+
+        await downloadAsImage(
+          downloadUrls[0].url,
+          downloadUrls[0].originalName,
         );
       },
       errorActions: ['toast', 'console'],
@@ -110,14 +136,19 @@ const useDownload = ({
     });
   };
 
-  const downloadAll = async (fileName?: string, mode?: DownloadMode) => {
+  const tryAllDownload = async () => {
     await tryFetch({
       task: async () => {
-        await handleDownload(
-          () => photoService.downloadAll(spaceCode),
-          fileName,
-          mode,
-        );
+        setIsDownloading(true);
+        const response = await photoService.downloadAll(spaceCode);
+
+        if (!response.data) return;
+        const data = response.data;
+        const { downloadUrls } = data;
+
+        setTotalProgress(downloadUrls.length);
+        downloadAsZip(downloadUrls);
+
         onDownloadSuccess?.();
       },
       errorActions: ['toast', 'console'],
@@ -130,42 +161,13 @@ const useDownload = ({
     });
   };
 
-  const handleDownload = async (
-    fetchFunction: () => Promise<ApiResponse<Blob>>,
-    fileName?: string,
-    mode: DownloadMode = 'download',
-  ) => {
-    const response = await fetchFunction();
-    if (!response || !response.data) return;
-    const blob = response.data;
-
-    tryTask({
-      task: async () => {
-        setIsDownloading(true);
-        validateDownloadFormat(blob);
-        if (mode === 'share') {
-          const file = new File(
-            [blob],
-            getDownloadName(undefined, blob, spaceName),
-            { type: blob.type },
-          );
-          await share({ files: [file] });
-        }
-        if (mode === 'download') downloadBlob(blob, fileName);
-      },
-      errorActions: ['console'],
-      onFinally: () => {
-        setIsDownloading(false);
-      },
-    });
-  };
-
   return {
-    downloadMode,
     isDownloading,
-    downloadAll,
-    downloadSelected,
-    downloadSingle,
+    tryAllDownload,
+    trySingleDownload,
+    trySelectedDownload,
+    totalProgress,
+    currentProgress,
   };
 };
 

@@ -30,11 +30,6 @@ export const TextContainer = styled.div`
   align-items: center;
 `;
 
-export const Title = styled.p`
-  ${({ theme }) => ({ ...theme.typography.header03 })}
-  color: ${({ theme }) => theme.colors.gray06};
-`;
-
 export const Description = styled.span<{ $isError: boolean }>`
   ${({ theme }) => ({ ...theme.typography.bodyLarge })}
   color: ${({ theme, $isError }) => ($isError ? theme.colors.error : theme.colors.gray04)};
