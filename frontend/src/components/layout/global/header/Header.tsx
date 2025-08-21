@@ -22,7 +22,7 @@ const Header = ({
   const navigate = useNavigate();
   const location = useLocation();
 
-  const isMainPage = location.pathname === ROUTES.MAIN;
+  const isLandingPage = location.pathname === ROUTES.LANDING;
   const isLogoutPage = location.pathname === ROUTES.LOGOUT;
   const isMyPage = location.pathname === ROUTES.MYPAGE;
 
@@ -33,8 +33,8 @@ const Header = ({
       </button>
 
       {isLogoutPage && null}
-      {isMainPage && !isLoggedIn && null}
-      {isMainPage && isLoggedIn && !isLoading && (
+      {isLandingPage && !isLoggedIn && null}
+      {isLandingPage && isLoggedIn && !isLoading && (
         <S.ProfileImageButton
           type="button"
           onClick={() => navigate(ROUTES.MYPAGE)}
@@ -49,7 +49,7 @@ const Header = ({
         </S.SettingButton>
       )}
 
-      {!isMainPage && !isLogoutPage && !isMyPage && (
+      {!isLandingPage && !isLogoutPage && !isMyPage && (
         <S.ProfileImageButton
           type="button"
           onClick={() => navigate(ROUTES.MYPAGE)}
