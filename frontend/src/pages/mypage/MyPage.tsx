@@ -126,8 +126,8 @@ const MyPage = () => {
             <SpaceCard
               key={space.id}
               name={space.name}
-              validHours={2022}
               openedAt={space.openedAt}
+              expiredAt={space.expiredAt}
               guestCount={space.guestCount}
               photoCount={space.photoCount}
               variant={matchSpaceCardVariant(space)}
