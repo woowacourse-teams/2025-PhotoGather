@@ -36,10 +36,10 @@ export const SectionContainer = styled.section`
 `;
 
 export const LoginSection = styled.section`
-display: flex;
-flex-direction: column;
-align-items: center;
-gap: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 40px;
 `;
 
 export const TopContainer = styled.div`

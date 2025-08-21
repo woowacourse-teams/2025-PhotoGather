@@ -1,8 +1,8 @@
 import styled from '@emotion/styled';
 
 export const Wrapper = styled.div`
-overflow-x: auto;
-width: calc(
+  overflow-x: auto;
+  width: calc(
     ${({ theme }) => theme.layout.width} - ${({ theme }) => theme.layout.padding.leftRight}
   );
   overflow: hidden;
@@ -38,6 +38,7 @@ export const DotContainer = styled.div<{ $isActive: boolean }>`
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  background-color: ${({ $isActive, theme }) => ($isActive ? theme.colors.gray03 : theme.colors.primary20)};
+  background-color: ${({ $isActive, theme }) =>
+    $isActive ? theme.colors.gray03 : theme.colors.primary20};
   cursor: pointer;
 `;
