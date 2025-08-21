@@ -1,8 +1,8 @@
 import { ReactComponent as DefaultImageIcon } from '@assets/icons/defaultImage.svg';
 import { ReactComponent as GroupIcon } from '@assets/icons/group.svg';
+import defaultImage from '@assets/images/default_image.png';
 import loadingImage from '@assets/images/loading.png';
 import { useNavigate } from 'react-router-dom';
-import { profileImage } from '../../pages/logout/LogoutPage';
 import { formatExpiredDate } from '../../utils/dateTimeFormatters';
 import { formatDate } from '../../utils/formatDate';
 import HighlightText from '../@common/highlightText/HighlightText';
@@ -42,7 +42,7 @@ const SpaceCard = ({
     return (
       <S.Wrapper onClick={() => navigate(route)}>
         <S.ImageContainer $isBlurred>
-          <S.CardImage src={profileImage} alt={name} $isBlurred />
+          <S.CardImage src={defaultImage} alt={name} $isBlurred />
           <S.ImageOverlayText>{`만료된\n스페이스`}</S.ImageOverlayText>
         </S.ImageContainer>
         <S.ContentContainer>
@@ -90,7 +90,7 @@ const SpaceCard = ({
   return (
     <S.Wrapper onClick={() => navigate(route)}>
       <S.ImageContainer>
-        <S.CardImage src={profileImage} alt={name} />
+        <S.CardImage src={defaultImage} alt={name} />
       </S.ImageContainer>
       <S.ContentContainer>
         <S.CardTitle>{name}</S.CardTitle>

@@ -124,7 +124,7 @@ export const CardTitle = styled.h3`
 
 export const CardDuration = styled.p`
   color: ${({ theme }) => theme.colors.gray03};
-  font: ${({ theme }) => theme.typography.captionSmall};
+  font: ${({ theme }) => theme.typography.bodyRegular};
 `;
 
 export const InfoContainer = styled.div`

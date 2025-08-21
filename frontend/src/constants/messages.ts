@@ -38,19 +38,12 @@ export const INFORMATION = {
     DESCRIPTION: '추억을 담을 공간의 이름을 작성해주세요.',
     PLACEHOLDER: '나만의 스페이스',
   },
-  DATE_INPUT: {
+  WHEN_OPEN_INPUT: {
     TITLE: {
-      TEXT: '스페이스를 언제부터 열까요?',
-      HIGHLIGHT_TEXT: '언제부터',
+      TEXT: '스페이스가 열릴 시간을 정해주세요.',
+      HIGHLIGHT_TEXT: '열릴 시간',
     },
-    DESCRIPTION: '선택한 시점부터 72시간 동안 열려요.',
-  },
-  TIME_INPUT: {
-    TITLE: {
-      TEXT: '스페이스를 몇시부터 열까요?',
-      HIGHLIGHT_TEXT: '몇시부터',
-    },
-    DESCRIPTION: '선택한 시점부터 24시간 동안 열려요.',
+    DESCRIPTION: '선택한 시간으로부터 72시간 동안 열려요.',
   },
   CHECK_SPACE_INFO: {
     TITLE: {
@@ -110,7 +103,8 @@ export const ERROR = {
     HIGHLIGHT_WORDS: [''],
   },
   INPUT: {
-    NAME: `${CONSTRAINTS.NAME_MAX_LENGTH}자 까지 입력할 수 있어요.`,
+    NAME_LENGTH: `${CONSTRAINTS.NAME_MAX_LENGTH}자 까지 입력할 수 있어요.`,
+    NAME_BLANK: '스페이스 이름은 공백으로 시작할 수 없어요.',
     DATE: '오늘 이전 날짜는 선택할 수 없어요.',
     TIME: '현재 시간 이후 시간대를 입력해주세요.',
   },

@@ -32,7 +32,7 @@ import { ScrollableBlurArea } from '../../../styles/@common/ScrollableBlurArea.s
 import { theme } from '../../../styles/theme';
 import { checkIsEarlyDate } from '../../../utils/checkIsEarlyTime';
 import { copyLinkToClipboard } from '../../../utils/copyLinkToClipboard';
-import { createShareUrl, createSpaceUrl } from '../../../utils/createSpaceUrl';
+import { createShareUrl } from '../../../utils/createSpaceUrl';
 import { track } from '../../../utils/googleAnalytics/track';
 import { goToTop } from '../../../utils/goToTop';
 import EarlyPage from '../../status/earlyPage/EarlyPage';
@@ -210,18 +210,6 @@ const SpaceHomePage = () => {
               }}
               label="업로드 링크"
             />
-            <IconLabelButton
-              icon={<LinkIcon fill={theme.colors.white} width="20px" />}
-              onClick={() => {
-                copyLinkToClipboard(createSpaceUrl(spaceCode ?? ''));
-                showToast({
-                  text: '링크가 복사되었습니다.',
-                  type: 'info',
-                  position: 'top',
-                });
-              }}
-              label="스페이스 링크"
-            />
           </S.ModalContentContainer>
         </C.Wrapper>,
         {
@@ -235,7 +223,6 @@ const SpaceHomePage = () => {
 
   return (
     <S.Wrapper>
-      {isEarlyTime && <EarlyPage openedAt={spaceInfo.openedAt} />}
       {isDownloading && (
         <LoadingLayout
           loadingContents={loadingContents}
