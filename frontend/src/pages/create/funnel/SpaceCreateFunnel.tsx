@@ -1,6 +1,9 @@
 import diamondImage from '@assets/images/diamond.png';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import StepProgressBar from '../../../components/progressBar/step/StepProgressBar';
+import { ROUTES } from '../../../constants/routes';
+import useAuthConditionTasks from '../../../hooks/@common/useAuthConditionTasks';
 import useConfirmBeforeRefresh from '../../../hooks/@common/useConfirmBeforeRefresh';
 import useFunnelHistory from '../../../hooks/useFunnelHistory';
 import type { SpaceFunnelInfo } from '../../../types/space.type';
@@ -40,17 +43,18 @@ const SpaceCreateFunnel = () => {
   const currentStep =
     PROGRESS_STEP_LIST.findIndex((oneStep) => oneStep === step) + 1;
 
+  const navigate = useNavigate();
+  useAuthConditionTasks({ taskWhenNoAuth: () => navigate(ROUTES.MAIN) });
+
   return (
     <S.Wrapper>
       <StepProgressBar
         currentStep={currentStep}
         maxStep={PROGRESS_STEP_LIST.length}
       />
-
       <S.TopContainer>
         <S.IconContainer>
           <S.Icon src={diamondImage} alt="다이아몬드 이미지" />
-          <S.UnderBar />
         </S.IconContainer>
       </S.TopContainer>
       <S.ContentContainer>

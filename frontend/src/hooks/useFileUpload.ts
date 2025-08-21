@@ -71,6 +71,7 @@ const useFileUpload = ({
         originFile: file.originFile,
         objectKey,
         capturedAt: file.capturedAt,
+        capacityValue: file.capacityValue,
         presignedUrl: '',
         state: 'idle',
       };
@@ -164,6 +165,7 @@ const useFileUpload = ({
       uploadFileName: file.objectKey,
       originalName: file.originFile.name,
       capturedAt: file.capturedAt,
+      capacityValue: file.capacityValue,
     }));
 
     await tryFetch({

@@ -98,6 +98,11 @@ const useDownload = ({
         const data = response.data;
         const { downloadUrls } = data;
 
+        if (downloadUrls.length === 1) {
+          downloadAsImage(downloadUrls[0].url, downloadUrls[0].originalName);
+          return;
+        }
+
         setTotalProgress(downloadUrls.length);
         downloadAsZip(downloadUrls);
       },

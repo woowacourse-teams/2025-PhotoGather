@@ -37,7 +37,7 @@ public class Space extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany(mappedBy = "space", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "space", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<SpaceHostMap> spaceHostMap = new ArrayList<>();
 
     @Column(name = "code", nullable = false, length = 64)
