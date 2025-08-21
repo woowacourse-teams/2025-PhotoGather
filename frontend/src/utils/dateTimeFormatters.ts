@@ -23,7 +23,7 @@ export const formatExpiredDate = (dateString?: string): string => {
   const month = padZero(date.getMonth() + 1);
   const day = padZero(date.getDate());
 
-  return `${year}/${month}/${day} 만료`;
+  return `만료일 | ${year}/${month}/${day}`;
 };
 
 export const calculateTimeDifference = (
