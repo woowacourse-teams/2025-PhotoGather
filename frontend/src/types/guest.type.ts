@@ -11,3 +11,8 @@ export interface GuestId {
 export interface GuestNickName {
   name: string;
 }
+
+export interface Guest {
+  id: number;
+  name: string;
+}

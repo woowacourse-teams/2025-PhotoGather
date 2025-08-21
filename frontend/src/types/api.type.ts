@@ -7,7 +7,10 @@ export interface requestOptionsType {
   body?: unknown;
   params?: Record<string, unknown>;
   bodyContentType?: BodyContentType;
+  withTraceId: boolean;
   token?: string;
+  fullUrl?: string;
+  headersOverride?: Record<string, string>;
 }
 export interface ApiResponse<T> {
   success: boolean;
@@ -37,4 +40,14 @@ export interface PhotoIds {
 
 export interface PhotoId {
   photoId: number;
+}
+
+export interface PresignedUrlsResponse {
+  signedUrls: Record<string, string>;
+}
+
+export interface UploadedPhotos {
+  uploadFileName: string;
+  originalName: string;
+  capturedAt: string | null;
 }

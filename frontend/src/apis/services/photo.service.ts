@@ -1,4 +1,9 @@
-import type { PhotoIds, PhotoListResponse } from '../../types/api.type';
+import type {
+  PhotoIds,
+  PhotoListResponse,
+  PresignedUrlsResponse,
+  UploadedPhotos,
+} from '../../types/api.type';
 import type {
   CreatePhotoInput,
   DownloadInfoList,
@@ -29,6 +34,26 @@ export const photoService = {
       'form-data',
     );
   },
+
+  getPresignedUrls: (spaceCode: string, uploadFileNames: string[]) =>
+    http.post<PresignedUrlsResponse>(
+      `/spaces/${spaceCode}/photos/issue/upload-urls`,
+      { uploadFileNames },
+    ),
+
+  notifyUploadComplete: (
+    spaceCode: string,
+    uploadedPhotos: UploadedPhotos[],
+    validGuestId: number,
+    nickName: string,
+  ) =>
+    http.post(`/spaces/${spaceCode}/photos?guestId=${validGuestId}`, {
+      nickName,
+      uploadedPhotos,
+    }),
+
+  uploadPhotosToS3: async (presignedUrl: string, file: File) =>
+    http.putToS3(presignedUrl, file),
 
   downloadAll: (spaceCode: string) =>
     authHttp.post<DownloadInfoList>(

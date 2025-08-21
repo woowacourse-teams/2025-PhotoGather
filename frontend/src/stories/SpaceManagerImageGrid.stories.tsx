@@ -17,6 +17,10 @@ export const Default: Story = {
         id: 1,
         path: 'https://avatars.githubusercontent.com/MinSungJe',
         originalName: '스페이스 이미지',
+        guest: {
+          id: 1,
+          name: '스토리북 사용자',
+        },
         capturedAt: '2025-07-31',
         createdAt: '2025-07-31',
       },
@@ -24,6 +28,10 @@ export const Default: Story = {
         id: 2,
         path: 'https://avatars.githubusercontent.com/ShinjungOh',
         originalName: '스페이스 이미지',
+        guest: {
+          id: 1,
+          name: '스토리북 사용자2',
+        },
         capturedAt: '2025-07-31',
         createdAt: '2025-07-31',
       },

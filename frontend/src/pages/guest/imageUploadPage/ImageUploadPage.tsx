@@ -12,9 +12,10 @@ import UploadBox from '../../../components/uploadBox/UploadBox';
 import UserBadge from '../../../components/userBadge/UserBadge';
 import { ROUTES } from '../../../constants/routes';
 import { useOverlay } from '../../../contexts/OverlayProvider';
-import useFileUpload from '../../../hooks/@common/useFileUpload';
 import useIntersectionObserver from '../../../hooks/@common/useIntersectionObserver';
 import useLeftTimer from '../../../hooks/@common/useLeftTimer';
+import useLocalFile from '../../../hooks/@common/useLocalFile';
+import useFileUpload from '../../../hooks/useFileUpload';
 import useGuestNickName from '../../../hooks/useGuestNickName';
 import useSpaceCodeFromPath from '../../../hooks/useSpaceCodeFromPath';
 import useSpaceInfo from '../../../hooks/useSpaceInfo';
@@ -54,21 +55,27 @@ const ImageUploadPage = () => {
 
   const spaceName = spaceInfo?.name ?? '';
   const {
-    previewData,
-    isUploading,
+    localFiles,
+    previewFile,
     handleFilesUploadClick,
     handleFilesDrop,
-    submitFileUpload,
     deleteFile,
-  } = useFileUpload({
-    spaceCode: spaceCode ?? '',
+    clearFiles,
+  } = useLocalFile({
     fileType: 'image',
+  });
+
+  const { submitFileUpload, isUploading } = useFileUpload({
+    localFiles: localFiles,
+    spaceCode: spaceCode ?? '',
     onUploadSuccess: navigateToUploadComplete,
+    nickName,
+    clearFiles: clearFiles,
     guestId,
     tryCreateNickName,
   });
 
-  const hasImages = Array.isArray(previewData) && previewData.length > 0;
+  const hasImages = Array.isArray(previewFile) && previewFile.length > 0;
   const { targetRef: hideBlurAreaTriggerRef, isIntersecting: isAtPageBottom } =
     useIntersectionObserver({});
   const { targetRef: scrollTopTriggerRef, isIntersecting: isAtPageTop } =
@@ -87,7 +94,7 @@ const ImageUploadPage = () => {
   };
 
   const handleImageClick = async (photoId: number) => {
-    const selectedPhoto = previewData.find((photo) => photo.id === photoId);
+    const selectedPhoto = previewFile.find((photo) => photo.id === photoId);
     if (!selectedPhoto) return;
 
     await overlay(
@@ -138,6 +145,10 @@ const ImageUploadPage = () => {
         nickName={nickName}
         onBadgeClick={() => showNickNameEditModal()}
       />
+      <UserBadge
+        nickName={nickName}
+        onBadgeClick={() => showNickNameEditModal()}
+      />
       <S.UploadContainer $hasImages={hasImages}>
         {shouldShowFakeUploadBox ? (
           <UploadBox
@@ -168,10 +179,10 @@ const ImageUploadPage = () => {
             <FloatingActionButton
               label={
                 <HighlightText
-                  text={`사진 ${previewData.length}장 업로드하기`}
+                  text={`사진 ${previewFile.length}장 업로드하기`}
                   fontStyle="buttonPrimary"
                   highlightColorStyle="gray04"
-                  highlightTextArray={[`사진 ${previewData.length}장`]}
+                  highlightTextArray={[`사진 ${previewFile.length}장`]}
                 />
               }
               onClick={submitFileUpload}
@@ -179,7 +190,7 @@ const ImageUploadPage = () => {
             />
           </S.ButtonContainer>
           <GuestImageGrid
-            photoData={previewData}
+            photoData={previewFile}
             rowImageAmount={3}
             onImageClick={handleImageClick}
             onDeleteClick={(id: number) => {
