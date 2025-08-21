@@ -33,6 +33,8 @@ export interface Space {
   openedAt: string;
   expiredAt: string;
   isExpired: boolean;
+  guestCount?: number;
+  photoCount?: number;
 }
 
 export interface UpdateSpaceInput {

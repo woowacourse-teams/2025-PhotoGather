@@ -4,11 +4,13 @@ import ComingSoonBox from '../../../components/comingSoonBox/ComingSoonBox';
 import DashboardBox from '../../../components/dashboardBox/DashboardBox';
 import { ROUTES } from '../../../constants/routes';
 import useSpaceCodeFromPath from '../../../hooks/useSpaceCodeFromPath';
+import useSpaceInfo from '../../../hooks/useSpaceInfo';
 import { theme } from '../../../styles/theme';
 import * as S from './DashboardPage.styles';
 
 const DashboardPage = () => {
   const { spaceCode } = useSpaceCodeFromPath();
+  const { spaceInfo } = useSpaceInfo(spaceCode || '');
   const navigate = useNavigate();
 
   const handleModifyButton = () => {
@@ -29,8 +31,18 @@ const DashboardPage = () => {
           }}
         />
         <S.DashboardInfoContainer>
-          <DashboardBox title="참여한 게스트" description="8명" />
-          <DashboardBox title="모은 사진들" description="130장" />
+          <DashboardBox
+            title="참여한 게스트"
+            description={
+              spaceInfo?.guestCount ? `${spaceInfo.guestCount}명` : '0명'
+            }
+          />
+          <DashboardBox
+            title="모은 사진들"
+            description={
+              spaceInfo?.photoCount ? `${spaceInfo.photoCount}장` : '0장'
+            }
+          />
         </S.DashboardInfoContainer>
       </S.DashboardContainer>
       <ComingSoonBox title="Coming Soon" />
