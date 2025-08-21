@@ -1,14 +1,13 @@
 -- 1. space
 CREATE TABLE space
 (
-    id           BIGINT AUTO_INCREMENT PRIMARY KEY,
-    code         VARCHAR(64)                        NOT NULL,
-    name         VARCHAR(255) CHARACTER SET utf8mb4 NOT NULL,
-    valid_hours  INT                                NOT NULL,
-    opened_at    TIMESTAMP                          NOT NULL,
-    max_capacity BIGINT                             NOT NULL DEFAULT 10737418240, -- 10GB default
-    created_at   TIMESTAMP                          NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at   TIMESTAMP                          NOT NULL DEFAULT CURRENT_TIMESTAMP
+    id          BIGINT AUTO_INCREMENT PRIMARY KEY,
+    code        VARCHAR(64)                        NOT NULL,
+    name        VARCHAR(255) CHARACTER SET utf8mb4 NOT NULL,
+    valid_hours INT                                NOT NULL,
+    opened_at   TIMESTAMP                          NOT NULL,
+    created_at  TIMESTAMP                          NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at  TIMESTAMP                          NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 -- 2. space_content
@@ -29,7 +28,6 @@ CREATE TABLE photo
     original_name VARCHAR(255) NOT NULL,
     path          VARCHAR(255) NOT NULL,
     captured_at   TIMESTAMP    NULL     DEFAULT NULL,
-    capacity      BIGINT       NOT NULL,
     created_at    TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (id),
     CONSTRAINT photo_space_content_fk FOREIGN KEY (id) REFERENCES space_content (id)
