@@ -46,52 +46,42 @@ const routes: AppRouteObject[] = [
         element: <SpaceCreateFunnel />,
       },
       {
-        path: 'manager',
-        children: [
-          {
-            path: 'space-home/:spaceCode',
-            element: <SpaceHomePage />,
-            handle: {
-              header: true,
-              starField: true,
-              highlight: true,
-            },
-          },
-          {
-            path: 'space-home/:spaceCode/dashboard',
-            element: <DashboardPage />,
-            handle: {
-              header: true,
-              highlight: true,
-            },
-          },
-          {
-            path: 'space-home/:spaceCode/settings',
-            element: <SettingsPage />,
-            handle: {
-              header: true,
-              highlight: true,
-            },
-          },
-        ],
+        path: 'space/:spaceCode',
+        element: <SpaceHomePage />,
+        handle: {
+          header: true,
+          starField: true,
+          highlight: true,
+        },
+      },
+
+      {
+        path: 'space/:spaceCode/dashboard',
+        element: <DashboardPage />,
+        handle: {
+          header: true,
+          highlight: true,
+        },
       },
       {
-        // TODO : 데모 후 삭제
-        path: 'guest',
-        children: [
-          {
-            path: 'image-upload/:spaceCode',
-            element: <ImageUploadPage />,
-            handle: {
-              starField: true,
-              highlight: true,
-            },
-          },
-          {
-            path: 'share',
-            element: <SharePage />,
-          },
-        ],
+        path: 'space/:spaceCode/settings',
+        element: <SettingsPage />,
+        handle: {
+          header: true,
+          highlight: true,
+        },
+      },
+      {
+        path: 'upload/:spaceCode',
+        element: <ImageUploadPage />,
+        handle: {
+          starField: true,
+          highlight: true,
+        },
+      },
+      {
+        path: 'share',
+        element: <SharePage />,
       },
       {
         path: 'mypage',
