@@ -21,7 +21,7 @@ const TextInput = ({ errorMessage, maxCount, ...inputProps }: InputProps) => {
         {...inputProps}
         id={inputProps.id}
         aria-label={inputProps['aria-label']}
-        value={inputProps.value}
+        value={graphemes.join('')}
         $isError={!!errorMessage}
       />
       <S.InputFooterContainer>
