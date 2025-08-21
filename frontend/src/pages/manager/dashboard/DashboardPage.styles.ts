@@ -32,14 +32,14 @@ export const DashboardInfoContainer = styled.div`
   gap: 16px;
 `;
 
-export const SettingsButtonContainer = styled.div`
+export const ModifyButtonContainer = styled.div`
   display: flex;
   justify-content: flex-end;
   ${({ theme }) => ({ ...theme.typography.captionSmall })};
   color: ${({ theme }) => theme.colors.white};
 `;
 
-export const SettingsButton = styled.button`
+export const ModifyButton = styled.button`
   display: flex;
   justify-content: flex-end;
   align-items: center;

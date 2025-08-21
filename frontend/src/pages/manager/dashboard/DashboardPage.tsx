@@ -9,7 +9,7 @@ const DashboardPage = () => {
   const { spaceCode } = useSpaceCodeFromPath();
   const navigate = useNavigate();
 
-  const handleSettingsButton = () => {
+  const handleModifyButton = () => {
     if (spaceCode) {
       navigate(ROUTES.MANAGER.SETTING(spaceCode));
     }
@@ -41,12 +41,12 @@ const DashboardPage = () => {
         </S.DashboardInfoContainer>
       </S.DashboardContainer>
       <DashboardBox title="Coming Soon" isClosed={true} />
-      <S.SettingsButtonContainer>
-        <S.SettingsButton onClick={handleSettingsButton}>
+      <S.ModifyButtonContainer>
+        <S.ModifyButton onClick={handleModifyButton}>
           스페이스 정보 수정
           <EditIcon />
-        </S.SettingsButton>
-      </S.SettingsButtonContainer>
+        </S.ModifyButton>
+      </S.ModifyButtonContainer>
     </S.Wrapper>
   );
 };

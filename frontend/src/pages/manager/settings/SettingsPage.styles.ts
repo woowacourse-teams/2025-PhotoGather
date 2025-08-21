@@ -5,6 +5,7 @@ export const Wrapper = styled.div`
   min-height: ${({ theme }) =>
     `calc(100vh - ${parseInt(theme.layout.padding.topBottom) * 2}px - ${theme.layout.headerHeight})`};
   position: relative;
+  // TODO: grid로 전환  
   display: flex;
   flex-direction: column;
   gap: 16px;

@@ -13,8 +13,11 @@ export const Wrapper = styled.div<{ $isClosed: boolean }>`
   padding: 12px 9px 12px 9px;
   text-align: center;
   gap: ${({ $isClosed }) => ($isClosed ? 0 : 12)};
+  // biome-ignore format: conditional styling required
   background-color: ${({ $isClosed }) =>
-    $isClosed ? hexToRgba(theme.colors.white, 0.1) : theme.colors.grayBackground};
+    $isClosed
+      ? hexToRgba(theme.colors.white, 0.1)
+      : theme.colors.grayBackground};
   border-radius: 12px;
   font: ${({ theme }) => theme.typography.bodyLarge};
 `;
