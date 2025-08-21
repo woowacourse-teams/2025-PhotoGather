@@ -79,6 +79,7 @@ const useError = () => {
     errorActions: ErrorType[];
     context?: ErrorRequiredProps;
     onFinally?: () => void;
+    useCommonCodeErrorHandler?: boolean;
   }
 
   const ERROR_CODES_TO_HANDLE = [401, 403];
@@ -88,6 +89,7 @@ const useError = () => {
     errorActions,
     context,
     onFinally,
+    useCommonCodeErrorHandler = true,
   }: TryFetchProps<T>) => {
     try {
       const response = await task();
@@ -96,6 +98,7 @@ const useError = () => {
       const error = e instanceof Error ? e : new Error(String(e));
 
       if (
+        useCommonCodeErrorHandler &&
         error instanceof HttpError &&
         ERROR_CODES_TO_HANDLE.includes(error.status)
       ) {

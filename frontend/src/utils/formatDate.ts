@@ -1,7 +1,20 @@
 import { DEBUG_MESSAGES } from '../constants/debugMessages';
 import { isParsableToDate } from './isParsableToDate';
 
-export const formatDate = (rawDate: string) => {
+const formatType = {
+  long: (parsedDate: Date) => ({
+    date: `${parsedDate.getFullYear()}년 ${parsedDate.getMonth() + 1}월 ${parsedDate.getDate()}일`,
+    time: `${parsedDate.getHours() > 12 ? '오후' : '오전'} ${parsedDate.getHours() - 12}시 ${parsedDate.getMinutes()}분`,
+  }),
+  short: (parsedDate: Date) => ({
+    date: `${parsedDate.getFullYear()}.${parsedDate.getMonth() + 1}.${parsedDate.getDate()}`,
+    time: `${parsedDate.getHours()}:${parsedDate.getMinutes()}`,
+  }),
+};
+
+type FormatType = 'long' | 'short';
+
+export const formatDate = (rawDate: string, type: FormatType = 'long') => {
   if (!isParsableToDate(rawDate)) {
     console.warn(
       `${DEBUG_MESSAGES.CAN_NOT_PARSE_TO_DATE} formatDate: "${rawDate}"`,
@@ -13,22 +26,9 @@ export const formatDate = (rawDate: string) => {
   }
 
   const parsedDate = new Date(rawDate);
-  const parsedMonth = padTwoDigits(parsedDate.getMonth() + 1);
-  const parsedDay = padTwoDigits(parsedDate.getDate());
+  const formattedDateTime = formatType[type](parsedDate);
 
-  const hour = parsedDate.getHours();
-  const parsedMinute = padTwoDigits(parsedDate.getMinutes());
-  const parsedHour = padTwoDigits(hour % 12 === 0 ? 12 : hour % 12);
-  const formattedDate = `${parsedDate.getFullYear()}년 ${parsedMonth}월 ${parsedDay}일`;
-  const formattedTime =
-    parsedDate.getHours() > 12
-      ? `오후 ${parsedHour}시 ${parsedMinute}분`
-      : `오전 ${parsedHour}시 ${parsedMinute}분`;
-
-  return {
-    date: formattedDate,
-    time: formattedTime,
-  };
+  return formattedDateTime;
 };
 
 const padTwoDigits = (num: number) => String(num).padStart(2, '0');

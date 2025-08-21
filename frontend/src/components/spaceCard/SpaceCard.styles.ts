@@ -12,6 +12,7 @@ export const Wrapper = styled.button`
   background-color: ${({ theme }) => theme.colors.white};
   text-align: left;
   cursor: pointer;
+  overflow: hidden;
 `;
 
 export const ImageContainer = styled.div<{
@@ -107,7 +108,7 @@ export const EarlyOverlayTitle = styled.div`
 `;
 
 export const EarlyOverlayDate = styled.div`
-  color: ${({ theme }) => theme.colors.white};
+  color: ${({ theme }) => theme.colors.accent};
   ${({ theme }) => ({ ...theme.typography.bodyLarge })};
 `;
 
@@ -122,8 +123,8 @@ export const CardTitle = styled.h3`
 `;
 
 export const CardDuration = styled.p`
-  color: ${({ theme }) => theme.colors.gray04};
-  font: ${({ theme }) => theme.typography.captionSmall};
+  color: ${({ theme }) => theme.colors.gray03};
+  font: ${({ theme }) => theme.typography.bodyRegular};
 `;
 
 export const InfoContainer = styled.div`
