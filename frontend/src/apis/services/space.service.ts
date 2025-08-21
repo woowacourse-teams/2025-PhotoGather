@@ -7,7 +7,7 @@ export const spaceService = {
 
   getInfoByCode: (spaceCode: string) => http.get<Space>(`/spaces/${spaceCode}`),
 
-  update: (spaceCode: string, data: SpaceCreateInfo) =>
+  update: (spaceCode: string, data: Partial<SpaceCreateInfo>) =>
     authHttp.patch<SpaceCreateInfo>(`/spaces/${spaceCode}`, data),
 
   delete: (spaceCode: string) => authHttp.delete<void>(`/spaces/${spaceCode}`),

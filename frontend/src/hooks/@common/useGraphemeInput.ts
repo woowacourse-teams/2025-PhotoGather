@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const segmenter = new Intl.Segmenter('und', { granularity: 'grapheme' });
 
@@ -18,13 +18,16 @@ const useGraphemeInput = ({
   );
 
   const validValue = graphemes.join('');
+  const validLength = graphemes.length;
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value);
     onChange?.(e);
   };
 
-  const validLength = graphemes.length;
+  useEffect(() => {
+    setValue(initialValue);
+  }, [initialValue]);
 
   return { handleChange, validValue, validLength };
 };
