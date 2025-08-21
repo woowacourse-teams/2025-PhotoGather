@@ -1,6 +1,9 @@
 export const ROUTES = {
   MAIN: '/',
   LOGIN: '/login',
+  AUTH: {
+    KAKAO: '/auth/login/kakao',
+  },
   CREATE: '/create',
   MANAGER: {
     SPACE_HOME: (spaceCode: string) => `/manager/space-home/${spaceCode}`,

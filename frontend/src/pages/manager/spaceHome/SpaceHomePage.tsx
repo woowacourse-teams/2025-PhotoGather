@@ -44,9 +44,6 @@ const SpaceHomePage = () => {
   const { spaceInfo } = useSpaceInfo(spaceCode ?? '');
   const isEarlyTime =
     spaceInfo?.openedAt && checkIsEarlyDate(spaceInfo.openedAt);
-
-  // TODO: NoData 시 표시할 Layout 필요
-  const _isNoData = !spaceInfo;
   const isSpaceExpired = spaceInfo?.isExpired;
   const spaceName = spaceInfo?.name ?? '';
   const { targetRef: hideBlurAreaTriggerRef, isIntersecting: isAtPageBottom } =
@@ -80,18 +77,23 @@ const SpaceHomePage = () => {
 
   const navigate = useNavigate();
 
-  const { isDownloading, downloadAll, selectDownload, downloadSingle } =
-    useDownload({
-      spaceCode: spaceCode ?? '',
-      spaceName,
-      onDownloadSuccess: () => {
-        navigate(ROUTES.COMPLETE.DOWNLOAD, {
-          state: {
-            spaceCode: spaceCode ?? '',
-          },
-        });
-      },
-    });
+  const {
+    downloadMode,
+    isDownloading,
+    downloadAll,
+    downloadSelected,
+    downloadSingle,
+  } = useDownload({
+    spaceCode: spaceCode ?? '',
+    spaceName,
+    onDownloadSuccess: () => {
+      navigate(ROUTES.COMPLETE.DOWNLOAD, {
+        state: {
+          spaceCode: spaceCode ?? '',
+        },
+      });
+    },
+  });
 
   const {
     isSelectMode,
@@ -134,7 +136,7 @@ const SpaceHomePage = () => {
   };
 
   const downloadPhotoWithTracking = async (photoId: number) => {
-    await downloadSingle(photoId);
+    await downloadSingle(photoId, undefined, downloadMode);
     track.button('single_download_button', {
       page: 'space_home',
       section: 'photo_modal',
@@ -156,6 +158,14 @@ const SpaceHomePage = () => {
         clickOverlayClose: true,
       },
     );
+  };
+
+  const handleSelectDelete = () => tryDeleteSelectedPhotos(selectedPhotoIds);
+
+  const handleSelectDownload = () => {
+    if (selectedPhotosCount === 1)
+      downloadSingle(selectedPhotoIds[0], undefined, downloadMode);
+    else downloadSelected(selectedPhotoIds, undefined, 'download');
   };
 
   const handleImageClick = isSelectMode ? toggleSelectedPhoto : openPhotoModal;
@@ -234,7 +244,7 @@ const SpaceHomePage = () => {
 
   return (
     <S.Wrapper>
-      {/* TODO: 버튼 지우기 */}
+      {isEarlyTime && <EarlyPage openedAt={spaceInfo.openedAt} />}
       {(isDownloading || isDeleting) && (
         <LoadingLayout
           loadingContents={loadingContents}
@@ -293,7 +303,7 @@ const SpaceHomePage = () => {
                   label="모두 저장하기"
                   icon={<SaveIcon fill={theme.colors.gray06} />}
                   onClick={() => {
-                    downloadAll();
+                    downloadAll(undefined, 'download');
                     track.button('all_download_button', {
                       page: 'space_home',
                       section: 'space_home',
@@ -315,8 +325,8 @@ const SpaceHomePage = () => {
               {isSelectMode && (
                 <PhotoSelectionToolBar
                   selectedCount={selectedPhotosCount}
-                  onDelete={() => tryDeleteSelectedPhotos(selectedPhotoIds)}
-                  onDownload={() => selectDownload(selectedPhotoIds)}
+                  onDelete={handleSelectDelete}
+                  onDownload={handleSelectDownload}
                 />
               )}
             </S.BottomNavigatorContainer>
