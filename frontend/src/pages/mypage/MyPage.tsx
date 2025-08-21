@@ -129,7 +129,7 @@ const MyPage = () => {
               guestCount={space.guestCount}
               photoCount={space.photoCount}
               variant={matchSpaceCardVariant(space)}
-              route={ROUTES.MANAGER.SPACE_HOME(String(space.id))}
+              route={ROUTES.MANAGER.SPACE_HOME(String(space.spaceCode))}
             />
           ))}
         </S.SpaceList>
