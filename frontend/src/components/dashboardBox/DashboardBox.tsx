@@ -6,19 +6,16 @@ interface DashboardBoxProps extends HTMLAttributes<HTMLDivElement> {
   title: string;
   /** 박스 내 들어갈 설명 */
   description?: string;
-  /** 박스 비활성화 여부 */
-  isClosed: boolean;
 }
 
 const DashboardBox = ({
   title,
   description,
-  isClosed,
   ...restProps
 }: DashboardBoxProps) => {
   return (
-    <S.Wrapper $isClosed={isClosed} {...restProps}>
-      <S.Title $isClosed={isClosed}>{title}</S.Title>
+    <S.Wrapper {...restProps}>
+      <S.Title>{title}</S.Title>
       <S.Description>{description}</S.Description>
     </S.Wrapper>
   );

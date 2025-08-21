@@ -27,7 +27,6 @@ export const Default: Story = {
   args: {
     title: '참여한 게스트',
     description: '8명',
-    isClosed: false,
   },
 };
 
@@ -35,23 +34,6 @@ export const WithLargeNumber: Story = {
   args: {
     title: '업로드된 사진',
     description: '1,234장',
-    isClosed: false,
-  },
-};
-
-export const Closed: Story = {
-  args: {
-    title: 'Coming Soon',
-    description: '',
-    isClosed: true,
-  },
-};
-
-export const ClosedWithDescription: Story = {
-  args: {
-    title: '종료된 이벤트',
-    description: '2024.12.25',
-    isClosed: true,
   },
 };
 
@@ -74,18 +56,9 @@ export const MultipleBoxes: Story = {
           flexWrap: 'wrap',
         }}
       >
-        <DashboardBox
-          title="참여한 게스트"
-          description="8명"
-          isClosed={false}
-        />
-        <DashboardBox
-          title="업로드된 사진"
-          description="45장"
-          isClosed={false}
-        />
+        <DashboardBox title="참여한 게스트" description="8명" />
+        <DashboardBox title="업로드된 사진" description="45장" />
       </div>
-      <DashboardBox title="Coming Soon" isClosed={true} />
     </div>
   ),
 };

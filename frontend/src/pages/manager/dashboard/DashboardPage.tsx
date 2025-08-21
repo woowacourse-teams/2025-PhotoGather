@@ -1,5 +1,6 @@
 import { ReactComponent as EditIcon } from '@assets/icons/edit.svg';
 import { useNavigate } from 'react-router-dom';
+import ComingSoonBox from '../../../components/comingSoonBox/ComingSoonBox';
 import DashboardBox from '../../../components/dashboardBox/DashboardBox';
 import { ROUTES } from '../../../constants/routes';
 import useSpaceCodeFromPath from '../../../hooks/useSpaceCodeFromPath';
@@ -22,25 +23,16 @@ const DashboardPage = () => {
         <DashboardBox
           title="스페이스 용량"
           description="23.45MB / 100MB"
-          isClosed={false}
           style={{
             height: '160px',
           }}
         />
         <S.DashboardInfoContainer>
-          <DashboardBox
-            title="참여한 게스트"
-            description="8명"
-            isClosed={false}
-          />
-          <DashboardBox
-            title="모은 사진들"
-            description="130장"
-            isClosed={false}
-          />
+          <DashboardBox title="참여한 게스트" description="8명" />
+          <DashboardBox title="모은 사진들" description="130장" />
         </S.DashboardInfoContainer>
       </S.DashboardContainer>
-      <DashboardBox title="Coming Soon" isClosed={true} />
+      <ComingSoonBox title="Coming Soon" />
       <S.ModifyButtonContainer>
         <S.ModifyButton onClick={handleModifyButton}>
           스페이스 정보 수정

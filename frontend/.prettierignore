@@ -1,2 +1,1 @@
 # Ignore files that conflict with biome formatter
-src/components/dashboardBox/DashboardBox.styles.ts
