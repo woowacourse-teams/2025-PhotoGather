@@ -19,7 +19,7 @@ export const formatRemainingHours = (hours: number): string => {
 export const formatExpiredDate = (expiredAt: string): string => {
   if (!expiredAt) return '만료';
 
-  return `만료일 | ${formatDate(expiredAt, 'short').date} ${formatDate(expiredAt, 'short').time}`;
+  return `만료 | ${formatDate(expiredAt, 'short').date} ${formatDate(expiredAt, 'short').time}`;
 };
 
 export const calculateTimeDifference = (
