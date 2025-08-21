@@ -30,7 +30,7 @@ public class AuthController {
     private final AuthService authService;
 
     @GetMapping("/me")
-    @Operation(summary = "로그인 상태 확인",
+    @Operation(summary = "내 정보 확인",
         description = "현재 로그인된 사용자의 정보를 확인합니다. " +
             "로그인된 사용자가 없으면 401 Unauthorized를 반환합니다.")
     public ResponseEntity<HostResponse> getCurrentUser(@LoginHost Host host) {
@@ -70,5 +70,13 @@ public class AuthController {
     ) {
         var response = authService.refresh(request.refreshToken());
         return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/terms")
+    @Operation(summary = "서비스 이용 약관 동의",
+        description = "서비스 이용 약관에 동의합니다. ")
+    public ResponseEntity<Void> agreeTerms(@LoginHost Host host) {
+        authService.agreeTerms(host);
+        return ResponseEntity.ok().build();
     }
 }
