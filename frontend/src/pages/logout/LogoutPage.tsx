@@ -14,12 +14,11 @@ const LogoutPage = () => {
   const handleLogout = async () => {
     console.log('로그아웃');
     const confirmResult = await overlay(
-      // TODO: 설정 PR 머지 후 주석 제거
       <ConfirmModal
-        // title="로그아웃 할까요?"
+        title="로그아웃 할까요?"
         confirmText="삭제"
         cancelText="취소"
-        // mode="error"
+        mode="error"
       />,
       {
         clickOverlayClose: true,
