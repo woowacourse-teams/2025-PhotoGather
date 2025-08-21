@@ -17,14 +17,16 @@ export const Title = styled.h2`
 `;
 
 export const DashboardContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: flex-start;
+  display: grid;
+  grid-template-columns: 1fr auto;
   gap: 16px;
+  justify-content: center;
+  align-items: stretch;
 `;
 
 export const DashboardInfoContainer = styled.div`
+  max-width: 136px;
+
   display: flex;
   flex-direction: column;
   justify-content: flex-start;

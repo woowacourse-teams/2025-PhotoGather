@@ -2,6 +2,7 @@ import { ReactComponent as EditIcon } from '@assets/icons/edit.svg';
 import { useNavigate } from 'react-router-dom';
 import ComingSoonBox from '../../../components/comingSoonBox/ComingSoonBox';
 import DashboardBox from '../../../components/dashboardBox/DashboardBox';
+import DonutGraph from '../../../components/donutGraph/DonutGraph';
 import { ROUTES } from '../../../constants/routes';
 import useSpaceCodeFromPath from '../../../hooks/useSpaceCodeFromPath';
 import useSpaceInfo from '../../../hooks/useSpaceInfo';
@@ -23,13 +24,9 @@ const DashboardPage = () => {
     <S.Wrapper>
       <S.Title>스페이스 관리</S.Title>
       <S.DashboardContainer>
-        <DashboardBox
-          title="스페이스 용량"
-          description="23.45MB / 100MB"
-          style={{
-            height: '160px',
-          }}
-        />
+        <DashboardBox title="스페이스 용량" description="23.45MB / 100MB">
+          <DonutGraph value={23.45} maxValue={100} width={80} height={80} />
+        </DashboardBox>
         <S.DashboardInfoContainer>
           <DashboardBox
             title="참여한 게스트"
