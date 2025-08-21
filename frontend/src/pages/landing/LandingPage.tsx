@@ -8,15 +8,12 @@ import { ReactComponent as MockupThree } from '@assets/images/mockup_3.svg';
 import { ReactComponent as MockupFour } from '@assets/images/mockup_4.svg';
 import { ReactComponent as Logo } from '@assets/logo.svg';
 import { useEffect, useMemo, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
 import Button from '../../components/@common/buttons/button/Button';
 import FloatingActionButton from '../../components/@common/buttons/floatingActionButton/FloatingActionButton';
 import IconLabelButton from '../../components/@common/buttons/iconLabelButton/IconLabelButton';
 import Footer from '../../components/footer/Footer';
 import KakaoLoginButton from '../../components/kakaoLoginButton/KakaoLoginButton';
 import LeftTimeInformationBox from '../../components/leftTimeInformationBox/LeftTimeInformationBox';
-import { ROUTES } from '../../constants/routes';
-import useAuthConditionTasks from '../../hooks/@common/useAuthConditionTasks';
 import useLandingScroll from '../../hooks/@common/useLandingScroll';
 import useLeftTimer from '../../hooks/@common/useLeftTimer';
 import useKakaoAuth from '../../hooks/domain/useKakaoAuth';
@@ -28,7 +25,6 @@ import { track } from '../../utils/googleAnalytics/track';
 import * as S from './LandingPage.styles';
 
 const LandingPage = () => {
-  const navigate = useNavigate();
   const mockDate = useMemo(() => {
     const today = new Date();
     const targetDate = new Date(today);
@@ -40,8 +36,6 @@ const LandingPage = () => {
   const { date, time } = formatDate(mockDate.toISOString());
   const mockupRef = useRef<HTMLDivElement>(null);
   const { handleKakaoLogin, handleLogout } = useKakaoAuth();
-
-  useAuthConditionTasks({ taskWhenAuth: () => navigate(ROUTES.MYPAGE) });
 
   useEffect(() => {
     const target = mockupRef.current;
