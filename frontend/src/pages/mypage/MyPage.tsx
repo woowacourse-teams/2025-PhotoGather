@@ -1,16 +1,43 @@
-import { useState } from 'react';
+import defaultImage from '@assets/images/img_default.png';
+import { useEffect, useState } from 'react';
+import { authService } from '../../apis/services/auth.service';
+import { spaceService } from '../../apis/services/space.service';
 import HighlightText from '../../components/@common/highlightText/HighlightText';
 import Profile from '../../components/profile/Profile';
 import SpaceCard from '../../components/spaceCard/SpaceCard';
-import { profileImage } from '../logout/LogoutPage';
+import type { MyInfo } from '../../types/api.type';
+import type { MySpace } from '../../types/space.type';
 import * as S from './MyPage.styles';
 
 type FilterType = 'all' | 'open' | 'closed' | 'upcoming';
 
 const MyPage = () => {
   const [activeFilter, setActiveFilter] = useState<FilterType>('all');
+  const [mySpaces, setMySpaces] = useState<MySpace[]>([]);
+  const [myInfo, setMyInfo] = useState<MyInfo | null>(null);
 
-  // TODO : API에서 데이터 받아오기
+  useEffect(() => {
+    const fetchMySpaces = async () => {
+      const response = await spaceService.getMySpaces();
+      setMySpaces(response.data ?? []);
+    };
+    const fetchAuthStatus = async () => {
+      const response = await authService.status();
+      setMyInfo(response.data ?? null);
+    };
+    fetchAuthStatus();
+    fetchMySpaces();
+  }, []);
+
+  const matchSpaceCardVariant = (space: MySpace) => {
+    const now = new Date();
+    const openedAt = new Date(space.openedAt);
+
+    if (space.isExpired) return 'expired';
+    if (now >= openedAt) return 'default';
+    return 'early';
+  };
+
   const filterCounts = {
     all: 16,
     open: 8,
@@ -27,7 +54,10 @@ const MyPage = () => {
 
   return (
     <S.Wrapper>
-      <Profile profileImage={profileImage} name={'이름'} />
+      <Profile
+        profileImage={myInfo?.pictureUrl ?? defaultImage}
+        name={myInfo?.name ?? '이름'}
+      />
       <S.CreateSpaceButton>
         <HighlightText
           text="＋ 스페이스 생성"
@@ -54,14 +84,17 @@ const MyPage = () => {
             </S.TabContainer>
           </S.FilterContainer>
 
-          <SpaceCard
-            name="강릉 여행"
-            validHours={2022}
-            openedAt="2002"
-            guestCount={11}
-            photoCount={23}
-            variant="expired"
-          />
+          {mySpaces.map((space) => (
+            <SpaceCard
+              key={space.id}
+              name={space.name}
+              validHours={2022}
+              openedAt={space.openedAt}
+              guestCount={space.guestCount}
+              photoCount={space.photoCount}
+              variant={matchSpaceCardVariant(space)}
+            />
+          ))}
         </S.SpaceList>
       </S.SpaceContainer>
     </S.Wrapper>

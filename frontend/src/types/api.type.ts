@@ -51,3 +51,9 @@ export interface UploadedPhotos {
   originalName: string;
   capturedAt: string | null;
 }
+
+export interface MyInfo {
+  id: number;
+  name: string;
+  pictureUrl: string;
+}
