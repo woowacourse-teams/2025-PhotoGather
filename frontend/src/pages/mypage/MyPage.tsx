@@ -2,6 +2,7 @@ import defaultProfile from '@assets/images/default_profile.png';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { authService } from '../../apis/services/auth.service';
+import { photoService } from '../../apis/services/photo.service';
 import { spaceService } from '../../apis/services/space.service';
 import HighlightText from '../../components/@common/highlightText/HighlightText';
 import Profile from '../../components/profile/Profile';
@@ -10,6 +11,8 @@ import { ROUTES } from '../../constants/routes';
 import useAuthConditionTasks from '../../hooks/@common/useAuthConditionTasks';
 import type { MyInfo } from '../../types/api.type';
 import type { MySpace } from '../../types/space.type';
+import { buildThumbnailUrl } from '../../utils/buildImageUrl';
+import { parsedImagePath } from '../../utils/parsedImagePath';
 import * as S from './MyPage.styles';
 
 type FilterType = 'all' | 'open' | 'closed' | 'upcoming';
@@ -22,9 +25,38 @@ const MyPage = () => {
   const isSpacesEmpty = mySpaces.length === 0;
   const navigate = useNavigate();
   useAuthConditionTasks({ taskWhenNoAuth: () => navigate(ROUTES.MAIN) });
-  // const { leftTime } = useLeftTimer({
-  //   targetTime: mySpaces.openedAt ?? '',
-  // });
+
+  // TODO : 임시 썸네일 -> 추후 api에서 내려주도록 수정 요청
+  const [thumbnails, setThumbnails] = useState<Record<string, string>>({});
+
+  useEffect(() => {
+    if (mySpaces.length === 0) return;
+
+    const fetchThumbnails = async () => {
+      const results: Record<string, string> = {};
+
+      await Promise.all(
+        mySpaces.map(async (space) => {
+          const res = await photoService.getBySpaceCode(space.spaceCode, {
+            page: 1,
+            size: 1,
+          });
+          const photo = res?.data?.photos?.[0];
+          if (!photo) return;
+          results[space.spaceCode] = buildThumbnailUrl(
+            space.spaceCode,
+            parsedImagePath(photo?.path),
+            'x800',
+          );
+        }),
+      );
+
+      setThumbnails(results);
+    };
+
+    fetchThumbnails();
+  }, [mySpaces]);
+  // <--- 여기까지 임시 썸네일 로직
 
   // TODO : 로딩시 스켈레톤 제작
   useEffect(() => {
@@ -134,18 +166,21 @@ const MyPage = () => {
             </S.TabContainer>
           </S.FilterContainer>
 
-          {matchingFilterFunc[activeFilter]().map((space) => (
-            <SpaceCard
-              key={space.id}
-              name={space.name}
-              openedAt={space.openedAt}
-              expiredAt={space.expiredAt}
-              guestCount={space.guestCount}
-              photoCount={space.photoCount}
-              variant={matchSpaceCardVariant(space)}
-              route={ROUTES.MANAGER.SPACE_HOME(String(space.spaceCode))}
-            />
-          ))}
+          {matchingFilterFunc[activeFilter]().map((space) => {
+            return (
+              <SpaceCard
+                key={space.id}
+                name={space.name}
+                thumbnail={thumbnails[space.spaceCode]}
+                openedAt={space.openedAt}
+                expiredAt={space.expiredAt}
+                guestCount={space.guestCount}
+                photoCount={space.photoCount}
+                variant={matchSpaceCardVariant(space)}
+                route={ROUTES.MANAGER.SPACE_HOME(String(space.spaceCode))}
+              />
+            );
+          })}
         </S.SpaceList>
       </S.SpaceContainer>
     </S.Wrapper>
