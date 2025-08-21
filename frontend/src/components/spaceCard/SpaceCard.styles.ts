@@ -123,7 +123,7 @@ export const CardTitle = styled.h3`
 `;
 
 export const CardDuration = styled.p`
-  color: ${({ theme }) => theme.colors.gray04};
+  color: ${({ theme }) => theme.colors.gray03};
   font: ${({ theme }) => theme.typography.captionSmall};
 `;
 

@@ -47,7 +47,7 @@ const SpaceCard = ({
         </S.ImageContainer>
         <S.ContentContainer>
           <S.CardTitle>{name}</S.CardTitle>
-          <S.CardDuration>{formatExpiredDate(expiredAt)}</S.CardDuration>
+          <S.CardDuration>{formatExpiredDate(expiredAt ?? '')}</S.CardDuration>
           <S.InfoContainer>
             <S.InfoItem>
               <GroupIcon />
@@ -94,7 +94,7 @@ const SpaceCard = ({
       </S.ImageContainer>
       <S.ContentContainer>
         <S.CardTitle>{name}</S.CardTitle>
-        <S.CardDuration>{formatExpiredDate(expiredAt)}</S.CardDuration>
+        <S.CardDuration>{formatExpiredDate(expiredAt ?? '')}</S.CardDuration>
         <S.InfoContainer>
           <S.InfoItem>
             <GroupIcon />
