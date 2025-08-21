@@ -19,6 +19,7 @@ const MyPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [mySpaces, setMySpaces] = useState<MySpace[]>([]);
   const [myInfo, setMyInfo] = useState<MyInfo | null>(null);
+  const isSpacesEmpty = mySpaces.length === 0;
   const navigate = useNavigate();
   useAuthConditionTasks({ taskWhenNoAuth: () => navigate(ROUTES.MAIN) });
   // const { leftTime } = useLeftTimer({
@@ -103,6 +104,17 @@ const MyPage = () => {
       </S.CreateSpaceButton>
       <S.SpaceContainer>
         <S.SpaceList>
+          {isSpacesEmpty && <S.FilterBlur />}
+          {isSpacesEmpty && (
+            <S.EmptyTextContainer>
+              <S.EmptyTitleContainer>
+                생성된 스페이스가 없어요
+              </S.EmptyTitleContainer>
+              <S.EmptyDescriptionContainer>
+                스페이스를 생성해주세요
+              </S.EmptyDescriptionContainer>
+            </S.EmptyTextContainer>
+          )}
           <S.FilterContainer>
             <S.TotalCount>
               총 {matchingFilterFunc[activeFilter]().length}개

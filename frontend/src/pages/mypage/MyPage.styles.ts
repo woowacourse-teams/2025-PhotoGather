@@ -36,6 +36,7 @@ export const SpaceContainer = styled.div`
   margin-top: 24px;
   margin-bottom: -32px;
   padding: 0 16px;
+  position: relative;
 `;
 
 export const SpaceList = styled.div`
@@ -44,6 +45,18 @@ export const SpaceList = styled.div`
   flex-direction: column;
   gap: 12px;
   margin-top: 26px;
+`;
+
+export const FilterBlur = styled.div`
+  background: ${({ theme }) => hexToRgba(theme.colors.white, 0.7)};
+  border-radius: 20px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 60px;
+  /* backdrop-filter: blur(8px); */
+  z-index: 1;
 `;
 
 export const FilterContainer = styled.div`
@@ -89,4 +102,24 @@ export const TabButton = styled.button<{ isActive: boolean }>`
       background-color: #f3f4f6;
     }
   `}
+`;
+
+export const EmptyTextContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  position: absolute;
+  top: 30%;
+  align-items: center;
+  align-self: center;
+`;
+
+export const EmptyTitleContainer = styled.p`
+  font: ${({ theme }) => theme.typography.header02};
+  color: ${({ theme }) => theme.colors.gray06};
+`;
+
+export const EmptyDescriptionContainer = styled.p`
+  font: ${({ theme }) => theme.typography.bodyRegular};
+  color: ${({ theme }) => theme.colors.gray03};
 `;
