@@ -56,4 +56,5 @@ export interface MyInfo {
   id: number;
   name: string;
   pictureUrl: string;
+  agreedTerms: boolean;
 }

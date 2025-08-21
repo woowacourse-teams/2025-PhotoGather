@@ -15,4 +15,6 @@ export const authService = {
   refresh: () => http.post('/auth/refresh'),
 
   status: () => authHttp.get<MyInfo>('/auth/me'),
+
+  agreeTerm: () => authHttp.post('/auth/terms'),
 };
