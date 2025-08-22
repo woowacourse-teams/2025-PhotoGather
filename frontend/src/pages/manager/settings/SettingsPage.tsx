@@ -15,13 +15,14 @@ import useGraphemeInput from '../../../hooks/@common/useGraphemeInput';
 import { useToast } from '../../../hooks/@common/useToast';
 import useSpaceCodeFromPath from '../../../hooks/useSpaceCodeFromPath';
 import useSpaceInfo from '../../../hooks/useSpaceInfo';
+import type { SpaceCreateInfo } from '../../../types/space.type';
 import { track } from '../../../utils/googleAnalytics/track';
 import { parseIsoStringFromDateTime } from '../../../utils/parseIsoStringFromDateTime';
 import * as S from './SettingsPage.styles';
 
 const SettingsPage = () => {
   const { spaceCode } = useSpaceCodeFromPath();
-  const { spaceInfo } = useSpaceInfo(spaceCode || '');
+  const { spaceInfo, refetchSpaceInfo } = useSpaceInfo(spaceCode || '');
   const { tryFetch } = useError();
   const overlay = useOverlay();
   const navigate = useNavigate();
@@ -42,6 +43,7 @@ const SettingsPage = () => {
 
   const { handleChange, validValue, validLength } = useGraphemeInput({
     initialValue: spaceName,
+    onChange: (e) => setSpaceName(e.target.value),
   });
 
   useEffect(() => {
@@ -65,7 +67,7 @@ const SettingsPage = () => {
     const originalTime = openedAtDate.toTimeString().slice(0, 5);
 
     return (
-      spaceName !== spaceInfo.name ||
+      validValue !== spaceInfo.name ||
       date !== originalDate ||
       time !== originalTime
     );
@@ -74,27 +76,35 @@ const SettingsPage = () => {
   const handleUpdateSpaceInfo = async () => {
     if (!spaceCode || !spaceInfo) return;
 
-    const openedAt = parseIsoStringFromDateTime(date, time);
+    const updateData: Partial<SpaceCreateInfo> = { password: '' };
 
-    const openedDate = new Date(spaceInfo.openedAt);
-    const expiredDate = new Date(spaceInfo.expiredAt);
-    const validHours = Math.round(
-      (expiredDate.getTime() - openedDate.getTime()) / (1000 * 60 * 60),
-    );
+    if (validValue !== spaceInfo.name) {
+      updateData.name = validValue;
+    }
+
+    if (!isDateTimeDisabled()) {
+      const openedAtDate = new Date(spaceInfo.openedAt);
+      const originalDate = openedAtDate.toISOString().split('T')[0];
+      const originalTime = openedAtDate.toTimeString().slice(0, 5);
+
+      if (date !== originalDate || time !== originalTime) {
+        updateData.openedAt = parseIsoStringFromDateTime(date, time);
+
+        const newOpenedDate = new Date(updateData.openedAt);
+        const expiredDate = new Date(spaceInfo.expiredAt);
+        const newValidHours = Math.round(
+          (expiredDate.getTime() - newOpenedDate.getTime()) / (1000 * 60 * 60),
+        );
+        updateData.validHours = newValidHours > 0 ? newValidHours : 72;
+      }
+    }
 
     const result = await tryFetch({
-      task: () =>
-        spaceService.update(spaceCode, {
-          name: spaceName,
-          validHours: validHours || 72,
-          openedAt: openedAt,
-          password: '',
-        }),
+      task: () => spaceService.update(spaceCode, updateData),
       errorActions: ['toast'],
       context: {
         toast: {
           text: '스페이스 정보 수정에 실패했어요.',
-          position: 'top',
         },
       },
     });
@@ -108,10 +118,10 @@ const SettingsPage = () => {
 
       showToast({
         text: '스페이스 정보가 수정되었어요.',
-        position: 'top',
+        type: 'info',
       });
 
-      window.location.reload();
+      await refetchSpaceInfo();
     }
   };
 
@@ -139,7 +149,6 @@ const SettingsPage = () => {
       context: {
         toast: {
           text: '스페이스 삭제에 실패했어요.',
-          position: 'top',
         },
       },
     });
@@ -153,7 +162,7 @@ const SettingsPage = () => {
 
       showToast({
         text: '스페이스가 성공적으로 삭제됐어요.',
-        position: 'top',
+        type: 'info',
       });
 
       navigate(ROUTES.MAIN);

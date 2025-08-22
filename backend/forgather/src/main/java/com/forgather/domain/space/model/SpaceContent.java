@@ -44,15 +44,16 @@ public abstract class SpaceContent {
     }
 
     @Override
-    public boolean equals(Object object) {
-        if (object == null || getClass() != object.getClass())
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (!(o instanceof SpaceContent that))
             return false;
-        SpaceContent that = (SpaceContent)object;
         return Objects.equals(id, that.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(id);
+        return Objects.hash(getId());
     }
 }
