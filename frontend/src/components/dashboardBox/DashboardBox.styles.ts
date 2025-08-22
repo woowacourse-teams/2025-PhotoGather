@@ -14,13 +14,14 @@ export const Wrapper = styled.div`
   gap: 12px;
   background-color: ${theme.colors.grayBackground};
   border-radius: 12px;
-  font: ${theme.typography.bodyLarge};
+  ${({ theme }) => ({ ...theme.typography.header03 })};
 `;
 
 export const Title = styled.h2`
-  color: ${theme.colors.gray06};
+  color: ${({ theme }) => theme.colors.gray06};
 `;
 
 export const Description = styled.h2`
   color: ${({ theme }) => theme.colors.primary60};
+  font: ${({ theme }) => theme.typography.bodyLarge};
 `;

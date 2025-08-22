@@ -188,7 +188,8 @@ public class PhotoService {
         Photo photo = photoRepository.getById(photoId);
         photo.validateSpace(space);
 
-        photoRepository.delete(photo);
+        // photoRepository.delete(photo);
+        space.getContents().remove(photo); // orphanRemoval이 설정되어 있어 자동으로 삭제됨
         contentsStorage.deleteContent(photo.getPath());
     }
 
@@ -202,7 +203,8 @@ public class PhotoService {
             .map(Photo::getPath)
             .toList();
 
-        photoRepository.deleteAll(photos);
+        // photoRepository.deleteAll(photos);
+        space.getContents().removeAll(photos); // // orphanRemoval이 설정되어 있어 자동으로 삭제됨
         contentsStorage.deleteSelectedContents(paths);
     }
 }

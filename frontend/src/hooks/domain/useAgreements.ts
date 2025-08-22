@@ -7,10 +7,14 @@ const useAgreements = () => {
   const { tryFetch } = useError();
   const [myInfo, setMyInfo] = useState<MyInfo | null>(null);
 
+  const [loadingAgreements, setLoadingAgreements] = useState(true);
+
   useEffect(() => {
     const fetchAuthStatus = async () => {
+      setLoadingAgreements(true);
       const response = await authService.status();
       setMyInfo(response.data ?? null);
+      setLoadingAgreements(false);
     };
     fetchAuthStatus();
   }, []);
@@ -24,7 +28,7 @@ const useAgreements = () => {
     });
   };
 
-  return { isAgree: myInfo?.agreedTerms ?? false, handleAgree };
+  return { isAgree: myInfo?.agreedTerms, handleAgree, loadingAgreements };
 };
 
 export default useAgreements;
