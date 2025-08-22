@@ -6,7 +6,6 @@ import UploadCompletePage from '../pages/complete/UploadCompletePage';
 import SpaceCreateFunnel from '../pages/create/funnel/SpaceCreateFunnel';
 import NetworkErrorPage from '../pages/error/NetworkErrorPage';
 import NotFoundErrorPage from '../pages/error/NotFoundErrorPage';
-import OpenBrowserPage from '../pages/error/OpenBrowser';
 import ImageUploadPage from '../pages/guest/imageUploadPage/ImageUploadPage';
 import SharePage from '../pages/guest/sharePage/SharePage';
 import LandingPage from '../pages/landing/LandingPage';
@@ -88,7 +87,7 @@ const routes: AppRouteObject[] = [
         handle: {
           starField: true,
           highlight: true,
-          kakaoBrowserAllow: true,
+          isInAppBrowserAllow: true,
         },
       },
       {
@@ -118,7 +117,7 @@ const routes: AppRouteObject[] = [
             path: 'upload',
             element: <UploadCompletePage />,
             handle: {
-              kakaoBrowserAllow: true,
+              isInAppBrowserAllow: true,
             },
           },
           {
@@ -156,10 +155,6 @@ const routes: AppRouteObject[] = [
       {
         path: 'network-error',
         element: <NetworkErrorPage />,
-      },
-      {
-        path: 'open-browser',
-        element: <OpenBrowserPage />,
       },
       {
         path: '*',
