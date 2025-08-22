@@ -6,7 +6,6 @@ export const Wrapper = styled.div`
   align-items: center;
   gap: 20px;
   padding: 32px 32px;
-  min-width: 320px;
   width: 100%;
   border-radius: 12px;
   background: ${({ theme }) => theme.colors.white};

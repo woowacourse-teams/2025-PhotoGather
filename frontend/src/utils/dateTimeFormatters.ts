@@ -1,4 +1,5 @@
 import type { Timer } from '../types/timer.type';
+import { formatDate } from './formatDate';
 
 export const padZero = (num: number) => String(num).padStart(2, '0');
 
@@ -15,15 +16,10 @@ export const formatRemainingHours = (hours: number): string => {
   return `${padZero(hour)}:${padZero(minute)}:${padZero(second)} 남음`;
 };
 
-export const formatExpiredDate = (dateString?: string): string => {
-  if (!dateString) return '만료';
+export const formatExpiredDate = (expiredAt: string): string => {
+  if (!expiredAt) return '만료';
 
-  const date = new Date(dateString);
-  const year = date.getFullYear();
-  const month = padZero(date.getMonth() + 1);
-  const day = padZero(date.getDate());
-
-  return `${year}/${month}/${day} 만료`;
+  return `만료 | ${formatDate(expiredAt, 'short').date} ${formatDate(expiredAt, 'short').time}`;
 };
 
 export const calculateTimeDifference = (

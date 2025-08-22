@@ -21,8 +21,7 @@ const useWebShareAPI = () => {
         validateCanShareFile(files);
         await navigator.share({ title, text, url, files });
       },
-      errorActions: ['toast'],
-      context: { toast: { text: '공유가 취소되었어요.' } },
+      errorActions: ['console'],
     });
   };
 

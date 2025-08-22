@@ -43,24 +43,20 @@ const AgreementElement = ({
       description={INFORMATION.AGREEMENT.DESCRIPTION}
       element={
         <S.Wrapper>
-          <S.AllAgreeRow>
+          <S.AllAgreeRow onClick={toggleAll}>
             <S.AllAgreeIcon
               fill={isAllChecked ? theme.colors.primary : theme.colors.gray03}
-              onClick={toggleAll}
-              type="button"
             />
-            <S.AllAgreeText>전체 동의</S.AllAgreeText>
+            <S.AllAgreeText $canClick={true}>전체 동의</S.AllAgreeText>
           </S.AllAgreeRow>
           <S.AgreeRow>
-            <S.AgreeCheckContainer>
+            <S.AgreeCheckContainer onClick={() => toggleAt(0)}>
               <S.AgreeCheckIcon
                 fill={
                   agreedToService ? theme.colors.primary : theme.colors.gray03
                 }
-                onClick={() => toggleAt(0)}
-                type="button"
               />
-              <S.AgreeText $showDetail={false}>
+              <S.AgreeText $showDetail={false} $canClick={true}>
                 서비스 이용약관 동의
               </S.AgreeText>
             </S.AgreeCheckContainer>
@@ -74,15 +70,13 @@ const AgreementElement = ({
             </S.AgreeText>
           </S.AgreeRow>
           <S.AgreeRow>
-            <S.AgreeCheckContainer>
+            <S.AgreeCheckContainer onClick={() => toggleAt(1)}>
               <S.AgreeCheckIcon
                 fill={
                   agreedToPrivacy ? theme.colors.primary : theme.colors.gray03
                 }
-                onClick={() => toggleAt(1)}
-                type="button"
               />
-              <S.AgreeText $showDetail={false}>
+              <S.AgreeText $showDetail={false} $canClick={true}>
                 개인정보 수집 및 이용 동의
               </S.AgreeText>
             </S.AgreeCheckContainer>

@@ -4,7 +4,7 @@ export const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 200px;
+  gap: 250px;
   padding: 120px 0;
 `;
 
@@ -35,29 +35,15 @@ export const SectionContainer = styled.section`
   gap: 28px;
 `;
 
-export const MockupScrollContainer = styled.section`
-  width: calc(
-    ${({ theme }) => theme.layout.width} - ${({ theme }) => theme.layout.padding.leftRight}
-  );
+export const LoginSection = styled.section`
   display: flex;
-  gap: 16px;
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-  &::-webkit-scrollbar {
-    display: none;
-  }
+  flex-direction: column;
+  align-items: center;
+  gap: 40px;
 `;
 
-export const MockupItem = styled.div`
-  flex: 0 0 auto;
-
-  &:first-of-type {
-    margin-left: 30px;
-  }
-
-  &:last-of-type {
-    margin-right: 30px;
-  }
+export const TopContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 125px;
 `;

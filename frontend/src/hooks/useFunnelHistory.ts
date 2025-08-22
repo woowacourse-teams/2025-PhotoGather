@@ -1,36 +1,18 @@
-import { useCallback, useEffect, useRef } from 'react';
+import { useCallback, useEffect } from 'react';
 
 const useFunnelHistory = <TStep extends string>(
   step: TStep,
   setStep: (step: TStep) => void,
 ) => {
-  const isInitialized = useRef(false);
-
-  const setupHistory = useCallback(() => {
-    if (isInitialized.current) return;
-
+  useEffect(() => {
     const currentState = {
       funnelStep: step,
     };
-
-    const currentHistoryState = window.history.state;
-
-    if (currentHistoryState && currentHistoryState.funnelStep === step) {
-      window.history.replaceState(currentState, '', window.location.href);
-    } else {
-      window.history.pushState(currentState, '', window.location.href);
-    }
-
-    isInitialized.current = true;
-  }, [step]);
-
-  useEffect(() => {
-    setupHistory();
+    window.history.replaceState(currentState, '', window.location.href);
 
     const handlePopState = (event: PopStateEvent) => {
       const state = event.state;
-
-      if (state.funnelStep && state.funnelStep !== step) {
+      if (state?.funnelStep && state.funnelStep !== step) {
         setStep(state.funnelStep);
       }
     };
@@ -40,7 +22,7 @@ const useFunnelHistory = <TStep extends string>(
     return () => {
       window.removeEventListener('popstate', handlePopState);
     };
-  }, [step, setStep, setupHistory]);
+  }, [step, setStep]);
 
   const navigateToNext = useCallback((nextStepId: string) => {
     const nextState = {

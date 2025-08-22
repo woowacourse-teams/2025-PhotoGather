@@ -30,7 +30,8 @@ const useDownload = ({
 
     const link = document.createElement('a');
     link.href = objectUrl;
-    link.download = `${fileName}`;
+    const safeFileName = fileName.replace(/[/\\:*?"<>|]/g, '_');
+    link.download = `${safeFileName}`;
 
     document.body.appendChild(link);
     link.click();
@@ -40,45 +41,44 @@ const useDownload = ({
   };
 
   const downloadAsZip = async (downloadInfos: DownloadInfo[]) => {
-    const files = await Promise.allSettled(
-      downloadInfos.map(async (downloadInfo) => {
-        const response = await fetch(downloadInfo.url);
-        if (!response.ok) {
-          throw new Error(`다운로드 실패: ${downloadInfo.originalName}`);
-        }
-        const blob = await response.blob();
-        setCurrentProgress((prev) => prev + 1);
+    const CHUNK_SIZE = 5;
+    const files: {
+      name: string;
+      input: Blob;
+      lastModified: Date;
+    }[] = [];
 
-        return {
-          name: downloadInfo.originalName,
-          input: blob,
-          lastModified: new Date(),
-        };
-      }),
-    );
+    for (let i = 0; i < downloadInfos.length; i += CHUNK_SIZE) {
+      const batch = downloadInfos.slice(i, i + CHUNK_SIZE);
+      console.log(batch);
 
-    const failed = files.find((r) => r.status === 'rejected');
-    if (failed) {
-      throw new Error('다운로드가 실패했습니다.');
+      const results = await Promise.allSettled(
+        batch.map(async (downloadInfo) => {
+          const response = await fetch(downloadInfo.url);
+          if (!response.ok) {
+            throw new Error(`다운로드 실패: ${downloadInfo.originalName}`);
+          }
+          const blob = await response.blob();
+          setCurrentProgress((prev) => prev + 1);
+
+          return {
+            name: downloadInfo.originalName,
+            input: blob,
+            lastModified: new Date(),
+          };
+        }),
+      );
+
+      if (results.some((r) => r.status === 'rejected')) {
+        throw new Error('다운로드가 실패했습니다. 다시 시도해 주세요.');
+      }
     }
 
-    const validFiles = files.map(
-      (r) =>
-        (
-          r as PromiseFulfilledResult<{
-            name: string;
-            input: Blob;
-            lastModified: Date;
-          }>
-        ).value,
-    );
-    const zipBlob = await downloadZip(validFiles).blob();
-
+    const zipBlob = await downloadZip(files).blob();
     const link = document.createElement('a');
     link.href = URL.createObjectURL(zipBlob);
     link.download = `${spaceName}.zip`;
     link.click();
-
     URL.revokeObjectURL(link.href);
   };
 
@@ -109,11 +109,14 @@ const useDownload = ({
         setTotalProgress(downloadUrls.length);
         await downloadAsZip(downloadUrls);
       },
-      errorActions: ['toast'],
+      errorActions: ['toast', 'afterAction'],
       context: {
         toast: {
           text: '다운로드에 실패했습니다. 다시 시도해 주세요.',
           type: 'error',
+        },
+        afterAction: {
+          action: () => setIsDownloading(false),
         },
       },
     });
@@ -134,11 +137,14 @@ const useDownload = ({
           downloadUrls[0].originalName,
         );
       },
-      errorActions: ['toast', 'console'],
+      errorActions: ['toast', 'afterAction'],
       context: {
         toast: {
           text: '다운로드에 실패했습니다. 다시 시도해 주세요.',
           type: 'error',
+        },
+        afterAction: {
+          action: () => setIsDownloading(false),
         },
       },
     });
@@ -159,11 +165,14 @@ const useDownload = ({
 
         onDownloadSuccess?.();
       },
-      errorActions: ['toast', 'console'],
+      errorActions: ['toast', 'afterAction'],
       context: {
         toast: {
           text: '다운로드에 실패했습니다. 다시 시도해 주세요.',
           type: 'error',
+        },
+        afterAction: {
+          action: () => setIsDownloading(false),
         },
       },
     });

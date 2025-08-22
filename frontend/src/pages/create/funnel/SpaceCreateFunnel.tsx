@@ -1,10 +1,11 @@
 import diamondImage from '@assets/images/diamond.png';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import StepProgressBar from '../../../components/progressBar/step/StepProgressBar';
 import { ROUTES } from '../../../constants/routes';
 import useAuthConditionTasks from '../../../hooks/@common/useAuthConditionTasks';
 import useConfirmBeforeRefresh from '../../../hooks/@common/useConfirmBeforeRefresh';
+import useAgreements from '../../../hooks/domain/useAgreements';
 import useFunnelHistory from '../../../hooks/useFunnelHistory';
 import type { SpaceFunnelInfo } from '../../../types/space.type';
 import AgreementElement from '../funnelElements/agreementElement/AgreementElement';
@@ -15,22 +16,24 @@ import * as S from './SpaceCreateFunnel.styles';
 
 type STEP = 'agreement' | 'name' | 'date' | 'check';
 
-const needsAgreement = true; //TODO: 추후 서버에서 받아온 값으로 교체해주어야 함
-
-const PROGRESS_STEP_LIST: STEP[] = needsAgreement
-  ? ['agreement', 'name', 'date', 'check']
-  : ['name', 'date', 'check'];
 const initialFunnelValue: SpaceFunnelInfo = {
   name: '',
   date: '',
   time: '',
   isImmediateOpen: null,
-  agreements: null, //TODO: null인 경우 첫번째 생성 X
+  agreements: null,
 };
 
 const SpaceCreateFunnel = () => {
   useConfirmBeforeRefresh();
-  const [step, setStep] = useState<STEP>(needsAgreement ? 'agreement' : 'name');
+  const { handleAgree, isAgree, loadingAgreements } = useAgreements();
+  const needsAgreement = !isAgree;
+  const PROGRESS_STEP_LIST: STEP[] = ['name', 'date', 'check'];
+  const [step, setStep] = useState<STEP>('name');
+  useEffect(() => {
+    if (!loadingAgreements && needsAgreement) setStep('agreement');
+  }, [needsAgreement, loadingAgreements]);
+
   const [spaceInfo, setSpaceInfo] =
     useState<SpaceFunnelInfo>(initialFunnelValue);
   const { navigateToNext } = useFunnelHistory<STEP>(step, setStep);
@@ -58,23 +61,6 @@ const SpaceCreateFunnel = () => {
         </S.IconContainer>
       </S.TopContainer>
       <S.ContentContainer>
-        {step === 'agreement' && (
-          <AgreementElement
-            value={
-              spaceInfo.agreements ?? {
-                agreedToService: false,
-                agreedToPrivacy: false,
-              }
-            }
-            onChange={(agreements) => {
-              setSpaceInfo((prev) => ({ ...prev, agreements }));
-            }}
-            onNext={(agreement) => {
-              setSpaceInfo((prev) => ({ ...prev, agreement }));
-              goNextStep('name');
-            }}
-          />
-        )}
         {step === 'name' && (
           <NameInputElement
             onNext={(name) => {
@@ -87,7 +73,7 @@ const SpaceCreateFunnel = () => {
         {step === 'date' && (
           <ImmediateOpenElement
             onNext={({ date, time, isImmediateOpen }) => {
-              goNextStep('check');
+              goNextStep(needsAgreement ? 'agreement' : 'check');
               setSpaceInfo((prev) => ({
                 ...prev,
                 date,
@@ -102,11 +88,29 @@ const SpaceCreateFunnel = () => {
             }}
           />
         )}
+        {step === 'agreement' && (
+          <AgreementElement
+            value={
+              spaceInfo.agreements ?? {
+                agreedToService: false,
+                agreedToPrivacy: false,
+              }
+            }
+            onChange={(agreements) => {
+              setSpaceInfo((prev) => ({ ...prev, agreements }));
+            }}
+            onNext={(agreement) => {
+              setSpaceInfo((prev) => ({ ...prev, agreement }));
+              goNextStep('check');
+            }}
+          />
+        )}
         {step === 'check' && (
           <CheckSpaceInfoElement
             spaceInfo={spaceInfo}
             onNext={(isImmediateOpen) => {
               setSpaceInfo((prev) => ({ ...prev, isImmediateOpen }));
+              handleAgree();
             }}
           />
         )}

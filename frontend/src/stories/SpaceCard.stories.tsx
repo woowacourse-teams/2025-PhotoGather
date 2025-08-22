@@ -34,7 +34,6 @@ const getPastDate = (days: number) => {
 export const Default: Story = {
   args: {
     name: '강릉 여행',
-    validHours: 12.5,
     openedAt: new Date().toISOString(),
     guestCount: 12,
     photoCount: 67,
@@ -45,7 +44,6 @@ export const Default: Story = {
 export const Expired: Story = {
   args: {
     name: '부산 출장',
-    validHours: 0,
     openedAt: getPastDate(3),
     expiredAt: getPastDate(1),
     guestCount: 15,
@@ -57,7 +55,6 @@ export const Expired: Story = {
 export const Early: Story = {
   args: {
     name: '속초 여행',
-    validHours: 24,
     openedAt: getFutureDate(2),
     guestCount: 10,
     photoCount: 0,
@@ -68,7 +65,6 @@ export const Early: Story = {
 export const EarlyWithLongWait: Story = {
   args: {
     name: '유럽 배낭여행',
-    validHours: 72,
     openedAt: getFutureDate(48),
     guestCount: 6,
     photoCount: 0,
@@ -79,7 +75,6 @@ export const EarlyWithLongWait: Story = {
 export const EmptySpace: Story = {
   args: {
     name: '새로운 스페이스',
-    validHours: 24,
     openedAt: new Date().toISOString(),
     variant: 'default',
   },

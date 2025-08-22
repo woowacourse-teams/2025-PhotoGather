@@ -1,13 +1,11 @@
 import { ReactComponent as DefaultImageIcon } from '@assets/icons/defaultImage.svg';
 import { ReactComponent as GroupIcon } from '@assets/icons/group.svg';
+import defaultImage from '@assets/images/default_image.png';
 import loadingImage from '@assets/images/loading.png';
 import { useNavigate } from 'react-router-dom';
-import { profileImage } from '../../pages/logout/LogoutPage';
-import {
-  formatExpiredDate,
-  formatRemainingHours,
-  formatTimeUntilOpen,
-} from '../../utils/dateTimeFormatters';
+import { formatExpiredDate } from '../../utils/dateTimeFormatters';
+import { formatDate } from '../../utils/formatDate';
+import HighlightText from '../@common/highlightText/HighlightText';
 import * as S from './SpaceCard.styles';
 
 type SpaceCardVariant = 'default' | 'expired' | 'early';
@@ -15,10 +13,10 @@ type SpaceCardVariant = 'default' | 'expired' | 'early';
 interface SpaceCardProps {
   /** 스페이스 이름 */
   name: string;
-  /** 남은 유효 시간 (시간 단위)*/
-  validHours: number;
+  /** 썸네일 */
+  thumbnail?: string;
   /** 스페이스 오픈 시간 */
-  openedAt: string;
+  openedAt?: string;
   /** 스페이스 만료 시간 */
   expiredAt?: string;
   /** 참여자 수 */
@@ -33,7 +31,7 @@ interface SpaceCardProps {
 
 const SpaceCard = ({
   name,
-  validHours,
+  thumbnail,
   openedAt,
   expiredAt,
   guestCount = 0,
@@ -47,12 +45,12 @@ const SpaceCard = ({
     return (
       <S.Wrapper onClick={() => navigate(route)}>
         <S.ImageContainer $isBlurred>
-          <S.CardImage src={profileImage} alt={name} $isBlurred />
+          <S.CardImage src={defaultImage} alt={name} $isBlurred />
           <S.ImageOverlayText>{`만료된\n스페이스`}</S.ImageOverlayText>
         </S.ImageContainer>
         <S.ContentContainer>
           <S.CardTitle>{name}</S.CardTitle>
-          <S.CardDuration>{formatExpiredDate(expiredAt)}</S.CardDuration>
+          <S.CardDuration>{formatExpiredDate(expiredAt ?? '')}</S.CardDuration>
           <S.InfoContainer>
             <S.InfoItem>
               <GroupIcon />
@@ -75,9 +73,17 @@ const SpaceCard = ({
           <S.CardImage src={loadingImage} alt="로딩 이미지" $isEarly />
           <S.EarlyOverlayContainer>
             <S.EarlyOverlayTitle>{name}</S.EarlyOverlayTitle>
-            <S.EarlyOverlayDate>
-              {formatTimeUntilOpen(openedAt)}
-            </S.EarlyOverlayDate>
+            <HighlightText
+              text={`${openedAt ? `${formatDate(openedAt).date} ${formatDate(openedAt).time}` : ''}\n오픈 예정`}
+              highlightTextArray={[
+                openedAt
+                  ? `${formatDate(openedAt).date} ${formatDate(openedAt).time}`
+                  : '',
+              ]}
+              highlightColorStyle="accent"
+              textColorStyle="white"
+              fontStyle="bodyLarge"
+            />
           </S.EarlyOverlayContainer>
         </S.ImageContainer>
       </S.Wrapper>
@@ -87,11 +93,11 @@ const SpaceCard = ({
   return (
     <S.Wrapper onClick={() => navigate(route)}>
       <S.ImageContainer>
-        <S.CardImage src={profileImage} alt={name} />
+        <S.CardImage src={thumbnail ?? defaultImage} alt={name} />
       </S.ImageContainer>
       <S.ContentContainer>
         <S.CardTitle>{name}</S.CardTitle>
-        <S.CardDuration>{formatRemainingHours(validHours)}</S.CardDuration>
+        <S.CardDuration>{formatExpiredDate(expiredAt ?? '')}</S.CardDuration>
         <S.InfoContainer>
           <S.InfoItem>
             <GroupIcon />

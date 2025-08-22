@@ -1,5 +1,6 @@
 import { type ReactElement, useState } from 'react';
 import { CONSTRAINTS } from '../../../../constants/constraints';
+import useGraphemeInput from '../../../../hooks/@common/useGraphemeInput';
 import type { BaseModalProps } from '../../../../types/modal.type';
 import Button from '../../buttons/button/Button';
 import type HighlightText from '../../highlightText/HighlightText';
@@ -35,16 +36,26 @@ const InputModal = ({
   onSubmit,
   initialValue,
 }: InputModalProps) => {
-  const [value, setValue] = useState(initialValue ?? '');
   const [errorMessage, setErrorMessage] = useState('');
+  const { handleChange, validValue, validLength } = useGraphemeInput({
+    initialValue,
+    onChange: (e) => {
+      setErrorMessage(createErrorMessage(e.target.value));
+    },
+  });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setErrorMessage(createErrorMessage(e.target.value));
-    setValue(e.target.value);
-  };
   const submitInput = () => {
-    onSubmit?.({ value });
+    onSubmit?.({ value: validValue });
   };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      e.currentTarget.blur();
+      submitInput();
+    }
+  };
+
   const isValid = errorMessage.length === 0;
 
   return (
@@ -58,9 +69,11 @@ const InputModal = ({
       <TextInput
         placeholder={placeholder}
         maxCount={CONSTRAINTS.NAME_MAX_LENGTH}
-        value={value}
+        value={validValue}
         onChange={handleChange}
         errorMessage={errorMessage}
+        validLength={validLength}
+        onKeyDown={handleKeyDown}
       />
       <C.ButtonContainer>
         {cancelText && (

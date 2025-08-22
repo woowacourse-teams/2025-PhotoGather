@@ -62,7 +62,7 @@ const SharePage = () => {
           text: INFORMATION.SHARE_LINK_API.CREATE_TEXT(name),
           url: createShareUrl(spaceCode),
         }),
-      errorActions: ['toast'],
+      errorActions: ['console'],
     });
   };
 

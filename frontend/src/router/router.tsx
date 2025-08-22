@@ -11,6 +11,7 @@ import SharePage from '../pages/guest/sharePage/SharePage';
 import LandingPage from '../pages/landing/LandingPage';
 import LoginPage from '../pages/login/LoginPage';
 import LogoutPage from '../pages/logout/LogoutPage';
+import MainPage from '../pages/MainPage';
 import DashboardPage from '../pages/manager/dashboard/DashboardPage';
 import SettingsPage from '../pages/manager/settings/SettingsPage';
 import SpaceHomePage from '../pages/manager/spaceHome/SpaceHomePage';
@@ -27,6 +28,15 @@ const routes: AppRouteObject[] = [
     children: [
       {
         path: '/',
+        element: <MainPage />,
+        handle: {
+          header: true,
+          starField: true,
+          highlight: true,
+        },
+      },
+      {
+        path: '/landing',
         element: <LandingPage />,
         handle: {
           header: true,
@@ -46,52 +56,42 @@ const routes: AppRouteObject[] = [
         element: <SpaceCreateFunnel />,
       },
       {
-        path: 'manager',
-        children: [
-          {
-            path: 'space-home/:spaceCode',
-            element: <SpaceHomePage />,
-            handle: {
-              header: true,
-              starField: true,
-              highlight: true,
-            },
-          },
-          {
-            path: 'space-home/:spaceCode/dashboard',
-            element: <DashboardPage />,
-            handle: {
-              header: true,
-              highlight: true,
-            },
-          },
-          {
-            path: 'space-home/:spaceCode/settings',
-            element: <SettingsPage />,
-            handle: {
-              header: true,
-              highlight: true,
-            },
-          },
-        ],
+        path: 'space/:spaceCode',
+        element: <SpaceHomePage />,
+        handle: {
+          header: true,
+          starField: true,
+          highlight: true,
+        },
+      },
+
+      {
+        path: 'space/:spaceCode/dashboard',
+        element: <DashboardPage />,
+        handle: {
+          header: true,
+          highlight: true,
+        },
       },
       {
-        // TODO : 데모 후 삭제
-        path: 'guest',
-        children: [
-          {
-            path: 'image-upload/:spaceCode',
-            element: <ImageUploadPage />,
-            handle: {
-              starField: true,
-              highlight: true,
-            },
-          },
-          {
-            path: 'share',
-            element: <SharePage />,
-          },
-        ],
+        path: 'space/:spaceCode/settings',
+        element: <SettingsPage />,
+        handle: {
+          header: true,
+          highlight: true,
+        },
+      },
+      {
+        path: 'upload/:spaceCode',
+        element: <ImageUploadPage />,
+        handle: {
+          starField: true,
+          highlight: true,
+        },
+      },
+      {
+        path: 'share',
+        element: <SharePage />,
       },
       {
         path: 'mypage',
@@ -99,7 +99,6 @@ const routes: AppRouteObject[] = [
         handle: {
           header: true,
           highlight: true,
-          headerMode: 'setting',
         },
       },
       {
@@ -108,7 +107,6 @@ const routes: AppRouteObject[] = [
         handle: {
           header: true,
           highlight: true,
-          headerMode: 'none',
         },
       },
       {
