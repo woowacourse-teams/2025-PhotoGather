@@ -25,7 +25,6 @@ const Layout = () => {
   const isHighlightPage = current?.handle?.highlight;
   const isStarFieldPage = current?.handle?.starField;
   const isHeaderExistPage = current?.handle?.header;
-  const isKakaoBrowserAllowPage = current?.handle?.kakaoBrowserAllow;
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: tryFetch를 dependency에 추가하면 무한 루프 발생
   useEffect(() => {
@@ -44,11 +43,6 @@ const Layout = () => {
     };
     fetchAuthStatus();
   }, []);
-
-  useEffect(() => {
-    if (isKakaoBrowserAllowPage) {
-    }
-  }, [isKakaoBrowserAllowPage]);
 
   return (
     <OverlayProvider>
