@@ -45,6 +45,7 @@ export const SpaceList = styled.div`
   flex-direction: column;
   gap: 12px;
   margin-top: 26px;
+  margin-bottom: 24px;
 `;
 
 export const FilterBlur = styled.div`
