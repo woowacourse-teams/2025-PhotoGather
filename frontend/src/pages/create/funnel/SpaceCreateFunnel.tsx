@@ -61,33 +61,6 @@ const SpaceCreateFunnel = () => {
         </S.IconContainer>
       </S.TopContainer>
       <S.ContentContainer>
-        {step === 'name' && (
-          <NameInputElement
-            onNext={(name) => {
-              goNextStep('date');
-              setSpaceInfo((prev) => ({ ...prev, name }));
-            }}
-            initialValue={spaceInfo.name}
-          />
-        )}
-        {step === 'date' && (
-          <ImmediateOpenElement
-            onNext={({ date, time, isImmediateOpen }) => {
-              goNextStep(needsAgreement ? 'agreement' : 'check');
-              setSpaceInfo((prev) => ({
-                ...prev,
-                date,
-                time,
-                isImmediateOpen: isImmediateOpen ?? false,
-              }));
-            }}
-            initialValue={{
-              date: spaceInfo.date,
-              time: spaceInfo.time,
-              isImmediateOpen: spaceInfo.isImmediateOpen,
-            }}
-          />
-        )}
         {step === 'agreement' && (
           <AgreementElement
             value={
@@ -101,7 +74,34 @@ const SpaceCreateFunnel = () => {
             }}
             onNext={(agreement) => {
               setSpaceInfo((prev) => ({ ...prev, agreement }));
+              goNextStep('name');
+            }}
+          />
+        )}
+        {step === 'name' && (
+          <NameInputElement
+            onNext={(name) => {
+              goNextStep('date');
+              setSpaceInfo((prev) => ({ ...prev, name }));
+            }}
+            initialValue={spaceInfo.name}
+          />
+        )}
+        {step === 'date' && (
+          <ImmediateOpenElement
+            onNext={({ date, time, isImmediateOpen }) => {
               goNextStep('check');
+              setSpaceInfo((prev) => ({
+                ...prev,
+                date,
+                time,
+                isImmediateOpen: isImmediateOpen ?? false,
+              }));
+            }}
+            initialValue={{
+              date: spaceInfo.date,
+              time: spaceInfo.time,
+              isImmediateOpen: spaceInfo.isImmediateOpen,
             }}
           />
         )}
