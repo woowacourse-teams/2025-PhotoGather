@@ -26,6 +26,7 @@ export const ROUTES = {
     NETWORK: '/network-error',
     NOT_FOUND: '*',
   },
+  OPEN_BROWSER: '/open-browser',
   DEMO: '/demo',
   POLICY: {
     PRIVACY_POLICY: '/policy/privacy-policy',

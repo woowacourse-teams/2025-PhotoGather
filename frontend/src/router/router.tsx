@@ -87,6 +87,7 @@ const routes: AppRouteObject[] = [
         handle: {
           starField: true,
           highlight: true,
+          kakaoBrowserAllow: true,
         },
       },
       {
@@ -115,6 +116,9 @@ const routes: AppRouteObject[] = [
           {
             path: 'upload',
             element: <UploadCompletePage />,
+            handle: {
+              kakaoBrowserAllow: true,
+            },
           },
           {
             path: 'download',
