@@ -12,7 +12,7 @@ export const ROUTES = {
     SETTING: (spaceCode: string) => `/space/${spaceCode}/settings`,
   },
   GUEST: {
-    IMAGE_UPLOAD: (spaceCode: string) => `/upload/${spaceCode}`,
+    IMAGE_UPLOAD: (spaceCode: string) => `guest/image-upload/${spaceCode}`,
     SHARE: '/share',
   },
   COMPLETE: {
