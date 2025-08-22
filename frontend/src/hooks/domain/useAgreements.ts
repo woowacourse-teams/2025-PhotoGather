@@ -6,6 +6,7 @@ import useError from '../@common/useError';
 const useAgreements = () => {
   const { tryFetch } = useError();
   const [myInfo, setMyInfo] = useState<MyInfo | null>(null);
+
   const [loadingAgreements, setLoadingAgreements] = useState(true);
 
   useEffect(() => {
