@@ -83,7 +83,7 @@ const routes: AppRouteObject[] = [
         },
       },
       {
-        path: 'upload/:spaceCode',
+        path: 'guest/image-upload/:spaceCode',
         element: <ImageUploadPage />,
         handle: {
           starField: true,
