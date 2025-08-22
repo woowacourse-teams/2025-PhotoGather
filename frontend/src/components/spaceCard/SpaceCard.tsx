@@ -13,6 +13,8 @@ type SpaceCardVariant = 'default' | 'expired' | 'early';
 interface SpaceCardProps {
   /** 스페이스 이름 */
   name: string;
+  /** 썸네일 */
+  thumbnail?: string;
   /** 스페이스 오픈 시간 */
   openedAt?: string;
   /** 스페이스 만료 시간 */
@@ -29,6 +31,7 @@ interface SpaceCardProps {
 
 const SpaceCard = ({
   name,
+  thumbnail,
   openedAt,
   expiredAt,
   guestCount = 0,
@@ -90,7 +93,7 @@ const SpaceCard = ({
   return (
     <S.Wrapper onClick={() => navigate(route)}>
       <S.ImageContainer>
-        <S.CardImage src={defaultImage} alt={name} />
+        <S.CardImage src={thumbnail ?? defaultImage} alt={name} />
       </S.ImageContainer>
       <S.ContentContainer>
         <S.CardTitle>{name}</S.CardTitle>
