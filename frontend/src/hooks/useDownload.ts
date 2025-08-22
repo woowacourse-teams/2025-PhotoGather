@@ -72,6 +72,15 @@ const useDownload = ({
       if (results.some((r) => r.status === 'rejected')) {
         throw new Error('다운로드가 실패했습니다. 다시 시도해 주세요.');
       }
+      results.map((result) => {
+        if (result.status === 'fulfilled') {
+          files.push({
+            name: result.value.name,
+            input: result.value.input,
+            lastModified: result.value.lastModified,
+          });
+        }
+      });
     }
 
     const zipBlob = await downloadZip(files).blob();
