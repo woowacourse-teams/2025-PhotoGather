@@ -6,7 +6,7 @@ import UploadCompletePage from '../pages/complete/UploadCompletePage';
 import SpaceCreateFunnel from '../pages/create/funnel/SpaceCreateFunnel';
 import NetworkErrorPage from '../pages/error/NetworkErrorPage';
 import NotFoundErrorPage from '../pages/error/NotFoundErrorPage';
-import OpenBrowserPage from '../pages/error/openBrowser';
+import OpenBrowserPage from '../pages/error/OpenBrowser';
 import ImageUploadPage from '../pages/guest/imageUploadPage/ImageUploadPage';
 import SharePage from '../pages/guest/sharePage/SharePage';
 import LandingPage from '../pages/landing/LandingPage';
