@@ -7,6 +7,13 @@ export const Wrapper = styled.div`
   height: ${({ theme }) => theme.layout.headerHeight};
 `;
 
+export const SettingButton = styled.button`
+  width: 24px;
+  aspect-ratio: 1/1;
+  border-radius: 50%;
+  overflow: hidden;
+`;
+
 export const ProfileImageButton = styled.button`
   width: 32px;
   aspect-ratio: 1/1;

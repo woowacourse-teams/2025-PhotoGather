@@ -1,13 +1,19 @@
 export const ROUTES = {
   MAIN: '/',
+  LANDING: '/landing',
   LOGIN: '/login',
+  AUTH: {
+    KAKAO: '/auth/login/kakao',
+  },
   CREATE: '/create',
   MANAGER: {
-    SPACE_HOME: (spaceId: string) => `/manager/space-home/${spaceId}`,
+    SPACE_HOME: (spaceCode: string) => `/space/${spaceCode}`,
+    DASHBOARD: (spaceCode: string) => `/space/${spaceCode}/dashboard`,
+    SETTING: (spaceCode: string) => `/space/${spaceCode}/settings`,
   },
   GUEST: {
-    IMAGE_UPLOAD: (spaceId: string) => `/guest/image-upload/${spaceId}`,
-    SHARE: '/guest/share',
+    IMAGE_UPLOAD: (spaceCode: string) => `/guest/image-upload/${spaceCode}`,
+    SHARE: '/share',
   },
   COMPLETE: {
     UPLOAD: '/complete/upload',
@@ -15,10 +21,12 @@ export const ROUTES = {
     SPACE_CREATED: '/complete/space-created',
   },
   MYPAGE: '/mypage',
+  LOGOUT: '/logout',
   ERROR: {
     NETWORK: '/network-error',
     NOT_FOUND: '*',
   },
+  OPEN_BROWSER: '/open-browser',
   DEMO: '/demo',
   POLICY: {
     PRIVACY_POLICY: '/policy/privacy-policy',

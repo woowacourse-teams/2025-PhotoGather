@@ -1,5 +1,6 @@
 package com.forgather.domain.space.model;
 
+import java.text.BreakIterator;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,11 +32,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Space extends BaseTimeEntity {
 
+    private static final long DEFAULT_MAX_CAPACITY_VALUE = 10_737_418_240L; // 10GB
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany(mappedBy = "space", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "space", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<SpaceHostMap> spaceHostMap = new ArrayList<>();
 
     @Column(name = "code", nullable = false, length = 64)
@@ -50,10 +53,10 @@ public class Space extends BaseTimeEntity {
     @Column(name = "opened_at", nullable = false)
     private LocalDateTime openedAt;
 
-    @OneToMany(mappedBy = "space")
+    @OneToMany(mappedBy = "space", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Guest> guests = new ArrayList<>();
 
-    @OneToMany(mappedBy = "space")
+    @OneToMany(mappedBy = "space", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<SpaceContent> contents = new ArrayList<>();
 
     @Transient
@@ -62,13 +65,27 @@ public class Space extends BaseTimeEntity {
     @Transient
     private long photoCount = 0;
 
+    @Column(name = "max_capacity", nullable = false)
+    private Long maxCapacity; // bytes
+
     public Space(Host host, String code, String name, int validHours, LocalDateTime openedAt) {
-        validate(code, name, validHours, openedAt);
+        validate(code, name, validHours, openedAt, DEFAULT_MAX_CAPACITY_VALUE);
         spaceHostMap.add(new SpaceHostMap(this, host));
         this.code = code;
         this.name = name;
         this.openedAt = openedAt;
         this.validHours = validHours;
+        this.maxCapacity = DEFAULT_MAX_CAPACITY_VALUE;
+    }
+
+    public Space(Host host, String code, String name, int validHours, LocalDateTime openedAt, Long capacity) {
+        validate(code, name, validHours, openedAt, capacity);
+        spaceHostMap.add(new SpaceHostMap(this, host));
+        this.code = code;
+        this.name = name;
+        this.openedAt = openedAt;
+        this.validHours = validHours;
+        this.maxCapacity = capacity;
     }
 
     @PostLoad
@@ -121,7 +138,7 @@ public class Space extends BaseTimeEntity {
     }
 
     private void setName(String name) {
-        if (name.isBlank() || name.length() > 10) {
+        if (name.isBlank() || getCharacterCount(name) > 10) {
             throw new BaseException("스페이스 이름은 비어있을 수 없고, 최대 10자여야 합니다. 생성 시도 이름: " + name);
         }
         this.name = name;
@@ -145,15 +162,18 @@ public class Space extends BaseTimeEntity {
         this.openedAt = newOpenedAt;
     }
 
-    private void validate(String code, String name, int validHours, LocalDateTime openedAt) {
+    private void validate(String code, String name, int validHours, LocalDateTime openedAt, Long maxCapacity) {
         if (code == null || code.length() != 10) {
             throw new BaseException("스페이스 코드는 10자리여야 합니다. 생성 시도 코드: " + code);
         }
-        if (name == null || name.isBlank() || name.length() > 10) {
-            throw new BaseException("스페이스 이름은 비어있을 수 없고, 최대 10자여야 합니다. 생성 시도 이름: " + name);
+        if (name == null || name.isBlank() || getCharacterCount(name) > 10) {
+            throw new IllegalArgumentException("스페이스 이름은 비어있을 수 없고, 최대 10자여야 합니다. 생성 시도 이름: " + name);
         }
         if (validHours <= 0) {
             throw new BaseException("스페이스 유효 시간은 1시간 이상이어야 합니다. 생성 시도 유효 시간: " + validHours);
+        }
+        if (maxCapacity == null || maxCapacity <= 0L) {
+            throw new IllegalArgumentException("스페이스 최대 용량은 비어있을 수 없고, 0보다 커야 합니다. 생성 시도 용량: " + maxCapacity);
         }
         validateOpenedAt(openedAt);
     }
@@ -177,8 +197,41 @@ public class Space extends BaseTimeEntity {
         if (name == null || name.isBlank()) {
             throw new BaseException("스페이스 이름은 비어있을 수 없습니다. 생성 시도 이름: " + name);
         }
+        if (getCharacterCount(name) > 10) {
+            throw new BaseException("스페이스 이름은 10자를 초과할 수 없습니다. 생성 시도 이름: " + name);
+        }
         if (openedAt == null) {
             throw new BaseException("스페이스 오픈 시각은 비어있을 수 없습니다.");
+        }
+        if (maxCapacity == null || maxCapacity <= 0L) {
+            throw new BaseException("스페이스 최대 용량은 비어있을 수 없고, 0보다 커야 합니다. 생성 시도 용량: " + maxCapacity);
+        }
+    }
+
+    // 이모지의 길이를 1로 처리
+    private int getCharacterCount(String text) {
+        BreakIterator iterator = BreakIterator.getCharacterInstance();
+        iterator.setText(text);
+        int count = 0;
+        while (iterator.next() != BreakIterator.DONE) {
+            count++;
+        }
+        return count;
+    }
+
+    public void validateCode(String code) {
+        if (!this.code.equals(code)) {
+            throw new BaseException("스페이스 코드가 잘못되었습니다.");
+        }
+    }
+
+    public void validateGuest(Guest guest) {
+        if (guest == null) {
+            throw new BaseException("게스트 정보가 없습니다.");
+        }
+        if (guest.getSpace() == null || !Objects.equals(guest.getSpace().getId(), this.id)) {
+            throw new BaseException(
+                "해당 게스트는 이 스페이스에 속하지 않습니다. 게스트 ID: " + guest.getId() + ", 스페이스 ID: " + this.id);
         }
     }
 
@@ -193,20 +246,5 @@ public class Space extends BaseTimeEntity {
     @Override
     public int hashCode() {
         return Objects.hashCode(id);
-    }
-
-    public void validateCode(String code) {
-        if (!this.code.equals(code)) {
-            throw new BaseException("스페이스 코드가 잘못되었습니다.");
-        }
-    }
-
-    public void validateGuest(Guest guest) {
-        if (guest == null) {
-            throw new BaseException("게스트 정보가 없습니다.");
-        }
-        if (guest.getSpace() == null || !Objects.equals(guest.getSpace().getId(), this.id)) {
-            throw new BaseException("해당 게스트는 이 스페이스에 속하지 않습니다. 게스트 ID: " + guest.getId() + ", 스페이스 ID: " + this.id);
-        }
     }
 }

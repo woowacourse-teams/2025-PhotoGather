@@ -1,4 +1,5 @@
 import { ReactComponent as LinkIcon } from '@assets/icons/link.svg';
+import { ReactComponent as ShareIcon } from '@assets/icons/share.svg';
 import LinkImage from '@assets/images/rocket.png';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Button from '../../../components/@common/buttons/button/Button';
@@ -6,8 +7,10 @@ import IconLabelButton from '../../../components/@common/buttons/iconLabelButton
 import HighlightText from '../../../components/@common/highlightText/HighlightText';
 import InfoBox from '../../../components/@common/infoBox/InfoBox';
 import { INFORMATION } from '../../../constants/messages';
+import { ROUTES } from '../../../constants/routes';
 import useError from '../../../hooks/@common/useError';
 import { useToast } from '../../../hooks/@common/useToast';
+import useWebShareAPI from '../../../hooks/useWebShareAPI';
 import { theme } from '../../../styles/theme';
 import { copyLinkToClipboard } from '../../../utils/copyLinkToClipboard';
 import { createShareUrl } from '../../../utils/createSpaceUrl';
@@ -16,12 +19,17 @@ import * as S from './SharePage.styles';
 const SharePage = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const spaceCode = location.state;
+  const { name, spaceCode } = location.state;
   const { showToast } = useToast();
-  const { tryTask } = useError();
+  const { tryTask, tryFetch } = useError();
+  const { share } = useWebShareAPI();
 
   const handleSpaceHomeButton = () => {
-    navigate(`/manager/space-home/${spaceCode}`);
+    navigate(ROUTES.MANAGER.SPACE_HOME(spaceCode));
+  };
+
+  const handleMainButton = () => {
+    navigate(ROUTES.MAIN);
   };
 
   const copyShareLink = () => {
@@ -33,7 +41,7 @@ const SharePage = () => {
     });
   };
 
-  const handleCopyLink = async () => {
+  const handleCopyLink = () => {
     tryTask({
       task: copyShareLink,
       errorActions: ['toast'],
@@ -43,6 +51,18 @@ const SharePage = () => {
           position: 'top',
         },
       },
+    });
+  };
+
+  const handleShare = async () => {
+    await tryFetch({
+      task: async () =>
+        share({
+          title: INFORMATION.SHARE_LINK_API.TITLE,
+          text: INFORMATION.SHARE_LINK_API.CREATE_TEXT(name),
+          url: createShareUrl(spaceCode),
+        }),
+      errorActions: ['console'],
     });
   };
 
@@ -69,18 +89,32 @@ const SharePage = () => {
           highlightTextArray={[INFORMATION.SHARE_WARNING.HIGHLIGHT_TEXT]}
         />
       </S.TopContainer>
-      <S.BottomContainer>
-        <S.ShareContainer>
-          <p>친구에게도 알려 주세요</p>
-          <S.IconLabelButtonContainer>
-            <IconLabelButton
-              icon={<LinkIcon fill={theme.colors.white} width="20px" />}
-              onClick={handleCopyLink}
-            />
-          </S.IconLabelButtonContainer>
-        </S.ShareContainer>
-        <Button text="나의 스페이스로 이동" onClick={handleSpaceHomeButton} />
-      </S.BottomContainer>
+      {spaceCode ? (
+        <S.BottomContainer>
+          <S.ShareContainer>
+            <S.ShareLabel>친구에게도 알려 주세요</S.ShareLabel>
+            <S.IconLabelButtonContainer>
+              <IconLabelButton
+                icon={<LinkIcon fill={theme.colors.white} width="20px" />}
+                onClick={handleCopyLink}
+              />
+              <IconLabelButton
+                icon={
+                  <ShareIcon
+                    fill={theme.colors.white}
+                    stroke={theme.colors.gray06}
+                    width="20px"
+                  />
+                }
+                onClick={handleShare}
+              />
+            </S.IconLabelButtonContainer>
+          </S.ShareContainer>
+          <Button text="나의 스페이스로 이동" onClick={handleSpaceHomeButton} />
+        </S.BottomContainer>
+      ) : (
+        <Button text="메인 페이지로 이동" onClick={handleMainButton} />
+      )}
     </S.Wrapper>
   );
 };

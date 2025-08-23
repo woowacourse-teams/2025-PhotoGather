@@ -25,6 +25,9 @@ const Footer = () => {
     });
   };
 
+  const googleFormUrl =
+    'https://docs.google.com/forms/d/e/1FAIpQLSd--boLbwhd6HjgjY_m7FNYE5sfpVlbldGmNsGzZgWRcMdEZQ/viewform';
+
   return (
     <S.Wrapper>
       <S.FooterContent>
@@ -34,7 +37,7 @@ const Footer = () => {
             개인정보처리방침
           </S.FooterLink>
           {/* TODO: 주소 추가 */}
-          <S.FooterLink href="주소추가" onClick={handleContactClick}>
+          <S.FooterLink href={googleFormUrl} onClick={handleContactClick}>
             문의하기
           </S.FooterLink>
         </S.FooterLinks>

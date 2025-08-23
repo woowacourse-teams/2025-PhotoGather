@@ -33,7 +33,7 @@ phases:
       - cd ../..
       - cp backend/forgather/build/libs/forgather-0.0.1-SNAPSHOT.jar ..
       - cp backend/forgather/deploy/appspec.yml ..
-      - cp backend/forgather/deploy/deploy-dev.sh ../deploy.sh
+      - cp backend/forgather/deploy/deploy.sh ..
 
 artifacts:
   files:

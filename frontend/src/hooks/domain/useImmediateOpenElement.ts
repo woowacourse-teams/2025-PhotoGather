@@ -8,14 +8,18 @@ import { useToast } from '../@common/useToast';
 const useImmediateOpenElement = (
   initialValue: ImmediateOpenElementInitialValue,
 ) => {
-  const [date, setDate] = useState(initialValue.date);
-  const [time, setTime] = useState(initialValue.time);
+  const { kstDateString, kstTimeString } = calculateKstToday();
+  const [date, setDate] = useState(
+    initialValue.date !== '' ? initialValue.date : kstDateString,
+  );
+  const [time, setTime] = useState(
+    initialValue.time !== '' ? initialValue.time : kstTimeString,
+  );
   const [isImmediateOpen, setIsImmediateOpen] = useState<boolean | null>(
     initialValue.isImmediateOpen,
   );
   const isNoInput =
     isImmediateOpen === false && (date.length === 0 || time.length === 0);
-  const { kstDateString } = calculateKstToday();
   const { showToast } = useToast();
 
   const handleTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {

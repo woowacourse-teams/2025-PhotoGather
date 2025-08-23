@@ -8,14 +8,13 @@ import { ReactComponent as MockupThree } from '@assets/images/mockup_3.svg';
 import { ReactComponent as MockupFour } from '@assets/images/mockup_4.svg';
 import { ReactComponent as Logo } from '@assets/logo.svg';
 import { useEffect, useMemo, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
 import Button from '../../components/@common/buttons/button/Button';
 import FloatingActionButton from '../../components/@common/buttons/floatingActionButton/FloatingActionButton';
 import IconLabelButton from '../../components/@common/buttons/iconLabelButton/IconLabelButton';
+import { Carousel } from '../../components/carousel/Carousel';
 import Footer from '../../components/footer/Footer';
 import KakaoLoginButton from '../../components/kakaoLoginButton/KakaoLoginButton';
 import LeftTimeInformationBox from '../../components/leftTimeInformationBox/LeftTimeInformationBox';
-import { ROUTES } from '../../constants/routes';
 import useLandingScroll from '../../hooks/@common/useLandingScroll';
 import useLeftTimer from '../../hooks/@common/useLeftTimer';
 import useKakaoAuth from '../../hooks/domain/useKakaoAuth';
@@ -27,7 +26,6 @@ import { track } from '../../utils/googleAnalytics/track';
 import * as S from './LandingPage.styles';
 
 const LandingPage = () => {
-  const navigate = useNavigate();
   const mockDate = useMemo(() => {
     const today = new Date();
     const targetDate = new Date(today);
@@ -61,122 +59,130 @@ const LandingPage = () => {
   }, []);
 
   return (
-    <S.Wrapper>
-      <S.SectionContainer>
-        <S.TextContainer>당신을 위한 순간, 흩어지지 않게</S.TextContainer>
-        <Logo fill={theme.colors.white} />
-      </S.SectionContainer>
+    <>
+      <S.Wrapper>
+        <S.TopContainer>
+          <S.SectionContainer>
+            <S.TextContainer>당신을 위한 순간, 흩어지지 않게</S.TextContainer>
+            <Logo fill={theme.colors.white} />
+          </S.SectionContainer>
 
-      <S.SectionContainer {...useLandingScroll({})}>
-        <S.TextContainer>{`주인공은 당신이니까,\n당신을 위한 순간, 흩어지지 않게`}</S.TextContainer>
-        <FloatingActionButton
-          label="스페이스 생성하기"
-          onClick={() => {
-            navigate(ROUTES.CREATE);
-            track.button('create_space_button', {
-              page: 'landing_page',
-              section: 'landing_page',
-              action: 'create_space',
-            });
-          }}
-        />
-        {CookieUtils.has('access') ? (
-          <Button text="로그아웃" variant="secondary" onClick={handleLogout} />
-        ) : (
-          <KakaoLoginButton onClick={handleKakaoLogin} />
-        )}
-      </S.SectionContainer>
+          <S.LoginSection {...useLandingScroll({})}>
+            <S.TextContainer>{`주인공은 당신이니까,\n사진은 우리가 책임질게요`}</S.TextContainer>
+            {CookieUtils.has('access') ? (
+              <Button
+                text="로그아웃"
+                variant="secondary"
+                onClick={handleLogout}
+              />
+            ) : (
+              <KakaoLoginButton onClick={handleKakaoLogin} />
+            )}
+          </S.LoginSection>
+        </S.TopContainer>
 
-      <S.SectionContainer
-        {...useLandingScroll({
-          delay: 0.4,
-          onVisible: () => track.sectionView('second_section', 2),
-        })}
-      >
-        <S.TextContainer>{`3초면 끝\n링크 하나로 그 날의 추억을 모아요`}</S.TextContainer>
-        <LeftTimeInformationBox
-          title="나의 스페이스"
-          leftTime={formattedLeftTime}
-          openDate={{
-            date: date,
-            time: time,
-          }}
-        />
-      </S.SectionContainer>
-
-      <S.SectionContainer
-        {...useLandingScroll({
-          delay: 0.4,
-          onVisible: () => track.sectionView('mockup_section', 3),
-        })}
-      >
-        <S.TextContainer>{`귀찮은 로그인 없이\n사진 업로드 가능`}</S.TextContainer>
-        <S.MockupScrollContainer ref={mockupRef}>
-          <S.MockupItem>
-            <MockupOne width={'280px'} />
-          </S.MockupItem>
-          <S.MockupItem>
-            <MockupTwo width={'280px'} />
-          </S.MockupItem>
-          <S.MockupItem>
-            <MockupThree width={'280px'} />
-          </S.MockupItem>
-          <S.MockupItem>
-            <MockupFour width={'280px'} />
-          </S.MockupItem>
-        </S.MockupScrollContainer>
-      </S.SectionContainer>
-
-      <S.SectionContainer
-        {...useLandingScroll({
-          delay: 0.4,
-          onVisible: () => track.sectionView('third_section', 4),
-        })}
-      >
-        <S.TextContainer>{`한번에 사진 다운로드\n클릭 한번으로 추억 정리 끝`}</S.TextContainer>
-        <FloatingActionButton
-          label="모두 저장하기"
-          icon={<SaveIcon fill={theme.colors.gray06} />}
-          style={{ cursor: 'default', pointerEvents: 'none' }}
-        />
-      </S.SectionContainer>
-
-      <S.SectionContainer
-        {...useLandingScroll({
-          delay: 0.4,
-          onVisible: () => track.sectionView('last_section', 5),
-        })}
-      >
-        <S.TextContainer>{`인스타그램, 카카오톡, QR코드\n빠르게 공유하고 사진을 모아보세요`}</S.TextContainer>
-        <S.RowContainer>
-          <InstagramIcon
-            style={{
-              height: '44px',
-              marginBottom: '4px',
-              cursor: 'default',
-              pointerEvents: 'none',
+        <S.SectionContainer
+          {...useLandingScroll({
+            delay: 0.4,
+            onVisible: () => track.sectionView('second_section', 2),
+          })}
+        >
+          <S.TextContainer>{`3초면 끝\n링크 하나로 그 날의 추억을 모아요`}</S.TextContainer>
+          <LeftTimeInformationBox
+            title="나의 스페이스"
+            leftTime={formattedLeftTime}
+            openDate={{
+              date: date,
+              time: time,
             }}
           />
-          <IconLabelButton
-            icon={<KakaoTalkIcon />}
-            style={{
-              backgroundColor: theme.colors.kakaoTalk,
-              cursor: 'default',
-              pointerEvents: 'none',
-            }}
+        </S.SectionContainer>
+
+        <S.SectionContainer
+          {...useLandingScroll({
+            delay: 0.4,
+            onVisible: () => track.sectionView('third_section', 4),
+          })}
+        >
+          <S.TextContainer>{`화질 걱정 없이,\n원본 그대로 보관하세요`}</S.TextContainer>
+          <Carousel
+            slides={[
+              <MockupOne key="one" width={'280px'} />,
+              <MockupTwo key="two" width={'280px'} />,
+              <MockupThree key="three" width={'280px'} />,
+              <MockupFour key="four" width={'280px'} />,
+            ]}
           />
-          <IconLabelButton
-            icon={<QrcodeIcon />}
-            style={{
-              width: '44px',
-              cursor: 'default',
-              pointerEvents: 'none',
-            }}
+        </S.SectionContainer>
+
+        <S.SectionContainer
+          {...useLandingScroll({
+            delay: 0.4,
+            onVisible: () => track.sectionView('third_section', 4),
+          })}
+        >
+          <S.TextContainer>{`한번에 사진 다운로드\n클릭 한번으로 추억 정리 끝`}</S.TextContainer>
+          <FloatingActionButton
+            label="모두 저장하기"
+            icon={<SaveIcon fill={theme.colors.gray06} />}
+            style={{ cursor: 'default', pointerEvents: 'none' }}
           />
-        </S.RowContainer>
-      </S.SectionContainer>
+        </S.SectionContainer>
+
+        <S.SectionContainer
+          {...useLandingScroll({
+            delay: 0.4,
+            onVisible: () => track.sectionView('third_section', 4),
+          })}
+        >
+          <S.TextContainer>{`귀찮은 로그인 없이,\n사진 업로드 가능해요`}</S.TextContainer>
+          <Carousel
+            slides={[
+              <MockupOne key="one" width={'280px'} />,
+              <MockupTwo key="two" width={'280px'} />,
+              <MockupThree key="three" width={'280px'} />,
+              <MockupFour key="four" width={'280px'} />,
+            ]}
+          />
+        </S.SectionContainer>
+
+        <S.SectionContainer
+          {...useLandingScroll({
+            delay: 0.4,
+            onVisible: () => track.sectionView('last_section', 5),
+          })}
+        >
+          <S.TextContainer>{`인스타그램, 카카오톡, QR코드\n빠르게 공유하고 사진을 모아보세요`}</S.TextContainer>
+          <S.RowContainer>
+            <InstagramIcon
+              style={{
+                height: '44px',
+                marginBottom: '4px',
+                cursor: 'default',
+                pointerEvents: 'none',
+              }}
+            />
+            <IconLabelButton
+              icon={<KakaoTalkIcon />}
+              style={{
+                backgroundColor: theme.colors.kakaoTalk,
+                cursor: 'default',
+                pointerEvents: 'none',
+              }}
+            />
+            <IconLabelButton
+              icon={<QrcodeIcon />}
+              style={{
+                width: '44px',
+                cursor: 'default',
+                pointerEvents: 'none',
+              }}
+            />
+          </S.RowContainer>
+        </S.SectionContainer>
+      </S.Wrapper>
       <Footer />
-    </S.Wrapper>
+    </>
   );
 };
 

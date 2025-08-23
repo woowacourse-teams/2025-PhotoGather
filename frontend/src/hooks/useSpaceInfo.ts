@@ -15,25 +15,25 @@ const useSpaceInfo = (spaceCode: string) => {
     setSpaceInfo(response.data);
   };
 
+  const fetchSpaceInfo = async () => {
+    await tryFetch({
+      task: requestSpaceInfo,
+      errorActions: ['toast'],
+      context: {
+        toast: {
+          text: '스페이스 정보를 불러오는데 실패했습니다.',
+        },
+      },
+      onFinally: () => setIsLoading(false),
+    });
+  };
+
   //biome-ignore lint/correctness/useExhaustiveDependencies: 무한 렌더링 방지
   useEffect(() => {
-    const fetchSpaceInfo = async () => {
-      await tryFetch({
-        task: requestSpaceInfo,
-        errorActions: ['toast'],
-        context: {
-          toast: {
-            text: '스페이스 정보를 불러오는데 실패했습니다.',
-          },
-        },
-        onFinally: () => setIsLoading(false),
-      });
-    };
-
     fetchSpaceInfo();
   }, [spaceCode]);
 
-  return { isLoading, spaceInfo };
+  return { isLoading, spaceInfo, refetchSpaceInfo: fetchSpaceInfo };
 };
 
 export default useSpaceInfo;

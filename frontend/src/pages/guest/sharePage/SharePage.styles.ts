@@ -11,7 +11,8 @@ export const TopContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 32px;
-  flex-grow: 1;
+  margin: auto 0;
+  justify-content: center;
 `;
 
 export const TextContainer = styled.div`
@@ -24,6 +25,7 @@ export const BottomContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 48px;
+  margin-top: auto;
 `;
 
 export const ShareContainer = styled.div`

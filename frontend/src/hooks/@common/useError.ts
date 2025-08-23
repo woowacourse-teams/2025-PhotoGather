@@ -12,12 +12,16 @@ interface AfterAction {
 interface RedirectPath {
   path: string;
 }
+interface ConsoleOptions {
+  text: string;
+}
 type ToastOptions = Omit<ToastBase, 'text'> & { text?: string };
 
 interface ErrorRequiredProps {
   toast?: ToastOptions;
   afterAction?: AfterAction;
   redirect?: RedirectPath;
+  console?: ConsoleOptions;
 }
 
 const useError = () => {
@@ -35,8 +39,8 @@ const useError = () => {
     redirect: (path: RedirectPath) => {
       navigate(path.path);
     },
-    console: (message: string) => {
-      console.error(message);
+    console: (error: Error) => {
+      console.error(error);
     },
   };
 
@@ -75,6 +79,7 @@ const useError = () => {
     errorActions: ErrorType[];
     context?: ErrorRequiredProps;
     onFinally?: () => void;
+    useCommonCodeErrorHandler?: boolean;
   }
 
   const ERROR_CODES_TO_HANDLE = [401, 403];
@@ -84,6 +89,7 @@ const useError = () => {
     errorActions,
     context,
     onFinally,
+    useCommonCodeErrorHandler = true,
   }: TryFetchProps<T>) => {
     try {
       const response = await task();
@@ -92,6 +98,7 @@ const useError = () => {
       const error = e instanceof Error ? e : new Error(String(e));
 
       if (
+        useCommonCodeErrorHandler &&
         error instanceof HttpError &&
         ERROR_CODES_TO_HANDLE.includes(error.status)
       ) {
@@ -131,7 +138,7 @@ const useError = () => {
       errorHandler.redirect(redirectPath);
     }
     if (errorActions.includes('console')) {
-      errorHandler.console(error.message);
+      errorHandler.console(error);
     }
   };
 

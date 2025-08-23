@@ -2,12 +2,19 @@ const path = require('node:path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const DotenvPlugin = require('dotenv-webpack');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = (_, argv) => {
-  const isProduction = argv.mode === 'production';
+  let envFile = '.env.local';
+
+  if (argv.mode === 'development') {
+    envFile = '.env.development';
+  }
+  if (argv.mode === 'production') {
+    envFile = '.env.production';
+  }
 
   return {
-    mode: isProduction ? 'production' : 'development',
     entry: './src/index.tsx',
     output: {
       filename: '[name].[contenthash].js',
@@ -75,7 +82,7 @@ module.exports = (_, argv) => {
     },
     plugins: [
       new DotenvPlugin({
-        path: isProduction ? './.env.production' : './.env',
+        path: envFile,
       }),
       new HtmlWebpackPlugin({
         template: './public/index.html',
@@ -86,9 +93,25 @@ module.exports = (_, argv) => {
       new ForkTsCheckerWebpackPlugin({
         async: true,
       }),
+      new CopyWebpackPlugin({
+        patterns: [
+          { from: 'public/favicon.ico', to: 'favicon.ico' },
+          { from: 'public/favicon-32x32.png', to: 'favicon-32x32.png' },
+          { from: 'public/favicon-16x16.png', to: 'favicon-16x16.png' },
+          { from: 'public/apple-touch-icon.png', to: 'apple-touch-icon.png' },
+        ],
+      }),
     ],
     devServer: {
-      static: './dist',
+      static: [
+        {
+          directory: path.join(__dirname, 'dist'),
+        },
+        {
+          directory: path.join(__dirname, 'public'),
+          publicPath: '/',
+        },
+      ],
       port: 3000,
       hot: true,
       open: true,

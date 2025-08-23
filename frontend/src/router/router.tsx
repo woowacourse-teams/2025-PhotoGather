@@ -4,14 +4,19 @@ import KakaoAuthPage from '../pages/auth/KakaoAuthPage';
 import DownloadCompletePage from '../pages/complete/DownloadCompletePage';
 import UploadCompletePage from '../pages/complete/UploadCompletePage';
 import SpaceCreateFunnel from '../pages/create/funnel/SpaceCreateFunnel';
-import DemoHome from '../pages/demo/DemoHome';
 import NetworkErrorPage from '../pages/error/NetworkErrorPage';
 import NotFoundErrorPage from '../pages/error/NotFoundErrorPage';
+import OpenBrowserPage from '../pages/error/OpenBrowser';
 import ImageUploadPage from '../pages/guest/imageUploadPage/ImageUploadPage';
 import SharePage from '../pages/guest/sharePage/SharePage';
 import LandingPage from '../pages/landing/LandingPage';
 import LoginPage from '../pages/login/LoginPage';
-import SpaceHome from '../pages/manager/spaceHome/SpaceHome';
+import LogoutPage from '../pages/logout/LogoutPage';
+import MainPage from '../pages/MainPage';
+import DashboardPage from '../pages/manager/dashboard/DashboardPage';
+import SettingsPage from '../pages/manager/settings/SettingsPage';
+import SpaceHomePage from '../pages/manager/spaceHome/SpaceHomePage';
+import MyPage from '../pages/mypage/MyPage';
 import PrivacyConsentPage from '../pages/policies/PrivacyConsentPage';
 import PrivacyPolicyPage from '../pages/policies/PrivacyPolicyPage';
 import TermsOfServicePage from '../pages/policies/TermsOfServicePage';
@@ -24,6 +29,15 @@ const routes: AppRouteObject[] = [
     children: [
       {
         path: '/',
+        element: <MainPage />,
+        handle: {
+          header: true,
+          starField: true,
+          highlight: true,
+        },
+      },
+      {
+        path: '/landing',
         element: <LandingPage />,
         handle: {
           header: true,
@@ -31,58 +45,71 @@ const routes: AppRouteObject[] = [
           highlight: true,
         },
       },
-      {
-        path: '/demo',
-        element: <DemoHome />,
-        handle: {
-          header: true,
-        },
-      },
+      // {
+      //   path: '/demo',
+      //   element: <DemoHome />,
+      //   handle: {
+      //     header: true,
+      //   },
+      // },
       {
         path: 'create',
         element: <SpaceCreateFunnel />,
       },
       {
-        path: 'space-home/:spaceCode',
-        element: <SpaceHome />,
+        path: 'space/:spaceCode',
+        element: <SpaceHomePage />,
         handle: {
           header: true,
           starField: true,
           highlight: true,
         },
       },
+
       {
-        // TODO : 데모 후 삭제
-        path: 'manager',
-        children: [
-          {
-            path: 'space-home/:spaceId',
-            element: <SpaceHome />,
-            handle: {
-              header: true,
-              starField: true,
-              highlight: true,
-            },
-          },
-        ],
+        path: 'space/:spaceCode/dashboard',
+        element: <DashboardPage />,
+        handle: {
+          header: true,
+          highlight: true,
+        },
       },
       {
-        // TODO : 데모 후 삭제
-        path: 'guest',
-        children: [
-          {
-            path: 'image-upload/:spaceId',
-            element: <ImageUploadPage />,
-            handle: {
-              starField: true,
-              highlight: true,
-            },
-          },
-          {
-            path: 'share',
-            element: <SharePage />,
-          },
-        ],
+        path: 'space/:spaceCode/settings',
+        element: <SettingsPage />,
+        handle: {
+          header: true,
+          highlight: true,
+        },
+      },
+      {
+        path: 'guest/image-upload/:spaceCode',
+        element: <ImageUploadPage />,
+        handle: {
+          starField: true,
+          highlight: true,
+          kakaoBrowserAllow: true,
+        },
+      },
+      {
+        path: 'share',
+        element: <SharePage />,
+      },
+      {
+        path: 'mypage',
+        element: <MyPage />,
+        handle: {
+          header: true,
+          highlight: true,
+        },
+      },
+      {
+        path: 'logout',
+        element: <LogoutPage />,
+        handle: {
+          header: true,
+          highlight: true,
+        },
       },
       {
         path: 'complete',
@@ -90,6 +117,9 @@ const routes: AppRouteObject[] = [
           {
             path: 'upload',
             element: <UploadCompletePage />,
+            handle: {
+              kakaoBrowserAllow: true,
+            },
           },
           {
             path: 'download',
@@ -126,6 +156,10 @@ const routes: AppRouteObject[] = [
       {
         path: 'network-error',
         element: <NetworkErrorPage />,
+      },
+      {
+        path: 'open-browser',
+        element: <OpenBrowserPage />,
       },
       {
         path: '*',

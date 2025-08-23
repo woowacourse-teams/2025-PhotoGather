@@ -1,6 +1,6 @@
 import Button from '../../../../components/@common/buttons/button/Button';
 import DateTimeInput from '../../../../components/@common/inputs/DateTimeInput';
-import { ERROR } from '../../../../constants/messages';
+import { ERROR, INFORMATION } from '../../../../constants/messages';
 import useImmediateOpenElement from '../../../../hooks/domain/useImmediateOpenElement';
 import type {
   FunnelElementProps,
@@ -33,10 +33,10 @@ const ImmediateOpenElement = ({
   return (
     <FunnelBasePage
       title={{
-        text: '스페이스를 지금 당장 열어볼까요?',
-        highlightTextArray: ['지금 당장'],
+        text: INFORMATION.WHEN_OPEN_INPUT.TITLE.TEXT,
+        highlightTextArray: [INFORMATION.WHEN_OPEN_INPUT.TITLE.HIGHLIGHT_TEXT],
       }}
-      description="스페이스가 열릴 시간을 정할 수 있어요."
+      description={INFORMATION.WHEN_OPEN_INPUT.DESCRIPTION}
       element={
         <>
           <S.ButtonContainer>

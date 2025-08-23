@@ -3,6 +3,7 @@ import LeftTimeInformationBox from '../../../components/leftTimeInformationBox/L
 import { INFORMATION } from '../../../constants/messages';
 import { ROUTES } from '../../../constants/routes';
 import useLeftTimer from '../../../hooks/@common/useLeftTimer';
+import useAgreements from '../../../hooks/domain/useAgreements';
 import useCreateSpace from '../../../hooks/useCreateSpace';
 import type { FunnelElementProps } from '../../../types/funnel.type';
 import type { SpaceFunnelInfo } from '../../../types/space.type';
@@ -27,7 +28,11 @@ const CheckSpaceInfoElement = ({
   const { leftTime } = useLeftTimer({ targetTime: openedAt });
   const formattedLeftTime = formatTimer(leftTime);
   const isImmediateOpen = formattedLeftTime === '00:00:00';
-  //TODO: agreements api 호출 필요
+  const { isAgree } = useAgreements();
+  const isNotAgreed =
+    !isAgree &&
+    (!spaceInfo.agreements?.agreedToPrivacy ||
+      !spaceInfo.agreements?.agreedToService);
 
   const { isCreating, fetchCreateSpace } = useCreateSpace();
   const { kstDateString, kstTimeString } = calculateKstToday();
@@ -46,7 +51,15 @@ const CheckSpaceInfoElement = ({
     if (!spaceCode) return;
 
     onNext(isImmediateOpen);
-    navigate(ROUTES.GUEST.SHARE, { state: spaceCode });
+    navigate(ROUTES.GUEST.SHARE, {
+      state: { name: spaceInfo.name, spaceCode },
+    });
+  };
+
+  const createText = () => {
+    if (isCreating) '생성 중';
+    if (isNotAgreed) return '동의하지 않은 약관이 있습니다.';
+    return '생성하기';
   };
 
   return (
@@ -66,8 +79,8 @@ const CheckSpaceInfoElement = ({
       onNextButtonClick={async () => {
         await createSpaceRedirect();
       }}
-      nextButtonDisabled={isCreating}
-      buttonText={isCreating ? '생성중' : '생성하기'}
+      nextButtonDisabled={isCreating || isNotAgreed}
+      buttonText={createText()}
     />
   );
 };

@@ -101,6 +101,7 @@ export const StyledButton = styled.button<{
   justify-content: center;
   align-items: center;
   gap: 4px;
+  white-space: nowrap;
 
   ${({ theme }) => ({ ...theme.typography.buttonPrimary })}
   ${({ $variant, theme }) => buttonStyles[$variant](theme)}

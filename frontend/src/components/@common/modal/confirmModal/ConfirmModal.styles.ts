@@ -2,6 +2,14 @@ import styled from '@emotion/styled';
 
 export const IconContainer = styled.div`
   display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: -12px;
+`;
+
+export const ImageContainer = styled.div`
+  display: flex;
   justify-content: center;
   align-items: center;
   width: 140px;
@@ -15,9 +23,17 @@ export const Icon = styled.img`
   object-fit: contain;
 `;
 
-export const Description = styled.p`
-  ${({ theme }) => ({ ...theme.typography.header03 })}
-  color: ${({ theme }) => theme.colors.gray04};
+export const TextContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`;
+
+export const Description = styled.span<{ $isError: boolean }>`
+  ${({ theme }) => ({ ...theme.typography.bodyLarge })}
+  color: ${({ theme, $isError }) => ($isError ? theme.colors.error : theme.colors.gray04)};
+  margin-top: 4px;
 `;
 
 export const ButtonContainer = styled.div`
