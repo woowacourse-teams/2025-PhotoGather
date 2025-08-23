@@ -6,6 +6,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.forgather.domain.guest.model.Guest;
+import com.forgather.global.exception.BaseException;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorValue;
@@ -47,7 +48,7 @@ public class Photo extends SpaceContent {
 
     public void validateSpace(Space other) {
         if (!space.equals(other)) {
-            throw new IllegalArgumentException("스페이스에 속하지 않는 사진입니다. 스페이스 ID: " + space.getId() + ", 사진 ID: " + id);
+            throw new BaseException("스페이스에 속하지 않는 사진입니다. 스페이스 ID: " + space.getId() + ", 사진 ID: " + id);
         }
     }
 

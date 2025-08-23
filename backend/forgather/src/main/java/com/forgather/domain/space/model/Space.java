@@ -9,7 +9,7 @@ import com.forgather.domain.guest.model.Guest;
 import com.forgather.domain.model.BaseTimeEntity;
 import com.forgather.global.auth.model.Host;
 import com.forgather.global.auth.model.SpaceHostMap;
-import com.forgather.global.exception.ForbiddenException;
+import com.forgather.global.exception.BaseException;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -82,18 +82,17 @@ public class Space extends BaseTimeEntity {
     public void validateExpiration(LocalDateTime currentDateTime) {
         LocalDateTime expiredAt = openedAt.plusHours(validHours);
         if (expiredAt.isBefore(currentDateTime)) {
-            throw new IllegalArgumentException("만료된 스페이스입니다. code: " + code);
+            throw new BaseException("만료된 스페이스입니다. spaceCode: " + code);
         }
     }
 
     public void validateHost(Host host) {
         if (host == null) {
-            throw new IllegalArgumentException("호스트 정보가 없습니다.");
+            throw new BaseException("호스트 정보가 없습니다.");
         }
         if (spaceHostMap.stream()
             .noneMatch(map -> Objects.equals(map.getHost().getId(), host.getId()))) {
-            throw new ForbiddenException(
-                "해당 호스트는 이 스페이스의 호스트가 아닙니다. host id: " + host.getId() + ", spaceCode:" + code);
+            throw new BaseException("해당 호스트는 이 스페이스의 호스트가 아닙니다. hostId: " + host.getId() + ", spaceCode:" + code);
         }
     }
 
@@ -123,14 +122,14 @@ public class Space extends BaseTimeEntity {
 
     private void setName(String name) {
         if (name.isBlank() || name.length() > 10) {
-            throw new IllegalArgumentException("스페이스 이름은 비어있을 수 없고, 최대 10자여야 합니다. 생성 시도 이름: " + name);
+            throw new BaseException("스페이스 이름은 비어있을 수 없고, 최대 10자여야 합니다. 생성 시도 이름: " + name);
         }
         this.name = name;
     }
 
     private void setValidHours(Integer validHours) {
         if (validHours <= 0) {
-            throw new IllegalArgumentException("스페이스 유효 시간은 1시간 이상이어야 합니다. 생성 시도 유효 시간: " + validHours);
+            throw new BaseException("스페이스 유효 시간은 1시간 이상이어야 합니다. 생성 시도 유효 시간: " + validHours);
         }
         this.validHours = validHours;
     }
@@ -138,34 +137,34 @@ public class Space extends BaseTimeEntity {
     private void setOpenedAt(LocalDateTime newOpenedAt) {
         validateOpenedAt(newOpenedAt);
         if (isExpired(LocalDateTime.now())) {
-            throw new IllegalArgumentException("만료된 스페이스의 오픈 시각을 변경할 수 없습니다.");
+            throw new BaseException("만료된 스페이스의 오픈 시각을 변경할 수 없습니다.");
         }
         if (isOpened(LocalDateTime.now())) {
-            throw new IllegalArgumentException("이미 열린 스페이스의 오픈 시각을 변경할 수 없습니다.");
+            throw new BaseException("이미 열린 스페이스의 오픈 시각을 변경할 수 없습니다.");
         }
         this.openedAt = newOpenedAt;
     }
 
     private void validate(String code, String name, int validHours, LocalDateTime openedAt) {
         if (code == null || code.length() != 10) {
-            throw new IllegalArgumentException("스페이스 코드는 10자리여야 합니다. 생성 시도 코드: " + code);
+            throw new BaseException("스페이스 코드는 10자리여야 합니다. 생성 시도 코드: " + code);
         }
         if (name == null || name.isBlank() || name.length() > 10) {
-            throw new IllegalArgumentException("스페이스 이름은 비어있을 수 없고, 최대 10자여야 합니다. 생성 시도 이름: " + name);
+            throw new BaseException("스페이스 이름은 비어있을 수 없고, 최대 10자여야 합니다. 생성 시도 이름: " + name);
         }
         if (validHours <= 0) {
-            throw new IllegalArgumentException("스페이스 유효 시간은 1시간 이상이어야 합니다. 생성 시도 유효 시간: " + validHours);
+            throw new BaseException("스페이스 유효 시간은 1시간 이상이어야 합니다. 생성 시도 유효 시간: " + validHours);
         }
         validateOpenedAt(openedAt);
     }
 
     private void validateOpenedAt(LocalDateTime openedAt) {
         if (openedAt == null) {
-            throw new IllegalArgumentException("스페이스 오픈 시각은 비어있을 수 없습니다.");
+            throw new BaseException("스페이스 오픈 시각은 비어있을 수 없습니다.");
         }
         // 네트워크 지연 고려해서 1시간 과거 생성까지는 허용
         if (openedAt.isBefore(LocalDateTime.now().minusHours(1L))) {
-            throw new IllegalArgumentException("스페이스 오픈 시각은 현재 시각 이후여야 합니다. 생성 시도 시각: " + openedAt);
+            throw new BaseException("스페이스 오픈 시각은 현재 시각 이후여야 합니다. 생성 시도 시각: " + openedAt);
         }
     }
 
@@ -173,13 +172,13 @@ public class Space extends BaseTimeEntity {
     @PreUpdate
     private void validateBeforeSave() {
         if (code == null || code.isBlank()) {
-            throw new IllegalArgumentException("스페이스 코드는 비어있을 수 없습니다. 생성 시도 코드: " + code);
+            throw new BaseException("스페이스 코드는 비어있을 수 없습니다. 생성 시도 코드: " + code);
         }
         if (name == null || name.isBlank()) {
-            throw new IllegalArgumentException("스페이스 이름은 비어있을 수 없습니다. 생성 시도 이름: " + name);
+            throw new BaseException("스페이스 이름은 비어있을 수 없습니다. 생성 시도 이름: " + name);
         }
         if (openedAt == null) {
-            throw new IllegalArgumentException("스페이스 오픈 시각은 비어있을 수 없습니다.");
+            throw new BaseException("스페이스 오픈 시각은 비어있을 수 없습니다.");
         }
     }
 
@@ -198,16 +197,16 @@ public class Space extends BaseTimeEntity {
 
     public void validateCode(String code) {
         if (!this.code.equals(code)) {
-            throw new IllegalArgumentException("스페이스 코드가 잘못되었습니다.");
+            throw new BaseException("스페이스 코드가 잘못되었습니다.");
         }
     }
 
     public void validateGuest(Guest guest) {
         if (guest == null) {
-            throw new IllegalArgumentException("게스트 정보가 없습니다.");
+            throw new BaseException("게스트 정보가 없습니다.");
         }
         if (guest.getSpace() == null || !Objects.equals(guest.getSpace().getId(), this.id)) {
-            throw new IllegalArgumentException("해당 게스트는 이 스페이스에 속하지 않습니다. 게스트 ID: " + guest.getId() + ", 스페이스 ID: " + this.id);
+            throw new BaseException("해당 게스트는 이 스페이스에 속하지 않습니다. 게스트 ID: " + guest.getId() + ", 스페이스 ID: " + this.id);
         }
     }
 }

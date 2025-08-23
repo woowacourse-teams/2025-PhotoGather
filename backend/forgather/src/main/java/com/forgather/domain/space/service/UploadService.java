@@ -21,6 +21,7 @@ import com.forgather.domain.space.model.Space;
 import com.forgather.domain.space.repository.PhotoRepository;
 import com.forgather.domain.space.repository.SpaceRepository;
 import com.forgather.domain.space.util.MetaDataExtractor;
+import com.forgather.global.exception.BaseException;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -70,7 +71,7 @@ public class UploadService {
     public IssueSignedUrlResponse issueSignedUrls(String spaceCode, IssueSignedUrlRequest request) {
         spaceRepository.getUnexpiredSpaceByCode(spaceCode);
         if (request.uploadFileNames().size() > MAX_COUNT_PER_ISSUE) {
-            throw new IllegalArgumentException("한번에 발급 가능한 최대 개수는 %d개 입니다.".formatted(MAX_COUNT_PER_ISSUE));
+            throw new BaseException("한번에 발급 가능한 업로드 url 개수는 %d개 입니다.".formatted(MAX_COUNT_PER_ISSUE));
         }
 
         Map<String, String> signedUrls = new HashMap<>();
