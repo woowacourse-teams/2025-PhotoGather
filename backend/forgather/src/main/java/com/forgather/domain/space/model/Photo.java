@@ -55,7 +55,7 @@ public class Photo extends SpaceContent {
     @PrePersist
     void validate() {
         if (capacity == null || capacity <= 0L) {
-            throw new IllegalArgumentException("사진 용량은 비어있을 수 없고, 0보다 커야 합니다. 생성 시도 용량: " + capacity);
+            throw new BaseException("사진 용량은 비어있을 수 없고, 0보다 커야 합니다. 생성 시도 용량: " + capacity);
         }
     }
 

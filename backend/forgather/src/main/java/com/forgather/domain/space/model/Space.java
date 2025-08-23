@@ -167,13 +167,13 @@ public class Space extends BaseTimeEntity {
             throw new BaseException("스페이스 코드는 10자리여야 합니다. 생성 시도 코드: " + code);
         }
         if (name == null || name.isBlank() || getCharacterCount(name) > 10) {
-            throw new IllegalArgumentException("스페이스 이름은 비어있을 수 없고, 최대 10자여야 합니다. 생성 시도 이름: " + name);
+            throw new BaseException("스페이스 이름은 비어있을 수 없고, 최대 10자여야 합니다. 생성 시도 이름: " + name);
         }
         if (validHours <= 0) {
             throw new BaseException("스페이스 유효 시간은 1시간 이상이어야 합니다. 생성 시도 유효 시간: " + validHours);
         }
         if (maxCapacity == null || maxCapacity <= 0L) {
-            throw new IllegalArgumentException("스페이스 최대 용량은 비어있을 수 없고, 0보다 커야 합니다. 생성 시도 용량: " + maxCapacity);
+            throw new BaseException("스페이스 최대 용량은 비어있을 수 없고, 0보다 커야 합니다. 생성 시도 용량: " + maxCapacity);
         }
         validateOpenedAt(openedAt);
     }
