@@ -11,7 +11,19 @@ CREATE TABLE space
     updated_at   TIMESTAMP                          NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
--- 2. space_content
+-- 2. guest
+CREATE TABLE guest
+(
+    id         BIGINT AUTO_INCREMENT PRIMARY KEY,
+    space_id   BIGINT    NOT NULL,
+    name       VARCHAR(100),
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT guest_space_fk FOREIGN KEY (space_id) REFERENCES space (id)
+);
+
+
+-- 3. space_content
 CREATE TABLE space_content
 (
     id           BIGINT AUTO_INCREMENT PRIMARY KEY,
@@ -22,7 +34,7 @@ CREATE TABLE space_content
     CONSTRAINT space_content_guest_fk FOREIGN KEY (guest_id) REFERENCES guest (id)
 );
 
--- 3. photo
+-- 4. photo
 CREATE TABLE photo
 (
     id            BIGINT       NOT NULL AUTO_INCREMENT,
@@ -35,7 +47,7 @@ CREATE TABLE photo
     CONSTRAINT photo_space_content_fk FOREIGN KEY (id) REFERENCES space_content (id)
 );
 
--- 4. host
+-- 5. host
 CREATE TABLE host
 (
     id          BIGINT AUTO_INCREMENT PRIMARY KEY,
@@ -45,7 +57,7 @@ CREATE TABLE host
     updated_at  TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
--- 5. space_host_map
+-- 6. space_host_map
 CREATE TABLE space_host_map
 (
     id         BIGINT    NOT NULL AUTO_INCREMENT,
@@ -58,22 +70,11 @@ CREATE TABLE space_host_map
     CONSTRAINT space_host_map_host_fk FOREIGN KEY (host_id) REFERENCES host (id)
 );
 
--- 6. host_kakao
+-- 7. host_kakao
 CREATE TABLE host_kakao
 (
     id      BIGINT AUTO_INCREMENT PRIMARY KEY,
     host_id BIGINT       NOT NULL,
     user_id VARCHAR(100) NOT NULL,
     CONSTRAINT fk_host_kakao_host FOREIGN KEY (host_id) REFERENCES host (id)
-);
-
--- 7. guest
-CREATE TABLE guest
-(
-    id         BIGINT AUTO_INCREMENT PRIMARY KEY,
-    space_id   BIGINT    NOT NULL,
-    name       VARCHAR(100),
-    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT guest_space_fk FOREIGN KEY (space_id) REFERENCES space (id)
 );
