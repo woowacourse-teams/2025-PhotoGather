@@ -50,7 +50,6 @@ const useDownload = ({
 
     for (let i = 0; i < downloadInfos.length; i += CHUNK_SIZE) {
       const batch = downloadInfos.slice(i, i + CHUNK_SIZE);
-      console.log(batch);
 
       const results = await Promise.allSettled(
         batch.map(async (downloadInfo) => {
@@ -106,17 +105,23 @@ const useDownload = ({
         if (!response.data) return;
         const data = response.data;
         const { downloadUrls } = data;
+        const noCacheUrls = downloadUrls.map((url) => {
+          return {
+            ...url,
+            url: `${url.url}?t=${Date.now()}`,
+          };
+        });
 
         if (downloadUrls.length === 1) {
           await downloadAsImage(
-            downloadUrls[0].url,
-            downloadUrls[0].originalName,
+            noCacheUrls[0].url,
+            noCacheUrls[0].originalName,
           );
           return;
         }
 
-        setTotalProgress(downloadUrls.length);
-        await downloadAsZip(downloadUrls);
+        setTotalProgress(noCacheUrls.length);
+        await downloadAsZip(noCacheUrls);
       },
       errorActions: ['toast', 'afterAction'],
       context: {
@@ -140,11 +145,9 @@ const useDownload = ({
         );
         if (!response.data) return;
         const { downloadUrls } = response.data;
+        const noCacheUrl = `${downloadUrls[0].url}?t=${Date.now()}`;
 
-        await downloadAsImage(
-          downloadUrls[0].url,
-          downloadUrls[0].originalName,
-        );
+        await downloadAsImage(noCacheUrl, downloadUrls[0].originalName);
       },
       errorActions: ['toast', 'afterAction'],
       context: {
@@ -168,9 +171,15 @@ const useDownload = ({
         if (!response.data) return;
         const data = response.data;
         const { downloadUrls } = data;
+        const noCacheUrls = downloadUrls.map((url) => {
+          return {
+            ...url,
+            url: `${url.url}?t=${Date.now()}`,
+          };
+        });
 
-        setTotalProgress(downloadUrls.length);
-        await downloadAsZip(downloadUrls);
+        setTotalProgress(noCacheUrls.length);
+        await downloadAsZip(noCacheUrls);
 
         onDownloadSuccess?.();
       },
