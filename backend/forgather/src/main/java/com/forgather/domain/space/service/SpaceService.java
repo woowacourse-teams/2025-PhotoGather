@@ -42,10 +42,13 @@ public class SpaceService {
     }
 
     public SpaceCapacityResponse getSpaceCapacity(String spaceCode, Host host) {
+        boolean canPublicAccess = publicAccessService.canAccess(spaceCode);
         if (host != null) {
             // TODO: 추후 스페이스가 만료되어 소프트 딜리트 되는 경우 용량 정보 제공 고려
             Space space = spaceRepository.getUnexpiredSpaceByCode(spaceCode);
-            space.validateHost(host);
+            if (!canPublicAccess) {
+                space.validateHost(host);
+            }
             // TODO: 부하 발생 때 최적화 고려
             long usedValue = photoRepository.findAllBySpace(space)
                 .stream()
@@ -54,7 +57,7 @@ public class SpaceService {
             return new SpaceCapacityResponse(space.getMaxCapacity(), usedValue);
         }
 
-        if (publicAccessService.canAccess(spaceCode)) {
+        if (canPublicAccess) {
             Space space = spaceRepository.getUnexpiredSpaceByCode(spaceCode);
             long usedValue = photoRepository.findAllBySpace(space)
                 .stream()
