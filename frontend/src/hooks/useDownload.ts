@@ -50,7 +50,6 @@ const useDownload = ({
 
     for (let i = 0; i < downloadInfos.length; i += CHUNK_SIZE) {
       const batch = downloadInfos.slice(i, i + CHUNK_SIZE);
-      console.log(batch);
 
       const results = await Promise.allSettled(
         batch.map(async (downloadInfo) => {

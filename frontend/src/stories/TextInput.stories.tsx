@@ -1,6 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { useState } from 'react';
 import TextInput from '../components/@common/inputs/textInput/TextInput';
+import { CONSTRAINTS } from '../constants/constraints';
+import useGraphemeInput from '../hooks/@common/useGraphemeInput';
 
 const meta: Meta<typeof TextInput> = {
   title: 'Components/Input/Text',
@@ -17,11 +19,22 @@ type Story = StoryObj<typeof TextInput>;
 export const Default: Story = {
   render: (args) => {
     const [value, setValue] = useState('');
+    const { validLength, validValue } = useGraphemeInput({
+      initialValue: value,
+      onChange: (e) => setValue(e.target.value),
+    });
     return (
       <TextInput
         {...args}
-        value={value}
+        value={validValue}
+        maxCount={CONSTRAINTS.NAME_MAX_LENGTH}
+        validLength={validLength}
         onChange={(e) => setValue(e.target.value)}
+        errorMessage={
+          validLength > CONSTRAINTS.NAME_MAX_LENGTH
+            ? '최대 10자까지 입력할 수 있습니다.'
+            : ''
+        }
       />
     );
   },

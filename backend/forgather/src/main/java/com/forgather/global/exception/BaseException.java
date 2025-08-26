@@ -6,6 +6,16 @@ public class BaseException extends RuntimeException {
 
     private final HttpStatus status;
 
+    public BaseException() {
+        super();
+        this.status = HttpStatus.BAD_REQUEST;
+    }
+
+    public BaseException(HttpStatus status) {
+        super();
+        this.status = status;
+    }
+
     public BaseException(String message) {
         super(message);
         this.status = HttpStatus.BAD_REQUEST;

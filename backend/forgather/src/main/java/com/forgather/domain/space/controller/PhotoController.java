@@ -98,7 +98,7 @@ public class PhotoController {
     public ResponseEntity<PhotoResponse> get(
         @PathVariable(name = "spaceCode") String spaceCode,
         @PathVariable(name = "photoId") Long photoId,
-        @LoginHost Host host
+        @LoginHost(required = false) Host host
     ) {
         var response = photoService.get(spaceCode, photoId, host);
         return ResponseEntity.ok(response);
@@ -109,7 +109,7 @@ public class PhotoController {
     public ResponseEntity<PhotosResponse> getAll(
         @PathVariable(name = "spaceCode") String spaceCode,
         @PageableDefault(size = 15, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable,
-        @LoginHost Host host
+        @LoginHost(required = false) Host host
     ) {
         var response = photoService.getAll(spaceCode, pageable, host);
         return ResponseEntity.ok(response);
@@ -219,7 +219,7 @@ public class PhotoController {
     public ResponseEntity<DownloadUrlsResponse> getDownloadUrl(
         @PathVariable(name = "spaceCode") String spaceCode,
         @PathVariable(name = "photoId") Long photoId,
-        @LoginHost Host host
+        @LoginHost(required = false) Host host
     ) {
         var response = photoService.getDownloadUrl(spaceCode, photoId, host);
         return ResponseEntity.ok(response);
@@ -230,7 +230,7 @@ public class PhotoController {
     public ResponseEntity<DownloadUrlsResponse> getSelectedDownloadUrls(
         @PathVariable(name = "spaceCode") String spaceCode,
         @RequestBody DownloadPhotosRequest request,
-        @LoginHost Host host
+        @LoginHost(required = false) Host host
     ) {
         var response = photoService.getSelectedDownloadUrls(spaceCode, request, host);
         return ResponseEntity.ok(response);
@@ -240,7 +240,7 @@ public class PhotoController {
     @Operation(summary = "사진 일괄 다운로드 URL", description = "특정 공간의 모든 사진 다운로드 URL 목록을 생성합니다.")
     public ResponseEntity<DownloadUrlsResponse> getAllDownloadUrls(
         @PathVariable(name = "spaceCode") String spaceCode,
-        @LoginHost Host host
+        @LoginHost(required = false) Host host
     ) {
         var response = photoService.getAllDownloadUrls(spaceCode, host);
         return ResponseEntity.ok(response);
