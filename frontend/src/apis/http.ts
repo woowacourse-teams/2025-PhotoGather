@@ -188,6 +188,8 @@ const createHttpClient = ({
       fullUrl: url,
       headersOverride: {
         'Content-Type': file.type || 'application/octet-stream',
+        'Cache-Control': 'no-store',
+        'Content-Disposition': `attachment; filename*=UTF-8''${encodeURIComponent(file.name)}`,
         'x-amz-tagging':
           'Service=techcourse&Role=techcourse-etc&ProjectTeam=PhotoGather',
       },
