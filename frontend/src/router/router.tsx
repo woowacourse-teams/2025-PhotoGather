@@ -82,11 +82,12 @@ const routes: AppRouteObject[] = [
         },
       },
       {
-        path: 'upload/:spaceCode',
+        path: 'guest/image-upload/:spaceCode',
         element: <ImageUploadPage />,
         handle: {
           starField: true,
           highlight: true,
+          isInAppBrowserAllow: true,
         },
       },
       {
@@ -115,6 +116,9 @@ const routes: AppRouteObject[] = [
           {
             path: 'upload',
             element: <UploadCompletePage />,
+            handle: {
+              isInAppBrowserAllow: true,
+            },
           },
           {
             path: 'download',

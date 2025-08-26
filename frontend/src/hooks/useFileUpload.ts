@@ -40,8 +40,8 @@ const useFileUpload = ({
   guestId,
   tryCreateNickName,
 }: UseFileUploadProps) => {
-  const [uploadFiles, setUploadFiles] = useState<UploadFile[]>([]);
-  const [batches, setBatches] = useState<Batch[]>();
+  const [, setUploadFiles] = useState<UploadFile[]>([]);
+  const [, setBatches] = useState<Batch[]>();
   const [session, setSession] = useState<Session>();
   const [isUploading, setIsUploading] = useState(false);
   const { tryFetch } = useError();

@@ -4,6 +4,7 @@ import { Outlet, useMatches } from 'react-router-dom';
 import { authService } from '../../apis/services/auth.service';
 import OverlayProvider from '../../contexts/OverlayProvider';
 import useError from '../../hooks/@common/useError';
+import useInAppRedirect from '../../hooks/@common/useInAppRedirect';
 import useGoogleAnalytics from '../../hooks/useGoogleAnalytics';
 import type { MyInfo } from '../../types/api.type';
 import type { AppRouteObject } from '../../types/route.type';
@@ -17,6 +18,7 @@ const Layout = () => {
   const { tryFetch } = useError();
 
   useGoogleAnalytics();
+  useInAppRedirect();
 
   const matches = useMatches() as AppRouteObject[];
   const current = matches[matches.length - 1];

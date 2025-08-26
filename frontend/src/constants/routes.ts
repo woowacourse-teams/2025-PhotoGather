@@ -12,7 +12,7 @@ export const ROUTES = {
     SETTING: (spaceCode: string) => `/space/${spaceCode}/settings`,
   },
   GUEST: {
-    IMAGE_UPLOAD: (spaceCode: string) => `/upload/${spaceCode}`,
+    IMAGE_UPLOAD: (spaceCode: string) => `/guest/image-upload/${spaceCode}`,
     SHARE: '/share',
   },
   COMPLETE: {
@@ -26,6 +26,7 @@ export const ROUTES = {
     NETWORK: '/network-error',
     NOT_FOUND: '*',
   },
+  OPEN_BROWSER: '/open-browser',
   DEMO: '/demo',
   POLICY: {
     PRIVACY_POLICY: '/policy/privacy-policy',
