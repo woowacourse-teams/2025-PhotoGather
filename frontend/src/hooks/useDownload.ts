@@ -105,23 +105,17 @@ const useDownload = ({
         if (!response.data) return;
         const data = response.data;
         const { downloadUrls } = data;
-        const noCacheUrls = downloadUrls.map((url) => {
-          return {
-            ...url,
-            url: `${url.url}?t=${Date.now()}`,
-          };
-        });
 
         if (downloadUrls.length === 1) {
           await downloadAsImage(
-            noCacheUrls[0].url,
-            noCacheUrls[0].originalName,
+            downloadUrls[0].url,
+            downloadUrls[0].originalName,
           );
           return;
         }
 
-        setTotalProgress(noCacheUrls.length);
-        await downloadAsZip(noCacheUrls);
+        setTotalProgress(downloadUrls.length);
+        await downloadAsZip(downloadUrls);
       },
       errorActions: ['toast', 'afterAction'],
       context: {
@@ -145,9 +139,11 @@ const useDownload = ({
         );
         if (!response.data) return;
         const { downloadUrls } = response.data;
-        const noCacheUrl = `${downloadUrls[0].url}?t=${Date.now()}`;
 
-        await downloadAsImage(noCacheUrl, downloadUrls[0].originalName);
+        await downloadAsImage(
+          downloadUrls[0].url,
+          downloadUrls[0].originalName,
+        );
       },
       errorActions: ['toast', 'afterAction'],
       context: {
@@ -171,15 +167,9 @@ const useDownload = ({
         if (!response.data) return;
         const data = response.data;
         const { downloadUrls } = data;
-        const noCacheUrls = downloadUrls.map((url) => {
-          return {
-            ...url,
-            url: `${url.url}?t=${Date.now()}`,
-          };
-        });
 
-        setTotalProgress(noCacheUrls.length);
-        await downloadAsZip(noCacheUrls);
+        setTotalProgress(downloadUrls.length);
+        await downloadAsZip(downloadUrls);
 
         onDownloadSuccess?.();
       },
