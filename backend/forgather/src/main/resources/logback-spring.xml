@@ -44,9 +44,23 @@
         <!-- 파일 Appender -->
         <appender name="FILE" class="ch.qos.logback.core.FileAppender">
             <file>${FILE_PATH}/${FILE_NAME}</file>
-            <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-                <pattern>${FILE_PATTERN}</pattern>
-                <charset>UTF-8</charset>
+            <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
+                <providers>
+                    <timestamp/>
+                    <logLevel>
+                        <fieldName>level</fieldName>
+                    </logLevel>
+                    <loggerName>
+                        <fieldName>logger</fieldName>
+                    </loggerName>
+                    <logstashMarkers/>
+                    <mdc/>
+                    <keyValuePairs/>
+                    <message>
+                        <fieldName>msg</fieldName>
+                    </message>
+                    <stackTrace/>
+                </providers>
             </encoder>
             <!-- BODY를 제외 -->
             <filter class="ch.qos.logback.core.filter.EvaluatorFilter">
@@ -82,9 +96,23 @@
                 <onMatch>ACCEPT</onMatch>
                 <onMismatch>DENY</onMismatch>
             </filter>
-            <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-                <pattern>${FILE_PATTERN}</pattern>
-                <charset>UTF-8</charset>
+            <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
+                <providers>
+                    <timestamp/>
+                    <logLevel>
+                        <fieldName>level</fieldName>
+                    </logLevel>
+                    <loggerName>
+                        <fieldName>logger</fieldName>
+                    </loggerName>
+                    <logstashMarkers/>
+                    <mdc/>
+                    <keyValuePairs/>
+                    <message>
+                        <fieldName>msg</fieldName>
+                    </message>
+                    <stackTrace/>
+                </providers>
             </encoder>
         </appender>
         <root>

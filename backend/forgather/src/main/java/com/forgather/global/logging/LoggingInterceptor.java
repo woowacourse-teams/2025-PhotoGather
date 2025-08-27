@@ -32,9 +32,7 @@ public class LoggingInterceptor implements HandlerInterceptor {
         request.setAttribute("com.forgather.startTime", System.currentTimeMillis());
 
         String traceId = extractTraceId(request);
-        String formattedTraceId = "\"" + traceId + "\"";
-
-        MDC.put(MDC_TRACE_ID_KEY, formattedTraceId); // 해당 쓰레드에서 발생하는 모든 로그에 포함
+        MDC.put(MDC_TRACE_ID_KEY, traceId); // 해당 쓰레드에서 발생하는 모든 로그에 포함
 
         log.atInfo()
             .addKeyValue("event", "REQUEST")
@@ -102,8 +100,7 @@ public class LoggingInterceptor implements HandlerInterceptor {
     }
 
     private void setTraceIdHeader(HttpServletResponse response) {
-        String formattedTraceId = MDC.get(MDC_TRACE_ID_KEY);
-        String traceId = formattedTraceId.substring(1, TRACE_ID_LENGTH + 1);
+        String traceId = MDC.get(MDC_TRACE_ID_KEY);
         response.setHeader(TRACE_ID_HEADER, traceId);
     }
 }
