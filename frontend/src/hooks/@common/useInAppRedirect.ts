@@ -1,9 +1,12 @@
 import { useEffect } from 'react';
-import { useLocation, useMatches } from 'react-router-dom';
+import { useLocation, useMatches, useNavigate } from 'react-router-dom';
+import { ROUTES } from '../../constants/routes';
 import type { AppRouteObject } from '../../types/route.type';
 import { checkIsIos } from '../../utils/checkIsIos';
 
 const useInAppRedirect = () => {
+  const navigate = useNavigate();
+
   const matches = useMatches() as AppRouteObject[];
   const current = matches[matches.length - 1];
   const isInAppBrowserAllowPage = current?.handle?.isInAppBrowserAllow;
@@ -13,11 +16,11 @@ const useInAppRedirect = () => {
   };
 
   const redirectInInAppBrowser = (targetUrl: string) => {
-    const noSchemeTargetUrl = targetUrl.replace(/^https?:\/\//, '');
     if (checkIsIos()) {
-      window.location.href = `x-safari-https://${noSchemeTargetUrl}`;
+      window.location.href = `x-safari-${targetUrl}`;
     } else {
       if (!isAlreadyInAppRedirected(targetUrl)) {
+        const noSchemeTargetUrl = targetUrl.replace(/^https?:\/\//, '');
         window.location.href = `intent://${noSchemeTargetUrl}#Intent;scheme=https;S.browser_fallback_url=${encodeURIComponent(
           targetUrl + '?__inapp_redirected=1',
         )};end`;
@@ -47,6 +50,7 @@ const useInAppRedirect = () => {
     const isInAppBrowser = /(instagram|twitter)/.test(userAgent);
 
     const targetUrl = `${process.env.DOMAIN}${location}`;
+    navigate(ROUTES.IN_APP_BROWSER);
 
     if (isKakaoBrowser && !isInAppBrowserAllowPage) {
       redirectInKakaoBrowser(targetUrl);
