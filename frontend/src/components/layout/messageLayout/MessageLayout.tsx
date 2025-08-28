@@ -10,11 +10,11 @@ interface MessageLayoutProps {
   /** 완료 페이지 설명 */
   description: string;
   /** 완료 페이지 버튼 텍스트 */
-  buttonText?: string;
+  buttonText: string;
   /** 완료 페이지에서 강조할 텍스트 */
   highlightWords: string[];
   /** 버튼 클릭했을 때 실행할 함수*/
-  onButtonClick?: () => void;
+  onButtonClick: () => void;
 }
 
 const MessageLayout = ({
@@ -41,9 +41,7 @@ const MessageLayout = ({
       </S.ContentWrapper>
 
       <S.BottomContainer>
-        {buttonText && onButtonClick && (
-          <Button text={buttonText} onClick={onButtonClick} />
-        )}
+        <Button text={buttonText} onClick={onButtonClick} />
       </S.BottomContainer>
     </S.Wrapper>
   );
