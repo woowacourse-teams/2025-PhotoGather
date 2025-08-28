@@ -44,9 +44,7 @@ const useInAppRedirect = () => {
     const userAgent = navigator.userAgent.toLowerCase();
     const isKakaoBrowser = userAgent.includes('kakaotalk');
     const isLineBrowser = userAgent.includes('line');
-    const isInAppBrowser = /(instagram|twitter|slack|discord|naver)/.test(
-      userAgent,
-    );
+    const isInAppBrowser = /(instagram|twitter)/.test(userAgent);
 
     const targetUrl = `${process.env.DOMAIN}${location}`;
 
