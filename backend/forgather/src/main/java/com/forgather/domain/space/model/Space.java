@@ -15,6 +15,8 @@ import com.forgather.global.exception.ForbiddenException;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -68,7 +70,11 @@ public class Space extends BaseTimeEntity {
     @Column(name = "max_capacity", nullable = false)
     private Long maxCapacity; // bytes
 
-    public Space(Host host, String code, String name, int validHours, LocalDateTime openedAt) {
+    @Column(name = "type", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private SpaceType type = SpaceType.PRIVATE;
+
+    public Space(Host host, String code, String name, int validHours, LocalDateTime openedAt, SpaceType type) {
         validate(code, name, validHours, openedAt, DEFAULT_MAX_CAPACITY_VALUE);
         spaceHostMap.add(new SpaceHostMap(this, host));
         this.code = code;
@@ -76,9 +82,13 @@ public class Space extends BaseTimeEntity {
         this.openedAt = openedAt;
         this.validHours = validHours;
         this.maxCapacity = DEFAULT_MAX_CAPACITY_VALUE;
+        if (type != null) {
+            this.type = type;
+        }
     }
 
-    public Space(Host host, String code, String name, int validHours, LocalDateTime openedAt, Long capacity) {
+    public Space(Host host, String code, String name, int validHours, LocalDateTime openedAt, Long capacity,
+        SpaceType type) {
         validate(code, name, validHours, openedAt, capacity);
         spaceHostMap.add(new SpaceHostMap(this, host));
         this.code = code;
@@ -86,6 +96,7 @@ public class Space extends BaseTimeEntity {
         this.openedAt = openedAt;
         this.validHours = validHours;
         this.maxCapacity = capacity;
+        this.type = type;
     }
 
     @PostLoad
@@ -126,7 +137,7 @@ public class Space extends BaseTimeEntity {
         return openedAt.plusHours(validHours);
     }
 
-    public void update(String name, Integer validHours, LocalDateTime openedAt, String password) {
+    public void update(String name, Integer validHours, LocalDateTime openedAt, String password, SpaceType type) {
         if (name != null) {
             setName(name);
         }
@@ -135,6 +146,9 @@ public class Space extends BaseTimeEntity {
         }
         if (openedAt != null) {
             setOpenedAt(openedAt);
+        }
+        if (type != null) {
+            this.type = type;
         }
     }
 
