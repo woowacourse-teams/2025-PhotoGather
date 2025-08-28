@@ -1,3 +1,5 @@
+import { useNavigate } from 'react-router-dom';
+import { ROUTES } from '../../constants/routes';
 import { checkIsIos } from '../../utils/checkIsIos';
 
 const useInAppRedirect = () => {
@@ -5,6 +7,8 @@ const useInAppRedirect = () => {
   const isKakaoBrowser = userAgent.includes('kakaotalk');
   const isLineBrowser = userAgent.includes('line');
   const isInAppBrowser = /(instagram|twitter)/.test(userAgent);
+
+  const navigate = useNavigate();
 
   const redirectInKakaoBrowser = (targetUrl: string) => {
     window.location.href = `kakaotalk://web/openExternal?url=${encodeURIComponent(targetUrl)}`;
@@ -38,12 +42,15 @@ const useInAppRedirect = () => {
 
   const redirectToExternalBrowser = (targetUrl: string) => {
     if (isKakaoBrowser) {
+      navigate(ROUTES.IN_APP_BROWSER, { state: { targetUrl } });
       redirectInKakaoBrowser(targetUrl);
     }
     if (isLineBrowser) {
+      navigate(ROUTES.IN_APP_BROWSER, { state: { targetUrl } });
       redirectInLineBrowser(targetUrl);
     }
     if (isInAppBrowser) {
+      navigate(ROUTES.IN_APP_BROWSER, { state: { targetUrl } });
       redirectInInAppBrowser(targetUrl);
     }
   };

@@ -35,7 +35,6 @@ const Layout = () => {
   //biome-ignore lint/correctness/useExhaustiveDependencies: 페이지 접속 시 처음 한 번만 실행
   useEffect(() => {
     if (isInAppBrowserAllowPage) return;
-    navigate(ROUTES.IN_APP_BROWSER, { state: { targetUrl } });
     redirectToExternalBrowser(targetUrl);
   }, []);
 
