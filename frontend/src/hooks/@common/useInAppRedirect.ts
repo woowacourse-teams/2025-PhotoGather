@@ -17,8 +17,16 @@ const useInAppRedirect = () => {
     if (checkIsIos()) {
       window.location.href = `x-safari-https://${noSchemeTargetUrl}`;
     } else {
-      window.location.href = `intent://${noSchemeTargetUrl}#Intent;scheme=https;end`;
+      if (!isAlreadyInAppRedirected(targetUrl)) {
+        window.location.href = `intent://${noSchemeTargetUrl}#Intent;scheme=https;S.browser_fallback_url=${encodeURIComponent(
+          targetUrl + '?__inapp_redirected=1',
+        )};end`;
+      }
     }
+  };
+
+  const isAlreadyInAppRedirected = (targetUrl: string) => {
+    return targetUrl.includes('__inapp_redirected');
   };
 
   const redirectInLineBrowser = (targetUrl: string) => {
@@ -48,7 +56,7 @@ const useInAppRedirect = () => {
     if (isLineBrowser && !isInAppBrowserAllowPage) {
       redirectInLineBrowser(targetUrl);
     }
-    if (isInAppBrowser) {
+    if (isInAppBrowser && !isInAppBrowserAllowPage) {
       redirectInInAppBrowser(targetUrl);
     }
   }, []);
