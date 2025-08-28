@@ -2,6 +2,7 @@ package com.forgather.domain.guest.model;
 
 import com.forgather.domain.model.BaseTimeEntity;
 import com.forgather.domain.space.model.Space;
+import com.forgather.global.exception.BaseException;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -49,13 +50,13 @@ public class Guest extends BaseTimeEntity {
     @PreUpdate
     private void validate() {
         if (space == null) {
-            throw new IllegalArgumentException("스페이스가 설정되지 않았습니다.");
+            throw new BaseException("스페이스가 설정되지 않았습니다.");
         }
         if (name == null || name.isEmpty()) {
-            throw new IllegalArgumentException("게스트 이름이 비어있습니다.");
+            throw new BaseException("게스트 이름이 비어있습니다.");
         }
         if (name.length() > 10) {
-            throw new IllegalArgumentException("게스트 이름은 10자를 초과할 수 없습니다.");
+            throw new BaseException("게스트 이름은 10자를 초과할 수 없습니다.");
         }
     }
 }

@@ -6,6 +6,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.forgather.domain.guest.model.Guest;
+import com.forgather.global.exception.BaseException;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorValue;
@@ -54,13 +55,13 @@ public class Photo extends SpaceContent {
     @PrePersist
     void validate() {
         if (capacity == null || capacity <= 0L) {
-            throw new IllegalArgumentException("사진 용량은 비어있을 수 없고, 0보다 커야 합니다. 생성 시도 용량: " + capacity);
+            throw new BaseException("사진 용량은 비어있을 수 없고, 0보다 커야 합니다. 생성 시도 용량: " + capacity);
         }
     }
 
     public void validateSpace(Space other) {
         if (!space.equals(other)) {
-            throw new IllegalArgumentException("스페이스에 속하지 않는 사진입니다. 스페이스 ID: " + space.getId() + ", 사진 ID: " + id);
+            throw new BaseException("스페이스에 속하지 않는 사진입니다. 스페이스 ID: " + space.getId() + ", 사진 ID: " + id);
         }
     }
 

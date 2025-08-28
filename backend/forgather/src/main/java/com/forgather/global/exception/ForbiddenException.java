@@ -1,16 +1,10 @@
 package com.forgather.global.exception;
 
-public class ForbiddenException extends RuntimeException {
+import org.springframework.http.HttpStatus;
 
-    public ForbiddenException() {
-        super();
-    }
-    
+public class ForbiddenException extends BaseException {
+
     public ForbiddenException(String message) {
-        super(message);
-    }
-    
-    public ForbiddenException(String message, Throwable cause) {
-        super(message, cause);
+        super(message, HttpStatus.FORBIDDEN);
     }
 }

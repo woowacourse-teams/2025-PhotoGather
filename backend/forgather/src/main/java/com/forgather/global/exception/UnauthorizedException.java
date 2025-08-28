@@ -1,16 +1,14 @@
 package com.forgather.global.exception;
 
-public class UnauthorizedException extends RuntimeException {
+import org.springframework.http.HttpStatus;
+
+public class UnauthorizedException extends BaseException {
 
     public UnauthorizedException() {
-        super();
+        super(HttpStatus.UNAUTHORIZED);
     }
 
     public UnauthorizedException(String message) {
-        super(message);
-    }
-
-    public UnauthorizedException(String message, Throwable cause) {
-        super(message, cause);
+        super(message, HttpStatus.UNAUTHORIZED);
     }
 }

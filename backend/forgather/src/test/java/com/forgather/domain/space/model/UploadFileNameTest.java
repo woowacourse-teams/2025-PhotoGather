@@ -7,6 +7,8 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import com.forgather.global.exception.BaseException;
+
 class UploadFileNameTest {
 
     @DisplayName("파일명이 유효하지 않으면 예외를 발생한다.")
@@ -15,6 +17,6 @@ class UploadFileNameTest {
     @ParameterizedTest
     void validateUploadFileName(String invalidName) {
         assertThatThrownBy(() -> new UploadFileName(invalidName))
-            .isInstanceOf(IllegalArgumentException.class);
+            .isInstanceOf(BaseException.class);
     }
 }
