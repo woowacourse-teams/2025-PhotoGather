@@ -262,4 +262,8 @@ public class Space extends BaseTimeEntity {
     public int hashCode() {
         return Objects.hashCode(id);
     }
+
+    public boolean isPublic() {
+        return type == SpaceType.PUBLIC;
+    }
 }
