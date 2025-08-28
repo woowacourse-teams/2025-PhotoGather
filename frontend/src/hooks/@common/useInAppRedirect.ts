@@ -13,10 +13,11 @@ const useInAppRedirect = () => {
   };
 
   const redirectInInAppBrowser = (targetUrl: string) => {
+    const noSchemeTargetUrl = targetUrl.replace(/^https?:\/\//, '');
     if (checkIsIos()) {
-      window.location.href = `x-safari-https://${targetUrl}`;
+      window.location.href = `x-safari-https://${noSchemeTargetUrl}`;
     } else {
-      window.location.href = `intent://${targetUrl}#Intent;scheme=https;end`;
+      window.location.href = `intent://${noSchemeTargetUrl}#Intent;scheme=https;end`;
     }
   };
 
@@ -40,7 +41,8 @@ const useInAppRedirect = () => {
         userAgent,
       );
 
-    const targetUrl = process.env.DOMAIN + location;
+    const targetUrl = `${process.env.DOMAIN}${location}`;
+
     if (isKakaoBrowser && !isInAppBrowserAllowPage) {
       redirectInKakaoBrowser(targetUrl);
     }
