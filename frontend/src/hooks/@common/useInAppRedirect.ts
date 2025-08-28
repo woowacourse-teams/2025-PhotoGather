@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { useLocation, useMatches } from 'react-router-dom';
 import type { AppRouteObject } from '../../types/route.type';
+import { checkIsIos } from '../../utils/checkIsIos';
 
 const useInAppRedirect = () => {
   const matches = useMatches() as AppRouteObject[];
@@ -11,12 +12,21 @@ const useInAppRedirect = () => {
     window.location.href = `kakaotalk://web/openExternal?url=${encodeURIComponent(targetUrl)}`;
   };
 
+  const redirectInInAppBrowser = (targetUrl: string) => {
+    if (checkIsIos()) {
+      window.location.href = `x-safari-https://${targetUrl}`;
+    } else {
+      window.location.href = `intent://${targetUrl}#Intent;scheme=https;end`;
+    }
+  };
+
   const redirectInLineBrowser = (targetUrl: string) => {
     if (location.indexOf('?') !== -1) {
       window.location.href = `${targetUrl}&openExternalBrowser=1`;
     } else {
       window.location.href = `${targetUrl}?openExternalBrowser=1`;
     }
+    console.log('fallback UI 자리');
   };
 
   const location = useLocation().pathname;
@@ -25,6 +35,10 @@ const useInAppRedirect = () => {
     const userAgent = navigator.userAgent.toLowerCase();
     const isKakaoBrowser = userAgent.includes('kakaotalk');
     const isLineBrowser = userAgent.includes('line');
+    const isInAppBrowser =
+      /(instagram|fbav|fban|whatsapp|telegram|twitter|tiktok|snapchat|reddit|slack|discord|naver|gsa|samsungbrowser)/.test(
+        userAgent,
+      );
 
     const targetUrl = process.env.DOMAIN + location;
     if (isKakaoBrowser && !isInAppBrowserAllowPage) {
@@ -32,6 +46,9 @@ const useInAppRedirect = () => {
     }
     if (isLineBrowser && !isInAppBrowserAllowPage) {
       redirectInLineBrowser(targetUrl);
+    }
+    if (isInAppBrowser) {
+      redirectInInAppBrowser(targetUrl);
     }
   }, []);
 };
