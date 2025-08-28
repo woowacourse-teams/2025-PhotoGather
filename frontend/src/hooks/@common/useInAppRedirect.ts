@@ -7,6 +7,18 @@ const useInAppRedirect = () => {
   const current = matches[matches.length - 1];
   const isInAppBrowserAllowPage = current?.handle?.isInAppBrowserAllow;
 
+  const redirectInKakaoBrowser = (targetUrl: string) => {
+    window.location.href = `kakaotalk://web/openExternal?url=${encodeURIComponent(targetUrl)}`;
+  };
+
+  const redirectInLineBrowser = (targetUrl: string) => {
+    if (location.indexOf('?') !== -1) {
+      window.location.href = `${targetUrl}&openExternalBrowser=1`;
+    } else {
+      window.location.href = `${targetUrl}?openExternalBrowser=1`;
+    }
+  };
+
   const location = useLocation().pathname;
   //biome-ignore lint/correctness/useExhaustiveDependencies: 페이지 접속 시 처음 한 번만 실행
   useEffect(() => {
@@ -16,14 +28,10 @@ const useInAppRedirect = () => {
 
     const targetUrl = process.env.DOMAIN + location;
     if (isKakaoBrowser && !isInAppBrowserAllowPage) {
-      window.location.href = `kakaotalk://web/openExternal?url=${encodeURIComponent(targetUrl)}`;
+      redirectInKakaoBrowser(targetUrl);
     }
     if (isLineBrowser && !isInAppBrowserAllowPage) {
-      if (location.indexOf('?') !== -1) {
-        window.location.href = `${targetUrl}&openExternalBrowser=1`;
-      } else {
-        window.location.href = `${targetUrl}?openExternalBrowser=1`;
-      }
+      redirectInLineBrowser(targetUrl);
     }
   }, []);
 };
