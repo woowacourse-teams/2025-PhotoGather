@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 
 import org.hibernate.validator.constraints.Length;
 
+import com.forgather.domain.space.model.SpaceType;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.Positive;
@@ -23,6 +25,9 @@ public record UpdateSpaceRequest(
     LocalDateTime openedAt,
 
     @Schema(description = "새로운 스페이스 비밀번호", example = "password123", nullable = true)
-    String password
+    String password,
+
+    @Schema(description = "새로운 스페이스 유형", example = "PRIVATE", nullable = true)
+    SpaceType type
 ) {
 }

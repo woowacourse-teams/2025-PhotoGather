@@ -76,7 +76,8 @@ public class SpaceService {
             request.name(),
             request.validHours(),
             request.openedAt(),
-            request.password()
+            request.password(),
+            request.type()
         );
 
         return SpaceResponse.from(space);

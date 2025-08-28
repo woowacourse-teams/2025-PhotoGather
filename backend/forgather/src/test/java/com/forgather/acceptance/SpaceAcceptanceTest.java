@@ -12,6 +12,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.forgather.domain.space.dto.CreateSpaceRequest;
+import com.forgather.domain.space.model.SpaceType;
 import com.forgather.domain.space.repository.HostRepository;
 import com.forgather.global.auth.model.Host;
 import com.forgather.global.auth.util.JwtTokenProvider;
@@ -42,7 +43,7 @@ class SpaceAcceptanceTest extends AcceptanceTest {
     void createSpaceWithRestAssuredMockMvc() {
         // given
         var host = hostRepository.save(new Host("모코", "pictureUrl"));
-        var request = new CreateSpaceRequest("test-space", 72, LocalDateTime.now().plusDays(3));
+        var request = new CreateSpaceRequest("test-space", 72, LocalDateTime.now().plusDays(3), SpaceType.PRIVATE);
         String token = jwtTokenProvider.generateAccessToken(host.getId());
 
         // when
