@@ -22,12 +22,12 @@ const DashboardPage = () => {
     }
   };
 
-  const bytesToMB = (bytes: number): number => {
-    return Number((bytes / (1024 * 1024)).toFixed(2));
+  const bytesToGB = (bytes: number): number => {
+    return Number((bytes / (1024 * 1024 * 1024)).toFixed(2));
   };
 
-  const usedMB = capacity ? bytesToMB(capacity.usedCapacity) : 0;
-  const maxMB = capacity ? bytesToMB(capacity.maxCapacity) : 10240;
+  const usedGB = capacity ? bytesToGB(capacity.usedCapacity) : 0;
+  const maxGB = capacity ? bytesToGB(capacity.maxCapacity) : 10;
 
   return (
     <S.Wrapper>
@@ -35,9 +35,9 @@ const DashboardPage = () => {
       <S.DashboardContainer>
         <DashboardBox
           title="스페이스 용량"
-          description={`${usedMB}MB / ${maxMB}MB`}
+          description={`${usedGB}GB / ${maxGB}GB`}
         >
-          <DonutGraph value={usedMB} maxValue={maxMB} width={80} height={80} />
+          <DonutGraph value={usedGB} maxValue={maxGB} width={80} height={80} />
         </DashboardBox>
         <S.DashboardInfoContainer>
           <DashboardBox

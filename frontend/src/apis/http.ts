@@ -40,7 +40,12 @@ const request = async <T>(
   }: requestOptionsType,
 ): Promise<ApiResponse<T>> => {
   const url = fullUrl ?? `${BASE_URL}${endpoint}${buildQueryString(params)}`;
-  const baseHeaders = createHeaders(bodyContentType, token, withTraceId);
+  const baseHeaders = createHeaders(
+    bodyContentType,
+    token,
+    withTraceId,
+    method,
+  );
   const headers = { ...baseHeaders, ...headersOverride };
 
   const requestBody = createBody(body, bodyContentType);
