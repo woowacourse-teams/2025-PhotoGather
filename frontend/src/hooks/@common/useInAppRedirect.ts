@@ -20,7 +20,7 @@ const useInAppRedirect = () => {
     } else {
       window.location.href = `${targetUrl}?openExternalBrowser=1`;
     }
-    console.log('fallback UI 자리');
+    // TODO : fallback UI 구현
   };
 
   const redirectInInAppBrowser = (targetUrl: string) => {
