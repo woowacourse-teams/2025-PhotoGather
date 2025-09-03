@@ -41,17 +41,20 @@ const useInAppRedirect = () => {
   };
 
   const redirectToExternalBrowser = (targetUrl: string) => {
+    if (!(isKakaoBrowser || isLineBrowser || isInAppBrowser)) return;
+
+    navigate(ROUTES.IN_APP_BROWSER, { state: { targetUrl } });
     if (isKakaoBrowser) {
-      navigate(ROUTES.IN_APP_BROWSER, { state: { targetUrl } });
       redirectInKakaoBrowser(targetUrl);
+      return;
     }
     if (isLineBrowser) {
-      navigate(ROUTES.IN_APP_BROWSER, { state: { targetUrl } });
       redirectInLineBrowser(targetUrl);
+      return;
     }
     if (isInAppBrowser) {
-      navigate(ROUTES.IN_APP_BROWSER, { state: { targetUrl } });
       redirectInInAppBrowser(targetUrl);
+      return;
     }
   };
 

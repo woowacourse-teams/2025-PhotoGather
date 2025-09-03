@@ -1,8 +1,7 @@
 import defaultProfile from '@assets/images/default_profile.png';
 import { useEffect, useState } from 'react';
-import { Outlet, useLocation, useMatches, useNavigate } from 'react-router-dom';
+import { Outlet, useLocation, useMatches } from 'react-router-dom';
 import { authService } from '../../apis/services/auth.service';
-import { ROUTES } from '../../constants/routes';
 import OverlayProvider from '../../contexts/OverlayProvider';
 import useError from '../../hooks/@common/useError';
 import useInAppRedirect from '../../hooks/@common/useInAppRedirect';
@@ -19,7 +18,6 @@ const Layout = () => {
   const { tryFetch } = useError();
   const location = useLocation().pathname;
   const { redirectToExternalBrowser } = useInAppRedirect();
-  const navigate = useNavigate();
 
   useGoogleAnalytics();
 
