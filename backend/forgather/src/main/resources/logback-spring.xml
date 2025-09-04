@@ -12,7 +12,9 @@
     <springProperty scope="context" name="FILE_PATH" source="logging.file.path" defaultValue="/var/log"/>
     <springProperty scope="context" name="FILE_NAME" source="logging.file.name" defaultValue="app.log"/>
     <springProperty scope="context" name="BODY_FILE_PATH" source="logging.file.body.path" defaultValue="/var/log"/>
-    <springProperty scope="context" name="BODY_FILE_NAME" source="logging.file.body.name" defaultValue="app-body.log"/>
+    <springProperty scope="context" name="BODY_FILE_NAME" source="logging.file.body.name" defaultValue="body.log"/>
+    <springProperty scope="context" name="ERROR_FILE_PATH" source="logging.file.error.path" defaultValue="/var/log"/>
+    <springProperty scope="context" name="ERROR_FILE_NAME" source="logging.file.error.name" defaultValue="error.log"/>
 
     <!--콘솔 Appender -->
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
@@ -72,10 +74,24 @@
                 <OnMismatch>DENY</OnMismatch>
             </filter>
         </appender>
+
+        <appender name="ERROR_FILE" class="ch.qos.logback.core.FileAppender">
+            <file>${ERROR_FILE_PATH}/${ERROR_FILE_NAME}</file>
+            <filter class="ch.qos.logback.classic.filter.LevelFilter">
+                <level>error</level>
+                <onMatch>ACCEPT</onMatch>
+                <onMismatch>DENY</onMismatch>
+            </filter>
+            <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+                <pattern>${FILE_PATTERN}</pattern>
+                <charset>UTF-8</charset>
+            </encoder>
+        </appender>
         <root>
             <appender-ref ref="CONSOLE"/>
             <appender-ref ref="FILE"/>
             <appender-ref ref="BODY_FILE"/>
+            <appender-ref ref="ERROR_FILE"/>
         </root>
     </springProfile>
 
