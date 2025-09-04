@@ -71,6 +71,14 @@ public class GlobalExceptionHandler {
             .body(ErrorResponse.from("필요한 쿠키가 누락되었습니다: " + e.getCookieName()));
     }
 
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleNotFoundException(NotFoundException e) {
+        logClientInfo(e);
+        return ResponseEntity.status(e.getStatusCode())
+            .contentType(APPLICATION_JSON)
+            .body(ErrorResponse.from(e.getMessage()));
+    }
+
     /**
      * 예측 가능하지만 주의해야할 예외 -> warn
      */
