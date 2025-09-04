@@ -1,5 +1,5 @@
 import * as exifr from 'exifr';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { CONSTRAINTS } from '../../constants/constraints';
 import type { LocalFile } from '../../types/file.type';
 import { isValidFileType } from '../../utils/isValidFileType';

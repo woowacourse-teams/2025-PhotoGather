@@ -47,11 +47,6 @@ const useFileUpload = ({
   const { tryFetch } = useError();
   const [progress, setProgress] = useState(0);
 
-  //TODO: 진행률 확인하고 제거
-  // useEffect(() => {
-  //   console.log(session);
-  // }, [session]);
-
   const ensureGuestId = async () => {
     if (guestId && guestId !== FAILED_GUEST_ID) return guestId;
 

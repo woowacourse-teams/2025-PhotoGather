@@ -99,6 +99,7 @@ const useDownload = ({
 
     await tryFetch({
       task: async () => {
+        setIsDownloading(true);
         const response = await photoService.downloadPhotos(spaceCode, {
           photoIds: photoIds,
         });
@@ -117,15 +118,17 @@ const useDownload = ({
         setTotalProgress(downloadUrls.length);
         await downloadAsZip(downloadUrls);
       },
-      errorActions: ['toast', 'afterAction'],
+      errorActions: ['toast'],
       context: {
         toast: {
           text: '다운로드에 실패했습니다. 다시 시도해 주세요.',
           type: 'error',
         },
-        afterAction: {
-          action: () => setIsDownloading(false),
-        },
+      },
+      onFinally: () => {
+        setTotalProgress(0);
+        setCurrentProgress(0);
+        setIsDownloading(false);
       },
     });
   };
@@ -145,15 +148,15 @@ const useDownload = ({
           downloadUrls[0].originalName,
         );
       },
-      errorActions: ['toast', 'afterAction'],
+      errorActions: ['toast'],
       context: {
         toast: {
           text: '다운로드에 실패했습니다. 다시 시도해 주세요.',
           type: 'error',
         },
-        afterAction: {
-          action: () => setIsDownloading(false),
-        },
+      },
+      onFinally: () => {
+        setIsDownloading(false);
       },
     });
   };
@@ -173,15 +176,17 @@ const useDownload = ({
 
         onDownloadSuccess?.();
       },
-      errorActions: ['toast', 'afterAction'],
+      errorActions: ['toast'],
       context: {
         toast: {
           text: '다운로드에 실패했습니다. 다시 시도해 주세요.',
           type: 'error',
         },
-        afterAction: {
-          action: () => setIsDownloading(false),
-        },
+      },
+      onFinally: () => {
+        setTotalProgress(0);
+        setCurrentProgress(0);
+        setIsDownloading(false);
       },
     });
   };
