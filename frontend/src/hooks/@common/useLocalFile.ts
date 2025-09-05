@@ -2,6 +2,7 @@ import * as exifr from 'exifr';
 import { useState } from 'react';
 import { CONSTRAINTS } from '../../constants/constraints';
 import type { LocalFile } from '../../types/file.type';
+import { heicToJpegBlob, isHeic } from '../../utils/heic';
 import { isValidFileType } from '../../utils/isValidFileType';
 import {
   checkInvalidFileType,
@@ -19,13 +20,30 @@ const useLocalFile = ({ fileType }: UseLocalFileProps) => {
     id: file.id,
     previewUrl: file.previewUrl,
   }));
-  const { tryTask } = useError();
+  const { tryTask, tryFetch } = useError();
 
   const extractDateTimeOriginal = async (file: File) => {
     const metadata = await exifr.parse(file, ['DateTimeOriginal']);
     return metadata?.DateTimeOriginal
       ? (metadata.DateTimeOriginal as Date).toISOString()
       : null;
+  };
+
+  const createImagePreviewUrl = async (file: File) => {
+    if (isHeic(file)) {
+      const { data } = await tryFetch({
+        task: () => heicToJpegBlob(file),
+        errorActions: ['toast'],
+        context: {
+          toast: {
+            text: '사진을 불러오는데 실패했어요. 다시 시도해주세요.',
+          },
+        },
+      });
+      return URL.createObjectURL(data as Blob);
+    } else {
+      return URL.createObjectURL(file);
+    }
   };
 
   const addPreviewUrlsFromFiles = async (files: File[]) => {
@@ -37,7 +55,7 @@ const useLocalFile = ({ fileType }: UseLocalFileProps) => {
         originFile: file,
         capturedAt: await extractDateTimeOriginal(file),
         capacityValue: file.size,
-        previewUrl: URL.createObjectURL(file),
+        previewUrl: await createImagePreviewUrl(file),
       })),
     );
 
