@@ -8,6 +8,7 @@ import NetworkErrorPage from '../pages/error/NetworkErrorPage';
 import NotFoundErrorPage from '../pages/error/NotFoundErrorPage';
 import ImageUploadPage from '../pages/guest/imageUploadPage/ImageUploadPage';
 import SharePage from '../pages/guest/sharePage/SharePage';
+import InAppBrowserPage from '../pages/inAppBrowser/InAppBrowserPage';
 import LandingPage from '../pages/landing/LandingPage';
 import LoginPage from '../pages/login/LoginPage';
 import LogoutPage from '../pages/logout/LogoutPage';
@@ -151,6 +152,10 @@ const routes: AppRouteObject[] = [
           { path: 'terms-of-service', element: <TermsOfServicePage /> },
           { path: 'privacy-consent', element: <PrivacyConsentPage /> },
         ],
+      },
+      {
+        path: 'in-app-browser',
+        element: <InAppBrowserPage />,
       },
       {
         path: 'network-error',

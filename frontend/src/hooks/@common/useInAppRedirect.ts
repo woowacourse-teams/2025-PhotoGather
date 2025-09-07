@@ -1,31 +1,64 @@
-import { useEffect } from 'react';
-import { useLocation, useMatches } from 'react-router-dom';
-import type { AppRouteObject } from '../../types/route.type';
+import { useNavigate } from 'react-router-dom';
+import { ROUTES } from '../../constants/routes';
+import { checkIsIos } from '../../utils/checkIsIos';
 
 const useInAppRedirect = () => {
-  const matches = useMatches() as AppRouteObject[];
-  const current = matches[matches.length - 1];
-  const isInAppBrowserAllowPage = current?.handle?.isInAppBrowserAllow;
+  const userAgent = navigator.userAgent.toLowerCase();
+  const isKakaoBrowser = userAgent.includes('kakaotalk');
+  const isLineBrowser = userAgent.includes('line');
+  const isInAppBrowser = /(instagram|twitter)/.test(userAgent);
 
-  const location = useLocation().pathname;
-  //biome-ignore lint/correctness/useExhaustiveDependencies: 페이지 접속 시 처음 한 번만 실행
-  useEffect(() => {
-    const userAgent = navigator.userAgent.toLowerCase();
-    const isKakaoBrowser = userAgent.includes('kakaotalk');
-    const isLineBrowser = userAgent.includes('line');
+  const navigate = useNavigate();
 
-    const targetUrl = process.env.DOMAIN + location;
-    if (isKakaoBrowser && !isInAppBrowserAllowPage) {
-      window.location.href = `kakaotalk://web/openExternal?url=${encodeURIComponent(targetUrl)}`;
+  const redirectInKakaoBrowser = (targetUrl: string) => {
+    window.location.href = `kakaotalk://web/openExternal?url=${encodeURIComponent(targetUrl)}`;
+  };
+
+  const redirectInLineBrowser = (targetUrl: string) => {
+    if (targetUrl.indexOf('?') !== -1) {
+      window.location.href = `${targetUrl}&openExternalBrowser=1`;
+    } else {
+      window.location.href = `${targetUrl}?openExternalBrowser=1`;
     }
-    if (isLineBrowser && !isInAppBrowserAllowPage) {
-      if (location.indexOf('?') !== -1) {
-        window.location.href = `${targetUrl}&openExternalBrowser=1`;
-      } else {
-        window.location.href = `${targetUrl}?openExternalBrowser=1`;
+    // TODO : fallback UI 구현
+  };
+
+  const redirectInInAppBrowser = (targetUrl: string) => {
+    if (checkIsIos()) {
+      window.location.href = `x-safari-${targetUrl}`;
+    } else {
+      if (!isAlreadyInAppRedirected(targetUrl)) {
+        const noSchemeTargetUrl = targetUrl.replace(/^https?:\/\//, '');
+        window.location.href = `intent://${noSchemeTargetUrl}#Intent;scheme=https;S.browser_fallback_url=${encodeURIComponent(
+          targetUrl + '?__inapp_redirected=1',
+        )};end`;
       }
     }
-  }, []);
+  };
+
+  const isAlreadyInAppRedirected = (targetUrl: string) => {
+    return targetUrl.includes('__inapp_redirected');
+  };
+
+  const redirectToExternalBrowser = (targetUrl: string) => {
+    if (!(isKakaoBrowser || isLineBrowser || isInAppBrowser)) return;
+
+    navigate(ROUTES.IN_APP_BROWSER, { state: { targetUrl } });
+    if (isKakaoBrowser) {
+      redirectInKakaoBrowser(targetUrl);
+      return;
+    }
+    if (isLineBrowser) {
+      redirectInLineBrowser(targetUrl);
+      return;
+    }
+    if (isInAppBrowser) {
+      redirectInInAppBrowser(targetUrl);
+      return;
+    }
+  };
+
+  return { redirectToExternalBrowser };
 };
 
 export default useInAppRedirect;
