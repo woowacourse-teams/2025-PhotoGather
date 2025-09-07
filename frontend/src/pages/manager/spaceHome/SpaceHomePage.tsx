@@ -3,6 +3,7 @@ import { ReactComponent as ShareIcon } from '@assets/icons/share.svg';
 import messageIcon from '@assets/images/message.png';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { ReactComponent as UploadIcon } from '../../../@assets/icons/add-photo.svg';
 import { ReactComponent as SaveIcon } from '../../../@assets/icons/download.svg';
 import { ReactComponent as SettingSvg } from '../../../@assets/icons/setting.svg';
 import { ReactComponent as ArrowUpSvg } from '../../../@assets/icons/upwardArrow.svg';
@@ -126,6 +127,15 @@ const SpaceHomePage = () => {
     });
   };
 
+  const clickUploadButton = () => {
+    navigate(ROUTES.GUEST.IMAGE_UPLOAD(spaceCode ?? ''));
+    track.button('space_upload_button', {
+      page: 'space_home',
+      section: 'space_home_header',
+      action: 'open_upload',
+    });
+  };
+
   const deletePhotoWithTracking = async (photoId: number) => {
     await tryDeleteSinglePhoto(photoId);
     track.button('single_delete_button', {
@@ -235,6 +245,11 @@ const SpaceHomePage = () => {
           title={spaceName}
           timer={leftTime}
           icons={[
+            {
+              element: <UploadIcon fill={theme.colors.white} width="20px" />,
+              onClick: clickUploadButton,
+              label: '업로드',
+            },
             {
               element: <SettingSvg fill={theme.colors.white} width="20px" />,
               onClick: clickDashboardWithTracking,
