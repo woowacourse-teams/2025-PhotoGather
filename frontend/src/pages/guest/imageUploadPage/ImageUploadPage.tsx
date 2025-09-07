@@ -1,7 +1,9 @@
 import messageIcon from '@assets/images/message.png';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { ReactComponent as ExternalLinkIcon } from '../../../@assets/icons/external-link.svg';
 import { ReactComponent as ArrowUpSvg } from '../../../@assets/icons/upwardArrow.svg';
+import Button from '../../../components/@common/buttons/button/Button';
 import FloatingActionButton from '../../../components/@common/buttons/floatingActionButton/FloatingActionButton';
 import FloatingIconButton from '../../../components/@common/buttons/floatingIconButton/FloatingIconButton';
 import HighlightText from '../../../components/@common/highlightText/HighlightText';
@@ -148,10 +150,18 @@ const ImageUploadPage = () => {
       )}
       <S.ScrollTopAnchor ref={scrollTopTriggerRef} />
       <SpaceHeader title={spaceName} timer={leftTime} />
-      <UserBadge
-        nickName={nickName}
-        onBadgeClick={() => showNickNameEditModal()}
-      />
+      <S.ToolBar>
+        <UserBadge
+          nickName={nickName}
+          onBadgeClick={() => showNickNameEditModal()}
+        />
+        <Button
+          variant="tertiary"
+          text="스페이스 관리 페이지"
+          icon={<ExternalLinkIcon fill={theme.colors.gray03} width="16px" />}
+          onClick={() => {}}
+        />
+      </S.ToolBar>
       <S.UploadContainer $hasImages={hasImages}>
         {shouldShowFakeUploadBox ? (
           <UploadBox
