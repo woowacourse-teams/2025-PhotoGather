@@ -50,13 +50,18 @@ const useLocalFile = ({ fileType }: UseLocalFileProps) => {
     const startIndex = localFiles.length;
 
     const tmpFiles = await Promise.all(
-      files.map(async (file, index) => ({
-        id: startIndex + index,
-        originFile: file,
-        capturedAt: await extractDateTimeOriginal(file),
-        capacityValue: file.size,
-        previewUrl: await createImagePreviewUrl(file),
-      })),
+      files.map(async (file, index) => {
+        const buf = await file.arrayBuffer();
+        const cloned = new File([buf], file.name, { type: file.type });
+
+        return {
+          id: startIndex + index,
+          originFile: cloned,
+          capturedAt: await extractDateTimeOriginal(cloned),
+          capacityValue: cloned.size,
+          previewUrl: await createImagePreviewUrl(cloned),
+        };
+      }),
     );
 
     setLocalFiles((prev) => [...prev, ...tmpFiles]);
