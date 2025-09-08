@@ -35,6 +35,10 @@ public class BaseException extends RuntimeException {
         return status.is4xxClientError();
     }
 
+    public boolean isSecurityError() {
+        return status.isSameCodeAs(HttpStatus.UNAUTHORIZED) || status.isSameCodeAs(HttpStatus.FORBIDDEN);
+    }
+
     public int getStatusCode() {
         return status.value();
     }
