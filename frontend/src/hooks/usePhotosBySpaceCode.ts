@@ -17,8 +17,8 @@ const usePhotosBySpaceCode = ({
   const PAGE_SIZE = 20;
   const PRESET = 'x800';
 
-  const [isLoading, setIsLoading] = useState(false);
-  const [photosList, setPhotosList] = useState<Photo[] | null>(null);
+  const [isLoadingPhotos, setIsLoadingPhotos] = useState(true);
+  const [photosList, setPhotosList] = useState<Photo[]>([]);
   const currentPage = useRef(1);
   const totalPages = useRef(1);
   const { tryFetch } = useError();
@@ -48,13 +48,13 @@ const usePhotosBySpaceCode = ({
 
   const updatePhotos = (updatePhotos: Photo[]) => {
     setPhotosList((prev) => {
-      if (!prev) return null;
+      if (!prev) return [];
       return updatePhotos;
     });
   };
 
   const fetchPhotosList = async () => {
-    setIsLoading(true);
+    setIsLoadingPhotos(true);
     const pageToFetch = currentPage.current;
     const response = await photoService.getBySpaceCode(spaceCode, {
       page: pageToFetch,
@@ -82,7 +82,7 @@ const usePhotosBySpaceCode = ({
         },
       },
       onFinally: () => {
-        setIsLoading(false);
+        setIsLoadingPhotos(false);
       },
     });
   };
@@ -92,7 +92,7 @@ const usePhotosBySpaceCode = ({
     tryFetchPhotosList,
     thumbnailPhotoMap,
     photosList,
-    isLoading,
+    isLoadingPhotos,
     updatePhotos,
   };
 };

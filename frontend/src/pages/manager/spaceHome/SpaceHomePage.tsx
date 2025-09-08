@@ -5,6 +5,7 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ReactComponent as UploadIcon } from '../../../@assets/icons/add-photo.svg';
 import { ReactComponent as SaveIcon } from '../../../@assets/icons/download.svg';
+import { ReactComponent as GiftIcon } from '../../../@assets/icons/gift.svg';
 import { ReactComponent as SettingSvg } from '../../../@assets/icons/setting.svg';
 import { ReactComponent as ArrowUpSvg } from '../../../@assets/icons/upwardArrow.svg';
 import FloatingActionButton from '../../../components/@common/buttons/floatingActionButton/FloatingActionButton';
@@ -69,7 +70,7 @@ const SpaceHomePage = () => {
 
   const {
     photosList,
-    isLoading,
+    isLoadingPhotos,
     thumbnailPhotoMap,
     isEndPage,
     tryFetchPhotosList,
@@ -181,7 +182,6 @@ const SpaceHomePage = () => {
     if (
       !isFetchSectionVisible ||
       isEndPage ||
-      isLoading ||
       isSpaceExpired ||
       isEarlyTime ||
       !hasAccess
@@ -239,6 +239,79 @@ const SpaceHomePage = () => {
     );
   };
 
+  const renderBottomNavigatorContent = () => {
+    return (
+      <S.BottomNavigatorContainer>
+        <S.TopButtonContainer $isVisible={!isAtPageTop}>
+          {!isSelectMode && (
+            <FloatingIconButton
+              icon={<ArrowUpSvg fill={theme.colors.white} />}
+              onClick={goToTop}
+            />
+          )}
+        </S.TopButtonContainer>
+        {isSelectMode && (
+          <PhotoSelectionToolBar
+            selectedCount={selectedPhotosCount}
+            onDelete={() => tryDeleteSelectedPhotos(selectedPhotoIds)}
+            onDownload={() => trySelectedDownload(selectedPhotoIds)}
+          />
+        )}
+      </S.BottomNavigatorContainer>
+    );
+  };
+
+  const renderBodyContent = () => {
+    if (isEarlyTime) return <EarlyPage openedAt={spaceInfo.openedAt} />;
+    if (isSpaceExpired) return <ExpiredPage />;
+    if (!isLoadingPhotos && photosList.length === 0)
+      return (
+        <S.NoImageContainer>
+          <GiftIcon width="120px" />
+          <S.NoImageText>{INFORMATION.NO_IMAGE}</S.NoImageText>
+        </S.NoImageContainer>
+      );
+    if (!isLoadingPhotos && photosList.length > 0)
+      return (
+        <>
+          <S.ImageManagementContainer>
+            <SpaceHomeTopActionBar
+              isSelectMode={isSelectMode}
+              isAllSelected={isAllSelected}
+              onToggleSelectMode={toggleSelectMode}
+              onToggleAllSelected={toggleAllSelected}
+            />
+            <SpaceManagerImageGrid
+              isSelectMode={isSelectMode}
+              selectedPhotoMap={selectedPhotoMap}
+              photoData={photosList}
+              thumbnailUrlList={thumbnailPhotoMap}
+              rowImageAmount={3}
+              onImageClick={handleImageClick}
+            />
+          </S.ImageManagementContainer>
+          {!isSelectMode && (
+            <S.DownloadButtonContainer>
+              <FloatingActionButton
+                label="모두 저장하기"
+                icon={<SaveIcon fill={theme.colors.gray06} />}
+                onClick={() => {
+                  tryAllDownload();
+                  track.button('all_download_button', {
+                    page: 'space_home',
+                    section: 'space_home',
+                    action: 'download_all',
+                  });
+                }}
+                disabled={isDownloading}
+              />
+            </S.DownloadButtonContainer>
+          )}
+          {renderBottomNavigatorContent()}
+        </>
+      );
+  };
+
   return (
     <S.Wrapper>
       {isDownloading && (
@@ -248,7 +321,9 @@ const SpaceHomePage = () => {
           currentAmount={currentProgress}
         />
       )}
+
       {!hasAccess && !isLoadingAccess && <NoAccessPage />}
+
       <S.InfoContainer ref={scrollTopTriggerRef}>
         <SpaceHeader
           title={spaceName}
@@ -273,73 +348,7 @@ const SpaceHomePage = () => {
         />
       </S.InfoContainer>
 
-      {isEarlyTime || isSpaceExpired ? (
-        <S.NoImageContainer>
-          {isEarlyTime && <EarlyPage openedAt={spaceInfo.openedAt} />}
-          {isSpaceExpired && <ExpiredPage />}
-        </S.NoImageContainer>
-      ) : (
-        photosList &&
-        (photosList.length > 0 ? (
-          <>
-            <S.ImageManagementContainer>
-              <SpaceHomeTopActionBar
-                isSelectMode={isSelectMode}
-                isAllSelected={isAllSelected}
-                onToggleSelectMode={toggleSelectMode}
-                onToggleAllSelected={toggleAllSelected}
-              />
-              <SpaceManagerImageGrid
-                isSelectMode={isSelectMode}
-                selectedPhotoMap={selectedPhotoMap}
-                photoData={photosList}
-                thumbnailUrlList={thumbnailPhotoMap}
-                rowImageAmount={3}
-                onImageClick={handleImageClick}
-              />
-            </S.ImageManagementContainer>
-
-            {!isSelectMode && (
-              <S.DownloadButtonContainer>
-                <FloatingActionButton
-                  label="모두 저장하기"
-                  icon={<SaveIcon fill={theme.colors.gray06} />}
-                  onClick={() => {
-                    tryAllDownload();
-                    track.button('all_download_button', {
-                      page: 'space_home',
-                      section: 'space_home',
-                      action: 'download_all',
-                    });
-                  }}
-                  disabled={isDownloading}
-                />
-              </S.DownloadButtonContainer>
-            )}
-
-            <S.BottomNavigatorContainer>
-              <S.TopButtonContainer $isVisible={!isAtPageTop}>
-                <FloatingIconButton
-                  icon={<ArrowUpSvg fill={theme.colors.white} />}
-                  onClick={goToTop}
-                />
-              </S.TopButtonContainer>
-              {isSelectMode && (
-                <PhotoSelectionToolBar
-                  selectedCount={selectedPhotosCount}
-                  onDelete={() => tryDeleteSelectedPhotos(selectedPhotoIds)}
-                  onDownload={() => trySelectedDownload(selectedPhotoIds)}
-                />
-              )}
-            </S.BottomNavigatorContainer>
-          </>
-        ) : (
-          <S.NoImageContainer>
-            <S.Icon />
-            <S.NoImageText>{INFORMATION.NO_IMAGE}</S.NoImageText>
-          </S.NoImageContainer>
-        ))
-      )}
+      {renderBodyContent()}
 
       <S.IntersectionArea ref={hideBlurAreaTriggerRef} />
       <S.IntersectionArea ref={fetchTriggerRef} />
