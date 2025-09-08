@@ -1,13 +1,12 @@
 import { ReactComponent as LinkIcon } from '@assets/icons/link.svg';
 import { ReactComponent as ShareIcon } from '@assets/icons/share.svg';
 import messageIcon from '@assets/images/message.png';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ReactComponent as UploadIcon } from '../../../@assets/icons/add-photo.svg';
 import { ReactComponent as SaveIcon } from '../../../@assets/icons/download.svg';
 import { ReactComponent as SettingSvg } from '../../../@assets/icons/setting.svg';
 import { ReactComponent as ArrowUpSvg } from '../../../@assets/icons/upwardArrow.svg';
-import { authService } from '../../../apis/services/auth.service';
 import FloatingActionButton from '../../../components/@common/buttons/floatingActionButton/FloatingActionButton';
 import FloatingIconButton from '../../../components/@common/buttons/floatingIconButton/FloatingIconButton';
 import IconLabelButton from '../../../components/@common/buttons/iconLabelButton/IconLabelButton';
@@ -24,6 +23,7 @@ import { useOverlay } from '../../../contexts/OverlayProvider';
 import useIntersectionObserver from '../../../hooks/@common/useIntersectionObserver';
 import useLeftTimer from '../../../hooks/@common/useLeftTimer';
 import { useToast } from '../../../hooks/@common/useToast';
+import useSpaceAccess from '../../../hooks/domain/useSpaceAccess';
 import useDownload from '../../../hooks/useDownload';
 import usePhotoSelect from '../../../hooks/usePhotoSelect';
 import usePhotosBySpaceCode from '../../../hooks/usePhotosBySpaceCode';
@@ -43,20 +43,10 @@ import NoAccessPage from '../../status/noAccessPage/NoAccessPage';
 import * as S from './SpaceHomePage.styles';
 
 const SpaceHomePage = () => {
-  // TODO : 전역에서 내려주는 hostId로 변경
-  const [hasAccess, setHasAccess] = useState(false);
-  useEffect(() => {
-    authService.status().then((res) => {
-      setHasAccess(res.data?.id === spaceInfo?.host.id);
-    });
-  }, []);
+  const overlay = useOverlay();
+  const { showToast } = useToast();
+  const navigate = useNavigate();
 
-  const { spaceCode } = useSpaceCodeFromPath();
-  const { spaceInfo } = useSpaceInfo(spaceCode ?? '');
-  const isEarlyTime =
-    spaceInfo?.openedAt && checkIsEarlyDate(spaceInfo.openedAt);
-  const isSpaceExpired = spaceInfo?.isExpired;
-  const spaceName = spaceInfo?.name ?? '';
   const { targetRef: hideBlurAreaTriggerRef, isIntersecting: isAtPageBottom } =
     useIntersectionObserver({});
   const { targetRef: scrollTopTriggerRef, isIntersecting: isAtPageTop } =
@@ -67,12 +57,15 @@ const SpaceHomePage = () => {
     reObserve,
   } = useIntersectionObserver({ rootMargin: '200px' });
 
-  const { leftTime } = useLeftTimer({
-    targetTime: (spaceInfo?.expiredAt as string) ?? '',
-  });
+  const { spaceCode } = useSpaceCodeFromPath();
 
-  const overlay = useOverlay();
-  const { showToast } = useToast();
+  const { spaceInfo } = useSpaceInfo(spaceCode ?? '');
+  const spaceName = spaceInfo?.name ?? '';
+  const isEarlyTime =
+    spaceInfo?.openedAt && checkIsEarlyDate(spaceInfo.openedAt);
+  const isSpaceExpired = spaceInfo?.isExpired;
+
+  const { hasAccess, isLoadingAccess } = useSpaceAccess(spaceInfo?.host.id);
 
   const {
     photosList,
@@ -85,8 +78,6 @@ const SpaceHomePage = () => {
     reObserve,
     spaceCode: spaceCode ?? '',
   });
-
-  const navigate = useNavigate();
 
   const {
     isDownloading,
@@ -105,6 +96,10 @@ const SpaceHomePage = () => {
         },
       });
     },
+  });
+
+  const { leftTime } = useLeftTimer({
+    targetTime: (spaceInfo?.expiredAt as string) ?? '',
   });
 
   const {
@@ -137,15 +132,6 @@ const SpaceHomePage = () => {
     });
   };
 
-  const clickUploadButton = () => {
-    navigate(ROUTES.GUEST.IMAGE_UPLOAD(spaceCode ?? ''));
-    track.button('space_upload_button', {
-      page: 'space_home',
-      section: 'space_home_header',
-      action: 'open_upload',
-    });
-  };
-
   const deletePhotoWithTracking = async (photoId: number) => {
     await tryDeleteSinglePhoto(photoId);
     track.button('single_delete_button', {
@@ -161,6 +147,15 @@ const SpaceHomePage = () => {
       page: 'space_home',
       section: 'photo_modal',
       action: 'download_single',
+    });
+  };
+
+  const clickUploadButtonWithTracking = () => {
+    navigate(ROUTES.GUEST.IMAGE_UPLOAD(spaceCode ?? ''));
+    track.button('space_upload_button', {
+      page: 'space_home',
+      section: 'space_home_header',
+      action: 'open_upload',
     });
   };
 
@@ -193,53 +188,55 @@ const SpaceHomePage = () => {
     )
       return;
     tryFetchPhotosList();
-  }, [isFetchSectionVisible, isEndPage, isSpaceExpired, isEarlyTime]);
+  }, [
+    isFetchSectionVisible,
+    isEndPage,
+    isSpaceExpired,
+    isEarlyTime,
+    hasAccess,
+  ]);
 
   const loadingContents = [
     {
-      icon: { src: messageIcon, alt: '데모 페이지 아이콘' },
+      icon: { src: messageIcon, alt: '로딩 아이콘' },
       description: '추억 담는 중',
     },
     {
-      icon: { src: messageIcon, alt: '데모 페이지 아이콘' },
+      icon: { src: messageIcon, alt: '로딩 아이콘' },
       description: '선물 상자 포장하는 중',
     },
     {
-      icon: { src: messageIcon, alt: '데모 페이지 아이콘' },
+      icon: { src: messageIcon, alt: '로딩 아이콘' },
       description: '배달 가는 중',
     },
     {
-      icon: { src: messageIcon, alt: '데모 페이지 아이콘' },
+      icon: { src: messageIcon, alt: '로딩 아이콘' },
       description: '당신에게 전달 중',
     },
   ];
 
   const toggleShareModal = async () => {
-    try {
-      await overlay(
-        <C.Wrapper>
-          <S.ModalContentContainer>
-            <IconLabelButton
-              icon={<LinkIcon fill={theme.colors.white} width="20px" />}
-              onClick={() => {
-                copyLinkToClipboard(createShareUrl(spaceCode ?? ''));
-                showToast({
-                  text: '링크가 복사되었습니다.',
-                  type: 'info',
-                  position: 'top',
-                });
-              }}
-              label="업로드 링크"
-            />
-          </S.ModalContentContainer>
-        </C.Wrapper>,
-        {
-          clickOverlayClose: true,
-        },
-      );
-    } catch (error) {
-      console.error(`모달 실패 : ${error}`);
-    }
+    await overlay(
+      <C.Wrapper>
+        <S.ModalContentContainer>
+          <IconLabelButton
+            icon={<LinkIcon fill={theme.colors.white} width="20px" />}
+            onClick={() => {
+              copyLinkToClipboard(createShareUrl(spaceCode ?? ''));
+              showToast({
+                text: '링크가 복사되었습니다.',
+                type: 'info',
+                position: 'top',
+              });
+            }}
+            label="업로드 링크"
+          />
+        </S.ModalContentContainer>
+      </C.Wrapper>,
+      {
+        clickOverlayClose: true,
+      },
+    );
   };
 
   return (
@@ -251,7 +248,7 @@ const SpaceHomePage = () => {
           currentAmount={currentProgress}
         />
       )}
-      {!hasAccess && <NoAccessPage />}
+      {!hasAccess && !isLoadingAccess && <NoAccessPage />}
       <S.InfoContainer ref={scrollTopTriggerRef}>
         <SpaceHeader
           title={spaceName}
@@ -259,7 +256,7 @@ const SpaceHomePage = () => {
           icons={[
             {
               element: <UploadIcon fill={theme.colors.white} width="20px" />,
-              onClick: clickUploadButton,
+              onClick: clickUploadButtonWithTracking,
               label: '업로드',
             },
             {
