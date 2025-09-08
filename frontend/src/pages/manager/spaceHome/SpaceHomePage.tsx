@@ -1,12 +1,13 @@
 import { ReactComponent as LinkIcon } from '@assets/icons/link.svg';
 import { ReactComponent as ShareIcon } from '@assets/icons/share.svg';
 import messageIcon from '@assets/images/message.png';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ReactComponent as UploadIcon } from '../../../@assets/icons/add-photo.svg';
 import { ReactComponent as SaveIcon } from '../../../@assets/icons/download.svg';
 import { ReactComponent as SettingSvg } from '../../../@assets/icons/setting.svg';
 import { ReactComponent as ArrowUpSvg } from '../../../@assets/icons/upwardArrow.svg';
+import { authService } from '../../../apis/services/auth.service';
 import FloatingActionButton from '../../../components/@common/buttons/floatingActionButton/FloatingActionButton';
 import FloatingIconButton from '../../../components/@common/buttons/floatingIconButton/FloatingIconButton';
 import IconLabelButton from '../../../components/@common/buttons/iconLabelButton/IconLabelButton';
@@ -38,9 +39,18 @@ import { track } from '../../../utils/googleAnalytics/track';
 import { goToTop } from '../../../utils/goToTop';
 import EarlyPage from '../../status/earlyPage/EarlyPage';
 import ExpiredPage from '../../status/expiredPage/ExpiredPage';
+import NoAccessPage from '../../status/noAccessPage/NoAccessPage';
 import * as S from './SpaceHomePage.styles';
 
 const SpaceHomePage = () => {
+  // TODO : 전역에서 내려주는 hostId로 변경
+  const [hasAccess, setHasAccess] = useState(false);
+  useEffect(() => {
+    authService.status().then((res) => {
+      setHasAccess(res.data?.id === spaceInfo?.host.id);
+    });
+  }, []);
+
   const { spaceCode } = useSpaceCodeFromPath();
   const { spaceInfo } = useSpaceInfo(spaceCode ?? '');
   const isEarlyTime =
@@ -178,7 +188,8 @@ const SpaceHomePage = () => {
       isEndPage ||
       isLoading ||
       isSpaceExpired ||
-      isEarlyTime
+      isEarlyTime ||
+      !hasAccess
     )
       return;
     tryFetchPhotosList();
@@ -240,6 +251,7 @@ const SpaceHomePage = () => {
           currentAmount={currentProgress}
         />
       )}
+      {!hasAccess && <NoAccessPage />}
       <S.InfoContainer ref={scrollTopTriggerRef}>
         <SpaceHeader
           title={spaceName}

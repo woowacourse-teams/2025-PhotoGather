@@ -35,6 +35,7 @@ export interface Space {
   isExpired: boolean;
   guestCount?: number;
   photoCount?: number;
+  host: MyInfo;
 }
 
 export interface UpdateSpaceInput {
