@@ -12,14 +12,16 @@ import AgreementElement from '../funnelElements/agreementElement/AgreementElemen
 import CheckSpaceInfoElement from '../funnelElements/CheckSpaceInfoElement';
 import ImmediateOpenElement from '../funnelElements/immediateOpenElement/ImmediateOpenElement';
 import NameInputElement from '../funnelElements/NameInputElement';
+import PublicTypeElement from '../funnelElements/publicTypeElement/PublicTypeElement';
 import * as S from './SpaceCreateFunnel.styles';
 
-type STEP = 'agreement' | 'name' | 'date' | 'check';
+type STEP = 'agreement' | 'name' | 'date' | 'publicType' | 'check';
 
 const initialFunnelValue: SpaceFunnelInfo = {
   name: '',
   date: '',
   time: '',
+  publicType: 'PUBLIC',
   isImmediateOpen: null,
   agreements: null,
 };
@@ -28,7 +30,7 @@ const SpaceCreateFunnel = () => {
   useConfirmBeforeRefresh();
   const { handleAgree, isAgree, loadingAgreements } = useAgreements();
   const needsAgreement = !isAgree;
-  const PROGRESS_STEP_LIST: STEP[] = ['name', 'date', 'check'];
+  const PROGRESS_STEP_LIST: STEP[] = ['name', 'date', 'publicType', 'check'];
   const [step, setStep] = useState<STEP>('name');
   useEffect(() => {
     if (!loadingAgreements && needsAgreement) setStep('agreement');
@@ -90,7 +92,7 @@ const SpaceCreateFunnel = () => {
         {step === 'date' && (
           <ImmediateOpenElement
             onNext={({ date, time, isImmediateOpen }) => {
-              goNextStep('check');
+              goNextStep('publicType');
               setSpaceInfo((prev) => ({
                 ...prev,
                 date,
@@ -103,6 +105,18 @@ const SpaceCreateFunnel = () => {
               time: spaceInfo.time,
               isImmediateOpen: spaceInfo.isImmediateOpen,
             }}
+          />
+        )}
+        {step === 'publicType' && (
+          <PublicTypeElement
+            onNext={(publicType) => {
+              goNextStep('check');
+              setSpaceInfo((prev) => ({
+                ...prev,
+                publicType,
+              }));
+            }}
+            initialValue={spaceInfo.publicType}
           />
         )}
         {step === 'check' && (

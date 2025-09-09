@@ -46,7 +46,7 @@ const CheckSpaceInfoElement = ({
       name: spaceInfo.name,
       validHours: 72,
       openedAt: calculatedOpenedAt,
-      password: '',
+      type: spaceInfo.publicType,
     });
     if (!spaceCode) return;
 

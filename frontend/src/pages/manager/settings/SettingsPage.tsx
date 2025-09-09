@@ -76,7 +76,7 @@ const SettingsPage = () => {
   const handleUpdateSpaceInfo = async () => {
     if (!spaceCode || !spaceInfo) return;
 
-    const updateData: Partial<SpaceCreateInfo> = { password: '' };
+    const updateData: Partial<SpaceCreateInfo> = {};
 
     if (validValue !== spaceInfo.name) {
       updateData.name = validValue;
