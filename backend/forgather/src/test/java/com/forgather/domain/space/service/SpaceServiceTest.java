@@ -13,6 +13,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 
 import com.forgather.domain.space.dto.CreateSpaceRequest;
+import com.forgather.domain.space.model.SpaceType;
 import com.forgather.domain.space.repository.HostRepository;
 import com.forgather.domain.space.repository.SpaceRepository;
 import com.forgather.global.auth.model.Host;
@@ -41,7 +42,8 @@ class SpaceServiceTest {
         CreateSpaceRequest request = new CreateSpaceRequest(
             invalidSpaceName,
             48,
-            LocalDateTime.now().plusDays(1)
+            LocalDateTime.now().plusDays(1),
+            SpaceType.PRIVATE
         );
         Host host = hostRepository.save(new Host("testHost", "testPictureUrl"));
 

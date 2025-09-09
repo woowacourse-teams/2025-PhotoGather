@@ -1,7 +1,8 @@
 import * as exifr from 'exifr';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { CONSTRAINTS } from '../../constants/constraints';
 import type { LocalFile } from '../../types/file.type';
+import { heicToJpegBlob, isHeic } from '../../utils/heic';
 import { isValidFileType } from '../../utils/isValidFileType';
 import {
   checkInvalidFileType,
@@ -19,7 +20,7 @@ const useLocalFile = ({ fileType }: UseLocalFileProps) => {
     id: file.id,
     previewUrl: file.previewUrl,
   }));
-  const { tryTask } = useError();
+  const { tryTask, tryFetch } = useError();
 
   const extractDateTimeOriginal = async (file: File) => {
     const metadata = await exifr.parse(file, ['DateTimeOriginal']);
@@ -28,17 +29,39 @@ const useLocalFile = ({ fileType }: UseLocalFileProps) => {
       : null;
   };
 
+  const createImagePreviewUrl = async (file: File) => {
+    if (isHeic(file)) {
+      const { data } = await tryFetch({
+        task: () => heicToJpegBlob(file),
+        errorActions: ['toast'],
+        context: {
+          toast: {
+            text: '사진을 불러오는데 실패했어요. 다시 시도해주세요.',
+          },
+        },
+      });
+      return URL.createObjectURL(data as Blob);
+    } else {
+      return URL.createObjectURL(file);
+    }
+  };
+
   const addPreviewUrlsFromFiles = async (files: File[]) => {
     const startIndex = localFiles.length;
 
     const tmpFiles = await Promise.all(
-      files.map(async (file, index) => ({
-        id: startIndex + index,
-        originFile: file,
-        capturedAt: await extractDateTimeOriginal(file),
-        capacityValue: file.size,
-        previewUrl: URL.createObjectURL(file),
-      })),
+      files.map(async (file, index) => {
+        const buf = await file.arrayBuffer();
+        const cloned = new File([buf], file.name, { type: file.type });
+
+        return {
+          id: startIndex + index,
+          originFile: cloned,
+          capturedAt: await extractDateTimeOriginal(cloned),
+          capacityValue: cloned.size,
+          previewUrl: await createImagePreviewUrl(cloned),
+        };
+      }),
     );
 
     setLocalFiles((prev) => [...prev, ...tmpFiles]);
