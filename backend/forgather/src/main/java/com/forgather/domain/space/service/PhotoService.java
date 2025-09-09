@@ -54,9 +54,10 @@ public class PhotoService {
     private final PublicAccessService publicAccessService;
 
     public PhotoResponse get(String spaceCode, Long photoId, Host host) {
+        Space space = spaceRepository.getUnexpiredSpaceByCode(spaceCode);
         boolean canPublicAccess = publicAccessService.canAccess(spaceCode);
+        canPublicAccess |= space.isPublic();
         if (host != null) { // 기존 로직, 로그인 상태
-            Space space = spaceRepository.getUnexpiredSpaceByCode(spaceCode);
             if (!canPublicAccess) {
                 space.validateHost(host);
             }
@@ -66,7 +67,6 @@ public class PhotoService {
         }
 
         if (canPublicAccess) {
-            Space space = spaceRepository.getUnexpiredSpaceByCode(spaceCode);
             Photo photo = photoRepository.getById(photoId);
             photo.validateSpace(space);
             return PhotoResponse.from(photo);
@@ -75,9 +75,10 @@ public class PhotoService {
     }
 
     public PhotosResponse getAll(String spaceCode, Pageable pageable, Host host) {
+        Space space = spaceRepository.getUnexpiredSpaceByCode(spaceCode);
         boolean canPublicAccess = publicAccessService.canAccess(spaceCode);
+        canPublicAccess |= space.isPublic();
         if (host != null) { // 기존 로직, 로그인 상태
-            Space space = spaceRepository.getUnexpiredSpaceByCode(spaceCode);
             if (!canPublicAccess) {
                 space.validateHost(host);
             }
@@ -86,7 +87,6 @@ public class PhotoService {
         }
 
         if (canPublicAccess) {
-            Space space = spaceRepository.getUnexpiredSpaceByCode(spaceCode);
             Page<Photo> photos = photoRepository.findAllBySpace(space, pageable);
             return PhotosResponse.from(photos);
         }
@@ -153,9 +153,10 @@ public class PhotoService {
     }
 
     public DownloadUrlsResponse getDownloadUrl(String spaceCode, Long photoId, Host host) {
+        Space space = spaceRepository.getUnexpiredSpaceByCode(spaceCode);
         boolean canPublicAccess = publicAccessService.canAccess(spaceCode);
+        canPublicAccess |= space.isPublic();
         if (host != null) { // 기존 로직, 로그인 상태
-            Space space = spaceRepository.getUnexpiredSpaceByCode(spaceCode);
             if (!canPublicAccess) {
                 space.validateHost(host);
             }
@@ -167,7 +168,6 @@ public class PhotoService {
         }
 
         if (canPublicAccess) {
-            Space space = spaceRepository.getUnexpiredSpaceByCode(spaceCode);
             Photo photo = photoRepository.getById(photoId);
             photo.validateSpace(space);
 
@@ -178,9 +178,10 @@ public class PhotoService {
     }
 
     public DownloadUrlsResponse getSelectedDownloadUrls(String spaceCode, DownloadPhotosRequest request, Host host) {
+        Space space = spaceRepository.getUnexpiredSpaceByCode(spaceCode);
         boolean canPublicAccess = publicAccessService.canAccess(spaceCode);
+        canPublicAccess |= space.isPublic();
         if (host != null) { // 기존 로직, 로그인 상태
-            Space space = spaceRepository.getUnexpiredSpaceByCode(spaceCode);
             if (!canPublicAccess) {
                 space.validateHost(host);
             }
@@ -194,7 +195,6 @@ public class PhotoService {
         }
 
         if (publicAccessService.canAccess(spaceCode)) {
-            Space space = spaceRepository.getUnexpiredSpaceByCode(spaceCode);
             List<Photo> photos = photoRepository.findAllByIdIn(request.photoIds());
             if (photos.isEmpty()) {
                 throw new BaseException("현재 다운로드할 수 있는 사진이 존재하지 않습니다.");
@@ -207,9 +207,10 @@ public class PhotoService {
     }
 
     public DownloadUrlsResponse getAllDownloadUrls(String spaceCode, Host host) {
+        Space space = spaceRepository.getUnexpiredSpaceByCode(spaceCode);
         boolean canPublicAccess = publicAccessService.canAccess(spaceCode);
+        canPublicAccess |= space.isPublic();
         if (host != null) { // 기존 로직, 로그인 상태
-            Space space = spaceRepository.getUnexpiredSpaceByCode(spaceCode);
             if (!canPublicAccess) {
                 space.validateHost(host);
             }
@@ -223,7 +224,6 @@ public class PhotoService {
         }
 
         if (canPublicAccess) {
-            Space space = spaceRepository.getUnexpiredSpaceByCode(spaceCode);
             List<Photo> photos = photoRepository.findAllBySpace(space);
             if (photos.isEmpty()) {
                 throw new BaseException("현재 다운로드할 수 있는 사진이 존재하지 않습니다.");

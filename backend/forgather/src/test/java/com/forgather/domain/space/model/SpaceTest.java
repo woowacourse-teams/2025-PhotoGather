@@ -28,7 +28,8 @@ class SpaceTest {
         Host host = new Host("moko", "pictureUrl");
 
         // when & then
-        assertThatCode(() -> new Space(host, spaceCode, name, validHours, openedAt)).doesNotThrowAnyException();
+        assertThatCode(
+            () -> new Space(host, spaceCode, name, validHours, openedAt, SpaceType.PRIVATE)).doesNotThrowAnyException();
     }
 
     @Test
@@ -39,7 +40,7 @@ class SpaceTest {
         int validHours = 48;
         LocalDateTime openedAt = LocalDateTime.now();
         Host host = new Host("moko", "pictureUrl");
-        Space space = new Space(host, spaceCode, "name", validHours, openedAt);
+        Space space = new Space(host, spaceCode, "name", validHours, openedAt, SpaceType.PRIVATE);
         LocalDateTime testDateTime = openedAt.plusHours(validHours + 1);
 
         // when & then
@@ -58,8 +59,9 @@ class SpaceTest {
         Host host = new Host("moko", "pictureUrl");
 
         // when & then
-        assertThatThrownBy(() -> new Space(host, spaceCode, "name", validHours, openedAt))
-            .isInstanceOf(BaseException.class);
+        assertThatThrownBy(
+            () -> new Space(host, spaceCode, "name", validHours, openedAt, SpaceType.PRIVATE)
+        ).isInstanceOf(BaseException.class);
     }
 
     @DisplayName("스페이스 이름이 비어있거나, 10자 초과면 예외를 던진다")
@@ -70,8 +72,9 @@ class SpaceTest {
         Host host = new Host("moko", "pictureUrl");
 
         // when & then
-        assertThatThrownBy(() -> new Space(host, "1234567890", invalidName, 48, LocalDateTime.now()))
-            .isInstanceOf(BaseException.class)
+        assertThatThrownBy(
+            () -> new Space(host, "1234567890", invalidName, 48, LocalDateTime.now(), SpaceType.PRIVATE)
+        ).isInstanceOf(BaseException.class)
             .hasMessageContaining("스페이스 이름");
     }
 
@@ -83,7 +86,7 @@ class SpaceTest {
         int validHours = 48;
         LocalDateTime openedAt = LocalDateTime.now();
         Host host = new Host("moko", "pictureUrl");
-        Space space = new Space(host, spaceCode, "name", validHours, openedAt);
+        Space space = new Space(host, spaceCode, "name", validHours, openedAt, SpaceType.PRIVATE);
 
         // when
         boolean isOpened = space.isOpened(LocalDateTime.now().plusHours(1));
@@ -100,7 +103,7 @@ class SpaceTest {
         int validHours = 48;
         LocalDateTime openedAt = LocalDateTime.now();
         Host host = new Host("moko", "pictureUrl");
-        Space space = new Space(host, spaceCode, "name", validHours, openedAt);
+        Space space = new Space(host, spaceCode, "name", validHours, openedAt, SpaceType.PRIVATE);
 
         // when
         boolean isExpired = space.isExpired(LocalDateTime.now().plusHours(validHours + 1));
@@ -117,11 +120,12 @@ class SpaceTest {
         int validHours = 48;
         LocalDateTime openedAt = LocalDateTime.now();
         Host host = new Host("moko", "pictureUrl");
-        Space space = new Space(host, spaceCode, "name", validHours, openedAt);
+        Space space = new Space(host, spaceCode, "name", validHours, openedAt, SpaceType.PRIVATE);
 
         // when & then
-        assertThatThrownBy(() -> space.update(null, null, LocalDateTime.now().plusSeconds(1), null))
-            .isInstanceOf(BaseException.class)
+        assertThatThrownBy(
+            () -> space.update(null, null, LocalDateTime.now().plusSeconds(1), null, SpaceType.PRIVATE)
+        ).isInstanceOf(BaseException.class)
             .hasMessageContaining("이미 열린");
     }
 
@@ -132,8 +136,9 @@ class SpaceTest {
         Host host = new Host("moko", "pictureUrl");
 
         // when & then
-        assertThatThrownBy(() -> new Space(host, "1234567890", "name", 0, LocalDateTime.now()))
-            .isInstanceOf(BaseException.class)
+        assertThatThrownBy(
+            () -> new Space(host, "1234567890", "name", 0, LocalDateTime.now(), SpaceType.PRIVATE)
+        ).isInstanceOf(BaseException.class)
             .hasMessageContaining("스페이스 유효 시간");
     }
 
@@ -144,8 +149,9 @@ class SpaceTest {
         Host host = new Host("moko", "pictureUrl");
 
         // when & then
-        assertThatThrownBy(() -> new Space(host, "123456789", "name", 48, LocalDateTime.now()))
-            .isInstanceOf(BaseException.class)
+        assertThatThrownBy(
+            () -> new Space(host, "123456789", "name", 48, LocalDateTime.now(), SpaceType.PRIVATE)
+        ).isInstanceOf(BaseException.class)
             .hasMessageContaining("스페이스 코드");
     }
 }

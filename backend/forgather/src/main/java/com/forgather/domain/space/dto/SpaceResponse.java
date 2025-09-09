@@ -40,7 +40,10 @@ public record SpaceResponse(
     long guestCount,
 
     @Schema(description = "스페이스에 업로드된 사진 수", example = "500")
-    long photoCount
+    long photoCount,
+
+    @Schema(description = "스페이스 타입", example = "PRIVATE")
+    String type
 ) {
 
     public static SpaceResponse from(Space space) {
@@ -55,7 +58,8 @@ public record SpaceResponse(
             // TODO: 스페이스 : 호스트 m:n 관계로 변경 후 수정 필요
             HostResponse.from(space.getSpaceHostMap().getFirst().getHost()),
             space.getGuestCount(),
-            space.getPhotoCount()
+            space.getPhotoCount(),
+            space.getType().name()
         );
     }
 }
