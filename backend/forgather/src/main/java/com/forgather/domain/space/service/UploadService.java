@@ -15,6 +15,7 @@ import com.forgather.domain.guest.model.Guest;
 import com.forgather.domain.guest.repository.GuestRepository;
 import com.forgather.domain.space.dto.IssueSignedUrlRequest;
 import com.forgather.domain.space.dto.IssueSignedUrlResponse;
+import com.forgather.domain.space.dto.SaveUploadedPhotoRequest;
 import com.forgather.domain.space.model.Photo;
 import com.forgather.domain.space.model.PhotoMetaData;
 import com.forgather.domain.space.model.Space;
@@ -34,15 +35,10 @@ public class UploadService {
     private static final int MAX_COUNT_PER_ISSUE = 100;
 
     private final SpaceRepository spaceRepository;
-    private final PhotoRepository photoRepository;
     private final ContentsStorage contentsStorage;
     private final GuestRepository guestRepository;
+    private final PhotoRepository photoRepository;
 
-    /**
-     * TODO
-     * S3 업로드 이후 실패 시 롤백 고려
-     * (MVP아님)
-     */
     @Transactional
     public void saveAll(String spaceCode, List<MultipartFile> multipartFiles, Long guestId) {
         Space space = spaceRepository.getUnexpiredSpaceByCode(spaceCode);
@@ -83,5 +79,16 @@ public class UploadService {
         }
         return new IssueSignedUrlResponse(signedUrls);
     }
-}
 
+    @Transactional
+    public void saveUploadedPhotos(String spaceCode, SaveUploadedPhotoRequest request, Long guestId) {
+        Space space = spaceRepository.getUnexpiredSpaceByCode(spaceCode);
+        Guest guest = guestRepository.getById(guestId);
+        space.validateGuest(guest);
+
+        List<Photo> photos = request.uploadedPhotos().stream()
+            .map(uploadedPhoto -> uploadedPhoto.toEntity(space, guest, contentsStorage.getRootDirectory()))
+            .toList();
+        photoRepository.saveAll(photos);
+    }
+}
