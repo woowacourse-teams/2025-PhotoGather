@@ -16,8 +16,6 @@ const defaultOverlayClickOption = {
   clickOverlayClose: false,
 };
 
-type OverlaySubmitResult = unknown;
-
 type OverlayOptions = {
   clickOverlayClose?: boolean;
 };
@@ -37,6 +35,7 @@ interface OverlayState<T> {
 export const OverlayContext = createContext<OverlayOpenFn | null>(null);
 
 const OverlayProvider = ({ children }: PropsWithChildren) => {
+  //biome-ignore lint/suspicious/noExplicitAny: any 형식만 허용
   const [overlayStack, setOverlayStack] = useState<OverlayState<any>[]>([]);
   const nextIdRef = useRef(0);
 

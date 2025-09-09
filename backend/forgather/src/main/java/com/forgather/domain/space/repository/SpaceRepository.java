@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.forgather.domain.space.model.Space;
+import com.forgather.global.exception.NotFoundException;
 
 public interface SpaceRepository extends JpaRepository<Space, Long> {
 
@@ -15,7 +16,7 @@ public interface SpaceRepository extends JpaRepository<Space, Long> {
 
     default Space getByCode(String spaceCode) {
         return findByCode(spaceCode)
-            .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 스페이스입니다. 스페이스 코드: " + spaceCode));
+            .orElseThrow(() -> new NotFoundException("존재하지 않는 스페이스입니다. 스페이스 코드: " + spaceCode));
     }
 
     default Space getUnexpiredSpaceByCode(String spaceCode) {

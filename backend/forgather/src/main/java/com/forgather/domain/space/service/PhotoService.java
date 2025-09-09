@@ -36,6 +36,7 @@ import com.forgather.domain.space.util.ZipGenerator;
 import com.forgather.global.auth.model.Host;
 import com.forgather.global.auth.service.PublicAccessService;
 import com.forgather.global.exception.UnauthorizedException;
+import com.forgather.global.exception.BaseException;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -186,7 +187,7 @@ public class PhotoService {
             }
             List<Photo> photos = photoRepository.findAllByIdIn(request.photoIds());
             if (photos.isEmpty()) {
-                throw new IllegalStateException("현재 다운로드할 수 있는 사진이 존재하지 않습니다.");
+                throw new BaseException("현재 다운로드할 수 있는 사진이 존재하지 않습니다.");
             }
             photos.forEach(photo -> photo.validateSpace(space));
 
@@ -196,7 +197,7 @@ public class PhotoService {
         if (publicAccessService.canAccess(spaceCode)) {
             List<Photo> photos = photoRepository.findAllByIdIn(request.photoIds());
             if (photos.isEmpty()) {
-                throw new IllegalStateException("현재 다운로드할 수 있는 사진이 존재하지 않습니다.");
+                throw new BaseException("현재 다운로드할 수 있는 사진이 존재하지 않습니다.");
             }
             photos.forEach(photo -> photo.validateSpace(space));
 
@@ -215,7 +216,7 @@ public class PhotoService {
             }
             List<Photo> photos = photoRepository.findAllBySpace(space);
             if (photos.isEmpty()) {
-                throw new IllegalStateException("현재 다운로드할 수 있는 사진이 존재하지 않습니다.");
+                throw new BaseException("현재 다운로드할 수 있는 사진이 존재하지 않습니다.");
             }
             photos.forEach(photo -> photo.validateSpace(space));
 
@@ -225,7 +226,7 @@ public class PhotoService {
         if (canPublicAccess) {
             List<Photo> photos = photoRepository.findAllBySpace(space);
             if (photos.isEmpty()) {
-                throw new IllegalStateException("현재 다운로드할 수 있는 사진이 존재하지 않습니다.");
+                throw new BaseException("현재 다운로드할 수 있는 사진이 존재하지 않습니다.");
             }
             photos.forEach(photo -> photo.validateSpace(space));
 

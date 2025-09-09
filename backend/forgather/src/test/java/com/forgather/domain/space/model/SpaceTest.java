@@ -2,7 +2,6 @@ package com.forgather.domain.space.model;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
-import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.time.LocalDateTime;
@@ -13,6 +12,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import com.forgather.global.auth.model.Host;
+import com.forgather.global.exception.BaseException;
 
 class SpaceTest {
 
@@ -28,7 +28,8 @@ class SpaceTest {
         Host host = new Host("moko", "pictureUrl");
 
         // when & then
-        assertThatCode(() -> new Space(host, spaceCode, name, validHours, openedAt, SpaceType.PRIVATE)).doesNotThrowAnyException();
+        assertThatCode(
+            () -> new Space(host, spaceCode, name, validHours, openedAt, SpaceType.PRIVATE)).doesNotThrowAnyException();
     }
 
     @Test
@@ -44,8 +45,8 @@ class SpaceTest {
 
         // when & then
         assertThatThrownBy(() -> space.validateExpiration(testDateTime))
-            .isInstanceOf(IllegalArgumentException.class)
-            .hasMessage("만료된 스페이스입니다. code: " + spaceCode);
+            .isInstanceOf(BaseException.class)
+            .hasMessage("만료된 스페이스입니다. spaceCode: " + spaceCode);
     }
 
     @DisplayName("스페이스 오픈 시각이 현재 시각보다 이전이면 예외를 던진다")
@@ -58,9 +59,9 @@ class SpaceTest {
         Host host = new Host("moko", "pictureUrl");
 
         // when & then
-        assertThatIllegalArgumentException().isThrownBy(
+        assertThatThrownBy(
             () -> new Space(host, spaceCode, "name", validHours, openedAt, SpaceType.PRIVATE)
-        );
+        ).isInstanceOf(BaseException.class);
     }
 
     @DisplayName("스페이스 이름이 비어있거나, 10자 초과면 예외를 던진다")
@@ -71,9 +72,10 @@ class SpaceTest {
         Host host = new Host("moko", "pictureUrl");
 
         // when & then
-        assertThatIllegalArgumentException().isThrownBy(
+        assertThatThrownBy(
             () -> new Space(host, "1234567890", invalidName, 48, LocalDateTime.now(), SpaceType.PRIVATE)
-        ).withMessageContaining("스페이스 이름");
+        ).isInstanceOf(BaseException.class)
+            .hasMessageContaining("스페이스 이름");
     }
 
     @DisplayName("스페이스가 열려있으면 .isOpened() 메서드가 true를 반환한다")
@@ -121,9 +123,10 @@ class SpaceTest {
         Space space = new Space(host, spaceCode, "name", validHours, openedAt, SpaceType.PRIVATE);
 
         // when & then
-        assertThatIllegalArgumentException().isThrownBy(
-                () -> space.update(null, null, LocalDateTime.now().plusSeconds(1), null, SpaceType.PRIVATE))
-            .withMessageContaining("이미 열린");
+        assertThatThrownBy(
+            () -> space.update(null, null, LocalDateTime.now().plusSeconds(1), null, SpaceType.PRIVATE)
+        ).isInstanceOf(BaseException.class)
+            .hasMessageContaining("이미 열린");
     }
 
     @DisplayName("스페이스 유효 시간은 1시간 이상이어야 한다")
@@ -133,9 +136,10 @@ class SpaceTest {
         Host host = new Host("moko", "pictureUrl");
 
         // when & then
-        assertThatIllegalArgumentException().isThrownBy(
-                () -> new Space(host, "1234567890", "name", 0, LocalDateTime.now(), SpaceType.PRIVATE))
-            .withMessageContaining("스페이스 유효 시간");
+        assertThatThrownBy(
+            () -> new Space(host, "1234567890", "name", 0, LocalDateTime.now(), SpaceType.PRIVATE)
+        ).isInstanceOf(BaseException.class)
+            .hasMessageContaining("스페이스 유효 시간");
     }
 
     @DisplayName("스페이스 코드는 10자리여야 한다")
@@ -145,8 +149,9 @@ class SpaceTest {
         Host host = new Host("moko", "pictureUrl");
 
         // when & then
-        assertThatIllegalArgumentException().isThrownBy(
-                () -> new Space(host, "123456789", "name", 48, LocalDateTime.now(), SpaceType.PRIVATE))
-            .withMessageContaining("스페이스 코드");
+        assertThatThrownBy(
+            () -> new Space(host, "123456789", "name", 48, LocalDateTime.now(), SpaceType.PRIVATE)
+        ).isInstanceOf(BaseException.class)
+            .hasMessageContaining("스페이스 코드");
     }
 }

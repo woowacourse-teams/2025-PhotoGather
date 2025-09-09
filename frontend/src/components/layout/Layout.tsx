@@ -1,6 +1,6 @@
 import defaultProfile from '@assets/images/default_profile.png';
 import { useEffect, useState } from 'react';
-import { Outlet, useMatches } from 'react-router-dom';
+import { Outlet, useLocation, useMatches } from 'react-router-dom';
 import { authService } from '../../apis/services/auth.service';
 import OverlayProvider from '../../contexts/OverlayProvider';
 import useError from '../../hooks/@common/useError';
@@ -16,15 +16,25 @@ const Layout = () => {
   const [myInfo, setMyInfo] = useState<MyInfo | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const { tryFetch } = useError();
+  const location = useLocation().pathname;
+  const { redirectToExternalBrowser } = useInAppRedirect();
 
   useGoogleAnalytics();
-  useInAppRedirect();
 
   const matches = useMatches() as AppRouteObject[];
   const current = matches[matches.length - 1];
   const isHighlightPage = current?.handle?.highlight;
   const isStarFieldPage = current?.handle?.starField;
   const isHeaderExistPage = current?.handle?.header;
+  const isInAppBrowserAllowPage = current?.handle?.isInAppBrowserAllow;
+
+  const targetUrl = `${process.env.DOMAIN}${location}`;
+
+  //biome-ignore lint/correctness/useExhaustiveDependencies: 페이지 접속 시 처음 한 번만 실행
+  useEffect(() => {
+    if (isInAppBrowserAllowPage) return;
+    redirectToExternalBrowser(targetUrl);
+  }, []);
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: tryFetch를 dependency에 추가하면 무한 루프 발생
   useEffect(() => {
