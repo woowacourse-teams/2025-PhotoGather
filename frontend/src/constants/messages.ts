@@ -51,6 +51,16 @@ export const INFORMATION = {
       HIGHLIGHT_TEXT: '공개 범위',
     },
     DESCRIPTION: '공개 범위는 언제든 바꿀 수 있어요.',
+    OPTIONS: {
+      PUBLIC: {
+        TITLE: '공개',
+        DESCRIPTION: '링크만 있으면 누구나 사진을 볼 수 있어요.',
+      },
+      PRIVATE: {
+        TITLE: '비공개',
+        DESCRIPTION: '링크가 있어도 사진은 나만 볼 수 있어요.',
+      },
+    },
   },
   CHECK_SPACE_INFO: {
     TITLE: {

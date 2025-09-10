@@ -71,11 +71,14 @@ const PublicTypeBorderButton = ({
   ...buttonProps
 }: PublicTypeBorderButton) => {
   const PublicTypeIcon = variant === 'PUBLIC' ? PublicIcon : PrivateIcon;
-  const title = variant === 'PUBLIC' ? '공개' : '비공개';
+  const title =
+    variant === 'PUBLIC'
+      ? INFORMATION.PUBLIC_OR_NOT.OPTIONS.PUBLIC.TITLE
+      : INFORMATION.PUBLIC_OR_NOT.OPTIONS.PRIVATE.TITLE;
   const description =
     variant === 'PUBLIC'
-      ? '링크만 있으면 누구나 사진을 볼 수 있어요.'
-      : '링크가 있어도 사진은 나만 볼 수 있어요.';
+      ? INFORMATION.PUBLIC_OR_NOT.OPTIONS.PUBLIC.DESCRIPTION
+      : INFORMATION.PUBLIC_OR_NOT.OPTIONS.PUBLIC.DESCRIPTION;
 
   return (
     <S.ButtonWrapper
