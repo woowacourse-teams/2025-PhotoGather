@@ -13,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.forgather.domain.guest.model.Guest;
 import com.forgather.domain.guest.repository.GuestRepository;
+import com.forgather.domain.space.dto.CancelUploadRequest;
 import com.forgather.domain.space.dto.IssueSignedUrlRequest;
 import com.forgather.domain.space.dto.IssueSignedUrlResponse;
 import com.forgather.domain.space.dto.SaveUploadedPhotoRequest;
@@ -90,5 +91,16 @@ public class UploadService {
             .map(uploadedPhoto -> uploadedPhoto.toEntity(space, guest, contentsStorage.getRootDirectory()))
             .toList();
         photoRepository.saveAll(photos);
+    }
+
+    public void cancelUpload(String spaceCode, CancelUploadRequest request, Long guestId) {
+        Space space = spaceRepository.getUnexpiredSpaceByCode(spaceCode);
+        Guest guest = guestRepository.getById(guestId);
+        space.validateGuest(guest);
+
+        request.cancelFileNames()
+            .stream()
+            .map(fileName -> generateContentsFilePath(contentsStorage.getRootDirectory(), spaceCode, fileName))
+            .forEach(contentsStorage::deleteContent);
     }
 }

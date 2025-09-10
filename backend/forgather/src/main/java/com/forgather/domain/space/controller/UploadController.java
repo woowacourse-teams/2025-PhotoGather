@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.forgather.domain.space.dto.CancelUploadRequest;
 import com.forgather.domain.space.dto.IssueSignedUrlRequest;
 import com.forgather.domain.space.dto.IssueSignedUrlResponse;
 import com.forgather.domain.space.dto.SaveUploadedPhotoRequest;
@@ -53,6 +54,17 @@ public class UploadController {
     ) {
         var response = uploadService.issueSignedUrls(spaceCode, request);
         return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/upload/cancel")
+    @Operation(summary = "사진 업로드 취소", description = "업로드 취소 발생 시 클라우드 저장소에 업로드 된 사진들을 일괄 삭제합니다.")
+    public ResponseEntity<Void> cancelUpload(
+        @PathVariable String spaceCode,
+        @RequestBody CancelUploadRequest request,
+        @RequestParam(name = "guestId", required = false) Long guestId
+    ) {
+        uploadService.cancelUpload(spaceCode, request, guestId);
+        return ResponseEntity.noContent().build();
     }
 
     @PostMapping
