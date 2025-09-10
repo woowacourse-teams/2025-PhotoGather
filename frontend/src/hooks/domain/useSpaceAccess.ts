@@ -5,6 +5,7 @@ const useSpaceAccess = (hostId: number | undefined) => {
   // TODO : 전역에서 내려주는 hostId로 변경
   const [hasAccess, setHasAccess] = useState(false);
   const [isLoadingAccess, setIsLoadingAccess] = useState(true);
+
   useEffect(() => {
     const fetchAccess = async () => {
       if (!hostId) return;
