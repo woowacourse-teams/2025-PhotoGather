@@ -1,17 +1,20 @@
+import { ReactComponent as PrivateIcon } from '@assets/icons/private.svg';
+import { ReactComponent as PublicIcon } from '@assets/icons/public.svg';
 import { useNavigate } from 'react-router-dom';
-import LeftTimeInformationBox from '../../../components/leftTimeInformationBox/LeftTimeInformationBox';
-import { INFORMATION } from '../../../constants/messages';
-import { ROUTES } from '../../../constants/routes';
-import useLeftTimer from '../../../hooks/@common/useLeftTimer';
-import useAgreements from '../../../hooks/domain/useAgreements';
-import useCreateSpace from '../../../hooks/useCreateSpace';
-import type { FunnelElementProps } from '../../../types/funnel.type';
-import type { SpaceFunnelInfo } from '../../../types/space.type';
-import { calculateKstToday } from '../../../utils/calculateKstToday';
-import { formatDate } from '../../../utils/formatDate';
-import { formatTimer } from '../../../utils/formatTimer';
-import { parseIsoStringFromDateTime } from '../../../utils/parseIsoStringFromDateTime';
-import FunnelBasePage from '../funnel/FunnelBasePage/FunnelBasePage';
+import LeftTimeInformationBox from '../../../../components/leftTimeInformationBox/LeftTimeInformationBox';
+import { INFORMATION } from '../../../../constants/messages';
+import { ROUTES } from '../../../../constants/routes';
+import useLeftTimer from '../../../../hooks/@common/useLeftTimer';
+import useAgreements from '../../../../hooks/domain/useAgreements';
+import useCreateSpace from '../../../../hooks/useCreateSpace';
+import type { FunnelElementProps } from '../../../../types/funnel.type';
+import type { SpaceFunnelInfo } from '../../../../types/space.type';
+import { calculateKstToday } from '../../../../utils/calculateKstToday';
+import { formatDate } from '../../../../utils/formatDate';
+import { formatTimer } from '../../../../utils/formatTimer';
+import { parseIsoStringFromDateTime } from '../../../../utils/parseIsoStringFromDateTime';
+import FunnelBasePage from '../../funnel/FunnelBasePage/FunnelBasePage';
+import * as S from './CheckSpaceInfoElement.styles';
 
 interface CheckSpaceInfoPageProps extends FunnelElementProps<boolean> {
   spaceInfo: SpaceFunnelInfo;
@@ -62,6 +65,9 @@ const CheckSpaceInfoElement = ({
     return '생성하기';
   };
 
+  const PublicTypeIcon =
+    spaceInfo.publicType === 'PUBLIC' ? PublicIcon : PrivateIcon;
+
   return (
     <FunnelBasePage
       title={{
@@ -71,7 +77,12 @@ const CheckSpaceInfoElement = ({
       description={INFORMATION.CHECK_SPACE_INFO.DESCRIPTION}
       element={
         <LeftTimeInformationBox
-          title={spaceInfo.name}
+          title={
+            <S.TitleContainer>
+              <S.Title>{spaceInfo.name}</S.Title>
+              <PublicTypeIcon fill="black" />
+            </S.TitleContainer>
+          }
           openDate={{ date, time }}
           leftTime={formattedLeftTime}
         />

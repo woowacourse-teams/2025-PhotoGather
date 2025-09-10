@@ -9,7 +9,7 @@ import useAgreements from '../../../hooks/domain/useAgreements';
 import useFunnelHistory from '../../../hooks/useFunnelHistory';
 import type { SpaceFunnelInfo } from '../../../types/space.type';
 import AgreementElement from '../funnelElements/agreementElement/AgreementElement';
-import CheckSpaceInfoElement from '../funnelElements/CheckSpaceInfoElement';
+import CheckSpaceInfoElement from '../funnelElements/checkSpaceInfoElement/CheckSpaceInfoElement';
 import ImmediateOpenElement from '../funnelElements/immediateOpenElement/ImmediateOpenElement';
 import NameInputElement from '../funnelElements/NameInputElement';
 import PublicTypeElement from '../funnelElements/publicTypeElement/PublicTypeElement';
