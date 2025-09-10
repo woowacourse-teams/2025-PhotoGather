@@ -1,10 +1,10 @@
 import { useState } from 'react';
-import BorderButton from '../../../../components/@common/buttons/borderButton/BorderButton';
 import { INFORMATION } from '../../../../constants/messages';
 import { theme } from '../../../../styles/theme';
 import type { FunnelElementProps } from '../../../../types/funnel.type';
 import type { SpacePublicType } from '../../../../types/space.type';
 import FunnelBasePage from '../../funnel/FunnelBasePage/FunnelBasePage';
+import * as S from './PublicTypeElement.styles';
 
 const PublicTypeElement = ({
   onNext,
@@ -16,9 +16,6 @@ const PublicTypeElement = ({
     (BorderButtonPublicType) => ({
       variant: BorderButtonPublicType,
       onClick: () => setPublicType(BorderButtonPublicType),
-      element: (
-        <PublicTypeBorderButtonContent variant={BorderButtonPublicType} />
-      ),
       color:
         publicType === BorderButtonPublicType
           ? theme.colors.primary
@@ -33,11 +30,11 @@ const PublicTypeElement = ({
         highlightTextArray: [INFORMATION.PUBLIC_OR_NOT.TITLE.HIGHLIGHT_TEXT],
       }}
       description={INFORMATION.PUBLIC_OR_NOT.DESCRIPTION}
-      element={BorderButtons.map(({ variant, onClick, element, color }) => (
-        <BorderButton
+      element={BorderButtons.map(({ variant, onClick, color }) => (
+        <PublicTypeBorderButton
           key={variant}
+          variant={variant}
           onClick={onClick}
-          element={element}
           color={color}
         />
       ))}
@@ -47,12 +44,37 @@ const PublicTypeElement = ({
   );
 };
 
-const PublicTypeBorderButtonContent = ({
-  variant,
-}: {
+interface PublicTypeBorderButton
+  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant: SpacePublicType;
-}) => {
-  return <p>{variant === 'PUBLIC' ? '공개' : '비공개'}</p>;
+  /** 테두리 버튼 요소의 색깔 */
+  color?: string;
+  /** 테두리 버튼 내부 요소 */
+  element?: React.ReactNode;
+  /** 버튼 클릭했을 때 실행할 함수*/
+  onClick: () => void;
+  /** 버튼 활성화 여부*/
+  disabled?: boolean;
+}
+
+const PublicTypeBorderButton = ({
+  variant,
+  color = theme.colors.gray03,
+  onClick,
+  disabled,
+  ...buttonProps
+}: PublicTypeBorderButton) => {
+  return (
+    <S.StyledBorderButton
+      {...buttonProps}
+      $color={color}
+      onClick={onClick}
+      disabled={disabled}
+    >
+      {variant === 'PUBLIC' && <p>공개</p>}
+      {variant === 'PRIVATE' && <p>비공개</p>}
+    </S.StyledBorderButton>
+  );
 };
 
 export default PublicTypeElement;
