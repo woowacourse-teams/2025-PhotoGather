@@ -1,5 +1,4 @@
 import styled from '@emotion/styled';
-import { ReactComponent as GiftIcon } from '../../../@assets/icons/gift.svg';
 import { theme } from '../../../styles/theme';
 import { hexToRgba } from '../../../utils/hexToRgba';
 
@@ -95,11 +94,6 @@ export const NoImageContainer = styled.div`
 export const NoImageText = styled.p`
   ${({ theme }) => ({ ...theme.typography.header03 })};
   color: ${({ theme }) => theme.colors.white};
-`;
-
-export const Icon = styled(GiftIcon)`
-  width: 120px;
-  aspect-ratio: 1/1;
 `;
 
 export const LoadingSpinnerContainer = styled.div`

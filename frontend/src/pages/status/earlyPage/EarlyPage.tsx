@@ -2,7 +2,7 @@ import lockImage from '@assets/images/lock.png';
 import HighlightText from '../../../components/@common/highlightText/HighlightText';
 import StatusLayout from '../../../components/layout/statusLayout/StatusLayout';
 import { formatDate } from '../../../utils/formatDate';
-import * as S from './EarlyPage.styles';
+import * as C from '../StatusPage.common.styles';
 
 interface EarlyPageProps {
   openedAt: string;
@@ -15,7 +15,7 @@ const EarlyPage = ({ openedAt }: EarlyPageProps) => {
     <StatusLayout
       image={{ src: lockImage, alt: '만료' }}
       element={
-        <S.DescriptionContainer>
+        <C.DescriptionContainer>
           <HighlightText
             text={`${date} \n${time} 오픈 예정`}
             fontStyle="header02"
@@ -23,7 +23,7 @@ const EarlyPage = ({ openedAt }: EarlyPageProps) => {
             highlightTextArray={[date, time]}
             textColorStyle="white"
           />
-        </S.DescriptionContainer>
+        </C.DescriptionContainer>
       }
     />
   );
