@@ -38,9 +38,9 @@ import { copyLinkToClipboard } from '../../../utils/copyLinkToClipboard';
 import { createShareUrl } from '../../../utils/createSpaceUrl';
 import { track } from '../../../utils/googleAnalytics/track';
 import { goToTop } from '../../../utils/goToTop';
+import AccessDeniedPage from '../../status/accessDeniedPage/AccessDeniedPage';
 import EarlyPage from '../../status/earlyPage/EarlyPage';
 import ExpiredPage from '../../status/expiredPage/ExpiredPage';
-import NoAccessPage from '../../status/noAccessPage/NoAccessPage';
 import * as S from './SpaceHomePage.styles';
 
 const SpaceHomePage = () => {
@@ -322,7 +322,7 @@ const SpaceHomePage = () => {
         />
       )}
 
-      {!hasAccess && !isLoadingAccess && <NoAccessPage />}
+      {!hasAccess && !isLoadingAccess && <AccessDeniedPage />}
 
       <S.InfoContainer ref={scrollTopTriggerRef}>
         <SpaceHeader
