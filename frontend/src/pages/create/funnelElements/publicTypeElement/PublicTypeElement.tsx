@@ -1,3 +1,5 @@
+import { ReactComponent as PrivateIcon } from '@assets/icons/private.svg';
+import { ReactComponent as PublicIcon } from '@assets/icons/public.svg';
 import { useState } from 'react';
 import { INFORMATION } from '../../../../constants/messages';
 import { theme } from '../../../../styles/theme';
@@ -30,14 +32,18 @@ const PublicTypeElement = ({
         highlightTextArray: [INFORMATION.PUBLIC_OR_NOT.TITLE.HIGHLIGHT_TEXT],
       }}
       description={INFORMATION.PUBLIC_OR_NOT.DESCRIPTION}
-      element={BorderButtons.map(({ variant, onClick, color }) => (
-        <PublicTypeBorderButton
-          key={variant}
-          variant={variant}
-          onClick={onClick}
-          color={color}
-        />
-      ))}
+      element={
+        <S.BorderButtonContainer>
+          {BorderButtons.map(({ variant, onClick, color }) => (
+            <PublicTypeBorderButton
+              key={variant}
+              variant={variant}
+              onClick={onClick}
+              color={color}
+            />
+          ))}
+        </S.BorderButtonContainer>
+      }
       onNextButtonClick={() => onNext(publicType)}
       nextButtonDisabled={!publicType}
     />
@@ -64,16 +70,28 @@ const PublicTypeBorderButton = ({
   disabled,
   ...buttonProps
 }: PublicTypeBorderButton) => {
+  const PublicTypeIcon = variant === 'PUBLIC' ? PublicIcon : PrivateIcon;
+  const title = variant === 'PUBLIC' ? '공개' : '비공개';
+  const description =
+    variant === 'PUBLIC'
+      ? '링크만 있으면 누구나 사진을 볼 수 있어요.'
+      : '링크가 있어도 사진은 나만 볼 수 있어요.';
+
   return (
-    <S.StyledBorderButton
+    <S.ButtonWrapper
       {...buttonProps}
       $color={color}
       onClick={onClick}
       disabled={disabled}
     >
-      {variant === 'PUBLIC' && <p>공개</p>}
-      {variant === 'PRIVATE' && <p>비공개</p>}
-    </S.StyledBorderButton>
+      <S.ContentContainer>
+        <S.TitleContainer>
+          <S.Title>{title}</S.Title>
+          <PublicTypeIcon fill={color} />
+        </S.TitleContainer>
+        <S.Description>{description}</S.Description>
+      </S.ContentContainer>
+    </S.ButtonWrapper>
   );
 };
 
