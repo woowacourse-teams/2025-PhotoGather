@@ -40,7 +40,7 @@ const Header = ({
     return (
       <S.ProfileImageButton
         type="button"
-        onClick={() => navigate(ROUTES.MYPAGE)}
+        onClick={() => navigate(ROUTES.LOGOUT)}
       >
         <img src={profileImageSrc} alt="프로필 이미지" />
       </S.ProfileImageButton>
@@ -49,7 +49,7 @@ const Header = ({
 
   return (
     <S.Wrapper>
-      <button type="button" onClick={() => navigate(ROUTES.LANDING)}>
+      <button type="button" onClick={() => navigate(ROUTES.MYPAGE)}>
         <Logo fill={theme.colors.white} width={100} />
       </button>
       {createActionButton()}
