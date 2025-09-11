@@ -1,9 +1,8 @@
-import { ReactComponent as PrivateIcon } from '@assets/icons/private.svg';
-import { ReactComponent as PublicIcon } from '@assets/icons/public.svg';
 import type { SpacePublicType } from '../../../types/space.type';
 import type { Timer } from '../../../types/timer.type';
 import { checkIsTimerExpired } from '../../../utils/checkIsTimerExpired';
 import { formatTimer } from '../../../utils/formatTimer';
+import PublicTypeIcon from '../../publicTypeIcon/PublicTypeIcon';
 import * as S from './SpaceHeader.styles';
 
 interface IconProps {
@@ -32,7 +31,6 @@ const SpaceHeader = ({
   timer,
   icons,
 }: SpaceHeaderProps) => {
-  const PublicTypeIcon = publicType === 'PUBLIC' ? PublicIcon : PrivateIcon;
   const isExpired = checkIsTimerExpired(timer);
   const isWithinOneHour = timer.days === 0 && timer.hours === 0 && !isExpired;
 
@@ -41,7 +39,7 @@ const SpaceHeader = ({
       <S.TitleIconContainer>
         <S.TitleContainer>
           <S.Title>{title}</S.Title>
-          <PublicTypeIcon fill="white" />
+          <PublicTypeIcon publicType={publicType} color="white" />
         </S.TitleContainer>
         {icons && (
           <S.IconContainer>

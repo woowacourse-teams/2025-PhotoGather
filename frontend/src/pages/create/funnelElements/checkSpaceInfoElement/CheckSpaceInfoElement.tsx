@@ -1,7 +1,6 @@
-import { ReactComponent as PrivateIcon } from '@assets/icons/private.svg';
-import { ReactComponent as PublicIcon } from '@assets/icons/public.svg';
 import { useNavigate } from 'react-router-dom';
 import LeftTimeInformationBox from '../../../../components/leftTimeInformationBox/LeftTimeInformationBox';
+import PublicTypeIcon from '../../../../components/publicTypeIcon/PublicTypeIcon';
 import { INFORMATION } from '../../../../constants/messages';
 import { ROUTES } from '../../../../constants/routes';
 import useLeftTimer from '../../../../hooks/@common/useLeftTimer';
@@ -65,9 +64,6 @@ const CheckSpaceInfoElement = ({
     return '생성하기';
   };
 
-  const PublicTypeIcon =
-    spaceInfo.publicType === 'PUBLIC' ? PublicIcon : PrivateIcon;
-
   return (
     <FunnelBasePage
       title={{
@@ -80,7 +76,7 @@ const CheckSpaceInfoElement = ({
           title={
             <S.TitleContainer>
               <S.Title>{spaceInfo.name}</S.Title>
-              <PublicTypeIcon fill="black" />
+              <PublicTypeIcon publicType={spaceInfo.publicType} color="black" />
             </S.TitleContainer>
           }
           openDate={{ date, time }}

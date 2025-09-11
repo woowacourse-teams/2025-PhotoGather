@@ -1,6 +1,5 @@
-import { ReactComponent as PrivateIcon } from '@assets/icons/private.svg';
-import { ReactComponent as PublicIcon } from '@assets/icons/public.svg';
 import { useState } from 'react';
+import PublicTypeIcon from '../../../../components/publicTypeIcon/PublicTypeIcon';
 import { INFORMATION } from '../../../../constants/messages';
 import { theme } from '../../../../styles/theme';
 import type { FunnelElementProps } from '../../../../types/funnel.type';
@@ -70,7 +69,6 @@ const PublicTypeBorderButton = ({
   disabled,
   ...buttonProps
 }: PublicTypeBorderButton) => {
-  const PublicTypeIcon = variant === 'PUBLIC' ? PublicIcon : PrivateIcon;
   const title =
     variant === 'PUBLIC'
       ? INFORMATION.PUBLIC_OR_NOT.OPTIONS.PUBLIC.TITLE
@@ -90,7 +88,7 @@ const PublicTypeBorderButton = ({
       <S.ContentContainer>
         <S.TitleContainer>
           <S.Title>{title}</S.Title>
-          <PublicTypeIcon fill={color} />
+          <PublicTypeIcon publicType={variant} color={color} />
         </S.TitleContainer>
         <S.Description>{description}</S.Description>
       </S.ContentContainer>
