@@ -123,7 +123,7 @@ const useDownload = ({
           type: 'error',
         },
       },
-      loadingStateKey: 'download',
+      loadingStateKey: 'selectedDownload',
       onFinally: () => {
         setTotalProgress(0);
         setCurrentProgress(0);
@@ -187,7 +187,10 @@ const useDownload = ({
   };
 
   return {
-    isDownloading: loadingState.download === 'loading',
+    isDownloading:
+      loadingState.allDownload === 'loading' ||
+      loadingState.singleDownload === 'loading' ||
+      loadingState.selectedDownload === 'loading',
     tryAllDownload,
     trySingleDownload,
     trySelectedDownload,

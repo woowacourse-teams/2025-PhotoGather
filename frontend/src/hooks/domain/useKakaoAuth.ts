@@ -30,7 +30,6 @@ const useKakaoAuth = () => {
     const clientIdTaskResult = await tryFetch({
       task: async () => await requestKakaoClientId(),
       errorActions: ['toast'],
-      loadingStateKey: 'clientId',
     });
 
     if (!clientIdTaskResult || !clientIdTaskResult.data) return;
@@ -50,7 +49,6 @@ const useKakaoAuth = () => {
     const clientIdTaskResult = await tryFetch({
       task: async () => await requestKakaoClientId(),
       errorActions: ['toast'],
-      loadingStateKey: 'kakaoAuth',
     });
 
     if (!clientIdTaskResult || !clientIdTaskResult.data) return;
@@ -84,7 +82,6 @@ const useKakaoAuth = () => {
           path: ROUTES.LOGIN,
         },
       },
-      loadingStateKey: 'kakaoAuth',
     });
   };
 

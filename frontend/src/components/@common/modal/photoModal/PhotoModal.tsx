@@ -80,7 +80,6 @@ const PhotoModal = (props: PhotoModalProps) => {
           text: '사진을 불러오는데 실패했어요. 다시 시도해주세요.',
         },
       },
-      loadingStateKey: 'photoModal',
     });
   };
 

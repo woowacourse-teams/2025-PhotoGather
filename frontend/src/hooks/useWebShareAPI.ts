@@ -22,7 +22,6 @@ const useWebShareAPI = () => {
         await navigator.share({ title, text, url, files });
       },
       errorActions: ['console'],
-      loadingStateKey: 'share',
     });
   };
 

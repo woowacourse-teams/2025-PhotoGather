@@ -81,7 +81,6 @@ const usePhotosDelete = ({
       onFinally: () => {
         setIsDeleting(false);
       },
-      loadingStateKey: 'deleteSelectedPhotos',
     });
   };
 
@@ -112,7 +111,6 @@ const usePhotosDelete = ({
       onFinally: () => {
         setIsDeleting(false);
       },
-      loadingStateKey: 'deleteSinglePhoto',
     });
 
     return true;

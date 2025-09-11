@@ -166,7 +166,6 @@ const useFileUpload = ({
           nickName,
         ),
       errorActions: ['console'],
-      loadingStateKey: 'fileUploadNotifySuccessFiles',
     });
 
     if (!response.success) {
@@ -200,7 +199,6 @@ const useFileUpload = ({
     const presignedUrls = await tryFetch({
       task: async () => await fetchPresignedUrls(batch.uploadFiles),
       errorActions: ['console'],
-      loadingStateKey: 'fileUploadPresignedUrls',
     });
 
     const updatedBatchFiles = addPresignedUrls(
@@ -281,7 +279,6 @@ const useFileUpload = ({
               await uploadSingleBatch(batch, validGuestId, nickName);
             },
             errorActions: ['console'],
-            loadingStateKey: 'fileUploadSingleBatch',
           });
           if (!response.success) {
             throw new Error('배치 업로드 중 오류 발생');
@@ -289,7 +286,6 @@ const useFileUpload = ({
         }
       },
       errorActions: ['console'],
-      loadingStateKey: 'fileUpload',
     });
     if (!response.success) {
       throw new Error('배치 업로드 실패');

@@ -85,7 +85,7 @@ const useTaskHandler = () => {
 
   interface TryFetchProps<T> {
     task: () => Promise<T>;
-    loadingStateKey: string;
+    loadingStateKey?: string;
     errorActions: ErrorType[];
     context?: ErrorRequiredProps;
     onFinally?: () => void;
@@ -103,12 +103,13 @@ const useTaskHandler = () => {
     useCommonCodeErrorHandler = true,
   }: TryFetchProps<T>) => {
     try {
-      updateLoadingState(loadingStateKey, 'loading');
+      loadingStateKey && updateLoadingState(loadingStateKey, 'loading');
       const response = await task();
-      setLoadingState((prev) => ({ ...prev, [loadingStateKey]: 'success' }));
+      loadingStateKey &&
+        setLoadingState((prev) => ({ ...prev, [loadingStateKey]: 'success' }));
       return { success: true, data: response };
     } catch (e) {
-      updateLoadingState(loadingStateKey, 'error');
+      loadingStateKey && updateLoadingState(loadingStateKey, 'error');
       const error = e instanceof Error ? e : new Error(String(e));
 
       if (
