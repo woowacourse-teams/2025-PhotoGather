@@ -49,3 +49,5 @@ export interface SpaceCapacity {
   maxCapacity: number;
   usedCapacity: number;
 }
+
+export type SpaceFilterType = 'all' | 'open' | 'closed' | 'upcoming';
