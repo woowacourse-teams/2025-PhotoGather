@@ -54,3 +54,7 @@ export const InstagramIcon = styled.img`
   cursor: default;
   pointer-events: none;
 `;
+
+export const Mockup = styled.img`
+width: 280px;
+`;

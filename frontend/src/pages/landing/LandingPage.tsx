@@ -3,10 +3,10 @@ import { ReactComponent as KakaoTalkIcon } from '@assets/icons/kakaotalk.svg';
 import { ReactComponent as Logo } from '@assets/icons/logo.svg';
 import { ReactComponent as QrcodeIcon } from '@assets/icons/qrCode.svg';
 import InstagramIcon from '@assets/images/instagram.png';
-import { ReactComponent as MockupOne } from '@assets/images/mockup_1.svg';
-import { ReactComponent as MockupTwo } from '@assets/images/mockup_2.svg';
-import { ReactComponent as MockupThree } from '@assets/images/mockup_3.svg';
-import { ReactComponent as MockupFour } from '@assets/images/mockup_4.svg';
+import MockupOne from '@assets/images/mockup_1.png';
+import MockupTwo from '@assets/images/mockup_2.png';
+import MockupThree from '@assets/images/mockup_3.png';
+import MockupFour from '@assets/images/mockup_4.png';
 import { useEffect, useMemo, useRef } from 'react';
 import Button from '../../components/@common/buttons/button/Button';
 import FloatingActionButton from '../../components/@common/buttons/floatingActionButton/FloatingActionButton';
@@ -107,10 +107,10 @@ const LandingPage = () => {
           <S.TextContainer>{`화질 걱정 없이,\n원본 그대로 보관하세요`}</S.TextContainer>
           <Carousel
             slides={[
-              <MockupOne key="one" width={'280px'} />,
-              <MockupTwo key="two" width={'280px'} />,
-              <MockupThree key="three" width={'280px'} />,
-              <MockupFour key="four" width={'280px'} />,
+              <S.Mockup src={MockupOne} key="one" />,
+              <S.Mockup src={MockupTwo} key="two" />,
+              <S.Mockup src={MockupThree} key="three" />,
+              <S.Mockup src={MockupFour} key="four" />,
             ]}
           />
         </S.SectionContainer>
@@ -138,10 +138,10 @@ const LandingPage = () => {
           <S.TextContainer>{`귀찮은 로그인 없이,\n사진 업로드 가능해요`}</S.TextContainer>
           <Carousel
             slides={[
-              <MockupOne key="one" width={'280px'} />,
-              <MockupTwo key="two" width={'280px'} />,
-              <MockupThree key="three" width={'280px'} />,
-              <MockupFour key="four" width={'280px'} />,
+              <S.Mockup src={MockupOne} key="one" />,
+              <S.Mockup src={MockupTwo} key="two" />,
+              <S.Mockup src={MockupThree} key="three" />,
+              <S.Mockup src={MockupFour} key="four" />,
             ]}
           />
         </S.SectionContainer>
