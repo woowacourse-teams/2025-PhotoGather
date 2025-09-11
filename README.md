@@ -34,6 +34,43 @@
 
 ## 서비스 탄생 배경
 
+> 포게더는 '특별한 순간을 함께 모으는 사진 공유 서비스'에요.
+
+호스트는 스페이스를 생성해 생일파티, 졸업식, 결혼식 사진을 다수에게 받을 수 있어요.  
+게스트는 링크로 접속해 이미지를 업로드할 수 있어요.   
+스페이스에서 사진을 조회하고, 원하는 사진을 다운로드 받아요.
+
+### 다른 서비스와 차별점
+
+기존에는 Apple 기기끼리 AirDrop을 사용하거나, 카카오톡, 드라이브, SNS DM을 통해 사진을 공유해야 했어요.  
+이런 방법은 나의 사진을 가지고 있는 사람들에게 연락을 해야하고,   
+누가 나의 사진을 찍었는지 모르거나 연락처가 없는 경우에는 받기 어렵다는 단점이 있었어요.
+
+포게더는 **업로드의 불편함을 최소화**해 사진을 편하게 모으도록 만들었어요.
+포게더를 이용하면 QR 코드와 링크를 이용해 로그인을 하지 않아도,   
+주인공과 아는 사이가 아니어도 언제든 사진을 전달할 수 있어요.
+여러 서비스로 분산된 사진 공유 창구를, 포게더가 흩어지지 않게 하나로 모아요. 
+
+### 디자인 시스템
+
+Figma에서 포게더의 자세한 디자인 시스템을 확인할 수 있어요.
+
+[🧑🏻‍🎨️ Figma Design System](https://www.figma.com/design/fboYAj0maxr7EtzTrK3V3M/ForGather-Design-System?node-id=0-1&p=f&t=k8AAJLZRQIZxjzGB-0)
+
+포게더의 사진을 모아보는 공간은 **스페이스(Space)** 라고 불러요.  
+나만의 공간인 스페이스, 우주에 있는 느낌을 주기 위해 신비로운 보라색과 형광 연두색을 사용했어요.
+
+<div style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px;">
+  <div style="display: flex; align-items: center; gap: 8px;">
+    <div style="width: 24px; height: 24px; background-color: #6639DF; border-radius: 4px;"></div>
+    <span>Primary(보라색): 메인 액션, 중요한 버튼</span>
+  </div>
+  <div style="display: flex; align-items: center; gap: 8px;">
+    <div style="width: 24px; height: 24px; background-color: #CEF763; border-radius: 4px;"></div>
+    <span>Accent(형광 연두): 강조, 알림, 성공 상태</span>
+  </div>
+</div>
+
 <br/><br/>
 
 ## 깃허브 위키 목차
