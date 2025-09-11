@@ -15,7 +15,10 @@ import useGraphemeInput from '../../../hooks/@common/useGraphemeInput';
 import { useToast } from '../../../hooks/@common/useToast';
 import useSpaceCodeFromPath from '../../../hooks/useSpaceCodeFromPath';
 import useSpaceInfo from '../../../hooks/useSpaceInfo';
-import type { SpaceCreateInfo } from '../../../types/space.type';
+import type {
+  SpaceCreateInfo,
+  SpacePublicType,
+} from '../../../types/space.type';
 import { track } from '../../../utils/googleAnalytics/track';
 import { parseIsoStringFromDateTime } from '../../../utils/parseIsoStringFromDateTime';
 import * as S from './SettingsPage.styles';
@@ -46,6 +49,8 @@ const SettingsPage = () => {
     onChange: (e) => setSpaceName(e.target.value),
   });
 
+  const [publicType, setPublicType] = useState<SpacePublicType>();
+
   useEffect(() => {
     if (spaceInfo) {
       setSpaceName(spaceInfo.name);
@@ -56,6 +61,7 @@ const SettingsPage = () => {
 
       setDate(dateString);
       setTime(timeString);
+      setPublicType(spaceInfo.type);
     }
   }, [spaceInfo]);
 
@@ -69,7 +75,8 @@ const SettingsPage = () => {
     return (
       validValue !== spaceInfo.name ||
       date !== originalDate ||
-      time !== originalTime
+      time !== originalTime ||
+      publicType !== spaceInfo.type
     );
   })();
 
@@ -97,6 +104,10 @@ const SettingsPage = () => {
         );
         updateData.validHours = newValidHours > 0 ? newValidHours : 72;
       }
+    }
+
+    if (publicType !== spaceInfo.type) {
+      updateData.type = publicType;
     }
 
     const result = await tryFetch({
@@ -180,7 +191,7 @@ const SettingsPage = () => {
       </S.InfoBoxContainer>
       <S.InfoContainer>
         <S.InputContainer>
-          <S.InputWrapper style={{ marginBottom: '-8px' }}>
+          <S.InputWrapper style={{ marginBottom: '-24px' }}>
             <S.InputLabel>스페이스 이름</S.InputLabel>
             <TextInput
               placeholder="스페이스 이름을 입력하세요"
@@ -212,6 +223,21 @@ const SettingsPage = () => {
               />
             </S.InputWrapper>
           </S.DateTimeContainer>
+          <S.InputWrapper>
+            <S.InputLabel>공개 범위</S.InputLabel>
+            <S.PublicTypeButtonContainer>
+              <Button
+                onClick={() => setPublicType('PUBLIC')}
+                text="공개"
+                variant={publicType === 'PUBLIC' ? 'primary' : 'secondary'}
+              />
+              <Button
+                onClick={() => setPublicType('PRIVATE')}
+                text="비공개"
+                variant={publicType === 'PRIVATE' ? 'primary' : 'secondary'}
+              />
+            </S.PublicTypeButtonContainer>
+          </S.InputWrapper>
         </S.InputContainer>
       </S.InfoContainer>
       <S.SpaceDeleteButtonContainer>
