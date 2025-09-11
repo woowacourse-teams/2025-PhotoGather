@@ -1,5 +1,5 @@
+import { ReactComponent as Logo } from '@assets/icons/logo.svg';
 import { ReactComponent as SettingSvg } from '@assets/icons/setting.svg';
-import { ReactComponent as Logo } from '@assets/logo.svg';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { ROUTES } from '../../../../constants/routes';
 import { theme } from '../../../../styles/theme';

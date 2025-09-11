@@ -1,12 +1,12 @@
 import { ReactComponent as SaveIcon } from '@assets/icons/download.svg';
 import { ReactComponent as InstagramIcon } from '@assets/icons/instagram.svg';
 import { ReactComponent as KakaoTalkIcon } from '@assets/icons/kakaotalk.svg';
+import { ReactComponent as Logo } from '@assets/icons/logo.svg';
 import { ReactComponent as QrcodeIcon } from '@assets/icons/qrCode.svg';
 import { ReactComponent as MockupOne } from '@assets/images/mockup_1.svg';
 import { ReactComponent as MockupTwo } from '@assets/images/mockup_2.svg';
 import { ReactComponent as MockupThree } from '@assets/images/mockup_3.svg';
 import { ReactComponent as MockupFour } from '@assets/images/mockup_4.svg';
-import { ReactComponent as Logo } from '@assets/logo.svg';
 import { useEffect, useMemo, useRef } from 'react';
 import Button from '../../components/@common/buttons/button/Button';
 import FloatingActionButton from '../../components/@common/buttons/floatingActionButton/FloatingActionButton';
