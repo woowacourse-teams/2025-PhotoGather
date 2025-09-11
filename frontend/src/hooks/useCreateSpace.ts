@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import { spaceService } from '../apis/services/space.service';
 import type { SpaceCreateInfo } from '../types/space.type';
-import useError from './@common/useError';
+import useTaskHandler from './@common/useTaskHandler';
 
 const useCreateSpace = () => {
   const [isCreating, setIsCreating] = useState(false);
-  const { tryFetch } = useError();
+  const { tryFetch } = useTaskHandler();
 
   const requestSpaceCode = async (spaceCreateInfo: SpaceCreateInfo) => {
     setIsCreating(true);

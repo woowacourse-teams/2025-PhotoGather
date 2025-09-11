@@ -70,7 +70,7 @@ const SpaceHomePage = () => {
 
   const {
     photosList,
-    isLoadingPhotos,
+    loadingState,
     thumbnailPhotoMap,
     isEndPage,
     tryFetchPhotosList,
@@ -264,14 +264,14 @@ const SpaceHomePage = () => {
   const renderBodyContent = () => {
     if (isEarlyTime) return <EarlyPage openedAt={spaceInfo.openedAt} />;
     if (isSpaceExpired) return <ExpiredPage />;
-    if (!isLoadingPhotos && photosList.length === 0)
+    if (loadingState === 'success' && photosList.length === 0)
       return (
         <S.NoImageContainer>
           <GiftIcon width="120px" />
           <S.NoImageText>{INFORMATION.NO_IMAGE}</S.NoImageText>
         </S.NoImageContainer>
       );
-    if (!isLoadingPhotos && photosList.length > 0)
+    if (loadingState === 'success' && photosList.length > 0)
       return (
         <>
           <S.ImageManagementContainer>

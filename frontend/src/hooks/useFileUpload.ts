@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { photoService } from '../apis/services/photo.service';
 import { FAILED_GUEST_ID } from '../constants/errors';
 import type { LocalFile, UploadFile } from '../types/file.type';
-import useError from './@common/useError';
+import useTaskHandler from './@common/useTaskHandler';
 
 interface Batch {
   id: number;
@@ -44,7 +44,7 @@ const useFileUpload = ({
   const [, setBatches] = useState<Batch[]>();
   const [session, setSession] = useState<Session>();
   const [isUploading, setIsUploading] = useState(false);
-  const { tryFetch } = useError();
+  const { tryFetch } = useTaskHandler();
   const [progress, setProgress] = useState(0);
 
   const ensureGuestId = async () => {

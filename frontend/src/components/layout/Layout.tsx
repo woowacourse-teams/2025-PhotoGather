@@ -3,8 +3,8 @@ import { useEffect, useState } from 'react';
 import { Outlet, useLocation, useMatches } from 'react-router-dom';
 import { authService } from '../../apis/services/auth.service';
 import OverlayProvider from '../../contexts/OverlayProvider';
-import useError from '../../hooks/@common/useError';
 import useInAppRedirect from '../../hooks/@common/useInAppRedirect';
+import useTaskHandler from '../../hooks/@common/useTaskHandler';
 import useGoogleAnalytics from '../../hooks/useGoogleAnalytics';
 import type { MyInfo } from '../../types/api.type';
 import type { AppRouteObject } from '../../types/route.type';
@@ -15,7 +15,7 @@ import { StarField } from './starField/StarField';
 const Layout = () => {
   const [myInfo, setMyInfo] = useState<MyInfo | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const { tryFetch } = useError();
+  const { tryFetch } = useTaskHandler();
   const location = useLocation().pathname;
   const { redirectToExternalBrowser } = useInAppRedirect();
 

@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { photoService } from '../apis/services/photo.service';
 import type { DownloadInfo } from '../types/photo.type';
 import { checkSelectedPhotoExist } from '../validators/photo.validator';
-import useError from './@common/useError';
+import useTaskHandler from './@common/useTaskHandler';
 
 interface UseDownloadProps {
   spaceCode: string;
@@ -20,7 +20,7 @@ const useDownload = ({
   const [totalProgress, setTotalProgress] = useState(0);
   const [currentProgress, setCurrentProgress] = useState(0);
 
-  const { tryTask, tryFetch } = useError();
+  const { tryTask, tryFetch } = useTaskHandler();
 
   const downloadAsImage = async (url: string, fileName: string) => {
     const response = await fetch(url);

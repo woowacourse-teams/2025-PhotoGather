@@ -24,10 +24,13 @@ interface ErrorRequiredProps {
   console?: ConsoleOptions;
 }
 
-const useError = () => {
-  const [isError, setIsError] = useState(false);
+const useTaskHandler = () => {
+  type LoadingStateType = 'pending' | 'loading' | 'success' | 'error';
+
   const { showToast } = useToast();
   const navigate = useNavigate();
+
+  const [loadingState, setLoadingState] = useState<LoadingStateType>('pending');
 
   const errorHandler = {
     toast: (toastBase: ToastBase) => {
@@ -60,11 +63,12 @@ const useError = () => {
     onFinally,
   }: TryTaskProps<T>): TryTaskResultType<T> => {
     try {
-      setIsError(false);
+      setLoadingState('loading');
       const data = task();
+      setLoadingState('success');
       return { success: true, data };
     } catch (e) {
-      setIsError(true);
+      setLoadingState('error');
       const error = e instanceof Error ? e : new Error(String(e));
       matchingErrorHandler(errorActions, context, error);
 
@@ -92,9 +96,12 @@ const useError = () => {
     useCommonCodeErrorHandler = true,
   }: TryFetchProps<T>) => {
     try {
+      setLoadingState('loading');
       const response = await task();
+      setLoadingState('success');
       return { success: true, data: response };
     } catch (e) {
+      setLoadingState('error');
       const error = e instanceof Error ? e : new Error(String(e));
 
       if (
@@ -160,7 +167,7 @@ const useError = () => {
     return;
   };
 
-  return { isError, tryTask, tryFetch };
+  return { loadingState, tryTask, tryFetch };
 };
 
-export default useError;
+export default useTaskHandler;

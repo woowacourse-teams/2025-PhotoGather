@@ -2,7 +2,7 @@ import defaultImage from '@assets/images/default_image.png';
 import { useEffect, useState } from 'react';
 import { photoService } from '../../../../apis/services/photo.service';
 import { useOverlay } from '../../../../contexts/OverlayProvider';
-import useError from '../../../../hooks/@common/useError';
+import useTaskHandler from '../../../../hooks/@common/useTaskHandler';
 import type { PreviewFile } from '../../../../types/file.type';
 import type { BaseModalProps } from '../../../../types/modal.type';
 import type { Photo } from '../../../../types/photo.type';
@@ -43,7 +43,7 @@ const PhotoModal = (props: PhotoModalProps) => {
   // TODO : 중복 상태 여부 확인 필요
   const [displayPath, setDisplayPath] = useState<string>('');
   const overlay = useOverlay();
-  const { tryFetch } = useError();
+  const { tryFetch } = useTaskHandler();
 
   const isManagerMode = mode === 'manager';
   const handleImageError = createImageErrorHandler(defaultImage);

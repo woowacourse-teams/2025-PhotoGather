@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
 import { spaceService } from '../apis/services/space.service';
 import type { Space } from '../types/space.type';
-import useError from './@common/useError';
+import useTaskHandler from './@common/useTaskHandler';
 
 const useSpaceInfo = (spaceCode: string) => {
   const [spaceInfo, setSpaceInfo] = useState<Space>();
   const [isLoading, setIsLoading] = useState(false);
-  const { tryFetch } = useError();
+  const { tryFetch } = useTaskHandler();
 
   const requestSpaceInfo = async () => {
     setIsLoading(true);
