@@ -122,6 +122,14 @@ public class GlobalExceptionHandler {
             .body(ErrorResponse.from("인증 토큰이 유효하지 않습니다."));
     }
 
+    @ExceptionHandler(FileUploadException.class)
+    public ResponseEntity<ErrorResponse> handleUnauthorizedException(FileUploadException e) {
+        logClientWarning(e);
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+            .contentType(APPLICATION_JSON)
+            .body(ErrorResponse.from(e.getMessage()));
+    }
+
     /**
      * 핸들링 되지 않은 커스텀 비즈니스 예외
      * 4XX -> info

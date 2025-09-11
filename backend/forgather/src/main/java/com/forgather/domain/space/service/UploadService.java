@@ -22,6 +22,7 @@ import com.forgather.domain.space.repository.PhotoRepository;
 import com.forgather.domain.space.repository.SpaceRepository;
 import com.forgather.domain.space.util.MetaDataExtractor;
 import com.forgather.global.exception.BaseException;
+import com.forgather.global.exception.FileUploadException;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -58,14 +59,13 @@ public class UploadService {
 
     private String upload(String spaceCode, MultipartFile multipartFile) {
         try {
-            log.atDebug()
+            log.atInfo()
                 .addKeyValue("spaceCode", spaceCode)
                 .addKeyValue("originalName", multipartFile.getOriginalFilename())
-                .log("파일 업로드 시작");
+                .log("파일 업로드 시작 {}, {}", spaceCode, multipartFile.getSize());
             return contentsStorage.upload(spaceCode, multipartFile);
         } catch (IOException e) {
-            throw new IllegalArgumentException(
-                "파일 업로드에 실패했습니다. 파일 이름: " + multipartFile.getOriginalFilename(), e);
+            throw new FileUploadException("파일 업로드에 실패했습니다. 파일 이름: " + multipartFile.getOriginalFilename(), e);
         }
     }
 
