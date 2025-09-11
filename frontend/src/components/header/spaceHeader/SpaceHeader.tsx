@@ -27,7 +27,7 @@ interface SpaceHeaderProps {
 
 const SpaceHeader = ({
   title,
-  publicType = 'PUBLIC',
+  publicType = 'PRIVATE',
   timer,
   icons,
 }: SpaceHeaderProps) => {
