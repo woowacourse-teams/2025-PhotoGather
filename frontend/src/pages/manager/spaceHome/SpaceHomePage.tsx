@@ -7,7 +7,7 @@ import { ReactComponent as UploadIcon } from '../../../@assets/icons/add-photo.s
 import { ReactComponent as SaveIcon } from '../../../@assets/icons/download.svg';
 import { ReactComponent as GiftIcon } from '../../../@assets/icons/gift.svg';
 import { ReactComponent as SettingSvg } from '../../../@assets/icons/setting.svg';
-import { ReactComponent as ArrowUpSvg } from '../../../@assets/icons/upwardArrow.svg';
+import { ReactComponent as ArrowUpSvg } from '../../../@assets/icons/upward-arrow.svg';
 import FloatingActionButton from '../../../components/@common/buttons/floatingActionButton/FloatingActionButton';
 import FloatingIconButton from '../../../components/@common/buttons/floatingIconButton/FloatingIconButton';
 import IconLabelButton from '../../../components/@common/buttons/iconLabelButton/IconLabelButton';

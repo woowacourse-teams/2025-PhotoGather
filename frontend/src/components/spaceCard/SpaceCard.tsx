@@ -1,4 +1,4 @@
-import { ReactComponent as DefaultImageIcon } from '@assets/icons/defaultImage.svg';
+import { ReactComponent as DefaultImageIcon } from '@assets/icons/default-image.svg';
 import { ReactComponent as GroupIcon } from '@assets/icons/group.svg';
 import defaultImage from '@assets/images/default_image.png';
 import loadingImage from '@assets/images/loading.png';
