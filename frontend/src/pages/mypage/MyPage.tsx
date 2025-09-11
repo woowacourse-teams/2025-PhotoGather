@@ -139,6 +139,7 @@ const MyPage = () => {
               <SpaceCard
                 key={space.id}
                 name={space.name}
+                publicType={space.type}
                 thumbnail={thumbnails[space.spaceCode]}
                 openedAt={space.openedAt}
                 expiredAt={space.expiredAt}
