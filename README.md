@@ -60,16 +60,8 @@ Figma에서 포게더의 자세한 디자인 시스템을 확인할 수 있어�
 포게더의 사진을 모아보는 공간은 **스페이스(Space)** 라고 불러요.  
 나만의 공간인 스페이스, 우주에 있는 느낌을 주기 위해 신비로운 보라색과 형광 연두색을 사용했어요.
 
-<div style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px;">
-  <div style="display: flex; align-items: center; gap: 8px;">
-    <div style="width: 24px; height: 24px; background-color: #6639DF; border-radius: 4px;"></div>
-    <span>Primary(보라색): 메인 액션, 중요한 버튼</span>
-  </div>
-  <div style="display: flex; align-items: center; gap: 8px;">
-    <div style="width: 24px; height: 24px; background-color: #CEF763; border-radius: 4px;"></div>
-    <span>Accent(형광 연두): 강조, 알림, 성공 상태</span>
-  </div>
-</div>
+![Primary](https://via.placeholder.com/15/6639DF/000000?text=+) **Primary (#6639DF)**: 메인 액션, 중요한 버튼  
+![Accent](https://via.placeholder.com/15/CEF763/000000?text=+) **Accent (#CEF763)**: 강조, 알림, 성공 상태
 
 <br/><br/>
 
