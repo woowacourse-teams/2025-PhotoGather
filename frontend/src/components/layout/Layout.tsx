@@ -14,7 +14,7 @@ import { StarField } from './starField/StarField';
 
 const Layout = () => {
   const [myInfo, setMyInfo] = useState<MyInfo | null>(null);
-  const { tryFetch } = useTaskHandler();
+  const { loadingState, tryFetch } = useTaskHandler();
   const location = useLocation().pathname;
   const { redirectToExternalBrowser } = useInAppRedirect();
 
@@ -44,6 +44,7 @@ const Layout = () => {
           return response.data;
         },
         errorActions: [],
+        loadingStateKey: 'auth',
         useCommonCodeErrorHandler: false,
       });
       setMyInfo(result.data ? result.data : null);
@@ -58,6 +59,7 @@ const Layout = () => {
           <Header
             profileImageSrc={myInfo?.pictureUrl || defaultProfile}
             isLoggedIn={!!myInfo}
+            isLoading={loadingState.auth === 'loading'}
           />
         )}
         {isStarFieldPage && <StarField />}
