@@ -1,8 +1,8 @@
 import { ReactComponent as SaveIcon } from '@assets/icons/download.svg';
-import { ReactComponent as InstagramIcon } from '@assets/icons/instagram.svg';
 import { ReactComponent as KakaoTalkIcon } from '@assets/icons/kakaotalk.svg';
 import { ReactComponent as Logo } from '@assets/icons/logo.svg';
 import { ReactComponent as QrcodeIcon } from '@assets/icons/qrCode.svg';
+import InstagramIcon from '@assets/images/instagram.png';
 import { ReactComponent as MockupOne } from '@assets/images/mockup_1.svg';
 import { ReactComponent as MockupTwo } from '@assets/images/mockup_2.svg';
 import { ReactComponent as MockupThree } from '@assets/images/mockup_3.svg';
@@ -154,14 +154,7 @@ const LandingPage = () => {
         >
           <S.TextContainer>{`인스타그램, 카카오톡, QR코드\n빠르게 공유하고 사진을 모아보세요`}</S.TextContainer>
           <S.RowContainer>
-            <InstagramIcon
-              style={{
-                height: '44px',
-                marginBottom: '4px',
-                cursor: 'default',
-                pointerEvents: 'none',
-              }}
-            />
+            <S.InstagramIcon src={InstagramIcon} />
             <IconLabelButton
               icon={<KakaoTalkIcon />}
               style={{
