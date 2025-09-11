@@ -49,7 +49,7 @@ const PublicTypeElement = ({
   );
 };
 
-interface PublicTypeBorderButton
+interface PublicTypeBorderButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant: SpacePublicType;
   /** 테두리 버튼 요소의 색깔 */
@@ -68,7 +68,7 @@ const PublicTypeBorderButton = ({
   onClick,
   disabled,
   ...buttonProps
-}: PublicTypeBorderButton) => {
+}: PublicTypeBorderButtonProps) => {
   const title =
     variant === 'PUBLIC'
       ? INFORMATION.PUBLIC_OR_NOT.OPTIONS.PUBLIC.TITLE
