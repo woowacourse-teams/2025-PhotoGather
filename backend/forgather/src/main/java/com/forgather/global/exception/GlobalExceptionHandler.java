@@ -109,7 +109,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(ForbiddenException.class)
     public ResponseEntity<ErrorResponse> handleForbiddenException(ForbiddenException e) {
         logClientWarning(e);
-        return ResponseEntity.status(HttpStatus.FORBIDDEN)
+        return ResponseEntity.status(e.getStatusCode())
             .contentType(APPLICATION_JSON)
             .body(ErrorResponse.from("접근 권한이 없습니다."));
     }
@@ -117,17 +117,9 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(UnauthorizedException.class)
     public ResponseEntity<ErrorResponse> handleUnauthorizedException(UnauthorizedException e) {
         logClientWarning(e);
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+        return ResponseEntity.status(e.getStatusCode())
             .contentType(APPLICATION_JSON)
             .body(ErrorResponse.from("인증 토큰이 유효하지 않습니다."));
-    }
-
-    @ExceptionHandler(FileUploadException.class)
-    public ResponseEntity<ErrorResponse> handleUnauthorizedException(FileUploadException e) {
-        logClientWarning(e);
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-            .contentType(APPLICATION_JSON)
-            .body(ErrorResponse.from(e.getMessage()));
     }
 
     /**
