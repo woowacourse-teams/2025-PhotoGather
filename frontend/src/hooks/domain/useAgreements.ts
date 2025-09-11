@@ -25,6 +25,7 @@ const useAgreements = () => {
         await authService.agreeTerm();
       },
       errorActions: ['toast'],
+      loadingStateKey: 'agreements',
     });
   };
 

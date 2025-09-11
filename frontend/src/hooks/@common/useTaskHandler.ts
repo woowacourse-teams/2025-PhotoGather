@@ -26,11 +26,12 @@ interface ErrorRequiredProps {
 
 const useTaskHandler = () => {
   type LoadingStateType = 'pending' | 'loading' | 'success' | 'error';
+  type LoadingStateMap = Record<string, LoadingStateType>;
 
   const { showToast } = useToast();
   const navigate = useNavigate();
 
-  const [loadingState, setLoadingState] = useState<LoadingStateType>('pending');
+  const [loadingState, setLoadingState] = useState<LoadingStateMap>({});
 
   const errorHandler = {
     toast: (toastBase: ToastBase) => {
@@ -63,12 +64,9 @@ const useTaskHandler = () => {
     onFinally,
   }: TryTaskProps<T>): TryTaskResultType<T> => {
     try {
-      setLoadingState('loading');
       const data = task();
-      setLoadingState('success');
       return { success: true, data };
     } catch (e) {
-      setLoadingState('error');
       const error = e instanceof Error ? e : new Error(String(e));
       matchingErrorHandler(errorActions, context, error);
 
@@ -78,8 +76,16 @@ const useTaskHandler = () => {
     }
   };
 
+  const updateLoadingState = (
+    loadingStateKey: string,
+    loadingState: LoadingStateType,
+  ) => {
+    setLoadingState((prev) => ({ ...prev, [loadingStateKey]: loadingState }));
+  };
+
   interface TryFetchProps<T> {
     task: () => Promise<T>;
+    loadingStateKey: string;
     errorActions: ErrorType[];
     context?: ErrorRequiredProps;
     onFinally?: () => void;
@@ -90,18 +96,19 @@ const useTaskHandler = () => {
 
   const tryFetch = async <T>({
     task,
+    loadingStateKey,
     errorActions,
     context,
     onFinally,
     useCommonCodeErrorHandler = true,
   }: TryFetchProps<T>) => {
     try {
-      setLoadingState('loading');
+      updateLoadingState(loadingStateKey, 'loading');
       const response = await task();
-      setLoadingState('success');
+      setLoadingState((prev) => ({ ...prev, [loadingStateKey]: 'success' }));
       return { success: true, data: response };
     } catch (e) {
-      setLoadingState('error');
+      updateLoadingState(loadingStateKey, 'error');
       const error = e instanceof Error ? e : new Error(String(e));
 
       if (

@@ -107,6 +107,7 @@ const SettingsPage = () => {
           text: '스페이스 정보 수정에 실패했어요.',
         },
       },
+      loadingStateKey: 'updateSpaceInfo',
     });
 
     if (result.success) {
@@ -151,6 +152,7 @@ const SettingsPage = () => {
           text: '스페이스 삭제에 실패했어요.',
         },
       },
+      loadingStateKey: 'deleteSpace',
     });
 
     if (result.success) {

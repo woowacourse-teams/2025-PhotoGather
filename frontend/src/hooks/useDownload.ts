@@ -16,11 +16,10 @@ const useDownload = ({
   spaceName,
   onDownloadSuccess,
 }: UseDownloadProps) => {
-  const [isDownloading, setIsDownloading] = useState(false);
   const [totalProgress, setTotalProgress] = useState(0);
   const [currentProgress, setCurrentProgress] = useState(0);
 
-  const { tryTask, tryFetch } = useTaskHandler();
+  const { loadingState, tryTask, tryFetch } = useTaskHandler();
 
   const downloadAsImage = async (url: string, fileName: string) => {
     const response = await fetch(url);
@@ -99,7 +98,6 @@ const useDownload = ({
 
     await tryFetch({
       task: async () => {
-        setIsDownloading(true);
         const response = await photoService.downloadPhotos(spaceCode, {
           photoIds: photoIds,
         });
@@ -125,10 +123,10 @@ const useDownload = ({
           type: 'error',
         },
       },
+      loadingStateKey: 'download',
       onFinally: () => {
         setTotalProgress(0);
         setCurrentProgress(0);
-        setIsDownloading(false);
       },
     });
   };
@@ -155,16 +153,13 @@ const useDownload = ({
           type: 'error',
         },
       },
-      onFinally: () => {
-        setIsDownloading(false);
-      },
+      loadingStateKey: 'singleDownload',
     });
   };
 
   const tryAllDownload = async () => {
     await tryFetch({
       task: async () => {
-        setIsDownloading(true);
         const response = await photoService.downloadAll(spaceCode);
 
         if (!response.data) return;
@@ -183,16 +178,16 @@ const useDownload = ({
           type: 'error',
         },
       },
+      loadingStateKey: 'allDownload',
       onFinally: () => {
         setTotalProgress(0);
         setCurrentProgress(0);
-        setIsDownloading(false);
       },
     });
   };
 
   return {
-    isDownloading,
+    isDownloading: loadingState.download === 'loading',
     tryAllDownload,
     trySingleDownload,
     trySelectedDownload,

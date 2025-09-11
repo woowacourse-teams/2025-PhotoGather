@@ -79,6 +79,7 @@ const usePhotosBySpaceCode = ({
           type: 'error',
         },
       },
+      loadingStateKey: 'photosList',
     });
   };
 

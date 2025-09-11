@@ -38,7 +38,6 @@ type PhotoModalProps = GuestPhotoModalProps | ManagerPhotoModalProps;
 
 const PhotoModal = (props: PhotoModalProps) => {
   const { mode, onClose, onSubmit } = props;
-  const [, setIsLoading] = useState(false);
   const [photo, setPhoto] = useState<Photo | null>(null);
   // TODO : 중복 상태 여부 확인 필요
   const [displayPath, setDisplayPath] = useState<string>('');
@@ -63,7 +62,6 @@ const PhotoModal = (props: PhotoModalProps) => {
   const fetchPhoto = async () => {
     await tryFetch({
       task: async () => {
-        setIsLoading(true);
         // TODO : 모달을 종류별로 분리
         if (!managerSpaceCode || !managerPhotoId) return;
         const response = await photoService.getById(
@@ -82,9 +80,7 @@ const PhotoModal = (props: PhotoModalProps) => {
           text: '사진을 불러오는데 실패했어요. 다시 시도해주세요.',
         },
       },
-      onFinally: () => {
-        setIsLoading(false);
-      },
+      loadingStateKey: 'photoModal',
     });
   };
 

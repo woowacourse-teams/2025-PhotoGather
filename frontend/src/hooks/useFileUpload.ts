@@ -43,8 +43,7 @@ const useFileUpload = ({
   const [, setUploadFiles] = useState<UploadFile[]>([]);
   const [, setBatches] = useState<Batch[]>();
   const [session, setSession] = useState<Session>();
-  const [isUploading, setIsUploading] = useState(false);
-  const { tryFetch } = useTaskHandler();
+  const { loadingState, tryFetch } = useTaskHandler();
   const [progress, setProgress] = useState(0);
 
   const ensureGuestId = async () => {
@@ -167,6 +166,7 @@ const useFileUpload = ({
           nickName,
         ),
       errorActions: ['console'],
+      loadingStateKey: 'fileUploadNotifySuccessFiles',
     });
 
     if (!response.success) {
@@ -200,6 +200,7 @@ const useFileUpload = ({
     const presignedUrls = await tryFetch({
       task: async () => await fetchPresignedUrls(batch.uploadFiles),
       errorActions: ['console'],
+      loadingStateKey: 'fileUploadPresignedUrls',
     });
 
     const updatedBatchFiles = addPresignedUrls(
@@ -280,6 +281,7 @@ const useFileUpload = ({
               await uploadSingleBatch(batch, validGuestId, nickName);
             },
             errorActions: ['console'],
+            loadingStateKey: 'fileUploadSingleBatch',
           });
           if (!response.success) {
             throw new Error('배치 업로드 중 오류 발생');
@@ -287,6 +289,7 @@ const useFileUpload = ({
         }
       },
       errorActions: ['console'],
+      loadingStateKey: 'fileUpload',
     });
     if (!response.success) {
       throw new Error('배치 업로드 실패');
@@ -297,7 +300,6 @@ const useFileUpload = ({
   const submitFileUpload = async () => {
     const currentSession = session ?? createSession(localFiles);
 
-    setIsUploading(true);
     const response = await tryFetch({
       task: async () => {
         const validGuestId = await ensureGuestId();
@@ -310,9 +312,7 @@ const useFileUpload = ({
           type: 'error',
         },
       },
-      onFinally: () => {
-        setIsUploading(false);
-      },
+      loadingStateKey: 'fileUpload',
     });
 
     if (response.success) {
@@ -325,7 +325,7 @@ const useFileUpload = ({
     submitFileUpload,
     total: session?.total,
     success: progress,
-    isUploading,
+    isUploading: loadingState.fileUpload === 'loading',
   };
 };
 

@@ -14,8 +14,7 @@ import { StarField } from './starField/StarField';
 
 const Layout = () => {
   const [myInfo, setMyInfo] = useState<MyInfo | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const { tryFetch } = useTaskHandler();
+  const { loadingState, tryFetch } = useTaskHandler();
   const location = useLocation().pathname;
   const { redirectToExternalBrowser } = useInAppRedirect();
 
@@ -39,14 +38,13 @@ const Layout = () => {
   // biome-ignore lint/correctness/useExhaustiveDependencies: tryFetch를 dependency에 추가하면 무한 루프 발생
   useEffect(() => {
     const fetchAuthStatus = async () => {
-      setIsLoading(true);
       const result = await tryFetch({
         task: async () => {
           const response = await authService.status();
           return response.data;
         },
         errorActions: [],
-        onFinally: () => setIsLoading(false),
+        loadingStateKey: 'auth',
         useCommonCodeErrorHandler: false,
       });
       setMyInfo(result.data ? result.data : null);
@@ -61,7 +59,6 @@ const Layout = () => {
           <Header
             profileImageSrc={myInfo?.pictureUrl || defaultProfile}
             isLoggedIn={!!myInfo}
-            isLoading={isLoading}
           />
         )}
         {isStarFieldPage && <StarField />}

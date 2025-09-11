@@ -10,15 +10,9 @@ interface HeaderProps {
   profileImageSrc: string;
   /** 로그인 여부 */
   isLoggedIn?: boolean;
-  /** 로딩 상태 */
-  isLoading?: boolean;
 }
 
-const Header = ({
-  profileImageSrc,
-  isLoggedIn = false,
-  isLoading = false,
-}: HeaderProps) => {
+const Header = ({ profileImageSrc, isLoggedIn = false }: HeaderProps) => {
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -33,7 +27,7 @@ const Header = ({
       );
     }
 
-    if (!isLoggedIn || isLoading) {
+    if (!isLoggedIn) {
       return null;
     }
 

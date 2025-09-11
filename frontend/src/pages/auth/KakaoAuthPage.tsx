@@ -17,6 +17,7 @@ const KakaoAuthPage = () => {
         await getAuth(code);
       },
       errorActions: ['toast'],
+      loadingStateKey: 'kakaoAuth',
     });
   }, [getAuth, tryFetch]);
 

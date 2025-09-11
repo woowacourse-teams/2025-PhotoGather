@@ -5,11 +5,9 @@ import useTaskHandler from './@common/useTaskHandler';
 
 const useSpaceInfo = (spaceCode: string) => {
   const [spaceInfo, setSpaceInfo] = useState<Space>();
-  const [isLoading, setIsLoading] = useState(false);
-  const { tryFetch } = useTaskHandler();
+  const { loadingState, tryFetch } = useTaskHandler();
 
   const requestSpaceInfo = async () => {
-    setIsLoading(true);
     const response = await spaceService.getInfoByCode(spaceCode);
     if (!response) return;
     setSpaceInfo(response.data);
@@ -24,7 +22,7 @@ const useSpaceInfo = (spaceCode: string) => {
           text: '스페이스 정보를 불러오는데 실패했습니다.',
         },
       },
-      onFinally: () => setIsLoading(false),
+      loadingStateKey: 'spaceInfo',
     });
   };
 
@@ -33,7 +31,11 @@ const useSpaceInfo = (spaceCode: string) => {
     fetchSpaceInfo();
   }, [spaceCode]);
 
-  return { isLoading, spaceInfo, refetchSpaceInfo: fetchSpaceInfo };
+  return {
+    isLoading: loadingState.spaceInfo === 'loading',
+    spaceInfo,
+    refetchSpaceInfo: fetchSpaceInfo,
+  };
 };
 
 export default useSpaceInfo;

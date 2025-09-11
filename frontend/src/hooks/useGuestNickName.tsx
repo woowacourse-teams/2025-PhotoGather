@@ -117,6 +117,7 @@ const useGuestNickName = ({ spaceCode }: UseGuestNickNameProps) => {
           text: '닉네임을 가져오는 중 오류가 발생했어요. 다시 시도해 주세요.',
         },
       },
+      loadingStateKey: 'getNickName',
     });
 
     return taskResult.data ?? FAILED_GUEST_ID;
@@ -143,6 +144,7 @@ const useGuestNickName = ({ spaceCode }: UseGuestNickNameProps) => {
           text: '닉네임을 저장하는 중 오류가 발생했어요. 다시 시도해 주세요.',
         },
       },
+      loadingStateKey: 'createNickName',
     });
 
     return taskResult.data ?? FAILED_GUEST_ID;
@@ -173,6 +175,7 @@ const useGuestNickName = ({ spaceCode }: UseGuestNickNameProps) => {
           text: '닉네임을 수정하는 중 오류가 발생했어요. 다시 시도해 주세요.',
         },
       },
+      loadingStateKey: 'changeNickName',
     });
 
     return taskResult.data ?? FAILED_GUEST_ID;

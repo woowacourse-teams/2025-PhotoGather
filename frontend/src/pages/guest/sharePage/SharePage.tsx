@@ -63,6 +63,7 @@ const SharePage = () => {
           url: createShareUrl(spaceCode),
         }),
       errorActions: ['console'],
+      loadingStateKey: 'share',
     });
   };
 
