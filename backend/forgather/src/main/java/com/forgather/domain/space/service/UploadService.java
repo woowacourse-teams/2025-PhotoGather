@@ -98,9 +98,10 @@ public class UploadService {
         Guest guest = guestRepository.getById(guestId);
         space.validateGuest(guest);
 
-        request.cancelFileNames()
+        List<String> cancelFileNames = request.cancelFileNames()
             .stream()
             .map(fileName -> generateContentsFilePath(contentsStorage.getRootDirectory(), spaceCode, fileName))
-            .forEach(contentsStorage::deleteContent);
+            .toList();
+        contentsStorage.deleteSelectedContents(cancelFileNames);
     }
 }
