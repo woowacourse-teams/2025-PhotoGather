@@ -76,7 +76,7 @@ const PublicTypeBorderButton = ({
   const description =
     variant === 'PUBLIC'
       ? INFORMATION.PUBLIC_OR_NOT.OPTIONS.PUBLIC.DESCRIPTION
-      : INFORMATION.PUBLIC_OR_NOT.OPTIONS.PUBLIC.DESCRIPTION;
+      : INFORMATION.PUBLIC_OR_NOT.OPTIONS.PRIVATE.DESCRIPTION;
 
   return (
     <S.ButtonWrapper
