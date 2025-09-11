@@ -39,6 +39,7 @@ export interface Space {
   guestCount?: number;
   photoCount?: number;
   host: MyInfo;
+  type?: SpacePublicType;
 }
 
 export interface UpdateSpaceInput {

@@ -1,3 +1,6 @@
+import { ReactComponent as PrivateIcon } from '@assets/icons/private.svg';
+import { ReactComponent as PublicIcon } from '@assets/icons/public.svg';
+import type { SpacePublicType } from '../../../types/space.type';
 import type { Timer } from '../../../types/timer.type';
 import { checkIsTimerExpired } from '../../../utils/checkIsTimerExpired';
 import { formatTimer } from '../../../utils/formatTimer';
@@ -15,20 +18,31 @@ interface IconProps {
 interface SpaceHeaderProps {
   /** 헤더의 제목 */
   title: string;
+  /** 헤더의 공개범위 */
+  publicType?: SpacePublicType;
   /** 헤더의 타이머 */
   timer: Timer;
   /** 헤더 우상단 아이콘 */
   icons?: IconProps[];
 }
 
-const SpaceHeader = ({ title, timer, icons }: SpaceHeaderProps) => {
+const SpaceHeader = ({
+  title,
+  publicType = 'PUBLIC',
+  timer,
+  icons,
+}: SpaceHeaderProps) => {
+  const PublicTypeIcon = publicType === 'PUBLIC' ? PublicIcon : PrivateIcon;
   const isExpired = checkIsTimerExpired(timer);
   const isWithinOneHour = timer.days === 0 && timer.hours === 0 && !isExpired;
 
   return (
     <S.Wrapper>
       <S.TitleIconContainer>
-        <S.Title>{title}</S.Title>
+        <S.TitleContainer>
+          <S.Title>{title}</S.Title>
+          <PublicTypeIcon fill="white" />
+        </S.TitleContainer>
         {icons && (
           <S.IconContainer>
             {icons.map((icon) => (
