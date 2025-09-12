@@ -207,7 +207,7 @@ public class AwsS3Cloud implements ContentsStorage {
         List<String> retryPaths = extractFailedKeys(response);
         DeleteObjectsResponse retryResponse = deleteContents(retryPaths);
         if (retryResponse.hasErrors()) {
-            log.atInfo()
+            log.atWarn()
                 .addKeyValue("deleteFailPath", extractFailedKeys(retryResponse).toString())
                 .log("S3 삭제 실패");
         }
