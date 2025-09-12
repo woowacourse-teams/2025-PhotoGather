@@ -8,7 +8,23 @@ public class JwtBaseException extends BaseException{
         super(message, status);
     }
 
+    public JwtBaseException(String message, int statusCode) {
+        super(message, statusCode);
+    }
+
+    public JwtBaseException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
     public JwtBaseException(String message, HttpStatus status, Throwable cause) {
         super(message, status, cause);
+    }
+
+    public JwtBaseException(HttpStatus status) {
+        super(status);
+    }
+
+    public JwtBaseException(String message) {
+        super(message);
     }
 }

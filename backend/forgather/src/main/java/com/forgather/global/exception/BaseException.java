@@ -31,6 +31,11 @@ public class BaseException extends RuntimeException {
         this.status = HttpStatus.valueOf(statusCode);
     }
 
+    public BaseException(String message, Throwable cause) {
+        super(message, cause);
+        this.status = HttpStatus.BAD_REQUEST;
+    }
+
     public BaseException(String message, HttpStatus status, Throwable cause) {
         super(message, cause);
         this.status = status;
