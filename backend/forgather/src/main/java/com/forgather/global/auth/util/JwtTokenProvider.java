@@ -5,9 +5,11 @@ import java.util.Date;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import com.forgather.global.config.JwtProperties;
+import com.forgather.global.exception.JwtBaseException;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
@@ -53,7 +55,7 @@ public class JwtTokenProvider {
                 .parseSignedClaims(token);
             return true;
         } catch (JwtException | IllegalArgumentException e) {
-            return false;
+            throw new JwtBaseException("Invalid JWT token", HttpStatus.UNAUTHORIZED, e);
         }
     }
 

@@ -8,6 +8,8 @@ import java.nio.file.Paths;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import com.forgather.global.exception.FileDownloadException;
+
 import lombok.RequiredArgsConstructor;
 
 @Configuration
@@ -22,7 +24,7 @@ public class FileDownloadConfig {
         try {
             Files.createDirectories(tempPath);
         } catch (IOException e) {
-            throw new IllegalStateException("임시 다운로드 디렉토리 생성 실패: " + tempPath, e);
+            throw new FileDownloadException("임시 다운로드 디렉토리 생성 실패: " + tempPath, e);
         }
         return tempPath;
     }

@@ -13,11 +13,12 @@ import com.drew.metadata.Metadata;
 import com.drew.metadata.exif.ExifSubIFDDirectory;
 import com.forgather.domain.space.model.PhotoMetaData;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 public class MetaDataExtractor {
 
-    private MetaDataExtractor() {
-        // private constructor to prevent instantiation
-    }
+    private MetaDataExtractor() {}
 
     public static PhotoMetaData extractPhotoMetaData(MultipartFile file) {
         return new PhotoMetaData(extractCapturedAt(file));
@@ -45,8 +46,8 @@ public class MetaDataExtractor {
         try {
             return ImageMetadataReader.readMetadata(file.getInputStream());
         } catch (ImageProcessingException | IOException e) {
-            throw new IllegalArgumentException(
-                "파일에서 메타데이터를 추출하는 데 실패했습니다. 파일 이름: " + file.getOriginalFilename(), e);
+            log.warn("파일에서 메타데이터를 추출하는 데 실패했습니다. 파일 이름: {}", file.getOriginalFilename(), e);
+            return null;
         }
     }
 

@@ -2,16 +2,20 @@ package com.forgather.global.auth.client;
 
 import java.math.BigInteger;
 import java.security.KeyFactory;
+import java.security.NoSuchAlgorithmException;
 import java.security.PublicKey;
+import java.security.spec.InvalidKeySpecException;
 import java.security.spec.RSAPublicKeySpec;
 import java.util.Base64;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
 
 import com.forgather.global.config.KakaoProperties;
+import com.forgather.global.exception.JwtBaseException;
 
 /**
  * 카카오 인증 관련 클라이언트
@@ -36,7 +40,8 @@ public class KakaoAuthClient {
     public PublicKey getKakaoPublicKey(String kid) {
         try {
             if (keys == null) {
-                throw new IllegalStateException("카카오 공개 키가 아직 로드되지 않았습니다. 먼저 requestKeys()를 호출해야 합니다.");
+                throw new JwtBaseException("카카오 공개 키가 아직 로드되지 않았습니다. 먼저 requestKeys()를 호출해야 합니다.",
+                    HttpStatus.UNAUTHORIZED);
             }
 
             for (Map<String, Object> key : keys) {
@@ -55,9 +60,9 @@ public class KakaoAuthClient {
                     return factory.generatePublic(spec);
                 }
             }
-            throw new IllegalArgumentException("Public key not found for kid: " + kid);
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to get Kakao public key", e);
+            throw new JwtBaseException("Public key not found for kid: " + kid,  HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (NoSuchAlgorithmException | NullPointerException | InvalidKeySpecException e) {
+            throw new JwtBaseException("Failed to get Kakao public key", HttpStatus.INTERNAL_SERVER_ERROR, e);
         }
     }
 
