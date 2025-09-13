@@ -41,7 +41,12 @@ const SpaceManagerImageElement = ({
       $width={width}
       onClick={() => onImageClick(data.id)}
     >
-      <C.Image src={thumbnailUrl} alt={alt} className="clarity-mask-photo" />
+      <C.Image
+        src={thumbnailUrl}
+        alt={alt}
+        className="clarity-mask-photo"
+        loading="lazy"
+      />
       {isSelectMode && isSelected && <S.SelectedMark />}
       {isSelectMode && <S.Overlay $isSelected={isSelected} />}
     </C.Wrapper>
