@@ -6,7 +6,7 @@ import { FAILED_GUEST_ID } from '../constants/errors';
 import { useOverlay } from '../contexts/OverlayProvider';
 import { CookieUtils } from '../utils/CookieUtils';
 import { createRandomNickName } from '../utils/createRandomNickName';
-import useError from './@common/useError';
+import useTaskHandler from './@common/useTaskHandler';
 
 interface UseGuestNickNameProps {
   spaceCode: string;
@@ -14,7 +14,7 @@ interface UseGuestNickNameProps {
 
 const useGuestNickName = ({ spaceCode }: UseGuestNickNameProps) => {
   const overlay = useOverlay();
-  const { tryFetch } = useError();
+  const { tryFetch } = useTaskHandler();
 
   const [nickName, setNickName] = useState('');
 

@@ -3,11 +3,11 @@ import { DOMAIN } from '../../apis/config';
 import { authService } from '../../apis/services/auth.service';
 import { ROUTES } from '../../constants/routes';
 import { CookieUtils } from '../../utils/CookieUtils';
-import useError from '../@common/useError';
+import useTaskHandler from '../@common/useTaskHandler';
 
 const useKakaoAuth = () => {
   const navigate = useNavigate();
-  const { tryTask, tryFetch } = useError();
+  const { tryTask, tryFetch } = useTaskHandler();
   const REQUEST_URI = `${DOMAIN}${ROUTES.AUTH.KAKAO}`;
 
   const createGetKakaoCodeUrl = (clientId: string, redirectUri: string) =>

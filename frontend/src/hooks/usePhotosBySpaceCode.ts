@@ -3,7 +3,7 @@ import { photoService } from '../apis/services/photo.service';
 import type { Photo } from '../types/photo.type';
 import { buildThumbnailUrl } from '../utils/buildImageUrl';
 import { parsedImagePath } from '../utils/parsedImagePath';
-import useError from './@common/useError';
+import useTaskHandler from './@common/useTaskHandler';
 
 interface UsePhotosBySpaceIdProps {
   reObserve: () => void;
@@ -17,11 +17,10 @@ const usePhotosBySpaceCode = ({
   const PAGE_SIZE = 20;
   const PRESET = 'x800';
 
-  const [isLoadingPhotos, setIsLoadingPhotos] = useState(true);
   const [photosList, setPhotosList] = useState<Photo[]>([]);
   const currentPage = useRef(1);
   const totalPages = useRef(1);
-  const { tryFetch } = useError();
+  const { tryFetch, loadingState } = useTaskHandler();
 
   const thumbnailPhotoMap = useMemo(() => {
     // TODO : thumbnail 이미지 참조 실패시 원본 이미지 참조하도록 설정
@@ -54,7 +53,6 @@ const usePhotosBySpaceCode = ({
   };
 
   const fetchPhotosList = async () => {
-    setIsLoadingPhotos(true);
     const pageToFetch = currentPage.current;
     const response = await photoService.getBySpaceCode(spaceCode, {
       page: pageToFetch,
@@ -81,9 +79,7 @@ const usePhotosBySpaceCode = ({
           type: 'error',
         },
       },
-      onFinally: () => {
-        setIsLoadingPhotos(false);
-      },
+      loadingStateKey: 'photosList',
     });
   };
 
@@ -92,7 +88,7 @@ const usePhotosBySpaceCode = ({
     tryFetchPhotosList,
     thumbnailPhotoMap,
     photosList,
-    isLoadingPhotos,
+    loadingState,
     updatePhotos,
   };
 };

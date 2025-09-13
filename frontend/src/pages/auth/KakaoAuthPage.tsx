@@ -1,9 +1,9 @@
 import { useEffect } from 'react';
-import useError from '../../hooks/@common/useError';
+import useTaskHandler from '../../hooks/@common/useTaskHandler';
 import useKakaoAuth from '../../hooks/domain/useKakaoAuth';
 
 const KakaoAuthPage = () => {
-  const { tryFetch } = useError();
+  const { tryFetch } = useTaskHandler();
   const { getAuth } = useKakaoAuth();
 
   useEffect(() => {

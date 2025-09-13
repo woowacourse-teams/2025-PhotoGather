@@ -4,7 +4,7 @@ import ConfirmModal from '../components/@common/modal/confirmModal/ConfirmModal'
 import { useOverlay } from '../contexts/OverlayProvider';
 import type { Photo } from '../types/photo.type';
 import { checkSelectedPhotoExist } from '../validators/photo.validator';
-import useError from './@common/useError';
+import useTaskHandler from './@common/useTaskHandler';
 import { useToast } from './@common/useToast';
 
 interface UsePhotosDeleteProps {
@@ -26,7 +26,7 @@ const usePhotosDelete = ({
 }: UsePhotosDeleteProps) => {
   const [isDeleting, setIsDeleting] = useState(false);
   const overlay = useOverlay();
-  const { tryTask, tryFetch } = useError();
+  const { tryTask, tryFetch } = useTaskHandler();
   const { showToast } = useToast();
 
   const showDeleteConfirmModal = async (message: string) => {

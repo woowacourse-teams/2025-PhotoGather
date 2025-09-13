@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
 import { spaceService } from '../apis/services/space.service';
 import type { SpaceCapacity } from '../types/space.type';
-import useError from './@common/useError';
+import useTaskHandler from './@common/useTaskHandler';
 
 const useSpaceCapacity = (spaceCode: string) => {
   const [capacity, setCapacity] = useState<SpaceCapacity>();
   const [isLoading, setIsLoading] = useState(false);
-  const { tryFetch } = useError();
+  const { tryFetch } = useTaskHandler();
 
   const requestSpaceCapacity = async () => {
     setIsLoading(true);
@@ -24,7 +24,6 @@ const useSpaceCapacity = (spaceCode: string) => {
           text: '스페이스 용량 정보를 불러오는데 실패했습니다.',
         },
       },
-      onFinally: () => setIsLoading(false),
     });
   };
 
