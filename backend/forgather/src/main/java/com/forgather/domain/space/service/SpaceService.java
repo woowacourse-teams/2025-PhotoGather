@@ -15,7 +15,6 @@ import com.forgather.domain.space.model.Space;
 import com.forgather.domain.space.repository.PhotoRepository;
 import com.forgather.domain.space.repository.SpaceRepository;
 import com.forgather.global.auth.model.Host;
-import com.forgather.global.auth.service.PublicAccessService;
 import com.forgather.global.exception.UnauthorizedException;
 import com.forgather.global.util.RandomCodeGenerator;
 
@@ -28,7 +27,6 @@ public class SpaceService {
     private final SpaceRepository spaceRepository;
     private final PhotoRepository photoRepository;
     private final RandomCodeGenerator codeGenerator;
-    private final PublicAccessService publicAccessService;
 
     public CreateSpaceResponse create(CreateSpaceRequest request, Host host) {
         String spaceCode = codeGenerator.generate(10);
@@ -42,11 +40,10 @@ public class SpaceService {
     }
 
     public SpaceCapacityResponse getSpaceCapacity(String spaceCode, Host host) {
-        boolean canPublicAccess = publicAccessService.canAccess(spaceCode);
+        Space space = spaceRepository.getUnexpiredSpaceByCode(spaceCode);
         if (host != null) {
             // TODO: 추후 스페이스가 만료되어 소프트 딜리트 되는 경우 용량 정보 제공 고려
-            Space space = spaceRepository.getUnexpiredSpaceByCode(spaceCode);
-            if (!canPublicAccess) {
+            if (!space.isPublic()) {
                 space.validateHost(host);
             }
             // TODO: 부하 발생 때 최적화 고려
@@ -57,8 +54,7 @@ public class SpaceService {
             return new SpaceCapacityResponse(space.getMaxCapacity(), usedValue);
         }
 
-        if (canPublicAccess) {
-            Space space = spaceRepository.getUnexpiredSpaceByCode(spaceCode);
+        if (space.isPublic()) {
             long usedValue = photoRepository.findAllBySpace(space)
                 .stream()
                 .mapToLong(Photo::getCapacity)

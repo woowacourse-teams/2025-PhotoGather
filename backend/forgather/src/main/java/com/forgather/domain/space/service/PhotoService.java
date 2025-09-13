@@ -19,7 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.FileSystemUtils;
 import org.springframework.util.StringUtils;
 
-import com.forgather.domain.guest.repository.GuestRepository;
 import com.forgather.domain.space.dto.DeletePhotosRequest;
 import com.forgather.domain.space.dto.DownloadPhotoResponse;
 import com.forgather.domain.space.dto.DownloadPhotosRequest;
@@ -32,7 +31,6 @@ import com.forgather.domain.space.repository.PhotoRepository;
 import com.forgather.domain.space.repository.SpaceRepository;
 import com.forgather.domain.space.util.ZipGenerator;
 import com.forgather.global.auth.model.Host;
-import com.forgather.global.auth.service.PublicAccessService;
 import com.forgather.global.exception.BaseException;
 import com.forgather.global.exception.UnauthorizedException;
 
@@ -48,14 +46,11 @@ public class PhotoService {
     private final PhotoRepository photoRepository;
     private final SpaceRepository spaceRepository;
     private final ContentsStorage contentsStorage;
-    private final PublicAccessService publicAccessService;
 
     public PhotoResponse get(String spaceCode, Long photoId, Host host) {
         Space space = spaceRepository.getUnexpiredSpaceByCode(spaceCode);
-        boolean canPublicAccess = publicAccessService.canAccess(spaceCode);
-        canPublicAccess |= space.isPublic();
         if (host != null) { // 기존 로직, 로그인 상태
-            if (!canPublicAccess) {
+            if (!space.isPublic()) {
                 space.validateHost(host);
             }
             Photo photo = photoRepository.getById(photoId);
@@ -63,7 +58,7 @@ public class PhotoService {
             return PhotoResponse.from(photo);
         }
 
-        if (canPublicAccess) {
+        if (space.isPublic()) {
             Photo photo = photoRepository.getById(photoId);
             photo.validateSpace(space);
             return PhotoResponse.from(photo);
@@ -73,17 +68,15 @@ public class PhotoService {
 
     public PhotosResponse getAll(String spaceCode, Pageable pageable, Host host) {
         Space space = spaceRepository.getUnexpiredSpaceByCode(spaceCode);
-        boolean canPublicAccess = publicAccessService.canAccess(spaceCode);
-        canPublicAccess |= space.isPublic();
         if (host != null) { // 기존 로직, 로그인 상태
-            if (!canPublicAccess) {
+            if (!space.isPublic()) {
                 space.validateHost(host);
             }
             Page<Photo> photos = photoRepository.findAllBySpace(space, pageable);
             return PhotosResponse.from(photos);
         }
 
-        if (canPublicAccess) {
+        if (space.isPublic()) {
             Page<Photo> photos = photoRepository.findAllBySpace(space, pageable);
             return PhotosResponse.from(photos);
         }
@@ -139,10 +132,8 @@ public class PhotoService {
 
     public DownloadUrlsResponse getDownloadUrl(String spaceCode, Long photoId, Host host) {
         Space space = spaceRepository.getUnexpiredSpaceByCode(spaceCode);
-        boolean canPublicAccess = publicAccessService.canAccess(spaceCode);
-        canPublicAccess |= space.isPublic();
         if (host != null) { // 기존 로직, 로그인 상태
-            if (!canPublicAccess) {
+            if (!space.isPublic()) {
                 space.validateHost(host);
             }
             Photo photo = photoRepository.getById(photoId);
@@ -152,7 +143,7 @@ public class PhotoService {
             return new DownloadUrlsResponse(List.of(DownloadUrl.from(photo.getOriginalName(), downloadUrl.toString())));
         }
 
-        if (canPublicAccess) {
+        if (space.isPublic()) {
             Photo photo = photoRepository.getById(photoId);
             photo.validateSpace(space);
 
@@ -164,10 +155,8 @@ public class PhotoService {
 
     public DownloadUrlsResponse getSelectedDownloadUrls(String spaceCode, DownloadPhotosRequest request, Host host) {
         Space space = spaceRepository.getUnexpiredSpaceByCode(spaceCode);
-        boolean canPublicAccess = publicAccessService.canAccess(spaceCode);
-        canPublicAccess |= space.isPublic();
         if (host != null) { // 기존 로직, 로그인 상태
-            if (!canPublicAccess) {
+            if (!space.isPublic()) {
                 space.validateHost(host);
             }
             List<Photo> photos = photoRepository.findAllByIdIn(request.photoIds());
@@ -179,7 +168,7 @@ public class PhotoService {
             return getDownloadUrlsResponse(photos);
         }
 
-        if (publicAccessService.canAccess(spaceCode)) {
+        if (space.isPublic()) {
             List<Photo> photos = photoRepository.findAllByIdIn(request.photoIds());
             if (photos.isEmpty()) {
                 throw new BaseException("현재 다운로드할 수 있는 사진이 존재하지 않습니다.");
@@ -193,10 +182,8 @@ public class PhotoService {
 
     public DownloadUrlsResponse getAllDownloadUrls(String spaceCode, Host host) {
         Space space = spaceRepository.getUnexpiredSpaceByCode(spaceCode);
-        boolean canPublicAccess = publicAccessService.canAccess(spaceCode);
-        canPublicAccess |= space.isPublic();
         if (host != null) { // 기존 로직, 로그인 상태
-            if (!canPublicAccess) {
+            if (!space.isPublic()) {
                 space.validateHost(host);
             }
             List<Photo> photos = photoRepository.findAllBySpace(space);
@@ -208,7 +195,7 @@ public class PhotoService {
             return getDownloadUrlsResponse(photos);
         }
 
-        if (canPublicAccess) {
+        if (space.isPublic()) {
             List<Photo> photos = photoRepository.findAllBySpace(space);
             if (photos.isEmpty()) {
                 throw new BaseException("현재 다운로드할 수 있는 사진이 존재하지 않습니다.");
