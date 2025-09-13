@@ -255,6 +255,6 @@ public class PhotoService {
 
         // photoRepository.deleteAll(photos);
         space.getContents().removeAll(photos); // // orphanRemoval이 설정되어 있어 자동으로 삭제됨
-        contentsStorage.deleteSelectedContents(paths);
+        contentsStorage.deleteContents(paths);
     }
 }
