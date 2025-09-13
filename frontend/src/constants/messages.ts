@@ -45,6 +45,23 @@ export const INFORMATION = {
     },
     DESCRIPTION: '선택한 시간으로부터 72시간 동안 열려요.',
   },
+  PUBLIC_OR_NOT: {
+    TITLE: {
+      TEXT: '공개 범위를 정해볼까요?',
+      HIGHLIGHT_TEXT: '공개 범위',
+    },
+    DESCRIPTION: '공개 범위는 언제든 바꿀 수 있어요.',
+    OPTIONS: {
+      PUBLIC: {
+        TITLE: '공개',
+        DESCRIPTION: '링크만 있으면 누구나 사진을 볼 수 있어요.',
+      },
+      PRIVATE: {
+        TITLE: '비공개',
+        DESCRIPTION: '링크가 있어도 사진은 나만 볼 수 있어요.',
+      },
+    },
+  },
   CHECK_SPACE_INFO: {
     TITLE: {
       TEXT: '스페이스 정보를 확인해 주세요.',

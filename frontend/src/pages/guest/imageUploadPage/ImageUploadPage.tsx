@@ -144,7 +144,11 @@ const ImageUploadPage = () => {
         />
       )}
       <S.ScrollTopAnchor ref={scrollTopTriggerRef} />
-      <SpaceHeader title={spaceName} timer={leftTime} />
+      <SpaceHeader
+        title={spaceName}
+        timer={leftTime}
+        publicType={spaceInfo?.type}
+      />
       <S.ToolBar>
         <UserBadge
           nickName={nickName}

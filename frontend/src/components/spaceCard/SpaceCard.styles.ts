@@ -117,6 +117,12 @@ export const ContentContainer = styled.div`
   padding: 15px 12px 15px 12px;
 `;
 
+export const CardTitleContainer = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+`;
+
 export const CardTitle = styled.h3`
   color: ${({ theme }) => theme.colors.gray06};
   font: ${({ theme }) => theme.typography.header03};

@@ -14,6 +14,12 @@ export const TitleIconContainer = styled.div`
   align-items: center;
 `;
 
+export const TitleContainer = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+`;
+
 export const Title = styled.p`
   ${({ theme }) => ({ ...theme.typography.header01 })};
   color: ${({ theme }) => theme.colors.white};
