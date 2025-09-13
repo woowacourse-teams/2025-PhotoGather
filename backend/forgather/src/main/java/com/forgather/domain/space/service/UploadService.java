@@ -102,6 +102,6 @@ public class UploadService {
             .stream()
             .map(fileName -> generateContentsFilePath(contentsStorage.getRootDirectory(), spaceCode, fileName))
             .toList();
-        contentsStorage.deleteSelectedContents(cancelFileNames);
+        contentsStorage.deleteContents(cancelFileNames);
     }
 }
