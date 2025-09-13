@@ -68,7 +68,9 @@ public class PhotoService {
 
     public File compressSelected(String spaceCode, DownloadPhotosRequest request, Host host) throws IOException {
         Space space = spaceRepository.getUnexpiredSpaceByCode(spaceCode);
-        space.validateHost(host);
+        if (!canAccess(space, host)) {
+            throw new UnauthorizedException();
+        }
         List<Photo> photos = photoRepository.findAllByIdIn(request.photoIds());
         photos.forEach(photo -> photo.validateSpace(space));
         return compressPhotoFile(spaceCode, photos);
@@ -76,6 +78,9 @@ public class PhotoService {
 
     public DownloadPhotoResponse download(String spaceCode, Long photoId, Host host) {
         Space space = spaceRepository.getUnexpiredSpaceByCode(spaceCode);
+        if (!canAccess(space, host)) {
+            throw new UnauthorizedException();
+        }
         Photo photo = photoRepository.getById(photoId);
         photo.validateSpace(space);
 
@@ -93,7 +98,9 @@ public class PhotoService {
      */
     public File compressAll(String spaceCode, Host host) throws IOException {
         Space space = spaceRepository.getUnexpiredSpaceByCode(spaceCode);
-        space.validateHost(host);
+        if (!canAccess(space, host)) {
+            throw new UnauthorizedException();
+        }
         List<Photo> photos = photoRepository.findAllBySpace(space);
         return compressPhotoFile(spaceCode, photos);
     }
