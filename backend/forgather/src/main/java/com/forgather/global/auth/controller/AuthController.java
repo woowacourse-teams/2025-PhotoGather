@@ -1,6 +1,5 @@
 package com.forgather.global.auth.controller;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -34,12 +33,8 @@ public class AuthController {
         description = "현재 로그인된 사용자의 정보를 확인합니다. " +
             "로그인된 사용자가 없으면 401 Unauthorized를 반환합니다.")
     public ResponseEntity<HostResponse> getCurrentUser(@LoginHost Host host) {
-        try {
-            var response = authService.getCurrentUser(host);
-            return ResponseEntity.ok(response);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
+        var response = authService.getCurrentUser(host);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/login/kakao")
