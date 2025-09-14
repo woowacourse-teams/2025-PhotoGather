@@ -1,24 +1,24 @@
 import { useState } from 'react';
-import PublicTypeIcon from '../../../../components/publicTypeIcon/PublicTypeIcon';
+import AccessTypeIcon from '../../../../components/accessTypeIcon/AccessTypeIcon';
 import { INFORMATION } from '../../../../constants/messages';
 import { theme } from '../../../../styles/theme';
 import type { FunnelElementProps } from '../../../../types/funnel.type';
-import type { SpacePublicType } from '../../../../types/space.type';
+import type { SpaceAccessType } from '../../../../types/space.type';
 import FunnelBasePage from '../../funnel/FunnelBasePage/FunnelBasePage';
-import * as S from './PublicTypeElement.styles';
+import * as S from './AccessTypeElement.styles';
 
-const PublicTypeElement = ({
+const AccessTypeElement = ({
   onNext,
   initialValue = 'PUBLIC',
-}: FunnelElementProps<SpacePublicType>) => {
-  const [publicType, setPublicType] = useState<SpacePublicType>(initialValue);
+}: FunnelElementProps<SpaceAccessType>) => {
+  const [accessType, setAccessType] = useState<SpaceAccessType>(initialValue);
 
   const BorderButtons = (['PUBLIC', 'PRIVATE'] as const).map(
-    (BorderButtonPublicType) => ({
-      variant: BorderButtonPublicType,
-      onClick: () => setPublicType(BorderButtonPublicType),
+    (BorderButtonAccessType) => ({
+      variant: BorderButtonAccessType,
+      onClick: () => setAccessType(BorderButtonAccessType),
       color:
-        publicType === BorderButtonPublicType
+        accessType === BorderButtonAccessType
           ? theme.colors.primary
           : theme.colors.gray03,
     }),
@@ -34,7 +34,7 @@ const PublicTypeElement = ({
       element={
         <S.BorderButtonContainer>
           {BorderButtons.map(({ variant, onClick, color }) => (
-            <PublicTypeBorderButton
+            <AccessTypeBorderButton
               key={variant}
               variant={variant}
               onClick={onClick}
@@ -43,15 +43,15 @@ const PublicTypeElement = ({
           ))}
         </S.BorderButtonContainer>
       }
-      onNextButtonClick={() => onNext(publicType)}
-      nextButtonDisabled={!publicType}
+      onNextButtonClick={() => onNext(accessType)}
+      nextButtonDisabled={!accessType}
     />
   );
 };
 
-interface PublicTypeBorderButtonProps
+interface AccessTypeBorderButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant: SpacePublicType;
+  variant: SpaceAccessType;
   /** 테두리 버튼 요소의 색깔 */
   color?: string;
   /** 테두리 버튼 내부 요소 */
@@ -62,13 +62,13 @@ interface PublicTypeBorderButtonProps
   disabled?: boolean;
 }
 
-const PublicTypeBorderButton = ({
+const AccessTypeBorderButton = ({
   variant,
   color = theme.colors.gray03,
   onClick,
   disabled,
   ...buttonProps
-}: PublicTypeBorderButtonProps) => {
+}: AccessTypeBorderButtonProps) => {
   const title =
     variant === 'PUBLIC'
       ? INFORMATION.PUBLIC_OR_NOT.OPTIONS.PUBLIC.TITLE
@@ -88,7 +88,7 @@ const PublicTypeBorderButton = ({
       <S.ContentContainer>
         <S.TitleContainer>
           <S.Title>{title}</S.Title>
-          <PublicTypeIcon publicType={variant} color={color} />
+          <AccessTypeIcon accessType={variant} color={color} />
         </S.TitleContainer>
         <S.Description>{description}</S.Description>
       </S.ContentContainer>
@@ -96,4 +96,4 @@ const PublicTypeBorderButton = ({
   );
 };
 
-export default PublicTypeElement;
+export default AccessTypeElement;

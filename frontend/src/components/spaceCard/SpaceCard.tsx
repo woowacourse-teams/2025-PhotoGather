@@ -3,11 +3,11 @@ import { ReactComponent as GroupIcon } from '@assets/icons/group.svg';
 import defaultImage from '@assets/images/default_image.png';
 import loadingImage from '@assets/images/loading.png';
 import { useNavigate } from 'react-router-dom';
-import type { SpacePublicType } from '../../types/space.type';
+import type { SpaceAccessType } from '../../types/space.type';
 import { formatExpiredDate } from '../../utils/dateTimeFormatters';
 import { formatDate } from '../../utils/formatDate';
 import HighlightText from '../@common/highlightText/HighlightText';
-import PublicTypeIcon from '../publicTypeIcon/PublicTypeIcon';
+import AccessTypeIcon from '../accessTypeIcon/AccessTypeIcon';
 import * as S from './SpaceCard.styles';
 
 type SpaceCardVariant = 'default' | 'expired' | 'early';
@@ -16,7 +16,7 @@ interface SpaceCardProps {
   /** 스페이스 이름 */
   name: string;
   /** 스페이스 공개 범위 */
-  publicType?: SpacePublicType;
+  accessType?: SpaceAccessType;
   /** 썸네일 */
   thumbnail?: string;
   /** 스페이스 오픈 시간 */
@@ -35,7 +35,7 @@ interface SpaceCardProps {
 
 const SpaceCard = ({
   name,
-  publicType,
+  accessType,
   thumbnail,
   openedAt,
   expiredAt,
@@ -103,8 +103,8 @@ const SpaceCard = ({
       <S.ContentContainer>
         <S.CardTitleContainer>
           <S.CardTitle>{name}</S.CardTitle>
-          <PublicTypeIcon
-            publicType={publicType ?? 'PRIVATE'}
+          <AccessTypeIcon
+            accessType={accessType ?? 'PRIVATE'}
             color="#2b2b2b"
           />
         </S.CardTitleContainer>

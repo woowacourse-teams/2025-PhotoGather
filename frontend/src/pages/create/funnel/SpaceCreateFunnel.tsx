@@ -8,20 +8,20 @@ import useConfirmBeforeRefresh from '../../../hooks/@common/useConfirmBeforeRefr
 import useAgreements from '../../../hooks/domain/useAgreements';
 import useFunnelHistory from '../../../hooks/useFunnelHistory';
 import type { SpaceFunnelInfo } from '../../../types/space.type';
+import AccessTypeElement from '../funnelElements/accessTypeElement/AccessTypeElement';
 import AgreementElement from '../funnelElements/agreementElement/AgreementElement';
 import CheckSpaceInfoElement from '../funnelElements/checkSpaceInfoElement/CheckSpaceInfoElement';
 import ImmediateOpenElement from '../funnelElements/immediateOpenElement/ImmediateOpenElement';
 import NameInputElement from '../funnelElements/NameInputElement';
-import PublicTypeElement from '../funnelElements/publicTypeElement/PublicTypeElement';
 import * as S from './SpaceCreateFunnel.styles';
 
-type STEP = 'agreement' | 'name' | 'date' | 'publicType' | 'check';
+type STEP = 'agreement' | 'name' | 'date' | 'accessType' | 'check';
 
 const initialFunnelValue: SpaceFunnelInfo = {
   name: '',
   date: '',
   time: '',
-  publicType: 'PUBLIC',
+  accessType: 'PUBLIC',
   isImmediateOpen: null,
   agreements: null,
 };
@@ -30,7 +30,7 @@ const SpaceCreateFunnel = () => {
   useConfirmBeforeRefresh();
   const { handleAgree, isAgree, loadingAgreements } = useAgreements();
   const needsAgreement = !isAgree;
-  const PROGRESS_STEP_LIST: STEP[] = ['name', 'date', 'publicType', 'check'];
+  const PROGRESS_STEP_LIST: STEP[] = ['name', 'date', 'accessType', 'check'];
   const [step, setStep] = useState<STEP>('name');
   useEffect(() => {
     if (!loadingAgreements && needsAgreement) setStep('agreement');
@@ -92,7 +92,7 @@ const SpaceCreateFunnel = () => {
         {step === 'date' && (
           <ImmediateOpenElement
             onNext={({ date, time, isImmediateOpen }) => {
-              goNextStep('publicType');
+              goNextStep('accessType');
               setSpaceInfo((prev) => ({
                 ...prev,
                 date,
@@ -107,16 +107,16 @@ const SpaceCreateFunnel = () => {
             }}
           />
         )}
-        {step === 'publicType' && (
-          <PublicTypeElement
-            onNext={(publicType) => {
+        {step === 'accessType' && (
+          <AccessTypeElement
+            onNext={(accessType) => {
               goNextStep('check');
               setSpaceInfo((prev) => ({
                 ...prev,
-                publicType,
+                accessType: accessType,
               }));
             }}
-            initialValue={spaceInfo.publicType}
+            initialValue={spaceInfo.accessType}
           />
         )}
         {step === 'check' && (

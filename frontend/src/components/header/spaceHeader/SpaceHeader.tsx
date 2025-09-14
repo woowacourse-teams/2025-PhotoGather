@@ -1,8 +1,8 @@
-import type { SpacePublicType } from '../../../types/space.type';
+import type { SpaceAccessType } from '../../../types/space.type';
 import type { Timer } from '../../../types/timer.type';
 import { checkIsTimerExpired } from '../../../utils/checkIsTimerExpired';
 import { formatTimer } from '../../../utils/formatTimer';
-import PublicTypeIcon from '../../publicTypeIcon/PublicTypeIcon';
+import AccessTypeIcon from '../../accessTypeIcon/AccessTypeIcon';
 import * as S from './SpaceHeader.styles';
 
 interface IconProps {
@@ -18,7 +18,7 @@ interface SpaceHeaderProps {
   /** 헤더의 제목 */
   title: string;
   /** 헤더의 공개범위 */
-  publicType?: SpacePublicType;
+  accessType?: SpaceAccessType;
   /** 헤더의 타이머 */
   timer: Timer;
   /** 헤더 우상단 아이콘 */
@@ -27,7 +27,7 @@ interface SpaceHeaderProps {
 
 const SpaceHeader = ({
   title,
-  publicType = 'PRIVATE',
+  accessType = 'PRIVATE',
   timer,
   icons,
 }: SpaceHeaderProps) => {
@@ -39,7 +39,7 @@ const SpaceHeader = ({
       <S.TitleIconContainer>
         <S.TitleContainer>
           <S.Title>{title}</S.Title>
-          <PublicTypeIcon publicType={publicType} color="white" />
+          <AccessTypeIcon accessType={accessType} color="white" />
         </S.TitleContainer>
         {icons && (
           <S.IconContainer>

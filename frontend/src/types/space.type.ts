@@ -1,6 +1,6 @@
 import type { MyInfo } from './api.type';
 
-export type SpacePublicType = 'PRIVATE' | 'PUBLIC';
+export type SpaceAccessType = 'PRIVATE' | 'PUBLIC';
 
 export interface SpaceCreateInfo {
   name: string;
@@ -18,7 +18,7 @@ export interface SpaceFunnelInfo {
   name: string;
   date: string;
   time: string;
-  publicType: SpacePublicType;
+  accessType: SpaceAccessType;
   isImmediateOpen: boolean | null;
   agreements: Agreements | null;
 }
@@ -39,7 +39,7 @@ export interface Space {
   guestCount?: number;
   photoCount?: number;
   host: MyInfo;
-  type?: SpacePublicType;
+  type?: SpaceAccessType;
 }
 
 export interface UpdateSpaceInput {

@@ -147,7 +147,7 @@ const ImageUploadPage = () => {
       <SpaceHeader
         title={spaceName}
         timer={leftTime}
-        publicType={spaceInfo?.type}
+        accessType={spaceInfo?.type}
       />
       <S.ToolBar>
         <UserBadge

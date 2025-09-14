@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
+import AccessTypeIcon from '../../../../components/accessTypeIcon/AccessTypeIcon';
 import LeftTimeInformationBox from '../../../../components/leftTimeInformationBox/LeftTimeInformationBox';
-import PublicTypeIcon from '../../../../components/publicTypeIcon/PublicTypeIcon';
 import { INFORMATION } from '../../../../constants/messages';
 import { ROUTES } from '../../../../constants/routes';
 import useLeftTimer from '../../../../hooks/@common/useLeftTimer';
@@ -48,7 +48,7 @@ const CheckSpaceInfoElement = ({
       name: spaceInfo.name,
       validHours: 72,
       openedAt: calculatedOpenedAt,
-      type: spaceInfo.publicType,
+      type: spaceInfo.accessType,
     });
     if (!spaceCode) return;
 
@@ -76,7 +76,7 @@ const CheckSpaceInfoElement = ({
           title={
             <S.TitleContainer>
               <S.Title>{spaceInfo.name}</S.Title>
-              <PublicTypeIcon publicType={spaceInfo.publicType} color="black" />
+              <AccessTypeIcon accessType={spaceInfo.accessType} color="black" />
             </S.TitleContainer>
           }
           openDate={{ date, time }}

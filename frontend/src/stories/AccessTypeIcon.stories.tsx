@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/react-webpack5';
-import PublicTypeIcon from '../components/publicTypeIcon/PublicTypeIcon';
+import AccessTypeIcon from '../components/accessTypeIcon/AccessTypeIcon';
 
-const meta: Meta<typeof PublicTypeIcon> = {
-  title: 'Components/PublicTypeIcon',
-  component: PublicTypeIcon,
+const meta: Meta<typeof AccessTypeIcon> = {
+  title: 'Components/AccessTypeIcon',
+  component: AccessTypeIcon,
 };
 export default meta;
 
@@ -11,13 +11,13 @@ type Story = StoryObj<typeof meta>;
 
 export const Public: Story = {
   args: {
-    publicType: 'PUBLIC',
+    accessType: 'PUBLIC',
     color: 'black',
   },
 };
 export const Private: Story = {
   args: {
-    publicType: 'PRIVATE',
+    accessType: 'PRIVATE',
     color: 'black',
   },
 };

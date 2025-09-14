@@ -16,8 +16,8 @@ import { useToast } from '../../../hooks/@common/useToast';
 import useSpaceCodeFromPath from '../../../hooks/useSpaceCodeFromPath';
 import useSpaceInfo from '../../../hooks/useSpaceInfo';
 import type {
+  SpaceAccessType,
   SpaceCreateInfo,
-  SpacePublicType,
 } from '../../../types/space.type';
 import { track } from '../../../utils/googleAnalytics/track';
 import { parseIsoStringFromDateTime } from '../../../utils/parseIsoStringFromDateTime';
@@ -49,7 +49,7 @@ const SettingsPage = () => {
     onChange: (e) => setSpaceName(e.target.value),
   });
 
-  const [publicType, setPublicType] = useState<SpacePublicType>();
+  const [accessType, setAccessType] = useState<SpaceAccessType>();
 
   useEffect(() => {
     if (spaceInfo) {
@@ -61,7 +61,7 @@ const SettingsPage = () => {
 
       setDate(dateString);
       setTime(timeString);
-      setPublicType(spaceInfo.type);
+      setAccessType(spaceInfo.type);
     }
   }, [spaceInfo]);
 
@@ -76,7 +76,7 @@ const SettingsPage = () => {
       validValue !== spaceInfo.name ||
       date !== originalDate ||
       time !== originalTime ||
-      publicType !== spaceInfo.type
+      accessType !== spaceInfo.type
     );
   })();
 
@@ -106,8 +106,8 @@ const SettingsPage = () => {
       }
     }
 
-    if (publicType !== spaceInfo.type) {
-      updateData.type = publicType;
+    if (accessType !== spaceInfo.type) {
+      updateData.type = accessType;
     }
 
     const result = await tryFetch({
@@ -225,18 +225,18 @@ const SettingsPage = () => {
           </S.DateTimeContainer>
           <S.InputWrapper>
             <S.InputLabel>공개 범위</S.InputLabel>
-            <S.PublicTypeButtonContainer>
+            <S.AccessTypeButtonContainer>
               <Button
-                onClick={() => setPublicType('PUBLIC')}
+                onClick={() => setAccessType('PUBLIC')}
                 text="공개"
-                variant={publicType === 'PUBLIC' ? 'primary' : 'secondary'}
+                variant={accessType === 'PUBLIC' ? 'primary' : 'secondary'}
               />
               <Button
-                onClick={() => setPublicType('PRIVATE')}
+                onClick={() => setAccessType('PRIVATE')}
                 text="비공개"
-                variant={publicType === 'PRIVATE' ? 'primary' : 'secondary'}
+                variant={accessType === 'PRIVATE' ? 'primary' : 'secondary'}
               />
-            </S.PublicTypeButtonContainer>
+            </S.AccessTypeButtonContainer>
           </S.InputWrapper>
         </S.InputContainer>
       </S.InfoContainer>

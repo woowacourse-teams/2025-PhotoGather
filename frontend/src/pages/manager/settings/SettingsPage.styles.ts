@@ -58,7 +58,7 @@ export const InputLabel = styled.label`
   color: ${({ theme }) => theme.colors.gray06};
 `;
 
-export const PublicTypeButtonContainer = styled.div`
+export const AccessTypeButtonContainer = styled.div`
   display: flex;
   align-items: center;
   gap: 12px;
