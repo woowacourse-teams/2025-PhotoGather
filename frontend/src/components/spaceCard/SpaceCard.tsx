@@ -3,6 +3,7 @@ import { ReactComponent as GroupIcon } from '@assets/icons/group.svg';
 import defaultImage from '@assets/images/default_image.png';
 import loadingImage from '@assets/images/loading.png';
 import { useNavigate } from 'react-router-dom';
+import { theme } from '../../styles/theme';
 import type { SpaceAccessType } from '../../types/space.type';
 import { formatExpiredDate } from '../../utils/dateTimeFormatters';
 import { formatDate } from '../../utils/formatDate';
@@ -105,7 +106,7 @@ const SpaceCard = ({
           <S.CardTitle>{name}</S.CardTitle>
           <AccessTypeIcon
             accessType={accessType ?? 'PRIVATE'}
-            color="#2b2b2b"
+            color={theme.colors.gray06}
           />
         </S.CardTitleContainer>
         <S.CardDuration>{formatExpiredDate(expiredAt ?? '')}</S.CardDuration>
