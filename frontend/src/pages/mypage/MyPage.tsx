@@ -138,15 +138,12 @@ const MyPage = () => {
             return (
               <SpaceCard
                 key={space.id}
-                name={space.name}
-                accessType={space.type}
+                space={space}
                 thumbnail={thumbnails[space.spaceCode]}
-                openedAt={space.openedAt}
-                expiredAt={space.expiredAt}
-                guestCount={space.guestCount}
-                photoCount={space.photoCount}
                 variant={matchSpaceCardVariant(space)}
-                route={ROUTES.MANAGER.SPACE_HOME(String(space.spaceCode))}
+                onClick={() =>
+                  navigate(ROUTES.MANAGER.SPACE_HOME(String(space.spaceCode)))
+                }
               />
             );
           })}

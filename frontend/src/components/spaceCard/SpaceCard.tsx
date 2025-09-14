@@ -2,9 +2,8 @@ import { ReactComponent as DefaultImageIcon } from '@assets/icons/defaultImage.s
 import { ReactComponent as GroupIcon } from '@assets/icons/group.svg';
 import defaultImage from '@assets/images/default_image.png';
 import loadingImage from '@assets/images/loading.png';
-import { useNavigate } from 'react-router-dom';
 import { theme } from '../../styles/theme';
-import type { SpaceAccessType } from '../../types/space.type';
+import type { MySpace } from '../../types/space.type';
 import { formatExpiredDate } from '../../utils/dateTimeFormatters';
 import { formatDate } from '../../utils/formatDate';
 import HighlightText from '../@common/highlightText/HighlightText';
@@ -14,42 +13,22 @@ import * as S from './SpaceCard.styles';
 type SpaceCardVariant = 'default' | 'expired' | 'early';
 
 interface SpaceCardProps {
-  /** 스페이스 이름 */
-  name: string;
-  /** 스페이스 공개 범위 */
-  accessType?: SpaceAccessType;
+  /** 표시할 스페이스 정보 */
+  space: MySpace;
   /** 썸네일 */
   thumbnail?: string;
-  /** 스페이스 오픈 시간 */
-  openedAt?: string;
-  /** 스페이스 만료 시간 */
-  expiredAt?: string;
-  /** 참여자 수 */
-  guestCount?: number;
-  /** 이미지 수 */
-  photoCount?: number;
   /** 카드 타입 */
   variant: SpaceCardVariant;
-  /** 카드 클릭 시 이동할 경로 */
-  route: string;
+  /** 카드 클릭 시 실행할 함수 */
+  onClick: () => void;
 }
 
-const SpaceCard = ({
-  name,
-  accessType,
-  thumbnail,
-  openedAt,
-  expiredAt,
-  guestCount = 0,
-  photoCount = 0,
-  variant,
-  route,
-}: SpaceCardProps) => {
-  const navigate = useNavigate();
+const SpaceCard = ({ space, thumbnail, variant, onClick }: SpaceCardProps) => {
+  const { name, expiredAt, guestCount, photoCount, openedAt, type } = space;
 
   if (variant === 'expired') {
     return (
-      <S.Wrapper onClick={() => navigate(route)}>
+      <S.Wrapper onClick={onClick}>
         <S.ImageContainer $isBlurred>
           <S.CardImage src={defaultImage} alt={name} $isBlurred />
           <S.ImageOverlayText>{`만료된\n스페이스`}</S.ImageOverlayText>
@@ -74,7 +53,7 @@ const SpaceCard = ({
 
   if (variant === 'early') {
     return (
-      <S.Wrapper onClick={() => navigate(route)}>
+      <S.Wrapper onClick={onClick}>
         <S.ImageContainer $isEarly>
           <S.CardImage src={loadingImage} alt="로딩 이미지" $isEarly />
           <S.EarlyOverlayContainer>
@@ -97,7 +76,7 @@ const SpaceCard = ({
   }
 
   return (
-    <S.Wrapper onClick={() => navigate(route)}>
+    <S.Wrapper onClick={onClick}>
       <S.ImageContainer>
         <S.CardImage src={thumbnail ?? defaultImage} alt={name} />
       </S.ImageContainer>
@@ -105,7 +84,7 @@ const SpaceCard = ({
         <S.CardTitleContainer>
           <S.CardTitle>{name}</S.CardTitle>
           <AccessTypeIcon
-            accessType={accessType ?? 'PRIVATE'}
+            accessType={type ?? 'PRIVATE'}
             color={theme.colors.gray06}
           />
         </S.CardTitleContainer>
