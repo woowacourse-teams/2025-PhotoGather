@@ -13,16 +13,16 @@ const AccessTypeElement = ({
 }: FunnelElementProps<SpaceAccessType>) => {
   const [accessType, setAccessType] = useState<SpaceAccessType>(initialValue);
 
-  const BorderButtons = (['PUBLIC', 'PRIVATE'] as const).map(
-    (BorderButtonAccessType) => ({
-      variant: BorderButtonAccessType,
-      onClick: () => setAccessType(BorderButtonAccessType),
-      color:
-        accessType === BorderButtonAccessType
-          ? theme.colors.primary
-          : theme.colors.gray03,
-    }),
-  );
+  const accessTypeOptions: SpaceAccessType[] = ['PUBLIC', 'PRIVATE'];
+
+  const BorderButtons = accessTypeOptions.map((BorderButtonAccessType) => ({
+    variant: BorderButtonAccessType,
+    onClick: () => setAccessType(BorderButtonAccessType),
+    color:
+      accessType === BorderButtonAccessType
+        ? theme.colors.primary
+        : theme.colors.gray03,
+  }));
 
   return (
     <FunnelBasePage
