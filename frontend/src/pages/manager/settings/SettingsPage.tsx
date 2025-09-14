@@ -192,8 +192,11 @@ const SettingsPage = () => {
       <S.InfoContainer>
         <S.InputContainer>
           <S.InputWrapper style={{ marginBottom: '-24px' }}>
-            <S.InputLabel>스페이스 이름</S.InputLabel>
+            <S.InputLabel htmlFor="space-name-input">
+              스페이스 이름
+            </S.InputLabel>
             <TextInput
+              id="space-name-input"
               placeholder="스페이스 이름을 입력하세요"
               value={validValue}
               onChange={handleChange}
@@ -203,8 +206,9 @@ const SettingsPage = () => {
           </S.InputWrapper>
           <S.DateTimeContainer>
             <S.InputWrapper>
-              <S.InputLabel>시작 날짜</S.InputLabel>
+              <S.InputLabel htmlFor="start-date-input">시작 날짜</S.InputLabel>
               <DateTimeInput
+                id="start-date-input"
                 inputType="date"
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
@@ -213,8 +217,9 @@ const SettingsPage = () => {
               />
             </S.InputWrapper>
             <S.InputWrapper>
-              <S.InputLabel>시작 시간</S.InputLabel>
+              <S.InputLabel htmlFor="start-time-input">시작 시간</S.InputLabel>
               <DateTimeInput
+                id="start-time-input"
                 inputType="time"
                 value={time}
                 onChange={(e) => setTime(e.target.value)}
@@ -224,8 +229,8 @@ const SettingsPage = () => {
             </S.InputWrapper>
           </S.DateTimeContainer>
           <S.InputWrapper>
-            <S.InputLabel>공개 범위</S.InputLabel>
-            <S.AccessTypeButtonContainer>
+            <S.InputLabel htmlFor="access-type-input">공개 범위</S.InputLabel>
+            <S.AccessTypeButtonContainer id="access-type-input">
               <Button
                 onClick={() => setAccessType('PUBLIC')}
                 text="공개"
