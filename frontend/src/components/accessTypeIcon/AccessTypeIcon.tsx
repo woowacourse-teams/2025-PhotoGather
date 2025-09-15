@@ -1,5 +1,4 @@
-import { ReactComponent as PrivateIcon } from '@assets/icons/private.svg';
-import { ReactComponent as PublicIcon } from '@assets/icons/public.svg';
+import { PrivateIcon, PublicIcon } from '../../@assets/icons';
 import type { SpaceAccessType } from '../../types/space.type';
 
 interface AccessTypeIconProps {

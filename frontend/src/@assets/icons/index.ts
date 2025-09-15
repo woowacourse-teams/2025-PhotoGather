@@ -1,3 +1,5 @@
+export { ReactComponent as PrivateIcon } from '@assets/icons/private.svg';
+export { ReactComponent as PublicIcon } from '@assets/icons/public.svg';
 export { ReactComponent as AddPhotoIcon } from './add-photo.svg';
 export { ReactComponent as CameraIcon } from './camera.svg';
 export { ReactComponent as CheckIcon } from './check.svg';
