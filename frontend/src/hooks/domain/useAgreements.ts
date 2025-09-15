@@ -19,8 +19,8 @@ const useAgreements = () => {
     fetchAuthStatus();
   }, []);
 
-  const handleAgree = () => {
-    tryFetch({
+  const handleAgree = async () => {
+    await tryFetch({
       task: async () => {
         await authService.agreeTerm();
       },

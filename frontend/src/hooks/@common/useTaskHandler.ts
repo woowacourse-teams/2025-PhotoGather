@@ -101,7 +101,7 @@ const useTaskHandler = () => {
     context,
     onFinally,
     useCommonCodeErrorHandler = true,
-  }: TryFetchProps<T>) => {
+  }: TryFetchProps<T>): Promise<TryTaskResultType<T>> => {
     try {
       loadingStateKey && updateLoadingState(loadingStateKey, 'loading');
       const response = await task();
