@@ -1,6 +1,5 @@
-import { ReactComponent as SaveIcon } from '@assets/icons/download.svg';
-import { ReactComponent as TrashCanIcon } from '@assets/icons/trash-can.svg';
 import styled from '@emotion/styled';
+import { DownloadIcon as SaveIcon, TrashCanIcon } from '../../@assets/icons';
 import { hexToRgba } from '../../utils/hexToRgba';
 
 export const Wrapper = styled.div`

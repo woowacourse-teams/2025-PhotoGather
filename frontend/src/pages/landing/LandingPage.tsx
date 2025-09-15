@@ -1,13 +1,15 @@
-import { ReactComponent as SaveIcon } from '@assets/icons/download.svg';
-import { ReactComponent as KakaoTalkIcon } from '@assets/icons/kakaotalk.svg';
-import { ReactComponent as Logo } from '@assets/icons/logo.svg';
-import { ReactComponent as QrcodeIcon } from '@assets/icons/qrCode.svg';
 import InstagramIcon from '@assets/images/instagram.png';
 import MockupOne from '@assets/images/mockup_1.png';
 import MockupTwo from '@assets/images/mockup_2.png';
 import MockupThree from '@assets/images/mockup_3.png';
 import MockupFour from '@assets/images/mockup_4.png';
 import { useEffect, useMemo, useRef } from 'react';
+import {
+  KakaoTalkIcon,
+  LogoIcon as Logo,
+  QrCodeIcon as QrcodeIcon,
+  DownloadIcon as SaveIcon,
+} from '../../@assets/icons';
 import Button from '../../components/@common/buttons/button/Button';
 import FloatingActionButton from '../../components/@common/buttons/floatingActionButton/FloatingActionButton';
 import IconLabelButton from '../../components/@common/buttons/iconLabelButton/IconLabelButton';

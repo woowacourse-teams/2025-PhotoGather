@@ -1,4 +1,4 @@
-import { ReactComponent as CheckIcon } from '@assets/icons/check.svg';
+import { CheckIcon } from '../../@assets/icons';
 import Button from '../@common/buttons/button/Button';
 import * as S from './SpaceHomeTopActionBar.styles';
 

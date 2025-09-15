@@ -1,6 +1,6 @@
-import { ReactComponent as ClockIcon } from '@assets/icons/clock.svg';
 import styled from '@emotion/styled';
 import { isPropValid } from 'storybook/internal/theming';
+import { ClockIcon } from '../../../@assets/icons';
 
 export const Wrapper = styled.div`
   display: flex;

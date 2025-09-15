@@ -1,6 +1,8 @@
-import { ReactComponent as SaveIcon } from '@assets/icons/download.svg';
-import { ReactComponent as TrashCanIcon } from '@assets/icons/trash-can.svg';
 import styled from '@emotion/styled';
+import {
+  DownloadIcon as SaveIcon,
+  TrashCanIcon,
+} from '../../../../@assets/icons';
 import { theme } from '../../../../styles/theme';
 import { hexToRgba } from '../../../../utils/hexToRgba';
 

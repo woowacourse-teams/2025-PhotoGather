@@ -1,7 +1,9 @@
-import { ReactComponent as SaveIcon } from '@assets/icons/download.svg';
-import { ReactComponent as LinkIcon } from '@assets/icons/link.svg';
-import { ReactComponent as TrashCanIcon } from '@assets/icons/trash-can.svg';
 import type { Meta, StoryObj } from '@storybook/react-webpack5';
+import {
+  LinkIcon,
+  DownloadIcon as SaveIcon,
+  TrashCanIcon,
+} from '../@assets/icons';
 import IconLabelButton from '../components/@common/buttons/iconLabelButton/IconLabelButton';
 import { theme } from '../styles/theme';
 

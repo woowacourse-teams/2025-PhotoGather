@@ -1,5 +1,5 @@
-import { ReactComponent as CloseIcon } from '@assets/icons/close.svg';
 import styled from '@emotion/styled';
+import { CloseIcon } from '../../../../../@assets/icons';
 import { hexToRgba } from '../../../../../utils/hexToRgba';
 
 export const CloseButton = styled.button`

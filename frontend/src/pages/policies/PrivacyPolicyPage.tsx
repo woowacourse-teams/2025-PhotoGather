@@ -1,5 +1,5 @@
-import { ReactComponent as Logo } from '@assets/icons/logo.svg';
 import { useEffect } from 'react';
+import { LogoIcon as Logo } from '../../@assets/icons';
 import { theme } from '../../styles/theme';
 import { goToTop } from '../../utils/goToTop';
 import * as S from './PolicyPage.common.styles';

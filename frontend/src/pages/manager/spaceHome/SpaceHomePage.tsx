@@ -1,12 +1,14 @@
-import { ReactComponent as LinkIcon } from '@assets/icons/link.svg';
-import { ReactComponent as ShareIcon } from '@assets/icons/share.svg';
 import messageIcon from '@assets/images/message.png';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ReactComponent as UploadIcon } from '../../../@assets/icons/add-photo.svg';
-import { ReactComponent as SaveIcon } from '../../../@assets/icons/download.svg';
-import { ReactComponent as SettingSvg } from '../../../@assets/icons/setting.svg';
-import { ReactComponent as ArrowUpSvg } from '../../../@assets/icons/upward-arrow.svg';
+import {
+  UpwardArrowIcon as ArrowUpSvg,
+  LinkIcon,
+  DownloadIcon as SaveIcon,
+  SettingIcon as SettingSvg,
+  ShareIcon,
+  AddPhotoIcon as UploadIcon,
+} from '../../../@assets/icons';
 import GiftIcon from '../../../@assets/images/gift.png';
 import FloatingActionButton from '../../../components/@common/buttons/floatingActionButton/FloatingActionButton';
 import FloatingIconButton from '../../../components/@common/buttons/floatingIconButton/FloatingIconButton';
