@@ -3,6 +3,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const DotenvPlugin = require('dotenv-webpack');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const ImageMinimizerPlugin = require('image-minimizer-webpack-plugin');
 
 module.exports = (_, argv) => {
   let envFile = '.env.local';
@@ -116,6 +117,35 @@ module.exports = (_, argv) => {
       hot: true,
       open: true,
       historyApiFallback: true,
+    },
+    optimization: {
+      minimize: true,
+      minimizer: [
+        new ImageMinimizerPlugin({
+          minimizer: {
+            implementation: ImageMinimizerPlugin.sharpMinify,
+            options: {
+              encodeOptions: {
+                png: { quality: 80, palette: true },
+                jpg: { quality: 75, progressive: true },
+                jpeg: { quality: 75, progressive: true },
+              },
+            },
+          },
+          generator: [
+            {
+              preset: 'webp',
+              implementation: ImageMinimizerPlugin.sharpGenerate,
+              options: {
+                encodeOptions: {
+                  webp: { quality: 80, effort: 6, lossless: false },
+                },
+              },
+              filename: 'static/images/[name][ext]',
+            },
+          ],
+        }),
+      ],
     },
   };
 };
