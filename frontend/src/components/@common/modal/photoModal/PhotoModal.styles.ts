@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+// biome-ignore format: 의도적으로 한 줄로 유지
 import { DownloadIcon as SaveIcon, TrashCanIcon } from '../../../../@assets/icons';
 import { theme } from '../../../../styles/theme';
 import { hexToRgba } from '../../../../utils/hexToRgba';
