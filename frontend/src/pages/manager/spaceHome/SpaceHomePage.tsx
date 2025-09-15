@@ -331,6 +331,7 @@ const SpaceHomePage = () => {
       <S.InfoContainer ref={scrollTopTriggerRef}>
         <SpaceHeader
           title={spaceName}
+          accessType={spaceInfo?.type}
           timer={leftTime}
           icons={[
             {
