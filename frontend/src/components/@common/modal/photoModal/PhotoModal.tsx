@@ -170,6 +170,8 @@ const PhotoModal = (props: PhotoModalProps) => {
             alt={photo?.originalName || 'Image'}
             onError={handleImageError}
             className="clarity-mask-photo"
+            loading="lazy"
+            fetchPriority="high"
           />
         ) : (
           <S.LoadingPhoto />
