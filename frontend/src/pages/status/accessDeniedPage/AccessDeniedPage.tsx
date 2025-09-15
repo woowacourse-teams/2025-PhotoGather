@@ -1,4 +1,4 @@
-import lockImage from '@assets/images/lock.png';
+import { LockImg as lockImage } from '../../../@assets/images';
 import StatusLayout from '../../../components/layout/statusLayout/StatusLayout';
 import * as C from '../StatusPage.common.styles';
 

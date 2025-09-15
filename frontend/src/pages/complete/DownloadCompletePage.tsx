@@ -1,5 +1,5 @@
-import GiftICon from '@assets/images/gift.png';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { GiftImg as GiftICon } from '../../@assets/images';
 import MessageLayout from '../../components/layout/messageLayout/MessageLayout';
 import { COMPLETE } from '../../constants/messages';
 import { ROUTES } from '../../constants/routes';

@@ -1,4 +1,3 @@
-import messageIcon from '@assets/images/message.png';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
@@ -9,7 +8,10 @@ import {
   ShareIcon,
   AddPhotoIcon as UploadIcon,
 } from '../../../@assets/icons';
-import GiftIcon from '../../../@assets/images/gift.png';
+import {
+  GiftImg as GiftIcon,
+  MessageImg as messageIcon,
+} from '../../../@assets/images';
 import FloatingActionButton from '../../../components/@common/buttons/floatingActionButton/FloatingActionButton';
 import FloatingIconButton from '../../../components/@common/buttons/floatingIconButton/FloatingIconButton';
 import IconLabelButton from '../../../components/@common/buttons/iconLabelButton/IconLabelButton';

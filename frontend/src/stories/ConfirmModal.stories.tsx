@@ -1,6 +1,6 @@
-import rocketImage from '@assets/images/rocket.png';
 import type { Meta, StoryObj } from '@storybook/react';
 import { WarningIcon } from '../@assets/icons';
+import { RocketImg as rocketImage } from '../@assets/images';
 import ConfirmModal from '../components/@common/modal/confirmModal/ConfirmModal';
 
 const meta: Meta<typeof ConfirmModal> = {

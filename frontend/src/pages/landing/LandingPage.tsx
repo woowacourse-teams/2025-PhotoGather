@@ -1,8 +1,3 @@
-import InstagramIcon from '@assets/images/instagram.png';
-import MockupOne from '@assets/images/mockup_1.png';
-import MockupTwo from '@assets/images/mockup_2.png';
-import MockupThree from '@assets/images/mockup_3.png';
-import MockupFour from '@assets/images/mockup_4.png';
 import { useEffect, useMemo, useRef } from 'react';
 import {
   KakaoTalkIcon,
@@ -10,6 +5,13 @@ import {
   QrCodeIcon as QrcodeIcon,
   DownloadIcon as SaveIcon,
 } from '../../@assets/icons';
+import {
+  InstagramImg as InstagramIcon,
+  MockupFourImg as MockupFour,
+  MockupOneImg as MockupOne,
+  MockupThreeImg as MockupThree,
+  MockupTwoImg as MockupTwo,
+} from '../../@assets/images';
 import Button from '../../components/@common/buttons/button/Button';
 import FloatingActionButton from '../../components/@common/buttons/floatingActionButton/FloatingActionButton';
 import IconLabelButton from '../../components/@common/buttons/iconLabelButton/IconLabelButton';

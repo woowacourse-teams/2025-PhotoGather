@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import lockImage from '../@assets/images/lock.png';
+import { LockImg as lockImage } from '../@assets/images';
 import StatusLayout from '../components/layout/statusLayout/StatusLayout';
 
 const meta: Meta<typeof StatusLayout> = {

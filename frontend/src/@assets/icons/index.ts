@@ -1,5 +1,3 @@
-// src/assets/icons/index.ts
-
 export { ReactComponent as AddPhotoIcon } from './add-photo.svg';
 export { ReactComponent as CameraIcon } from './camera.svg';
 export { ReactComponent as CheckIcon } from './check.svg';
@@ -21,10 +19,14 @@ export { ReactComponent as RoundCheckIcon } from './round-check.svg';
 export { ReactComponent as RoundCheckOutlineIcon } from './round-check-outline.svg';
 export { ReactComponent as SettingIcon } from './setting.svg';
 export { ReactComponent as ShareIcon } from './share.svg';
-export { ReactComponent as StarFilledIcon } from './star-filled.svg';
-export { ReactComponent as StarOutlinedIcon } from './star-outlined.svg';
-export { default as StarFilledIconUrl } from './star-filled.svg';
-export { default as StarOutlinedIconUrl } from './star-outlined.svg';
+export {
+  default as StarFilledIconUrl,
+  ReactComponent as StarFilledIcon,
+} from './star-filled.svg';
+export {
+  default as StarOutlinedIconUrl,
+  ReactComponent as StarOutlinedIcon,
+} from './star-outlined.svg';
 export { ReactComponent as TrashCanIcon } from './trash-can.svg';
 export { ReactComponent as UpwardArrowIcon } from './upward-arrow.svg';
 export { ReactComponent as WarningIcon } from './warning.svg';

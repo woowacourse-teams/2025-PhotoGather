@@ -1,5 +1,5 @@
-import defaultImage from '@assets/images/default_image.png';
 import { useEffect, useState } from 'react';
+import { DefaultImageImg as defaultImage } from '../../../../@assets/images';
 import { photoService } from '../../../../apis/services/photo.service';
 import { useOverlay } from '../../../../contexts/OverlayProvider';
 import useError from '../../../../hooks/@common/useError';
