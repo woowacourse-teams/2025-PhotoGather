@@ -56,5 +56,5 @@ export const InstagramIcon = styled.img`
 `;
 
 export const Mockup = styled.img`
-width: 280px;
+  width: 280px;
 `;

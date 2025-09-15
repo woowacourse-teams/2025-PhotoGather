@@ -1,8 +1,5 @@
 import styled from '@emotion/styled';
-import {
-  DownloadIcon as SaveIcon,
-  TrashCanIcon,
-} from '../../../../@assets/icons';
+import { DownloadIcon as SaveIcon, TrashCanIcon } from '../../../../@assets/icons';
 import { theme } from '../../../../styles/theme';
 import { hexToRgba } from '../../../../utils/hexToRgba';
 
