@@ -1,7 +1,9 @@
-import messageIcon from '@assets/images/message.png';
 import { useNavigate } from 'react-router-dom';
-import { ReactComponent as ExternalLinkIcon } from '../../../@assets/icons/external-link.svg';
-import { ReactComponent as ArrowUpSvg } from '../../../@assets/icons/upwardArrow.svg';
+import {
+  UpwardArrowIcon as ArrowUpSvg,
+  ExternalLinkIcon,
+} from '../../../@assets/icons';
+import { MessageImg as messageIcon } from '../../../@assets/images';
 import Button from '../../../components/@common/buttons/button/Button';
 import FloatingActionButton from '../../../components/@common/buttons/floatingActionButton/FloatingActionButton';
 import FloatingIconButton from '../../../components/@common/buttons/floatingIconButton/FloatingIconButton';

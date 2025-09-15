@@ -1,6 +1,5 @@
-import { ReactComponent as SaveIcon } from '@assets/icons/download.svg';
-import { ReactComponent as ShareIcon } from '@assets/icons/share.svg';
 import type { Meta, StoryObj } from '@storybook/react-webpack5';
+import { DownloadIcon as SaveIcon, ShareIcon } from '../@assets/icons';
 import SpaceHeader from '../components/header/spaceHeader/SpaceHeader';
 
 const meta: Meta<typeof SpaceHeader> = {

@@ -111,3 +111,7 @@ export const ModalContentContainer = styled.div`
   align-items: center;
   gap: 24px;
 `;
+
+export const GiftIconImage = styled.img`
+  width: 120px;
+`;

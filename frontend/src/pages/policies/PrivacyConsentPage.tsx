@@ -1,5 +1,5 @@
-import { ReactComponent as Logo } from '@assets/icons/logo.svg';
 import { useNavigate } from 'react-router-dom';
+import { LogoIcon as Logo } from '../../@assets/icons';
 import Button from '../../components/@common/buttons/button/Button';
 import { theme } from '../../styles/theme';
 import * as S from './PolicyPage.common.styles';

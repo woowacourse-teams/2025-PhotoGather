@@ -1,6 +1,6 @@
-import { ReactComponent as WarningIcon } from '@assets/icons/warning.svg';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { WarningIcon } from '../../../@assets/icons';
 import { spaceService } from '../../../apis/services/space.service';
 import Button from '../../../components/@common/buttons/button/Button';
 import InfoBox from '../../../components/@common/infoBox/InfoBox';

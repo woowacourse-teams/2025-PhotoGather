@@ -1,7 +1,6 @@
-import { ReactComponent as LinkIcon } from '@assets/icons/link.svg';
-import { ReactComponent as ShareIcon } from '@assets/icons/share.svg';
-import LinkImage from '@assets/images/rocket.png';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { LinkIcon, ShareIcon } from '../../../@assets/icons';
+import { RocketImg as LinkImage } from '../../../@assets/images';
 import Button from '../../../components/@common/buttons/button/Button';
 import IconLabelButton from '../../../components/@common/buttons/iconLabelButton/IconLabelButton';
 import HighlightText from '../../../components/@common/highlightText/HighlightText';

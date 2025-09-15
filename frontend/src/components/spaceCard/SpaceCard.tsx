@@ -1,8 +1,9 @@
-import { ReactComponent as DefaultImageIcon } from '@assets/icons/defaultImage.svg';
-import { ReactComponent as GroupIcon } from '@assets/icons/group.svg';
-import defaultImage from '@assets/images/default_image.png';
-import loadingImage from '@assets/images/loading.png';
 import { useNavigate } from 'react-router-dom';
+import { DefaultImageIcon, GroupIcon } from '../../@assets/icons';
+import {
+  DefaultImageImg as defaultImage,
+  LoadingImg as loadingImage,
+} from '../../@assets/images';
 import { formatExpiredDate } from '../../utils/dateTimeFormatters';
 import { formatDate } from '../../utils/formatDate';
 import HighlightText from '../@common/highlightText/HighlightText';
