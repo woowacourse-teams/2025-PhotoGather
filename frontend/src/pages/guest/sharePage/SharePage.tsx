@@ -7,7 +7,7 @@ import HighlightText from '../../../components/@common/highlightText/HighlightTe
 import InfoBox from '../../../components/@common/infoBox/InfoBox';
 import { INFORMATION } from '../../../constants/messages';
 import { ROUTES } from '../../../constants/routes';
-import useError from '../../../hooks/@common/useError';
+import useTaskHandler from '../../../hooks/@common/useTaskHandler';
 import { useToast } from '../../../hooks/@common/useToast';
 import useWebShareAPI from '../../../hooks/useWebShareAPI';
 import { theme } from '../../../styles/theme';
@@ -20,7 +20,7 @@ const SharePage = () => {
   const location = useLocation();
   const { name, spaceCode } = location.state;
   const { showToast } = useToast();
-  const { tryTask, tryFetch } = useError();
+  const { tryTask, tryFetch } = useTaskHandler();
   const { share } = useWebShareAPI();
 
   const handleSpaceHomeButton = () => {

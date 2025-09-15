@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { DefaultImageImg as defaultImage } from '../../../../@assets/images';
 import { photoService } from '../../../../apis/services/photo.service';
 import { useOverlay } from '../../../../contexts/OverlayProvider';
-import useError from '../../../../hooks/@common/useError';
+import useTaskHandler from '../../../../hooks/@common/useTaskHandler';
 import type { PreviewFile } from '../../../../types/file.type';
 import type { BaseModalProps } from '../../../../types/modal.type';
 import type { Photo } from '../../../../types/photo.type';
@@ -38,12 +38,11 @@ type PhotoModalProps = GuestPhotoModalProps | ManagerPhotoModalProps;
 
 const PhotoModal = (props: PhotoModalProps) => {
   const { mode, onClose, onSubmit } = props;
-  const [, setIsLoading] = useState(false);
   const [photo, setPhoto] = useState<Photo | null>(null);
   // TODO : 중복 상태 여부 확인 필요
   const [displayPath, setDisplayPath] = useState<string>('');
   const overlay = useOverlay();
-  const { tryFetch } = useError();
+  const { tryFetch } = useTaskHandler();
 
   const isManagerMode = mode === 'manager';
   const handleImageError = createImageErrorHandler(defaultImage);
@@ -63,7 +62,6 @@ const PhotoModal = (props: PhotoModalProps) => {
   const fetchPhoto = async () => {
     await tryFetch({
       task: async () => {
-        setIsLoading(true);
         // TODO : 모달을 종류별로 분리
         if (!managerSpaceCode || !managerPhotoId) return;
         const response = await photoService.getById(
@@ -81,9 +79,6 @@ const PhotoModal = (props: PhotoModalProps) => {
         toast: {
           text: '사진을 불러오는데 실패했어요. 다시 시도해주세요.',
         },
-      },
-      onFinally: () => {
-        setIsLoading(false);
       },
     });
   };

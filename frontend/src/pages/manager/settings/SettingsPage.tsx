@@ -10,8 +10,8 @@ import ConfirmModal from '../../../components/@common/modal/confirmModal/Confirm
 import { INFORMATION } from '../../../constants/messages';
 import { ROUTES } from '../../../constants/routes';
 import { useOverlay } from '../../../contexts/OverlayProvider';
-import useError from '../../../hooks/@common/useError';
 import useGraphemeInput from '../../../hooks/@common/useGraphemeInput';
+import useTaskHandler from '../../../hooks/@common/useTaskHandler';
 import { useToast } from '../../../hooks/@common/useToast';
 import useSpaceCodeFromPath from '../../../hooks/useSpaceCodeFromPath';
 import useSpaceInfo from '../../../hooks/useSpaceInfo';
@@ -23,7 +23,7 @@ import * as S from './SettingsPage.styles';
 const SettingsPage = () => {
   const { spaceCode } = useSpaceCodeFromPath();
   const { spaceInfo, refetchSpaceInfo } = useSpaceInfo(spaceCode || '');
-  const { tryFetch } = useError();
+  const { tryFetch } = useTaskHandler();
   const overlay = useOverlay();
   const navigate = useNavigate();
   const { showToast } = useToast();
