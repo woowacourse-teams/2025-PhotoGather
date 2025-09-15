@@ -1,4 +1,4 @@
-import loadingImage from '@assets/images/loading.png';
+import { LoadingImg as loadingImage } from '../../@assets/images';
 import HighlightText from '../@common/highlightText/HighlightText';
 import * as S from './LeftTimeInformationBox.styles';
 

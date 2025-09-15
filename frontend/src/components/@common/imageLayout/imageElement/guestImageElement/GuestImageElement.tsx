@@ -1,4 +1,4 @@
-import defaultImage from '../../../../../@assets/images/default_image.png';
+import { DefaultImageImg as defaultImage } from '../../../../../@assets/images';
 import type { PreviewFile } from '../../../../../types/file.type';
 import type { GuestImageElementHandlers } from '../../../../../types/imageGrid.type';
 import { createImageErrorHandler } from '../../../../../utils/createImageErrorHandler';

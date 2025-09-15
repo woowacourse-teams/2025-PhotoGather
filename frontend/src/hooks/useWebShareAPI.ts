@@ -2,7 +2,7 @@ import {
   validateCanShareFile,
   validateCanWebShare,
 } from '../validators/share.validator';
-import useError from './@common/useError';
+import useTaskHandler from './@common/useTaskHandler';
 
 interface ShareOptions {
   title?: string;
@@ -12,7 +12,7 @@ interface ShareOptions {
 }
 
 const useWebShareAPI = () => {
-  const { tryFetch } = useError();
+  const { tryFetch } = useTaskHandler();
 
   const share = async ({ title, text, url, files }: ShareOptions) => {
     await tryFetch({

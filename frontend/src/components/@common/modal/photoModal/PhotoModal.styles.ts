@@ -1,6 +1,6 @@
-import { ReactComponent as SaveIcon } from '@assets/icons/download.svg';
-import { ReactComponent as TrashCanIcon } from '@assets/icons/trash-can.svg';
 import styled from '@emotion/styled';
+// biome-ignore format: 의도적으로 한 줄로 유지
+import { DownloadIcon as SaveIcon, TrashCanIcon } from '../../../../@assets/icons';
 import { theme } from '../../../../styles/theme';
 import { hexToRgba } from '../../../../utils/hexToRgba';
 

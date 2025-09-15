@@ -1,5 +1,5 @@
-import wifiImage from '@assets/images/wifi.png';
 import { useNavigate } from 'react-router-dom';
+import { WifiImg as wifiImage } from '../../@assets/images';
 import MessageLayout from '../../components/layout/messageLayout/MessageLayout';
 import { ERROR } from '../../constants/messages';
 

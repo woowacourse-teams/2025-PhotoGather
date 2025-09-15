@@ -24,10 +24,14 @@ interface ErrorRequiredProps {
   console?: ConsoleOptions;
 }
 
-const useError = () => {
-  const [isError, setIsError] = useState(false);
+const useTaskHandler = () => {
+  type LoadingStateType = 'pending' | 'loading' | 'success' | 'error';
+  type LoadingStateMap = Record<string, LoadingStateType>;
+
   const { showToast } = useToast();
   const navigate = useNavigate();
+
+  const [loadingState, setLoadingState] = useState<LoadingStateMap>({});
 
   const errorHandler = {
     toast: (toastBase: ToastBase) => {
@@ -60,11 +64,9 @@ const useError = () => {
     onFinally,
   }: TryTaskProps<T>): TryTaskResultType<T> => {
     try {
-      setIsError(false);
       const data = task();
       return { success: true, data };
     } catch (e) {
-      setIsError(true);
       const error = e instanceof Error ? e : new Error(String(e));
       matchingErrorHandler(errorActions, context, error);
 
@@ -74,8 +76,16 @@ const useError = () => {
     }
   };
 
+  const updateLoadingState = (
+    loadingStateKey: string,
+    loadingState: LoadingStateType,
+  ) => {
+    setLoadingState((prev) => ({ ...prev, [loadingStateKey]: loadingState }));
+  };
+
   interface TryFetchProps<T> {
     task: () => Promise<T>;
+    loadingStateKey?: string;
     errorActions: ErrorType[];
     context?: ErrorRequiredProps;
     onFinally?: () => void;
@@ -86,15 +96,20 @@ const useError = () => {
 
   const tryFetch = async <T>({
     task,
+    loadingStateKey,
     errorActions,
     context,
     onFinally,
     useCommonCodeErrorHandler = true,
-  }: TryFetchProps<T>) => {
+  }: TryFetchProps<T>): Promise<TryTaskResultType<T>> => {
     try {
+      loadingStateKey && updateLoadingState(loadingStateKey, 'loading');
       const response = await task();
+      loadingStateKey &&
+        setLoadingState((prev) => ({ ...prev, [loadingStateKey]: 'success' }));
       return { success: true, data: response };
     } catch (e) {
+      loadingStateKey && updateLoadingState(loadingStateKey, 'error');
       const error = e instanceof Error ? e : new Error(String(e));
 
       if (
@@ -160,7 +175,7 @@ const useError = () => {
     return;
   };
 
-  return { isError, tryTask, tryFetch };
+  return { loadingState, tryTask, tryFetch };
 };
 
-export default useError;
+export default useTaskHandler;

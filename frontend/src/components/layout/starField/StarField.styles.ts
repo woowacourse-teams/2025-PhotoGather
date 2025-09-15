@@ -1,6 +1,5 @@
-import FilledStar from '@assets/icons/star-filled.svg';
-import OutlinedStar from '@assets/icons/star-outlined.svg';
 import styled from '@emotion/styled';
+import { StarFilledIconUrl, StarOutlinedIconUrl } from '../../../@assets/icons';
 
 export const Wrapper = styled.div`
   position: fixed;
@@ -38,7 +37,7 @@ export const StarContainer = styled.div<{
   width: ${({ size }) => `${size}px`};
   height: ${({ size }) => `${size}px`};
   background: ${({ star }) => `
-    url(${star === 'filled' ? FilledStar : OutlinedStar}) no-repeat center / contain
+    url(${star === 'filled' ? StarFilledIconUrl : StarOutlinedIconUrl}) no-repeat center / contain
   `};
   animation: spinAndScale 3s linear infinite;
   animation-delay: ${({ delay }) => `${delay || 0}s`};

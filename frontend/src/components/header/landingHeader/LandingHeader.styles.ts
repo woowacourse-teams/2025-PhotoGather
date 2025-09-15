@@ -1,5 +1,5 @@
-import { ReactComponent as MenuIcon } from '@assets/icons/menu.svg';
 import styled from '@emotion/styled';
+import { MenuIcon } from '../../../@assets/icons';
 
 export const Wrapper = styled.div`
   width: 100%;

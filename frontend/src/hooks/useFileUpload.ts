@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { photoService } from '../apis/services/photo.service';
 import { FAILED_GUEST_ID } from '../constants/errors';
 import type { LocalFile, UploadFile } from '../types/file.type';
-import useError from './@common/useError';
+import useTaskHandler from './@common/useTaskHandler';
 
 interface Batch {
   id: number;
@@ -43,8 +43,7 @@ const useFileUpload = ({
   const [, setUploadFiles] = useState<UploadFile[]>([]);
   const [, setBatches] = useState<Batch[]>();
   const [session, setSession] = useState<Session>();
-  const [isUploading, setIsUploading] = useState(false);
-  const { tryFetch } = useError();
+  const { loadingState, tryFetch } = useTaskHandler();
   const [progress, setProgress] = useState(0);
 
   const ensureGuestId = async () => {
@@ -297,7 +296,6 @@ const useFileUpload = ({
   const submitFileUpload = async () => {
     const currentSession = session ?? createSession(localFiles);
 
-    setIsUploading(true);
     const response = await tryFetch({
       task: async () => {
         const validGuestId = await ensureGuestId();
@@ -310,9 +308,7 @@ const useFileUpload = ({
           type: 'error',
         },
       },
-      onFinally: () => {
-        setIsUploading(false);
-      },
+      loadingStateKey: 'fileUpload',
     });
 
     if (response.success) {
@@ -325,7 +321,7 @@ const useFileUpload = ({
     submitFileUpload,
     total: session?.total,
     success: progress,
-    isUploading,
+    isUploading: loadingState.fileUpload === 'loading',
   };
 };
 

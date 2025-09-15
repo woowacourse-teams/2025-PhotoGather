@@ -18,6 +18,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.forgather.global.config.S3Properties;
+import com.forgather.global.exception.FileDownloadException;
 import com.forgather.global.util.RandomCodeGenerator;
 
 import lombok.RequiredArgsConstructor;
@@ -111,7 +112,7 @@ public class AwsS3Cloud implements ContentsStorage {
         if (!localDownloadDirectory.exists()) {
             boolean created = localDownloadDirectory.mkdirs();
             if (!created) {
-                throw new IllegalStateException("다운로드 디렉토리 생성 실패: " + localDownloadDirectory.getAbsolutePath());
+                throw new FileDownloadException("다운로드 디렉토리 생성 실패: " + localDownloadDirectory.getAbsolutePath());
             }
         }
         return localDownloadDirectory;
@@ -207,7 +208,7 @@ public class AwsS3Cloud implements ContentsStorage {
         List<String> retryPaths = extractFailedKeys(response);
         DeleteObjectsResponse retryResponse = deleteContents(retryPaths);
         if (retryResponse.hasErrors()) {
-            log.atInfo()
+            log.atWarn()
                 .addKeyValue("deleteFailPath", extractFailedKeys(retryResponse).toString())
                 .log("S3 삭제 실패");
         }

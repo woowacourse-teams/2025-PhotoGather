@@ -1,5 +1,5 @@
-import DownloadIcon from '@assets/icons/download.svg';
 import type { Meta, StoryObj } from '@storybook/react';
+import { DownloadIcon } from '../@assets/icons';
 import FloatingActionButton from '../components/@common/buttons/floatingActionButton/FloatingActionButton';
 
 const meta: Meta<typeof FloatingActionButton> = {
@@ -26,6 +26,6 @@ export const Disabled: Story = {
 export const WithIcon: Story = {
   args: {
     label: 'With Icon',
-    icon: <img src={DownloadIcon} alt="download" />,
+    icon: <DownloadIcon />,
   },
 };

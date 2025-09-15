@@ -1,6 +1,6 @@
-import rocketImage from '@assets/images/rocket.png';
 import * as Sentry from '@sentry/react';
 import { useNavigate } from 'react-router-dom';
+import { RocketImg as rocketImage } from '../../@assets/images';
 import Button from '../../components/@common/buttons/button/Button';
 import KakaoLoginButton from '../../components/kakaoLoginButton/KakaoLoginButton';
 import { ROUTES } from '../../constants/routes';

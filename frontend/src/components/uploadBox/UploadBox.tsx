@@ -1,4 +1,4 @@
-import { ReactComponent as CameraIcon } from '@assets/icons/camera.svg';
+import { CameraIcon } from '../../@assets/icons';
 import useDrag from '../../hooks/@common/useDrag';
 import { theme } from '../../styles/theme';
 import * as S from './UploadBox.styles';

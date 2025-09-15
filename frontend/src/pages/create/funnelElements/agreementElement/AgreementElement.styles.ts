@@ -1,6 +1,5 @@
-import { ReactComponent as CheckIcon } from '@assets/icons/check.svg';
-import { ReactComponent as RoundCheckIcon } from '@assets/icons/round-check.svg';
 import styled from '@emotion/styled';
+import { CheckIcon, RoundCheckIcon } from '../../../../@assets/icons';
 
 export const Wrapper = styled.div`
   display: flex;
