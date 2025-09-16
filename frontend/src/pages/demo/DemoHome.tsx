@@ -4,6 +4,7 @@ import { RocketImg as rocketImage } from '../../@assets/images';
 import Button from '../../components/@common/buttons/button/Button';
 import KakaoLoginButton from '../../components/kakaoLoginButton/KakaoLoginButton';
 import { ROUTES } from '../../constants/routes';
+import useAuth from '../../hooks/@common/useAuth';
 import useKakaoAuth from '../../hooks/domain/useKakaoAuth';
 import { CookieUtils } from '../../utils/CookieUtils';
 import * as S from './DemoHome.styles';
@@ -21,7 +22,8 @@ const DemoHome = () => {
       Sentry.captureMessage('가짜 축하');
     }
   };
-  const { handleKakaoLogin, handleLogout } = useKakaoAuth();
+  const { handleKakaoLogin } = useKakaoAuth();
+  const { handleLogout } = useAuth();
 
   return (
     <S.Wrapper>

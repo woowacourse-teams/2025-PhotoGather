@@ -19,6 +19,7 @@ import { Carousel } from '../../components/carousel/Carousel';
 import Footer from '../../components/footer/Footer';
 import KakaoLoginButton from '../../components/kakaoLoginButton/KakaoLoginButton';
 import LeftTimeInformationBox from '../../components/leftTimeInformationBox/LeftTimeInformationBox';
+import useAuth from '../../hooks/@common/useAuth';
 import useLandingScroll from '../../hooks/@common/useLandingScroll';
 import useLeftTimer from '../../hooks/@common/useLeftTimer';
 import useKakaoAuth from '../../hooks/domain/useKakaoAuth';
@@ -40,7 +41,8 @@ const LandingPage = () => {
   const formattedLeftTime = formatTimer(leftTime);
   const { date, time } = formatDate(mockDate.toISOString());
   const mockupRef = useRef<HTMLDivElement>(null);
-  const { handleKakaoLogin, handleLogout } = useKakaoAuth();
+  const { handleKakaoLogin } = useKakaoAuth();
+  const { handleLogout } = useAuth();
 
   useEffect(() => {
     const target = mockupRef.current;

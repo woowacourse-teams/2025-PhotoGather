@@ -2,13 +2,14 @@ import { useNavigate } from 'react-router-dom';
 import { DOMAIN } from '../../apis/config';
 import { authService } from '../../apis/services/auth.service';
 import { ROUTES } from '../../constants/routes';
-import { CookieUtils } from '../../utils/CookieUtils';
+import useAuth from '../@common/useAuth';
 import useTaskHandler from '../@common/useTaskHandler';
 
 const useKakaoAuth = () => {
   const navigate = useNavigate();
   const { tryTask, tryFetch } = useTaskHandler();
   const REQUEST_URI = `${DOMAIN}${ROUTES.AUTH.KAKAO}`;
+  const { setAuthTokens } = useAuth();
 
   const createGetKakaoCodeUrl = (clientId: string, redirectUri: string) =>
     `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${clientId}&redirect_uri=${redirectUri}`;
@@ -64,12 +65,10 @@ const useKakaoAuth = () => {
 
         if (!authResponse || !authResponse.data) return;
 
-        CookieUtils.set('access', authResponse.data.accessToken, {
-          path: ROUTES.MAIN,
-        });
-        CookieUtils.set('refresh', authResponse.data.refreshToken, {
-          path: ROUTES.MAIN,
-        });
+        setAuthTokens(
+          authResponse.data.accessToken,
+          authResponse.data.refreshToken,
+        );
 
         navigate(ROUTES.MAIN);
         setTimeout(() => {
@@ -85,16 +84,7 @@ const useKakaoAuth = () => {
     });
   };
 
-  const handleLogout = async () => {
-    CookieUtils.delete('access', { path: ROUTES.MAIN });
-    CookieUtils.delete('refresh', { path: ROUTES.MAIN });
-    navigate(ROUTES.MAIN);
-    setTimeout(() => {
-      location.reload();
-    }, 0);
-  };
-
-  return { handleKakaoLogin, getAuth, handleLogout };
+  return { handleKakaoLogin, getAuth };
 };
 
 export default useKakaoAuth;
