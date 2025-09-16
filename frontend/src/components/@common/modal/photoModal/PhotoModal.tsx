@@ -178,7 +178,7 @@ const PhotoModal = (props: PhotoModalProps) => {
       >
         <IconLabelButton
           icon={<S.DeleteIcon />}
-          variant="dark"
+          variant="danger"
           onClick={handleDelete}
         />
           

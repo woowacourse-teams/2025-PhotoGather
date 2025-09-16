@@ -1,14 +1,15 @@
 import styled from '@emotion/styled';
+import { hexToRgba } from '../../../utils/hexToRgba';
 
 export const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
-  max-width: ${({ theme }) => theme.layout.width};
-  width: 100%;
-  height: 100%;
-  gap: 10px;
+  justify-content: center;
+  gap: 20px;
+  flex-grow: 1;
+  border-radius: 12px;
+  background: ${({ theme }) => hexToRgba(theme.colors.gray06, 0.7)};
 `;
 
 export const Icon = styled.img`

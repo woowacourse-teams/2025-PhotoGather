@@ -186,14 +186,9 @@ const SpaceHomePage = () => {
 
   //biome-ignore lint/correctness/useExhaustiveDependencies: isFetchSectionVisible 변경 시 호출
   useEffect(() => {
-    if (
-      !isFetchSectionVisible ||
-      isEndPage ||
-      isSpaceExpired ||
-      isEarlyTime ||
-      !hasAccess
-    )
-      return;
+    if (isSpaceExpired || isEarlyTime || !hasAccess) return;
+    if (!isFetchSectionVisible || isEndPage) return;
+
     tryFetchPhotosList();
   }, [
     isFetchSectionVisible,
@@ -357,7 +352,7 @@ const SpaceHomePage = () => {
         />
       </S.InfoContainer>
 
-      <div style={{}}>{renderBodyContent()}</div>
+      {renderBodyContent()}
 
       <S.IntersectionArea ref={hideBlurAreaTriggerRef} />
       <S.IntersectionArea ref={fetchTriggerRef} />
