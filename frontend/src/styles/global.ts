@@ -1,6 +1,5 @@
 import { css } from '@emotion/react';
 import RobotoRegular from '../@assets/fonts/Roboto-Mono-regular.woff2';
-import SUITVariable from '../@assets/fonts/SUIT-Variable.woff2';
 
 export const global = css`
   * {
@@ -10,7 +9,16 @@ export const global = css`
   }
   @font-face {
     font-family: 'SUIT';
-    src: url(${SUITVariable}) format('woff2');
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_suit@1.0/SUIT-Regular.woff2')
+      format('woff2');
+    font-weight: 400;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'SUIT';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_suit@1.0/SUIT-Bold.woff2')
+      format('woff2');
+    font-weight: 700;
     font-display: swap;
   }
   @font-face {
