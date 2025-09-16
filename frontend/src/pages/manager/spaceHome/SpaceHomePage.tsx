@@ -71,6 +71,9 @@ const SpaceHomePage = () => {
   const isSpaceExpired = spaceInfo?.isExpired;
 
   const { hasAccess, isLoadingAccess } = useSpaceAccess(spaceInfo?.host.id);
+  // early -> 이미지 업로드 X / 설정 + 공유 가능
+  // 만료 -> 이미지 업로드 X / 공유 X / 설정 O
+  // 접근 불가 -> 3가지 다 X
 
   const {
     photosList,
@@ -340,14 +343,14 @@ const SpaceHomePage = () => {
               label: '업로드',
             },
             {
-              element: <SettingSvg fill={theme.colors.white} width="20px" />,
-              onClick: clickDashboardWithTracking,
-              label: '설정',
-            },
-            {
               element: <ShareIcon fill={theme.colors.white} width="20px" />,
               onClick: toggleShareModal,
               label: '공유',
+            },
+            {
+              element: <SettingSvg fill={theme.colors.white} width="20px" />,
+              onClick: clickDashboardWithTracking,
+              label: '설정',
             },
           ]}
         />

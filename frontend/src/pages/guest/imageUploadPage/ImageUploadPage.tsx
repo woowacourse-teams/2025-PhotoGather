@@ -47,6 +47,7 @@ const ImageUploadPage = () => {
   const { nickName, guestId, showNickNameEditModal, tryCreateNickName } =
     useGuestNickName({
       spaceCode: spaceCode ?? '',
+      shouldShowNickNameModal: !!spaceInfo && !isEarlyTime && !isSpaceExpired,
     });
 
   const navigateToUploadComplete = () => {
