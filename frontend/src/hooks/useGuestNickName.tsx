@@ -44,7 +44,7 @@ const useGuestNickName = ({
     if (mode === 'create') {
       showNickNameCreateModal();
     }
-  }, []);
+  }, [shouldShowNickNameModal]);
 
   const createNickNameErrorMessage = (nickName: string) => {
     if (nickName.length > 10) {

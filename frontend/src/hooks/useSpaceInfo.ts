@@ -32,7 +32,7 @@ const useSpaceInfo = (spaceCode: string) => {
   }, [spaceCode]);
 
   return {
-    isLoading: loadingState.spaceInfo === 'loading',
+    spaceInfoLoadingState: loadingState.spaceInfo,
     spaceInfo,
     refetchSpaceInfo: fetchSpaceInfo,
   };

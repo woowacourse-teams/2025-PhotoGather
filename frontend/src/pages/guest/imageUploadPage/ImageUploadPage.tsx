@@ -34,11 +34,12 @@ import * as S from './ImageUploadPage.styles';
 
 const ImageUploadPage = () => {
   const { spaceCode } = useSpaceCodeFromPath();
-  const { spaceInfo } = useSpaceInfo(spaceCode ?? '');
+  const { spaceInfo, spaceInfoLoadingState } = useSpaceInfo(spaceCode ?? '');
   const isNoData = !spaceInfo;
-  const isSpaceExpired = spaceInfo?.isExpired;
-  const isEarlyTime =
-    spaceInfo?.openedAt && checkIsEarlyDate(spaceInfo.openedAt);
+  const isSpaceExpired = spaceInfo ? spaceInfo.isExpired : false;
+  const isEarlyTime = spaceInfo
+    ? spaceInfo.openedAt && checkIsEarlyDate(spaceInfo.openedAt)
+    : false;
   const shouldShowFakeUploadBox = isNoData || isEarlyTime || isSpaceExpired;
 
   const overlay = useOverlay();
@@ -47,7 +48,8 @@ const ImageUploadPage = () => {
   const { nickName, guestId, showNickNameEditModal, tryCreateNickName } =
     useGuestNickName({
       spaceCode: spaceCode ?? '',
-      shouldShowNickNameModal: !!spaceInfo && !isEarlyTime && !isSpaceExpired,
+      shouldShowNickNameModal:
+        spaceInfoLoadingState === 'success' && !isEarlyTime && !isSpaceExpired,
     });
 
   const navigateToUploadComplete = () => {
@@ -137,7 +139,9 @@ const ImageUploadPage = () => {
 
   return (
     <S.Wrapper $hasImages={hasImages}>
-      {isEarlyTime && <EarlyPage openedAt={spaceInfo.openedAt} />}
+      {isEarlyTime && (
+        <EarlyPage openedAt={spaceInfo ? spaceInfo.openedAt : ''} />
+      )}
       {isSpaceExpired && <ExpiredPage />}
       {isUploading && (
         <LoadingLayout
