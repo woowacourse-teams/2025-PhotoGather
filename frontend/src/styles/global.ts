@@ -15,13 +15,6 @@ export const global = css`
     font-display: swap;
   }
   @font-face {
-    font-family: 'SUIT';
-    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_suit@1.0/SUIT-Bold.woff2')
-      format('woff2');
-    font-weight: 700;
-    font-display: swap;
-  }
-  @font-face {
     font-family: 'Roboto';
     src: url(${RobotoRegular}) format('woff2');
     font-display: swap;
