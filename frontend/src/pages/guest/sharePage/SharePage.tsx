@@ -1,14 +1,13 @@
-import { ReactComponent as LinkIcon } from '@assets/icons/link.svg';
-import { ReactComponent as ShareIcon } from '@assets/icons/share.svg';
-import LinkImage from '@assets/images/rocket.png';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { LinkIcon, ShareIcon } from '../../../@assets/icons';
+import { RocketImg as LinkImage } from '../../../@assets/images';
 import Button from '../../../components/@common/buttons/button/Button';
 import IconLabelButton from '../../../components/@common/buttons/iconLabelButton/IconLabelButton';
 import HighlightText from '../../../components/@common/highlightText/HighlightText';
 import InfoBox from '../../../components/@common/infoBox/InfoBox';
 import { INFORMATION } from '../../../constants/messages';
 import { ROUTES } from '../../../constants/routes';
-import useError from '../../../hooks/@common/useError';
+import useTaskHandler from '../../../hooks/@common/useTaskHandler';
 import { useToast } from '../../../hooks/@common/useToast';
 import useWebShareAPI from '../../../hooks/useWebShareAPI';
 import { theme } from '../../../styles/theme';
@@ -21,7 +20,7 @@ const SharePage = () => {
   const location = useLocation();
   const { name, spaceCode } = location.state;
   const { showToast } = useToast();
-  const { tryTask, tryFetch } = useError();
+  const { tryTask, tryFetch } = useTaskHandler();
   const { share } = useWebShareAPI();
 
   const handleSpaceHomeButton = () => {

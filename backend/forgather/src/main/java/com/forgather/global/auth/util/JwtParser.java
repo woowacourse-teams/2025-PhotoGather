@@ -4,11 +4,14 @@ import java.security.PublicKey;
 import java.util.Base64;
 import java.util.Map;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.forgather.global.auth.client.KakaoAuthClient;
 import com.forgather.global.auth.dto.KakaoIdToken;
+import com.forgather.global.exception.JwtBaseException;
+import com.forgather.global.exception.JwtParseException;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -25,7 +28,7 @@ public class JwtParser {
         try {
             String[] parts = idToken.split("\\.");
             if (parts.length != 3) {
-                throw new IllegalArgumentException("Invalid JWT format");
+                throw new JwtParseException("Invalid JWT format", HttpStatus.UNAUTHORIZED);
             }
 
             String header = new String(Base64.getUrlDecoder().decode(parts[0]));
@@ -34,7 +37,7 @@ public class JwtParser {
             String kid = (String) headerMap.get("kid");
 
             if (kid == null) {
-                throw new IllegalArgumentException("Missing kid in JWT header");
+                throw new JwtParseException("Missing kid in JWT header", HttpStatus.UNAUTHORIZED);
             }
 
             PublicKey publicKey = kakaoAuthClient.getKakaoPublicKey(kid);
@@ -46,8 +49,10 @@ public class JwtParser {
                     .getPayload();
 
             return objectMapper.convertValue(claims, KakaoIdToken.class);
-        } catch (Exception e) {
-            throw new IllegalArgumentException("ID Token이 잘못되었습니다.", e);
+        } catch (JwtParseException e) {
+            throw e;
+        }catch (Exception e) {
+            throw new JwtBaseException("ID Token이 잘못되었습니다.", HttpStatus.UNAUTHORIZED, e);
         }
     }
 }

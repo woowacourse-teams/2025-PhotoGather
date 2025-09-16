@@ -1,5 +1,5 @@
-import { ReactComponent as InfoIcon } from '@assets/icons/info.svg';
 import styled from '@emotion/styled';
+import { InfoIcon } from '../../../@assets/icons';
 
 export const Wrapper = styled.div`
   display: flex;

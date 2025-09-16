@@ -1,5 +1,5 @@
-import downloadImage from '@assets/images/download.png';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { GiftImg as GiftICon } from '../../@assets/images';
 import MessageLayout from '../../components/layout/messageLayout/MessageLayout';
 import { COMPLETE } from '../../constants/messages';
 import { ROUTES } from '../../constants/routes';
@@ -14,7 +14,7 @@ const DownloadCompletePage = () => {
 
   return (
     <MessageLayout
-      image={downloadImage}
+      image={GiftICon}
       title={COMPLETE.DOWNLOAD.TITLE}
       description={COMPLETE.DOWNLOAD.DESCRIPTION}
       buttonText={COMPLETE.DOWNLOAD.BUTTON_TEXT}

@@ -1,6 +1,8 @@
-import { ReactComponent as SettingSvg } from '@assets/icons/setting.svg';
-import { ReactComponent as Logo } from '@assets/logo.svg';
 import { useLocation, useNavigate } from 'react-router-dom';
+import {
+  LogoIcon as Logo,
+  SettingIcon as SettingSvg,
+} from '../../../../@assets/icons';
 import { ROUTES } from '../../../../constants/routes';
 import { theme } from '../../../../styles/theme';
 import * as S from './Header.styles';

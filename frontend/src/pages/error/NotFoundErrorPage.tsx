@@ -1,5 +1,5 @@
-import NotFoundImage from '@assets/images/not-found.png';
 import { useNavigate } from 'react-router-dom';
+import { NotFoundImg as NotFoundImage } from '../../@assets/images';
 import MessageLayout from '../../components/layout/messageLayout/MessageLayout';
 import { ERROR } from '../../constants/messages';
 import { ROUTES } from '../../constants/routes';

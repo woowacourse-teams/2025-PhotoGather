@@ -1,6 +1,6 @@
-import defaultProfile from '@assets/images/default_profile.png';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { DefaultProfileImg as defaultProfile } from '../../@assets/images';
 import { authService } from '../../apis/services/auth.service';
 import { photoService } from '../../apis/services/photo.service';
 import { spaceService } from '../../apis/services/space.service';
@@ -138,14 +138,12 @@ const MyPage = () => {
             return (
               <SpaceCard
                 key={space.id}
-                name={space.name}
+                space={space}
                 thumbnail={thumbnails[space.spaceCode]}
-                openedAt={space.openedAt}
-                expiredAt={space.expiredAt}
-                guestCount={space.guestCount}
-                photoCount={space.photoCount}
                 variant={matchSpaceCardVariant(space)}
-                route={ROUTES.MANAGER.SPACE_HOME(String(space.spaceCode))}
+                onClick={() =>
+                  navigate(ROUTES.MANAGER.SPACE_HOME(String(space.spaceCode)))
+                }
               />
             );
           })}

@@ -1,4 +1,4 @@
-import { ReactComponent as EditIcon } from '@assets/icons/edit.svg';
+import { EditIcon } from '../../@assets/icons';
 import { theme } from '../../styles/theme';
 import * as S from './UserBadge.styles';
 

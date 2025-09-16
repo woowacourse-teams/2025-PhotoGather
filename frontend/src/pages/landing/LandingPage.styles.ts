@@ -47,3 +47,14 @@ export const TopContainer = styled.div`
   flex-direction: column;
   gap: 125px;
 `;
+
+export const InstagramIcon = styled.img`
+  width: 44px;
+  margin-bottom: 4px;
+  cursor: default;
+  pointer-events: none;
+`;
+
+export const Mockup = styled.img`
+  width: 280px;
+`;

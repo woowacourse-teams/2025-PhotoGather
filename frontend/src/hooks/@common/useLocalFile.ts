@@ -8,7 +8,7 @@ import {
   checkInvalidFileType,
   checkUploadLimit,
 } from '../../validators/photo.validator';
-import useError from './useError';
+import useTaskHandler from './useTaskHandler';
 
 interface UseLocalFileProps {
   fileType: string;
@@ -20,7 +20,7 @@ const useLocalFile = ({ fileType }: UseLocalFileProps) => {
     id: file.id,
     previewUrl: file.previewUrl,
   }));
-  const { tryTask, tryFetch } = useError();
+  const { tryTask, tryFetch } = useTaskHandler();
 
   const extractDateTimeOriginal = async (file: File) => {
     const metadata = await exifr.parse(file, ['DateTimeOriginal']);
