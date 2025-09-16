@@ -20,7 +20,7 @@ public interface ContentsStorage {
 
     void deleteContent(String contentPath);
 
-    void deleteSelectedContents(List<String> contentPaths);
+    void deleteContents(List<String> contentPaths);
 
     String issueSignedUrl(String path);
 
