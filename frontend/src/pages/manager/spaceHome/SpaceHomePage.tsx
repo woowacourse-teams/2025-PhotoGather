@@ -227,7 +227,8 @@ const SpaceHomePage = () => {
       <C.Wrapper>
         <S.ModalContentContainer>
           <IconLabelButton
-            icon={<LinkIcon fill={theme.colors.white} width="20px" />}
+            icon={<LinkIcon width="20px" />}
+            variant="outline"
             onClick={() => {
               copyLinkToClipboard(createShareUrl(spaceCode ?? ''));
               showToast({
@@ -356,7 +357,7 @@ const SpaceHomePage = () => {
         />
       </S.InfoContainer>
 
-      {renderBodyContent()}
+      <div style={{}}>{renderBodyContent()}</div>
 
       <S.IntersectionArea ref={hideBlurAreaTriggerRef} />
       <S.IntersectionArea ref={fetchTriggerRef} />

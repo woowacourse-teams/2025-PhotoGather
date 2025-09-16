@@ -49,7 +49,7 @@ export const Dark: Story = {
 export const Light: Story = {
   args: {
     icon: <SaveIcon fill={theme.colors.white} />,
-    variant: 'light',
+    variant: 'dark',
   },
 };
 
