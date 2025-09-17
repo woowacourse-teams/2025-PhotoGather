@@ -265,6 +265,7 @@ const SpaceHomePage = () => {
 
   const renderBodyContent = () => {
     if (isEarlyTime) return <EarlyPage openedAt={spaceInfo.openedAt} />;
+    if (!hasAccess && !isLoadingAccess) return <AccessDeniedPage />;
     if (isSpaceExpired) return <ExpiredPage />;
     if (photosList.length === 0)
       return (
@@ -324,8 +325,6 @@ const SpaceHomePage = () => {
         />
       )}
 
-      {!hasAccess && !isLoadingAccess && <AccessDeniedPage />}
-
       <S.InfoContainer ref={scrollTopTriggerRef}>
         <SpaceHeader
           title={spaceName}
@@ -351,7 +350,7 @@ const SpaceHomePage = () => {
         />
       </S.InfoContainer>
 
-      {renderBodyContent()}
+      <S.BodyContainer>{renderBodyContent()}</S.BodyContainer>
 
       <S.IntersectionArea ref={hideBlurAreaTriggerRef} />
       <S.IntersectionArea ref={fetchTriggerRef} />
