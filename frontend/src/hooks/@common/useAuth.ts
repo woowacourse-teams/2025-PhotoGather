@@ -1,23 +1,9 @@
 import { useNavigate } from 'react-router-dom';
 import { ROUTES } from '../../constants/routes';
-import { CookieUtils } from '../../utils/CookieUtils';
+import { clearAuthTokens } from '../../utils/authCookieManager';
 
 const useAuth = () => {
   const navigate = useNavigate();
-
-  const setAuthTokens = (accessToken: string, refreshToken: string) => {
-    CookieUtils.set('access', accessToken, {
-      path: ROUTES.MAIN,
-    });
-    CookieUtils.set('refresh', refreshToken, {
-      path: ROUTES.MAIN,
-    });
-  };
-
-  const clearAuthTokens = () => {
-    CookieUtils.delete('access', { path: ROUTES.MAIN });
-    CookieUtils.delete('refresh', { path: ROUTES.MAIN });
-  };
 
   const handleLogout = async () => {
     clearAuthTokens();
@@ -27,7 +13,7 @@ const useAuth = () => {
     }, 0);
   };
 
-  return { setAuthTokens, handleLogout };
+  return { handleLogout };
 };
 
 export default useAuth;
