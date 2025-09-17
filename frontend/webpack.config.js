@@ -5,6 +5,9 @@ const DotenvPlugin = require('dotenv-webpack');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const ImageMinimizerPlugin = require('image-minimizer-webpack-plugin');
 
+const SpeedMeasurePlugin = require('speed-measure-webpack-plugin');
+const smp = new SpeedMeasurePlugin();
+
 module.exports = (_, argv) => {
   let envFile = '.env.local';
 
@@ -15,14 +18,26 @@ module.exports = (_, argv) => {
     envFile = '.env.production';
   }
 
-  return {
+  return smp.wrap({
     entry: './src/index.tsx',
     output: {
-      filename: '[name].[contenthash].js',
+      filename:
+        argv.mode === 'production' ? '[name].[contenthash].js' : '[name].js',
       path: path.resolve(__dirname, 'dist'),
       publicPath: '/',
       clean: true,
     },
+    cache:
+      argv.mode === 'none'
+        ? {
+            type: 'filesystem',
+            buildDependencies: {
+              config: [__filename],
+            },
+          }
+        : false,
+    devtool:
+      argv.mode === 'none' ? 'eval-cheap-module-source-map' : 'source-map',
     resolve: {
       extensions: ['.tsx', '.ts', '.js'],
       alias: {
@@ -118,34 +133,41 @@ module.exports = (_, argv) => {
       open: true,
       historyApiFallback: true,
     },
+    infrastructureLogging: {
+      level: 'verbose',
+    },
     optimization: {
-      minimize: true,
+      minimize: argv.mode === 'production',
       minimizer: [
-        new ImageMinimizerPlugin({
-          minimizer: {
-            implementation: ImageMinimizerPlugin.sharpMinify,
-            options: {
-              encodeOptions: {
-                png: { quality: 80, palette: true },
-                jpg: { quality: 75, progressive: true },
-                jpeg: { quality: 75, progressive: true },
-              },
-            },
-          },
-          generator: [
-            {
-              preset: 'webp',
-              implementation: ImageMinimizerPlugin.sharpGenerate,
-              options: {
-                encodeOptions: {
-                  webp: { quality: 80, effort: 6, lossless: false },
+        ...(argv.mode === 'production'
+          ? [
+              new ImageMinimizerPlugin({
+                minimizer: {
+                  implementation: ImageMinimizerPlugin.sharpMinify,
+                  options: {
+                    encodeOptions: {
+                      png: { quality: 80, palette: true },
+                      jpg: { quality: 75, progressive: true },
+                      jpeg: { quality: 75, progressive: true },
+                    },
+                  },
                 },
-              },
-              filename: 'static/images/[name][ext]',
-            },
-          ],
-        }),
+                generator: [
+                  {
+                    preset: 'webp',
+                    implementation: ImageMinimizerPlugin.sharpGenerate,
+                    options: {
+                      encodeOptions: {
+                        webp: { quality: 80, effort: 6, lossless: false },
+                      },
+                    },
+                    filename: 'static/images/[name][ext]',
+                  },
+                ],
+              }),
+            ]
+          : []),
       ],
     },
-  };
+  });
 };
