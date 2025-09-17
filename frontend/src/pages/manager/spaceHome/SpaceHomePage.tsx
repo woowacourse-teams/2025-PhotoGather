@@ -1,12 +1,12 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
+  AddPhotoIcon,
   UpwardArrowIcon as ArrowUpSvg,
   LinkIcon,
   DownloadIcon as SaveIcon,
-  SettingIcon as SettingSvg,
+  SettingIcon,
   ShareIcon,
-  AddPhotoIcon as UploadIcon,
 } from '../../../@assets/icons';
 import {
   GiftImg as GiftIcon,
@@ -18,7 +18,7 @@ import IconLabelButton from '../../../components/@common/buttons/iconLabelButton
 import SpaceManagerImageGrid from '../../../components/@common/imageLayout/imageGrid/spaceManagerImageGrid/SpaceManagerImageGrid';
 import * as C from '../../../components/@common/modal/Modal.common.styles';
 import PhotoModal from '../../../components/@common/modal/photoModal/PhotoModal';
-import SpaceHeader from '../../../components/header/spaceHeader/SpaceHeader';
+import SpaceManagerSpaceHeader from '../../../components/header/spaceHeader/spaceManagerSpaceHeader/SpaceManagerSpaceHeader';
 import LoadingLayout from '../../../components/layout/loadingLayout/LoadingLayout';
 import PhotoSelectionToolBar from '../../../components/photoSelectionToolBar/PhotoSelectionToolBar';
 import SpaceHomeTopActionBar from '../../../components/spaceHomeTopActionBar/SpaceHomeTopActionBar';
@@ -71,9 +71,6 @@ const SpaceHomePage = () => {
   const isSpaceExpired = spaceInfo?.isExpired;
 
   const { hasAccess, isLoadingAccess } = useSpaceAccess(spaceInfo?.host.id);
-  // early -> 이미지 업로드 X / 설정 + 공유 가능
-  // 만료 -> 이미지 업로드 X / 공유 X / 설정 O
-  // 접근 불가 -> 3가지 다 X
 
   const {
     photosList,
@@ -241,6 +238,31 @@ const SpaceHomePage = () => {
     );
   };
 
+  const canAddPhoto = hasAccess && !isSpaceExpired && !isEarlyTime;
+  const canShare = hasAccess && !isSpaceExpired;
+  const canChangeSetting = hasAccess && !isSpaceExpired;
+
+  const iconItems = [
+    {
+      element: <AddPhotoIcon width="20px" />,
+      onClick: clickUploadButtonWithTracking,
+      disabled: !canAddPhoto,
+      label: '업로드',
+    },
+    {
+      element: <ShareIcon width="20px" />,
+      onClick: toggleShareModal,
+      disabled: !canShare,
+      label: '공유',
+    },
+    {
+      element: <SettingIcon width="20px" />,
+      onClick: clickDashboardWithTracking,
+      disabled: !canChangeSetting,
+      label: '설정',
+    },
+  ];
+
   const renderBottomNavigatorContent = () => {
     return (
       <S.BottomNavigatorContainer>
@@ -326,27 +348,11 @@ const SpaceHomePage = () => {
       )}
 
       <S.InfoContainer ref={scrollTopTriggerRef}>
-        <SpaceHeader
+        <SpaceManagerSpaceHeader
           title={spaceName}
           accessType={spaceInfo?.type}
           timer={leftTime}
-          icons={[
-            {
-              element: <UploadIcon fill={theme.colors.white} width="20px" />,
-              onClick: clickUploadButtonWithTracking,
-              label: '업로드',
-            },
-            {
-              element: <ShareIcon fill={theme.colors.white} width="20px" />,
-              onClick: toggleShareModal,
-              label: '공유',
-            },
-            {
-              element: <SettingSvg fill={theme.colors.white} width="20px" />,
-              onClick: clickDashboardWithTracking,
-              label: '설정',
-            },
-          ]}
+          iconItems={iconItems}
         />
       </S.InfoContainer>
 

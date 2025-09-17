@@ -10,7 +10,7 @@ import FloatingIconButton from '../../../components/@common/buttons/floatingIcon
 import HighlightText from '../../../components/@common/highlightText/HighlightText';
 import GuestImageGrid from '../../../components/@common/imageLayout/imageGrid/guestImageGrid/GuestImageGrid';
 import PhotoModal from '../../../components/@common/modal/photoModal/PhotoModal';
-import SpaceHeader from '../../../components/header/spaceHeader/SpaceHeader';
+import GuestSpaceHeader from '../../../components/header/spaceHeader/guestSpaceHeader/GuestSpaceHeader';
 import LoadingLayout from '../../../components/layout/loadingLayout/LoadingLayout';
 import UploadBox from '../../../components/uploadBox/UploadBox';
 import UserBadge from '../../../components/userBadge/UserBadge';
@@ -151,7 +151,7 @@ const ImageUploadPage = () => {
         />
       )}
       <S.ScrollTopAnchor ref={scrollTopTriggerRef} />
-      <SpaceHeader
+      <GuestSpaceHeader
         title={spaceName}
         timer={leftTime}
         accessType={spaceInfo?.type}

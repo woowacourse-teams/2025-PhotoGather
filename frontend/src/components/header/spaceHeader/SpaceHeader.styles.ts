@@ -30,15 +30,6 @@ export const IconContainer = styled.div`
   gap: 8px;
 `;
 
-export const Icon = styled.button`
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  &:active {
-    scale: 0.9;
-  }
-`;
-
 export const TimerContainer = styled.div`
   display: flex;
   gap: 7px;

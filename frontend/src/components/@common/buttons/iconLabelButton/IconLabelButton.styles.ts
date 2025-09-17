@@ -6,6 +6,13 @@ import { hexToRgba } from '../../../../utils/hexToRgba';
 export const IconLabelButtonStyles = {
   default: (theme: Theme) => css`
     color: ${theme.colors.white};
+    padding: 0;
+    &:active{
+      scale: 0.95;
+    }
+    &:disabled {
+      color: ${theme.colors.gray04};
+    }
   `,
   outline: (theme: Theme) => css`
     border: 1px solid ${theme.colors.gray02};
