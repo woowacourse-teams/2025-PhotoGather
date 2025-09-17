@@ -6,6 +6,7 @@ import type {
   requestOptionsType,
 } from '../types/api.type';
 import { HttpError } from '../types/error.type';
+import { refreshAccessToken, setAuthTokens } from '../utils/authCookieManager';
 import { CookieUtils } from '../utils/CookieUtils';
 import { makeSentryRequestContext } from '../utils/sentry/sentryRequestContext';
 import { BASE_URL } from './config';
@@ -50,15 +51,31 @@ const request = async <T>(
 
   const requestBody = createBody(body, bodyContentType);
 
-  try {
-    const response = await fetch(url, {
+  const doFetch = async (overrideToken?: string) => {
+    return await fetch(url, {
       method,
-      headers,
+      headers: {
+        ...headers,
+        ...(overrideToken ? { Authorization: `Bearer ${overrideToken}` } : {}),
+      },
       body: requestBody,
     });
+  };
+
+  try {
+    let response = await doFetch();
+
+    if (response.status === 401) {
+      try {
+        const newTokens = await refreshAccessToken();
+        setAuthTokens(newTokens.accessToken, newTokens.refreshToken);
+        response = await doFetch(newTokens.accessToken);
+      } catch (error) {
+        if (error instanceof Error) throw new HttpError(401, error.message);
+      }
+    }
 
     const contentType = response.headers.get('content-type');
-
     if (
       contentType?.includes('application/zip') ||
       contentType?.includes('image/')
