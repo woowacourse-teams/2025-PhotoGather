@@ -137,9 +137,9 @@ module.exports = (_, argv) => {
       level: 'verbose',
     },
     optimization: {
-      minimize: argv.mode === 'production',
+      minimize: argv.mode === 'production' || argv.mode === 'development',
       minimizer: [
-        ...(argv.mode === 'production'
+        ...(argv.mode === 'production' || argv.mode === 'development'
           ? [
               new ImageMinimizerPlugin({
                 minimizer: {
