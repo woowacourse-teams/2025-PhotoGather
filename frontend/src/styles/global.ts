@@ -8,20 +8,6 @@ export const global = css`
     font-synthesis: none;
   }
   @font-face {
-    font-family: 'SUIT';
-    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_suit@1.0/SUIT-Regular.woff2')
-      format('woff2');
-    font-weight: 400;
-    font-display: swap;
-  }
-  @font-face {
-    font-family: 'SUIT';
-    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_suit@1.0/SUIT-Medium.woff2')
-      format('woff2');
-    font-weight: 500;
-    font-display: swap;
-  }
-  @font-face {
     font-family: 'Roboto';
     src: url(${RobotoRegular}) format('woff2');
     font-display: swap;
