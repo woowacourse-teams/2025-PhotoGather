@@ -240,7 +240,7 @@ const SpaceHomePage = () => {
 
   const canAddPhoto = hasAccess && !isSpaceExpired && !isEarlyTime;
   const canShare = hasAccess && !isSpaceExpired;
-  const canChangeSetting = hasAccess && !isSpaceExpired;
+  const canChangeSetting = hasAccess;
 
   const iconItems = [
     {
