@@ -7,7 +7,7 @@ export const IconLabelButtonStyles = {
   default: (theme: Theme) => css`
     color: ${theme.colors.white};
     padding: 0;
-    &:active{
+    &:active {
       scale: 0.95;
     }
     &:disabled {
@@ -52,7 +52,6 @@ export const IconContainer = styled.button<{
   border-radius: 12px;
 
   ${({ $variant, theme }) => $variant && IconLabelButtonStyles[$variant](theme)}
-    
 `;
 
 export const Icon = styled.div`
