@@ -151,15 +151,15 @@ public class AwsS3Cloud implements ContentsStorage {
     @Override
     public void deleteContent(String contentPath) {
         List<String> deletePaths = getPathWithThumbnails(contentPath);
-        deleteCloudContents(deletePaths);
+        executeBatchDeletion(deletePaths);
     }
 
     @Override
-    public void deleteSelectedContents(List<String> contentPaths) {
+    public void deleteContents(List<String> contentPaths) {
         List<String> deletePaths = contentPaths.stream()
             .flatMap(path -> getPathWithThumbnails(path).stream())
             .toList();
-        deleteCloudContents(deletePaths);
+        executeBatchDeletion(deletePaths);
     }
 
     private List<String> getPathWithThumbnails(String contentPath) {
@@ -179,13 +179,13 @@ public class AwsS3Cloud implements ContentsStorage {
             THUMBNAIL_EXTENSION);
     }
 
-    private void deleteCloudContents(List<String> deletePaths) {
+    private void executeBatchDeletion(List<String> deletePaths) {
         // S3Client#deleteObjects 의 최대 처리 가능 개수 1,000
         for (int i = 0; i < deletePaths.size(); i += MAX_DELETE_COUNT) {
             List<String> batch = deletePaths.subList(i, Math.min(i + MAX_DELETE_COUNT, deletePaths.size()));
-            DeleteObjectsResponse response = deleteContents(batch);
+            DeleteObjectsResponse response = executeObjectsDeletion(batch);
             if (response.hasErrors()) {
-                retryDeleteContents(response);
+                retryObjectsDeletion(response);
             }
         }
         log.atInfo()
@@ -193,7 +193,7 @@ public class AwsS3Cloud implements ContentsStorage {
             .log("S3 삭제 완료");
     }
 
-    private DeleteObjectsResponse deleteContents(List<String> deletePaths) {
+    private DeleteObjectsResponse executeObjectsDeletion(List<String> deletePaths) {
         List<ObjectIdentifier> deleteObjects = deletePaths.stream()
             .map(path -> ObjectIdentifier.builder().key(path).build())
             .toList();
@@ -204,9 +204,9 @@ public class AwsS3Cloud implements ContentsStorage {
         return s3Client.deleteObjects(deleteRequest);
     }
 
-    private void retryDeleteContents(DeleteObjectsResponse response) {
+    private void retryObjectsDeletion(DeleteObjectsResponse response) {
         List<String> retryPaths = extractFailedKeys(response);
-        DeleteObjectsResponse retryResponse = deleteContents(retryPaths);
+        DeleteObjectsResponse retryResponse = executeObjectsDeletion(retryPaths);
         if (retryResponse.hasErrors()) {
             log.atWarn()
                 .addKeyValue("deleteFailPath", extractFailedKeys(retryResponse).toString())
