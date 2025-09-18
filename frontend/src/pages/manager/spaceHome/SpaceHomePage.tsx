@@ -243,6 +243,9 @@ const SpaceHomePage = () => {
     );
   };
 
+  const progressBarWidth =
+    parseInt(theme.layout.width) - parseInt(theme.layout.padding.leftRight) * 8;
+
   const renderBottomNavigatorContent = () => {
     return (
       <S.BottomNavigatorContainer>
@@ -320,6 +323,7 @@ const SpaceHomePage = () => {
     <S.Wrapper>
       {isDownloading && (
         <LoadingLayout
+          progressBarWidth={progressBarWidth}
           loadingContents={loadingContents}
           totalAmount={totalProgress}
           currentAmount={currentProgress}

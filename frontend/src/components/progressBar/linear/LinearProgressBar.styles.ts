@@ -1,53 +1,58 @@
 import styled from '@emotion/styled';
 
 export const Wrapper = styled.div`
-  width: ${({ theme }) =>
-    `${parseInt(theme.layout.width) - parseInt(theme.layout.padding.leftRight) * 8}px`};
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+`;
+
+export const ProgressContainer = styled.div<{ $progressWidth: number }>`
+  width: ${({ $progressWidth }) => `${$progressWidth}px`};
   height: 8px;
   background-color: #f5f5f5;
   border-radius: 50px;
   position: relative;
-  overflow: visible;
+  overflow: hidden;
 `;
 
-export const ProgressElement = styled.div<{ $percentage: number }>`
+export const ProgressElement = styled.div<{ $progressBarScale: number }>`
   position: absolute;
   left: 0;
-  top: 50%;
-  transform: translateY(-50%);
-  height: 80%;
-  width: ${({ $percentage }) => Math.min(Math.max($percentage, 0), 100)}%;
+  top: 0;
+  height: 100%;
+  width: 100%;
   background-color: ${({ theme }) => theme.colors.primary60};
   border-radius: 50px;
-  transition: width 0.3s ease;
+  transition: transform 0.3s ease;
+  transform-origin: left;
+  transform: scaleX(${({ $progressBarScale }) => $progressBarScale});
   z-index: 1;
+
+  will-change: transform;
 `;
 
 type GlowVariant = 'start' | 'end' | 'progress';
 
 export const GlowElement = styled.div<{
   $variant: GlowVariant;
-  $percentage?: number;
-}>`
+  $glowElementPosition: number;
+}>` 
   position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  width: ${16}px;
-  height: ${16}px;
+  left: 0;
+  width: 16px;
+  height: 16px;
   border-radius: 50%;
   background: ${({ theme }) => theme.colors.primary10};
-  box-shadow:
-    0 0 7.56px 0 #f0ebfc,
-    0 0 2.16px 0 #f0ebfc,
-    0 0 1.08px 0 #f0ebfc;
+  filter: drop-shadow(0 0 7.56px #f0ebfc)
+        drop-shadow(0 0 2.16px #f0ebfc)
+        drop-shadow(0 0 1.08px #f0ebfc);
   pointer-events: none;
   z-index: 2;
-  transition: left 0.3s ease;
+  transition: transform 0.3s ease;
+  transform-origin: left;
+  transform: translateX(${({ $glowElementPosition }) => $glowElementPosition}px);
 
-  left: ${({ $variant, $percentage }) => {
-    if ($variant === 'start') return '0';
-    if ($variant === 'end') return `calc(100% - ${16}px)`;
-    const p = Math.min(Math.max($percentage ?? 0, 0), 100);
-    return `clamp(0px, calc(${p}% - ${16 / 2}px), calc(100% - ${16}px))`;
-  }};
+  will-change: transform;
 `;

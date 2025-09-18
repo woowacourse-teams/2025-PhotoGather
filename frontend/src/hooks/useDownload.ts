@@ -158,6 +158,8 @@ const useDownload = ({
   };
 
   const tryAllDownload = async () => {
+    const start = performance.now();
+
     await tryFetch({
       task: async () => {
         const response = await photoService.downloadAll(spaceCode);
@@ -180,6 +182,11 @@ const useDownload = ({
       },
       loadingStateKey: 'allDownload',
       onFinally: () => {
+        const end = performance.now(); // 최종 완료 시점
+        console.log('시작 시각', start);
+        console.log('최종 완료 시각', end);
+        console.log(`총 소요 시간: ${(end - start) / 1000}초`);
+
         setTotalProgress(0);
         setCurrentProgress(0);
       },
