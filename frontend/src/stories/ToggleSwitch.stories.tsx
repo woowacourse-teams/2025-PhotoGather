@@ -1,14 +1,14 @@
 import type { Meta, StoryObj } from '@storybook/react-webpack5';
 import { useState } from 'react';
-import Toggle from '../components/@common/toggle/Toggle';
+import ToggleSwitch from '../components/@common/toggle/ToggleSwitch';
 
-const meta: Meta<typeof Toggle> = {
-  title: 'Components/Toggle',
-  component: Toggle,
+const meta: Meta<typeof ToggleSwitch> = {
+  title: 'Components/ToggleSwitch',
+  component: ToggleSwitch,
   render: () => {
     const [isToggle, setIsToggle] = useState(false);
     return (
-      <Toggle
+      <ToggleSwitch
         isToggle={isToggle}
         onToggleClick={() => setIsToggle((prev) => !prev)}
       />
