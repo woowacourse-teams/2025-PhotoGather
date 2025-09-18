@@ -17,8 +17,8 @@ const ToggleSwitch = ({
   onToggleClick: handleToggleClick,
 }: ToggleSwitchProps) => {
   return (
-    <S.Wrapper $size={size} onClick={handleToggleClick}>
-      {isToggle ? <p>토글됨</p> : <p>토글안됨</p>}
+    <S.Wrapper $size={size} $isToggle={isToggle} onClick={handleToggleClick}>
+      <S.Thumb $size={size} $isToggle={isToggle} />
     </S.Wrapper>
   );
 };
