@@ -5,10 +5,19 @@ import ToggleSwitch from '../components/@common/toggle/ToggleSwitch';
 const meta: Meta<typeof ToggleSwitch> = {
   title: 'Components/ToggleSwitch',
   component: ToggleSwitch,
-  render: () => {
+  argTypes: {
+    size: {
+      control: { type: 'select' },
+      options: ['small', 'medium', 'large'],
+    },
+    isToggle: { control: false },
+    onToggleClick: { control: false },
+  },
+  render: (args) => {
     const [isToggle, setIsToggle] = useState(false);
     return (
       <ToggleSwitch
+        {...args}
         isToggle={isToggle}
         onToggleClick={() => setIsToggle((prev) => !prev)}
       />
