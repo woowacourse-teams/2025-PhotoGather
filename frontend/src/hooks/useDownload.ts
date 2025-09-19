@@ -40,8 +40,7 @@ const useDownload = ({
 
   const downloadAsZip = async (downloadInfos: DownloadInfo[]) => {
     if (!navigator.serviceWorker.controller) {
-      console.log('service worker not found');
-      return;
+      throw new Error('service worker not found');
     }
     navigator.serviceWorker.controller.postMessage({
       type: 'START_ZIP',
@@ -49,14 +48,10 @@ const useDownload = ({
       zipName: `${spaceName}.zip`,
     });
 
-    navigator.serviceWorker.addEventListener('message', (event) => {
-      if (event.data.type === 'READY') {
-        const iframe = document.createElement('iframe');
-        iframe.style.display = 'none';
-        iframe.src = '/streaming-download';
-        document.body.appendChild(iframe);
-      }
-    });
+    const iframe = document.createElement('iframe');
+    iframe.style.display = 'none';
+    iframe.src = '/streaming-download';
+    document.body.appendChild(iframe);
   };
 
   const trySelectedDownload = async (photoIds: number[]) => {

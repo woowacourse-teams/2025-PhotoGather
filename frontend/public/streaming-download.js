@@ -31,11 +31,11 @@ const handleZipStream = async () => {
   const BATCH_SIZE = 20;
   const tempFiles = [];
   console.log('작동', cachedDownloadInfos);
+
   for (let i = 0; i < cachedDownloadInfos.length; i += BATCH_SIZE) {
     console.log(`${i}번째 루프`);
-    const batchInfos = cachedDownloadInfos.slice(i, i + BATCH_SIZE);
 
-    // 진행률 포함
+    const batchInfos = cachedDownloadInfos.slice(i, i + BATCH_SIZE);
     const files = await Promise.all(
       batchInfos.map(async (f) => {
         const response = await fetch(f.url);
@@ -51,12 +51,15 @@ const handleZipStream = async () => {
     );
     tempFiles.push(...files);
   }
+
   const zipResponse = downloadZip(tempFiles);
+
+  const encodedZipName = encodeURIComponent(cachedZipName);
 
   return new Response(zipResponse.body, {
     headers: {
       'Content-Type': 'application/zip',
-      'Content-Disposition': `attachment; filename="${cachedZipName}"`,
+      'Content-Disposition': `attachment; filename*=UTF-8''${encodedZipName}`,
     },
   });
 };
