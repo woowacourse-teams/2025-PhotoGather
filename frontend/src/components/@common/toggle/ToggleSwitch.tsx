@@ -27,7 +27,13 @@ const ToggleSwitch = ({
   const thumbIcon = isToggle ? thumbIconInfo?.onIcon : thumbIconInfo?.offIcon;
 
   return (
-    <S.Wrapper $size={size} $isToggle={isToggle} onClick={handleToggleClick}>
+    <S.Wrapper
+      $size={size}
+      $isToggle={isToggle}
+      onClick={handleToggleClick}
+      aria-pressed={isToggle}
+      role="switch"
+    >
       <S.Thumb $size={size} $isToggle={isToggle}>
         <S.Icon>{thumbIcon}</S.Icon>
       </S.Thumb>
