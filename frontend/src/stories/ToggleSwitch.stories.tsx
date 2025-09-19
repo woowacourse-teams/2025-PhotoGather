@@ -8,6 +8,9 @@ import { theme } from '../styles/theme';
 const meta: Meta<typeof ToggleSwitch> = {
   title: 'Components/ToggleSwitch',
   component: ToggleSwitch,
+  parameters: {
+    layout: 'centered',
+  },
   argTypes: {
     size: {
       control: { type: 'select' },
