@@ -9,3 +9,15 @@ root.render(
   <App />,
   // </React.StrictMode>,
 );
+
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker
+    .register('/streaming-download.js', {
+      scope: '/',
+      type: 'module',
+    })
+    .then(() => {
+      console.log('Download worker registered');
+    })
+    .catch(console.error);
+}
