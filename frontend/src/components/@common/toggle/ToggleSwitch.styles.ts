@@ -48,4 +48,11 @@ export const Thumb = styled.div<{
   );
   /* box-shadow: 1px 1px 2px 0 rgba(0, 0, 0, 0.25); */
   transition: transform 0.3s;
+  padding: 2px;
+`;
+
+export const Icon = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
