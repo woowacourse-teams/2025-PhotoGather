@@ -1,5 +1,6 @@
 import * as Sentry from '@sentry/react';
 import { HTTP_STATUS_MESSAGES } from '../constants/errors';
+import { AUTH_COOKIES } from '../constants/keys';
 import type {
   ApiResponse,
   BodyContentType,
@@ -220,5 +221,5 @@ const createHttpClient = ({
 
 export const http = createHttpClient({});
 export const authHttp = createHttpClient({
-  getToken: () => CookieUtils.get('access') ?? '',
+  getToken: () => CookieUtils.get(AUTH_COOKIES.ACCESS) ?? '',
 });

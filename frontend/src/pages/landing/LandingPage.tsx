@@ -19,6 +19,7 @@ import { Carousel } from '../../components/carousel/Carousel';
 import Footer from '../../components/footer/Footer';
 import KakaoLoginButton from '../../components/kakaoLoginButton/KakaoLoginButton';
 import LeftTimeInformationBox from '../../components/leftTimeInformationBox/LeftTimeInformationBox';
+import { AUTH_COOKIES } from '../../constants/keys';
 import useAuthActions from '../../hooks/@common/useAuthActions';
 import useLandingScroll from '../../hooks/@common/useLandingScroll';
 import useLeftTimer from '../../hooks/@common/useLeftTimer';
@@ -75,7 +76,7 @@ const LandingPage = () => {
 
           <S.LoginSection {...useLandingScroll({})}>
             <S.TextContainer>{`주인공은 당신이니까,\n사진은 우리가 책임질게요`}</S.TextContainer>
-            {CookieUtils.has('access') ? (
+            {CookieUtils.has(AUTH_COOKIES.ACCESS) ? (
               <Button
                 text="로그아웃"
                 variant="secondary"

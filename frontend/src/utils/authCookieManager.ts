@@ -1,4 +1,5 @@
 import { BASE_URL } from '../apis/config';
+import { AUTH_COOKIES } from '../constants/keys';
 import { ROUTES } from '../constants/routes';
 import type { AuthTokenResponse } from '../types/auth.type';
 import { CookieUtils } from './CookieUtils';
@@ -6,20 +7,20 @@ import { CookieUtils } from './CookieUtils';
 let refreshPromise: Promise<AuthTokenResponse> | null = null;
 
 export const setAuthTokens = (accessToken: string, refreshToken: string) => {
-  CookieUtils.set('access', accessToken, { path: ROUTES.MAIN });
-  CookieUtils.set('refresh', refreshToken, { path: ROUTES.MAIN });
+  CookieUtils.set(AUTH_COOKIES.ACCESS, accessToken, { path: ROUTES.MAIN });
+  CookieUtils.set(AUTH_COOKIES.REFRESH, refreshToken, { path: ROUTES.MAIN });
 };
 
 export const clearAuthTokens = () => {
-  CookieUtils.delete('access', { path: ROUTES.MAIN });
-  CookieUtils.delete('refresh', { path: ROUTES.MAIN });
+  CookieUtils.delete(AUTH_COOKIES.ACCESS, { path: ROUTES.MAIN });
+  CookieUtils.delete(AUTH_COOKIES.REFRESH, { path: ROUTES.MAIN });
 };
 
 export const refreshAccessToken = async (): Promise<AuthTokenResponse> => {
   if (refreshPromise) return refreshPromise;
 
-  const accessToken = CookieUtils.get('access');
-  const refreshToken = CookieUtils.get('refresh');
+  const accessToken = CookieUtils.get(AUTH_COOKIES.ACCESS);
+  const refreshToken = CookieUtils.get(AUTH_COOKIES.REFRESH);
   if (!accessToken || !refreshToken) {
     clearAuthTokens();
     throw new Error('로그인 후 이용해주세요.');
