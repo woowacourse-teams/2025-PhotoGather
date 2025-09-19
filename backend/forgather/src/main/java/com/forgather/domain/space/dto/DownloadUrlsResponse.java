@@ -14,7 +14,7 @@ public record DownloadUrlsResponse(
         String originalName,
 
         @Schema(description = "다운로드 URL",
-            example = "https://bucket.s3.ap-northeast-2.amazonaws.com/test/contents/0987654321/UUID1.jpg")
+            example = "photogather/contents/0987654321/UUID1.jpg")
         String url
     ) {
         public static DownloadUrl from(String originalName, String url) {
