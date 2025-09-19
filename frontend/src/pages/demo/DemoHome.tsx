@@ -4,7 +4,7 @@ import { RocketImg as rocketImage } from '../../@assets/images';
 import Button from '../../components/@common/buttons/button/Button';
 import KakaoLoginButton from '../../components/kakaoLoginButton/KakaoLoginButton';
 import { ROUTES } from '../../constants/routes';
-import useAuth from '../../hooks/@common/useAuth';
+import useAuthActions from '../../hooks/@common/useAuthActions';
 import useKakaoAuth from '../../hooks/domain/useKakaoAuth';
 import { CookieUtils } from '../../utils/CookieUtils';
 import * as S from './DemoHome.styles';
@@ -23,7 +23,7 @@ const DemoHome = () => {
     }
   };
   const { handleKakaoLogin } = useKakaoAuth();
-  const { handleLogout } = useAuth();
+  const { handleLogout } = useAuthActions();
 
   return (
     <S.Wrapper>

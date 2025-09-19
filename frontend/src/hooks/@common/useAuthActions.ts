@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import { ROUTES } from '../../constants/routes';
 import { clearAuthTokens } from '../../utils/authCookieManager';
 
-const useAuth = () => {
+const useAuthActions = () => {
   const navigate = useNavigate();
 
   const handleLogout = async () => {
@@ -16,4 +16,4 @@ const useAuth = () => {
   return { handleLogout };
 };
 
-export default useAuth;
+export default useAuthActions;

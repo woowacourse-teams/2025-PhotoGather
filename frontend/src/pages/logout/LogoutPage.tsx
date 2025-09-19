@@ -6,7 +6,7 @@ import ConfirmModal from '../../components/@common/modal/confirmModal/ConfirmMod
 import Profile from '../../components/profile/Profile';
 import { ROUTES } from '../../constants/routes';
 import { useOverlay } from '../../contexts/OverlayProvider';
-import useAuth from '../../hooks/@common/useAuth';
+import useAuthActions from '../../hooks/@common/useAuthActions';
 import useAuthConditionTasks from '../../hooks/@common/useAuthConditionTasks';
 import type { MyInfo } from '../../types/api.type';
 import { track } from '../../utils/googleAnalytics/track';
@@ -18,7 +18,7 @@ const LogoutPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [myInfo, setMyInfo] = useState<MyInfo | null>(null);
   useAuthConditionTasks({ taskWhenNoAuth: () => navigate(ROUTES.MAIN) });
-  const { handleLogout: logout } = useAuth();
+  const { handleLogout: logout } = useAuthActions();
 
   useEffect(() => {
     const fetchAuthStatus = async () => {
