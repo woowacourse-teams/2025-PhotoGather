@@ -118,34 +118,34 @@ module.exports = (_, argv) => {
       open: true,
       historyApiFallback: true,
     },
-    // optimization: {
-    //   minimize: true,
-    //   minimizer: [
-    //     new ImageMinimizerPlugin({
-    //       minimizer: {
-    //         implementation: ImageMinimizerPlugin.sharpMinify,
-    //         options: {
-    //           encodeOptions: {
-    //             png: { quality: 80, palette: true },
-    //             jpg: { quality: 75, progressive: true },
-    //             jpeg: { quality: 75, progressive: true },
-    //           },
-    //         },
-    //       },
-    //       generator: [
-    //         {
-    //           preset: 'webp',
-    //           implementation: ImageMinimizerPlugin.sharpGenerate,
-    //           options: {
-    //             encodeOptions: {
-    //               webp: { quality: 80, effort: 6, lossless: false },
-    //             },
-    //           },
-    //           filename: 'static/images/[name][ext]',
-    //         },
-    //       ],
-    //     }),
-    //   ],
-    // },
+    optimization: {
+      minimize: true,
+      minimizer: [
+        new ImageMinimizerPlugin({
+          minimizer: {
+            implementation: ImageMinimizerPlugin.sharpMinify,
+            options: {
+              encodeOptions: {
+                png: { quality: 80, palette: true },
+                jpg: { quality: 75, progressive: true },
+                jpeg: { quality: 75, progressive: true },
+              },
+            },
+          },
+          generator: [
+            {
+              preset: 'webp',
+              implementation: ImageMinimizerPlugin.sharpGenerate,
+              options: {
+                encodeOptions: {
+                  webp: { quality: 80, effort: 6, lossless: false },
+                },
+              },
+              filename: 'static/images/[name][ext]',
+            },
+          ],
+        }),
+      ],
+    },
   };
 };
