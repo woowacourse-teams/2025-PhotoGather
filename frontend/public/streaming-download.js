@@ -1,8 +1,5 @@
 import { downloadZip } from 'https://cdn.jsdelivr.net/npm/client-zip@2.5.0/index.js';
 
-let cachedDownloadInfos = [];
-let cachedZipName = 'cached.zip';
-
 self.addEventListener('install', (event) => {
   event.waitUntil(self.skipWaiting());
 });
@@ -11,31 +8,21 @@ self.addEventListener('activate', (event) => {
   event.waitUntil(clients.claim());
 });
 
-self.addEventListener('message', (event) => {
-  if (event.data.type === 'START_ZIP') {
-    cachedDownloadInfos = event.data.downloadInfos;
-    cachedZipName = event.data.zipName;
-    event.source.postMessage({ type: 'READY' });
-  }
-});
-
 self.addEventListener('fetch', (event) => {
   const url = new URL(event.request.url);
   if (url.pathname === '/streaming-download') {
-    console.log('fetch작동');
-    event.respondWith(handleZipStream());
+    event.respondWith(handleZipStream(event.request));
   }
 });
 
-const handleZipStream = async () => {
+const handleZipStream = async (request) => {
+  const { downloadInfos, zipName } = await request.json();
+
   const BATCH_SIZE = 20;
   const tempFiles = [];
-  console.log('작동', cachedDownloadInfos);
 
-  for (let i = 0; i < cachedDownloadInfos.length; i += BATCH_SIZE) {
-    console.log(`${i}번째 루프`);
-
-    const batchInfos = cachedDownloadInfos.slice(i, i + BATCH_SIZE);
+  for (let i = 0; i < downloadInfos.length; i += BATCH_SIZE) {
+    const batchInfos = downloadInfos.slice(i, i + BATCH_SIZE);
     const files = await Promise.all(
       batchInfos.map(async (f) => {
         const response = await fetch(f.url);
@@ -54,7 +41,7 @@ const handleZipStream = async () => {
 
   const zipResponse = downloadZip(tempFiles);
 
-  const encodedZipName = encodeURIComponent(cachedZipName);
+  const encodedZipName = encodeURIComponent(zipName);
 
   return new Response(zipResponse.body, {
     headers: {

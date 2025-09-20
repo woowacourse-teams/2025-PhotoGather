@@ -39,19 +39,37 @@ const useDownload = ({
   };
 
   const downloadAsZip = async (downloadInfos: DownloadInfo[]) => {
-    if (!navigator.serviceWorker.controller) {
-      throw new Error('service worker not found');
-    }
-    navigator.serviceWorker.controller.postMessage({
-      type: 'START_ZIP',
-      downloadInfos: downloadInfos,
-      zipName: `${spaceName}.zip`,
-    });
+    try {
+      const response = await fetch('/streaming-download', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          downloadInfos: downloadInfos,
+          zipName: `${spaceName}.zip`,
+        }),
+      });
 
-    const iframe = document.createElement('iframe');
-    iframe.style.display = 'none';
-    iframe.src = '/streaming-download';
-    document.body.appendChild(iframe);
+      if (!response.ok) {
+        throw new Error('다운로드 요청 실패');
+      }
+
+      const blob = await response.blob();
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `${spaceName}.zip`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error('다운로드 오류:', error);
+      if (error instanceof Error) {
+        alert(`다운로드 중 오류가 발생했습니다: ${error.message}`);
+      }
+    }
   };
 
   const trySelectedDownload = async (photoIds: number[]) => {
@@ -134,7 +152,14 @@ const useDownload = ({
         const { downloadUrls } = data;
 
         setTotalProgress(downloadUrls.length);
-        await downloadAsZip(downloadUrls);
+
+        const prefix = 'photogather/';
+        const parsedDownloadUrls = downloadUrls.map((info) => ({
+          url: process.env.IMAGE_BASE_URL + info.url.slice(prefix.length),
+          originalName: info.originalName,
+        }));
+        console.log(parsedDownloadUrls);
+        await downloadAsZip(parsedDownloadUrls);
 
         onDownloadSuccess?.();
       },
