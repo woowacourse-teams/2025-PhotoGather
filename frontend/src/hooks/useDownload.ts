@@ -2,6 +2,8 @@ import { downloadZip } from 'client-zip';
 import { useState } from 'react';
 import { photoService } from '../apis/services/photo.service';
 import type { DownloadInfo } from '../types/photo.type';
+import { buildOriginalImageUrl } from '../utils/buildImageUrl';
+import { parseImagePath } from '../utils/parsedImagePath';
 import { checkSelectedPhotoExist } from '../validators/photo.validator';
 import useTaskHandler from './@common/useTaskHandler';
 
@@ -114,7 +116,12 @@ const useDownload = ({
         }
 
         setTotalProgress(downloadUrls.length);
-        await downloadAsZip(downloadUrls);
+        const parsedUrls = downloadUrls.map((info) => ({
+          ...info,
+          url: buildOriginalImageUrl(parseImagePath(info.url)),
+        }));
+        console.log(parsedUrls);
+        await downloadAsZip(parsedUrls);
       },
       errorActions: ['toast'],
       context: {
@@ -142,7 +149,7 @@ const useDownload = ({
         const { downloadUrls } = response.data;
 
         await downloadAsImage(
-          downloadUrls[0].url,
+          buildOriginalImageUrl(parseImagePath(downloadUrls[0].url)),
           downloadUrls[0].originalName,
         );
       },
@@ -167,7 +174,11 @@ const useDownload = ({
         const { downloadUrls } = data;
 
         setTotalProgress(downloadUrls.length);
-        await downloadAsZip(downloadUrls);
+        const parsedUrls = downloadUrls.map((info) => ({
+          ...info,
+          url: buildOriginalImageUrl(parseImagePath(info.url)),
+        }));
+        await downloadAsZip(parsedUrls);
 
         onDownloadSuccess?.();
       },
