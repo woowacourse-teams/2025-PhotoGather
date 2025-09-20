@@ -72,7 +72,10 @@ const PhotoModal = (props: PhotoModalProps) => {
         if (!response || !response.data) return;
         const data = response.data;
         setPhoto(data);
-        setDisplayPath(buildOriginalImageUrl(data.path));
+        const filePath = data.path;
+        const arr = filePath.split('contents/');
+        const path = arr[arr.length - 1];
+        setDisplayPath(buildOriginalImageUrl(path));
       },
       errorActions: ['toast'],
       context: {
