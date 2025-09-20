@@ -14,7 +14,7 @@ interface IconItem {
   disabled: boolean;
 }
 
-interface SpaceManagerSpaceHeaderProps {
+interface ManagerHeaderProps {
   /** 헤더의 제목 */
   title: string;
   /** 헤더의 공개범위 */
@@ -25,12 +25,12 @@ interface SpaceManagerSpaceHeaderProps {
   iconItems: IconItem[];
 }
 
-const SpaceManagerSpaceHeader = ({
+const ManagerHeader = ({
   title,
   accessType = 'PRIVATE',
   timer,
   iconItems,
-}: SpaceManagerSpaceHeaderProps) => {
+}: ManagerHeaderProps) => {
   return (
     <SpaceHeader>
       <SpaceHeader.TitleSection>
@@ -57,4 +57,4 @@ const SpaceManagerSpaceHeader = ({
   );
 };
 
-export default SpaceManagerSpaceHeader;
+export default ManagerHeader;

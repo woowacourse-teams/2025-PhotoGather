@@ -18,7 +18,7 @@ import IconLabelButton from '../../../components/@common/buttons/iconLabelButton
 import SpaceManagerImageGrid from '../../../components/@common/imageLayout/imageGrid/spaceManagerImageGrid/SpaceManagerImageGrid';
 import * as C from '../../../components/@common/modal/Modal.common.styles';
 import PhotoModal from '../../../components/@common/modal/photoModal/PhotoModal';
-import SpaceManagerSpaceHeader from '../../../components/header/spaceHeader/spaceManagerSpaceHeader/SpaceManagerSpaceHeader';
+import ManagerHeader from '../../../components/header/spaceHeader/managerSpaceHeader/ManagerHeader';
 import LoadingLayout from '../../../components/layout/loadingLayout/LoadingLayout';
 import PhotoSelectionToolBar from '../../../components/photoSelectionToolBar/PhotoSelectionToolBar';
 import SpaceHomeTopActionBar from '../../../components/spaceHomeTopActionBar/SpaceHomeTopActionBar';
@@ -348,7 +348,7 @@ const SpaceHomePage = () => {
       )}
 
       <S.InfoContainer ref={scrollTopTriggerRef}>
-        <SpaceManagerSpaceHeader
+        <ManagerHeader
           title={spaceName}
           accessType={spaceInfo?.type}
           timer={leftTime}

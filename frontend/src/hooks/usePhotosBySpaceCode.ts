@@ -45,8 +45,6 @@ const usePhotosBySpaceCode = ({
     });
   };
 
-  console.log(photosList.length);
-
   const updatePhotos = (updatePhotos: Photo[]) => {
     setPhotosList((prev) => {
       if (!prev) return [];
