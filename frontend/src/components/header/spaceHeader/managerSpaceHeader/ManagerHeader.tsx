@@ -4,7 +4,7 @@ import IconLabelButton from '../../../@common/buttons/iconLabelButton/IconLabelB
 import SpaceHeader from '../SpaceHeader';
 
 interface IconItem {
-  /** 아이콘 요소    */
+  /** 아이콘 요소 */
   element: React.ReactNode;
   /** 아이콘 클릭 이벤트 */
   onClick: () => void;
