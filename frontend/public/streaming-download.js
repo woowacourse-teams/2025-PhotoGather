@@ -10,6 +10,10 @@ self.addEventListener('activate', (event) => {
 
 self.addEventListener('fetch', (event) => {
   const url = new URL(event.request.url);
+  if (event.request.mode === 'navigate') {
+    event.respondWith(fetch(event.request));
+    return;
+  }
   if (url.pathname === '/streaming-download') {
     event.respondWith(handleZipStream(event.request));
     return;
@@ -48,17 +52,21 @@ async function* downloadFilesGenerator(downloadInfos) {
 }
 
 const handleZipStream = async (request) => {
-  const { downloadInfos, zipName } = await request.json();
+  try {
+    const { downloadInfos, zipName } = await request.json();
 
-  const files = downloadFilesGenerator(downloadInfos);
+    const files = downloadFilesGenerator(downloadInfos);
 
-  const zipResponse = downloadZip(files);
-  const encodedZipName = encodeURIComponent(zipName);
+    const zipResponse = downloadZip(files);
+    const encodedZipName = encodeURIComponent(zipName);
 
-  return new Response(zipResponse.body, {
-    headers: {
-      'Content-Type': 'application/zip',
-      'Content-Disposition': `attachment; filename*=UTF-8''${encodedZipName}`,
-    },
-  });
+    return new Response(zipResponse.body, {
+      headers: {
+        'Content-Type': 'application/zip',
+        'Content-Disposition': `attachment; filename*=UTF-8''${encodedZipName}`,
+      },
+    });
+  } catch (error) {
+    throw new Error(`개별 fetch 중 다운로드 실패, ${error}`);
+  }
 };
