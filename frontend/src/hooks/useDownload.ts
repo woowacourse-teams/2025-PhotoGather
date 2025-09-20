@@ -154,7 +154,13 @@ const useDownload = ({
 
   const downloadImage = async (url: string, fileName: string) => {
     const blob = await fetchSingleImage(url, fileName);
-    await saveByDownloadLink(new Response(blob));
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = fileName;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(URL.createObjectURL(blob));
   };
 
   // TODO : 이미지 url 통일 후 제거 필요
