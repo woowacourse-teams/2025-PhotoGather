@@ -5,7 +5,6 @@ import static com.forgather.domain.space.dto.DownloadUrlsResponse.DownloadUrl;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -127,8 +126,7 @@ public class PhotoService {
         }
         Photo photo = photoRepository.getById(photoId);
         photo.validateSpace(space);
-        URL downloadUrl = contentsStorage.issueDownloadUrl(photo.getPath());
-        return new DownloadUrlsResponse(List.of(DownloadUrl.from(photo.getOriginalName(), downloadUrl.toString())));
+        return new DownloadUrlsResponse(List.of(DownloadUrl.from(photo.getOriginalName(), photo.getPath())));
     }
 
     public DownloadUrlsResponse getSelectedDownloadUrls(String spaceCode, DownloadPhotosRequest request, Host host) {
@@ -174,8 +172,7 @@ public class PhotoService {
 
         for (Photo photo : photos) {
             String uniqueFileName = createUniqueFileName(photo, originalNameCounts);
-            String downloadUrl = contentsStorage.issueDownloadUrl(photo.getPath()).toString();
-            downloadUrls.put(uniqueFileName, downloadUrl);
+            downloadUrls.put(uniqueFileName, photo.getPath());
         }
 
         return createDownloadUrlsResponse(downloadUrls);
