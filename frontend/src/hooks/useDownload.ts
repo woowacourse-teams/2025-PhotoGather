@@ -1,3 +1,4 @@
+import { downloadZip } from 'client-zip';
 import { useEffect, useState } from 'react';
 import { photoService } from '../apis/services/photo.service';
 import type { DownloadInfo } from '../types/photo.type';
@@ -34,25 +35,7 @@ const useDownload = ({
     };
   }, []);
 
-  const downloadAsImage = async (url: string, fileName: string) => {
-    const response = await fetch(url);
-    const blob = await response.blob();
-
-    const objectUrl = URL.createObjectURL(blob);
-
-    const link = document.createElement('a');
-    link.href = objectUrl;
-    const safeFileName = fileName.replace(/[/\\:*?"<>|]/g, '_');
-    link.download = `${safeFileName}`;
-
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-
-    URL.revokeObjectURL(objectUrl);
-  };
-
-  const downloadByFilePicker = async (body: ReadableStream<Uint8Array>) => {
+  const saveByFilePicker = async (body: ReadableStream<Uint8Array>) => {
     try {
       const handle = await (window as any).showSaveFilePicker({
         suggestedName: `${spaceName}.zip`,
@@ -69,12 +52,13 @@ const useDownload = ({
           text: '다운로드가 취소되었습니다.',
           type: 'info',
         });
+        return { canceled: true };
       }
       throw error;
     }
   };
 
-  const downloadByDownloadLink = async (response: Response) => {
+  const saveByDownloadLink = async (response: Response) => {
     const url = URL.createObjectURL(await response.blob());
     const link = document.createElement('a');
     link.href = url;
@@ -85,7 +69,60 @@ const useDownload = ({
     URL.revokeObjectURL(url);
   };
 
-  const downloadAsZip = async (downloadInfos: DownloadInfo[]) => {
+  const fetchSingleImage = async (url: string, originalName: string) => {
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error(`s3에서 이미지 fetch 실패: ${originalName}`);
+    }
+    const blob = await response.blob();
+    return blob;
+  };
+
+  const downloadAsBlobFile = async (downloadInfos: DownloadInfo[]) => {
+    const CHUNK_SIZE = 10;
+    const files: {
+      name: string;
+      input: Blob;
+      lastModified: Date;
+    }[] = [];
+
+    for (let i = 0; i < downloadInfos.length; i += CHUNK_SIZE) {
+      const batch = downloadInfos.slice(i, i + CHUNK_SIZE);
+
+      const results = await Promise.allSettled(
+        batch.map(async (downloadInfo) => {
+          const blob = await fetchSingleImage(
+            downloadInfo.url,
+            downloadInfo.originalName,
+          );
+          setCurrentProgress((prev) => prev + 1);
+
+          return {
+            name: downloadInfo.originalName,
+            input: blob,
+            lastModified: new Date(),
+          };
+        }),
+      );
+
+      if (results.some((r) => r.status === 'rejected')) {
+        throw new Error('다운로드가 실패했습니다. 다시 시도해 주세요.');
+      }
+      results.map((result) => {
+        if (result.status === 'fulfilled') {
+          files.push({
+            name: result.value.name,
+            input: result.value.input,
+            lastModified: result.value.lastModified,
+          });
+        }
+      });
+    }
+    const zipBlob = await downloadZip(files).blob();
+    await saveByDownloadLink(new Response(zipBlob));
+  };
+
+  const downloadAsStreaming = async (downloadInfos: DownloadInfo[]) => {
     const response = await fetch('/streaming-download', {
       method: 'POST',
       headers: {
@@ -100,12 +137,33 @@ const useDownload = ({
     if (!response.ok || !response.body) {
       throw new Error('service worker 다운로드 요청 실패');
     }
-
     if ('showSaveFilePicker' in window) {
-      await downloadByFilePicker(response.body);
+      await saveByFilePicker(response.body);
       return;
     }
-    await downloadByDownloadLink(response);
+    await saveByDownloadLink(response);
+  };
+
+  const downloadMultipleImages = async (downloadInfos: DownloadInfo[]) => {
+    if ('serviceWorker' in navigator) {
+      await downloadAsStreaming(downloadInfos);
+      return;
+    }
+    await downloadAsBlobFile(downloadInfos);
+  };
+
+  const downloadImage = async (url: string, fileName: string) => {
+    const blob = await fetchSingleImage(url, fileName);
+    await saveByDownloadLink(new Response(blob));
+  };
+
+  // TODO : 이미지 url 통일 후 제거 필요
+  const tempParsedDownloadUrls = (downloadUrls: DownloadInfo[]) => {
+    const prefix = 'photogather/';
+    return downloadUrls.map((downloadInfo) => ({
+      url: process.env.IMAGE_BASE_URL + downloadInfo.url.slice(prefix.length),
+      originalName: downloadInfo.originalName,
+    }));
   };
 
   const trySelectedDownload = async (photoIds: number[]) => {
@@ -123,17 +181,18 @@ const useDownload = ({
         if (!response.data) return;
         const data = response.data;
         const { downloadUrls } = data;
+        const parsedDownloadUrls = tempParsedDownloadUrls(downloadUrls);
 
         if (downloadUrls.length === 1) {
-          await downloadAsImage(
-            downloadUrls[0].url,
-            downloadUrls[0].originalName,
+          await downloadImage(
+            parsedDownloadUrls[0].url,
+            parsedDownloadUrls[0].originalName,
           );
           return;
         }
 
-        setTotalProgress(downloadUrls.length);
-        await downloadAsZip(downloadUrls);
+        setTotalProgress(parsedDownloadUrls.length);
+        await downloadMultipleImages(parsedDownloadUrls);
       },
       errorActions: ['toast'],
       context: {
@@ -159,10 +218,11 @@ const useDownload = ({
         );
         if (!response.data) return;
         const { downloadUrls } = response.data;
+        const parsedDownloadUrls = tempParsedDownloadUrls(downloadUrls);
 
-        await downloadAsImage(
-          downloadUrls[0].url,
-          downloadUrls[0].originalName,
+        await downloadImage(
+          parsedDownloadUrls[0].url,
+          parsedDownloadUrls[0].originalName,
         );
       },
       errorActions: ['toast'],
@@ -189,16 +249,12 @@ const useDownload = ({
 
         setTotalProgress(downloadUrls.length);
 
-        const prefix = 'photogather/';
-        const parsedDownloadUrls = downloadUrls.map((info) => ({
-          url: process.env.IMAGE_BASE_URL + info.url.slice(prefix.length),
-          originalName: info.originalName,
-        }));
-        await downloadAsZip(parsedDownloadUrls);
+        const parsedDownloadUrls = tempParsedDownloadUrls(downloadUrls);
+        await downloadMultipleImages(parsedDownloadUrls);
 
         onDownloadSuccess?.();
       },
-      errorActions: ['toast', 'console'],
+      errorActions: ['toast'],
       context: {
         toast: {
           text: '다운로드에 실패했습니다. 다시 시도해 주세요.',
@@ -211,7 +267,6 @@ const useDownload = ({
         console.log('시작 시각', start);
         console.log('최종 완료 시각', end);
         console.log(`총 소요 시간: ${(end - start) / 1000}초`);
-
         setTotalProgress(0);
         setCurrentProgress(0);
       },
