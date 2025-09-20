@@ -12,7 +12,8 @@ export const authService = {
   getAuth: (requestBody: KakaoTokenResponse) =>
     http.post<AuthTokenResponse>('/auth/login/kakao/confirm', requestBody),
 
-  refresh: () => http.post('/auth/refresh'),
+  refresh: (refreshToken: string) =>
+    http.post<AuthTokenResponse>('/auth/refresh', { refreshToken }),
 
   status: () => authHttp.get<MyInfo>('/auth/me'),
 
