@@ -13,7 +13,7 @@ import useSpacesDisplay from '../../hooks/domain/useSpacesDisplay';
 import type { MyInfo } from '../../types/api.type';
 import type { MySpace, SpaceFilterType } from '../../types/space.type';
 import { buildThumbnailUrl } from '../../utils/buildImageUrl';
-import { parsedImagePath } from '../../utils/parsedImagePath';
+import { extractImageFileName } from '../../utils/parsedImagePath';
 import * as S from './MyPage.styles';
 
 const MyPage = () => {
@@ -51,7 +51,7 @@ const MyPage = () => {
           if (!photo) return;
           results[space.spaceCode] = buildThumbnailUrl(
             space.spaceCode,
-            parsedImagePath(photo?.path),
+            extractImageFileName(photo?.path),
             'x800',
           );
         }),

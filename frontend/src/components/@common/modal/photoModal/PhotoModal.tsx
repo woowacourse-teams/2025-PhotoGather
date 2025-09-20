@@ -8,6 +8,7 @@ import type { BaseModalProps } from '../../../../types/modal.type';
 import type { Photo } from '../../../../types/photo.type';
 import { buildOriginalImageUrl } from '../../../../utils/buildImageUrl';
 import { createImageErrorHandler } from '../../../../utils/createImageErrorHandler';
+import { parseImagePath } from '../../../../utils/parsedImagePath';
 import IconLabelButton from '../../buttons/iconLabelButton/IconLabelButton';
 import ConfirmModal from '../confirmModal/ConfirmModal';
 import * as S from './PhotoModal.styles';
@@ -72,10 +73,8 @@ const PhotoModal = (props: PhotoModalProps) => {
         if (!response || !response.data) return;
         const data = response.data;
         setPhoto(data);
-        const filePath = data.path;
-        const arr = filePath.split('contents/');
-        const path = arr[arr.length - 1];
-        setDisplayPath(buildOriginalImageUrl(path));
+        const parsedPath = parseImagePath(data.path);
+        setDisplayPath(buildOriginalImageUrl(parsedPath));
       },
       errorActions: ['toast'],
       context: {
