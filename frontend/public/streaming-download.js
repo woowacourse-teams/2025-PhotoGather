@@ -12,35 +12,47 @@ self.addEventListener('fetch', (event) => {
   const url = new URL(event.request.url);
   if (url.pathname === '/streaming-download') {
     event.respondWith(handleZipStream(event.request));
+    return;
   }
 });
+
+const sendDownloadProgress = async (completed, total) => {
+  const clients = await self.clients.matchAll({
+    includeUncontrolled: true,
+    type: 'window',
+  });
+  clients.forEach((client) => {
+    client.postMessage({
+      type: 'DOWNLOAD_PROGRESS',
+      completed: completed,
+      total: total,
+    });
+  });
+};
+
+async function* downloadFilesGenerator(downloadInfos) {
+  let completedFetches = 0;
+  for (const info of downloadInfos) {
+    const response = await fetch(info.url);
+    if (!response.ok || !response.body) {
+      throw new Error(`다운로드 실패 : ${info.url}`);
+    }
+    completedFetches++;
+    await sendDownloadProgress(completedFetches, downloadInfos.length);
+    yield {
+      name: info.originalName,
+      input: response.body,
+      lastModified: new Date(),
+    };
+  }
+}
 
 const handleZipStream = async (request) => {
   const { downloadInfos, zipName } = await request.json();
 
-  const BATCH_SIZE = 20;
-  const tempFiles = [];
+  const files = downloadFilesGenerator(downloadInfos);
 
-  for (let i = 0; i < downloadInfos.length; i += BATCH_SIZE) {
-    const batchInfos = downloadInfos.slice(i, i + BATCH_SIZE);
-    const files = await Promise.all(
-      batchInfos.map(async (f) => {
-        const response = await fetch(f.url);
-        if (!response.ok || !response.body) {
-          throw new Error(`다운로드 실패 : ${f.url}`);
-        }
-        return {
-          name: f.originalName,
-          input: response.body,
-          lastModified: new Date(),
-        };
-      }),
-    );
-    tempFiles.push(...files);
-  }
-
-  const zipResponse = downloadZip(tempFiles);
-
+  const zipResponse = downloadZip(files);
   const encodedZipName = encodeURIComponent(zipName);
 
   return new Response(zipResponse.body, {

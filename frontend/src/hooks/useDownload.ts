@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { photoService } from '../apis/services/photo.service';
 import type { DownloadInfo } from '../types/photo.type';
 import { checkSelectedPhotoExist } from '../validators/photo.validator';
 import useTaskHandler from './@common/useTaskHandler';
+import { useToast } from './@common/useToast';
 
 interface UseDownloadProps {
   spaceCode: string;
@@ -17,8 +18,21 @@ const useDownload = ({
 }: UseDownloadProps) => {
   const [totalProgress, setTotalProgress] = useState(0);
   const [currentProgress, setCurrentProgress] = useState(0);
+  const { showToast } = useToast();
 
   const { loadingState, tryTask, tryFetch } = useTaskHandler();
+
+  useEffect(() => {
+    const receiveMessage = (event: MessageEvent) => {
+      if (event.data.type === 'DOWNLOAD_PROGRESS') {
+        setCurrentProgress(event.data.completed);
+      }
+    };
+    navigator.serviceWorker.addEventListener('message', receiveMessage);
+    return () => {
+      navigator.serviceWorker.removeEventListener('message', receiveMessage);
+    };
+  }, []);
 
   const downloadAsImage = async (url: string, fileName: string) => {
     const response = await fetch(url);
@@ -38,38 +52,60 @@ const useDownload = ({
     URL.revokeObjectURL(objectUrl);
   };
 
-  const downloadAsZip = async (downloadInfos: DownloadInfo[]) => {
+  const downloadByFilePicker = async (body: ReadableStream<Uint8Array>) => {
     try {
-      const response = await fetch('/streaming-download', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          downloadInfos: downloadInfos,
-          zipName: `${spaceName}.zip`,
-        }),
+      const handle = await (window as any).showSaveFilePicker({
+        suggestedName: `${spaceName}.zip`,
+        types: [
+          { description: 'Zip file', accept: { 'application/zip': ['.zip'] } },
+        ],
       });
-
-      if (!response.ok) {
-        throw new Error('다운로드 요청 실패');
-      }
-
-      const blob = await response.blob();
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = `${spaceName}.zip`;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      URL.revokeObjectURL(url);
+      const writable = await handle.createWritable();
+      await body.pipeTo(writable);
     } catch (error) {
-      console.error('다운로드 오류:', error);
-      if (error instanceof Error) {
-        alert(`다운로드 중 오류가 발생했습니다: ${error.message}`);
+      if (!(error instanceof Error)) throw error;
+      if (error.name === 'AbortError') {
+        showToast({
+          text: '다운로드가 취소되었습니다.',
+          type: 'info',
+        });
       }
+      throw error;
     }
+  };
+
+  const downloadByDownloadLink = async (response: Response) => {
+    const url = URL.createObjectURL(await response.blob());
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `${spaceName}.zip`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
+
+  const downloadAsZip = async (downloadInfos: DownloadInfo[]) => {
+    const response = await fetch('/streaming-download', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        downloadInfos: downloadInfos,
+        zipName: `${spaceName}.zip`,
+      }),
+    });
+
+    if (!response.ok || !response.body) {
+      throw new Error('service worker 다운로드 요청 실패');
+    }
+
+    if ('showSaveFilePicker' in window) {
+      await downloadByFilePicker(response.body);
+      return;
+    }
+    await downloadByDownloadLink(response);
   };
 
   const trySelectedDownload = async (photoIds: number[]) => {
@@ -158,12 +194,11 @@ const useDownload = ({
           url: process.env.IMAGE_BASE_URL + info.url.slice(prefix.length),
           originalName: info.originalName,
         }));
-        console.log(parsedDownloadUrls);
         await downloadAsZip(parsedDownloadUrls);
 
         onDownloadSuccess?.();
       },
-      errorActions: ['toast'],
+      errorActions: ['toast', 'console'],
       context: {
         toast: {
           text: '다운로드에 실패했습니다. 다시 시도해 주세요.',
@@ -172,7 +207,7 @@ const useDownload = ({
       },
       loadingStateKey: 'allDownload',
       onFinally: () => {
-        const end = performance.now(); // 최종 완료 시점
+        const end = performance.now();
         console.log('시작 시각', start);
         console.log('최종 완료 시각', end);
         console.log(`총 소요 시간: ${(end - start) / 1000}초`);
