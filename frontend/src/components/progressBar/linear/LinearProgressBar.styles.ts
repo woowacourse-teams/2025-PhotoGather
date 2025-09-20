@@ -38,16 +38,15 @@ type GlowVariant = 'start' | 'end' | 'progress';
 export const GlowElement = styled.div<{
   $variant: GlowVariant;
   $glowElementPosition: number;
-}>` 
+}>`
   position: absolute;
   left: 0;
   width: 16px;
   height: 16px;
   border-radius: 50%;
   background: ${({ theme }) => theme.colors.primary10};
-  filter: drop-shadow(0 0 7.56px #f0ebfc)
-        drop-shadow(0 0 2.16px #f0ebfc)
-        drop-shadow(0 0 1.08px #f0ebfc);
+  filter: drop-shadow(0 0 7.56px #f0ebfc) drop-shadow(0 0 2.16px #f0ebfc)
+    drop-shadow(0 0 1.08px #f0ebfc);
   pointer-events: none;
   z-index: 2;
   transition: transform 0.3s ease;
