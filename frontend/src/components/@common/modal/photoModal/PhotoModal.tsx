@@ -178,13 +178,14 @@ const PhotoModal = (props: PhotoModalProps) => {
       >
         <IconLabelButton
           icon={<S.DeleteIcon />}
-          variant="dark"
+          variant="danger"
           onClick={handleDelete}
         />
+          
         {isManagerMode && (
           <IconLabelButton
             icon={<S.DownloadIcon />}
-            variant="light"
+            variant="dark"
             onClick={handleDownload}
           />
         )}

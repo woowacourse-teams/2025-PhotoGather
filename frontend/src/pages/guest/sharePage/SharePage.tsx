@@ -10,7 +10,6 @@ import { ROUTES } from '../../../constants/routes';
 import useTaskHandler from '../../../hooks/@common/useTaskHandler';
 import { useToast } from '../../../hooks/@common/useToast';
 import useWebShareAPI from '../../../hooks/useWebShareAPI';
-import { theme } from '../../../styles/theme';
 import { copyLinkToClipboard } from '../../../utils/copyLinkToClipboard';
 import { createShareUrl } from '../../../utils/createSpaceUrl';
 import * as S from './SharePage.styles';
@@ -94,18 +93,14 @@ const SharePage = () => {
             <S.ShareLabel>친구에게도 알려 주세요</S.ShareLabel>
             <S.IconLabelButtonContainer>
               <IconLabelButton
-                icon={<LinkIcon fill={theme.colors.white} width="20px" />}
+                icon={<LinkIcon width="20px" />}
                 onClick={handleCopyLink}
+                variant="outline"
               />
               <IconLabelButton
-                icon={
-                  <ShareIcon
-                    fill={theme.colors.white}
-                    stroke={theme.colors.gray06}
-                    width="20px"
-                  />
-                }
+                icon={<ShareIcon width="20px" />}
                 onClick={handleShare}
+                variant="outline"
               />
             </S.IconLabelButtonContainer>
           </S.ShareContainer>

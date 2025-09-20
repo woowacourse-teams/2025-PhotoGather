@@ -34,6 +34,7 @@ const LoginPage = () => {
             icon={<KakaoLogo />}
             style={{ backgroundColor: theme.colors.kakaoTalk, border: 'none' }}
             onClick={handleKakaoLogin}
+            variant="outline"
           />
         </S.LoginButtonContainer>
         <Button

@@ -10,9 +10,13 @@ import useTaskHandler from './@common/useTaskHandler';
 
 interface UseGuestNickNameProps {
   spaceCode: string;
+  shouldShowNickNameModal: boolean;
 }
 
-const useGuestNickName = ({ spaceCode }: UseGuestNickNameProps) => {
+const useGuestNickName = ({
+  spaceCode,
+  shouldShowNickNameModal,
+}: UseGuestNickNameProps) => {
   const overlay = useOverlay();
   const { tryFetch } = useTaskHandler();
 
@@ -28,6 +32,8 @@ const useGuestNickName = ({ spaceCode }: UseGuestNickNameProps) => {
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: 초기 모달 표시
   useEffect(() => {
+    if (!shouldShowNickNameModal) return;
+
     const fetchNickName = async () => {
       const fetchedNickName = await tryGetNickName();
       setNickName(String(fetchedNickName));
@@ -38,7 +44,7 @@ const useGuestNickName = ({ spaceCode }: UseGuestNickNameProps) => {
     if (mode === 'create') {
       showNickNameCreateModal();
     }
-  }, []);
+  }, [shouldShowNickNameModal]);
 
   const createNickNameErrorMessage = (nickName: string) => {
     if (nickName.length > 10) {
