@@ -47,7 +47,6 @@ const useDownload = ({
       await body.pipeTo(writable);
     } catch (error) {
       if (!(error instanceof Error)) return;
-      console.log(error.name);
       if (error.name === 'AbortError') {
         showToast({
           text: '다운로드가 취소되었습니다.',
