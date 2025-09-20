@@ -10,10 +10,7 @@ self.addEventListener('activate', (event) => {
 
 self.addEventListener('fetch', (event) => {
   const url = new URL(event.request.url);
-  if (event.request.mode === 'navigate') {
-    event.respondWith(fetch(event.request));
-    return;
-  }
+
   if (url.pathname === '/streaming-download') {
     event.respondWith(handleZipStream(event.request));
     return;
