@@ -35,7 +35,7 @@ const useDownload = ({
     };
   }, []);
 
-  const saveByFilePicker = async (body: ReadableStream<Uint8Array>) => {
+  const saveZipByFilePicker = async (body: ReadableStream<Uint8Array>) => {
     try {
       const handle = await (window as any).showSaveFilePicker({
         suggestedName: `${spaceName}.zip`,
@@ -58,7 +58,7 @@ const useDownload = ({
     }
   };
 
-  const saveByDownloadLink = async (response: Response) => {
+  const saveZipByDownloadLink = async (response: Response) => {
     const url = URL.createObjectURL(await response.blob());
     const link = document.createElement('a');
     link.href = url;
@@ -119,7 +119,7 @@ const useDownload = ({
       });
     }
     const zipBlob = await downloadZip(files).blob();
-    await saveByDownloadLink(new Response(zipBlob));
+    await saveZipByDownloadLink(new Response(zipBlob));
   };
 
   const downloadAsStreaming = async (downloadInfos: DownloadInfo[]) => {
@@ -138,10 +138,10 @@ const useDownload = ({
       throw new Error('service worker 다운로드 요청 실패');
     }
     if ('showSaveFilePicker' in window) {
-      await saveByFilePicker(response.body);
+      await saveZipByFilePicker(response.body);
       return;
     }
-    await saveByDownloadLink(response);
+    await saveZipByDownloadLink(response);
   };
 
   const downloadMultipleImages = async (downloadInfos: DownloadInfo[]) => {
