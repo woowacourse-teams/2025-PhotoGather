@@ -89,6 +89,7 @@ const useTaskHandler = () => {
     errorActions: ErrorType[];
     context?: ErrorRequiredProps;
     onFinally?: () => void;
+    onSuccess?: () => void;
     useCommonCodeErrorHandler?: boolean;
   }
 
@@ -121,6 +122,9 @@ const useTaskHandler = () => {
         return { success: false, data: null };
       }
 
+      if (error.name === 'AbortError') {
+        return { success: true, data: undefined as T };
+      }
       matchingErrorHandler(errorActions, context, error);
       return { success: false, data: null };
     } finally {
