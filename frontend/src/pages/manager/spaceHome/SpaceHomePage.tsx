@@ -184,7 +184,6 @@ const SpaceHomePage = () => {
 
   const handleImageClick = isSelectMode ? toggleSelectedPhoto : openPhotoModal;
 
-  console.log(accessLoadingState, hasAccess);
   //biome-ignore lint/correctness/useExhaustiveDependencies: isFetchSectionVisible 변경 시 호출
   useEffect(() => {
     if (spaceInfoLoadingState !== 'success' || accessLoadingState !== 'success')

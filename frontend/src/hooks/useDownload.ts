@@ -120,7 +120,6 @@ const useDownload = ({
           ...info,
           url: buildOriginalImageUrl(parseImagePath(info.url)),
         }));
-        console.log(parsedUrls);
         await downloadAsZip(parsedUrls);
       },
       errorActions: ['toast'],
