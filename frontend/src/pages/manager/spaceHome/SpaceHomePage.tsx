@@ -70,8 +70,8 @@ const SpaceHomePage = () => {
     spaceInfo?.openedAt && checkIsEarlyDate(spaceInfo.openedAt);
   const isSpaceExpired = spaceInfo?.isExpired;
 
-  const { hasAccess, accessLoadingState } = useSpaceAccess({
-    hostId: spaceInfo?.host.id,
+  const { hasAccess, accessLoadingState, hostId } = useSpaceAccess({
+    spaceHostId: spaceInfo?.host.id,
     spaceType: spaceInfo?.type,
   });
 
@@ -253,7 +253,7 @@ const SpaceHomePage = () => {
 
   const canAddPhoto = hasAccess && !isSpaceExpired && !isEarlyTime;
   const canShare = hasAccess && !isSpaceExpired;
-  const canChangeSetting = hasAccess;
+  const canChangeSetting = spaceInfo?.host.id === hostId;
 
   const iconItems = [
     {

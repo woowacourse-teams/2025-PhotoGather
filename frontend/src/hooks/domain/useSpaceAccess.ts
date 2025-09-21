@@ -3,25 +3,20 @@ import { authService } from '../../apis/services/auth.service';
 import type { SpaceAccessType } from '../../types/space.type';
 
 interface UseSpaceAccessProps {
-  hostId: number | undefined;
+  spaceHostId: number | undefined;
   spaceType: SpaceAccessType | undefined;
 }
 
-const useSpaceAccess = ({ hostId, spaceType }: UseSpaceAccessProps) => {
-  // TODO : 전역에서 내려주는 hostId로 변경
+const useSpaceAccess = ({ spaceHostId, spaceType }: UseSpaceAccessProps) => {
   const [hasAccess, setHasAccess] = useState(false);
+  // TODO : 전역에서 내려주는 hostId로 변경
+  const [hostId, setHostId] = useState<number | undefined>(undefined);
   type LoadingStateType = 'pending' | 'loading' | 'success' | 'error';
   const [accessLoadingState, setAccessLoadingState] =
     useState<LoadingStateType>('pending');
 
   useEffect(() => {
-    setAccessLoadingState('loading');
-    if (spaceType === 'PUBLIC') {
-      setHasAccess(true);
-      setAccessLoadingState('success');
-      return;
-    }
-    if (!hostId) {
+    if (!spaceHostId) {
       setHasAccess(false);
       setAccessLoadingState('error');
       return;
@@ -31,7 +26,14 @@ const useSpaceAccess = ({ hostId, spaceType }: UseSpaceAccessProps) => {
     const fetchAccess = async () => {
       try {
         await authService.status().then((res) => {
-          setHasAccess(res.data?.id === hostId);
+          if (spaceType === 'PUBLIC') {
+            setHasAccess(true);
+            setAccessLoadingState('success');
+            setHostId(res.data?.id);
+            return;
+          }
+          setHasAccess(res.data?.id === spaceHostId);
+          setHostId(res.data?.id);
           setAccessLoadingState('success');
         });
       } catch (error) {
@@ -40,9 +42,9 @@ const useSpaceAccess = ({ hostId, spaceType }: UseSpaceAccessProps) => {
       }
     };
     fetchAccess();
-  }, [hostId, spaceType]);
+  }, [spaceHostId, spaceType]);
 
-  return { hasAccess, accessLoadingState };
+  return { hasAccess, accessLoadingState, hostId };
 };
 
 export default useSpaceAccess;
