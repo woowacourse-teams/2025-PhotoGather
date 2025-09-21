@@ -2,7 +2,7 @@ import { useMemo, useRef, useState } from 'react';
 import { photoService } from '../apis/services/photo.service';
 import type { Photo } from '../types/photo.type';
 import { buildThumbnailUrl } from '../utils/buildImageUrl';
-import { parsedImagePath } from '../utils/parsedImagePath';
+import { extractImageFileName } from '../utils/parsedImagePath';
 import useTaskHandler from './@common/useTaskHandler';
 
 interface UsePhotosBySpaceIdProps {
@@ -28,7 +28,7 @@ const usePhotosBySpaceCode = ({
     return new Map(
       photosList.map((photo) => [
         photo.id,
-        buildThumbnailUrl(spaceCode, parsedImagePath(photo.path), PRESET),
+        buildThumbnailUrl(spaceCode, extractImageFileName(photo.path), PRESET),
       ]),
     );
   }, [photosList, spaceCode]);

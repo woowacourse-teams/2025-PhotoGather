@@ -6,6 +6,6 @@ export const buildThumbnailUrl = (
   return `${process.env.IMAGE_BASE_URL}/${spaceCode}/thumbnails/${fileName}_${preset}.webp`;
 };
 
-export const buildOriginalImageUrl = (fileName: string) => {
-  return `${process.env.IMAGE_BASE_URL}/${fileName}`;
+export const buildOriginalImageUrl = (imagePath: string) => {
+  return `${process.env.IMAGE_BASE_URL}/${imagePath}`;
 };
