@@ -64,15 +64,15 @@ const SpaceHomePage = () => {
 
   const { spaceCode } = useSpaceCodeFromPath();
 
-  const { spaceInfo } = useSpaceInfo(spaceCode ?? '');
+  const { spaceInfoLoadingState, spaceInfo } = useSpaceInfo(spaceCode ?? '');
   const spaceName = spaceInfo?.name ?? '';
   const isEarlyTime =
     spaceInfo?.openedAt && checkIsEarlyDate(spaceInfo.openedAt);
   const isSpaceExpired = spaceInfo?.isExpired;
 
-  const { hasAccess, isLoadingAccess } = useSpaceAccess({
+  const { hasAccess, accessLoadingState } = useSpaceAccess({
     hostId: spaceInfo?.host.id,
-    spaceType: spaceInfo?.type ?? 'PUBLIC',
+    spaceType: spaceInfo?.type,
   });
 
   const {
@@ -184,19 +184,28 @@ const SpaceHomePage = () => {
 
   const handleImageClick = isSelectMode ? toggleSelectedPhoto : openPhotoModal;
 
+  console.log(accessLoadingState, hasAccess);
   //biome-ignore lint/correctness/useExhaustiveDependencies: isFetchSectionVisible 변경 시 호출
   useEffect(() => {
-    if (photosListLoadingState !== 'success' || isLoadingAccess) return;
-    if (isSpaceExpired || isEarlyTime || !hasAccess) return;
-    if (!isFetchSectionVisible || isEndPage) return;
+    if (spaceInfoLoadingState !== 'success' || accessLoadingState !== 'success')
+      return;
 
-    tryFetchPhotosList();
+    if (!hasAccess || isSpaceExpired || isEarlyTime || isEndPage) return;
+
+    if (photosListLoadingState === 'loading') return;
+
+    if (isFetchSectionVisible && !isEndPage) {
+      tryFetchPhotosList();
+    }
   }, [
     isFetchSectionVisible,
     isEndPage,
     isSpaceExpired,
     isEarlyTime,
     hasAccess,
+    accessLoadingState,
+    spaceInfoLoadingState,
+    photosListLoadingState,
   ]);
 
   const loadingContents = [
@@ -292,9 +301,10 @@ const SpaceHomePage = () => {
 
   const renderBodyContent = () => {
     if (isEarlyTime) return <EarlyPage openedAt={spaceInfo.openedAt} />;
-    if (!hasAccess && !isLoadingAccess) return <AccessDeniedPage />;
     if (isSpaceExpired) return <ExpiredPage />;
-    if (photosList.length === 0)
+    if (accessLoadingState === 'success' && !hasAccess)
+      return <AccessDeniedPage />;
+    if (photosListLoadingState === 'success' && photosList.length === 0)
       return (
         <S.NoImageContainer>
           <S.GiftIconImage src={GiftIcon} />
