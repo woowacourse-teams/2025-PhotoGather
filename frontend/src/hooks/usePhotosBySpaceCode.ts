@@ -37,7 +37,7 @@ const usePhotosBySpaceCode = ({
 
   const appendPhotosList = (photos: Photo[], updatedTotalPages: number) => {
     setPhotosList((prev) => {
-      if (!prev) {
+      if (prev.length === 0) {
         totalPages.current = updatedTotalPages;
         return photos;
       }

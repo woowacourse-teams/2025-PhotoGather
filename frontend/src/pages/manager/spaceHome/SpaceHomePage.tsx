@@ -1,12 +1,12 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
+  AddPhotoIcon,
   UpwardArrowIcon as ArrowUpSvg,
   LinkIcon,
   DownloadIcon as SaveIcon,
-  SettingIcon as SettingSvg,
+  SettingIcon,
   ShareIcon,
-  AddPhotoIcon as UploadIcon,
 } from '../../../@assets/icons';
 import {
   GiftImg as GiftIcon,
@@ -18,7 +18,7 @@ import IconLabelButton from '../../../components/@common/buttons/iconLabelButton
 import SpaceManagerImageGrid from '../../../components/@common/imageLayout/imageGrid/spaceManagerImageGrid/SpaceManagerImageGrid';
 import * as C from '../../../components/@common/modal/Modal.common.styles';
 import PhotoModal from '../../../components/@common/modal/photoModal/PhotoModal';
-import SpaceHeader from '../../../components/header/spaceHeader/SpaceHeader';
+import ManagerHeader from '../../../components/header/spaceHeader/managerSpaceHeader/ManagerHeader';
 import LoadingLayout from '../../../components/layout/loadingLayout/LoadingLayout';
 import PhotoSelectionToolBar from '../../../components/photoSelectionToolBar/PhotoSelectionToolBar';
 import SpaceHomeTopActionBar from '../../../components/spaceHomeTopActionBar/SpaceHomeTopActionBar';
@@ -74,7 +74,6 @@ const SpaceHomePage = () => {
 
   const {
     photosList,
-    loadingState,
     thumbnailPhotoMap,
     isEndPage,
     tryFetchPhotosList,
@@ -183,14 +182,9 @@ const SpaceHomePage = () => {
 
   //biome-ignore lint/correctness/useExhaustiveDependencies: isFetchSectionVisible 변경 시 호출
   useEffect(() => {
-    if (
-      !isFetchSectionVisible ||
-      isEndPage ||
-      isSpaceExpired ||
-      isEarlyTime ||
-      !hasAccess
-    )
-      return;
+    if (isSpaceExpired || isEarlyTime || !hasAccess) return;
+    if (!isFetchSectionVisible || isEndPage) return;
+
     tryFetchPhotosList();
   }, [
     isFetchSectionVisible,
@@ -224,7 +218,8 @@ const SpaceHomePage = () => {
       <C.Wrapper>
         <S.ModalContentContainer>
           <IconLabelButton
-            icon={<LinkIcon fill={theme.colors.white} width="20px" />}
+            icon={<LinkIcon width="20px" />}
+            variant="outline"
             onClick={() => {
               copyLinkToClipboard(createShareUrl(spaceCode ?? ''));
               showToast({
@@ -242,6 +237,31 @@ const SpaceHomePage = () => {
       },
     );
   };
+
+  const canAddPhoto = hasAccess && !isSpaceExpired && !isEarlyTime;
+  const canShare = hasAccess && !isSpaceExpired;
+  const canChangeSetting = hasAccess;
+
+  const iconItems = [
+    {
+      element: <AddPhotoIcon width="20px" />,
+      onClick: clickUploadButtonWithTracking,
+      disabled: !canAddPhoto,
+      label: '업로드',
+    },
+    {
+      element: <ShareIcon width="20px" />,
+      onClick: toggleShareModal,
+      disabled: !canShare,
+      label: '공유',
+    },
+    {
+      element: <SettingIcon width="20px" />,
+      onClick: clickDashboardWithTracking,
+      disabled: !canChangeSetting,
+      label: '설정',
+    },
+  ];
 
   const renderBottomNavigatorContent = () => {
     return (
@@ -267,15 +287,16 @@ const SpaceHomePage = () => {
 
   const renderBodyContent = () => {
     if (isEarlyTime) return <EarlyPage openedAt={spaceInfo.openedAt} />;
+    if (!hasAccess && !isLoadingAccess) return <AccessDeniedPage />;
     if (isSpaceExpired) return <ExpiredPage />;
-    if (loadingState.photosList === 'success' && photosList.length === 0)
+    if (photosList.length === 0)
       return (
         <S.NoImageContainer>
           <S.GiftIconImage src={GiftIcon} />
           <S.NoImageText>{INFORMATION.NO_IMAGE}</S.NoImageText>
         </S.NoImageContainer>
       );
-    if (loadingState.photosList === 'success' && photosList.length > 0)
+    if (photosList.length > 0)
       return (
         <>
           <S.ImageManagementContainer>
@@ -326,34 +347,16 @@ const SpaceHomePage = () => {
         />
       )}
 
-      {!hasAccess && !isLoadingAccess && <AccessDeniedPage />}
-
       <S.InfoContainer ref={scrollTopTriggerRef}>
-        <SpaceHeader
+        <ManagerHeader
           title={spaceName}
           accessType={spaceInfo?.type}
           timer={leftTime}
-          icons={[
-            {
-              element: <UploadIcon fill={theme.colors.white} width="20px" />,
-              onClick: clickUploadButtonWithTracking,
-              label: '업로드',
-            },
-            {
-              element: <SettingSvg fill={theme.colors.white} width="20px" />,
-              onClick: clickDashboardWithTracking,
-              label: '설정',
-            },
-            {
-              element: <ShareIcon fill={theme.colors.white} width="20px" />,
-              onClick: toggleShareModal,
-              label: '공유',
-            },
-          ]}
+          iconItems={iconItems}
         />
       </S.InfoContainer>
 
-      {renderBodyContent()}
+      <S.BodyContainer>{renderBodyContent()}</S.BodyContainer>
 
       <S.IntersectionArea ref={hideBlurAreaTriggerRef} />
       <S.IntersectionArea ref={fetchTriggerRef} />

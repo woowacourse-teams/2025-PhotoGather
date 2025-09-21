@@ -160,6 +160,7 @@ const LandingPage = () => {
           <S.RowContainer>
             <S.InstagramIcon src={InstagramIcon} />
             <IconLabelButton
+              variant="outline"
               icon={<KakaoTalkIcon />}
               style={{
                 backgroundColor: theme.colors.kakaoTalk,
@@ -169,6 +170,7 @@ const LandingPage = () => {
             />
             <IconLabelButton
               icon={<QrcodeIcon />}
+              variant="outline"
               style={{
                 width: '44px',
                 cursor: 'default',
