@@ -64,9 +64,12 @@ const usePhotosBySpaceCode = ({
 
     const { photos, totalPages } = response.data;
     appendPhotosList(photos, totalPages);
-    requestAnimationFrame(() => {
-      reObserve();
-    });
+
+    if (currentPage.current < totalPages) {
+      requestAnimationFrame(() => {
+        reObserve();
+      });
+    }
   };
 
   const tryFetchPhotosList = async () => {
@@ -88,7 +91,7 @@ const usePhotosBySpaceCode = ({
     tryFetchPhotosList,
     thumbnailPhotoMap,
     photosList,
-    loadingState,
+    photosListLoadingState: loadingState.photosList,
     updatePhotos,
   };
 };

@@ -70,7 +70,10 @@ const SpaceHomePage = () => {
     spaceInfo?.openedAt && checkIsEarlyDate(spaceInfo.openedAt);
   const isSpaceExpired = spaceInfo?.isExpired;
 
-  const { hasAccess, isLoadingAccess } = useSpaceAccess(spaceInfo?.host.id);
+  const { hasAccess, isLoadingAccess } = useSpaceAccess({
+    hostId: spaceInfo?.host.id,
+    spaceType: spaceInfo?.type ?? 'PUBLIC',
+  });
 
   const {
     photosList,
@@ -78,6 +81,7 @@ const SpaceHomePage = () => {
     isEndPage,
     tryFetchPhotosList,
     updatePhotos,
+    photosListLoadingState,
   } = usePhotosBySpaceCode({
     reObserve,
     spaceCode: spaceCode ?? '',
@@ -182,6 +186,7 @@ const SpaceHomePage = () => {
 
   //biome-ignore lint/correctness/useExhaustiveDependencies: isFetchSectionVisible 변경 시 호출
   useEffect(() => {
+    if (photosListLoadingState === 'loading') return;
     if (isSpaceExpired || isEarlyTime || !hasAccess) return;
     if (!isFetchSectionVisible || isEndPage) return;
 
