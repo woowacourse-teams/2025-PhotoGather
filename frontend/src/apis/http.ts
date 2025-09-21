@@ -1,4 +1,5 @@
 import * as Sentry from '@sentry/react';
+import { CONSTRAINTS } from '../constants/constraints';
 import { HTTP_STATUS_MESSAGES } from '../constants/errors';
 import { AUTH_COOKIES } from '../constants/keys';
 import type {
@@ -66,7 +67,7 @@ const request = async <T>(
   try {
     let response = await doFetch();
     let retryCount = 0;
-    const maxRetryCounts = 5;
+    const maxRetryCounts = CONSTRAINTS.MAX_COUNT_FOR_REFRESH;
 
     while (response.status === 401 && retryCount < maxRetryCounts) {
       try {
