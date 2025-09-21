@@ -65,12 +65,15 @@ const request = async <T>(
 
   try {
     let response = await doFetch();
+    let retryCount = 0;
+    const maxRetryCounts = 5;
 
-    if (response.status === 401) {
+    while (response.status === 401 && retryCount < maxRetryCounts) {
       try {
         const newTokens = await refreshAccessToken();
         setAuthTokens(newTokens.accessToken, newTokens.refreshToken);
         response = await doFetch(newTokens.accessToken);
+        retryCount += 1;
       } catch (error) {
         if (error instanceof Error) throw new HttpError(401, error.message);
       }
