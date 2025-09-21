@@ -186,7 +186,7 @@ const SpaceHomePage = () => {
 
   //biome-ignore lint/correctness/useExhaustiveDependencies: isFetchSectionVisible 변경 시 호출
   useEffect(() => {
-    if (photosListLoadingState === 'loading') return;
+    if (photosListLoadingState !== 'success' || isLoadingAccess) return;
     if (isSpaceExpired || isEarlyTime || !hasAccess) return;
     if (!isFetchSectionVisible || isEndPage) return;
 
