@@ -45,7 +45,7 @@ export const INFORMATION = {
     },
     DESCRIPTION: '선택한 시간으로부터 72시간 동안 열려요.',
   },
-  PUBLIC_OR_NOT: {
+  ACCESS_TYPE: {
     TITLE: {
       TEXT: '공개 범위를 정해볼까요?',
       HIGHLIGHT_TEXT: '공개 범위',
