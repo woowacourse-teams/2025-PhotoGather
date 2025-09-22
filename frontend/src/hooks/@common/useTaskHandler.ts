@@ -46,6 +46,10 @@ const useTaskHandler = () => {
     console: (error: Error) => {
       console.error(error);
     },
+    //TODO: 개발자를 위한 에러 핸들러 추가 고려
+    throw: (error: Error) => {
+      throw error;
+    },
   };
 
   type ErrorType = keyof typeof errorHandler;
@@ -154,6 +158,9 @@ const useTaskHandler = () => {
     }
     if (errorActions.includes('console')) {
       errorHandler.console(error);
+    }
+    if (errorActions.includes('throw')) {
+      errorHandler.throw(error);
     }
   };
 
