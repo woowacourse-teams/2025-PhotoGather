@@ -62,6 +62,7 @@ dependencies {
 	// Metrics
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 	implementation 'io.micrometer:micrometer-registry-prometheus'
+	implementation 'io.opentelemetry:opentelemetry-exporter-otlp'
 }
 
 tasks.named('test') {

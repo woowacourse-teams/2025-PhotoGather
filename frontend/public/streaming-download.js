@@ -1,5 +1,6 @@
 import { downloadZip } from 'https://cdn.jsdelivr.net/npm/client-zip@2.5.0/index.js';
 
+
 let isDownloading = false;
 
 self.addEventListener('install', (event) => {

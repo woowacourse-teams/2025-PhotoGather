@@ -6,8 +6,8 @@ import ConfirmModal from '../../components/@common/modal/confirmModal/ConfirmMod
 import Profile from '../../components/profile/Profile';
 import { ROUTES } from '../../constants/routes';
 import { useOverlay } from '../../contexts/OverlayProvider';
+import useAuthActions from '../../hooks/@common/useAuthActions';
 import useAuthConditionTasks from '../../hooks/@common/useAuthConditionTasks';
-import useKakaoAuth from '../../hooks/domain/useKakaoAuth';
 import type { MyInfo } from '../../types/api.type';
 import { track } from '../../utils/googleAnalytics/track';
 import * as S from './LogoutPage.styles';
@@ -18,7 +18,7 @@ const LogoutPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [myInfo, setMyInfo] = useState<MyInfo | null>(null);
   useAuthConditionTasks({ taskWhenNoAuth: () => navigate(ROUTES.MAIN) });
-  const { handleLogout: logout } = useKakaoAuth();
+  const { handleLogout: logout } = useAuthActions();
 
   useEffect(() => {
     const fetchAuthStatus = async () => {
