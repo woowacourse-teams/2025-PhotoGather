@@ -22,7 +22,9 @@ module.exports = (_, argv) => {
     entry: './src/index.tsx',
     output: {
       filename:
-        argv.mode === 'production' ? '[name].[contenthash].js' : '[name].js',
+        argv.mode === 'production' || argv.mode === 'development'
+          ? '[name].[contenthash].js'
+          : '[name].js',
       path: path.resolve(__dirname, 'dist'),
       publicPath: '/',
       clean: true,

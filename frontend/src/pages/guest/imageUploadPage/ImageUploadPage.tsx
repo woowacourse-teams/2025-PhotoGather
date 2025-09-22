@@ -10,7 +10,7 @@ import FloatingIconButton from '../../../components/@common/buttons/floatingIcon
 import HighlightText from '../../../components/@common/highlightText/HighlightText';
 import GuestImageGrid from '../../../components/@common/imageLayout/imageGrid/guestImageGrid/GuestImageGrid';
 import PhotoModal from '../../../components/@common/modal/photoModal/PhotoModal';
-import SpaceHeader from '../../../components/header/spaceHeader/SpaceHeader';
+import GuestSpaceHeader from '../../../components/header/spaceHeader/guestSpaceHeader/GuestSpaceHeader';
 import LoadingLayout from '../../../components/layout/loadingLayout/LoadingLayout';
 import UploadBox from '../../../components/uploadBox/UploadBox';
 import UserBadge from '../../../components/userBadge/UserBadge';
@@ -34,11 +34,12 @@ import * as S from './ImageUploadPage.styles';
 
 const ImageUploadPage = () => {
   const { spaceCode } = useSpaceCodeFromPath();
-  const { spaceInfo } = useSpaceInfo(spaceCode ?? '');
+  const { spaceInfo, spaceInfoLoadingState } = useSpaceInfo(spaceCode ?? '');
   const isNoData = !spaceInfo;
-  const isSpaceExpired = spaceInfo?.isExpired;
-  const isEarlyTime =
-    spaceInfo?.openedAt && checkIsEarlyDate(spaceInfo.openedAt);
+  const isSpaceExpired = spaceInfo ? spaceInfo.isExpired : false;
+  const isEarlyTime = spaceInfo
+    ? spaceInfo.openedAt && checkIsEarlyDate(spaceInfo.openedAt)
+    : false;
   const shouldShowFakeUploadBox = isNoData || isEarlyTime || isSpaceExpired;
 
   const overlay = useOverlay();
@@ -47,6 +48,8 @@ const ImageUploadPage = () => {
   const { nickName, guestId, showNickNameEditModal, tryCreateNickName } =
     useGuestNickName({
       spaceCode: spaceCode ?? '',
+      shouldShowNickNameModal:
+        spaceInfoLoadingState === 'success' && !isEarlyTime && !isSpaceExpired,
     });
 
   const navigateToUploadComplete = () => {
@@ -139,7 +142,9 @@ const ImageUploadPage = () => {
 
   return (
     <S.Wrapper $hasImages={hasImages}>
-      {isEarlyTime && <EarlyPage openedAt={spaceInfo.openedAt} />}
+      {isEarlyTime && (
+        <EarlyPage openedAt={spaceInfo ? spaceInfo.openedAt : ''} />
+      )}
       {isSpaceExpired && <ExpiredPage />}
       {isUploading && (
         <LoadingLayout
@@ -150,7 +155,7 @@ const ImageUploadPage = () => {
         />
       )}
       <S.ScrollTopAnchor ref={scrollTopTriggerRef} />
-      <SpaceHeader
+      <GuestSpaceHeader
         title={spaceName}
         timer={leftTime}
         accessType={spaceInfo?.type}

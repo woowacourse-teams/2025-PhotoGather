@@ -1,5 +1,7 @@
 import { downloadZip } from 'https://cdn.jsdelivr.net/npm/client-zip@2.5.0/index.js';
 
+let isDownloading = false;
+
 self.addEventListener('install', (event) => {
   event.waitUntil(self.skipWaiting());
 });
@@ -12,6 +14,8 @@ self.addEventListener('fetch', (event) => {
   const url = new URL(event.request.url);
 
   if (url.pathname === '/streaming-download') {
+    console.log('Fetch 시작');
+
     event.respondWith(handleZipStream(event.request));
     return;
   }
@@ -35,6 +39,7 @@ async function* downloadFilesGenerator(downloadInfos) {
   let completedFetches = 0;
   for (const info of downloadInfos) {
     const response = await fetch(info.url);
+    console.log('response', response);
     if (!response.ok || !response.body) {
       throw new Error(`다운로드 실패 : ${info.url}`);
     }
@@ -42,17 +47,27 @@ async function* downloadFilesGenerator(downloadInfos) {
     await sendDownloadProgress(completedFetches, downloadInfos.length);
     yield {
       name: info.originalName,
-      input: response.body,
+      input: response.clone().body,
       lastModified: new Date(),
     };
   }
 }
 
 const handleZipStream = async (request) => {
+  if (isDownloading) {
+    return new Response('이미 다운로드 중입니다.', { status: 400 });
+  }
+  if (request.method !== 'POST') {
+    return new Response('POST 요청만 허용합니다.', { status: 400 });
+  }
   try {
+    console.log('시작');
+    isDownloading = true;
     const { downloadInfos, zipName } = await request.json();
 
     const files = downloadFilesGenerator(downloadInfos);
+
+    console.log('files', files);
 
     const zipResponse = downloadZip(files);
     const encodedZipName = encodeURIComponent(zipName);
@@ -65,5 +80,7 @@ const handleZipStream = async (request) => {
     });
   } catch (error) {
     throw new Error(`개별 fetch 중 다운로드 실패, ${error}`);
+  } finally {
+    isDownloading = false;
   }
 };

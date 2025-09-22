@@ -2,6 +2,8 @@ import { downloadZip } from 'client-zip';
 import { useEffect, useState } from 'react';
 import { photoService } from '../apis/services/photo.service';
 import type { DownloadInfo } from '../types/photo.type';
+import { buildOriginalImageUrl } from '../utils/buildImageUrl';
+import { parseImagePath } from '../utils/parsedImagePath';
 import { checkSelectedPhotoExist } from '../validators/photo.validator';
 import useTaskHandler from './@common/useTaskHandler';
 import { useToast } from './@common/useToast';
@@ -162,15 +164,6 @@ const useDownload = ({
     URL.revokeObjectURL(URL.createObjectURL(blob));
   };
 
-  // TODO : 이미지 url 통일 후 제거 필요
-  const tempParsedDownloadUrls = (downloadUrls: DownloadInfo[]) => {
-    const prefix = 'photogather/';
-    return downloadUrls.map((downloadInfo) => ({
-      url: process.env.IMAGE_BASE_URL + downloadInfo.url.slice(prefix.length),
-      originalName: downloadInfo.originalName,
-    }));
-  };
-
   const trySelectedDownload = async (photoIds: number[]) => {
     const taskResult = tryTask({
       task: () => checkSelectedPhotoExist(photoIds),
@@ -186,7 +179,12 @@ const useDownload = ({
         if (!response.data) return;
         const data = response.data;
         const { downloadUrls } = data;
-        const parsedDownloadUrls = tempParsedDownloadUrls(downloadUrls);
+        const parsedDownloadUrls = downloadUrls.map((info) => {
+          return {
+            ...info,
+            url: buildOriginalImageUrl(parseImagePath(info.url)),
+          };
+        });
 
         if (downloadUrls.length === 1) {
           await downloadImage(
@@ -223,7 +221,12 @@ const useDownload = ({
         );
         if (!response.data) return;
         const { downloadUrls } = response.data;
-        const parsedDownloadUrls = tempParsedDownloadUrls(downloadUrls);
+        const parsedDownloadUrls = downloadUrls.map((info) => {
+          return {
+            ...info,
+            url: buildOriginalImageUrl(parseImagePath(info.url)),
+          };
+        });
 
         await downloadImage(
           parsedDownloadUrls[0].url,
@@ -254,12 +257,17 @@ const useDownload = ({
 
         setTotalProgress(downloadUrls.length);
 
-        const parsedDownloadUrls = tempParsedDownloadUrls(downloadUrls);
+        const parsedDownloadUrls = downloadUrls.map((info) => {
+          return {
+            ...info,
+            url: buildOriginalImageUrl(parseImagePath(info.url)),
+          };
+        });
         await downloadMultipleImages(parsedDownloadUrls);
 
         onDownloadSuccess?.();
       },
-      errorActions: ['toast'],
+      errorActions: ['toast', 'console'],
       context: {
         toast: {
           text: '다운로드에 실패했습니다. 다시 시도해 주세요.',
