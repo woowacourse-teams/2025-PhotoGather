@@ -146,17 +146,12 @@ const useFileUpload = ({
     validGuestId: number,
     nickName: string,
   ) => {
-    if (successFiles.length === 0) {
-      throw new Error('성공한 파일이 없습니다.');
-    }
-
     const uploadedPhotos = successFiles.map((file) => ({
       uploadFileName: file.objectKey,
       originalName: file.originFile.name,
       capturedAt: file.capturedAt,
       capacityValue: file.capacityValue,
     }));
-
     const response = await tryFetch({
       task: async () =>
         await photoService.notifyUploadComplete(
@@ -220,6 +215,14 @@ const useFileUpload = ({
     const successFiles = updatedBatchFiles.filter(
       (f) => f.state === 'uploaded',
     );
+    const failedFiles = updatedBatchFiles.filter((f) => f.state === 'failed');
+
+    if (failedFiles.length > 0 || successFiles.length === 0) {
+      throw new Error(
+        `failed files exist(${failedFiles.length}) or no success files(${successFiles.length})`,
+      );
+    }
+
     await notifySuccessFiles(successFiles, validGuestId, nickName);
   };
 
