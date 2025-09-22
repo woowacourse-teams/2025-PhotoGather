@@ -15,26 +15,13 @@ const useSpaceAccess = ({ spaceHostId, spaceType }: UseSpaceAccessProps) => {
   const [accessLoadingState, setAccessLoadingState] =
     useState<LoadingStateType>('pending');
 
-  const checkNoAuthAccess = async () => {
-    if (spaceType === 'PUBLIC') {
-      setHasAccess(true);
-      setAccessLoadingState('success');
-      return;
-    }
-    setHasAccess(false);
-    setAccessLoadingState('success');
-  };
+  const checkAuthAccess = async (visitorId?: number) => {
+    const isPublic = spaceType === 'PUBLIC';
+    const hasPermission = isPublic || visitorId === spaceHostId;
 
-  const checkAuthAndAccess = async (visitorId: number) => {
-    if (spaceType === 'PUBLIC') {
-      setHasAccess(true);
-      setAccessLoadingState('success');
-      setHostId(visitorId);
-      return;
-    }
-    setHasAccess(visitorId === spaceHostId);
-    setHostId(visitorId);
+    setHasAccess(hasPermission);
     setAccessLoadingState('success');
+    if (visitorId) setHostId(visitorId);
   };
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: contextApI로 대체 예정
@@ -50,12 +37,12 @@ const useSpaceAccess = ({ spaceHostId, spaceType }: UseSpaceAccessProps) => {
       try {
         await authService.status().then((res) => {
           if (!res.data) return;
-          checkAuthAndAccess(res.data.id);
+          checkAuthAccess(res.data.id);
         });
       } catch (error) {
         console.error(`접근 권한 확인 실패 : ${error}`);
         // TODO : catch 단을 context에 hostId가 없을 경우로 변경 (로그인 하지 않은 사용자)
-        checkNoAuthAccess();
+        checkAuthAccess();
       }
     };
     fetchAccess();
