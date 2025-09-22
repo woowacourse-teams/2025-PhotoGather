@@ -15,7 +15,7 @@ import ImmediateOpenElement from '../funnelElements/immediateOpenElement/Immedia
 import NameInputElement from '../funnelElements/NameInputElement';
 import * as S from './SpaceCreateFunnel.styles';
 
-type STEP = 'agreement' | 'name' | 'date' | 'accessType' | 'check';
+type STEP = 'agreement' | 'name' | 'date' | 'accessType' | 'inbox' | 'check';
 
 const initialFunnelValue: SpaceFunnelInfo = {
   name: '',
@@ -30,7 +30,13 @@ const SpaceCreateFunnel = () => {
   useConfirmBeforeRefresh();
   const { handleAgree, isAgree, loadingAgreements } = useAgreements();
   const needsAgreement = !isAgree;
-  const PROGRESS_STEP_LIST: STEP[] = ['name', 'date', 'accessType', 'check'];
+  const PROGRESS_STEP_LIST: STEP[] = [
+    'name',
+    'date',
+    'accessType',
+    'inbox',
+    'check',
+  ];
   const [step, setStep] = useState<STEP>('name');
   useEffect(() => {
     if (!loadingAgreements && needsAgreement) setStep('agreement');
@@ -108,6 +114,18 @@ const SpaceCreateFunnel = () => {
           />
         )}
         {step === 'accessType' && (
+          <AccessTypeElement
+            onNext={(accessType) => {
+              goNextStep('inbox');
+              setSpaceInfo((prev) => ({
+                ...prev,
+                accessType: accessType,
+              }));
+            }}
+            initialValue={spaceInfo.accessType}
+          />
+        )}
+        {step === 'inbox' && (
           <AccessTypeElement
             onNext={(accessType) => {
               goNextStep('check');
