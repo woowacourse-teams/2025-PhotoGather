@@ -263,7 +263,6 @@ const SpaceHomePage = () => {
     },
   ];
 
-
   const progressBarWidth =
     parseInt(theme.layout.width) - parseInt(theme.layout.padding.leftRight) * 8;
 

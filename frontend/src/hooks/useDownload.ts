@@ -39,6 +39,7 @@ const useDownload = ({
 
   const saveZipByFilePicker = async (body: ReadableStream<Uint8Array>) => {
     try {
+      // biome-ignore lint/suspicious/noExplicitAny: any 사용 필요
       const handle = await (window as any).showSaveFilePicker({
         suggestedName: `${spaceName}.zip`,
         types: [
