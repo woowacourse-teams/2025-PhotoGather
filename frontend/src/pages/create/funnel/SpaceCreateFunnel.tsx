@@ -133,7 +133,7 @@ const SpaceCreateFunnel = () => {
               goNextStep('check');
               setSpaceInfo((prev) => ({
                 ...prev,
-                inbox: isUsingInbox,
+                isUsingInbox,
               }));
             }}
             initialValue={spaceInfo.isUsingInbox}

@@ -7,6 +7,7 @@ export interface SpaceCreateInfo {
   validHours: number;
   openedAt: string;
   type?: string;
+  inbox?: boolean;
 }
 
 export interface Agreements {

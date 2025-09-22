@@ -49,6 +49,7 @@ const CheckSpaceInfoElement = ({
       validHours: 72,
       openedAt: calculatedOpenedAt,
       type: spaceInfo.accessType,
+      inbox: spaceInfo.isUsingInbox,
     });
     if (!spaceCode) return;
 
