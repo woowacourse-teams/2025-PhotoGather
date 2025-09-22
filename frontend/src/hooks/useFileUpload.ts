@@ -146,7 +146,7 @@ const useFileUpload = ({
     validGuestId: number,
     nickName: string,
   ) => {
-    if (successFiles.length !== localFiles.length) {
+    if (successFiles.length === 0) {
       throw new Error('성공한 파일이 없습니다.');
     }
 
