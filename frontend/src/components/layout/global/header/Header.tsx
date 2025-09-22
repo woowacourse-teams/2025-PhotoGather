@@ -1,6 +1,8 @@
-import { ReactComponent as SettingSvg } from '@assets/icons/setting.svg';
-import { ReactComponent as Logo } from '@assets/logo.svg';
 import { useLocation, useNavigate } from 'react-router-dom';
+import {
+  LogoIcon as Logo,
+  SettingIcon as SettingSvg,
+} from '../../../../@assets/icons';
 import { ROUTES } from '../../../../constants/routes';
 import { theme } from '../../../../styles/theme';
 import * as S from './Header.styles';
@@ -40,7 +42,7 @@ const Header = ({
     return (
       <S.ProfileImageButton
         type="button"
-        onClick={() => navigate(ROUTES.MYPAGE)}
+        onClick={() => navigate(ROUTES.LOGOUT)}
       >
         <img src={profileImageSrc} alt="프로필 이미지" />
       </S.ProfileImageButton>
@@ -49,7 +51,7 @@ const Header = ({
 
   return (
     <S.Wrapper>
-      <button type="button" onClick={() => navigate(ROUTES.LANDING)}>
+      <button type="button" onClick={() => navigate(ROUTES.MYPAGE)}>
         <Logo fill={theme.colors.white} width={100} />
       </button>
       {createActionButton()}

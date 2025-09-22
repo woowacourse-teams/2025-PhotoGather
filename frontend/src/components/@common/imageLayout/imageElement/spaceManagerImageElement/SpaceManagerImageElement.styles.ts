@@ -1,6 +1,8 @@
-import { ReactComponent as RoundCheckIcon } from '@assets/icons/round-check.svg';
-import { ReactComponent as NotSelectedCheckIcon } from '@assets/icons/round-check-outline.svg';
 import styled from '@emotion/styled';
+import {
+  RoundCheckOutlineIcon as NotSelectedCheckIcon,
+  RoundCheckIcon,
+} from '../../../../../@assets/icons';
 import { hexToRgba } from '../../../../../utils/hexToRgba';
 
 export const Overlay = styled.div<{ $isSelected: boolean }>`

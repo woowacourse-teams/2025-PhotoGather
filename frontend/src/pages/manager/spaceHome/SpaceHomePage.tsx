@@ -1,18 +1,24 @@
-import { ReactComponent as LinkIcon } from '@assets/icons/link.svg';
-import { ReactComponent as ShareIcon } from '@assets/icons/share.svg';
-import messageIcon from '@assets/images/message.png';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ReactComponent as SaveIcon } from '../../../@assets/icons/download.svg';
-import { ReactComponent as SettingSvg } from '../../../@assets/icons/setting.svg';
-import { ReactComponent as ArrowUpSvg } from '../../../@assets/icons/upwardArrow.svg';
+import {
+  AddPhotoIcon,
+  UpwardArrowIcon as ArrowUpSvg,
+  LinkIcon,
+  DownloadIcon as SaveIcon,
+  SettingIcon,
+  ShareIcon,
+} from '../../../@assets/icons';
+import {
+  GiftImg as GiftIcon,
+  MessageImg as messageIcon,
+} from '../../../@assets/images';
 import FloatingActionButton from '../../../components/@common/buttons/floatingActionButton/FloatingActionButton';
 import FloatingIconButton from '../../../components/@common/buttons/floatingIconButton/FloatingIconButton';
 import IconLabelButton from '../../../components/@common/buttons/iconLabelButton/IconLabelButton';
 import SpaceManagerImageGrid from '../../../components/@common/imageLayout/imageGrid/spaceManagerImageGrid/SpaceManagerImageGrid';
 import * as C from '../../../components/@common/modal/Modal.common.styles';
 import PhotoModal from '../../../components/@common/modal/photoModal/PhotoModal';
-import SpaceHeader from '../../../components/header/spaceHeader/SpaceHeader';
+import ManagerHeader from '../../../components/header/spaceHeader/managerSpaceHeader/ManagerHeader';
 import LoadingLayout from '../../../components/layout/loadingLayout/LoadingLayout';
 import PhotoSelectionToolBar from '../../../components/photoSelectionToolBar/PhotoSelectionToolBar';
 import SpaceHomeTopActionBar from '../../../components/spaceHomeTopActionBar/SpaceHomeTopActionBar';
@@ -22,6 +28,7 @@ import { useOverlay } from '../../../contexts/OverlayProvider';
 import useIntersectionObserver from '../../../hooks/@common/useIntersectionObserver';
 import useLeftTimer from '../../../hooks/@common/useLeftTimer';
 import { useToast } from '../../../hooks/@common/useToast';
+import useSpaceAccess from '../../../hooks/domain/useSpaceAccess';
 import useDownload from '../../../hooks/useDownload';
 import usePhotoSelect from '../../../hooks/usePhotoSelect';
 import usePhotosBySpaceCode from '../../../hooks/usePhotosBySpaceCode';
@@ -35,17 +42,16 @@ import { copyLinkToClipboard } from '../../../utils/copyLinkToClipboard';
 import { createShareUrl } from '../../../utils/createSpaceUrl';
 import { track } from '../../../utils/googleAnalytics/track';
 import { goToTop } from '../../../utils/goToTop';
+import AccessDeniedPage from '../../status/accessDeniedPage/AccessDeniedPage';
 import EarlyPage from '../../status/earlyPage/EarlyPage';
 import ExpiredPage from '../../status/expiredPage/ExpiredPage';
 import * as S from './SpaceHomePage.styles';
 
 const SpaceHomePage = () => {
-  const { spaceCode } = useSpaceCodeFromPath();
-  const { spaceInfo } = useSpaceInfo(spaceCode ?? '');
-  const isEarlyTime =
-    spaceInfo?.openedAt && checkIsEarlyDate(spaceInfo.openedAt);
-  const isSpaceExpired = spaceInfo?.isExpired;
-  const spaceName = spaceInfo?.name ?? '';
+  const overlay = useOverlay();
+  const { showToast } = useToast();
+  const navigate = useNavigate();
+
   const { targetRef: hideBlurAreaTriggerRef, isIntersecting: isAtPageBottom } =
     useIntersectionObserver({});
   const { targetRef: scrollTopTriggerRef, isIntersecting: isAtPageTop } =
@@ -56,16 +62,18 @@ const SpaceHomePage = () => {
     reObserve,
   } = useIntersectionObserver({ rootMargin: '200px' });
 
-  const { leftTime } = useLeftTimer({
-    targetTime: (spaceInfo?.expiredAt as string) ?? '',
-  });
+  const { spaceCode } = useSpaceCodeFromPath();
 
-  const overlay = useOverlay();
-  const { showToast } = useToast();
+  const { spaceInfo } = useSpaceInfo(spaceCode ?? '');
+  const spaceName = spaceInfo?.name ?? '';
+  const isEarlyTime =
+    spaceInfo?.openedAt && checkIsEarlyDate(spaceInfo.openedAt);
+  const isSpaceExpired = spaceInfo?.isExpired;
+
+  const { hasAccess, isLoadingAccess } = useSpaceAccess(spaceInfo?.host.id);
 
   const {
     photosList,
-    isLoading,
     thumbnailPhotoMap,
     isEndPage,
     tryFetchPhotosList,
@@ -74,8 +82,6 @@ const SpaceHomePage = () => {
     reObserve,
     spaceCode: spaceCode ?? '',
   });
-
-  const navigate = useNavigate();
 
   const {
     isDownloading,
@@ -94,6 +100,10 @@ const SpaceHomePage = () => {
         },
       });
     },
+  });
+
+  const { leftTime } = useLeftTimer({
+    targetTime: (spaceInfo?.expiredAt as string) ?? '',
   });
 
   const {
@@ -144,6 +154,15 @@ const SpaceHomePage = () => {
     });
   };
 
+  const clickUploadButtonWithTracking = () => {
+    navigate(ROUTES.GUEST.IMAGE_UPLOAD(spaceCode ?? ''));
+    track.button('space_upload_button', {
+      page: 'space_home',
+      section: 'space_home_header',
+      action: 'open_upload',
+    });
+  };
+
   const openPhotoModal = async (photoId: number) => {
     await overlay(
       <PhotoModal
@@ -163,62 +182,159 @@ const SpaceHomePage = () => {
 
   //biome-ignore lint/correctness/useExhaustiveDependencies: isFetchSectionVisible 변경 시 호출
   useEffect(() => {
-    if (
-      !isFetchSectionVisible ||
-      isEndPage ||
-      isLoading ||
-      isSpaceExpired ||
-      isEarlyTime
-    )
-      return;
+    if (isSpaceExpired || isEarlyTime || !hasAccess) return;
+    if (!isFetchSectionVisible || isEndPage) return;
+
     tryFetchPhotosList();
-  }, [isFetchSectionVisible, isEndPage, isSpaceExpired, isEarlyTime]);
+  }, [
+    isFetchSectionVisible,
+    isEndPage,
+    isSpaceExpired,
+    isEarlyTime,
+    hasAccess,
+  ]);
 
   const loadingContents = [
     {
-      icon: { src: messageIcon, alt: '데모 페이지 아이콘' },
+      icon: { src: messageIcon, alt: '로딩 아이콘' },
       description: '추억 담는 중',
     },
     {
-      icon: { src: messageIcon, alt: '데모 페이지 아이콘' },
+      icon: { src: messageIcon, alt: '로딩 아이콘' },
       description: '선물 상자 포장하는 중',
     },
     {
-      icon: { src: messageIcon, alt: '데모 페이지 아이콘' },
+      icon: { src: messageIcon, alt: '로딩 아이콘' },
       description: '배달 가는 중',
     },
     {
-      icon: { src: messageIcon, alt: '데모 페이지 아이콘' },
+      icon: { src: messageIcon, alt: '로딩 아이콘' },
       description: '당신에게 전달 중',
     },
   ];
 
   const toggleShareModal = async () => {
-    try {
-      await overlay(
-        <C.Wrapper>
-          <S.ModalContentContainer>
-            <IconLabelButton
-              icon={<LinkIcon fill={theme.colors.white} width="20px" />}
-              onClick={() => {
-                copyLinkToClipboard(createShareUrl(spaceCode ?? ''));
-                showToast({
-                  text: '링크가 복사되었습니다.',
-                  type: 'info',
-                  position: 'top',
-                });
-              }}
-              label="업로드 링크"
+    await overlay(
+      <C.Wrapper>
+        <S.ModalContentContainer>
+          <IconLabelButton
+            icon={<LinkIcon width="20px" />}
+            variant="outline"
+            onClick={() => {
+              copyLinkToClipboard(createShareUrl(spaceCode ?? ''));
+              showToast({
+                text: '링크가 복사되었습니다.',
+                type: 'info',
+                position: 'top',
+              });
+            }}
+            label="업로드 링크"
+          />
+        </S.ModalContentContainer>
+      </C.Wrapper>,
+      {
+        clickOverlayClose: true,
+      },
+    );
+  };
+
+  const canAddPhoto = hasAccess && !isSpaceExpired && !isEarlyTime;
+  const canShare = hasAccess && !isSpaceExpired;
+  const canChangeSetting = hasAccess;
+
+  const iconItems = [
+    {
+      element: <AddPhotoIcon width="20px" />,
+      onClick: clickUploadButtonWithTracking,
+      disabled: !canAddPhoto,
+      label: '업로드',
+    },
+    {
+      element: <ShareIcon width="20px" />,
+      onClick: toggleShareModal,
+      disabled: !canShare,
+      label: '공유',
+    },
+    {
+      element: <SettingIcon width="20px" />,
+      onClick: clickDashboardWithTracking,
+      disabled: !canChangeSetting,
+      label: '설정',
+    },
+  ];
+
+  const renderBottomNavigatorContent = () => {
+    return (
+      <S.BottomNavigatorContainer>
+        <S.TopButtonContainer $isVisible={!isAtPageTop}>
+          {!isSelectMode && (
+            <FloatingIconButton
+              icon={<ArrowUpSvg fill={theme.colors.white} />}
+              onClick={goToTop}
             />
-          </S.ModalContentContainer>
-        </C.Wrapper>,
-        {
-          clickOverlayClose: true,
-        },
+          )}
+        </S.TopButtonContainer>
+        {isSelectMode && (
+          <PhotoSelectionToolBar
+            selectedCount={selectedPhotosCount}
+            onDelete={() => tryDeleteSelectedPhotos(selectedPhotoIds)}
+            onDownload={() => trySelectedDownload(selectedPhotoIds)}
+          />
+        )}
+      </S.BottomNavigatorContainer>
+    );
+  };
+
+  const renderBodyContent = () => {
+    if (isEarlyTime) return <EarlyPage openedAt={spaceInfo.openedAt} />;
+    if (!hasAccess && !isLoadingAccess) return <AccessDeniedPage />;
+    if (isSpaceExpired) return <ExpiredPage />;
+    if (photosList.length === 0)
+      return (
+        <S.NoImageContainer>
+          <S.GiftIconImage src={GiftIcon} />
+          <S.NoImageText>{INFORMATION.NO_IMAGE}</S.NoImageText>
+        </S.NoImageContainer>
       );
-    } catch (error) {
-      console.error(`모달 실패 : ${error}`);
-    }
+    if (photosList.length > 0)
+      return (
+        <>
+          <S.ImageManagementContainer>
+            <SpaceHomeTopActionBar
+              isSelectMode={isSelectMode}
+              isAllSelected={isAllSelected}
+              onToggleSelectMode={toggleSelectMode}
+              onToggleAllSelected={toggleAllSelected}
+            />
+            <SpaceManagerImageGrid
+              isSelectMode={isSelectMode}
+              selectedPhotoMap={selectedPhotoMap}
+              photoData={photosList}
+              thumbnailUrlList={thumbnailPhotoMap}
+              rowImageAmount={3}
+              onImageClick={handleImageClick}
+            />
+          </S.ImageManagementContainer>
+          {!isSelectMode && (
+            <S.DownloadButtonContainer>
+              <FloatingActionButton
+                label="모두 저장하기"
+                icon={<SaveIcon fill={theme.colors.gray06} />}
+                onClick={() => {
+                  tryAllDownload();
+                  track.button('all_download_button', {
+                    page: 'space_home',
+                    section: 'space_home',
+                    action: 'download_all',
+                  });
+                }}
+                disabled={isDownloading}
+              />
+            </S.DownloadButtonContainer>
+          )}
+          {renderBottomNavigatorContent()}
+        </>
+      );
   };
 
   return (
@@ -230,92 +346,17 @@ const SpaceHomePage = () => {
           currentAmount={currentProgress}
         />
       )}
+
       <S.InfoContainer ref={scrollTopTriggerRef}>
-        <SpaceHeader
+        <ManagerHeader
           title={spaceName}
+          accessType={spaceInfo?.type}
           timer={leftTime}
-          icons={[
-            {
-              element: <SettingSvg fill={theme.colors.white} width="20px" />,
-              onClick: clickDashboardWithTracking,
-              label: '설정',
-            },
-            {
-              element: <ShareIcon fill={theme.colors.white} width="20px" />,
-              onClick: toggleShareModal,
-              label: '공유',
-            },
-          ]}
+          iconItems={iconItems}
         />
       </S.InfoContainer>
 
-      {isEarlyTime || isSpaceExpired ? (
-        <S.NoImageContainer>
-          {isEarlyTime && <EarlyPage openedAt={spaceInfo.openedAt} />}
-          {isSpaceExpired && <ExpiredPage />}
-        </S.NoImageContainer>
-      ) : (
-        photosList &&
-        (photosList.length > 0 ? (
-          <>
-            <S.ImageManagementContainer>
-              <SpaceHomeTopActionBar
-                isSelectMode={isSelectMode}
-                isAllSelected={isAllSelected}
-                onToggleSelectMode={toggleSelectMode}
-                onToggleAllSelected={toggleAllSelected}
-              />
-              <SpaceManagerImageGrid
-                isSelectMode={isSelectMode}
-                selectedPhotoMap={selectedPhotoMap}
-                photoData={photosList}
-                thumbnailUrlList={thumbnailPhotoMap}
-                rowImageAmount={3}
-                onImageClick={handleImageClick}
-              />
-            </S.ImageManagementContainer>
-
-            {!isSelectMode && (
-              <S.DownloadButtonContainer>
-                <FloatingActionButton
-                  label="모두 저장하기"
-                  icon={<SaveIcon fill={theme.colors.gray06} />}
-                  onClick={() => {
-                    tryAllDownload();
-                    track.button('all_download_button', {
-                      page: 'space_home',
-                      section: 'space_home',
-                      action: 'download_all',
-                    });
-                  }}
-                  disabled={isDownloading}
-                />
-              </S.DownloadButtonContainer>
-            )}
-
-            <S.BottomNavigatorContainer>
-              <S.TopButtonContainer $isVisible={!isAtPageTop}>
-                <FloatingIconButton
-                  icon={<ArrowUpSvg fill={theme.colors.white} />}
-                  onClick={goToTop}
-                />
-              </S.TopButtonContainer>
-              {isSelectMode && (
-                <PhotoSelectionToolBar
-                  selectedCount={selectedPhotosCount}
-                  onDelete={() => tryDeleteSelectedPhotos(selectedPhotoIds)}
-                  onDownload={() => trySelectedDownload(selectedPhotoIds)}
-                />
-              )}
-            </S.BottomNavigatorContainer>
-          </>
-        ) : (
-          <S.NoImageContainer>
-            <S.Icon />
-            <S.NoImageText>{INFORMATION.NO_IMAGE}</S.NoImageText>
-          </S.NoImageContainer>
-        ))
-      )}
+      <S.BodyContainer>{renderBodyContent()}</S.BodyContainer>
 
       <S.IntersectionArea ref={hideBlurAreaTriggerRef} />
       <S.IntersectionArea ref={fetchTriggerRef} />

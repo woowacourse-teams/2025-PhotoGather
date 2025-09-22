@@ -293,3 +293,18 @@ declare namespace Intl {
     isWordLike?: boolean;
   }
 }
+
+declare module '*.png?as=webp' {
+  const src: string;
+  export default src;
+}
+
+declare module '*.jpg?as=webp' {
+  const src: string;
+  export default src;
+}
+
+declare module '*.jpeg?as=webp' {
+  const src: string;
+  export default src;
+}

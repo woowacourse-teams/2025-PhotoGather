@@ -1,5 +1,5 @@
-import { ReactComponent as EditIcon } from '@assets/icons/edit.svg';
 import { useNavigate } from 'react-router-dom';
+import { EditIcon } from '../../../@assets/icons';
 import ComingSoonBox from '../../../components/comingSoonBox/ComingSoonBox';
 import DashboardBox from '../../../components/dashboardBox/DashboardBox';
 import DonutGraph from '../../../components/donutGraph/DonutGraph';

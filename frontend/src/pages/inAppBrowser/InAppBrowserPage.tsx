@@ -1,5 +1,5 @@
-import planetImage from '@assets/images/planet.png';
 import { useLocation } from 'react-router-dom';
+import { PlanetImg as planetImage } from '../../@assets/images';
 import MessageLayout from '../../components/layout/messageLayout/MessageLayout';
 import useInAppRedirect from '../../hooks/@common/useInAppRedirect';
 

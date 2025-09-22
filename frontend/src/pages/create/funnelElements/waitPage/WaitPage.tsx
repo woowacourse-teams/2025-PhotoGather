@@ -1,4 +1,4 @@
-import loadingImage from '@assets/images/loading.png';
+import { LoadingImg as loadingImage } from '../../../../@assets/images';
 import HighlightText from '../../../../components/@common/highlightText/HighlightText';
 import { INFORMATION } from '../../../../constants/messages';
 import type { SpaceFunnelInfo } from '../../../../types/space.type';

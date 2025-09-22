@@ -77,7 +77,7 @@ export const theme = {
     },
     buttonTertiary: {
       fontWeight: 500,
-      fontSize: '12px',
+      fontSize: '14px',
       lineHeight: '120%',
     },
   },

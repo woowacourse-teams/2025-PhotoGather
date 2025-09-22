@@ -75,3 +75,10 @@ export const LoadingSpinnerContainer = styled.div`
   transform: translate(-50%, -50%);
   z-index: ${({ theme }) => theme.zIndex.loadingSpinner};
 `;
+
+export const ToolBar = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+`;

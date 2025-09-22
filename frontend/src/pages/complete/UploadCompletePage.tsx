@@ -1,5 +1,5 @@
-import uploadImage from '@assets/images/upload.png';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { UploadImg as uploadImage } from '../../@assets/images';
 import MessageLayout from '../../components/layout/messageLayout/MessageLayout';
 import { COMPLETE } from '../../constants/messages';
 import { ROUTES } from '../../constants/routes';

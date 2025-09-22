@@ -1,16 +1,16 @@
-import lockImage from '@assets/images/lock.png';
+import { LockImg as lockImage } from '../../../@assets/images';
 import StatusLayout from '../../../components/layout/statusLayout/StatusLayout';
-import * as S from './ExpiredPage.styles';
+import * as C from '../StatusPage.common.styles';
 
 const ExpiredPage = () => {
   return (
     <StatusLayout
       image={{ src: lockImage, alt: '만료' }}
       element={
-        <S.DescriptionContainer>
-          <S.Description>스페이스 기간이</S.Description>
-          <S.Description>만료되었어요</S.Description>
-        </S.DescriptionContainer>
+        <C.DescriptionContainer>
+          <C.Description>스페이스 기간이</C.Description>
+          <C.Description>만료되었어요</C.Description>
+        </C.DescriptionContainer>
       }
     />
   );

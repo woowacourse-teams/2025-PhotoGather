@@ -1,4 +1,4 @@
-import loadingImage from '@assets/images/loading.png';
+import { LoadingImg as loadingImage } from '../../@assets/images';
 import HighlightText from '../@common/highlightText/HighlightText';
 import * as S from './LeftTimeInformationBox.styles';
 
@@ -11,7 +11,7 @@ interface OpenDate {
 
 interface LeftTimeInformationBoxProps {
   /** 스페이스 타이틀 */
-  title: string;
+  title: string | React.ReactNode;
   /** 오픈까지 남은 날짜와 시간 */
   leftTime: string;
   /** 오픈하는 날짜와 시간 */
@@ -27,7 +27,7 @@ const LeftTimeInformationBox = ({
 
   return (
     <S.Wrapper>
-      <S.Title>{title}</S.Title>
+      {typeof title === 'string' ? <S.Title>{title}</S.Title> : title}
       <S.TopDescriptionContainer>
         <S.TopDescription>열리기까지</S.TopDescription>
         <S.TopLeftTime>{leftTime}</S.TopLeftTime>

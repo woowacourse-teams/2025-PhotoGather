@@ -1,6 +1,6 @@
-import { ReactComponent as KakaoLogo } from '@assets/icons/kakaotalk.svg';
-import LoginImage from '@assets/images/login.png';
 import { useNavigate } from 'react-router-dom';
+import { KakaoTalkIcon as KakaoLogo } from '../../@assets/icons';
+import { LoginImg as LoginImage } from '../../@assets/images';
 import Button from '../../components/@common/buttons/button/Button';
 import IconLabelButton from '../../components/@common/buttons/iconLabelButton/IconLabelButton';
 import HighlightText from '../../components/@common/highlightText/HighlightText';
@@ -34,6 +34,7 @@ const LoginPage = () => {
             icon={<KakaoLogo />}
             style={{ backgroundColor: theme.colors.kakaoTalk, border: 'none' }}
             onClick={handleKakaoLogin}
+            variant="outline"
           />
         </S.LoginButtonContainer>
         <Button

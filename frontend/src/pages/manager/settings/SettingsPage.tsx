@@ -1,6 +1,6 @@
-import { ReactComponent as WarningIcon } from '@assets/icons/warning.svg';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { WarningIcon } from '../../../@assets/icons';
 import { spaceService } from '../../../apis/services/space.service';
 import Button from '../../../components/@common/buttons/button/Button';
 import InfoBox from '../../../components/@common/infoBox/InfoBox';
@@ -10,12 +10,15 @@ import ConfirmModal from '../../../components/@common/modal/confirmModal/Confirm
 import { INFORMATION } from '../../../constants/messages';
 import { ROUTES } from '../../../constants/routes';
 import { useOverlay } from '../../../contexts/OverlayProvider';
-import useError from '../../../hooks/@common/useError';
 import useGraphemeInput from '../../../hooks/@common/useGraphemeInput';
+import useTaskHandler from '../../../hooks/@common/useTaskHandler';
 import { useToast } from '../../../hooks/@common/useToast';
 import useSpaceCodeFromPath from '../../../hooks/useSpaceCodeFromPath';
 import useSpaceInfo from '../../../hooks/useSpaceInfo';
-import type { SpaceCreateInfo } from '../../../types/space.type';
+import type {
+  SpaceAccessType,
+  SpaceCreateInfo,
+} from '../../../types/space.type';
 import { track } from '../../../utils/googleAnalytics/track';
 import { parseIsoStringFromDateTime } from '../../../utils/parseIsoStringFromDateTime';
 import * as S from './SettingsPage.styles';
@@ -23,7 +26,7 @@ import * as S from './SettingsPage.styles';
 const SettingsPage = () => {
   const { spaceCode } = useSpaceCodeFromPath();
   const { spaceInfo, refetchSpaceInfo } = useSpaceInfo(spaceCode || '');
-  const { tryFetch } = useError();
+  const { tryFetch } = useTaskHandler();
   const overlay = useOverlay();
   const navigate = useNavigate();
   const { showToast } = useToast();
@@ -46,6 +49,8 @@ const SettingsPage = () => {
     onChange: (e) => setSpaceName(e.target.value),
   });
 
+  const [accessType, setAccessType] = useState<SpaceAccessType>();
+
   useEffect(() => {
     if (spaceInfo) {
       setSpaceName(spaceInfo.name);
@@ -56,6 +61,7 @@ const SettingsPage = () => {
 
       setDate(dateString);
       setTime(timeString);
+      setAccessType(spaceInfo.type);
     }
   }, [spaceInfo]);
 
@@ -69,14 +75,15 @@ const SettingsPage = () => {
     return (
       validValue !== spaceInfo.name ||
       date !== originalDate ||
-      time !== originalTime
+      time !== originalTime ||
+      accessType !== spaceInfo.type
     );
   })();
 
   const handleUpdateSpaceInfo = async () => {
     if (!spaceCode || !spaceInfo) return;
 
-    const updateData: Partial<SpaceCreateInfo> = { password: '' };
+    const updateData: Partial<SpaceCreateInfo> = {};
 
     if (validValue !== spaceInfo.name) {
       updateData.name = validValue;
@@ -97,6 +104,10 @@ const SettingsPage = () => {
         );
         updateData.validHours = newValidHours > 0 ? newValidHours : 72;
       }
+    }
+
+    if (accessType !== spaceInfo.type) {
+      updateData.type = accessType;
     }
 
     const result = await tryFetch({
@@ -180,9 +191,12 @@ const SettingsPage = () => {
       </S.InfoBoxContainer>
       <S.InfoContainer>
         <S.InputContainer>
-          <S.InputWrapper style={{ marginBottom: '-8px' }}>
-            <S.InputLabel>스페이스 이름</S.InputLabel>
+          <S.InputWrapper style={{ marginBottom: '-24px' }}>
+            <S.InputLabel htmlFor="space-name-input">
+              스페이스 이름
+            </S.InputLabel>
             <TextInput
+              id="space-name-input"
               placeholder="스페이스 이름을 입력하세요"
               value={validValue}
               onChange={handleChange}
@@ -192,8 +206,9 @@ const SettingsPage = () => {
           </S.InputWrapper>
           <S.DateTimeContainer>
             <S.InputWrapper>
-              <S.InputLabel>시작 날짜</S.InputLabel>
+              <S.InputLabel htmlFor="start-date-input">시작 날짜</S.InputLabel>
               <DateTimeInput
+                id="start-date-input"
                 inputType="date"
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
@@ -202,8 +217,9 @@ const SettingsPage = () => {
               />
             </S.InputWrapper>
             <S.InputWrapper>
-              <S.InputLabel>시작 시간</S.InputLabel>
+              <S.InputLabel htmlFor="start-time-input">시작 시간</S.InputLabel>
               <DateTimeInput
+                id="start-time-input"
                 inputType="time"
                 value={time}
                 onChange={(e) => setTime(e.target.value)}
@@ -212,6 +228,21 @@ const SettingsPage = () => {
               />
             </S.InputWrapper>
           </S.DateTimeContainer>
+          <S.InputWrapper>
+            <S.InputLabel htmlFor="access-type-input">공개 범위</S.InputLabel>
+            <S.AccessTypeButtonContainer id="access-type-input">
+              <Button
+                onClick={() => setAccessType('PUBLIC')}
+                text="공개"
+                variant={accessType === 'PUBLIC' ? 'primary' : 'secondary'}
+              />
+              <Button
+                onClick={() => setAccessType('PRIVATE')}
+                text="비공개"
+                variant={accessType === 'PRIVATE' ? 'primary' : 'secondary'}
+              />
+            </S.AccessTypeButtonContainer>
+          </S.InputWrapper>
         </S.InputContainer>
       </S.InfoContainer>
       <S.SpaceDeleteButtonContainer>

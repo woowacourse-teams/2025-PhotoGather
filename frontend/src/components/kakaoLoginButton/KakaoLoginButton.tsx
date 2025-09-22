@@ -1,4 +1,4 @@
-import { ReactComponent as KakaoIcon } from '@assets/icons/kakaotalk.svg';
+import { KakaoTalkIcon as KakaoIcon } from '../../@assets/icons';
 import * as S from './KakaoLoginButton.styles';
 
 export type IconPosition = 'left' | 'center';

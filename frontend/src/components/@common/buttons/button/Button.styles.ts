@@ -46,6 +46,8 @@ export const buttonStyles = {
   `,
 
   tertiary: (theme: Theme) => css`
+    width: fit-content;
+    padding: 0;
     background-color: transparent;
     color: ${theme.colors.gray03};
     ${theme.typography.buttonTertiary}

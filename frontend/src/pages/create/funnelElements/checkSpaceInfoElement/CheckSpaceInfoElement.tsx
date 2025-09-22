@@ -1,17 +1,19 @@
 import { useNavigate } from 'react-router-dom';
-import LeftTimeInformationBox from '../../../components/leftTimeInformationBox/LeftTimeInformationBox';
-import { INFORMATION } from '../../../constants/messages';
-import { ROUTES } from '../../../constants/routes';
-import useLeftTimer from '../../../hooks/@common/useLeftTimer';
-import useAgreements from '../../../hooks/domain/useAgreements';
-import useCreateSpace from '../../../hooks/useCreateSpace';
-import type { FunnelElementProps } from '../../../types/funnel.type';
-import type { SpaceFunnelInfo } from '../../../types/space.type';
-import { calculateKstToday } from '../../../utils/calculateKstToday';
-import { formatDate } from '../../../utils/formatDate';
-import { formatTimer } from '../../../utils/formatTimer';
-import { parseIsoStringFromDateTime } from '../../../utils/parseIsoStringFromDateTime';
-import FunnelBasePage from '../funnel/FunnelBasePage/FunnelBasePage';
+import AccessTypeIcon from '../../../../components/accessTypeIcon/AccessTypeIcon';
+import LeftTimeInformationBox from '../../../../components/leftTimeInformationBox/LeftTimeInformationBox';
+import { INFORMATION } from '../../../../constants/messages';
+import { ROUTES } from '../../../../constants/routes';
+import useLeftTimer from '../../../../hooks/@common/useLeftTimer';
+import useAgreements from '../../../../hooks/domain/useAgreements';
+import useCreateSpace from '../../../../hooks/useCreateSpace';
+import type { FunnelElementProps } from '../../../../types/funnel.type';
+import type { SpaceFunnelInfo } from '../../../../types/space.type';
+import { calculateKstToday } from '../../../../utils/calculateKstToday';
+import { formatDate } from '../../../../utils/formatDate';
+import { formatTimer } from '../../../../utils/formatTimer';
+import { parseIsoStringFromDateTime } from '../../../../utils/parseIsoStringFromDateTime';
+import FunnelBasePage from '../../funnel/FunnelBasePage/FunnelBasePage';
+import * as S from './CheckSpaceInfoElement.styles';
 
 interface CheckSpaceInfoPageProps extends FunnelElementProps<boolean> {
   spaceInfo: SpaceFunnelInfo;
@@ -46,7 +48,7 @@ const CheckSpaceInfoElement = ({
       name: spaceInfo.name,
       validHours: 72,
       openedAt: calculatedOpenedAt,
-      password: '',
+      type: spaceInfo.accessType,
     });
     if (!spaceCode) return;
 
@@ -71,7 +73,12 @@ const CheckSpaceInfoElement = ({
       description={INFORMATION.CHECK_SPACE_INFO.DESCRIPTION}
       element={
         <LeftTimeInformationBox
-          title={spaceInfo.name}
+          title={
+            <S.TitleContainer>
+              <S.Title>{spaceInfo.name}</S.Title>
+              <AccessTypeIcon accessType={spaceInfo.accessType} color="black" />
+            </S.TitleContainer>
+          }
           openDate={{ date, time }}
           leftTime={formattedLeftTime}
         />

@@ -1,6 +1,6 @@
-import { ReactComponent as ClockIcon } from '@assets/icons/clock.svg';
 import styled from '@emotion/styled';
 import { isPropValid } from 'storybook/internal/theming';
+import { ClockIcon } from '../../../@assets/icons';
 
 export const Wrapper = styled.div`
   display: flex;
@@ -14,6 +14,12 @@ export const TitleIconContainer = styled.div`
   align-items: center;
 `;
 
+export const TitleContainer = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+`;
+
 export const Title = styled.p`
   ${({ theme }) => ({ ...theme.typography.header01 })};
   color: ${({ theme }) => theme.colors.white};
@@ -22,15 +28,6 @@ export const Title = styled.p`
 export const IconContainer = styled.div`
   display: flex;
   gap: 8px;
-`;
-
-export const Icon = styled.button`
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  &:active {
-    scale: 0.9;
-  }
 `;
 
 export const TimerContainer = styled.div`

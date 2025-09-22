@@ -38,6 +38,7 @@ export const InputContainer = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
+  gap: 12px;
 `;
 
 export const InputWrapper = styled.div`
@@ -55,6 +56,12 @@ export const DateTimeContainer = styled.div`
 export const InputLabel = styled.label`
   ${({ theme }) => ({ ...theme.typography.bodyLarge })};
   color: ${({ theme }) => theme.colors.gray06};
+`;
+
+export const AccessTypeButtonContainer = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 12px;
 `;
 
 export const SpaceDeleteButtonContainer = styled.div`

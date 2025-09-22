@@ -1,13 +1,10 @@
 package com.forgather.domain.space.controller;
 
-import static org.springframework.http.HttpStatus.CREATED;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
-import java.util.List;
 
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
@@ -24,22 +21,15 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
 import com.forgather.domain.space.dto.DeletePhotosRequest;
 import com.forgather.domain.space.dto.DownloadPhotosRequest;
 import com.forgather.domain.space.dto.DownloadUrlsResponse;
-import com.forgather.domain.space.dto.IssueSignedUrlRequest;
-import com.forgather.domain.space.dto.IssueSignedUrlResponse;
 import com.forgather.domain.space.dto.PhotoResponse;
 import com.forgather.domain.space.dto.PhotosResponse;
-import com.forgather.domain.space.dto.SaveUploadedPhotoRequest;
 import com.forgather.domain.space.service.PhotoService;
-import com.forgather.domain.space.service.UploadService;
 import com.forgather.global.auth.annotation.LoginHost;
 import com.forgather.global.auth.model.Host;
 
@@ -58,40 +48,6 @@ public class PhotoController {
     private static final String ZIP_CONTENT_TYPE = "application/zip";
 
     private final PhotoService photoService;
-    private final UploadService uploadService;
-
-    @Deprecated
-    @PostMapping(path = "/upload", consumes = {"multipart/form-data"})
-    @Operation(summary = "사진 일괄 업로드", description = "클라우드 저장소와 DB에 사진을 전부 업로드합니다.")
-    public ResponseEntity<Void> uploadAll(
-        @PathVariable(name = "spaceCode") String spaceCode,
-        @RequestPart(name = "files") List<MultipartFile> files,
-        @RequestParam(name = "guestId", required = false) Long guestId
-    ) {
-        uploadService.saveAll(spaceCode, files, guestId);
-        return ResponseEntity.ok().build();
-    }
-
-    @PostMapping(path = "/issue/upload-urls")
-    @Operation(summary = "업로드 URL 일괄 발급", description = "업로드 사진 별 서명된 URL을 발급합니다.")
-    public ResponseEntity<IssueSignedUrlResponse> issuePreSignedUrls(
-        @PathVariable(name = "spaceCode") String spaceCode,
-        @RequestBody IssueSignedUrlRequest request
-    ) {
-        var response = uploadService.issueSignedUrls(spaceCode, request);
-        return ResponseEntity.ok(response);
-    }
-
-    @PostMapping
-    @Operation(summary = "업로드 된 사진 정보 일괄 저장", description = "업로드 된 사진 정보를 DB에 저장합니다.")
-    public ResponseEntity<Void> saveAll(
-        @PathVariable(name = "spaceCode") String spaceCode,
-        @RequestBody SaveUploadedPhotoRequest request,
-        @RequestParam(name = "guestId", required = false) Long guestId
-    ) {
-        photoService.saveUploadedPhotos(spaceCode, request, guestId);
-        return ResponseEntity.status(CREATED).build();
-    }
 
     @GetMapping("/{photoId}")
     @Operation(summary = "사진 조회", description = "특정 공간의 사진을 조회합니다.")
@@ -108,7 +64,7 @@ public class PhotoController {
     @Operation(summary = "사진 목록 조회", description = "특정 공간의 사진 목록을 조회합니다.")
     public ResponseEntity<PhotosResponse> getAll(
         @PathVariable(name = "spaceCode") String spaceCode,
-        @PageableDefault(size = 15, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable,
+        @PageableDefault(size = 15, sort = {"createdAt", "id"}, direction = Sort.Direction.DESC) Pageable pageable,
         @LoginHost(required = false) Host host
     ) {
         var response = photoService.getAll(spaceCode, pageable, host);
@@ -121,7 +77,7 @@ public class PhotoController {
     public ResponseEntity<Resource> download(
         @PathVariable(name = "spaceCode") String spaceCode,
         @PathVariable(name = "photoId") Long photoId,
-        @LoginHost Host host
+        @LoginHost(required = false) Host host
     ) {
         var response = photoService.download(spaceCode, photoId, host);
         ContentDisposition contentDisposition = ContentDisposition.attachment()
@@ -143,7 +99,7 @@ public class PhotoController {
     public ResponseEntity<StreamingResponseBody> downloadSelected(
         @PathVariable(name = "spaceCode") String spaceCode,
         @RequestBody DownloadPhotosRequest request,
-        @LoginHost Host host
+        @LoginHost(required = false) Host host
     ) throws IOException {
         File zipFile = photoService.compressSelected(spaceCode, request, host);
 
@@ -180,7 +136,7 @@ public class PhotoController {
     @Operation(summary = "사진 zip 일괄 다운로드", description = "특정 공간의 사진 목록을 zip 파일로 다운로드합니다.")
     public ResponseEntity<StreamingResponseBody> downloadAll(
         @PathVariable(name = "spaceCode") String spaceCode,
-        @LoginHost Host host
+        @LoginHost(required = false) Host host
     ) throws IOException {
         File zipFile = photoService.compressAll(spaceCode, host);
 

@@ -2,8 +2,10 @@ import { downloadZip } from 'client-zip';
 import { useState } from 'react';
 import { photoService } from '../apis/services/photo.service';
 import type { DownloadInfo } from '../types/photo.type';
+import { buildOriginalImageUrl } from '../utils/buildImageUrl';
+import { parseImagePath } from '../utils/parsedImagePath';
 import { checkSelectedPhotoExist } from '../validators/photo.validator';
-import useError from './@common/useError';
+import useTaskHandler from './@common/useTaskHandler';
 
 interface UseDownloadProps {
   spaceCode: string;
@@ -16,11 +18,10 @@ const useDownload = ({
   spaceName,
   onDownloadSuccess,
 }: UseDownloadProps) => {
-  const [isDownloading, setIsDownloading] = useState(false);
   const [totalProgress, setTotalProgress] = useState(0);
   const [currentProgress, setCurrentProgress] = useState(0);
 
-  const { tryTask, tryFetch } = useError();
+  const { loadingState, tryTask, tryFetch } = useTaskHandler();
 
   const downloadAsImage = async (url: string, fileName: string) => {
     const response = await fetch(url);
@@ -99,7 +100,6 @@ const useDownload = ({
 
     await tryFetch({
       task: async () => {
-        setIsDownloading(true);
         const response = await photoService.downloadPhotos(spaceCode, {
           photoIds: photoIds,
         });
@@ -116,7 +116,12 @@ const useDownload = ({
         }
 
         setTotalProgress(downloadUrls.length);
-        await downloadAsZip(downloadUrls);
+        const parsedUrls = downloadUrls.map((info) => ({
+          ...info,
+          url: buildOriginalImageUrl(parseImagePath(info.url)),
+        }));
+        console.log(parsedUrls);
+        await downloadAsZip(parsedUrls);
       },
       errorActions: ['toast'],
       context: {
@@ -125,10 +130,10 @@ const useDownload = ({
           type: 'error',
         },
       },
+      loadingStateKey: 'selectedDownload',
       onFinally: () => {
         setTotalProgress(0);
         setCurrentProgress(0);
-        setIsDownloading(false);
       },
     });
   };
@@ -144,7 +149,7 @@ const useDownload = ({
         const { downloadUrls } = response.data;
 
         await downloadAsImage(
-          downloadUrls[0].url,
+          buildOriginalImageUrl(parseImagePath(downloadUrls[0].url)),
           downloadUrls[0].originalName,
         );
       },
@@ -155,16 +160,13 @@ const useDownload = ({
           type: 'error',
         },
       },
-      onFinally: () => {
-        setIsDownloading(false);
-      },
+      loadingStateKey: 'singleDownload',
     });
   };
 
   const tryAllDownload = async () => {
     await tryFetch({
       task: async () => {
-        setIsDownloading(true);
         const response = await photoService.downloadAll(spaceCode);
 
         if (!response.data) return;
@@ -172,7 +174,11 @@ const useDownload = ({
         const { downloadUrls } = data;
 
         setTotalProgress(downloadUrls.length);
-        await downloadAsZip(downloadUrls);
+        const parsedUrls = downloadUrls.map((info) => ({
+          ...info,
+          url: buildOriginalImageUrl(parseImagePath(info.url)),
+        }));
+        await downloadAsZip(parsedUrls);
 
         onDownloadSuccess?.();
       },
@@ -183,16 +189,19 @@ const useDownload = ({
           type: 'error',
         },
       },
+      loadingStateKey: 'allDownload',
       onFinally: () => {
         setTotalProgress(0);
         setCurrentProgress(0);
-        setIsDownloading(false);
       },
     });
   };
 
   return {
-    isDownloading,
+    isDownloading:
+      loadingState.allDownload === 'loading' ||
+      loadingState.singleDownload === 'loading' ||
+      loadingState.selectedDownload === 'loading',
     tryAllDownload,
     trySingleDownload,
     trySelectedDownload,
