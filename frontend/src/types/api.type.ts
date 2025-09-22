@@ -58,3 +58,7 @@ export interface MyInfo {
   pictureUrl: string;
   agreedTerms: boolean;
 }
+
+export interface CancelFileNames {
+  cancelFileNames: string[];
+}
