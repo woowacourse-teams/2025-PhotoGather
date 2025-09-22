@@ -12,18 +12,20 @@ import AccessTypeElement from '../funnelElements/accessTypeElement/AccessTypeEle
 import AgreementElement from '../funnelElements/agreementElement/AgreementElement';
 import CheckSpaceInfoElement from '../funnelElements/checkSpaceInfoElement/CheckSpaceInfoElement';
 import ImmediateOpenElement from '../funnelElements/immediateOpenElement/ImmediateOpenElement';
+import InboxElement from '../funnelElements/inboxElement/InboxElement';
 import NameInputElement from '../funnelElements/NameInputElement';
 import * as S from './SpaceCreateFunnel.styles';
 
 type STEP = 'agreement' | 'name' | 'date' | 'accessType' | 'inbox' | 'check';
 
 const initialFunnelValue: SpaceFunnelInfo = {
+  agreements: null,
   name: '',
   date: '',
   time: '',
-  accessType: 'PUBLIC',
   isImmediateOpen: null,
-  agreements: null,
+  accessType: 'PUBLIC',
+  isUsingInbox: true,
 };
 
 const SpaceCreateFunnel = () => {
@@ -126,15 +128,15 @@ const SpaceCreateFunnel = () => {
           />
         )}
         {step === 'inbox' && (
-          <AccessTypeElement
-            onNext={(accessType) => {
+          <InboxElement
+            onNext={(isUsingInbox) => {
               goNextStep('check');
               setSpaceInfo((prev) => ({
                 ...prev,
-                accessType: accessType,
+                inbox: isUsingInbox,
               }));
             }}
-            initialValue={spaceInfo.accessType}
+            initialValue={spaceInfo.isUsingInbox}
           />
         )}
         {step === 'check' && (
