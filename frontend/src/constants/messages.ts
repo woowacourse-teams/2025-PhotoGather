@@ -11,7 +11,7 @@ export const INFORMATION = {
     HIGHLIGHT_TEXT: '완료',
   },
   SUGGEST_SHARE: {
-    DESCRIPTION: '스페이스 링크를 공유해 보세요',
+    DESCRIPTION: '스페이스 링크를 공유해 보세요.',
     HIGHLIGHT_TEXT: '스페이스 링크',
   },
   SHARE_LINK_API: {
@@ -20,7 +20,7 @@ export const INFORMATION = {
       `${spaceName}에 사진을 업로드 할 수 있는 링크를 공유했어요!`,
   },
   SHARE_WARNING: {
-    DESCRIPTION: `내 스페이스 관리 페이지에서도\n스페이스 링크를 확인할 수 있어요`,
+    DESCRIPTION: `내 스페이스 관리 페이지에서도\n스페이스 링크를 확인할 수 있어요.`,
     HIGHLIGHT_TEXT: '스페이스 링크',
   },
   AGREEMENT: {
@@ -28,7 +28,7 @@ export const INFORMATION = {
       TEXT: '서비스 사용을 위해\n약관에 동의해주세요',
       HIGHLIGHT_TEXT: '약관에 동의',
     },
-    DESCRIPTION: '첫 스페이스 생성시에만 동의가 필요해요',
+    DESCRIPTION: '첫 스페이스 생성시에만 동의가 필요해요.',
   },
   NAME_INPUT: {
     TITLE: {
@@ -40,7 +40,7 @@ export const INFORMATION = {
   },
   WHEN_OPEN_INPUT: {
     TITLE: {
-      TEXT: '스페이스가 열릴 시간을 정해주세요.',
+      TEXT: '스페이스가 열릴 시간을 정해주세요',
       HIGHLIGHT_TEXT: '열릴 시간',
     },
     DESCRIPTION: '선택한 시간으로부터 72시간 동안 열려요.',
@@ -67,7 +67,7 @@ export const INFORMATION = {
       TEXT: '수신함을 활성화할까요?',
       HIGHLIGHT_TEXT: '수신함',
     },
-    DESCRIPTION: '스페이스에 올리기 전에 사진을 확인할 수 있어요',
+    DESCRIPTION: '스페이스에 올리기 전에 사진을 확인할 수 있어요.',
     OPTIONS: {
       ENABLE: {
         TITLE: '수신함 활성화',
@@ -82,7 +82,7 @@ export const INFORMATION = {
   },
   CHECK_SPACE_INFO: {
     TITLE: {
-      TEXT: '스페이스 정보를 확인해 주세요.',
+      TEXT: '스페이스 정보를 확인해 주세요',
       HIGHLIGHT_TEXT: '스페이스 정보',
     },
     DESCRIPTION: '완료를 누르면 곧바로 링크가 발급돼요.',
@@ -99,7 +99,7 @@ export const INFORMATION = {
       TEXT: '로그인 후 서비스를 이용해주세요',
       HIGHLIGHT_TEXT: '로그인',
     },
-    DESCRIPTION: '당신의 사진을 모아 드릴게요',
+    DESCRIPTION: '당신의 사진을 모아 드릴게요.',
   },
 } as const;
 
