@@ -87,9 +87,6 @@ export const INFORMATION = {
     },
     DESCRIPTION: '완료를 누르면 곧바로 링크가 발급돼요.',
   },
-  WAIT_PAGE: {
-    TITLE_LIST: ['조금만 기다려주세요', '곧 스페이스 생성이 끝나요'],
-  },
   SETTINGS: {
     DESCRIPTION: `사진이 업로드된 이후에는\n시작 날짜 / 시간을 수정할 수 없어요.`,
     HIGHLIGHT_TEXT: '시작 날짜 / 시간',
