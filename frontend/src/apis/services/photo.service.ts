@@ -1,4 +1,5 @@
 import type {
+  CancelFileNames,
   PhotoIds,
   PhotoListResponse,
   PresignedUrlsResponse,
@@ -82,4 +83,14 @@ export const photoService = {
 
   deletePhoto: (spaceCode: string, photoId: number) =>
     authHttp.delete<void>(`/spaces/${spaceCode}/photos/${photoId}`),
+
+  cancelUpload: (
+    spaceCode: string,
+    cancelFileNames: CancelFileNames,
+    guestId: number,
+  ) =>
+    http.post<void>(
+      `/spaces/${spaceCode}/photos/upload/cancel?guestId=${guestId}`,
+      cancelFileNames,
+    ),
 };
