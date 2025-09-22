@@ -29,10 +29,10 @@ const InboxElement = ({
   return (
     <FunnelBasePage
       title={{
-        text: INFORMATION.ACCESS_TYPE.TITLE.TEXT,
-        highlightTextArray: [INFORMATION.ACCESS_TYPE.TITLE.HIGHLIGHT_TEXT],
+        text: INFORMATION.INBOX.TITLE.TEXT,
+        highlightTextArray: [INFORMATION.INBOX.TITLE.HIGHLIGHT_TEXT],
       }}
-      description={INFORMATION.ACCESS_TYPE.DESCRIPTION}
+      description={INFORMATION.INBOX.DESCRIPTION}
       element={
         <S.BorderButtonContainer>
           {BorderButtons.map(({ variant, onClick, color }) => (
@@ -72,12 +72,12 @@ const InboxBorderButton = ({
 }: InboxBorderButtonProps) => {
   const title =
     variant === true
-      ? INFORMATION.ACCESS_TYPE.OPTIONS.PUBLIC.TITLE
-      : INFORMATION.ACCESS_TYPE.OPTIONS.PRIVATE.TITLE;
+      ? INFORMATION.INBOX.OPTIONS.ENABLE.TITLE
+      : INFORMATION.INBOX.OPTIONS.DISABLE.TITLE;
   const description =
     variant === true
-      ? INFORMATION.ACCESS_TYPE.OPTIONS.PUBLIC.DESCRIPTION
-      : INFORMATION.ACCESS_TYPE.OPTIONS.PRIVATE.DESCRIPTION;
+      ? INFORMATION.INBOX.OPTIONS.ENABLE.DESCRIPTION
+      : INFORMATION.INBOX.OPTIONS.DISABLE.DESCRIPTION;
 
   return (
     <S.ButtonWrapper

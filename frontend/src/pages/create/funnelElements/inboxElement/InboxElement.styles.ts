@@ -43,4 +43,6 @@ export const Title = styled.p`
 
 export const Description = styled.p`
   ${({ theme }) => ({ ...theme.typography.captionSmall })}
+  white-space: pre-wrap;
+  text-align: left;
 `;
