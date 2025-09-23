@@ -197,7 +197,7 @@ const SpaceHomePage = () => {
       tryFetchPhotosList();
     }
   }, [
-    // isFetchSectionVisible,
+    isFetchSectionVisible,
     isEndPage,
     isSpaceExpired,
     isEarlyTime,
