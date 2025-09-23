@@ -2,18 +2,13 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   AddPhotoIcon,
-  UpwardArrowIcon as ArrowUpSvg,
   LinkIcon,
   DownloadIcon as SaveIcon,
   SettingIcon,
   ShareIcon,
 } from '../../../@assets/icons';
-import {
-  GiftImg as GiftIcon,
-  MessageImg as messageIcon,
-} from '../../../@assets/images';
+import { MessageImg as messageIcon } from '../../../@assets/images';
 import FloatingActionButton from '../../../components/@common/buttons/floatingActionButton/FloatingActionButton';
-import FloatingIconButton from '../../../components/@common/buttons/floatingIconButton/FloatingIconButton';
 import IconLabelButton from '../../../components/@common/buttons/iconLabelButton/IconLabelButton';
 import SpaceManagerImageGrid from '../../../components/@common/imageLayout/imageGrid/spaceManagerImageGrid/SpaceManagerImageGrid';
 import * as C from '../../../components/@common/modal/Modal.common.styles';
@@ -22,7 +17,6 @@ import ManagerHeader from '../../../components/header/spaceHeader/managerSpaceHe
 import LoadingLayout from '../../../components/layout/loadingLayout/LoadingLayout';
 import PhotoSelectionToolBar from '../../../components/photoSelectionToolBar/PhotoSelectionToolBar';
 import SpaceHomeTopActionBar from '../../../components/spaceHomeTopActionBar/SpaceHomeTopActionBar';
-import { INFORMATION } from '../../../constants/messages';
 import { ROUTES } from '../../../constants/routes';
 import { useOverlay } from '../../../contexts/OverlayProvider';
 import useIntersectionObserver from '../../../hooks/@common/useIntersectionObserver';
@@ -35,16 +29,15 @@ import usePhotosBySpaceCode from '../../../hooks/usePhotosBySpaceCode';
 import usePhotosDelete from '../../../hooks/usePhotosDelete';
 import useSpaceCodeFromPath from '../../../hooks/useSpaceCodeFromPath';
 import useSpaceInfo from '../../../hooks/useSpaceInfo';
-import { ScrollableBlurArea } from '../../../styles/@common/ScrollableBlurArea.styles';
 import { theme } from '../../../styles/theme';
 import { checkIsEarlyDate } from '../../../utils/checkIsEarlyTime';
 import { copyLinkToClipboard } from '../../../utils/copyLinkToClipboard';
 import { createShareUrl } from '../../../utils/createSpaceUrl';
 import { track } from '../../../utils/googleAnalytics/track';
-import { goToTop } from '../../../utils/goToTop';
 import AccessDeniedPage from '../../status/accessDeniedPage/AccessDeniedPage';
 import EarlyPage from '../../status/earlyPage/EarlyPage';
 import ExpiredPage from '../../status/expiredPage/ExpiredPage';
+import ManagerPageScaffold from '../ManagerPageScaffold';
 import * as S from './SpaceHomePage.styles';
 
 const SpaceHomePage = () => {
@@ -52,15 +45,11 @@ const SpaceHomePage = () => {
   const { showToast } = useToast();
   const navigate = useNavigate();
 
-  const { targetRef: hideBlurAreaTriggerRef, isIntersecting: isAtPageBottom } =
-    useIntersectionObserver({});
-  const { targetRef: scrollTopTriggerRef, isIntersecting: isAtPageTop } =
-    useIntersectionObserver({ isInitialInView: true });
-  const {
-    targetRef: fetchTriggerRef,
-    isIntersecting: isFetchSectionVisible,
-    reObserve,
-  } = useIntersectionObserver({ rootMargin: '200px' });
+  const { reObserve, isIntersecting: isFetchSectionVisible } =
+    useIntersectionObserver({
+      rootMargin: '200px',
+      isInitialInView: false,
+    });
 
   const { spaceCode } = useSpaceCodeFromPath();
 
@@ -278,23 +267,13 @@ const SpaceHomePage = () => {
 
   const renderBottomNavigatorContent = () => {
     return (
-      <S.BottomNavigatorContainer>
-        <S.TopButtonContainer $isVisible={!isAtPageTop}>
-          {!isSelectMode && (
-            <FloatingIconButton
-              icon={<ArrowUpSvg fill={theme.colors.white} />}
-              onClick={goToTop}
-            />
-          )}
-        </S.TopButtonContainer>
-        {isSelectMode && (
-          <PhotoSelectionToolBar
-            selectedCount={selectedPhotosCount}
-            onDelete={() => tryDeleteSelectedPhotos(selectedPhotoIds)}
-            onDownload={() => trySelectedDownload(selectedPhotoIds)}
-          />
-        )}
-      </S.BottomNavigatorContainer>
+      <ManagerPageScaffold.BottomNavigator isSelectMode={isSelectMode}>
+        <PhotoSelectionToolBar
+          selectedCount={selectedPhotosCount}
+          onDelete={() => tryDeleteSelectedPhotos(selectedPhotoIds)}
+          onDownload={() => trySelectedDownload(selectedPhotoIds)}
+        />
+      </ManagerPageScaffold.BottomNavigator>
     );
   };
 
@@ -303,17 +282,13 @@ const SpaceHomePage = () => {
     if (isSpaceExpired) return <ExpiredPage />;
     if (accessLoadingState === 'success' && !hasAccess)
       return <AccessDeniedPage />;
-    if (photosListLoadingState === 'success' && photosList.length === 0)
-      return (
-        <S.NoImageContainer>
-          <S.GiftIconImage src={GiftIcon} />
-          <S.NoImageText>{INFORMATION.NO_IMAGE}</S.NoImageText>
-        </S.NoImageContainer>
-      );
+    if (photosListLoadingState === 'success' && photosList.length === 0) return;
+    <ManagerPageScaffold.NoImageBox />;
+
     if (photosList.length > 0)
       return (
         <>
-          <S.ImageManagementContainer>
+          <ManagerPageScaffold.ImageContainer>
             <SpaceHomeTopActionBar
               isSelectMode={isSelectMode}
               isAllSelected={isAllSelected}
@@ -328,9 +303,9 @@ const SpaceHomePage = () => {
               rowImageAmount={3}
               onImageClick={handleImageClick}
             />
-          </S.ImageManagementContainer>
+          </ManagerPageScaffold.ImageContainer>
           {!isSelectMode && (
-            <S.DownloadButtonContainer>
+            <ManagerPageScaffold.BottomFloatingButton>
               <FloatingActionButton
                 label="모두 저장하기"
                 icon={<SaveIcon fill={theme.colors.gray06} />}
@@ -344,7 +319,7 @@ const SpaceHomePage = () => {
                 }}
                 disabled={isDownloading}
               />
-            </S.DownloadButtonContainer>
+            </ManagerPageScaffold.BottomFloatingButton>
           )}
           {renderBottomNavigatorContent()}
         </>
@@ -352,7 +327,7 @@ const SpaceHomePage = () => {
   };
 
   return (
-    <S.Wrapper>
+    <ManagerPageScaffold>
       {isDownloading && (
         <LoadingLayout
           loadingContents={loadingContents}
@@ -361,22 +336,17 @@ const SpaceHomePage = () => {
         />
       )}
 
-      <S.InfoContainer ref={scrollTopTriggerRef}>
+      <ManagerPageScaffold.Header>
         <ManagerHeader
           title={spaceName}
           accessType={spaceInfo?.type}
           timer={leftTime}
           iconItems={iconItems}
         />
-      </S.InfoContainer>
+      </ManagerPageScaffold.Header>
 
       <S.BodyContainer>{renderBodyContent()}</S.BodyContainer>
-
-      <S.IntersectionArea ref={hideBlurAreaTriggerRef} />
-      <S.IntersectionArea ref={fetchTriggerRef} />
-      <ScrollableBlurArea $isHide={isAtPageBottom} $position="bottom" />
-      <ScrollableBlurArea $isHide={isAtPageTop} $position="top" />
-    </S.Wrapper>
+    </ManagerPageScaffold>
   );
 };
 

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { ROUTES } from '../../constants/routes';
 import type { TryTaskResultType } from '../../types/common.type';
 import { HttpError } from '../../types/error.type';
+import type { LoadingStateType } from '../../types/loading.type';
 import type { ToastBase } from '../../types/toast.type';
 import { useToast } from './useToast';
 
@@ -25,7 +26,6 @@ interface ErrorRequiredProps {
 }
 
 const useTaskHandler = () => {
-  type LoadingStateType = 'pending' | 'loading' | 'success' | 'error';
   type LoadingStateMap = Record<string, LoadingStateType>;
 
   const { showToast } = useToast();
