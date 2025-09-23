@@ -7,6 +7,7 @@ import InfoBox from '../../../components/@common/infoBox/InfoBox';
 import DateTimeInput from '../../../components/@common/inputs/DateTimeInput';
 import TextInput from '../../../components/@common/inputs/textInput/TextInput';
 import ConfirmModal from '../../../components/@common/modal/confirmModal/ConfirmModal';
+import ToggleSwitch from '../../../components/@common/toggle/ToggleSwitch';
 import { INFORMATION } from '../../../constants/messages';
 import { ROUTES } from '../../../constants/routes';
 import { useOverlay } from '../../../contexts/OverlayProvider';
@@ -50,6 +51,7 @@ const SettingsPage = () => {
   });
 
   const [accessType, setAccessType] = useState<SpaceAccessType>();
+  const [isUsingInbox, setIsUsingInbox] = useState<boolean>();
 
   useEffect(() => {
     if (spaceInfo) {
@@ -62,6 +64,7 @@ const SettingsPage = () => {
       setDate(dateString);
       setTime(timeString);
       setAccessType(spaceInfo.type);
+      setIsUsingInbox(spaceInfo.inbox?.status || false);
     }
   }, [spaceInfo]);
 
@@ -240,6 +243,15 @@ const SettingsPage = () => {
                 onClick={() => setAccessType('PRIVATE')}
                 text="비공개"
                 variant={accessType === 'PRIVATE' ? 'primary' : 'secondary'}
+              />
+            </S.AccessTypeButtonContainer>
+          </S.InputWrapper>
+          <S.InputWrapper>
+            <S.InputLabel htmlFor="inbox-input">수신함</S.InputLabel>
+            <S.AccessTypeButtonContainer id="inbox-input">
+              <ToggleSwitch
+                isToggle={isUsingInbox || false}
+                onToggleClick={() => setIsUsingInbox((prev) => !prev)}
               />
             </S.AccessTypeButtonContainer>
           </S.InputWrapper>
