@@ -20,9 +20,9 @@ const InboxElement = ({
         icon: <FolderIcon />,
       },
       description: INFORMATION.INBOX.OPTIONS.ENABLE.DESCRIPTION,
-      onClick: () => setIsInboxEnabled(true),
       color:
         isInboxEnabled === true ? theme.colors.primary : theme.colors.gray03,
+      onClick: () => setIsInboxEnabled(true),
     },
     {
       heading: {
@@ -30,9 +30,9 @@ const InboxElement = ({
         icon: <CrossedFolderIcon />,
       },
       description: INFORMATION.INBOX.OPTIONS.DISABLE.DESCRIPTION,
-      onClick: () => setIsInboxEnabled(false),
       color:
         isInboxEnabled === false ? theme.colors.primary : theme.colors.gray03,
+      onClick: () => setIsInboxEnabled(false),
     },
   ];
 
@@ -45,13 +45,13 @@ const InboxElement = ({
       description={INFORMATION.INBOX.DESCRIPTION}
       element={
         <S.BorderButtonContainer>
-          {BorderButtons.map(({ heading, description, onClick, color }) => (
+          {BorderButtons.map(({ heading, description, color, onClick }) => (
             <BorderButton
               key={heading.text}
               heading={heading}
               description={description}
-              onClick={onClick}
               color={color}
+              onClick={onClick}
             />
           ))}
         </S.BorderButtonContainer>

@@ -28,11 +28,11 @@ const AccessTypeElement = ({
       BorderButtonAccessType === 'PUBLIC'
         ? INFORMATION.ACCESS_TYPE.OPTIONS.PUBLIC.DESCRIPTION
         : INFORMATION.ACCESS_TYPE.OPTIONS.PRIVATE.DESCRIPTION,
-    onClick: () => setAccessType(BorderButtonAccessType),
     color:
       accessType === BorderButtonAccessType
         ? theme.colors.primary
         : theme.colors.gray03,
+    onClick: () => setAccessType(BorderButtonAccessType),
   }));
 
   return (
@@ -44,13 +44,13 @@ const AccessTypeElement = ({
       description={INFORMATION.ACCESS_TYPE.DESCRIPTION}
       element={
         <S.BorderButtonContainer>
-          {BorderButtons.map(({ heading, description, onClick, color }) => (
+          {BorderButtons.map(({ heading, description, color, onClick }) => (
             <BorderButton
               key={heading.text}
               heading={heading}
               description={description}
-              onClick={onClick}
               color={color}
+              onClick={onClick}
             />
           ))}
         </S.BorderButtonContainer>
