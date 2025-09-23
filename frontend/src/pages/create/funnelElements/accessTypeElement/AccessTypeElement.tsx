@@ -16,24 +16,22 @@ const AccessTypeElement = ({
 
   const accessTypeOptions: SpaceAccessType[] = ['PUBLIC', 'PRIVATE'];
 
-  const BorderButtons = accessTypeOptions.map((BorderButtonAccessType) => ({
-    heading: {
-      text:
-        BorderButtonAccessType === 'PUBLIC'
-          ? INFORMATION.ACCESS_TYPE.OPTIONS.PUBLIC.TITLE
-          : INFORMATION.ACCESS_TYPE.OPTIONS.PRIVATE.TITLE,
-      icon: <AccessTypeIcon accessType={BorderButtonAccessType} />,
-    },
-    description:
-      BorderButtonAccessType === 'PUBLIC'
-        ? INFORMATION.ACCESS_TYPE.OPTIONS.PUBLIC.DESCRIPTION
-        : INFORMATION.ACCESS_TYPE.OPTIONS.PRIVATE.DESCRIPTION,
-    color:
-      accessType === BorderButtonAccessType
-        ? theme.colors.primary
-        : theme.colors.gray03,
-    onClick: () => setAccessType(BorderButtonAccessType),
-  }));
+  const BorderButtons = accessTypeOptions.map((BorderButtonAccessType) => {
+    const option = INFORMATION.ACCESS_TYPE.OPTIONS[BorderButtonAccessType];
+
+    return {
+      heading: {
+        text: option.TITLE,
+        icon: <AccessTypeIcon accessType={BorderButtonAccessType} />,
+      },
+      description: option.DESCRIPTION,
+      color:
+        accessType === BorderButtonAccessType
+          ? theme.colors.primary
+          : theme.colors.gray03,
+      onClick: () => setAccessType(BorderButtonAccessType),
+    };
+  });
 
   return (
     <FunnelBasePage
