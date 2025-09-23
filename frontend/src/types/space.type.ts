@@ -21,7 +21,7 @@ export interface SpaceFunnelInfo {
   time: string;
   accessType: SpaceAccessType;
   isImmediateOpen: boolean | null;
-  isUsingInbox: boolean;
+  isInboxEnabled: boolean;
   agreements: Agreements | null;
 }
 

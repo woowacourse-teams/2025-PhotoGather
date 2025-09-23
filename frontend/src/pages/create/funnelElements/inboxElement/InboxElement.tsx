@@ -11,7 +11,7 @@ const InboxElement = ({
   onNext,
   initialValue = true,
 }: FunnelElementProps<boolean>) => {
-  const [isUsingInbox, setIsUsingInbox] = useState(initialValue);
+  const [isInboxEnabled, setIsInboxEnabled] = useState(initialValue);
 
   const BorderButtons = [
     {
@@ -20,8 +20,9 @@ const InboxElement = ({
         icon: <FolderIcon />,
       },
       description: INFORMATION.INBOX.OPTIONS.ENABLE.DESCRIPTION,
-      onClick: () => setIsUsingInbox(true),
-      color: isUsingInbox === true ? theme.colors.primary : theme.colors.gray03,
+      onClick: () => setIsInboxEnabled(true),
+      color:
+        isInboxEnabled === true ? theme.colors.primary : theme.colors.gray03,
     },
     {
       heading: {
@@ -29,9 +30,9 @@ const InboxElement = ({
         icon: <CrossedFolderIcon />,
       },
       description: INFORMATION.INBOX.OPTIONS.DISABLE.DESCRIPTION,
-      onClick: () => setIsUsingInbox(false),
+      onClick: () => setIsInboxEnabled(false),
       color:
-        isUsingInbox === false ? theme.colors.primary : theme.colors.gray03,
+        isInboxEnabled === false ? theme.colors.primary : theme.colors.gray03,
     },
   ];
 
@@ -55,7 +56,7 @@ const InboxElement = ({
           ))}
         </S.BorderButtonContainer>
       }
-      onNextButtonClick={() => onNext(isUsingInbox)}
+      onNextButtonClick={() => onNext(isInboxEnabled)}
     />
   );
 };

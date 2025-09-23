@@ -51,7 +51,7 @@ const SettingsPage = () => {
   });
 
   const [accessType, setAccessType] = useState<SpaceAccessType>();
-  const [isUsingInbox, setIsUsingInbox] = useState<boolean>();
+  const [isInboxEnabled, setIsInboxEnabled] = useState<boolean>();
 
   useEffect(() => {
     if (spaceInfo) {
@@ -64,7 +64,7 @@ const SettingsPage = () => {
       setDate(dateString);
       setTime(timeString);
       setAccessType(spaceInfo.type);
-      setIsUsingInbox(spaceInfo.inbox?.status || false);
+      setIsInboxEnabled(spaceInfo.inbox?.status || false);
     }
   }, [spaceInfo]);
 
@@ -250,8 +250,8 @@ const SettingsPage = () => {
             <S.InputLabel htmlFor="inbox-input">수신함</S.InputLabel>
             <S.AccessTypeButtonContainer id="inbox-input">
               <ToggleSwitch
-                isToggle={isUsingInbox || false}
-                onToggleClick={() => setIsUsingInbox((prev) => !prev)}
+                isToggle={isInboxEnabled || false}
+                onToggleClick={() => setIsInboxEnabled((prev) => !prev)}
               />
             </S.AccessTypeButtonContainer>
           </S.InputWrapper>

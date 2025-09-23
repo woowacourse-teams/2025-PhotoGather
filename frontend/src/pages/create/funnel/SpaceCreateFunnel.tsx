@@ -25,7 +25,7 @@ const initialFunnelValue: SpaceFunnelInfo = {
   time: '',
   isImmediateOpen: null,
   accessType: 'PUBLIC',
-  isUsingInbox: true,
+  isInboxEnabled: true,
 };
 
 const SpaceCreateFunnel = () => {
@@ -129,14 +129,14 @@ const SpaceCreateFunnel = () => {
         )}
         {step === 'inbox' && (
           <InboxElement
-            onNext={(isUsingInbox) => {
+            onNext={(isInboxEnabled) => {
               goNextStep('check');
               setSpaceInfo((prev) => ({
                 ...prev,
-                isUsingInbox,
+                isInboxEnabled,
               }));
             }}
-            initialValue={spaceInfo.isUsingInbox}
+            initialValue={spaceInfo.isInboxEnabled}
           />
         )}
         {step === 'check' && (
