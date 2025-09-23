@@ -1,4 +1,3 @@
-import { theme } from '../../../../styles/theme';
 import * as S from './BorderButton.styles';
 
 interface BorderButtonProps
@@ -10,8 +9,8 @@ interface BorderButtonProps
   };
   /** 버튼의 설명 */
   description: string;
-  /** 버튼의 색깔 (테두리 및 내부) */
-  color: string;
+  /** 버튼의 variant */
+  variant?: keyof typeof S.borderButtonStyles;
   /** 클릭 시 실행할 함수 */
   onClick: () => void;
   /** 비활성화 여부 */
@@ -21,7 +20,7 @@ interface BorderButtonProps
 const BorderButton = ({
   heading,
   description,
-  color = theme.colors.gray03,
+  variant = 'unselected',
   onClick,
   disabled,
   ...buttonProps
@@ -29,7 +28,7 @@ const BorderButton = ({
   return (
     <S.Wrapper
       {...buttonProps}
-      $color={color}
+      $variant={variant}
       onClick={onClick}
       disabled={disabled}
     >

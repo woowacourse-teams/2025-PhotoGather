@@ -10,12 +10,22 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {
+export const Selected: Story = {
   args: {
     heading: { text: '테두리 버튼', icon: <FolderIcon /> },
     description: '테두리 버튼 설명입니다.',
-    color: '#000000',
     onClick: () => alert('테두리 버튼 클릭됨'),
     disabled: false,
+    variant: 'selected',
+  },
+};
+
+export const Unselected: Story = {
+  args: {
+    heading: { text: '테두리 버튼', icon: <FolderIcon /> },
+    description: '테두리 버튼 설명입니다.',
+    onClick: () => alert('테두리 버튼 클릭됨'),
+    disabled: false,
+    variant: 'unselected',
   },
 };

@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { CrossedFolderIcon, FolderIcon } from '../../../../@assets/icons';
 import BorderButton from '../../../../components/@common/buttons/borderButton/BorderButton';
 import { INFORMATION } from '../../../../constants/messages';
-import { theme } from '../../../../styles/theme';
 import type { FunnelElementProps } from '../../../../types/funnel.type';
 import FunnelBasePage from '../../funnel/FunnelBasePage/FunnelBasePage';
 import * as S from './InboxElement.styles';
@@ -20,8 +19,7 @@ const InboxElement = ({
         icon: <FolderIcon />,
       },
       description: INFORMATION.INBOX.OPTIONS.ENABLE.DESCRIPTION,
-      color:
-        isInboxEnabled === true ? theme.colors.primary : theme.colors.gray03,
+      variant: isInboxEnabled === true ? 'selected' : 'unselected',
       onClick: () => setIsInboxEnabled(true),
     },
     {
@@ -30,11 +28,10 @@ const InboxElement = ({
         icon: <CrossedFolderIcon />,
       },
       description: INFORMATION.INBOX.OPTIONS.DISABLE.DESCRIPTION,
-      color:
-        isInboxEnabled === false ? theme.colors.primary : theme.colors.gray03,
+      variant: isInboxEnabled === false ? 'selected' : 'unselected',
       onClick: () => setIsInboxEnabled(false),
     },
-  ];
+  ] as const;
 
   return (
     <FunnelBasePage
@@ -45,12 +42,12 @@ const InboxElement = ({
       description={INFORMATION.INBOX.DESCRIPTION}
       element={
         <S.BorderButtonContainer>
-          {BorderButtons.map(({ heading, description, color, onClick }) => (
+          {BorderButtons.map(({ heading, description, variant, onClick }) => (
             <BorderButton
               key={heading.text}
               heading={heading}
               description={description}
-              color={color}
+              variant={variant}
               onClick={onClick}
             />
           ))}
