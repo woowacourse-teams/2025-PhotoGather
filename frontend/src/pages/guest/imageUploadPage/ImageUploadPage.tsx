@@ -137,6 +137,9 @@ const ImageUploadPage = () => {
     },
   ];
 
+  const progressBarWidth =
+    parseInt(theme.layout.width) - parseInt(theme.layout.padding.leftRight) * 8;
+
   return (
     <S.Wrapper $hasImages={hasImages}>
       {isEarlyTime && (
@@ -145,6 +148,7 @@ const ImageUploadPage = () => {
       {isSpaceExpired && <ExpiredPage />}
       {isUploading && (
         <LoadingLayout
+          progressBarWidth={progressBarWidth}
           loadingContents={loadingContents}
           totalAmount={total ?? 10}
           currentAmount={success ?? 5}
