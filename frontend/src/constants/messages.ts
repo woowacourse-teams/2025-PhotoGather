@@ -70,13 +70,12 @@ export const INFORMATION = {
     DESCRIPTION: '스페이스에 올리기 전에 사진을 확인할 수 있어요.',
     OPTIONS: {
       ENABLE: {
-        TITLE: '수신함 활성화',
-        DESCRIPTION:
-          '게스트가 올린 사진을 먼저 검토하고\n선택적으로 공개할 수 있어요.',
+        TITLE: '활성화',
+        DESCRIPTION: '사진을 확인하고 선택해서 저장해요.',
       },
       DISABLE: {
-        TITLE: '수신함 비활성화',
-        DESCRIPTION: '게스트가 올린 사진이\n바로 스페이스에 공개돼요.',
+        TITLE: '비활성화',
+        DESCRIPTION: '사진이 바로 스페이스에 저장돼요.',
       },
     },
   },
