@@ -15,7 +15,7 @@ const useSpaceAccess = ({ spaceHostId, spaceType }: UseSpaceAccessProps) => {
   const [accessLoadingState, setAccessLoadingState] =
     useState<LoadingStateType>('pending');
 
-  const checkAuthAccess = async (visitorId?: number) => {
+  const checkAuthAccess = (visitorId?: number) => {
     const isPublic = spaceType === 'PUBLIC';
     const hasPermission = isPublic || visitorId === spaceHostId;
 
