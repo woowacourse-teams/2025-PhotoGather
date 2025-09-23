@@ -15,6 +15,14 @@
                   console.log('Service Worker registration failed:', error);
               });
           });
+          window.addEventListener('beforeunload', () => {
+            if (navigator.serviceWorker.controller) {
+             navigator.serviceWorker.controller.postMessage({
+             type: 'STOP_DOWNLOAD',
+          });
+  }
+});
+          
       }
   </script>
     <link rel="icon" type="image/x-icon" href="/favicon.ico">

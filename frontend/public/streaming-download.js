@@ -1,6 +1,7 @@
 import { downloadZip } from 'https://cdn.jsdelivr.net/npm/client-zip@2.5.0/index.js';
 
 let isDownloading = false;
+let abortDownload = false;
 
 self.addEventListener('install', (event) => {
   event.waitUntil(self.skipWaiting());
@@ -8,6 +9,13 @@ self.addEventListener('install', (event) => {
 
 self.addEventListener('activate', (event) => {
   event.waitUntil(clients.claim());
+});
+
+self.addEventListener('message', (event) => {
+  if (event.data.type === 'STOP_DOWNLOAD') {
+    abortDownload = true;
+    isDownloading = false;
+  }
 });
 
 self.addEventListener('fetch', (event) => {
@@ -38,6 +46,9 @@ const sendDownloadProgress = async (completed, total) => {
 async function* downloadFilesGenerator(downloadInfos) {
   let completedFetches = 0;
   for (const info of downloadInfos) {
+    if (abortDownload) {
+      throw new Error('다운로드 중 새로고침 발생');
+    }
     const response = await fetch(info.url);
     console.log('response', response);
     if (!response.ok || !response.body) {
