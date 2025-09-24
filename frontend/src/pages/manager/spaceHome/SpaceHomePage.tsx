@@ -22,17 +22,11 @@ import PhotoSelectionToolBar from '../../../components/specific/photoSelectionTo
 import SpaceHomeTopActionBar from '../../../components/specific/spaceHomeTopActionBar/SpaceHomeTopActionBar';
 import { ROUTES } from '../../../constants/routes';
 import { useOverlay } from '../../../contexts/OverlayProvider';
-import useIntersectionObserver from '../../../hooks/@common/useIntersectionObserver';
 import useLeftTimer from '../../../hooks/@common/useLeftTimer';
 import { useToast } from '../../../hooks/@common/useToast';
+import usePhotosDomain from '../../../hooks/domain/photos/usePhotosDomain';
 import useScrollUITriggers from '../../../hooks/domain/photos/useScrollUITriggers';
-import useSpaceAccess from '../../../hooks/domain/useSpaceAccess';
-import useDownload from '../../../hooks/useDownload';
-import usePhotoSelect from '../../../hooks/usePhotoSelect';
-import usePhotosBySpaceCode from '../../../hooks/usePhotosBySpaceCode';
-import usePhotosDelete from '../../../hooks/usePhotosDelete';
-import useSpaceCodeFromPath from '../../../hooks/useSpaceCodeFromPath';
-import useSpaceInfo from '../../../hooks/useSpaceInfo';
+import useSpaceDomain from '../../../hooks/domain/space/useSpaceDomain';
 import { ScrollableBlurArea } from '../../../styles/@common/ScrollableBlurArea.styles';
 import { theme } from '../../../styles/theme';
 import { checkIsEarlyDate } from '../../../utils/checkIsEarlyTime';
@@ -51,79 +45,24 @@ const SpaceHomePage = () => {
   const navigate = useNavigate();
 
   const scrollUITriggers = useScrollUITriggers();
+
+  const { spaceCode, spaceInfoDomain, spaceAccessDomain } = useSpaceDomain();
+  const spaceName = spaceInfoDomain.spaceInfo?.name ?? '';
   const {
-    targetRef: fetchTriggerRef,
-    isIntersecting: isFetchSectionVisible,
-    reObserve,
-  } = useIntersectionObserver({ rootMargin: '200px' });
+    photosDomain,
+    photoSelectDomain,
+    photosDeleteDomain,
+    infiniteScroll,
+    downloadDomain,
+  } = usePhotosDomain({ spaceCode: spaceCode ?? '', spaceName });
 
-  const { spaceCode } = useSpaceCodeFromPath();
-
-  const { spaceInfoLoadingState, spaceInfo } = useSpaceInfo(spaceCode ?? '');
-  const spaceName = spaceInfo?.name ?? '';
   const isEarlyTime =
-    spaceInfo?.openedAt && checkIsEarlyDate(spaceInfo.openedAt);
-  const isSpaceExpired = spaceInfo?.isExpired;
-
-  const { hasAccess, accessLoadingState, hostId } = useSpaceAccess({
-    spaceHostId: spaceInfo?.host.id,
-    spaceType: spaceInfo?.type,
-  });
-
-  const {
-    photosList,
-    thumbnailPhotoMap,
-    isEndPage,
-    tryFetchPhotosList,
-    updatePhotos,
-    photosListLoadingState,
-  } = usePhotosBySpaceCode({
-    reObserve,
-    spaceCode: spaceCode ?? '',
-  });
-
-  const {
-    isDownloading,
-    tryAllDownload,
-    trySelectedDownload,
-    trySingleDownload,
-    totalProgress,
-    currentProgress,
-  } = useDownload({
-    spaceCode: spaceCode ?? '',
-    spaceName,
-    onDownloadSuccess: () => {
-      navigate(ROUTES.COMPLETE.DOWNLOAD, {
-        state: {
-          spaceCode: spaceCode ?? '',
-        },
-      });
-    },
-  });
+    spaceInfoDomain.spaceInfo?.openedAt &&
+    checkIsEarlyDate(spaceInfoDomain.spaceInfo.openedAt);
+  const isSpaceExpired = spaceInfoDomain.spaceInfo?.isExpired;
 
   const { leftTime } = useLeftTimer({
-    targetTime: (spaceInfo?.expiredAt as string) ?? '',
-  });
-
-  const {
-    isSelectMode,
-    toggleSelectMode,
-    selectedPhotoMap,
-    selectedPhotosCount,
-    toggleSelectedPhoto,
-    extractUnselectedPhotos,
-    selectedPhotoIds,
-    isAllSelected,
-    toggleAllSelected,
-  } = usePhotoSelect({ photosList: photosList ?? [] });
-
-  const { tryDeleteSelectedPhotos, tryDeleteSinglePhoto } = usePhotosDelete({
-    spaceCode: spaceCode ?? '',
-    toggleSelectMode,
-    updatePhotos,
-    tryFetchPhotosList,
-    extractUnselectedPhotos,
-    photosList,
+    targetTime: (spaceInfoDomain.spaceInfo?.expiredAt as string) ?? '',
   });
 
   const clickDashboardWithTracking = () => {
@@ -136,7 +75,7 @@ const SpaceHomePage = () => {
   };
 
   const deletePhotoWithTracking = async (photoId: number) => {
-    await tryDeleteSinglePhoto(photoId);
+    await photosDeleteDomain.tryDeleteSinglePhoto(photoId);
     track.button('single_delete_button', {
       page: 'space_home',
       section: 'photo_modal',
@@ -145,7 +84,7 @@ const SpaceHomePage = () => {
   };
 
   const downloadPhotoWithTracking = async (photoId: number) => {
-    await trySingleDownload(photoId);
+    await downloadDomain.trySingleDownload(photoId);
     track.button('single_download_button', {
       page: 'space_home',
       section: 'photo_modal',
@@ -177,29 +116,40 @@ const SpaceHomePage = () => {
     );
   };
 
-  const handleImageClick = isSelectMode ? toggleSelectedPhoto : openPhotoModal;
+  const handleImageClick = photoSelectDomain.isSelectMode
+    ? photoSelectDomain.toggleSelectedPhoto
+    : openPhotoModal;
 
   //biome-ignore lint/correctness/useExhaustiveDependencies: isFetchSectionVisible 변경 시 호출
   useEffect(() => {
-    if (spaceInfoLoadingState !== 'success' || accessLoadingState !== 'success')
+    if (
+      spaceInfoDomain.spaceInfoLoadingState !== 'success' ||
+      spaceAccessDomain.accessLoadingState !== 'success'
+    )
       return;
 
-    if (!hasAccess || isSpaceExpired || isEarlyTime || isEndPage) return;
+    if (
+      !spaceAccessDomain.hasAccess ||
+      isSpaceExpired ||
+      isEarlyTime ||
+      photosDomain.isEndPage
+    )
+      return;
 
-    if (photosListLoadingState === 'loading') return;
+    if (photosDomain.photosListLoadingState === 'loading') return;
 
-    if (isFetchSectionVisible && !isEndPage) {
-      tryFetchPhotosList();
+    if (infiniteScroll.isFetchSectionVisible && !photosDomain.isEndPage) {
+      photosDomain.tryFetchPhotosList();
     }
   }, [
-    isFetchSectionVisible,
-    isEndPage,
+    infiniteScroll.isFetchSectionVisible,
+    photosDomain.isEndPage,
     isSpaceExpired,
     isEarlyTime,
-    hasAccess,
-    accessLoadingState,
-    spaceInfoLoadingState,
-    photosListLoadingState,
+    spaceAccessDomain.hasAccess,
+    spaceAccessDomain.accessLoadingState,
+    spaceInfoDomain.spaceInfoLoadingState,
+    photosDomain.photosListLoadingState,
   ]);
 
   const loadingContents = [
@@ -246,9 +196,11 @@ const SpaceHomePage = () => {
     );
   };
 
-  const canAddPhoto = hasAccess && !isSpaceExpired && !isEarlyTime;
-  const canShare = hasAccess && !isSpaceExpired;
-  const canChangeSetting = spaceInfo?.host.id === hostId;
+  const canAddPhoto =
+    spaceAccessDomain.hasAccess && !isSpaceExpired && !isEarlyTime;
+  const canShare = spaceAccessDomain.hasAccess && !isSpaceExpired;
+  const canChangeSetting =
+    spaceInfoDomain.spaceInfo?.host.id === spaceAccessDomain.hostId;
 
   const iconItems = [
     {
@@ -275,18 +227,26 @@ const SpaceHomePage = () => {
     return (
       <S.BottomNavigatorContainer>
         <S.TopButtonContainer $isVisible={!scrollUITriggers.isAtPageTop}>
-          {!isSelectMode && (
+          {!photoSelectDomain.isSelectMode && (
             <FloatingIconButton
               icon={<ArrowUpSvg fill={theme.colors.white} />}
               onClick={goToTop}
             />
           )}
         </S.TopButtonContainer>
-        {isSelectMode && (
+        {photoSelectDomain.isSelectMode && (
           <PhotoSelectionToolBar
-            selectedCount={selectedPhotosCount}
-            onDelete={() => tryDeleteSelectedPhotos(selectedPhotoIds)}
-            onDownload={() => trySelectedDownload(selectedPhotoIds)}
+            selectedCount={photoSelectDomain.selectedPhotosCount}
+            onDelete={() =>
+              photosDeleteDomain.tryDeleteSelectedPhotos(
+                photoSelectDomain.selectedPhotoIds,
+              )
+            }
+            onDownload={() =>
+              downloadDomain.trySelectedDownload(
+                photoSelectDomain.selectedPhotoIds,
+              )
+            }
           />
         )}
       </S.BottomNavigatorContainer>
@@ -294,45 +254,52 @@ const SpaceHomePage = () => {
   };
 
   const renderBodyContent = () => {
-    if (isEarlyTime) return <EarlyPage openedAt={spaceInfo.openedAt} />;
+    if (isEarlyTime)
+      return <EarlyPage openedAt={spaceInfoDomain.spaceInfo?.openedAt ?? ''} />;
     if (isSpaceExpired) return <ExpiredPage />;
-    if (accessLoadingState === 'success' && !hasAccess)
+    if (
+      spaceAccessDomain.accessLoadingState === 'success' &&
+      !spaceAccessDomain.hasAccess
+    )
       return <AccessDeniedPage />;
-    if (photosListLoadingState === 'success' && photosList.length === 0)
+    if (
+      photosDomain.photosListLoadingState === 'success' &&
+      photosDomain.photosList.length === 0
+    )
       return <NoImageBox />;
-    if (photosList.length > 0)
+    if (photosDomain.photosList.length > 0)
       return (
         <>
           <S.ImageManagementContainer>
             <SpaceHomeTopActionBar
-              isSelectMode={isSelectMode}
-              isAllSelected={isAllSelected}
-              onToggleSelectMode={toggleSelectMode}
-              onToggleAllSelected={toggleAllSelected}
+              isSelectMode={photoSelectDomain.isSelectMode}
+              isAllSelected={photoSelectDomain.isAllSelected}
+              onToggleSelectMode={photoSelectDomain.toggleSelectMode}
+              onToggleAllSelected={photoSelectDomain.toggleAllSelected}
             />
             <SpaceManagerImageGrid
-              isSelectMode={isSelectMode}
-              selectedPhotoMap={selectedPhotoMap}
-              photoData={photosList}
-              thumbnailUrlList={thumbnailPhotoMap}
+              isSelectMode={photoSelectDomain.isSelectMode}
+              selectedPhotoMap={photoSelectDomain.selectedPhotoMap}
+              photoData={photosDomain.photosList}
+              thumbnailUrlList={photosDomain.thumbnailPhotoMap}
               rowImageAmount={3}
               onImageClick={handleImageClick}
             />
           </S.ImageManagementContainer>
-          {!isSelectMode && (
+          {!photoSelectDomain.isSelectMode && (
             <S.DownloadButtonContainer>
               <FloatingActionButton
                 label="모두 저장하기"
                 icon={<SaveIcon fill={theme.colors.gray06} />}
                 onClick={() => {
-                  tryAllDownload();
+                  downloadDomain.tryAllDownload();
                   track.button('all_download_button', {
                     page: 'space_home',
                     section: 'space_home',
                     action: 'download_all',
                   });
                 }}
-                disabled={isDownloading}
+                disabled={downloadDomain.isDownloading}
               />
             </S.DownloadButtonContainer>
           )}
@@ -343,18 +310,18 @@ const SpaceHomePage = () => {
 
   return (
     <S.Wrapper>
-      {isDownloading && (
+      {downloadDomain.isDownloading && (
         <LoadingLayout
           loadingContents={loadingContents}
-          totalAmount={totalProgress}
-          currentAmount={currentProgress}
+          totalAmount={downloadDomain.totalProgress}
+          currentAmount={downloadDomain.currentProgress}
         />
       )}
 
       <S.InfoContainer ref={scrollUITriggers.scrollTopTriggerRef}>
         <ManagerHeader
           title={spaceName}
-          accessType={spaceInfo?.type}
+          accessType={spaceInfoDomain.spaceInfo?.type}
           timer={leftTime}
           iconItems={iconItems}
         />
@@ -363,7 +330,7 @@ const SpaceHomePage = () => {
       <S.BodyContainer>{renderBodyContent()}</S.BodyContainer>
 
       <S.IntersectionArea ref={scrollUITriggers.hideBlurAreaTriggerRef} />
-      <S.IntersectionArea ref={fetchTriggerRef} />
+      <S.IntersectionArea ref={infiniteScroll.fetchTriggerRef} />
       <ScrollableBlurArea
         $isHide={scrollUITriggers.isAtPageBottom}
         $position="bottom"
