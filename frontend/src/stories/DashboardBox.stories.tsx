@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import DashboardBox from '../components/@common/dashboardBox/DashboardBox';
+import DashboardBox from '../components/specific/dashboardBox/DashboardBox';
 
 const meta: Meta<typeof DashboardBox> = {
   component: DashboardBox,

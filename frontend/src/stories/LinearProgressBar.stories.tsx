@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-webpack5';
-import LinearProgressBar from '../components/specific/progressBar/linear/LinearProgressBar';
+import LinearProgressBar from '../components/@common/progressBar/linear/LinearProgressBar';
 
 const meta: Meta<typeof LinearProgressBar> = {
   title: 'Components/ProgressBar/LinearProgressBar',

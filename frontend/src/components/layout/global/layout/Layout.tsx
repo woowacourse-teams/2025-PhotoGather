@@ -1,15 +1,15 @@
 import { useEffect, useState } from 'react';
 import { Outlet, useLocation, useMatches } from 'react-router-dom';
-import { DefaultProfileImg as defaultProfile } from '../../@assets/images';
-import { authService } from '../../apis/services/auth.service';
-import OverlayProvider from '../../contexts/OverlayProvider';
-import useInAppRedirect from '../../hooks/@common/useInAppRedirect';
-import useTaskHandler from '../../hooks/@common/useTaskHandler';
-import useGoogleAnalytics from '../../hooks/useGoogleAnalytics';
-import type { MyInfo } from '../../types/api.type';
-import type { AppRouteObject } from '../../types/route.type';
-import { StarField } from '../@common/starField/StarField';
-import Header from './global/header/Header';
+import { DefaultProfileImg as defaultProfile } from '../../../../@assets/images';
+import { authService } from '../../../../apis/services/auth.service';
+import OverlayProvider from '../../../../contexts/OverlayProvider';
+import useInAppRedirect from '../../../../hooks/@common/useInAppRedirect';
+import useTaskHandler from '../../../../hooks/@common/useTaskHandler';
+import useGoogleAnalytics from '../../../../hooks/useGoogleAnalytics';
+import type { MyInfo } from '../../../../types/api.type';
+import type { AppRouteObject } from '../../../../types/route.type';
+import { StarField } from '../../../@common/starField/StarField';
+import Header from '../header/Header';
 import * as S from './Layout.styles';
 
 const Layout = () => {
