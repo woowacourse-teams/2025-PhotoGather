@@ -1,16 +1,21 @@
 import { useEffect } from 'react';
+import { CheckIcon, TrashCanIcon } from '../../../@assets/icons';
 import { photoService } from '../../../apis/services/photo.service';
 import SpaceManagerImageGrid from '../../../components/@common/imageLayout/imageGrid/spaceManagerImageGrid/SpaceManagerImageGrid';
 import PhotoModal from '../../../components/@common/modal/photoModal/PhotoModal';
 import NoImageBox from '../../../components/specific/noImageBox/NoImageBox';
+import SpaceFooter from '../../../components/specific/space/spaceFooter/SpaceFooter';
 import InboxHeader from '../../../components/specific/space/spaceHeader/inboxHeader/InboxHeader';
 import SpaceHomeTopActionBar from '../../../components/specific/spaceHomeTopActionBar/SpaceHomeTopActionBar';
 import { useOverlay } from '../../../contexts/OverlayProvider';
 import useIntersectionObserver from '../../../hooks/@common/useIntersectionObserver';
+import usePhotoSelect from '../../../hooks/domain/photos/usePhotoSelect';
 import usePhotosBySpaceCode from '../../../hooks/domain/photos/usePhotosBySpaceCode';
+import usePhotosDelete from '../../../hooks/domain/photos/usePhotosDelete';
 import useSpaceDomain from '../../../hooks/domain/space/useSpaceDomain';
 import useScrollUITriggers from '../../../hooks/domain/ui/useScrollUITriggers';
 import { ScrollableBlurArea } from '../../../styles/@common/ScrollableBlurArea.styles';
+import { theme } from '../../../styles/theme';
 import { checkIsEarlyDate } from '../../../utils/checkIsEarlyTime';
 import AccessDeniedPage from '../../status/accessDeniedPage/AccessDeniedPage';
 import EarlyPage from '../../status/earlyPage/EarlyPage';
@@ -43,11 +48,35 @@ const InboxPage = () => {
     tryFetchPhotosList,
     isEndPage,
     thumbnailPhotoMap,
+    updatePhotos,
   } = usePhotosBySpaceCode({
     reObserve,
     spaceCode: spaceInfo?.spaceCode ?? '',
     // TODO:  API 개발 후 수정
     fetchFunc: photoService.getBySpaceCode,
+  });
+
+  const {
+    toggleSelectMode,
+    toggleAllSelected,
+    isAllSelected,
+    isSelectMode,
+    toggleSelectedPhoto,
+    selectedPhotoMap,
+    selectedPhotosCount,
+    selectedPhotoIds,
+    extractUnselectedPhotos,
+  } = usePhotoSelect({
+    photosList: photosList ?? [],
+  });
+
+  const { tryDeleteSelectedPhotos, tryDeleteSinglePhoto } = usePhotosDelete({
+    spaceCode: spaceInfo?.spaceCode ?? '',
+    toggleSelectMode: toggleSelectMode,
+    updatePhotos: updatePhotos,
+    tryFetchPhotosList: tryFetchPhotosList,
+    extractUnselectedPhotos: extractUnselectedPhotos,
+    photosList: photosList,
   });
 
   const isEarlyTime = checkIsEarlyDate(spaceInfo?.openedAt ?? '');
@@ -60,13 +89,17 @@ const InboxPage = () => {
         photoId={photoId}
         spaceCode={spaceInfo?.spaceCode ?? ''}
         onDownload={() => {}}
-        onDelete={() => {}}
+        onDelete={() => {
+          tryDeleteSinglePhoto(photoId);
+        }}
       />,
       {
         clickOverlayClose: true,
       },
     );
   };
+
+  const handleImageClick = isSelectMode ? toggleSelectedPhoto : openPhotoModal;
 
   //biome-ignore lint/correctness/useExhaustiveDependencies: isFetchSectionVisible 변경 시 호출
   useEffect(() => {
@@ -103,21 +136,34 @@ const InboxPage = () => {
         <>
           <C.ImageManagementContainer>
             <SpaceHomeTopActionBar
-              isSelectMode={false}
-              isAllSelected={false}
-              onToggleSelectMode={() => {}}
-              onToggleAllSelected={() => {}}
+              isSelectMode={isSelectMode}
+              isAllSelected={isAllSelected}
+              onToggleSelectMode={toggleSelectMode}
+              onToggleAllSelected={toggleAllSelected}
             />
             <SpaceManagerImageGrid
-              isSelectMode={false}
-              selectedPhotoMap={new Map()}
+              isSelectMode={isSelectMode}
+              selectedPhotoMap={selectedPhotoMap}
               photoData={photosList}
               thumbnailUrlList={thumbnailPhotoMap}
               rowImageAmount={3}
-              onImageClick={openPhotoModal}
+              onImageClick={handleImageClick}
             />
           </C.ImageManagementContainer>
-          {/** Inbox footer 자리 */}
+          {/** TODO: onClick 함수 추후 구현 */}
+          <SpaceFooter
+            isAtPageTop={isAtPageTop}
+            isSelectMode={isSelectMode}
+            selectedPhotosCount={selectedPhotosCount}
+            leftIconAction={{
+              icon: <TrashCanIcon fill={theme.colors.white} width={16} />,
+              onClick: () => tryDeleteSelectedPhotos(selectedPhotoIds),
+            }}
+            rightIconAction={{
+              icon: <CheckIcon fill={theme.colors.white} width={24} />,
+              onClick: () => {},
+            }}
+          />
         </>
       );
   };

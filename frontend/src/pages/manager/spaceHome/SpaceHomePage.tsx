@@ -1,7 +1,8 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { DownloadIcon } from '../../../@assets/icons';
+import { DownloadIcon, TrashCanIcon } from '../../../@assets/icons';
 import { photoService } from '../../../apis/services/photo.service';
+import Button from '../../../components/@common/buttons/button/Button';
 import FloatingActionButton from '../../../components/@common/buttons/floatingActionButton/FloatingActionButton';
 import SpaceManagerImageGrid from '../../../components/@common/imageLayout/imageGrid/spaceManagerImageGrid/SpaceManagerImageGrid';
 import PhotoModal from '../../../components/@common/modal/photoModal/PhotoModal';
@@ -178,6 +179,13 @@ const SpaceHomePage = () => {
       return (
         <>
           <C.ImageManagementContainer>
+            <Button
+              text="임시 보관함"
+              variant="darkRounded"
+              onClick={() => {
+                navigate(ROUTES.MANAGER.INBOX(spaceInfo?.spaceCode ?? ''));
+              }}
+            />
             <SpaceHomeTopActionBar
               isSelectMode={isSelectMode}
               isAllSelected={isAllSelected}
@@ -198,9 +206,14 @@ const SpaceHomePage = () => {
             isAtPageTop={isAtPageTop}
             isSelectMode={isSelectMode}
             selectedPhotosCount={selectedPhotosCount}
-            selectedPhotoIds={selectedPhotoIds}
-            tryDeleteSelectedPhotos={tryDeleteSelectedPhotos}
-            trySelectedDownload={trySelectedDownload}
+            leftIconAction={{
+              icon: <TrashCanIcon fill={theme.colors.white} width={16} />,
+              onClick: () => tryDeleteSelectedPhotos(selectedPhotoIds),
+            }}
+            rightIconAction={{
+              icon: <DownloadIcon fill={theme.colors.white} width={24} />,
+              onClick: () => trySelectedDownload(selectedPhotoIds),
+            }}
           />
           {!isSelectMode && (
             <S.DownloadButtonContainer>

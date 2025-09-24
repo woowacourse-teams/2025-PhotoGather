@@ -1,5 +1,6 @@
 import { UpwardArrowIcon } from '../../../../@assets/icons';
 import { theme } from '../../../../styles/theme';
+import type { IconActionProps } from '../../../../types/soaceFooter.type';
 import { goToTop } from '../../../../utils/goToTop';
 import FloatingIconButton from '../../../@common/buttons/floatingIconButton/FloatingIconButton';
 import PhotoSelectionToolBar from '../../photoSelectionToolBar/PhotoSelectionToolBar';
@@ -9,18 +10,16 @@ interface SpaceFooterProps {
   isAtPageTop: boolean;
   isSelectMode: boolean;
   selectedPhotosCount: number;
-  selectedPhotoIds: number[];
-  tryDeleteSelectedPhotos: (photoIds: number[]) => void;
-  trySelectedDownload: (photoIds: number[]) => void;
+  leftIconAction: IconActionProps;
+  rightIconAction: IconActionProps;
 }
 
 const SpaceFooter = ({
   isAtPageTop,
   isSelectMode,
   selectedPhotosCount,
-  selectedPhotoIds,
-  tryDeleteSelectedPhotos,
-  trySelectedDownload,
+  leftIconAction,
+  rightIconAction,
 }: SpaceFooterProps) => {
   return (
     <S.BottomNavigatorContainer>
@@ -35,8 +34,14 @@ const SpaceFooter = ({
       {isSelectMode && (
         <PhotoSelectionToolBar
           selectedCount={selectedPhotosCount}
-          onDelete={() => tryDeleteSelectedPhotos(selectedPhotoIds)}
-          onDownload={() => trySelectedDownload(selectedPhotoIds)}
+          leftIconAction={{
+            icon: leftIconAction.icon,
+            onClick: () => leftIconAction.onClick(),
+          }}
+          rightIconAction={{
+            icon: rightIconAction.icon,
+            onClick: () => rightIconAction.onClick(),
+          }}
         />
       )}
     </S.BottomNavigatorContainer>

@@ -1,4 +1,5 @@
 import { createPhotoSelectedMessage } from '../../../constants/messages';
+import type { IconActionProps } from '../../../types/soaceFooter.type';
 import { track } from '../../../utils/googleAnalytics/track';
 import HighlightText from '../../@common/highlightText/HighlightText';
 import * as S from './PhotoSelectionToolBar.styles';
@@ -6,23 +7,23 @@ import * as S from './PhotoSelectionToolBar.styles';
 interface PhotoSelectionToolBarProps {
   /** 선택된 사진 개수 */
   selectedCount: number;
-  /** 삭제 버튼 클릭 시 실행할 함수 */
-  onDelete: () => void;
-  /** 다운로드 버튼 클릭 시 실행할 함수 */
-  onDownload: () => void;
+  /** 왼쪽 버튼 리스트 */
+  leftIconAction: IconActionProps;
+  /** 오른쪽 액션 버튼 리스트 */
+  rightIconAction: IconActionProps;
 }
 
 const PhotoSelectionToolBar = ({
   selectedCount,
-  onDelete,
-  onDownload,
+  leftIconAction,
+  rightIconAction,
 }: PhotoSelectionToolBarProps) => {
   const photoSelectedMessage = createPhotoSelectedMessage(selectedCount);
   return (
     <S.Wrapper>
       <S.Button
         onClick={() => {
-          onDelete();
+          leftIconAction.onClick();
           track.button('selected_delete_button', {
             page: 'space_home',
             section: 'photo_selection_tool-bar',
@@ -30,7 +31,7 @@ const PhotoSelectionToolBar = ({
           });
         }}
       >
-        <S.DeleteIcon />
+        {leftIconAction.icon}
       </S.Button>
       <HighlightText
         text={photoSelectedMessage}
@@ -41,7 +42,7 @@ const PhotoSelectionToolBar = ({
       />
       <S.Button
         onClick={() => {
-          onDownload();
+          rightIconAction.onClick();
           track.button('selected_download_button', {
             page: 'space_home',
             section: 'photo_selection_tool_bar',
@@ -49,7 +50,7 @@ const PhotoSelectionToolBar = ({
           });
         }}
       >
-        <S.DownloadIcon />
+        {rightIconAction.icon}
       </S.Button>
     </S.Wrapper>
   );

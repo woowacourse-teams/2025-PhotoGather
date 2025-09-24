@@ -10,6 +10,7 @@ export const ROUTES = {
     SPACE_HOME: (spaceCode: string) => `/space/${spaceCode}`,
     DASHBOARD: (spaceCode: string) => `/space/${spaceCode}/dashboard`,
     SETTING: (spaceCode: string) => `/space/${spaceCode}/settings`,
+    INBOX: (spaceCode: string) => `/space/${spaceCode}/inbox`,
   },
   GUEST: {
     IMAGE_UPLOAD: (spaceCode: string) => `/guest/image-upload/${spaceCode}`,
