@@ -15,10 +15,10 @@ import {
 import Button from '../../components/@common/buttons/button/Button';
 import FloatingActionButton from '../../components/@common/buttons/floatingActionButton/FloatingActionButton';
 import IconLabelButton from '../../components/@common/buttons/iconLabelButton/IconLabelButton';
-import { Carousel } from '../../components/carousel/Carousel';
-import Footer from '../../components/footer/Footer';
-import KakaoLoginButton from '../../components/kakaoLoginButton/KakaoLoginButton';
-import LeftTimeInformationBox from '../../components/leftTimeInformationBox/LeftTimeInformationBox';
+import { Carousel } from '../../components/@common/carousel/Carousel';
+import Footer from '../../components/layout/global/footer/Footer';
+import KakaoLoginButton from '../../components/specific/kakaoLoginButton/KakaoLoginButton';
+import LeftTimeInformationBox from '../../components/specific/leftTimeInformationBox/LeftTimeInformationBox';
 import { AUTH_COOKIES } from '../../constants/keys';
 import useAuthActions from '../../hooks/@common/useAuthActions';
 import useLandingScroll from '../../hooks/@common/useLandingScroll';

@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { DefaultProfileImg as defaultProfile } from '../../@assets/images';
 import { authService } from '../../apis/services/auth.service';
 import ConfirmModal from '../../components/@common/modal/confirmModal/ConfirmModal';
-import Profile from '../../components/profile/Profile';
+import Profile from '../../components/@common/profile/Profile';
 import { ROUTES } from '../../constants/routes';
 import { useOverlay } from '../../contexts/OverlayProvider';
 import useAuthActions from '../../hooks/@common/useAuthActions';

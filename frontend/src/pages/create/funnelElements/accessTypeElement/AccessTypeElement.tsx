@@ -1,6 +1,6 @@
 import { useState } from 'react';
+import AccessTypeIcon from '../../../../components/@common/accessTypeIcon/AccessTypeIcon';
 import BorderButton from '../../../../components/@common/buttons/borderButton/BorderButton';
-import AccessTypeIcon from '../../../../components/accessTypeIcon/AccessTypeIcon';
 import { INFORMATION } from '../../../../constants/messages';
 import type { FunnelElementProps } from '../../../../types/funnel.type';
 import type { SpaceAccessType } from '../../../../types/space.type';
