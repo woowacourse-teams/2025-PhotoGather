@@ -1,4 +1,8 @@
 import { useEffect, useState } from 'react';
+import {
+  LeftwardArrowIcon,
+  RightwardArrowIcon,
+} from '../../../../@assets/icons';
 import { DefaultImageImg as defaultImage } from '../../../../@assets/images';
 import { photoService } from '../../../../apis/services/photo.service';
 import { useOverlay } from '../../../../contexts/OverlayProvider';
@@ -173,6 +177,22 @@ const PhotoModal = (props: PhotoModalProps) => {
         ) : (
           <S.LoadingPhoto />
         )}
+        <S.NavigationContainer>
+          <S.NavigationButton
+            $position="left"
+            aria-label="이전 사진"
+            onClick={() => console.log('left')}
+          >
+            <LeftwardArrowIcon />
+          </S.NavigationButton>
+          <S.NavigationButton
+            $position="right"
+            aria-label="다음 사진"
+            onClick={() => console.log('right')}
+          >
+            <RightwardArrowIcon />
+          </S.NavigationButton>
+        </S.NavigationContainer>
       </S.PhotoContainer>
       <S.ButtonContainer
         $isManagerMode={isManagerMode}
@@ -183,7 +203,6 @@ const PhotoModal = (props: PhotoModalProps) => {
           variant="danger"
           onClick={handleDelete}
         />
-          
         {isManagerMode && (
           <IconLabelButton
             icon={<S.DownloadIcon />}
