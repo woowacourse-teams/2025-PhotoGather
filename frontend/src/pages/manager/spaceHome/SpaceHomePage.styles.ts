@@ -1,7 +1,5 @@
 import styled from '@emotion/styled';
-import { ImageGridBackDrop } from '../../../styles/@common/BackDrop.styles';
 import { theme } from '../../../styles/theme';
-import { hexToRgba } from '../../../utils/hexToRgba';
 
 export const Wrapper = styled.div`
   width: 100%;
@@ -86,21 +84,6 @@ export const TopButtonContainer = styled.div<{ $isVisible: boolean }>`
   }
 `;
 
-export const NoImageContainer = styled(ImageGridBackDrop)`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 20px;
-  flex-grow: 1;
-  background: ${({ theme }) => hexToRgba(theme.colors.gray06, 0.3)};
-`;
-
-export const NoImageText = styled.p`
-  ${({ theme }) => ({ ...theme.typography.header03 })};
-  color: ${({ theme }) => theme.colors.white};
-`;
-
 export const LoadingSpinnerContainer = styled.div`
   position: fixed;
   top: 50%;
@@ -115,8 +98,4 @@ export const ModalContentContainer = styled.div`
   justify-content: center;
   align-items: center;
   gap: 24px;
-`;
-
-export const GiftIconImage = styled.img`
-  width: 120px;
 `;

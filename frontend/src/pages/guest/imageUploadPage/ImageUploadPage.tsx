@@ -16,9 +16,9 @@ import LoadingLayout from '../../../components/layout/loadingLayout/LoadingLayou
 import UploadBox from '../../../components/specific/uploadBox/UploadBox';
 import { ROUTES } from '../../../constants/routes';
 import { useOverlay } from '../../../contexts/OverlayProvider';
-import useIntersectionObserver from '../../../hooks/@common/useIntersectionObserver';
 import useLeftTimer from '../../../hooks/@common/useLeftTimer';
 import useLocalFile from '../../../hooks/@common/useLocalFile';
+import useScrollUITriggers from '../../../hooks/domain/photos/useScrollUITriggers';
 import useFileUpload from '../../../hooks/useFileUpload';
 import useGuestNickName from '../../../hooks/useGuestNickName';
 import useSpaceCodeFromPath from '../../../hooks/useSpaceCodeFromPath';
@@ -83,10 +83,7 @@ const ImageUploadPage = () => {
   });
 
   const hasImages = Array.isArray(previewFile) && previewFile.length > 0;
-  const { targetRef: hideBlurAreaTriggerRef, isIntersecting: isAtPageBottom } =
-    useIntersectionObserver({});
-  const { targetRef: scrollTopTriggerRef, isIntersecting: isAtPageTop } =
-    useIntersectionObserver({ isInitialInView: true });
+  const scrollUITriggers = useScrollUITriggers();
   const { leftTime } = useLeftTimer({
     targetTime: (spaceInfo?.expiredAt as string) ?? '',
   });
@@ -150,7 +147,7 @@ const ImageUploadPage = () => {
           currentAmount={success ?? 5}
         />
       )}
-      <S.ScrollTopAnchor ref={scrollTopTriggerRef} />
+      <S.ScrollTopAnchor ref={scrollUITriggers.scrollTopTriggerRef} />
       <GuestSpaceHeader
         title={spaceName}
         timer={leftTime}
@@ -221,7 +218,7 @@ const ImageUploadPage = () => {
               });
             }}
           />
-          <S.TopButtonContainer $isVisible={!isAtPageTop}>
+          <S.TopButtonContainer $isVisible={!scrollUITriggers.isAtPageTop}>
             <FloatingIconButton
               icon={<ArrowUpSvg fill={theme.colors.white} />}
               onClick={goToTop}
@@ -229,8 +226,11 @@ const ImageUploadPage = () => {
           </S.TopButtonContainer>
         </>
       )}
-      <S.IntersectionArea ref={hideBlurAreaTriggerRef} />
-      <ScrollableBlurArea $isHide={isAtPageBottom} $position="bottom" />
+      <S.IntersectionArea ref={scrollUITriggers.hideBlurAreaTriggerRef} />
+      <ScrollableBlurArea
+        $isHide={scrollUITriggers.isAtPageBottom}
+        $position="bottom"
+      />
     </S.Wrapper>
   );
 };

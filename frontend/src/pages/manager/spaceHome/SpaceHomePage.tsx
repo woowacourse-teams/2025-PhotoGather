@@ -8,10 +8,7 @@ import {
   SettingIcon,
   ShareIcon,
 } from '../../../@assets/icons';
-import {
-  GiftImg as GiftIcon,
-  MessageImg as messageIcon,
-} from '../../../@assets/images';
+import { MessageImg as messageIcon } from '../../../@assets/images';
 import FloatingActionButton from '../../../components/@common/buttons/floatingActionButton/FloatingActionButton';
 import FloatingIconButton from '../../../components/@common/buttons/floatingIconButton/FloatingIconButton';
 import IconLabelButton from '../../../components/@common/buttons/iconLabelButton/IconLabelButton';
@@ -20,14 +17,15 @@ import * as C from '../../../components/@common/modal/Modal.common.styles';
 import PhotoModal from '../../../components/@common/modal/photoModal/PhotoModal';
 import ManagerHeader from '../../../components/layout/header/spaceHeader/managerSpaceHeader/ManagerHeader';
 import LoadingLayout from '../../../components/layout/loadingLayout/LoadingLayout';
+import NoImageBox from '../../../components/specific/noImageBox/NoImageBox';
 import PhotoSelectionToolBar from '../../../components/specific/photoSelectionToolBar/PhotoSelectionToolBar';
 import SpaceHomeTopActionBar from '../../../components/specific/spaceHomeTopActionBar/SpaceHomeTopActionBar';
-import { INFORMATION } from '../../../constants/messages';
 import { ROUTES } from '../../../constants/routes';
 import { useOverlay } from '../../../contexts/OverlayProvider';
 import useIntersectionObserver from '../../../hooks/@common/useIntersectionObserver';
 import useLeftTimer from '../../../hooks/@common/useLeftTimer';
 import { useToast } from '../../../hooks/@common/useToast';
+import useScrollUITriggers from '../../../hooks/domain/photos/useScrollUITriggers';
 import useSpaceAccess from '../../../hooks/domain/useSpaceAccess';
 import useDownload from '../../../hooks/useDownload';
 import usePhotoSelect from '../../../hooks/usePhotoSelect';
@@ -52,10 +50,7 @@ const SpaceHomePage = () => {
   const { showToast } = useToast();
   const navigate = useNavigate();
 
-  const { targetRef: hideBlurAreaTriggerRef, isIntersecting: isAtPageBottom } =
-    useIntersectionObserver({});
-  const { targetRef: scrollTopTriggerRef, isIntersecting: isAtPageTop } =
-    useIntersectionObserver({ isInitialInView: true });
+  const scrollUITriggers = useScrollUITriggers();
   const {
     targetRef: fetchTriggerRef,
     isIntersecting: isFetchSectionVisible,
@@ -279,7 +274,7 @@ const SpaceHomePage = () => {
   const renderBottomNavigatorContent = () => {
     return (
       <S.BottomNavigatorContainer>
-        <S.TopButtonContainer $isVisible={!isAtPageTop}>
+        <S.TopButtonContainer $isVisible={!scrollUITriggers.isAtPageTop}>
           {!isSelectMode && (
             <FloatingIconButton
               icon={<ArrowUpSvg fill={theme.colors.white} />}
@@ -304,12 +299,7 @@ const SpaceHomePage = () => {
     if (accessLoadingState === 'success' && !hasAccess)
       return <AccessDeniedPage />;
     if (photosListLoadingState === 'success' && photosList.length === 0)
-      return (
-        <S.NoImageContainer>
-          <S.GiftIconImage src={GiftIcon} />
-          <S.NoImageText>{INFORMATION.NO_IMAGE}</S.NoImageText>
-        </S.NoImageContainer>
-      );
+      return <NoImageBox />;
     if (photosList.length > 0)
       return (
         <>
@@ -361,7 +351,7 @@ const SpaceHomePage = () => {
         />
       )}
 
-      <S.InfoContainer ref={scrollTopTriggerRef}>
+      <S.InfoContainer ref={scrollUITriggers.scrollTopTriggerRef}>
         <ManagerHeader
           title={spaceName}
           accessType={spaceInfo?.type}
@@ -372,10 +362,16 @@ const SpaceHomePage = () => {
 
       <S.BodyContainer>{renderBodyContent()}</S.BodyContainer>
 
-      <S.IntersectionArea ref={hideBlurAreaTriggerRef} />
+      <S.IntersectionArea ref={scrollUITriggers.hideBlurAreaTriggerRef} />
       <S.IntersectionArea ref={fetchTriggerRef} />
-      <ScrollableBlurArea $isHide={isAtPageBottom} $position="bottom" />
-      <ScrollableBlurArea $isHide={isAtPageTop} $position="top" />
+      <ScrollableBlurArea
+        $isHide={scrollUITriggers.isAtPageBottom}
+        $position="bottom"
+      />
+      <ScrollableBlurArea
+        $isHide={scrollUITriggers.isAtPageTop}
+        $position="top"
+      />
     </S.Wrapper>
   );
 };
