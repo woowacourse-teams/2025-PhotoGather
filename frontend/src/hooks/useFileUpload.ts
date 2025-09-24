@@ -34,29 +34,37 @@ const useFileUpload = ({
   const { loadingState, tryFetch } = useTaskHandler();
   const uploadedFilesRef = useRef<string[]>([]);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies(sendCancelBeacon): suppress dependency sendCancelBeacon
   useEffect(() => {
-    //  브라우저 내 또는 이동시 업로드 취소 요청
-    const handlePageHide = () => {
-      if (
-        uploadedFilesRef.current.length > 0 &&
-        guestId &&
-        guestId !== FAILED_GUEST_ID
-      ) {
-        const formData = new FormData();
-        uploadedFilesRef.current.forEach((fileName) => {
-          formData.append('cancelFileNames', fileName);
-        });
+    window.addEventListener('pagehide', sendCancelBeacon);
+    return () => window.removeEventListener('pagehide', sendCancelBeacon);
+  }, []);
 
-        navigator.sendBeacon(
-          `${BASE_URL}/spaces/${spaceCode}/photos/upload/cancel?guestId=${guestId}`,
-          formData,
-        );
-      }
+  // biome-ignore lint/correctness/useExhaustiveDependencies(sendCancelBeacon): suppress dependency sendCancelBeacon
+  // biome-ignore lint/correctness/useExhaustiveDependencies(location): SPA 내부 라우트 전환 시 취소 실행 필요
+  useEffect(() => {
+    return () => {
+      sendCancelBeacon();
     };
+  }, [location]);
 
-    window.addEventListener('pagehide', handlePageHide);
-    return () => window.removeEventListener('pagehide', handlePageHide);
-  }, [spaceCode, guestId]);
+  const sendCancelBeacon = () => {
+    if (
+      uploadedFilesRef.current.length > 0 &&
+      guestId &&
+      guestId !== FAILED_GUEST_ID
+    ) {
+      const formData = new FormData();
+      uploadedFilesRef.current.forEach((fileName) => {
+        formData.append('cancelFileNames', fileName);
+      });
+
+      navigator.sendBeacon(
+        `${BASE_URL}/spaces/${spaceCode}/photos/upload/cancel?guestId=${guestId}`,
+        formData,
+      );
+    }
+  };
 
   const ensureGuestId = async () => {
     if (guestId && guestId !== FAILED_GUEST_ID) return guestId;
