@@ -150,6 +150,31 @@ const PhotoModal = (props: PhotoModalProps) => {
     onSubmit?.(true);
   };
 
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        onClose?.();
+      }
+
+      if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        console.log('left');
+      }
+
+      if (e.key === 'ArrowRight') {
+        e.preventDefault();
+        console.log('right');
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [onClose]);
+
   return (
     <S.Wrapper
       onMouseDown={(e) => {
