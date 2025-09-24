@@ -53,14 +53,16 @@ const useFileUpload = ({
       guestId &&
       guestId !== FAILED_GUEST_ID
     ) {
-      const formData = new FormData();
+      const params = new URLSearchParams();
       uploadedFilesRef.current.forEach((fileName) => {
-        formData.append('cancelFileNames', fileName);
+        params.append('cancelFileNames', fileName);
       });
 
       navigator.sendBeacon(
         `${BASE_URL}/spaces/${spaceCode}/photos/upload/cancel?guestId=${guestId}`,
-        formData,
+        new Blob([params.toString()], {
+          type: 'application/x-www-form-urlencoded',
+        }),
       );
     }
   };
