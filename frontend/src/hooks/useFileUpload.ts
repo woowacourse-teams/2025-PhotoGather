@@ -1,4 +1,5 @@
-import { useReducer } from 'react';
+import { useEffect, useReducer, useRef } from 'react';
+import { BASE_URL } from '../apis/config';
 import { photoService } from '../apis/services/photo.service';
 import { FAILED_GUEST_ID } from '../constants/errors';
 import type {
@@ -31,6 +32,31 @@ const useFileUpload = ({
 }: UseFileUploadProps) => {
   const [session, dispatch] = useReducer(useSessionReducer, initialSession);
   const { loadingState, tryFetch } = useTaskHandler();
+  const uploadedFilesRef = useRef<string[]>([]);
+
+  useEffect(() => {
+    //  브라우저 내 또는 이동시 업로드 취소 요청
+    const handlePageHide = () => {
+      if (
+        uploadedFilesRef.current.length > 0 &&
+        guestId &&
+        guestId !== FAILED_GUEST_ID
+      ) {
+        const formData = new FormData();
+        uploadedFilesRef.current.forEach((fileName) => {
+          formData.append('cancelFileNames', fileName);
+        });
+
+        navigator.sendBeacon(
+          `${BASE_URL}/spaces/${spaceCode}/photos/upload/cancel?guestId=${guestId}`,
+          formData,
+        );
+      }
+    };
+
+    window.addEventListener('pagehide', handlePageHide);
+    return () => window.removeEventListener('pagehide', handlePageHide);
+  }, [spaceCode, guestId]);
 
   const ensureGuestId = async () => {
     if (guestId && guestId !== FAILED_GUEST_ID) return guestId;
@@ -39,6 +65,27 @@ const useFileUpload = ({
     if (!newGuestId) return FAILED_GUEST_ID;
 
     return newGuestId;
+  };
+
+  const cleanupUploadedFiles = async (currentGuestId: number) => {
+    if (uploadedFilesRef.current.length > 0) {
+      await tryFetch({
+        task: async () => {
+          await photoService.cancelUpload(
+            spaceCode,
+            { cancelFileNames: uploadedFilesRef.current },
+            currentGuestId,
+          );
+          uploadedFilesRef.current = [];
+        },
+        errorActions: ['console'],
+        context: {
+          console: {
+            text: '파일 정리 실패',
+          },
+        },
+      });
+    }
   };
 
   const createUploadFiles = (localFiles: LocalFile[]) => {
@@ -128,6 +175,7 @@ const useFileUpload = ({
     });
 
     if (response.success) {
+      uploadedFilesRef.current.push(file.objectKey);
       dispatch({
         type: 'UPDATE_FILE_STATE',
         payload: { batchId, fileId: file.id, state: 'uploaded' },
@@ -143,7 +191,7 @@ const useFileUpload = ({
     }
   };
 
-  const uploadToS3 = async (
+  const uploadFilesToS3 = async (
     batchId: number,
     uploadFiles: UploadFile[],
   ): Promise<UploadFile[]> => {
@@ -180,7 +228,7 @@ const useFileUpload = ({
           validGuestId,
           nickName,
         ),
-      errorActions: ['console'],
+      errorActions: ['console', 'throw'],
       context: {
         console: {
           text: '서버에 업로드 완료 알림 실패',
@@ -189,6 +237,22 @@ const useFileUpload = ({
     });
 
     if (!response.success || !response.data) {
+      const failedFileNames = successFiles.map((f) => f.objectKey);
+      await tryFetch({
+        task: async () => {
+          await photoService.cancelUpload(
+            spaceCode,
+            { cancelFileNames: failedFileNames },
+            validGuestId,
+          );
+        },
+        errorActions: ['console'],
+        context: {
+          console: {
+            text: 'notify 실패로 인한 파일 정리 실패',
+          },
+        },
+      });
       throw new Error('서버에 업로드 완료 알림 실패2');
     }
 
@@ -213,12 +277,16 @@ const useFileUpload = ({
       batch.uploadFiles,
       presignedUrlsResponse.data,
     );
+
     dispatch({
       type: 'UPDATE_BATCH_FILES',
       payload: { batchId: batch.id, files: filesWithPresignedUrls },
     });
 
-    const uploadedFiles = await uploadToS3(batch.id, filesWithPresignedUrls);
+    const uploadedFiles = await uploadFilesToS3(
+      batch.id,
+      filesWithPresignedUrls,
+    );
 
     dispatch({
       type: 'UPDATE_BATCH_FILES',
@@ -226,9 +294,11 @@ const useFileUpload = ({
     });
     dispatch({ type: 'UPDATE_BATCH_STATS', payload: { batchId: batch.id } });
 
-    const successFiles = uploadedFiles.filter((f) => f.state === 'uploaded');
-    if (successFiles.length > 0)
-      await notifyUploadComplete(successFiles, validGuestId, nickName);
+    const failedFiles = uploadedFiles.filter((f) => f.state === 'failed');
+    const successFiles = uploadedFiles.filter((f) => f.state === 'failed');
+
+    if (failedFiles.length > 0) throw new Error('성공한 파일이 없습니다.');
+    await notifyUploadComplete(successFiles, validGuestId, nickName);
 
     return {
       success: successFiles.length,
@@ -242,17 +312,22 @@ const useFileUpload = ({
     nickName: string,
   ) => {
     for (const batch of currentSession.batches) {
-      await tryFetch({
+      const response = await tryFetch({
         task: async () => {
           await uploadSingleBatch(batch, validGuestId, nickName);
         },
-        errorActions: ['console', 'throw'],
+        errorActions: ['console'],
         context: {
           console: {
             text: `배치 업로드 실패: 배치 ID ${batch.id}`,
           },
         },
       });
+
+      if (!response.success) {
+        await cleanupUploadedFiles(validGuestId);
+        throw new Error(`배치 업로드 실패: 배치 ID ${batch.id}`);
+      }
     }
   };
 
@@ -279,6 +354,7 @@ const useFileUpload = ({
     });
 
     if (response.success) {
+      uploadedFilesRef.current = [];
       onUploadSuccess();
       clearFiles();
       dispatch({ type: 'RESET' });
