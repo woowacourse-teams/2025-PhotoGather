@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-webpack5';
-import AccessTypeIcon from '../components/accessTypeIcon/AccessTypeIcon';
+import AccessTypeIcon from '../components/@common/accessTypeIcon/AccessTypeIcon';
 
 const meta: Meta<typeof AccessTypeIcon> = {
   title: 'Components/AccessTypeIcon',

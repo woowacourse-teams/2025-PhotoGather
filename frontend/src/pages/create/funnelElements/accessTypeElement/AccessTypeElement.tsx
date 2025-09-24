@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import AccessTypeIcon from '../../../../components/accessTypeIcon/AccessTypeIcon';
+import AccessTypeIcon from '../../../../components/@common/accessTypeIcon/AccessTypeIcon';
 import { INFORMATION } from '../../../../constants/messages';
 import { theme } from '../../../../styles/theme';
 import type { FunnelElementProps } from '../../../../types/funnel.type';

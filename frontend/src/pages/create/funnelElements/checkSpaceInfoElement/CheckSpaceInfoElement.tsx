@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
-import AccessTypeIcon from '../../../../components/accessTypeIcon/AccessTypeIcon';
-import LeftTimeInformationBox from '../../../../components/leftTimeInformationBox/LeftTimeInformationBox';
+import AccessTypeIcon from '../../../../components/@common/accessTypeIcon/AccessTypeIcon';
+import LeftTimeInformationBox from '../../../../components/specific/leftTimeInformationBox/LeftTimeInformationBox';
 import { INFORMATION } from '../../../../constants/messages';
 import { ROUTES } from '../../../../constants/routes';
 import useLeftTimer from '../../../../hooks/@common/useLeftTimer';
