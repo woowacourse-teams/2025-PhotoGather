@@ -1,4 +1,7 @@
 import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { DownloadIcon } from '../../../@assets/icons';
+import FloatingActionButton from '../../../components/@common/buttons/floatingActionButton/FloatingActionButton';
 import SpaceManagerImageGrid from '../../../components/@common/imageLayout/imageGrid/spaceManagerImageGrid/SpaceManagerImageGrid';
 import PhotoModal from '../../../components/@common/modal/photoModal/PhotoModal';
 import LoadingLayout from '../../../components/layout/loadingLayout/LoadingLayout';
@@ -7,11 +10,17 @@ import SpaceFooter from '../../../components/specific/space/spaceFooter/SpaceFoo
 import ManagerHeader from '../../../components/specific/space/spaceHeader/managerSpaceHeader/ManagerHeader';
 import SpaceHomeTopActionBar from '../../../components/specific/spaceHomeTopActionBar/SpaceHomeTopActionBar';
 import { loadingContents } from '../../../constants/loadingContents';
+import { ROUTES } from '../../../constants/routes';
 import { useOverlay } from '../../../contexts/OverlayProvider';
-import usePhotosDomain from '../../../hooks/domain/photos/usePhotosDomain';
+import useIntersectionObserver from '../../../hooks/@common/useIntersectionObserver';
+import useDownload from '../../../hooks/domain/photos/useDownload';
+import usePhotoSelect from '../../../hooks/domain/photos/usePhotoSelect';
+import usePhotosBySpaceCode from '../../../hooks/domain/photos/usePhotosBySpaceCode';
+import usePhotosDelete from '../../../hooks/domain/photos/usePhotosDelete';
 import useSpaceDomain from '../../../hooks/domain/space/useSpaceDomain';
 import useScrollUITriggers from '../../../hooks/domain/ui/useScrollUITriggers';
 import { ScrollableBlurArea } from '../../../styles/@common/ScrollableBlurArea.styles';
+import { theme } from '../../../styles/theme';
 import { checkIsEarlyDate } from '../../../utils/checkIsEarlyTime';
 import { track } from '../../../utils/googleAnalytics/track';
 import AccessDeniedPage from '../../status/accessDeniedPage/AccessDeniedPage';
@@ -21,6 +30,7 @@ import * as S from './SpaceHomePage.styles';
 
 const SpaceHomePage = () => {
   const overlay = useOverlay();
+  const navigate = useNavigate();
 
   const {
     isAtPageBottom,
@@ -29,41 +39,51 @@ const SpaceHomePage = () => {
     hideBlurAreaTriggerRef,
   } = useScrollUITriggers();
 
+  const {
+    targetRef: fetchTriggerRef,
+    isIntersecting: isFetchSectionVisible,
+    reObserve,
+  } = useIntersectionObserver({ rootMargin: '200px' });
+
   const { spaceInfoDomain, spaceAccessDomain } = useSpaceDomain();
   const { spaceInfo, spaceInfoLoadingState } = spaceInfoDomain;
   const { hasAccess, accessLoadingState, loggedInUserId } = spaceAccessDomain;
 
   const {
-    photosDomain,
-    photoSelectDomain,
-    photosDeleteDomain,
-    infiniteScroll,
-    photosDownloadDomain,
-  } = usePhotosDomain({
+    photosList,
+    photosListLoadingState,
+    tryFetchPhotosList,
+    updatePhotos,
+    isEndPage,
+    thumbnailPhotoMap,
+  } = usePhotosBySpaceCode({
+    reObserve,
     spaceCode: spaceInfo?.spaceCode ?? '',
-    spaceName: spaceInfo?.name ?? '',
   });
 
-  const { isFetchSectionVisible, fetchTriggerRef } = infiniteScroll;
-
   const {
-    photosListLoadingState,
-    photosList,
-    thumbnailPhotoMap,
-    isEndPage,
-    tryFetchPhotosList,
-  } = photosDomain;
-  const {
-    isSelectMode,
-    toggleSelectedPhoto,
-    selectedPhotosCount,
-    selectedPhotoIds,
-    selectedPhotoMap,
     toggleSelectMode,
     toggleAllSelected,
     isAllSelected,
-  } = photoSelectDomain;
-  const { tryDeleteSinglePhoto, tryDeleteSelectedPhotos } = photosDeleteDomain;
+    isSelectMode,
+    toggleSelectedPhoto,
+    selectedPhotoMap,
+    selectedPhotosCount,
+    selectedPhotoIds,
+    extractUnselectedPhotos,
+  } = usePhotoSelect({
+    photosList: photosList ?? [],
+  });
+
+  const { tryDeleteSinglePhoto, tryDeleteSelectedPhotos } = usePhotosDelete({
+    spaceCode: spaceInfo?.spaceCode ?? '',
+    toggleSelectMode: toggleSelectMode,
+    updatePhotos: updatePhotos,
+    tryFetchPhotosList: tryFetchPhotosList,
+    extractUnselectedPhotos: extractUnselectedPhotos,
+    photosList: photosList,
+  });
+
   const {
     trySingleDownload,
     trySelectedDownload,
@@ -71,7 +91,17 @@ const SpaceHomePage = () => {
     isDownloading,
     totalProgress,
     currentProgress,
-  } = photosDownloadDomain;
+  } = useDownload({
+    spaceCode: spaceInfo?.spaceCode ?? '',
+    spaceName: spaceInfo?.name ?? '',
+    onDownloadSuccess: () => {
+      navigate(ROUTES.COMPLETE.DOWNLOAD, {
+        state: {
+          spaceCode: spaceInfo?.spaceCode ?? '',
+        },
+      });
+    },
+  });
 
   const isEarlyTime = checkIsEarlyDate(spaceInfo?.openedAt ?? '');
   const isSpaceExpired = spaceInfo?.isExpired;
@@ -139,7 +169,7 @@ const SpaceHomePage = () => {
     if (isSpaceExpired) return <ExpiredPage />;
     if (accessLoadingState === 'success' && !hasAccess)
       return <AccessDeniedPage />;
-    if (photosListLoadingState === 'success' && photosList.length === 0)
+    if (photosListLoadingState === 'success' && photosList?.length === 0)
       return <NoImageBox />;
     if (photosList.length > 0)
       return (
@@ -164,13 +194,28 @@ const SpaceHomePage = () => {
           <SpaceFooter
             isAtPageTop={isAtPageTop}
             isSelectMode={isSelectMode}
-            isDownloading={isDownloading}
             selectedPhotosCount={selectedPhotosCount}
             selectedPhotoIds={selectedPhotoIds}
             tryDeleteSelectedPhotos={tryDeleteSelectedPhotos}
             trySelectedDownload={trySelectedDownload}
-            tryAllDownload={tryAllDownload}
           />
+          {!isSelectMode && (
+            <S.DownloadButtonContainer>
+              <FloatingActionButton
+                label="모두 저장하기"
+                icon={<DownloadIcon fill={theme.colors.gray06} />}
+                onClick={() => {
+                  tryAllDownload();
+                  track.button('all_download_button', {
+                    page: 'space_home',
+                    section: 'space_home',
+                    action: 'download_all',
+                  });
+                }}
+                disabled={isDownloading}
+              />
+            </S.DownloadButtonContainer>
+          )}
         </>
       );
   };

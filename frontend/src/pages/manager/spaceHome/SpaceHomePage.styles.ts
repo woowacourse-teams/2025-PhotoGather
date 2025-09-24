@@ -55,3 +55,11 @@ export const LoadingSpinnerContainer = styled.div`
   transform: translate(-50%, -50%);
   z-index: ${({ theme }) => theme.zIndex.loadingSpinner};
 `;
+
+export const DownloadButtonContainer = styled.div`
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: ${({ theme }) => theme.zIndex.floatingActionButton};
+`;
