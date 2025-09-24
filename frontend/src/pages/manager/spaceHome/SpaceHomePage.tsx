@@ -64,13 +64,16 @@ const SpaceHomePage = () => {
 
   const { spaceCode } = useSpaceCodeFromPath();
 
-  const { spaceInfo } = useSpaceInfo(spaceCode ?? '');
+  const { spaceInfoLoadingState, spaceInfo } = useSpaceInfo(spaceCode ?? '');
   const spaceName = spaceInfo?.name ?? '';
   const isEarlyTime =
     spaceInfo?.openedAt && checkIsEarlyDate(spaceInfo.openedAt);
   const isSpaceExpired = spaceInfo?.isExpired;
 
-  const { hasAccess, isLoadingAccess } = useSpaceAccess(spaceInfo?.host.id);
+  const { hasAccess, accessLoadingState, hostId } = useSpaceAccess({
+    spaceHostId: spaceInfo?.host.id,
+    spaceType: spaceInfo?.type,
+  });
 
   const {
     photosList,
@@ -78,6 +81,7 @@ const SpaceHomePage = () => {
     isEndPage,
     tryFetchPhotosList,
     updatePhotos,
+    photosListLoadingState,
   } = usePhotosBySpaceCode({
     reObserve,
     spaceCode: spaceCode ?? '',
@@ -182,16 +186,25 @@ const SpaceHomePage = () => {
 
   //biome-ignore lint/correctness/useExhaustiveDependencies: isFetchSectionVisible 변경 시 호출
   useEffect(() => {
-    if (isSpaceExpired || isEarlyTime || !hasAccess) return;
-    if (!isFetchSectionVisible || isEndPage) return;
+    if (spaceInfoLoadingState !== 'success' || accessLoadingState !== 'success')
+      return;
 
-    tryFetchPhotosList();
+    if (!hasAccess || isSpaceExpired || isEarlyTime || isEndPage) return;
+
+    if (photosListLoadingState === 'loading') return;
+
+    if (isFetchSectionVisible && !isEndPage) {
+      tryFetchPhotosList();
+    }
   }, [
     isFetchSectionVisible,
     isEndPage,
     isSpaceExpired,
     isEarlyTime,
     hasAccess,
+    accessLoadingState,
+    spaceInfoLoadingState,
+    photosListLoadingState,
   ]);
 
   const loadingContents = [
@@ -240,7 +253,7 @@ const SpaceHomePage = () => {
 
   const canAddPhoto = hasAccess && !isSpaceExpired && !isEarlyTime;
   const canShare = hasAccess && !isSpaceExpired;
-  const canChangeSetting = hasAccess;
+  const canChangeSetting = spaceInfo?.host.id === hostId;
 
   const iconItems = [
     {
@@ -287,9 +300,10 @@ const SpaceHomePage = () => {
 
   const renderBodyContent = () => {
     if (isEarlyTime) return <EarlyPage openedAt={spaceInfo.openedAt} />;
-    if (!hasAccess && !isLoadingAccess) return <AccessDeniedPage />;
     if (isSpaceExpired) return <ExpiredPage />;
-    if (photosList.length === 0)
+    if (accessLoadingState === 'success' && !hasAccess)
+      return <AccessDeniedPage />;
+    if (photosListLoadingState === 'success' && photosList.length === 0)
       return (
         <S.NoImageContainer>
           <S.GiftIconImage src={GiftIcon} />
