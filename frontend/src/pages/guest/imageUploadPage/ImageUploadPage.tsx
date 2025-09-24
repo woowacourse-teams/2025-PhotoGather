@@ -120,20 +120,20 @@ const ImageUploadPage = () => {
 
   const loadingContents = [
     {
-      icon: { src: messageIcon, alt: '데모 페이지 아이콘' },
+      icon: { src: messageIcon, alt: '메시지 아이콘' },
       description: '추억 담는 중',
     },
     {
-      icon: { src: messageIcon, alt: '데모 페이지 아이콘' },
+      icon: { src: messageIcon, alt: '메시지 아이콘' },
       description: '선물 상자 포장하는 중',
     },
     {
-      icon: { src: messageIcon, alt: '데모 페이지 아이콘' },
+      icon: { src: messageIcon, alt: '메시지 아이콘' },
       description: '배달 가는 중',
     },
     {
-      icon: { src: messageIcon, alt: '데모 페이지 아이콘' },
-      description: '당신에게 전달 중',
+      icon: { src: messageIcon, alt: '메시지 아이콘' },
+      description: '주인공에게 전달 중',
     },
   ];
 
