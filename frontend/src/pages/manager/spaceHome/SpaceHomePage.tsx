@@ -1,16 +1,10 @@
 import { useEffect } from 'react';
-import {
-  UpwardArrowIcon as ArrowUpSvg,
-  DownloadIcon as SaveIcon,
-} from '../../../@assets/icons';
-import FloatingActionButton from '../../../components/@common/buttons/floatingActionButton/FloatingActionButton';
-import FloatingIconButton from '../../../components/@common/buttons/floatingIconButton/FloatingIconButton';
 import SpaceManagerImageGrid from '../../../components/@common/imageLayout/imageGrid/spaceManagerImageGrid/SpaceManagerImageGrid';
 import PhotoModal from '../../../components/@common/modal/photoModal/PhotoModal';
-import ManagerHeader from '../../../components/layout/header/spaceHeader/managerSpaceHeader/ManagerHeader';
 import LoadingLayout from '../../../components/layout/loadingLayout/LoadingLayout';
 import NoImageBox from '../../../components/specific/noImageBox/NoImageBox';
-import PhotoSelectionToolBar from '../../../components/specific/photoSelectionToolBar/PhotoSelectionToolBar';
+import SpaceFooter from '../../../components/specific/space/spaceFooter/SpaceFooter';
+import ManagerHeader from '../../../components/specific/space/spaceHeader/managerSpaceHeader/ManagerHeader';
 import SpaceHomeTopActionBar from '../../../components/specific/spaceHomeTopActionBar/SpaceHomeTopActionBar';
 import { loadingContents } from '../../../constants/loadingContents';
 import { useOverlay } from '../../../contexts/OverlayProvider';
@@ -18,10 +12,8 @@ import usePhotosDomain from '../../../hooks/domain/photos/usePhotosDomain';
 import useSpaceDomain from '../../../hooks/domain/space/useSpaceDomain';
 import useScrollUITriggers from '../../../hooks/domain/ui/useScrollUITriggers';
 import { ScrollableBlurArea } from '../../../styles/@common/ScrollableBlurArea.styles';
-import { theme } from '../../../styles/theme';
 import { checkIsEarlyDate } from '../../../utils/checkIsEarlyTime';
 import { track } from '../../../utils/googleAnalytics/track';
-import { goToTop } from '../../../utils/goToTop';
 import AccessDeniedPage from '../../status/accessDeniedPage/AccessDeniedPage';
 import EarlyPage from '../../status/earlyPage/EarlyPage';
 import ExpiredPage from '../../status/expiredPage/ExpiredPage';
@@ -142,32 +134,10 @@ const SpaceHomePage = () => {
     photosListLoadingState,
   ]);
 
-  const renderBottomNavigatorContent = () => {
-    return (
-      <S.BottomNavigatorContainer>
-        <S.TopButtonContainer $isVisible={!isAtPageTop}>
-          {!isSelectMode && (
-            <FloatingIconButton
-              icon={<ArrowUpSvg fill={theme.colors.white} />}
-              onClick={goToTop}
-            />
-          )}
-        </S.TopButtonContainer>
-        {isSelectMode && (
-          <PhotoSelectionToolBar
-            selectedCount={selectedPhotosCount}
-            onDelete={() => tryDeleteSelectedPhotos(selectedPhotoIds)}
-            onDownload={() => trySelectedDownload(selectedPhotoIds)}
-          />
-        )}
-      </S.BottomNavigatorContainer>
-    );
-  };
-
   const renderBodyContent = () => {
     if (isEarlyTime) return <EarlyPage openedAt={spaceInfo?.openedAt ?? ''} />;
     if (isSpaceExpired) return <ExpiredPage />;
-    if (accessLoadingState === 'success' && !spaceAccessDomain.hasAccess)
+    if (accessLoadingState === 'success' && !hasAccess)
       return <AccessDeniedPage />;
     if (photosListLoadingState === 'success' && photosList.length === 0)
       return <NoImageBox />;
@@ -190,24 +160,17 @@ const SpaceHomePage = () => {
               onImageClick={handleImageClick}
             />
           </S.ImageManagementContainer>
-          {!isSelectMode && (
-            <S.DownloadButtonContainer>
-              <FloatingActionButton
-                label="모두 저장하기"
-                icon={<SaveIcon fill={theme.colors.gray06} />}
-                onClick={() => {
-                  tryAllDownload();
-                  track.button('all_download_button', {
-                    page: 'space_home',
-                    section: 'space_home',
-                    action: 'download_all',
-                  });
-                }}
-                disabled={isDownloading}
-              />
-            </S.DownloadButtonContainer>
-          )}
-          {renderBottomNavigatorContent()}
+
+          <SpaceFooter
+            isAtPageTop={isAtPageTop}
+            isSelectMode={isSelectMode}
+            isDownloading={isDownloading}
+            selectedPhotosCount={selectedPhotosCount}
+            selectedPhotoIds={selectedPhotoIds}
+            tryDeleteSelectedPhotos={tryDeleteSelectedPhotos}
+            trySelectedDownload={trySelectedDownload}
+            tryAllDownload={tryAllDownload}
+          />
         </>
       );
   };

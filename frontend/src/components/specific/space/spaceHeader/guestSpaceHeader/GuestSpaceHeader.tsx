@@ -1,5 +1,5 @@
-import type { SpaceAccessType } from '../../../../types/space.type';
-import type { Timer } from '../../../../types/timer.type';
+import type { SpaceAccessType } from '../../../../../types/space.type';
+import type { Timer } from '../../../../../types/timer.type';
 import SpaceHeader from '../SpaceHeader';
 
 interface GuestSpaceHeaderProps {

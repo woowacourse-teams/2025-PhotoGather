@@ -11,8 +11,8 @@ import HighlightText from '../../../components/@common/highlightText/HighlightTe
 import GuestImageGrid from '../../../components/@common/imageLayout/imageGrid/guestImageGrid/GuestImageGrid';
 import PhotoModal from '../../../components/@common/modal/photoModal/PhotoModal';
 import UserBadge from '../../../components/@common/userBadge/UserBadge';
-import GuestSpaceHeader from '../../../components/layout/header/spaceHeader/guestSpaceHeader/GuestSpaceHeader';
 import LoadingLayout from '../../../components/layout/loadingLayout/LoadingLayout';
+import GuestSpaceHeader from '../../../components/specific/space/spaceHeader/guestSpaceHeader/GuestSpaceHeader';
 import UploadBox from '../../../components/specific/uploadBox/UploadBox';
 import { ROUTES } from '../../../constants/routes';
 import { useOverlay } from '../../../contexts/OverlayProvider';
