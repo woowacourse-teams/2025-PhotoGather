@@ -215,16 +215,22 @@ const PhotoModal = (props: PhotoModalProps) => {
         )}
         <S.NavigationContainer>
           <S.NavigationButton
+            type="button"
             $position="left"
             aria-label="다음 사진"
-            onClick={() => console.log('left')}
+            onPointerDown={() => {
+              console.log('left');
+            }}
           >
             <LeftwardArrowIcon />
           </S.NavigationButton>
           <S.NavigationButton
+            type="button"
             $position="right"
             aria-label="이전 사진"
-            onClick={() => console.log('right')}
+            onPointerDown={() => {
+              console.log('right');
+            }}
           >
             <RightwardArrowIcon />
           </S.NavigationButton>
