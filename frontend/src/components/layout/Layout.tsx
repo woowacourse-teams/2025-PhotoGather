@@ -8,9 +8,9 @@ import useTaskHandler from '../../hooks/@common/useTaskHandler';
 import useGoogleAnalytics from '../../hooks/useGoogleAnalytics';
 import type { MyInfo } from '../../types/api.type';
 import type { AppRouteObject } from '../../types/route.type';
+import { StarField } from '../@common/starField/StarField';
 import Header from './global/header/Header';
 import * as S from './Layout.styles';
-import { StarField } from './starField/StarField';
 
 const Layout = () => {
   const [myInfo, setMyInfo] = useState<MyInfo | null>(null);

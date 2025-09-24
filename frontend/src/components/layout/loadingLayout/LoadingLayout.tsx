@@ -1,6 +1,6 @@
 import useScrollLock from '../../../hooks/@common/useScrollLock';
 import * as C from '../../../styles/@common/BackDrop.styles';
-import LinearProgressBar from '../../progressBar/linear/LinearProgressBar';
+import LinearProgressBar from '../../specific/progressBar/linear/LinearProgressBar';
 import * as S from './LoadingLayout.styles';
 
 interface LoadingLayoutProps {

@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-webpack5';
-import StepProgressBar from '../components/progressBar/step/StepProgressBar';
+import StepProgressBar from '../components/specific/progressBar/step/StepProgressBar';
 
 const meta: Meta<typeof StepProgressBar> = {
   title: 'Components/ProgressBar/StepProgressBar',

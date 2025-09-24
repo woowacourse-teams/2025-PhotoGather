@@ -1,8 +1,8 @@
 import { useNavigate } from 'react-router-dom';
 import { EditIcon } from '../../../@assets/icons';
-import ComingSoonBox from '../../../components/comingSoonBox/ComingSoonBox';
-import DashboardBox from '../../../components/dashboardBox/DashboardBox';
-import DonutGraph from '../../../components/donutGraph/DonutGraph';
+import ComingSoonBox from '../../../components/@common/comingSoonBox/ComingSoonBox';
+import DashboardBox from '../../../components/@common/dashboardBox/DashboardBox';
+import DonutGraph from '../../../components/@common/donutGraph/DonutGraph';
 import { ROUTES } from '../../../constants/routes';
 import useSpaceCapacity from '../../../hooks/useSpaceCapacity';
 import useSpaceCodeFromPath from '../../../hooks/useSpaceCodeFromPath';

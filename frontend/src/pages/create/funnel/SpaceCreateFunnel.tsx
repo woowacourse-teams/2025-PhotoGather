@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { DiamondImg as diamondImage } from '../../../@assets/images';
-import StepProgressBar from '../../../components/progressBar/step/StepProgressBar';
+import StepProgressBar from '../../../components/specific/progressBar/step/StepProgressBar';
 import { ROUTES } from '../../../constants/routes';
 import useAuthConditionTasks from '../../../hooks/@common/useAuthConditionTasks';
 import useConfirmBeforeRefresh from '../../../hooks/@common/useConfirmBeforeRefresh';
