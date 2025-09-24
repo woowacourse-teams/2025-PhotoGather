@@ -36,7 +36,7 @@ interface ManagerHeaderProps {
   /** 헤더의 공개범위 */
   isEarlyTime: boolean;
   /** 접속한 사람의 id */
-  hostId: number;
+  loggedInUserId: number;
 }
 
 const ManagerHeader = ({
@@ -48,9 +48,10 @@ const ManagerHeader = ({
   accessType,
   isSpaceExpired,
   isEarlyTime,
-  hostId,
+  loggedInUserId,
 }: ManagerHeaderProps) => {
   // TODO : spaceInfo를 이 내부에서 불러오도록 한다면?
+  // TODO : 전역에서 내려주는 loggedInUserId로 변경
   const overlay = useOverlay();
   const { showToast } = useToast();
   const navigate = useNavigate();
@@ -61,7 +62,7 @@ const ManagerHeader = ({
 
   const canAddPhoto = hasAccess && !isSpaceExpired && !isEarlyTime;
   const canShare = hasAccess && !isSpaceExpired;
-  const canChangeSetting = managerId === hostId;
+  const canChangeSetting = managerId === loggedInUserId;
 
   const clickDashboardWithTracking = () => {
     navigate(ROUTES.MANAGER.DASHBOARD(spaceCode));

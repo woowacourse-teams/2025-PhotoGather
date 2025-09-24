@@ -40,7 +40,7 @@ const usePhotosDomain = ({ spaceCode, spaceName }: UsePhotosDomainProps) => {
     photosList: photosDomain.photosList,
   });
 
-  const downloadDomain = useDownload({
+  const photosDownloadDomain = useDownload({
     spaceCode: spaceCode ?? '',
     spaceName,
     onDownloadSuccess: () => {
@@ -61,7 +61,7 @@ const usePhotosDomain = ({ spaceCode, spaceName }: UsePhotosDomainProps) => {
     photosDomain,
     photoSelectDomain,
     photosDeleteDomain,
-    downloadDomain,
+    photosDownloadDomain,
   };
 };
 

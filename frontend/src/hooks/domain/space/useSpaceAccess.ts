@@ -10,7 +10,9 @@ interface UseSpaceAccessProps {
 const useSpaceAccess = ({ spaceHostId, spaceType }: UseSpaceAccessProps) => {
   const [hasAccess, setHasAccess] = useState(false);
   // TODO : 전역에서 내려주는 hostId로 변경
-  const [hostId, setHostId] = useState<number | undefined>(undefined);
+  const [loggedInUserId, setLoggedInUserId] = useState<number | undefined>(
+    undefined,
+  );
   type LoadingStateType = 'pending' | 'loading' | 'success' | 'error';
   const [accessLoadingState, setAccessLoadingState] =
     useState<LoadingStateType>('pending');
@@ -21,7 +23,7 @@ const useSpaceAccess = ({ spaceHostId, spaceType }: UseSpaceAccessProps) => {
 
     setHasAccess(hasPermission);
     setAccessLoadingState('success');
-    if (visitorId) setHostId(visitorId);
+    if (visitorId) setLoggedInUserId(visitorId);
   };
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: contextApI로 대체 예정
@@ -48,7 +50,7 @@ const useSpaceAccess = ({ spaceHostId, spaceType }: UseSpaceAccessProps) => {
     fetchAccess();
   }, [spaceHostId, spaceType]);
 
-  return { hasAccess, accessLoadingState, hostId };
+  return { hasAccess, accessLoadingState, loggedInUserId };
 };
 
 export default useSpaceAccess;

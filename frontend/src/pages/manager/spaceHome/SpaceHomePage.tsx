@@ -39,14 +39,14 @@ const SpaceHomePage = () => {
 
   const { spaceInfoDomain, spaceAccessDomain } = useSpaceDomain();
   const { spaceInfo, spaceInfoLoadingState } = spaceInfoDomain;
-  const { hasAccess, accessLoadingState } = spaceAccessDomain;
+  const { hasAccess, accessLoadingState, loggedInUserId } = spaceAccessDomain;
 
   const {
     photosDomain,
     photoSelectDomain,
     photosDeleteDomain,
     infiniteScroll,
-    downloadDomain,
+    photosDownloadDomain,
   } = usePhotosDomain({
     spaceCode: spaceInfo?.spaceCode ?? '',
     spaceName: spaceInfo?.name ?? '',
@@ -77,7 +77,9 @@ const SpaceHomePage = () => {
     trySelectedDownload,
     tryAllDownload,
     isDownloading,
-  } = downloadDomain;
+    totalProgress,
+    currentProgress,
+  } = photosDownloadDomain;
 
   const isEarlyTime = checkIsEarlyDate(spaceInfo?.openedAt ?? '');
   const isSpaceExpired = spaceInfo?.isExpired;
@@ -122,8 +124,7 @@ const SpaceHomePage = () => {
     if (spaceInfoLoadingState !== 'success' || accessLoadingState !== 'success')
       return;
 
-    if (!hasAccess || isSpaceExpired || isEarlyTime || photosDomain.isEndPage)
-      return;
+    if (!hasAccess || isSpaceExpired || isEarlyTime || isEndPage) return;
 
     if (photosListLoadingState === 'loading') return;
 
@@ -213,25 +214,25 @@ const SpaceHomePage = () => {
 
   return (
     <S.Wrapper>
-      {downloadDomain.isDownloading && (
+      {isDownloading && (
         <LoadingLayout
           loadingContents={loadingContents}
-          totalAmount={downloadDomain.totalProgress}
-          currentAmount={downloadDomain.currentProgress}
+          totalAmount={totalProgress}
+          currentAmount={currentProgress}
         />
       )}
 
       <S.HeaderContainer ref={scrollTopTriggerRef}>
         <ManagerHeader
+          spaceName={spaceInfo?.name ?? ''}
+          spaceCode={spaceInfo?.spaceCode ?? ''}
+          expiredAt={spaceInfo?.expiredAt ?? ''}
           accessType={spaceInfo?.type ?? 'PRIVATE'}
           hasAccess={hasAccess}
           isSpaceExpired={isSpaceExpired ?? false}
           isEarlyTime={isEarlyTime ?? false}
-          spaceName={spaceInfo?.name ?? ''}
-          spaceCode={spaceInfo?.spaceCode ?? ''}
           managerId={spaceInfo?.host.id ?? 0}
-          expiredAt={spaceInfo?.expiredAt ?? ''}
-          hostId={spaceInfo?.host.id ?? 0}
+          loggedInUserId={loggedInUserId ?? 0}
         />
       </S.HeaderContainer>
 
