@@ -6,6 +6,7 @@ import {
 import { DefaultImageImg as defaultImage } from '../../../../@assets/images';
 import { photoService } from '../../../../apis/services/photo.service';
 import { useOverlay } from '../../../../contexts/OverlayProvider';
+import useSwipe from '../../../../hooks/@common/useSwipe';
 import useTaskHandler from '../../../../hooks/@common/useTaskHandler';
 import type { PreviewFile } from '../../../../types/file.type';
 import type { BaseModalProps } from '../../../../types/modal.type';
@@ -48,6 +49,13 @@ const PhotoModal = (props: PhotoModalProps) => {
   const [displayPath, setDisplayPath] = useState<string>('');
   const overlay = useOverlay();
   const { tryFetch } = useTaskHandler();
+
+  const swipeHandlers = useSwipe({
+    onSwipeLeft: () => alert('다음'),
+    onSwipeRight: () => alert('이전'),
+    threshold: 50,
+    debug: false,
+  });
 
   const isManagerMode = mode === 'manager';
   const handleImageError = createImageErrorHandler(defaultImage);
@@ -189,7 +197,10 @@ const PhotoModal = (props: PhotoModalProps) => {
           {photo.guest.name ?? '익명의 우주여행자'}
         </S.FromContainer>
       )}
-      <S.PhotoContainer onMouseDown={(e) => e.stopPropagation()}>
+      <S.PhotoContainer
+        onMouseDown={(e) => e.stopPropagation()}
+        {...swipeHandlers}
+      >
         {displayPath ? (
           <S.Photo
             src={displayPath}
@@ -205,14 +216,14 @@ const PhotoModal = (props: PhotoModalProps) => {
         <S.NavigationContainer>
           <S.NavigationButton
             $position="left"
-            aria-label="이전 사진"
+            aria-label="다음 사진"
             onClick={() => console.log('left')}
           >
             <LeftwardArrowIcon />
           </S.NavigationButton>
           <S.NavigationButton
             $position="right"
-            aria-label="다음 사진"
+            aria-label="이전 사진"
             onClick={() => console.log('right')}
           >
             <RightwardArrowIcon />
