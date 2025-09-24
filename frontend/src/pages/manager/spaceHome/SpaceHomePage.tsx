@@ -26,6 +26,7 @@ import { track } from '../../../utils/googleAnalytics/track';
 import AccessDeniedPage from '../../status/accessDeniedPage/AccessDeniedPage';
 import EarlyPage from '../../status/earlyPage/EarlyPage';
 import ExpiredPage from '../../status/expiredPage/ExpiredPage';
+import * as C from '../Manager.common.styles';
 import * as S from './SpaceHomePage.styles';
 
 const SpaceHomePage = () => {
@@ -174,7 +175,7 @@ const SpaceHomePage = () => {
     if (photosList.length > 0)
       return (
         <>
-          <S.ImageManagementContainer>
+          <C.ImageManagementContainer>
             <SpaceHomeTopActionBar
               isSelectMode={isSelectMode}
               isAllSelected={isAllSelected}
@@ -189,7 +190,7 @@ const SpaceHomePage = () => {
               rowImageAmount={3}
               onImageClick={handleImageClick}
             />
-          </S.ImageManagementContainer>
+          </C.ImageManagementContainer>
 
           <SpaceFooter
             isAtPageTop={isAtPageTop}
@@ -221,7 +222,7 @@ const SpaceHomePage = () => {
   };
 
   return (
-    <S.Wrapper>
+    <C.Wrapper>
       {isDownloading && (
         <LoadingLayout
           loadingContents={loadingContents}
@@ -230,7 +231,7 @@ const SpaceHomePage = () => {
         />
       )}
 
-      <S.HeaderContainer ref={scrollTopTriggerRef}>
+      <C.HeaderContainer ref={scrollTopTriggerRef}>
         <ManagerHeader
           spaceName={spaceInfo?.name ?? ''}
           spaceCode={spaceInfo?.spaceCode ?? ''}
@@ -242,15 +243,15 @@ const SpaceHomePage = () => {
           managerId={spaceInfo?.host.id ?? 0}
           loggedInUserId={loggedInUserId ?? 0}
         />
-      </S.HeaderContainer>
+      </C.HeaderContainer>
 
-      <S.BodyContainer>{renderBodyContent()}</S.BodyContainer>
+      <C.BodyContainer>{renderBodyContent()}</C.BodyContainer>
 
-      <S.IntersectionArea ref={hideBlurAreaTriggerRef} />
-      <S.IntersectionArea ref={fetchTriggerRef} />
+      <C.IntersectionArea ref={hideBlurAreaTriggerRef} />
+      <C.IntersectionArea ref={fetchTriggerRef} />
       <ScrollableBlurArea $isHide={isAtPageBottom} $position="bottom" />
       <ScrollableBlurArea $isHide={isAtPageTop} $position="top" />
-    </S.Wrapper>
+    </C.Wrapper>
   );
 };
 
