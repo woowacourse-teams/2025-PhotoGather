@@ -1,17 +1,13 @@
 package com.forgather.domain.guest.repository;
 
-import java.util.Optional;
-
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import com.forgather.domain.guest.model.Guest;
-import com.forgather.global.exception.NotFoundException;
 
-public interface GuestRepository extends JpaRepository<Guest, Long> {
+@Repository
+public interface GuestRepository {
 
-    Optional<Guest> findById(Long id);
+    Guest save(Guest guest);
 
-    default Guest getById(Long id) {
-        return findById(id).orElseThrow(() -> new NotFoundException("Guest를 찾을 수 없습니다. guestId: " + id));
-    }
+    Guest getById(Long id);
 }

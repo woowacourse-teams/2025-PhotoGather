@@ -19,7 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.FileSystemUtils;
 import org.springframework.util.StringUtils;
 
-import com.forgather.domain.guest.repository.GuestRepository;
 import com.forgather.domain.space.dto.DeletePhotosRequest;
 import com.forgather.domain.space.dto.DownloadPhotoResponse;
 import com.forgather.domain.space.dto.DownloadPhotosRequest;
@@ -58,13 +57,13 @@ public class PhotoService {
             if (!canPublicAccess) {
                 space.validateHost(host);
             }
-            Photo photo = photoRepository.getById(photoId);
+            Photo photo = photoRepository.getByIdOrThrow(photoId);
             photo.validateSpace(space);
             return PhotoResponse.from(photo);
         }
 
         if (canPublicAccess) {
-            Photo photo = photoRepository.getById(photoId);
+            Photo photo = photoRepository.getByIdOrThrow(photoId);
             photo.validateSpace(space);
             return PhotoResponse.from(photo);
         }
@@ -100,7 +99,7 @@ public class PhotoService {
 
     public DownloadPhotoResponse download(String spaceCode, Long photoId, Host host) {
         Space space = spaceRepository.getUnexpiredSpaceByCode(spaceCode);
-        Photo photo = photoRepository.getById(photoId);
+        Photo photo = photoRepository.getByIdOrThrow(photoId);
         photo.validateSpace(space);
 
         String photoPath = photo.getPath();
@@ -145,7 +144,7 @@ public class PhotoService {
             if (!canPublicAccess) {
                 space.validateHost(host);
             }
-            Photo photo = photoRepository.getById(photoId);
+            Photo photo = photoRepository.getByIdOrThrow(photoId);
             photo.validateSpace(space);
 
             URL downloadUrl = contentsStorage.issueDownloadUrl(photo.getPath());
@@ -153,7 +152,7 @@ public class PhotoService {
         }
 
         if (canPublicAccess) {
-            Photo photo = photoRepository.getById(photoId);
+            Photo photo = photoRepository.getByIdOrThrow(photoId);
             photo.validateSpace(space);
 
             URL downloadUrl = contentsStorage.issueDownloadUrl(photo.getPath());
@@ -248,7 +247,7 @@ public class PhotoService {
     public void delete(String spaceCode, Long photoId, Host host) {
         Space space = spaceRepository.getUnexpiredSpaceByCode(spaceCode);
         space.validateHost(host);
-        Photo photo = photoRepository.getById(photoId);
+        Photo photo = photoRepository.getByIdOrThrow(photoId);
         photo.validateSpace(space);
 
         // photoRepository.delete(photo);

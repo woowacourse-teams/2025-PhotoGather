@@ -1,18 +1,21 @@
 package com.forgather.domain.space.repository;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
-
-import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.forgather.domain.space.model.Space;
 import com.forgather.global.exception.NotFoundException;
 
-public interface SpaceRepository extends JpaRepository<Space, Long> {
+public interface SpaceRepository {
+
+    void delete(Space space);
+
+    Space save(Space space);
 
     Optional<Space> findByCode(String spaceCode);
 
-    void deleteByCode(String spaceCode);
+    List<Space> findAll();
 
     default Space getByCode(String spaceCode) {
         return findByCode(spaceCode)
