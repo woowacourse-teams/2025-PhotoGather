@@ -41,12 +41,11 @@ const useFileUpload = ({
   }, []);
 
   // biome-ignore lint/correctness/useExhaustiveDependencies(sendCancelBeacon): suppress dependency sendCancelBeacon
-  // biome-ignore lint/correctness/useExhaustiveDependencies(location): SPA 내부 라우트 전환 시 취소 실행 필요
   useEffect(() => {
     return () => {
       sendCancelBeacon();
     };
-  }, [location]);
+  }, []);
 
   const sendCancelBeacon = () => {
     if (
