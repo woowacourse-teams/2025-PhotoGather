@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import AccessTypeIcon from '../../../../components/@common/accessTypeIcon/AccessTypeIcon';
+import BorderButton from '../../../../components/@common/buttons/borderButton/BorderButton';
 import { INFORMATION } from '../../../../constants/messages';
-import { theme } from '../../../../styles/theme';
 import type { FunnelElementProps } from '../../../../types/funnel.type';
 import type { SpaceAccessType } from '../../../../types/space.type';
 import FunnelBasePage from '../../funnel/FunnelBasePage/FunnelBasePage';
@@ -15,30 +15,37 @@ const AccessTypeElement = ({
 
   const accessTypeOptions: SpaceAccessType[] = ['PUBLIC', 'PRIVATE'];
 
-  const BorderButtons = accessTypeOptions.map((BorderButtonAccessType) => ({
-    variant: BorderButtonAccessType,
-    onClick: () => setAccessType(BorderButtonAccessType),
-    color:
-      accessType === BorderButtonAccessType
-        ? theme.colors.primary
-        : theme.colors.gray03,
-  }));
+  const BorderButtons = accessTypeOptions.map((BorderButtonAccessType) => {
+    const option = INFORMATION.ACCESS_TYPE.OPTIONS[BorderButtonAccessType];
+
+    return {
+      heading: {
+        text: option.TITLE,
+        icon: <AccessTypeIcon accessType={BorderButtonAccessType} />,
+      },
+      description: option.DESCRIPTION,
+      variant:
+        accessType === BorderButtonAccessType ? 'selected' : 'unselected',
+      onClick: () => setAccessType(BorderButtonAccessType),
+    } as const;
+  });
 
   return (
     <FunnelBasePage
       title={{
-        text: INFORMATION.PUBLIC_OR_NOT.TITLE.TEXT,
-        highlightTextArray: [INFORMATION.PUBLIC_OR_NOT.TITLE.HIGHLIGHT_TEXT],
+        text: INFORMATION.ACCESS_TYPE.TITLE.TEXT,
+        highlightTextArray: [INFORMATION.ACCESS_TYPE.TITLE.HIGHLIGHT_TEXT],
       }}
-      description={INFORMATION.PUBLIC_OR_NOT.DESCRIPTION}
+      description={INFORMATION.ACCESS_TYPE.DESCRIPTION}
       element={
         <S.BorderButtonContainer>
-          {BorderButtons.map(({ variant, onClick, color }) => (
-            <AccessTypeBorderButton
-              key={variant}
+          {BorderButtons.map(({ heading, description, variant, onClick }) => (
+            <BorderButton
+              key={heading.text}
+              heading={heading}
+              description={description}
               variant={variant}
               onClick={onClick}
-              color={color}
             />
           ))}
         </S.BorderButtonContainer>
@@ -46,53 +53,6 @@ const AccessTypeElement = ({
       onNextButtonClick={() => onNext(accessType)}
       nextButtonDisabled={!accessType}
     />
-  );
-};
-
-interface AccessTypeBorderButtonProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant: SpaceAccessType;
-  /** 테두리 버튼 요소의 색깔 */
-  color?: string;
-  /** 테두리 버튼 내부 요소 */
-  element?: React.ReactNode;
-  /** 버튼 클릭했을 때 실행할 함수*/
-  onClick: () => void;
-  /** 버튼 활성화 여부*/
-  disabled?: boolean;
-}
-
-const AccessTypeBorderButton = ({
-  variant,
-  color = theme.colors.gray03,
-  onClick,
-  disabled,
-  ...buttonProps
-}: AccessTypeBorderButtonProps) => {
-  const title =
-    variant === 'PUBLIC'
-      ? INFORMATION.PUBLIC_OR_NOT.OPTIONS.PUBLIC.TITLE
-      : INFORMATION.PUBLIC_OR_NOT.OPTIONS.PRIVATE.TITLE;
-  const description =
-    variant === 'PUBLIC'
-      ? INFORMATION.PUBLIC_OR_NOT.OPTIONS.PUBLIC.DESCRIPTION
-      : INFORMATION.PUBLIC_OR_NOT.OPTIONS.PRIVATE.DESCRIPTION;
-
-  return (
-    <S.ButtonWrapper
-      {...buttonProps}
-      $color={color}
-      onClick={onClick}
-      disabled={disabled}
-    >
-      <S.ContentContainer>
-        <S.TitleContainer>
-          <S.Title>{title}</S.Title>
-          <AccessTypeIcon accessType={variant} color={color} />
-        </S.TitleContainer>
-        <S.Description>{description}</S.Description>
-      </S.ContentContainer>
-    </S.ButtonWrapper>
   );
 };
 

@@ -12,25 +12,33 @@ import AccessTypeElement from '../funnelElements/accessTypeElement/AccessTypeEle
 import AgreementElement from '../funnelElements/agreementElement/AgreementElement';
 import CheckSpaceInfoElement from '../funnelElements/checkSpaceInfoElement/CheckSpaceInfoElement';
 import ImmediateOpenElement from '../funnelElements/immediateOpenElement/ImmediateOpenElement';
+import InboxElement from '../funnelElements/inboxElement/InboxElement';
 import NameInputElement from '../funnelElements/NameInputElement';
 import * as S from './SpaceCreateFunnel.styles';
 
-type STEP = 'agreement' | 'name' | 'date' | 'accessType' | 'check';
+type STEP = 'agreement' | 'name' | 'date' | 'accessType' | 'inbox' | 'check';
 
 const initialFunnelValue: SpaceFunnelInfo = {
+  agreements: null,
   name: '',
   date: '',
   time: '',
-  accessType: 'PUBLIC',
   isImmediateOpen: null,
-  agreements: null,
+  accessType: 'PUBLIC',
+  isInboxEnabled: true,
 };
 
 const SpaceCreateFunnel = () => {
   useConfirmBeforeRefresh();
   const { handleAgree, isAgree, loadingAgreements } = useAgreements();
   const needsAgreement = !isAgree;
-  const PROGRESS_STEP_LIST: STEP[] = ['name', 'date', 'accessType', 'check'];
+  const PROGRESS_STEP_LIST: STEP[] = [
+    'name',
+    'date',
+    'accessType',
+    'inbox',
+    'check',
+  ];
   const [step, setStep] = useState<STEP>('name');
   useEffect(() => {
     if (!loadingAgreements && needsAgreement) setStep('agreement');
@@ -110,13 +118,25 @@ const SpaceCreateFunnel = () => {
         {step === 'accessType' && (
           <AccessTypeElement
             onNext={(accessType) => {
-              goNextStep('check');
+              goNextStep('inbox');
               setSpaceInfo((prev) => ({
                 ...prev,
                 accessType: accessType,
               }));
             }}
             initialValue={spaceInfo.accessType}
+          />
+        )}
+        {step === 'inbox' && (
+          <InboxElement
+            onNext={(isInboxEnabled) => {
+              goNextStep('check');
+              setSpaceInfo((prev) => ({
+                ...prev,
+                isInboxEnabled,
+              }));
+            }}
+            initialValue={spaceInfo.isInboxEnabled}
           />
         )}
         {step === 'check' && (
