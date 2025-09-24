@@ -1,26 +1,14 @@
-import { useState } from 'react';
+import { useReducer } from 'react';
 import { photoService } from '../apis/services/photo.service';
 import { FAILED_GUEST_ID } from '../constants/errors';
-import type { LocalFile, UploadFile } from '../types/file.type';
+import type {
+  LocalFile,
+  UploadFile,
+  UploadFileState,
+} from '../types/file.type';
 import useTaskHandler from './@common/useTaskHandler';
-
-interface Batch {
-  id: number;
-  total: number;
-  success: number;
-  failed: number;
-  uploadFiles: UploadFile[];
-}
-
-interface Session {
-  total: number;
-  success: number;
-  failed: number;
-  batches: Batch[];
-}
-
-// TODO: progress를 따로 관리하도록 설계
-// TODO: reducer로 상태값 변경하도록 리팩토링
+import type { Batch, Session } from './useUploadReducer';
+import useSessionReducer, { initialSession } from './useUploadReducer';
 
 interface UseFileUploadProps {
   spaceCode: string;
@@ -31,6 +19,7 @@ interface UseFileUploadProps {
   guestId: number;
   tryCreateNickName: () => Promise<number>;
 }
+
 const useFileUpload = ({
   spaceCode,
   localFiles,
@@ -40,11 +29,8 @@ const useFileUpload = ({
   guestId,
   tryCreateNickName,
 }: UseFileUploadProps) => {
-  const [, setUploadFiles] = useState<UploadFile[]>([]);
-  const [, setBatches] = useState<Batch[]>();
-  const [session, setSession] = useState<Session>();
+  const [session, dispatch] = useReducer(useSessionReducer, initialSession);
   const { loadingState, tryFetch } = useTaskHandler();
-  const [progress, setProgress] = useState(0);
 
   const ensureGuestId = async () => {
     if (guestId && guestId !== FAILED_GUEST_ID) return guestId;
@@ -56,7 +42,7 @@ const useFileUpload = ({
   };
 
   const createUploadFiles = (localFiles: LocalFile[]) => {
-    const newUploadFiles: UploadFile[] = localFiles.map((file) => {
+    return localFiles.map((file) => {
       const extension = file.originFile.name.split('.').pop();
       const objectKey = `${crypto.randomUUID()}.${extension}`;
 
@@ -67,18 +53,15 @@ const useFileUpload = ({
         capturedAt: file.capturedAt,
         capacityValue: file.capacityValue,
         presignedUrl: '',
-        state: 'idle',
+        state: 'idle' as UploadFileState,
       };
     });
-
-    setUploadFiles(newUploadFiles);
-    return newUploadFiles;
   };
 
   const createBatches = (uploadFiles: UploadFile[]) => {
     // 100개 단위로 나누어 배치 생성
     const chunkSize = 100;
-    const newBatches = Array.from(
+    return Array.from(
       { length: Math.ceil(uploadFiles.length / chunkSize) },
       (_, i) => {
         const chunk = uploadFiles.slice(i * chunkSize, (i + 1) * chunkSize);
@@ -91,65 +74,97 @@ const useFileUpload = ({
         };
       },
     );
-
-    setBatches(newBatches);
-    return newBatches;
   };
 
-  // uploadFiles, batches, session 초기화
-  const createSession = (localFiles: LocalFile[]) => {
-    const newFiles = createUploadFiles(localFiles);
-    const newBatches = createBatches(newFiles);
+  const initializeSession = () => {
+    const uploadFiles = createUploadFiles(localFiles);
+    const batches = createBatches(uploadFiles);
 
-    const newSession: Session = {
-      total: localFiles.length,
+    const newSession = {
+      total: uploadFiles.length,
       success: 0,
       failed: 0,
-      batches: newBatches,
+      progress: 0,
+      batches,
     };
-    setSession(newSession);
+
+    dispatch({ type: 'INIT_SESSION', payload: newSession });
     return newSession;
   };
 
   const fetchPresignedUrls = async (uploadFiles: UploadFile[]) => {
     const objectKeys = uploadFiles.map((f) => f.objectKey);
-    const res = await photoService.getPresignedUrls(spaceCode, objectKeys);
-    if (!res || !res.data?.signedUrls)
+    const response = await photoService.getPresignedUrls(spaceCode, objectKeys);
+
+    if (!response || !response.data?.signedUrls) {
       throw new Error('presignedUrl 발급 실패');
-    return res.data.signedUrls as Record<string, string>;
+    }
+
+    return response.data.signedUrls;
   };
 
   const addPresignedUrls = (
+    files: UploadFile[],
     presignedUrls: Record<string, string>,
-    targetFiles: UploadFile[],
   ) => {
-    const updated = targetFiles.map(
-      (file): UploadFile => ({
-        ...file,
-        presignedUrl: presignedUrls[file.objectKey] ?? '',
-        state: 'signed' as const,
-      }),
-    );
-
-    setUploadFiles((prev) =>
-      prev.map((f) => {
-        const found = updated.find((u) => u.id === f.id);
-        return found ?? f;
-      }),
-    );
-
-    return updated;
+    return files.map((file) => ({
+      ...file,
+      presignedUrl: presignedUrls[file.objectKey] ?? '',
+      state: 'signed' as const,
+    }));
   };
 
-  const notifySuccessFiles = async (
+  const uploadSingleFileToS3 = async (batchId: number, file: UploadFile) => {
+    const response = await tryFetch({
+      task: async () => {
+        await photoService.uploadPhotosToS3(file.presignedUrl, file.originFile);
+      },
+      errorActions: ['console'],
+      context: {
+        console: {
+          text: `파일 업로드 실패: ${file.originFile.name}`,
+        },
+      },
+    });
+
+    if (response.success) {
+      dispatch({
+        type: 'UPDATE_FILE_STATE',
+        payload: { batchId, fileId: file.id, state: 'uploaded' },
+      });
+      dispatch({ type: 'INCREMENT_PROGRESS' });
+      return { ...file, state: 'uploaded' as const };
+    } else {
+      dispatch({
+        type: 'UPDATE_FILE_STATE',
+        payload: { batchId, fileId: file.id, state: 'failed' },
+      });
+      return { ...file, state: 'failed' as const };
+    }
+  };
+
+  const uploadToS3 = async (
+    batchId: number,
+    uploadFiles: UploadFile[],
+  ): Promise<UploadFile[]> => {
+    const uploadPromises = uploadFiles.map((file) =>
+      uploadSingleFileToS3(batchId, file),
+    );
+
+    const results = await Promise.allSettled(uploadPromises);
+
+    return results.map((result) =>
+      result.status === 'fulfilled'
+        ? result.value
+        : { ...uploadFiles[0], state: 'failed' as const },
+    );
+  };
+
+  const notifyUploadComplete = async (
     successFiles: UploadFile[],
     validGuestId: number,
     nickName: string,
   ) => {
-    if (successFiles.length !== localFiles.length) {
-      throw new Error('성공한 파일이 없습니다.');
-    }
-
     const uploadedPhotos = successFiles.map((file) => ({
       uploadFileName: file.objectKey,
       originalName: file.originFile.name,
@@ -166,162 +181,115 @@ const useFileUpload = ({
           nickName,
         ),
       errorActions: ['console'],
+      context: {
+        console: {
+          text: '서버에 업로드 완료 알림 실패',
+        },
+      },
     });
 
-    if (!response.success) {
-      throw new Error('서버에게 성공 알림에 실패했습니다.');
+    if (!response.success || !response.data) {
+      throw new Error('서버에 업로드 완료 알림 실패2');
     }
-  };
 
-  const uploadToS3 = async (updatedBatchFiles: UploadFile[]) => {
-    await Promise.allSettled(
-      updatedBatchFiles.map(async (file) => {
-        try {
-          await photoService.uploadPhotosToS3(
-            file.presignedUrl,
-            file.originFile,
-          );
-          file.state = 'uploaded';
-          setProgress((prev) => prev + 1);
-        } catch {
-          file.state = 'failed';
-          throw new Error('S3에 업로드하는데 실패했습니다.');
-        }
-      }),
-    );
+    return response.data;
   };
 
   const uploadSingleBatch = async (
     batch: Batch,
     validGuestId: number,
     nickName: string,
-  ) => {
-    const presignedUrls = await tryFetch({
+  ): Promise<{ success: number; failed: number }> => {
+    const presignedUrlsResponse = await tryFetch({
       task: async () => await fetchPresignedUrls(batch.uploadFiles),
       errorActions: ['console'],
     });
 
-    const updatedBatchFiles = addPresignedUrls(
-      presignedUrls.data ?? {},
+    if (!presignedUrlsResponse.success || !presignedUrlsResponse.data) {
+      throw new Error('Presigned URL 발급 실패');
+    }
+
+    const filesWithPresignedUrls = addPresignedUrls(
       batch.uploadFiles,
+      presignedUrlsResponse.data,
     );
-
-    await uploadToS3(updatedBatchFiles);
-
-    setUploadFiles((prev) =>
-      prev.map((file) => {
-        const target = updatedBatchFiles.find((u) => u.id === file.id);
-        return target ? { ...file, state: target.state } : file;
-      }),
-    );
-
-    calculateSuccessFiles(batch, updatedBatchFiles);
-
-    const successFiles = updatedBatchFiles.filter(
-      (f) => f.state === 'uploaded',
-    );
-    await notifySuccessFiles(successFiles, validGuestId, nickName);
-  };
-
-  const calculateSuccessFiles = (
-    batch: Batch,
-    updatedBatchFiles: UploadFile[],
-  ) => {
-    const uploadedCount = updatedBatchFiles.filter(
-      (f) => f.state === 'uploaded',
-    ).length;
-    const failedCount = updatedBatchFiles.filter(
-      (f) => f.state === 'failed',
-    ).length;
-
-    const updatedBatch: Batch = {
-      ...batch,
-      success: uploadedCount,
-      failed: failedCount,
-      uploadFiles: updatedBatchFiles,
-    };
-
-    setBatches((prev) =>
-      prev?.map((b) => (b.id === batch.id ? updatedBatch : b)),
-    );
-
-    // 단일 기준이고
-    setSession((prev) => {
-      if (!prev) return prev;
-
-      const newBatches = prev.batches.map((b) =>
-        b.id === batch.id ? updatedBatch : b,
-      );
-
-      const totalSuccess = newBatches.reduce((acc, b) => acc + b.success, 0);
-      const totalFailed = newBatches.reduce((acc, b) => acc + b.failed, 0);
-
-      return {
-        ...prev,
-        total: newBatches.reduce((acc, b) => acc + b.total, 0),
-        success: totalSuccess,
-        failed: totalFailed,
-        batches: newBatches,
-      };
+    dispatch({
+      type: 'UPDATE_BATCH_FILES',
+      payload: { batchId: batch.id, files: filesWithPresignedUrls },
     });
+
+    const uploadedFiles = await uploadToS3(batch.id, filesWithPresignedUrls);
+
+    dispatch({
+      type: 'UPDATE_BATCH_FILES',
+      payload: { batchId: batch.id, files: uploadedFiles },
+    });
+    dispatch({ type: 'UPDATE_BATCH_STATS', payload: { batchId: batch.id } });
+
+    const successFiles = uploadedFiles.filter((f) => f.state === 'uploaded');
+    if (successFiles.length > 0)
+      await notifyUploadComplete(successFiles, validGuestId, nickName);
+
+    return {
+      success: successFiles.length,
+      failed: uploadedFiles.filter((f) => f.state === 'failed').length,
+    };
   };
 
-  const uploadBatches = async (
+  const uploadAllBatches = async (
     currentSession: Session,
     validGuestId: number,
     nickName: string,
   ) => {
-    const response = await tryFetch({
-      task: async () => {
-        for (const batch of currentSession.batches) {
-          const response = await tryFetch({
-            task: async () => {
-              await uploadSingleBatch(batch, validGuestId, nickName);
-            },
-            errorActions: ['console'],
-          });
-          if (!response.success) {
-            throw new Error('배치 업로드 중 오류 발생');
-          }
-        }
-      },
-      errorActions: ['console'],
-    });
-    if (!response.success) {
-      throw new Error('배치 업로드 실패');
+    for (const batch of currentSession.batches) {
+      await tryFetch({
+        task: async () => {
+          await uploadSingleBatch(batch, validGuestId, nickName);
+        },
+        errorActions: ['console', 'throw'],
+        context: {
+          console: {
+            text: `배치 업로드 실패: 배치 ID ${batch.id}`,
+          },
+        },
+      });
     }
   };
 
-  // "진짜" 업로드
   const submitFileUpload = async () => {
-    const currentSession = session ?? createSession(localFiles);
+    let currentSession = session;
+    if (session.batches.length === 0) {
+      currentSession = initializeSession();
+      console.log('Initialized session:', currentSession);
+    }
 
     const response = await tryFetch({
       task: async () => {
         const validGuestId = await ensureGuestId();
-        await uploadBatches(currentSession, validGuestId, nickName);
+        await uploadAllBatches(currentSession, validGuestId, nickName);
       },
-      errorActions: ['toast', 'console'],
+      errorActions: ['toast', 'console', 'throw'],
       context: {
         toast: {
           text: '업로드에 실패했습니다. 다시 시도해주세요.',
           type: 'error',
         },
       },
-      loadingStateKey: 'fileUpload',
+      loadingStateKey: 'upload-images',
     });
 
     if (response.success) {
       onUploadSuccess();
       clearFiles();
+      dispatch({ type: 'RESET' });
     }
   };
 
   return {
     submitFileUpload,
-    total: session?.total,
-    success: progress,
-    isUploading: loadingState.fileUpload === 'loading',
+    total: session.total,
+    success: session.progress,
+    isUploading: loadingState['upload-images'] === 'loading',
   };
 };
 
