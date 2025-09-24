@@ -13,7 +13,6 @@ const useSpaceDomain = () => {
   return {
     spaceInfoDomain,
     spaceAccessDomain,
-    spaceCode,
   };
 };
 

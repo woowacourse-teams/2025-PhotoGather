@@ -1,8 +1,8 @@
 import {
   validateCanShareFile,
   validateCanWebShare,
-} from '../validators/share.validator';
-import useTaskHandler from './@common/useTaskHandler';
+} from '../../validators/share.validator';
+import useTaskHandler from './useTaskHandler';
 
 interface ShareOptions {
   title?: string;

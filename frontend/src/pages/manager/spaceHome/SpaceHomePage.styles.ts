@@ -18,7 +18,7 @@ export const BodyContainer = styled.div`
   flex-grow: 1;
 `;
 
-export const InfoContainer = styled.div`
+export const HeaderContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 60px;
@@ -90,12 +90,4 @@ export const LoadingSpinnerContainer = styled.div`
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: ${({ theme }) => theme.zIndex.loadingSpinner};
-`;
-
-export const ModalContentContainer = styled.div`
-  min-width: 200px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 24px;
 `;
