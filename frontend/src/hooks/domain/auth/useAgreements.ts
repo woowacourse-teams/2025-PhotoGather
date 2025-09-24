@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import { authService } from '../../apis/services/auth.service';
-import type { MyInfo } from '../../types/api.type';
-import useTaskHandler from '../@common/useTaskHandler';
+import { authService } from '../../../apis/services/auth.service';
+import type { MyInfo } from '../../../types/api.type';
+import useTaskHandler from '../../@common/useTaskHandler';
 
 const useAgreements = () => {
   const { tryFetch } = useTaskHandler();

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { authService } from '../../apis/services/auth.service';
-import type { SpaceAccessType } from '../../types/space.type';
+import { authService } from '../../../apis/services/auth.service';
+import type { SpaceAccessType } from '../../../types/space.type';
 
 interface UseSpaceAccessProps {
   spaceHostId: number | undefined;

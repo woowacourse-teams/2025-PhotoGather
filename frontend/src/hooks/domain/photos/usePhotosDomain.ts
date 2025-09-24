@@ -1,10 +1,10 @@
 import { useNavigate } from 'react-router-dom';
 import { ROUTES } from '../../../constants/routes';
 import useIntersectionObserver from '../../@common/useIntersectionObserver';
-import useDownload from '../../useDownload';
-import usePhotoSelect from '../../usePhotoSelect';
-import usePhotosBySpaceCode from '../../usePhotosBySpaceCode';
-import usePhotosDelete from '../../usePhotosDelete';
+import useDownload from './useDownload';
+import usePhotoSelect from './usePhotoSelect';
+import usePhotosBySpaceCode from './usePhotosBySpaceCode';
+import usePhotosDelete from './usePhotosDelete';
 
 interface UsePhotosDomainProps {
   spaceCode: string;

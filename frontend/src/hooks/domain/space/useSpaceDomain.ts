@@ -1,6 +1,6 @@
-import useSpaceCodeFromPath from '../../useSpaceCodeFromPath';
-import useSpaceInfo from '../../useSpaceInfo';
-import useSpaceAccess from '../useSpaceAccess';
+import useSpaceAccess from './useSpaceAccess';
+import useSpaceCodeFromPath from './useSpaceCodeFromPath';
+import useSpaceInfo from './useSpaceInfo';
 
 const useSpaceDomain = () => {
   const { spaceCode } = useSpaceCodeFromPath();

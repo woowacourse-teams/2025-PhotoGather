@@ -1,9 +1,9 @@
 import { useNavigate } from 'react-router-dom';
-import { DOMAIN } from '../../apis/config';
-import { authService } from '../../apis/services/auth.service';
-import { ROUTES } from '../../constants/routes';
-import { setAuthTokens } from '../../utils/authCookieManager';
-import useTaskHandler from '../@common/useTaskHandler';
+import { DOMAIN } from '../../../apis/config';
+import { authService } from '../../../apis/services/auth.service';
+import { ROUTES } from '../../../constants/routes';
+import { setAuthTokens } from '../../../utils/authCookieManager';
+import useTaskHandler from '../../@common/useTaskHandler';
 
 const useKakaoAuth = () => {
   const navigate = useNavigate();

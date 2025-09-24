@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
-import { guestService } from '../apis/services/guest.service';
-import HighlightText from '../components/@common/highlightText/HighlightText';
-import InputModal from '../components/@common/modal/inputModal/InputModal';
-import { FAILED_GUEST_ID } from '../constants/errors';
-import { useOverlay } from '../contexts/OverlayProvider';
-import { CookieUtils } from '../utils/CookieUtils';
-import { createRandomNickName } from '../utils/createRandomNickName';
-import useTaskHandler from './@common/useTaskHandler';
+import { guestService } from '../../../apis/services/guest.service';
+import HighlightText from '../../../components/@common/highlightText/HighlightText';
+import InputModal from '../../../components/@common/modal/inputModal/InputModal';
+import { FAILED_GUEST_ID } from '../../../constants/errors';
+import { useOverlay } from '../../../contexts/OverlayProvider';
+import { CookieUtils } from '../../../utils/CookieUtils';
+import { createRandomNickName } from '../../../utils/createRandomNickName';
+import useTaskHandler from '../../@common/useTaskHandler';
 
 interface UseGuestNickNameProps {
   spaceCode: string;

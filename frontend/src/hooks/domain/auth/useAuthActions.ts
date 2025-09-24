@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
-import { ROUTES } from '../../constants/routes';
-import { clearAuthTokens } from '../../utils/authCookieManager';
+import { ROUTES } from '../../../constants/routes';
+import { clearAuthTokens } from '../../../utils/authCookieManager';
 
 const useAuthActions = () => {
   const navigate = useNavigate();

@@ -1,14 +1,14 @@
 import * as exifr from 'exifr';
 import { useState } from 'react';
-import { CONSTRAINTS } from '../../constants/constraints';
-import type { LocalFile } from '../../types/file.type';
-import { heicToJpegBlob, isHeic } from '../../utils/heic';
-import { isValidFileType } from '../../utils/isValidFileType';
+import { CONSTRAINTS } from '../../../constants/constraints';
+import type { LocalFile } from '../../../types/file.type';
+import { heicToJpegBlob, isHeic } from '../../../utils/heic';
+import { isValidFileType } from '../../../utils/isValidFileType';
 import {
   checkInvalidFileType,
   checkUploadLimit,
-} from '../../validators/photo.validator';
-import useTaskHandler from './useTaskHandler';
+} from '../../../validators/photo.validator';
+import useTaskHandler from '../../@common/useTaskHandler';
 
 interface UseLocalFileProps {
   fileType: string;

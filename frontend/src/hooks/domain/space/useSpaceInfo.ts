@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import { spaceService } from '../apis/services/space.service';
-import type { Space } from '../types/space.type';
-import useTaskHandler from './@common/useTaskHandler';
+import { spaceService } from '../../../apis/services/space.service';
+import type { Space } from '../../../types/space.type';
+import useTaskHandler from '../../@common/useTaskHandler';
 
 const useSpaceInfo = (spaceCode: string) => {
   const [spaceInfo, setSpaceInfo] = useState<Space>();

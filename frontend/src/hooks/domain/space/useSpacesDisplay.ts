@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import type { MySpace, SpaceFilterType } from '../../types/space.type';
+import type { MySpace, SpaceFilterType } from '../../../types/space.type';
 
 interface UseSpacesDisplayProps {
   mySpaces: MySpace[];

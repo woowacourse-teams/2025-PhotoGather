@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
-import { AUTH_COOKIES } from '../../constants/keys';
-import { CookieUtils } from '../../utils/CookieUtils';
+import { AUTH_COOKIES } from '../../../constants/keys';
+import { CookieUtils } from '../../../utils/CookieUtils';
 
 interface UseAuthConditionTasksProps {
   taskWhenAuth?: () => void;

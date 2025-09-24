@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import type { Photo } from '../types/photo.type';
+import type { Photo } from '../../../types/photo.type';
 
 interface UsePhotoSelectProps {
   photosList: Photo[];

@@ -1,6 +1,6 @@
-import { spaceService } from '../apis/services/space.service';
-import type { SpaceCreateInfo } from '../types/space.type';
-import useTaskHandler from './@common/useTaskHandler';
+import { spaceService } from '../../../apis/services/space.service';
+import type { SpaceCreateInfo } from '../../../types/space.type';
+import useTaskHandler from '../../@common/useTaskHandler';
 
 const useCreateSpace = () => {
   const { loadingState, tryFetch } = useTaskHandler();
