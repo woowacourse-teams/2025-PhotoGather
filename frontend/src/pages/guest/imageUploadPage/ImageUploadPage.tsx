@@ -18,7 +18,7 @@ import { ROUTES } from '../../../constants/routes';
 import { useOverlay } from '../../../contexts/OverlayProvider';
 import useLeftTimer from '../../../hooks/@common/useLeftTimer';
 import useLocalFile from '../../../hooks/@common/useLocalFile';
-import useScrollUITriggers from '../../../hooks/domain/photos/useScrollUITriggers';
+import useScrollUITriggers from '../../../hooks/domain/ui/useScrollUITriggers';
 import useFileUpload from '../../../hooks/useFileUpload';
 import useGuestNickName from '../../../hooks/useGuestNickName';
 import useSpaceCodeFromPath from '../../../hooks/useSpaceCodeFromPath';
