@@ -1,7 +1,7 @@
 import { downloadZip } from 'https://cdn.jsdelivr.net/npm/client-zip@2.5.0/index.js';
 
 let isDownloading = false;
-let abortDownload = false;
+let reloadFlag = false;
 
 self.addEventListener('install', (event) => {
   event.waitUntil(self.skipWaiting());
@@ -13,7 +13,7 @@ self.addEventListener('activate', (event) => {
 
 self.addEventListener('message', (event) => {
   if (event.data.type === 'STOP_DOWNLOAD') {
-    abortDownload = true;
+    reloadFlag = true;
     isDownloading = false;
   }
 });
@@ -46,11 +46,10 @@ const sendDownloadProgress = async (completed, total) => {
 async function* downloadFilesGenerator(downloadInfos) {
   let completedFetches = 0;
   for (const info of downloadInfos) {
-    if (abortDownload) {
+    if (reloadFlag) {
       throw new Error('다운로드 중 새로고침 발생');
     }
     const response = await fetch(info.url);
-    console.log('response', response);
     if (!response.ok || !response.body) {
       throw new Error(`다운로드 실패 : ${info.url}`);
     }
@@ -72,13 +71,10 @@ const handleZipStream = async (request) => {
     return new Response('POST 요청만 허용합니다.', { status: 400 });
   }
   try {
-    console.log('시작');
     isDownloading = true;
     const { downloadInfos, zipName } = await request.json();
 
     const files = downloadFilesGenerator(downloadInfos);
-
-    console.log('files', files);
 
     const zipResponse = downloadZip(files);
     const encodedZipName = encodeURIComponent(zipName);
