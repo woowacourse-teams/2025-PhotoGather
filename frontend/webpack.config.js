@@ -179,6 +179,7 @@ module.exports = (_, argv) => {
                   },
                   mangle: true,
                 },
+                extractComments: false,
               }),
             ]
           : []),
