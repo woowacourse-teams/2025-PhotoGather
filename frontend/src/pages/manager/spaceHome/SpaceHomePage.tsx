@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { DownloadIcon } from '../../../@assets/icons';
+import { photoService } from '../../../apis/services/photo.service';
 import FloatingActionButton from '../../../components/@common/buttons/floatingActionButton/FloatingActionButton';
 import SpaceManagerImageGrid from '../../../components/@common/imageLayout/imageGrid/spaceManagerImageGrid/SpaceManagerImageGrid';
 import PhotoModal from '../../../components/@common/modal/photoModal/PhotoModal';
@@ -60,6 +61,7 @@ const SpaceHomePage = () => {
   } = usePhotosBySpaceCode({
     reObserve,
     spaceCode: spaceInfo?.spaceCode ?? '',
+    fetchFunc: photoService.getBySpaceCode,
   });
 
   const {

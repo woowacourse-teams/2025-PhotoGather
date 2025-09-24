@@ -1,16 +1,21 @@
 import { useMemo, useRef, useState } from 'react';
-import { photoService } from '../../../apis/services/photo.service';
+import type { ApiResponse, PhotoListResponse } from '../../../types/api.type';
 import type { Photo } from '../../../types/photo.type';
 import { buildThumbnailUrl } from '../../../utils/buildImageUrl';
 import { extractImageFileName } from '../../../utils/parsedImagePath';
 import useTaskHandler from '../../@common/useTaskHandler';
 
 interface UsePhotosBySpaceIdProps {
+  fetchFunc: (
+    spaceCode: string,
+    params: { page: number; size: number },
+  ) => Promise<ApiResponse<PhotoListResponse>>;
   reObserve: () => void;
   spaceCode: string;
 }
 
 const usePhotosBySpaceCode = ({
+  fetchFunc,
   reObserve,
   spaceCode,
 }: UsePhotosBySpaceIdProps) => {
@@ -54,7 +59,7 @@ const usePhotosBySpaceCode = ({
 
   const fetchPhotosList = async () => {
     const pageToFetch = currentPage.current;
-    const response = await photoService.getBySpaceCode(spaceCode, {
+    const response = await fetchFunc(spaceCode, {
       page: pageToFetch,
       size: PAGE_SIZE,
     });

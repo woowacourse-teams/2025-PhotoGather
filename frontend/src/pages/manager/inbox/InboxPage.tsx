@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { photoService } from '../../../apis/services/photo.service';
 import SpaceManagerImageGrid from '../../../components/@common/imageLayout/imageGrid/spaceManagerImageGrid/SpaceManagerImageGrid';
 import PhotoModal from '../../../components/@common/modal/photoModal/PhotoModal';
 import NoImageBox from '../../../components/specific/noImageBox/NoImageBox';
@@ -45,6 +46,8 @@ const InboxPage = () => {
   } = usePhotosBySpaceCode({
     reObserve,
     spaceCode: spaceInfo?.spaceCode ?? '',
+    // TODO:  API 개발 후 수정
+    fetchFunc: photoService.getBySpaceCode,
   });
 
   const isEarlyTime = checkIsEarlyDate(spaceInfo?.openedAt ?? '');
