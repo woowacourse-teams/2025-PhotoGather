@@ -25,8 +25,8 @@ import { useOverlay } from '../../../contexts/OverlayProvider';
 import useLeftTimer from '../../../hooks/@common/useLeftTimer';
 import { useToast } from '../../../hooks/@common/useToast';
 import usePhotosDomain from '../../../hooks/domain/photos/usePhotosDomain';
-import useScrollUITriggers from '../../../hooks/domain/photos/useScrollUITriggers';
 import useSpaceDomain from '../../../hooks/domain/space/useSpaceDomain';
+import useScrollUITriggers from '../../../hooks/domain/ui/useScrollUITriggers';
 import { ScrollableBlurArea } from '../../../styles/@common/ScrollableBlurArea.styles';
 import { theme } from '../../../styles/theme';
 import { checkIsEarlyDate } from '../../../utils/checkIsEarlyTime';
@@ -48,6 +48,7 @@ const SpaceHomePage = () => {
 
   const { spaceCode, spaceInfoDomain, spaceAccessDomain } = useSpaceDomain();
   const spaceName = spaceInfoDomain.spaceInfo?.name ?? '';
+
   const {
     photosDomain,
     photoSelectDomain,

@@ -1,11 +1,11 @@
 import { downloadZip } from 'client-zip';
 import { useState } from 'react';
-import { photoService } from '../apis/services/photo.service';
-import type { DownloadInfo } from '../types/photo.type';
-import { buildOriginalImageUrl } from '../utils/buildImageUrl';
-import { parseImagePath } from '../utils/parsedImagePath';
-import { checkSelectedPhotoExist } from '../validators/photo.validator';
-import useTaskHandler from './@common/useTaskHandler';
+import { photoService } from '../../../apis/services/photo.service';
+import type { DownloadInfo } from '../../../types/photo.type';
+import { buildOriginalImageUrl } from '../../../utils/buildImageUrl';
+import { parseImagePath } from '../../../utils/parsedImagePath';
+import { checkSelectedPhotoExist } from '../../../validators/photo.validator';
+import useTaskHandler from '../../@common/useTaskHandler';
 
 interface UseDownloadProps {
   spaceCode: string;

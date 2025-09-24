@@ -6,8 +6,8 @@ import ConfirmModal from '../../components/@common/modal/confirmModal/ConfirmMod
 import Profile from '../../components/@common/profile/Profile';
 import { ROUTES } from '../../constants/routes';
 import { useOverlay } from '../../contexts/OverlayProvider';
-import useAuthActions from '../../hooks/@common/useAuthActions';
-import useAuthConditionTasks from '../../hooks/@common/useAuthConditionTasks';
+import useAuthActions from '../../hooks/domain/auth/useAuthActions';
+import useAuthConditionTasks from '../../hooks/domain/auth/useAuthConditionTasks';
 import type { MyInfo } from '../../types/api.type';
 import { track } from '../../utils/googleAnalytics/track';
 import * as S from './LogoutPage.styles';

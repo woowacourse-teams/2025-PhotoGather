@@ -1,9 +1,9 @@
 import { useMemo, useRef, useState } from 'react';
-import { photoService } from '../apis/services/photo.service';
-import type { Photo } from '../types/photo.type';
-import { buildThumbnailUrl } from '../utils/buildImageUrl';
-import { extractImageFileName } from '../utils/parsedImagePath';
-import useTaskHandler from './@common/useTaskHandler';
+import { photoService } from '../../../apis/services/photo.service';
+import type { Photo } from '../../../types/photo.type';
+import { buildThumbnailUrl } from '../../../utils/buildImageUrl';
+import { extractImageFileName } from '../../../utils/parsedImagePath';
+import useTaskHandler from '../../@common/useTaskHandler';
 
 interface UsePhotosBySpaceIdProps {
   reObserve: () => void;

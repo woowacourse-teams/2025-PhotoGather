@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { photoService } from '../apis/services/photo.service';
-import ConfirmModal from '../components/@common/modal/confirmModal/ConfirmModal';
-import { useOverlay } from '../contexts/OverlayProvider';
-import type { Photo } from '../types/photo.type';
-import { checkSelectedPhotoExist } from '../validators/photo.validator';
-import useTaskHandler from './@common/useTaskHandler';
-import { useToast } from './@common/useToast';
+import { photoService } from '../../../apis/services/photo.service';
+import ConfirmModal from '../../../components/@common/modal/confirmModal/ConfirmModal';
+import { useOverlay } from '../../../contexts/OverlayProvider';
+import type { Photo } from '../../../types/photo.type';
+import { checkSelectedPhotoExist } from '../../../validators/photo.validator';
+import useTaskHandler from '../../@common/useTaskHandler';
+import { useToast } from '../../@common/useToast';
 
 interface UsePhotosDeleteProps {
   spaceCode: string;

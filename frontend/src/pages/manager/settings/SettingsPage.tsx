@@ -13,8 +13,8 @@ import { useOverlay } from '../../../contexts/OverlayProvider';
 import useGraphemeInput from '../../../hooks/@common/useGraphemeInput';
 import useTaskHandler from '../../../hooks/@common/useTaskHandler';
 import { useToast } from '../../../hooks/@common/useToast';
-import useSpaceCodeFromPath from '../../../hooks/useSpaceCodeFromPath';
-import useSpaceInfo from '../../../hooks/useSpaceInfo';
+import useSpaceCodeFromPath from '../../../hooks/domain/space/useSpaceCodeFromPath';
+import useSpaceInfo from '../../../hooks/domain/space/useSpaceInfo';
 import type {
   SpaceAccessType,
   SpaceCreateInfo,

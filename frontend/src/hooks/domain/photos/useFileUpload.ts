@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import { photoService } from '../apis/services/photo.service';
-import { FAILED_GUEST_ID } from '../constants/errors';
-import type { LocalFile, UploadFile } from '../types/file.type';
-import useTaskHandler from './@common/useTaskHandler';
+import { photoService } from '../../../apis/services/photo.service';
+import { FAILED_GUEST_ID } from '../../../constants/errors';
+import type { LocalFile, UploadFile } from '../../../types/file.type';
+import useTaskHandler from '../../@common/useTaskHandler';
 
 interface Batch {
   id: number;
