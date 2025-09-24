@@ -3,7 +3,6 @@ import SpaceManagerImageGrid from '../../../components/@common/imageLayout/image
 import PhotoModal from '../../../components/@common/modal/photoModal/PhotoModal';
 import NoImageBox from '../../../components/specific/noImageBox/NoImageBox';
 import InboxHeader from '../../../components/specific/space/spaceHeader/inboxHeader/InboxHeader';
-import ManagerHeader from '../../../components/specific/space/spaceHeader/managerSpaceHeader/ManagerHeader';
 import SpaceHomeTopActionBar from '../../../components/specific/spaceHomeTopActionBar/SpaceHomeTopActionBar';
 import { useOverlay } from '../../../contexts/OverlayProvider';
 import useIntersectionObserver from '../../../hooks/@common/useIntersectionObserver';
@@ -35,7 +34,7 @@ const InboxPage = () => {
 
   const { spaceInfoDomain, spaceAccessDomain } = useSpaceDomain();
   const { spaceInfo, spaceInfoLoadingState } = spaceInfoDomain;
-  const { hasAccess, accessLoadingState, loggedInUserId } = spaceAccessDomain;
+  const { hasAccess, accessLoadingState } = spaceAccessDomain;
 
   const {
     photosList,
