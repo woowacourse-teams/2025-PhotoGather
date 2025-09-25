@@ -1,6 +1,7 @@
 import { useEffect, useReducer, useRef } from 'react';
 import { BASE_URL } from '../apis/config';
 import { photoService } from '../apis/services/photo.service';
+import { CONSTRAINTS } from '../constants/constraints';
 import { FAILED_GUEST_ID } from '../constants/errors';
 import type {
   LocalFile,
@@ -116,7 +117,7 @@ const useFileUpload = ({
 
   const createBatches = (uploadFiles: UploadFile[]) => {
     // 100개 단위로 나누어 배치 생성
-    const chunkSize = 100;
+    const chunkSize = CONSTRAINTS.BATCH_SIZE;
     return Array.from(
       { length: Math.ceil(uploadFiles.length / chunkSize) },
       (_, i) => {
