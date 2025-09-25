@@ -90,7 +90,7 @@ const useFileUpload = ({
         errorActions: ['console'],
         context: {
           console: {
-            text: '파일 정리 실패',
+            text: '업로드 실패로 인한 파일 정리 실패',
           },
         },
       });
