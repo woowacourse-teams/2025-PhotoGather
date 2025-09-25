@@ -256,14 +256,13 @@ const useFileUpload = ({
             validGuestId,
           );
         },
-        errorActions: ['console'],
+        errorActions: ['console', 'throw'],
         context: {
           console: {
             text: 'notify 실패로 인한 파일 정리 실패',
           },
         },
       });
-      throw new Error('서버에 업로드 완료 알림 실패2');
     }
 
     return response.data;
