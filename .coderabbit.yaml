@@ -1,0 +1,31 @@
+# Minimal configuration for getting started
+language: "ko-KR"
+
+reviews:
+  profile: "chill" # 덜 까다로움
+  high_level_summary: true # pr 요약
+  poem: false
+  auto_review:
+    enabled: true
+    drafts: false
+    base_branches:
+      - develop
+    ignore_usernames:
+      - ShinjungOh
+      - hanheel
+      - H0ngJu
+      - MinSungJe
+      - songsunkook
+      - ykmxxi
+      - Hacanna42
+  tools:
+    eslint: # JavaScript/TypeScript 프로젝트용
+      enabled: true
+    gitleaks: # 민감정보 체크
+      enabled: false
+
+knowledge_base:
+  code_guidelines:
+    enabled: true
+    filePatterns:
+      - "./coderabbit_rules.md"
