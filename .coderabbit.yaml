@@ -1,5 +1,5 @@
 language: "ko-KR"  # 리뷰 언어
-
+tone_instructions: "각 코드 라인을 세심하게 검토하고, 개선점이 있는 라인에 직접 인라인 코멘트를 달아주세요. 정확한 피드백을 제공해주세요."
 reviews:
   profile: "assertive"  # 리뷰 강도 설정
   high_level_summary: false  # PR 전체 요약
@@ -12,7 +12,6 @@ reviews:
   related_prs: false  # 관련 PR 찾기
   suggested_labels: false  # 라벨 제안
   suggested_reviewers: false  # 리뷰어 제안
-
   auto_review:  # 자동 리뷰 설정
     enabled: true  # 자동 리뷰 활성화
     drafts: false  # 드래프트 PR 리뷰
