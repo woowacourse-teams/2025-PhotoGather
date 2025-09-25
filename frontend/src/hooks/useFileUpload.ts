@@ -3,11 +3,7 @@ import { BASE_URL } from '../apis/config';
 import { photoService } from '../apis/services/photo.service';
 import { CONSTRAINTS } from '../constants/constraints';
 import { FAILED_GUEST_ID } from '../constants/errors';
-import type {
-  LocalFile,
-  UploadFile,
-  UploadFileState,
-} from '../types/file.type';
+import type { LocalFile, UploadFile } from '../types/file.type';
 import useTaskHandler from './@common/useTaskHandler';
 import type { Batch, Session } from './useUploadReducer';
 import useSessionReducer, { initialSession } from './useUploadReducer';
