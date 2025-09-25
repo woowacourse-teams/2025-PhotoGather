@@ -1,6 +1,6 @@
 import { UpwardArrowIcon } from '../../../../@assets/icons';
 import { theme } from '../../../../styles/theme';
-import type { IconActionProps } from '../../../../types/soaceFooter.type';
+import type { IconActionProps } from '../../../../types/spaceFooter.type';
 import { goToTop } from '../../../../utils/goToTop';
 import FloatingIconButton from '../../../@common/buttons/floatingIconButton/FloatingIconButton';
 import PhotoSelectionToolBar from '../../photoSelectionToolBar/PhotoSelectionToolBar';

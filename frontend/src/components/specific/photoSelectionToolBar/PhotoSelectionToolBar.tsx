@@ -1,5 +1,5 @@
 import { createPhotoSelectedMessage } from '../../../constants/messages';
-import type { IconActionProps } from '../../../types/soaceFooter.type';
+import type { IconActionProps } from '../../../types/spaceFooter.type';
 import { track } from '../../../utils/googleAnalytics/track';
 import HighlightText from '../../@common/highlightText/HighlightText';
 import * as S from './PhotoSelectionToolBar.styles';
