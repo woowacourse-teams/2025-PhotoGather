@@ -180,7 +180,7 @@ const SpaceHomePage = () => {
         <>
           <C.ImageManagementContainer>
             <Button
-              text="임시 보관함"
+              text="수신함 📩"
               variant="darkRounded"
               onClick={() => {
                 navigate(ROUTES.MANAGER.INBOX(spaceInfo?.spaceCode ?? ''));
