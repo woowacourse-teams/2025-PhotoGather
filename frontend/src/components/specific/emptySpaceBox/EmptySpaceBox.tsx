@@ -4,10 +4,10 @@ import * as S from './EmptySpaceBox.styles';
 
 const EmptySpaceBox = () => {
   return (
-    <S.NoImageContainer>
+    <S.EmptySpaceContainer>
       <S.GiftIconImage src={GiftIcon} />
-      <S.NoImageText>{INFORMATION.NO_IMAGE}</S.NoImageText>
-    </S.NoImageContainer>
+      <S.EmptySpaceText>{INFORMATION.NO_IMAGE}</S.EmptySpaceText>
+    </S.EmptySpaceContainer>
   );
 };
 

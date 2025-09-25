@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 import { ImageGridBackDrop } from '../../../styles/@common/BackDrop.styles';
 import { hexToRgba } from '../../../utils/hexToRgba';
 
-export const NoImageContainer = styled(ImageGridBackDrop)`
+export const EmptySpaceContainer = styled(ImageGridBackDrop)`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -12,7 +12,7 @@ export const NoImageContainer = styled(ImageGridBackDrop)`
   background: ${({ theme }) => hexToRgba(theme.colors.gray06, 0.3)};
 `;
 
-export const NoImageText = styled.p`
+export const EmptySpaceText = styled.p`
   ${({ theme }) => ({ ...theme.typography.header03 })};
   color: ${({ theme }) => theme.colors.white};
 `;
