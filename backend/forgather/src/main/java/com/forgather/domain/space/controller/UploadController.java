@@ -1,10 +1,12 @@
 package com.forgather.domain.space.controller;
 
 import static org.springframework.http.HttpStatus.CREATED;
+import static org.springframework.http.MediaType.APPLICATION_FORM_URLENCODED_VALUE;
 
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -56,11 +58,11 @@ public class UploadController {
         return ResponseEntity.ok(response);
     }
 
-    @PostMapping("/upload/cancel")
+    @PostMapping(value = "/upload/cancel", consumes = APPLICATION_FORM_URLENCODED_VALUE)
     @Operation(summary = "사진 업로드 취소", description = "업로드 취소 발생 시 클라우드 저장소에 업로드 된 사진들을 일괄 삭제합니다.")
     public ResponseEntity<Void> cancelUpload(
         @PathVariable String spaceCode,
-        @RequestBody CancelUploadRequest request,
+        @ModelAttribute CancelUploadRequest request,
         @RequestParam(name = "guestId", required = false) Long guestId
     ) {
         uploadService.cancelUpload(spaceCode, request, guestId);
