@@ -126,7 +126,7 @@ export const NavigationButton = styled.button<{ $position: 'left' | 'right' }>`
   background: ${hexToRgba(theme.colors.gray06, 0.8)};
   border: none;
   cursor: pointer;
-    
+
   &:disabled {
     opacity: 0.3;
     cursor: not-allowed;
