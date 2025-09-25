@@ -6,7 +6,7 @@ import IconLabelButton from '../../components/@common/buttons/iconLabelButton/Ic
 import HighlightText from '../../components/@common/highlightText/HighlightText';
 import { INFORMATION } from '../../constants/messages';
 import { ROUTES } from '../../constants/routes';
-import useKakaoAuth from '../../hooks/domain/useKakaoAuth';
+import useKakaoAuth from '../../hooks/domain/auth/useKakaoAuth';
 import { theme } from '../../styles/theme';
 import * as S from './LoginPage.styles';
 

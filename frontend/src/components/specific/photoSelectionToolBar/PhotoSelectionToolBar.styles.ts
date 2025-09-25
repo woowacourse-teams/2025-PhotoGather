@@ -1,5 +1,4 @@
 import styled from '@emotion/styled';
-import { DownloadIcon as SaveIcon, TrashCanIcon } from '../../../@assets/icons';
 import { hexToRgba } from '../../../utils/hexToRgba';
 
 export const Wrapper = styled.div`
@@ -19,19 +18,6 @@ export const Button = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
-`;
-
-export const DeleteIcon = styled(TrashCanIcon)`
-  width: 16px;
-  color: ${({ theme }) => theme.colors.white};
-  &:active {
-    transform: scale(0.9);
-  }
-`;
-
-export const DownloadIcon = styled(SaveIcon)`
-  width: 16px;
-  color: ${({ theme }) => theme.colors.white};
   &:active {
     transform: scale(0.9);
   }

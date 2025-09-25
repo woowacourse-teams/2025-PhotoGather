@@ -1,21 +1,14 @@
 import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { DownloadIcon, TrashCanIcon } from '../../../@assets/icons';
+import { CheckIcon, TrashCanIcon } from '../../../@assets/icons';
 import { photoService } from '../../../apis/services/photo.service';
-import Button from '../../../components/@common/buttons/button/Button';
-import FloatingActionButton from '../../../components/@common/buttons/floatingActionButton/FloatingActionButton';
 import SpaceManagerImageGrid from '../../../components/@common/imageLayout/imageGrid/spaceManagerImageGrid/SpaceManagerImageGrid';
 import PhotoModal from '../../../components/@common/modal/photoModal/PhotoModal';
-import LoadingLayout from '../../../components/layout/loadingLayout/LoadingLayout';
 import EmptySpaceBox from '../../../components/specific/emptySpaceBox/EmptySpaceBox';
 import SpaceFooter from '../../../components/specific/space/spaceFooter/SpaceFooter';
-import ManagerHeader from '../../../components/specific/space/spaceHeader/managerSpaceHeader/ManagerHeader';
+import InboxHeader from '../../../components/specific/space/spaceHeader/inboxHeader/InboxHeader';
 import SpaceHomeTopActionBar from '../../../components/specific/spaceHomeTopActionBar/SpaceHomeTopActionBar';
-import { loadingContents } from '../../../constants/loadingContents';
-import { ROUTES } from '../../../constants/routes';
 import { useOverlay } from '../../../contexts/OverlayProvider';
 import useIntersectionObserver from '../../../hooks/@common/useIntersectionObserver';
-import useDownload from '../../../hooks/domain/photos/useDownload';
 import usePhotoSelect from '../../../hooks/domain/photos/usePhotoSelect';
 import usePhotosBySpaceCode from '../../../hooks/domain/photos/usePhotosBySpaceCode';
 import usePhotosDelete from '../../../hooks/domain/photos/usePhotosDelete';
@@ -24,16 +17,13 @@ import useScrollUITriggers from '../../../hooks/domain/ui/useScrollUITriggers';
 import { ScrollableBlurArea } from '../../../styles/@common/ScrollableBlurArea.styles';
 import { theme } from '../../../styles/theme';
 import { checkIsEarlyDate } from '../../../utils/checkIsEarlyTime';
-import { track } from '../../../utils/googleAnalytics/track';
 import AccessDeniedPage from '../../status/accessDeniedPage/AccessDeniedPage';
 import EarlyPage from '../../status/earlyPage/EarlyPage';
 import ExpiredPage from '../../status/expiredPage/ExpiredPage';
 import * as C from '../Manager.common.styles';
-import * as S from './SpaceHomePage.styles';
 
-const SpaceHomePage = () => {
+const InboxPage = () => {
   const overlay = useOverlay();
-  const navigate = useNavigate();
 
   const {
     isAtPageBottom,
@@ -50,18 +40,19 @@ const SpaceHomePage = () => {
 
   const { spaceInfoDomain, spaceAccessDomain } = useSpaceDomain();
   const { spaceInfo, spaceInfoLoadingState } = spaceInfoDomain;
-  const { hasAccess, accessLoadingState, loggedInUserId } = spaceAccessDomain;
+  const { hasAccess, accessLoadingState } = spaceAccessDomain;
 
   const {
     photosList,
     photosListLoadingState,
     tryFetchPhotosList,
-    updatePhotos,
     isEndPage,
     thumbnailPhotoMap,
+    updatePhotos,
   } = usePhotosBySpaceCode({
     reObserve,
     spaceCode: spaceInfo?.spaceCode ?? '',
+    // TODO:  API 개발 후 수정
     fetchFunc: photoService.getBySpaceCode,
   });
 
@@ -79,7 +70,7 @@ const SpaceHomePage = () => {
     photosList: photosList ?? [],
   });
 
-  const { tryDeleteSinglePhoto, tryDeleteSelectedPhotos } = usePhotosDelete({
+  const { tryDeleteSelectedPhotos, tryDeleteSinglePhoto } = usePhotosDelete({
     spaceCode: spaceInfo?.spaceCode ?? '',
     toggleSelectMode: toggleSelectMode,
     updatePhotos: updatePhotos,
@@ -88,45 +79,8 @@ const SpaceHomePage = () => {
     photosList: photosList,
   });
 
-  const {
-    trySingleDownload,
-    trySelectedDownload,
-    tryAllDownload,
-    isDownloading,
-    totalProgress,
-    currentProgress,
-  } = useDownload({
-    spaceCode: spaceInfo?.spaceCode ?? '',
-    spaceName: spaceInfo?.name ?? '',
-    onDownloadSuccess: () => {
-      navigate(ROUTES.COMPLETE.DOWNLOAD, {
-        state: {
-          spaceCode: spaceInfo?.spaceCode ?? '',
-        },
-      });
-    },
-  });
-
   const isEarlyTime = checkIsEarlyDate(spaceInfo?.openedAt ?? '');
   const isSpaceExpired = spaceInfo?.isExpired;
-
-  const deletePhotoWithTracking = async (photoId: number) => {
-    await tryDeleteSinglePhoto(photoId);
-    track.button('single_delete_button', {
-      page: 'space_home',
-      section: 'photo_modal',
-      action: 'delete_single',
-    });
-  };
-
-  const downloadPhotoWithTracking = async (photoId: number) => {
-    await trySingleDownload(photoId);
-    track.button('single_download_button', {
-      page: 'space_home',
-      section: 'photo_modal',
-      action: 'download_single',
-    });
-  };
 
   const openPhotoModal = async (photoId: number) => {
     await overlay(
@@ -134,8 +88,10 @@ const SpaceHomePage = () => {
         mode="manager"
         photoId={photoId}
         spaceCode={spaceInfo?.spaceCode ?? ''}
-        onDownload={async () => await downloadPhotoWithTracking(photoId)}
-        onDelete={async () => await deletePhotoWithTracking(photoId)}
+        onDownload={() => {}}
+        onDelete={() => {
+          tryDeleteSinglePhoto(photoId);
+        }}
       />,
       {
         clickOverlayClose: true,
@@ -179,13 +135,6 @@ const SpaceHomePage = () => {
       return (
         <>
           <C.ImageManagementContainer>
-            <Button
-              text="수신함 📩"
-              variant="darkRounded"
-              onClick={() => {
-                navigate(ROUTES.MANAGER.INBOX(spaceInfo?.spaceCode ?? ''));
-              }}
-            />
             <SpaceHomeTopActionBar
               isSelectMode={isSelectMode}
               isAllSelected={isAllSelected}
@@ -201,7 +150,7 @@ const SpaceHomePage = () => {
               onImageClick={handleImageClick}
             />
           </C.ImageManagementContainer>
-
+          {/** TODO: onClick 함수 추후 구현 */}
           <SpaceFooter
             isAtPageTop={isAtPageTop}
             isSelectMode={isSelectMode}
@@ -211,53 +160,18 @@ const SpaceHomePage = () => {
               onClick: () => tryDeleteSelectedPhotos(selectedPhotoIds),
             }}
             rightIconAction={{
-              icon: <DownloadIcon fill={theme.colors.white} width={24} />,
-              onClick: () => trySelectedDownload(selectedPhotoIds),
+              icon: <CheckIcon fill={theme.colors.white} width={24} />,
+              onClick: () => {},
             }}
           />
-          {!isSelectMode && (
-            <S.DownloadButtonContainer>
-              <FloatingActionButton
-                label="모두 저장하기"
-                icon={<DownloadIcon fill={theme.colors.gray06} />}
-                onClick={() => {
-                  tryAllDownload();
-                  track.button('all_download_button', {
-                    page: 'space_home',
-                    section: 'space_home',
-                    action: 'download_all',
-                  });
-                }}
-                disabled={isDownloading}
-              />
-            </S.DownloadButtonContainer>
-          )}
         </>
       );
   };
 
   return (
     <C.Wrapper>
-      {isDownloading && (
-        <LoadingLayout
-          loadingContents={loadingContents}
-          totalAmount={totalProgress}
-          currentAmount={currentProgress}
-        />
-      )}
-
       <C.HeaderContainer ref={scrollTopTriggerRef}>
-        <ManagerHeader
-          spaceName={spaceInfo?.name ?? ''}
-          spaceCode={spaceInfo?.spaceCode ?? ''}
-          expiredAt={spaceInfo?.expiredAt ?? ''}
-          accessType={spaceInfo?.type ?? 'PRIVATE'}
-          hasAccess={hasAccess}
-          isSpaceExpired={isSpaceExpired ?? false}
-          isEarlyTime={isEarlyTime ?? false}
-          managerId={spaceInfo?.host.id ?? 0}
-          loggedInUserId={loggedInUserId ?? 0}
-        />
+        <InboxHeader spaceName={spaceInfo?.name ?? ''} />
       </C.HeaderContainer>
 
       <C.BodyContainer>{renderBodyContent()}</C.BodyContainer>
@@ -270,4 +184,4 @@ const SpaceHomePage = () => {
   );
 };
 
-export default SpaceHomePage;
+export default InboxPage;
