@@ -305,7 +305,7 @@ const useFileUpload = ({
     dispatch({ type: 'UPDATE_BATCH_STATS', payload: { batchId: batch.id } });
 
     const failedFiles = uploadedFiles.filter((f) => f.state === 'failed');
-    const successFiles = uploadedFiles.filter((f) => f.state === 'failed');
+    const successFiles = uploadedFiles.filter((f) => f.state === 'uploaded');
 
     if (failedFiles.length > 0) throw new Error('성공한 파일이 없습니다.');
     await notifyUploadComplete(successFiles, validGuestId, nickName);
