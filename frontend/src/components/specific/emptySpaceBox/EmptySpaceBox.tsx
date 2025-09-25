@@ -1,8 +1,8 @@
 import { GiftImg as GiftIcon } from '../../../@assets/images';
 import { INFORMATION } from '../../../constants/messages';
-import * as S from './NoImageBox.styles';
+import * as S from './EmptySpaceBox.styles';
 
-const NoImageBox = () => {
+const EmptySpaceBox = () => {
   return (
     <S.NoImageContainer>
       <S.GiftIconImage src={GiftIcon} />
@@ -11,4 +11,4 @@ const NoImageBox = () => {
   );
 };
 
-export default NoImageBox;
+export default EmptySpaceBox;

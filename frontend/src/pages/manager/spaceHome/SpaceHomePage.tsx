@@ -7,7 +7,7 @@ import FloatingActionButton from '../../../components/@common/buttons/floatingAc
 import SpaceManagerImageGrid from '../../../components/@common/imageLayout/imageGrid/spaceManagerImageGrid/SpaceManagerImageGrid';
 import PhotoModal from '../../../components/@common/modal/photoModal/PhotoModal';
 import LoadingLayout from '../../../components/layout/loadingLayout/LoadingLayout';
-import NoImageBox from '../../../components/specific/noImageBox/NoImageBox';
+import EmptySpaceBox from '../../../components/specific/emptySpaceBox/EmptySpaceBox';
 import SpaceFooter from '../../../components/specific/space/spaceFooter/SpaceFooter';
 import ManagerHeader from '../../../components/specific/space/spaceHeader/managerSpaceHeader/ManagerHeader';
 import SpaceHomeTopActionBar from '../../../components/specific/spaceHomeTopActionBar/SpaceHomeTopActionBar';
@@ -174,7 +174,7 @@ const SpaceHomePage = () => {
     if (accessLoadingState === 'success' && !hasAccess)
       return <AccessDeniedPage />;
     if (photosListLoadingState === 'success' && photosList?.length === 0)
-      return <NoImageBox />;
+      return <EmptySpaceBox />;
     if (photosList.length > 0)
       return (
         <>

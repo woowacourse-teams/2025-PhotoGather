@@ -3,7 +3,7 @@ import { CheckIcon, TrashCanIcon } from '../../../@assets/icons';
 import { photoService } from '../../../apis/services/photo.service';
 import SpaceManagerImageGrid from '../../../components/@common/imageLayout/imageGrid/spaceManagerImageGrid/SpaceManagerImageGrid';
 import PhotoModal from '../../../components/@common/modal/photoModal/PhotoModal';
-import NoImageBox from '../../../components/specific/noImageBox/NoImageBox';
+import EmptySpaceBox from '../../../components/specific/emptySpaceBox/EmptySpaceBox';
 import SpaceFooter from '../../../components/specific/space/spaceFooter/SpaceFooter';
 import InboxHeader from '../../../components/specific/space/spaceHeader/inboxHeader/InboxHeader';
 import SpaceHomeTopActionBar from '../../../components/specific/spaceHomeTopActionBar/SpaceHomeTopActionBar';
@@ -130,7 +130,7 @@ const InboxPage = () => {
     if (accessLoadingState === 'success' && !hasAccess)
       return <AccessDeniedPage />;
     if (photosListLoadingState === 'success' && photosList?.length === 0)
-      return <NoImageBox />;
+      return <EmptySpaceBox />;
     if (photosList.length > 0)
       return (
         <>
