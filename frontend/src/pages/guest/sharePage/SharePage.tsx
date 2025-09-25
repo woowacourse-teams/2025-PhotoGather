@@ -9,7 +9,7 @@ import { INFORMATION } from '../../../constants/messages';
 import { ROUTES } from '../../../constants/routes';
 import useTaskHandler from '../../../hooks/@common/useTaskHandler';
 import { useToast } from '../../../hooks/@common/useToast';
-import useWebShareAPI from '../../../hooks/useWebShareAPI';
+import useWebShareAPI from '../../../hooks/@common/useWebShareAPI';
 import { copyLinkToClipboard } from '../../../utils/copyLinkToClipboard';
 import { createShareUrl } from '../../../utils/createSpaceUrl';
 import * as S from './SharePage.styles';

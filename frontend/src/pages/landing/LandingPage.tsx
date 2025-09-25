@@ -15,13 +15,15 @@ import {
 import Button from '../../components/@common/buttons/button/Button';
 import FloatingActionButton from '../../components/@common/buttons/floatingActionButton/FloatingActionButton';
 import IconLabelButton from '../../components/@common/buttons/iconLabelButton/IconLabelButton';
-import { Carousel } from '../../components/carousel/Carousel';
-import Footer from '../../components/footer/Footer';
-import KakaoLoginButton from '../../components/kakaoLoginButton/KakaoLoginButton';
-import LeftTimeInformationBox from '../../components/leftTimeInformationBox/LeftTimeInformationBox';
+import { Carousel } from '../../components/@common/carousel/Carousel';
+import Footer from '../../components/layout/global/footer/Footer';
+import KakaoLoginButton from '../../components/specific/kakaoLoginButton/KakaoLoginButton';
+import LeftTimeInformationBox from '../../components/specific/leftTimeInformationBox/LeftTimeInformationBox';
+import { AUTH_COOKIES } from '../../constants/keys';
 import useLandingScroll from '../../hooks/@common/useLandingScroll';
 import useLeftTimer from '../../hooks/@common/useLeftTimer';
-import useKakaoAuth from '../../hooks/domain/useKakaoAuth';
+import useAuthActions from '../../hooks/domain/auth/useAuthActions';
+import useKakaoAuth from '../../hooks/domain/auth/useKakaoAuth';
 import { theme } from '../../styles/theme';
 import { CookieUtils } from '../../utils/CookieUtils';
 import { formatDate } from '../../utils/formatDate';
@@ -40,7 +42,8 @@ const LandingPage = () => {
   const formattedLeftTime = formatTimer(leftTime);
   const { date, time } = formatDate(mockDate.toISOString());
   const mockupRef = useRef<HTMLDivElement>(null);
-  const { handleKakaoLogin, handleLogout } = useKakaoAuth();
+  const { handleKakaoLogin } = useKakaoAuth();
+  const { handleLogout } = useAuthActions();
 
   useEffect(() => {
     const target = mockupRef.current;
@@ -73,7 +76,7 @@ const LandingPage = () => {
 
           <S.LoginSection {...useLandingScroll({})}>
             <S.TextContainer>{`주인공은 당신이니까,\n사진은 우리가 책임질게요`}</S.TextContainer>
-            {CookieUtils.has('access') ? (
+            {CookieUtils.has(AUTH_COOKIES.ACCESS) ? (
               <Button
                 text="로그아웃"
                 variant="secondary"

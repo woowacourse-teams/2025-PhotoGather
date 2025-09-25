@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import UploadBox from '../components/uploadBox/UploadBox';
+import UploadBox from '../components/specific/uploadBox/UploadBox';
 
 const meta: Meta<typeof UploadBox> = {
   title: 'Components/UploadBox',

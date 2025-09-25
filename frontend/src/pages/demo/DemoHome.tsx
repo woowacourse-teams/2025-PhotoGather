@@ -2,8 +2,10 @@ import * as Sentry from '@sentry/react';
 import { useNavigate } from 'react-router-dom';
 import { RocketImg as rocketImage } from '../../@assets/images';
 import Button from '../../components/@common/buttons/button/Button';
-import KakaoLoginButton from '../../components/kakaoLoginButton/KakaoLoginButton';
+import KakaoLoginButton from '../../components/specific/kakaoLoginButton/KakaoLoginButton';
+import { AUTH_COOKIES } from '../../constants/keys';
 import { ROUTES } from '../../constants/routes';
+import useAuthActions from '../../hooks/@common/useAuthActions';
 import useKakaoAuth from '../../hooks/domain/useKakaoAuth';
 import { CookieUtils } from '../../utils/CookieUtils';
 import * as S from './DemoHome.styles';
@@ -21,13 +23,14 @@ const DemoHome = () => {
       Sentry.captureMessage('가짜 축하');
     }
   };
-  const { handleKakaoLogin, handleLogout } = useKakaoAuth();
+  const { handleKakaoLogin } = useKakaoAuth();
+  const { handleLogout } = useAuthActions();
 
   return (
     <S.Wrapper>
       <S.Icon src={rocketImage} alt="데모 페이지 아이콘"></S.Icon>
       <S.Title>Forgather DEMO</S.Title>
-      {CookieUtils.has('access') ? (
+      {CookieUtils.has(AUTH_COOKIES.ACCESS) ? (
         <Button text="로그아웃" variant="secondary" onClick={handleLogout} />
       ) : (
         <KakaoLoginButton onClick={handleKakaoLogin} />

@@ -64,7 +64,7 @@ public class PhotoController {
     @Operation(summary = "사진 목록 조회", description = "특정 공간의 사진 목록을 조회합니다.")
     public ResponseEntity<PhotosResponse> getAll(
         @PathVariable(name = "spaceCode") String spaceCode,
-        @PageableDefault(size = 15, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable,
+        @PageableDefault(size = 15, sort = {"createdAt", "id"}, direction = Sort.Direction.DESC) Pageable pageable,
         @LoginHost(required = false) Host host
     ) {
         var response = photoService.getAll(spaceCode, pageable, host);
