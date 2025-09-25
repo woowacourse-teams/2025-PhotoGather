@@ -109,7 +109,7 @@ const useFileUpload = ({
         capturedAt: file.capturedAt,
         capacityValue: file.capacityValue,
         presignedUrl: '',
-        state: 'idle' as UploadFileState,
+        state: 'idle' as const,
       };
     });
   };
