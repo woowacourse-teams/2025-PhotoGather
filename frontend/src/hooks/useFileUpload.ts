@@ -54,8 +54,8 @@ const useFileUpload = ({
       guestId !== FAILED_GUEST_ID
     ) {
       const params = new URLSearchParams();
-      uploadedFilesRef.current.forEach((fileName) => {
-        params.append('cancelFileNames', fileName);
+      uploadedFilesRef.current.forEach((objectKey) => {
+        params.append('cancelFileNames', objectKey);
       });
 
       navigator.sendBeacon(
