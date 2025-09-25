@@ -10,10 +10,10 @@ import FloatingIconButton from '../../../components/@common/buttons/floatingIcon
 import HighlightText from '../../../components/@common/highlightText/HighlightText';
 import GuestImageGrid from '../../../components/@common/imageLayout/imageGrid/guestImageGrid/GuestImageGrid';
 import PhotoModal from '../../../components/@common/modal/photoModal/PhotoModal';
-import GuestSpaceHeader from '../../../components/header/spaceHeader/guestSpaceHeader/GuestSpaceHeader';
+import UserBadge from '../../../components/@common/userBadge/UserBadge';
+import GuestSpaceHeader from '../../../components/layout/header/spaceHeader/guestSpaceHeader/GuestSpaceHeader';
 import LoadingLayout from '../../../components/layout/loadingLayout/LoadingLayout';
-import UploadBox from '../../../components/uploadBox/UploadBox';
-import UserBadge from '../../../components/userBadge/UserBadge';
+import UploadBox from '../../../components/specific/uploadBox/UploadBox';
 import { ROUTES } from '../../../constants/routes';
 import { useOverlay } from '../../../contexts/OverlayProvider';
 import useIntersectionObserver from '../../../hooks/@common/useIntersectionObserver';
