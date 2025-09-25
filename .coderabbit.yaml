@@ -18,11 +18,11 @@ reviews:
       - songsunkook
       - ykmxxi
       - Hacanna42
-    tools:
-      eslint: # JavaScript/TypeScript 프로젝트용
-        enabled: true
-      gitleaks: # 민감정보 체크
-        enabled: false
+  tools:
+    eslint: # JavaScript/TypeScript 프로젝트용
+      enabled: true
+    gitleaks: # 민감정보 체크
+      enabled: false
 
 knowledge_base:
   code_guidelines:
