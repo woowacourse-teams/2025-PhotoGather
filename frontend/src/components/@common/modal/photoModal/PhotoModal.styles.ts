@@ -5,6 +5,7 @@ import { theme } from '../../../../styles/theme';
 import { hexToRgba } from '../../../../utils/hexToRgba';
 
 export const Wrapper = styled.div`
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -37,6 +38,7 @@ export const FromMessage = styled.span`
 `;
 
 export const PhotoContainer = styled.div`
+  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -44,7 +46,7 @@ export const PhotoContainer = styled.div`
   height: 320px;
   background: ${hexToRgba(theme.colors.gray03, 0.3)};
   backdrop-filter: blur(4px);
-  overflow: hidden;
+  overflow: visible;
 `;
 
 export const Photo = styled.img`
@@ -89,5 +91,48 @@ export const DownloadIcon = styled(SaveIcon)`
   color: ${({ theme }) => theme.colors.white};
   &:active {
     transform: scale(0.9);
+  }
+`;
+
+export const NavigationContainer = styled.div`
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: calc(100% + 32px);
+  left: -16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  pointer-events: none;
+  z-index: ${({ theme }) => theme.zIndex.topActionButton};
+
+  & > * {
+    pointer-events: auto;
+  }
+
+  @media (max-width: 480px) {
+    width: calc(100% + 12px);
+    left: -6px;
+  }
+`;
+
+export const NavigationButton = styled.button<{ $position: 'left' | 'right' }>`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: ${hexToRgba(theme.colors.gray06, 0.8)};
+  border: none;
+  cursor: pointer;
+
+  &:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+    &:hover {
+      background: ${hexToRgba(theme.colors.gray06, 0.8)};
+      transform: none;
+    }
   }
 `;

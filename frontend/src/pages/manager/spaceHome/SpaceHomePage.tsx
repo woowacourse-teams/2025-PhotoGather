@@ -167,12 +167,31 @@ const SpaceHomePage = () => {
     });
   };
 
+  const getNavigationIds = (currentId: number) => {
+    const currentIndex = photosList.findIndex(
+      (photo) => photo.id === currentId,
+    );
+
+    return {
+      prevId:
+        currentIndex < photosList.length - 1
+          ? photosList[currentIndex + 1].id
+          : null,
+      nextId: currentIndex > 0 ? photosList[currentIndex - 1].id : null,
+    };
+  };
+
   const openPhotoModal = async (photoId: number) => {
+    const { prevId, nextId } = getNavigationIds(photoId);
+
     await overlay(
       <PhotoModal
         mode="manager"
         photoId={photoId}
         spaceCode={spaceCode ?? ''}
+        prevPhotoId={prevId}
+        nextPhotoId={nextId}
+        getNavigationIds={getNavigationIds}
         onDownload={async () => await downloadPhotoWithTracking(photoId)}
         onDelete={async () => await deletePhotoWithTracking(photoId)}
       />,

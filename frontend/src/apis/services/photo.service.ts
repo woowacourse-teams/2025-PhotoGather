@@ -12,9 +12,6 @@ import type {
 import { authHttp, http } from '../http';
 
 export const photoService = {
-  getAll: (params?: { page?: number; pageSize?: number }) =>
-    authHttp.get<PhotoListResponse>('/photos', params),
-
   getById: (spaceCode: string, photoId: number) =>
     authHttp.get<Photo>(`/spaces/${spaceCode}/photos/${photoId}`),
 
