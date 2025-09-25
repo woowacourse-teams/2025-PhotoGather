@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import { ImageGridBackDrop } from '../../../styles/@common/BackDrop.styles';
 import { theme } from '../../../styles/theme';
 import { hexToRgba } from '../../../utils/hexToRgba';
 
@@ -6,11 +7,17 @@ export const Wrapper = styled.div`
   width: 100%;
   min-height: ${({ theme }) =>
     `calc(100vh - ${parseInt(theme.layout.padding.topBottom) * 2}px - ${theme.layout.headerHeight})`};
-  position: relative;
   display: flex;
   flex-direction: column;
   gap: 24px;
   z-index: ${({ theme }) => theme.zIndex.imageGrid};
+`;
+
+export const BodyContainer = styled.div`
+  position: relative;
+  width: 100%;
+  height: 100%;
+  flex-grow: 1;
 `;
 
 export const InfoContainer = styled.div`
@@ -79,15 +86,13 @@ export const TopButtonContainer = styled.div<{ $isVisible: boolean }>`
   }
 `;
 
-export const NoImageContainer = styled.div`
-  position: relative;
+export const NoImageContainer = styled(ImageGridBackDrop)`
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 20px;
   flex-grow: 1;
-  border-radius: 12px;
   background: ${({ theme }) => hexToRgba(theme.colors.gray06, 0.3)};
 `;
 
@@ -110,4 +115,8 @@ export const ModalContentContainer = styled.div`
   justify-content: center;
   align-items: center;
   gap: 24px;
+`;
+
+export const GiftIconImage = styled.img`
+  width: 120px;
 `;

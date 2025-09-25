@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.forgather.domain.space.model.Space;
+import com.forgather.global.exception.BaseException;
 import com.forgather.global.exception.NotFoundException;
 
 public interface SpaceRepository {
@@ -18,6 +19,9 @@ public interface SpaceRepository {
     List<Space> findAll();
 
     default Space getByCode(String spaceCode) {
+        if (spaceCode ==  null) {
+            throw new BaseException("스페이스 코드는 null일 수 없습니다.");
+        }
         return findByCode(spaceCode)
             .orElseThrow(() -> new NotFoundException("존재하지 않는 스페이스입니다. 스페이스 코드: " + spaceCode));
     }

@@ -29,7 +29,7 @@ public class GuestService {
 
     @Transactional
     public GuestResponse updateGuest(String spaceCode, Long guestId, UpdateGuestRequest request) {
-        Guest guest = guestRepository.getById(guestId);
+        Guest guest = guestRepository.getByIdOrThrow(guestId);
         Space space = guest.getSpace();
         space.validateCode(spaceCode);
         guest.rename(request.name());
@@ -37,7 +37,7 @@ public class GuestService {
     }
 
     public GuestResponse getGuest(String spaceCode, Long guestId) {
-        Guest guest = guestRepository.getById(guestId);
+        Guest guest = guestRepository.getByIdOrThrow(guestId);
         Space space = guest.getSpace();
         space.validateCode(spaceCode);
         return GuestResponse.from(guest);

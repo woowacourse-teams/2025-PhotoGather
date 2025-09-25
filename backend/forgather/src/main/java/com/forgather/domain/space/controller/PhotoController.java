@@ -64,7 +64,7 @@ public class PhotoController {
     @Operation(summary = "사진 목록 조회", description = "특정 공간의 사진 목록을 조회합니다.")
     public ResponseEntity<PhotosResponse> getAll(
         @PathVariable(name = "spaceCode") String spaceCode,
-        @PageableDefault(size = 15, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable,
+        @PageableDefault(size = 15, sort = {"createdAt", "id"}, direction = Sort.Direction.DESC) Pageable pageable,
         @LoginHost(required = false) Host host
     ) {
         var response = photoService.getAll(spaceCode, pageable, host);
@@ -77,7 +77,7 @@ public class PhotoController {
     public ResponseEntity<Resource> download(
         @PathVariable(name = "spaceCode") String spaceCode,
         @PathVariable(name = "photoId") Long photoId,
-        @LoginHost Host host
+        @LoginHost(required = false) Host host
     ) {
         var response = photoService.download(spaceCode, photoId, host);
         ContentDisposition contentDisposition = ContentDisposition.attachment()
@@ -99,7 +99,7 @@ public class PhotoController {
     public ResponseEntity<StreamingResponseBody> downloadSelected(
         @PathVariable(name = "spaceCode") String spaceCode,
         @RequestBody DownloadPhotosRequest request,
-        @LoginHost Host host
+        @LoginHost(required = false) Host host
     ) throws IOException {
         File zipFile = photoService.compressSelected(spaceCode, request, host);
 
@@ -136,7 +136,7 @@ public class PhotoController {
     @Operation(summary = "사진 zip 일괄 다운로드", description = "특정 공간의 사진 목록을 zip 파일로 다운로드합니다.")
     public ResponseEntity<StreamingResponseBody> downloadAll(
         @PathVariable(name = "spaceCode") String spaceCode,
-        @LoginHost Host host
+        @LoginHost(required = false) Host host
     ) throws IOException {
         File zipFile = photoService.compressAll(spaceCode, host);
 

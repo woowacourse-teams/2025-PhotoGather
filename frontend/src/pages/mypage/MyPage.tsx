@@ -1,19 +1,19 @@
-import defaultProfile from '@assets/images/default_profile.png';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { DefaultProfileImg as defaultProfile } from '../../@assets/images';
 import { authService } from '../../apis/services/auth.service';
 import { photoService } from '../../apis/services/photo.service';
 import { spaceService } from '../../apis/services/space.service';
 import HighlightText from '../../components/@common/highlightText/HighlightText';
-import Profile from '../../components/profile/Profile';
-import SpaceCard from '../../components/spaceCard/SpaceCard';
+import Profile from '../../components/@common/profile/Profile';
+import SpaceCard from '../../components/specific/spaceCard/SpaceCard';
 import { ROUTES } from '../../constants/routes';
 import useAuthConditionTasks from '../../hooks/@common/useAuthConditionTasks';
 import useSpacesDisplay from '../../hooks/domain/useSpacesDisplay';
 import type { MyInfo } from '../../types/api.type';
 import type { MySpace, SpaceFilterType } from '../../types/space.type';
 import { buildThumbnailUrl } from '../../utils/buildImageUrl';
-import { parsedImagePath } from '../../utils/parsedImagePath';
+import { extractImageFileName } from '../../utils/parsedImagePath';
 import * as S from './MyPage.styles';
 
 const MyPage = () => {
@@ -51,7 +51,7 @@ const MyPage = () => {
           if (!photo) return;
           results[space.spaceCode] = buildThumbnailUrl(
             space.spaceCode,
-            parsedImagePath(photo?.path),
+            extractImageFileName(photo?.path),
             'x800',
           );
         }),
@@ -138,14 +138,12 @@ const MyPage = () => {
             return (
               <SpaceCard
                 key={space.id}
-                name={space.name}
+                space={space}
                 thumbnail={thumbnails[space.spaceCode]}
-                openedAt={space.openedAt}
-                expiredAt={space.expiredAt}
-                guestCount={space.guestCount}
-                photoCount={space.photoCount}
                 variant={matchSpaceCardVariant(space)}
-                route={ROUTES.MANAGER.SPACE_HOME(String(space.spaceCode))}
+                onClick={() =>
+                  navigate(ROUTES.MANAGER.SPACE_HOME(String(space.spaceCode)))
+                }
               />
             );
           })}

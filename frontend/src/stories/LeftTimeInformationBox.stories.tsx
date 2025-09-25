@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import LeftTimeInformationBox from '../components/leftTimeInformationBox/LeftTimeInformationBox';
+import LeftTimeInformationBox from '../components/specific/leftTimeInformationBox/LeftTimeInformationBox';
 
 const meta: Meta<typeof LeftTimeInformationBox> = {
   title: 'components/LeftTimeInformationBox',

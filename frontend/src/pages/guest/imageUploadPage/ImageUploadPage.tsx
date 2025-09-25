@@ -1,17 +1,19 @@
-import messageIcon from '@assets/images/message.png';
 import { useNavigate } from 'react-router-dom';
-import { ReactComponent as ExternalLinkIcon } from '../../../@assets/icons/external-link.svg';
-import { ReactComponent as ArrowUpSvg } from '../../../@assets/icons/upwardArrow.svg';
+import {
+  UpwardArrowIcon as ArrowUpSvg,
+  ExternalLinkIcon,
+} from '../../../@assets/icons';
+import { MessageImg as messageIcon } from '../../../@assets/images';
 import Button from '../../../components/@common/buttons/button/Button';
 import FloatingActionButton from '../../../components/@common/buttons/floatingActionButton/FloatingActionButton';
 import FloatingIconButton from '../../../components/@common/buttons/floatingIconButton/FloatingIconButton';
 import HighlightText from '../../../components/@common/highlightText/HighlightText';
 import GuestImageGrid from '../../../components/@common/imageLayout/imageGrid/guestImageGrid/GuestImageGrid';
 import PhotoModal from '../../../components/@common/modal/photoModal/PhotoModal';
-import SpaceHeader from '../../../components/header/spaceHeader/SpaceHeader';
+import UserBadge from '../../../components/@common/userBadge/UserBadge';
+import GuestSpaceHeader from '../../../components/layout/header/spaceHeader/guestSpaceHeader/GuestSpaceHeader';
 import LoadingLayout from '../../../components/layout/loadingLayout/LoadingLayout';
-import UploadBox from '../../../components/uploadBox/UploadBox';
-import UserBadge from '../../../components/userBadge/UserBadge';
+import UploadBox from '../../../components/specific/uploadBox/UploadBox';
 import { ROUTES } from '../../../constants/routes';
 import { useOverlay } from '../../../contexts/OverlayProvider';
 import useIntersectionObserver from '../../../hooks/@common/useIntersectionObserver';
@@ -32,11 +34,12 @@ import * as S from './ImageUploadPage.styles';
 
 const ImageUploadPage = () => {
   const { spaceCode } = useSpaceCodeFromPath();
-  const { spaceInfo } = useSpaceInfo(spaceCode ?? '');
+  const { spaceInfo, spaceInfoLoadingState } = useSpaceInfo(spaceCode ?? '');
   const isNoData = !spaceInfo;
-  const isSpaceExpired = spaceInfo?.isExpired;
-  const isEarlyTime =
-    spaceInfo?.openedAt && checkIsEarlyDate(spaceInfo.openedAt);
+  const isSpaceExpired = spaceInfo ? spaceInfo.isExpired : false;
+  const isEarlyTime = spaceInfo
+    ? spaceInfo.openedAt && checkIsEarlyDate(spaceInfo.openedAt)
+    : false;
   const shouldShowFakeUploadBox = isNoData || isEarlyTime || isSpaceExpired;
 
   const overlay = useOverlay();
@@ -45,6 +48,8 @@ const ImageUploadPage = () => {
   const { nickName, guestId, showNickNameEditModal, tryCreateNickName } =
     useGuestNickName({
       spaceCode: spaceCode ?? '',
+      shouldShowNickNameModal:
+        spaceInfoLoadingState === 'success' && !isEarlyTime && !isSpaceExpired,
     });
 
   const navigateToUploadComplete = () => {
@@ -134,7 +139,9 @@ const ImageUploadPage = () => {
 
   return (
     <S.Wrapper $hasImages={hasImages}>
-      {isEarlyTime && <EarlyPage openedAt={spaceInfo.openedAt} />}
+      {isEarlyTime && (
+        <EarlyPage openedAt={spaceInfo ? spaceInfo.openedAt : ''} />
+      )}
       {isSpaceExpired && <ExpiredPage />}
       {isUploading && (
         <LoadingLayout
@@ -144,7 +151,11 @@ const ImageUploadPage = () => {
         />
       )}
       <S.ScrollTopAnchor ref={scrollTopTriggerRef} />
-      <SpaceHeader title={spaceName} timer={leftTime} />
+      <GuestSpaceHeader
+        title={spaceName}
+        timer={leftTime}
+        accessType={spaceInfo?.type}
+      />
       <S.ToolBar>
         <UserBadge
           nickName={nickName}

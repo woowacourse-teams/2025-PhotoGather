@@ -1,8 +1,8 @@
-import { ReactComponent as EditIcon } from '@assets/icons/edit.svg';
 import { useNavigate } from 'react-router-dom';
-import ComingSoonBox from '../../../components/comingSoonBox/ComingSoonBox';
-import DashboardBox from '../../../components/dashboardBox/DashboardBox';
-import DonutGraph from '../../../components/donutGraph/DonutGraph';
+import { EditIcon } from '../../../@assets/icons';
+import DonutGraph from '../../../components/@common/donutGraph/DonutGraph';
+import ComingSoonBox from '../../../components/specific/comingSoonBox/ComingSoonBox';
+import DashboardBox from '../../../components/specific/dashboardBox/DashboardBox';
 import { ROUTES } from '../../../constants/routes';
 import useSpaceCapacity from '../../../hooks/useSpaceCapacity';
 import useSpaceCodeFromPath from '../../../hooks/useSpaceCodeFromPath';

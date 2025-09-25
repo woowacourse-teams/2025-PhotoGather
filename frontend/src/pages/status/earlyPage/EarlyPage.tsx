@@ -1,4 +1,4 @@
-import lockImage from '@assets/images/lock.png';
+import { LockImg as lockImage } from '../../../@assets/images';
 import HighlightText from '../../../components/@common/highlightText/HighlightText';
 import StatusLayout from '../../../components/layout/statusLayout/StatusLayout';
 import { formatDate } from '../../../utils/formatDate';

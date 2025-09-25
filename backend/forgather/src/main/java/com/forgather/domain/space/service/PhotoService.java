@@ -5,7 +5,6 @@ import static com.forgather.domain.space.dto.DownloadUrlsResponse.DownloadUrl;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -31,7 +30,6 @@ import com.forgather.domain.space.repository.PhotoRepository;
 import com.forgather.domain.space.repository.SpaceRepository;
 import com.forgather.domain.space.util.ZipGenerator;
 import com.forgather.global.auth.model.Host;
-import com.forgather.global.auth.service.PublicAccessService;
 import com.forgather.global.exception.BaseException;
 import com.forgather.global.exception.UnauthorizedException;
 
@@ -47,51 +45,31 @@ public class PhotoService {
     private final PhotoRepository photoRepository;
     private final SpaceRepository spaceRepository;
     private final ContentsStorage contentsStorage;
-    private final PublicAccessService publicAccessService;
 
     public PhotoResponse get(String spaceCode, Long photoId, Host host) {
         Space space = spaceRepository.getUnexpiredSpaceByCode(spaceCode);
-        boolean canPublicAccess = publicAccessService.canAccess(spaceCode);
-        canPublicAccess |= space.isPublic();
-        if (host != null) { // 기존 로직, 로그인 상태
-            if (!canPublicAccess) {
-                space.validateHost(host);
-            }
-            Photo photo = photoRepository.getByIdOrThrow(photoId);
-            photo.validateSpace(space);
-            return PhotoResponse.from(photo);
+        if (!canAccess(space, host)) {
+            throw new UnauthorizedException();
         }
-
-        if (canPublicAccess) {
-            Photo photo = photoRepository.getByIdOrThrow(photoId);
-            photo.validateSpace(space);
-            return PhotoResponse.from(photo);
-        }
-        throw new UnauthorizedException();
+        Photo photo = photoRepository.getByIdOrThrow(photoId);
+        photo.validateSpace(space);
+        return PhotoResponse.from(photo);
     }
 
     public PhotosResponse getAll(String spaceCode, Pageable pageable, Host host) {
         Space space = spaceRepository.getUnexpiredSpaceByCode(spaceCode);
-        boolean canPublicAccess = publicAccessService.canAccess(spaceCode);
-        canPublicAccess |= space.isPublic();
-        if (host != null) { // 기존 로직, 로그인 상태
-            if (!canPublicAccess) {
-                space.validateHost(host);
-            }
-            Page<Photo> photos = photoRepository.findAllBySpace(space, pageable);
-            return PhotosResponse.from(photos);
+        if (!canAccess(space, host)) {
+            throw new UnauthorizedException();
         }
-
-        if (canPublicAccess) {
-            Page<Photo> photos = photoRepository.findAllBySpace(space, pageable);
-            return PhotosResponse.from(photos);
-        }
-        throw new UnauthorizedException();
+        Page<Photo> photos = photoRepository.findAllBySpace(space, pageable);
+        return PhotosResponse.from(photos);
     }
 
     public File compressSelected(String spaceCode, DownloadPhotosRequest request, Host host) throws IOException {
         Space space = spaceRepository.getUnexpiredSpaceByCode(spaceCode);
-        space.validateHost(host);
+        if (!canAccess(space, host)) {
+            throw new UnauthorizedException();
+        }
         List<Photo> photos = photoRepository.findAllByIdIn(request.photoIds());
         photos.forEach(photo -> photo.validateSpace(space));
         return compressPhotoFile(spaceCode, photos);
@@ -99,6 +77,9 @@ public class PhotoService {
 
     public DownloadPhotoResponse download(String spaceCode, Long photoId, Host host) {
         Space space = spaceRepository.getUnexpiredSpaceByCode(spaceCode);
+        if (!canAccess(space, host)) {
+            throw new UnauthorizedException();
+        }
         Photo photo = photoRepository.getByIdOrThrow(photoId);
         photo.validateSpace(space);
 
@@ -116,7 +97,9 @@ public class PhotoService {
      */
     public File compressAll(String spaceCode, Host host) throws IOException {
         Space space = spaceRepository.getUnexpiredSpaceByCode(spaceCode);
-        space.validateHost(host);
+        if (!canAccess(space, host)) {
+            throw new UnauthorizedException();
+        }
         List<Photo> photos = photoRepository.findAllBySpace(space);
         return compressPhotoFile(spaceCode, photos);
     }
@@ -138,106 +121,84 @@ public class PhotoService {
 
     public DownloadUrlsResponse getDownloadUrl(String spaceCode, Long photoId, Host host) {
         Space space = spaceRepository.getUnexpiredSpaceByCode(spaceCode);
-        boolean canPublicAccess = publicAccessService.canAccess(spaceCode);
-        canPublicAccess |= space.isPublic();
-        if (host != null) { // 기존 로직, 로그인 상태
-            if (!canPublicAccess) {
-                space.validateHost(host);
-            }
-            Photo photo = photoRepository.getByIdOrThrow(photoId);
-            photo.validateSpace(space);
-
-            URL downloadUrl = contentsStorage.issueDownloadUrl(photo.getPath());
-            return new DownloadUrlsResponse(List.of(DownloadUrl.from(photo.getOriginalName(), downloadUrl.toString())));
+        if (!canAccess(space, host)) {
+            throw new UnauthorizedException();
         }
-
-        if (canPublicAccess) {
-            Photo photo = photoRepository.getByIdOrThrow(photoId);
-            photo.validateSpace(space);
-
-            URL downloadUrl = contentsStorage.issueDownloadUrl(photo.getPath());
-            return new DownloadUrlsResponse(List.of(DownloadUrl.from(photo.getOriginalName(), downloadUrl.toString())));
-        }
-        throw new UnauthorizedException();
+        Photo photo = photoRepository.getByIdOrThrow(photoId);
+        photo.validateSpace(space);
+        return new DownloadUrlsResponse(List.of(DownloadUrl.from(photo.getOriginalName(), photo.getPath())));
     }
 
     public DownloadUrlsResponse getSelectedDownloadUrls(String spaceCode, DownloadPhotosRequest request, Host host) {
         Space space = spaceRepository.getUnexpiredSpaceByCode(spaceCode);
-        boolean canPublicAccess = publicAccessService.canAccess(spaceCode);
-        canPublicAccess |= space.isPublic();
-        if (host != null) { // 기존 로직, 로그인 상태
-            if (!canPublicAccess) {
-                space.validateHost(host);
-            }
-            List<Photo> photos = photoRepository.findAllByIdIn(request.photoIds());
-            if (photos.isEmpty()) {
-                throw new BaseException("현재 다운로드할 수 있는 사진이 존재하지 않습니다.");
-            }
-            photos.forEach(photo -> photo.validateSpace(space));
-
-            return getDownloadUrlsResponse(photos);
+        if (!canAccess(space, host)) {
+            throw new UnauthorizedException();
         }
-
-        if (publicAccessService.canAccess(spaceCode)) {
-            List<Photo> photos = photoRepository.findAllByIdIn(request.photoIds());
-            if (photos.isEmpty()) {
-                throw new BaseException("현재 다운로드할 수 있는 사진이 존재하지 않습니다.");
-            }
-            photos.forEach(photo -> photo.validateSpace(space));
-
-            return getDownloadUrlsResponse(photos);
+        List<Photo> photos = photoRepository.findAllByIdIn(request.photoIds());
+        if (photos.isEmpty()) {
+            throw new BaseException("현재 다운로드할 수 있는 사진이 존재하지 않습니다.");
         }
-        throw new UnauthorizedException();
+        photos.forEach(photo -> photo.validateSpace(space));
+        return getDownloadUrlsResponse(photos);
     }
 
     public DownloadUrlsResponse getAllDownloadUrls(String spaceCode, Host host) {
         Space space = spaceRepository.getUnexpiredSpaceByCode(spaceCode);
-        boolean canPublicAccess = publicAccessService.canAccess(spaceCode);
-        canPublicAccess |= space.isPublic();
-        if (host != null) { // 기존 로직, 로그인 상태
-            if (!canPublicAccess) {
-                space.validateHost(host);
-            }
-            List<Photo> photos = photoRepository.findAllBySpace(space);
-            if (photos.isEmpty()) {
-                throw new BaseException("현재 다운로드할 수 있는 사진이 존재하지 않습니다.");
-            }
-            photos.forEach(photo -> photo.validateSpace(space));
-
-            return getDownloadUrlsResponse(photos);
+        if (!canAccess(space, host)) {
+            throw new UnauthorizedException();
         }
-
-        if (canPublicAccess) {
-            List<Photo> photos = photoRepository.findAllBySpace(space);
-            if (photos.isEmpty()) {
-                throw new BaseException("현재 다운로드할 수 있는 사진이 존재하지 않습니다.");
-            }
-            photos.forEach(photo -> photo.validateSpace(space));
-
-            return getDownloadUrlsResponse(photos);
+        List<Photo> photos = photoRepository.findAllBySpace(space);
+        if (photos.isEmpty()) {
+            throw new BaseException("현재 다운로드할 수 있는 사진이 존재하지 않습니다.");
         }
-        throw new UnauthorizedException();
+        photos.forEach(photo -> photo.validateSpace(space));
+        return getDownloadUrlsResponse(photos);
+    }
+
+    private boolean canAccess(Space space, Host host) {
+        if (space.isPublic()) {
+            return true;
+        }
+        if (host != null) {
+            space.validateHost(host);
+            return true;
+        }
+        return false;
     }
 
     private DownloadUrlsResponse getDownloadUrlsResponse(List<Photo> photos) {
         Map<String, String> downloadUrls = new LinkedHashMap<>();
         Map<String, Integer> originalNameCounts = new HashMap<>();
+
         for (Photo photo : photos) {
-            String originalName = photo.getOriginalName();
-            int extensionStartIndex = originalName.lastIndexOf('.');
-            String baseName = originalName.substring(0, extensionStartIndex);
-            String extension = originalName.substring(extensionStartIndex + 1);
-            if (originalNameCounts.containsKey(originalName)) {
-                int count = originalNameCounts.get(originalName);
-                originalNameCounts.put(originalName, count + 1);
-                baseName = String.format("%s(%d)", baseName, originalNameCounts.get(originalName));
-            } else {
-                originalNameCounts.put(originalName, 0);
-            }
-            String downloadUrl = contentsStorage.issueDownloadUrl(photo.getPath()).toString();
-            downloadUrls.put(String.format("%s.%s", baseName, extension), downloadUrl);
+            String uniqueFileName = createUniqueFileName(photo, originalNameCounts);
+            downloadUrls.put(uniqueFileName, photo.getPath());
         }
 
+        return createDownloadUrlsResponse(downloadUrls);
+    }
+
+    private String createUniqueFileName(Photo photo, Map<String, Integer> originalNameCounts) {
+        String originalName = photo.getOriginalName();
+        int extensionStartIndex = originalName.lastIndexOf('.');
+        String baseName = originalName.substring(0, extensionStartIndex);
+        String extension = originalName.substring(extensionStartIndex + 1);
+
+        String uniqueBaseName = createUniqueBaseName(baseName, originalName, originalNameCounts);
+        return String.format("%s.%s", uniqueBaseName, extension);
+    }
+
+    private String createUniqueBaseName(String baseName, String originalName, Map<String, Integer> originalNameCounts) {
+        if (originalNameCounts.containsKey(originalName)) {
+            int count = originalNameCounts.get(originalName);
+            originalNameCounts.put(originalName, count + 1);
+            return String.format("%s(%d)", baseName, originalNameCounts.get(originalName));
+        }
+        originalNameCounts.put(originalName, 0);
+        return baseName;
+    }
+
+    private DownloadUrlsResponse createDownloadUrlsResponse(Map<String, String> downloadUrls) {
         return new DownloadUrlsResponse(downloadUrls.entrySet().stream()
             .map(entry -> DownloadUrl.from(entry.getKey(), entry.getValue()))
             .toList());
@@ -267,6 +228,6 @@ public class PhotoService {
 
         // photoRepository.deleteAll(photos);
         space.getContents().removeAll(photos); // // orphanRemoval이 설정되어 있어 자동으로 삭제됨
-        contentsStorage.deleteSelectedContents(paths);
+        contentsStorage.deleteContents(paths);
     }
 }

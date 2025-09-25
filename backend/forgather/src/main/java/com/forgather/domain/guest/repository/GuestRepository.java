@@ -9,5 +9,5 @@ public interface GuestRepository {
 
     Guest save(Guest guest);
 
-    Guest getById(Long id);
+    Guest getByIdOrThrow(Long id);
 }

@@ -2,8 +2,8 @@ import { useMemo, useRef, useState } from 'react';
 import { photoService } from '../apis/services/photo.service';
 import type { Photo } from '../types/photo.type';
 import { buildThumbnailUrl } from '../utils/buildImageUrl';
-import { parsedImagePath } from '../utils/parsedImagePath';
-import useError from './@common/useError';
+import { extractImageFileName } from '../utils/parsedImagePath';
+import useTaskHandler from './@common/useTaskHandler';
 
 interface UsePhotosBySpaceIdProps {
   reObserve: () => void;
@@ -17,11 +17,10 @@ const usePhotosBySpaceCode = ({
   const PAGE_SIZE = 20;
   const PRESET = 'x800';
 
-  const [isLoadingPhotos, setIsLoadingPhotos] = useState(true);
   const [photosList, setPhotosList] = useState<Photo[]>([]);
   const currentPage = useRef(1);
   const totalPages = useRef(1);
-  const { tryFetch } = useError();
+  const { tryFetch, loadingState } = useTaskHandler();
 
   const thumbnailPhotoMap = useMemo(() => {
     // TODO : thumbnail 이미지 참조 실패시 원본 이미지 참조하도록 설정
@@ -29,7 +28,7 @@ const usePhotosBySpaceCode = ({
     return new Map(
       photosList.map((photo) => [
         photo.id,
-        buildThumbnailUrl(spaceCode, parsedImagePath(photo.path), PRESET),
+        buildThumbnailUrl(spaceCode, extractImageFileName(photo.path), PRESET),
       ]),
     );
   }, [photosList, spaceCode]);
@@ -38,7 +37,7 @@ const usePhotosBySpaceCode = ({
 
   const appendPhotosList = (photos: Photo[], updatedTotalPages: number) => {
     setPhotosList((prev) => {
-      if (!prev) {
+      if (prev.length === 0) {
         totalPages.current = updatedTotalPages;
         return photos;
       }
@@ -54,7 +53,6 @@ const usePhotosBySpaceCode = ({
   };
 
   const fetchPhotosList = async () => {
-    setIsLoadingPhotos(true);
     const pageToFetch = currentPage.current;
     const response = await photoService.getBySpaceCode(spaceCode, {
       page: pageToFetch,
@@ -66,9 +64,12 @@ const usePhotosBySpaceCode = ({
 
     const { photos, totalPages } = response.data;
     appendPhotosList(photos, totalPages);
-    requestAnimationFrame(() => {
-      reObserve();
-    });
+
+    if (currentPage.current < totalPages) {
+      requestAnimationFrame(() => {
+        reObserve();
+      });
+    }
   };
 
   const tryFetchPhotosList = async () => {
@@ -81,9 +82,7 @@ const usePhotosBySpaceCode = ({
           type: 'error',
         },
       },
-      onFinally: () => {
-        setIsLoadingPhotos(false);
-      },
+      loadingStateKey: 'photosList',
     });
   };
 
@@ -92,7 +91,7 @@ const usePhotosBySpaceCode = ({
     tryFetchPhotosList,
     thumbnailPhotoMap,
     photosList,
-    isLoadingPhotos,
+    photosListLoadingState: loadingState.photosList,
     updatePhotos,
   };
 };

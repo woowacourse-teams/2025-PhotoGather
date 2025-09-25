@@ -1,23 +1,27 @@
-import { ReactComponent as LinkIcon } from '@assets/icons/link.svg';
-import { ReactComponent as ShareIcon } from '@assets/icons/share.svg';
-import messageIcon from '@assets/images/message.png';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ReactComponent as UploadIcon } from '../../../@assets/icons/add-photo.svg';
-import { ReactComponent as SaveIcon } from '../../../@assets/icons/download.svg';
-import { ReactComponent as GiftIcon } from '../../../@assets/icons/gift.svg';
-import { ReactComponent as SettingSvg } from '../../../@assets/icons/setting.svg';
-import { ReactComponent as ArrowUpSvg } from '../../../@assets/icons/upwardArrow.svg';
+import {
+  AddPhotoIcon,
+  UpwardArrowIcon as ArrowUpSvg,
+  LinkIcon,
+  DownloadIcon as SaveIcon,
+  SettingIcon,
+  ShareIcon,
+} from '../../../@assets/icons';
+import {
+  GiftImg as GiftIcon,
+  MessageImg as messageIcon,
+} from '../../../@assets/images';
 import FloatingActionButton from '../../../components/@common/buttons/floatingActionButton/FloatingActionButton';
 import FloatingIconButton from '../../../components/@common/buttons/floatingIconButton/FloatingIconButton';
 import IconLabelButton from '../../../components/@common/buttons/iconLabelButton/IconLabelButton';
 import SpaceManagerImageGrid from '../../../components/@common/imageLayout/imageGrid/spaceManagerImageGrid/SpaceManagerImageGrid';
 import * as C from '../../../components/@common/modal/Modal.common.styles';
 import PhotoModal from '../../../components/@common/modal/photoModal/PhotoModal';
-import SpaceHeader from '../../../components/header/spaceHeader/SpaceHeader';
+import ManagerHeader from '../../../components/layout/header/spaceHeader/managerSpaceHeader/ManagerHeader';
 import LoadingLayout from '../../../components/layout/loadingLayout/LoadingLayout';
-import PhotoSelectionToolBar from '../../../components/photoSelectionToolBar/PhotoSelectionToolBar';
-import SpaceHomeTopActionBar from '../../../components/spaceHomeTopActionBar/SpaceHomeTopActionBar';
+import PhotoSelectionToolBar from '../../../components/specific/photoSelectionToolBar/PhotoSelectionToolBar';
+import SpaceHomeTopActionBar from '../../../components/specific/spaceHomeTopActionBar/SpaceHomeTopActionBar';
 import { INFORMATION } from '../../../constants/messages';
 import { ROUTES } from '../../../constants/routes';
 import { useOverlay } from '../../../contexts/OverlayProvider';
@@ -60,21 +64,24 @@ const SpaceHomePage = () => {
 
   const { spaceCode } = useSpaceCodeFromPath();
 
-  const { spaceInfo } = useSpaceInfo(spaceCode ?? '');
+  const { spaceInfoLoadingState, spaceInfo } = useSpaceInfo(spaceCode ?? '');
   const spaceName = spaceInfo?.name ?? '';
   const isEarlyTime =
     spaceInfo?.openedAt && checkIsEarlyDate(spaceInfo.openedAt);
   const isSpaceExpired = spaceInfo?.isExpired;
 
-  const { hasAccess, isLoadingAccess } = useSpaceAccess(spaceInfo?.host.id);
+  const { hasAccess, accessLoadingState, hostId } = useSpaceAccess({
+    spaceHostId: spaceInfo?.host.id,
+    spaceType: spaceInfo?.type,
+  });
 
   const {
     photosList,
-    isLoadingPhotos,
     thumbnailPhotoMap,
     isEndPage,
     tryFetchPhotosList,
     updatePhotos,
+    photosListLoadingState,
   } = usePhotosBySpaceCode({
     reObserve,
     spaceCode: spaceCode ?? '',
@@ -179,21 +186,25 @@ const SpaceHomePage = () => {
 
   //biome-ignore lint/correctness/useExhaustiveDependencies: isFetchSectionVisible 변경 시 호출
   useEffect(() => {
-    if (
-      !isFetchSectionVisible ||
-      isEndPage ||
-      isSpaceExpired ||
-      isEarlyTime ||
-      !hasAccess
-    )
+    if (spaceInfoLoadingState !== 'success' || accessLoadingState !== 'success')
       return;
-    tryFetchPhotosList();
+
+    if (!hasAccess || isSpaceExpired || isEarlyTime || isEndPage) return;
+
+    if (photosListLoadingState === 'loading') return;
+
+    if (isFetchSectionVisible && !isEndPage) {
+      tryFetchPhotosList();
+    }
   }, [
     isFetchSectionVisible,
     isEndPage,
     isSpaceExpired,
     isEarlyTime,
     hasAccess,
+    accessLoadingState,
+    spaceInfoLoadingState,
+    photosListLoadingState,
   ]);
 
   const loadingContents = [
@@ -220,7 +231,8 @@ const SpaceHomePage = () => {
       <C.Wrapper>
         <S.ModalContentContainer>
           <IconLabelButton
-            icon={<LinkIcon fill={theme.colors.white} width="20px" />}
+            icon={<LinkIcon width="20px" />}
+            variant="outline"
             onClick={() => {
               copyLinkToClipboard(createShareUrl(spaceCode ?? ''));
               showToast({
@@ -238,6 +250,31 @@ const SpaceHomePage = () => {
       },
     );
   };
+
+  const canAddPhoto = hasAccess && !isSpaceExpired && !isEarlyTime;
+  const canShare = hasAccess && !isSpaceExpired;
+  const canChangeSetting = spaceInfo?.host.id === hostId;
+
+  const iconItems = [
+    {
+      element: <AddPhotoIcon width="20px" />,
+      onClick: clickUploadButtonWithTracking,
+      disabled: !canAddPhoto,
+      label: '업로드',
+    },
+    {
+      element: <ShareIcon width="20px" />,
+      onClick: toggleShareModal,
+      disabled: !canShare,
+      label: '공유',
+    },
+    {
+      element: <SettingIcon width="20px" />,
+      onClick: clickDashboardWithTracking,
+      disabled: !canChangeSetting,
+      label: '설정',
+    },
+  ];
 
   const renderBottomNavigatorContent = () => {
     return (
@@ -264,14 +301,16 @@ const SpaceHomePage = () => {
   const renderBodyContent = () => {
     if (isEarlyTime) return <EarlyPage openedAt={spaceInfo.openedAt} />;
     if (isSpaceExpired) return <ExpiredPage />;
-    if (!isLoadingPhotos && photosList.length === 0)
+    if (accessLoadingState === 'success' && !hasAccess)
+      return <AccessDeniedPage />;
+    if (photosListLoadingState === 'success' && photosList.length === 0)
       return (
         <S.NoImageContainer>
-          <GiftIcon width="120px" />
+          <S.GiftIconImage src={GiftIcon} />
           <S.NoImageText>{INFORMATION.NO_IMAGE}</S.NoImageText>
         </S.NoImageContainer>
       );
-    if (!isLoadingPhotos && photosList.length > 0)
+    if (photosList.length > 0)
       return (
         <>
           <S.ImageManagementContainer>
@@ -322,33 +361,16 @@ const SpaceHomePage = () => {
         />
       )}
 
-      {!hasAccess && !isLoadingAccess && <AccessDeniedPage />}
-
       <S.InfoContainer ref={scrollTopTriggerRef}>
-        <SpaceHeader
+        <ManagerHeader
           title={spaceName}
+          accessType={spaceInfo?.type}
           timer={leftTime}
-          icons={[
-            {
-              element: <UploadIcon fill={theme.colors.white} width="20px" />,
-              onClick: clickUploadButtonWithTracking,
-              label: '업로드',
-            },
-            {
-              element: <SettingSvg fill={theme.colors.white} width="20px" />,
-              onClick: clickDashboardWithTracking,
-              label: '설정',
-            },
-            {
-              element: <ShareIcon fill={theme.colors.white} width="20px" />,
-              onClick: toggleShareModal,
-              label: '공유',
-            },
-          ]}
+          iconItems={iconItems}
         />
       </S.InfoContainer>
 
-      {renderBodyContent()}
+      <S.BodyContainer>{renderBodyContent()}</S.BodyContainer>
 
       <S.IntersectionArea ref={hideBlurAreaTriggerRef} />
       <S.IntersectionArea ref={fetchTriggerRef} />

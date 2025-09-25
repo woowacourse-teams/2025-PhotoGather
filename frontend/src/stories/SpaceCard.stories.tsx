@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import SpaceCard from '../components/spaceCard/SpaceCard';
+import SpaceCard from '../components/specific/spaceCard/SpaceCard';
+import type { MySpace } from '../types/space.type';
 
 const meta: Meta<typeof SpaceCard> = {
   title: 'Components/SpaceCard',
@@ -33,49 +34,59 @@ const getPastDate = (days: number) => {
 
 export const Default: Story = {
   args: {
-    name: '강릉 여행',
-    openedAt: new Date().toISOString(),
-    guestCount: 12,
-    photoCount: 67,
+    space: {
+      name: '강릉 여행',
+      openedAt: new Date().toISOString(),
+      guestCount: 12,
+      photoCount: 67,
+    } as MySpace,
     variant: 'default',
   },
 };
 
 export const Expired: Story = {
   args: {
-    name: '부산 출장',
-    openedAt: getPastDate(3),
-    expiredAt: getPastDate(1),
-    guestCount: 15,
-    photoCount: 89,
+    space: {
+      name: '부산 출장',
+      openedAt: getPastDate(3),
+      expiredAt: getPastDate(1),
+      guestCount: 15,
+      photoCount: 89,
+    } as MySpace,
     variant: 'expired',
   },
 };
 
 export const Early: Story = {
   args: {
-    name: '속초 여행',
-    openedAt: getFutureDate(2),
-    guestCount: 10,
-    photoCount: 0,
+    space: {
+      name: '속초 여행',
+      openedAt: getFutureDate(2),
+      guestCount: 10,
+      photoCount: 0,
+    } as MySpace,
     variant: 'early',
   },
 };
 
 export const EarlyWithLongWait: Story = {
   args: {
-    name: '유럽 배낭여행',
-    openedAt: getFutureDate(48),
-    guestCount: 6,
-    photoCount: 0,
+    space: {
+      name: '유럽 배낭여행',
+      openedAt: getFutureDate(48),
+      guestCount: 6,
+      photoCount: 0,
+    } as MySpace,
     variant: 'early',
   },
 };
 
 export const EmptySpace: Story = {
   args: {
-    name: '새로운 스페이스',
-    openedAt: new Date().toISOString(),
+    space: {
+      name: '새로운 스페이스',
+      openedAt: new Date().toISOString(),
+    } as MySpace,
     variant: 'default',
   },
 };

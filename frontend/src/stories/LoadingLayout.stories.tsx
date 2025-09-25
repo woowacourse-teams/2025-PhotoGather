@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-webpack5';
-import rocketImage from '../@assets/images/rocket.png';
+import { RocketImg as rocketImage } from '../@assets/images';
 import LoadingLayout from '../components/layout/loadingLayout/LoadingLayout';
 
 const meta: Meta<typeof LoadingLayout> = {

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { photoService } from '../apis/services/photo.service';
 import { FAILED_GUEST_ID } from '../constants/errors';
 import type { LocalFile, UploadFile } from '../types/file.type';
-import useError from './@common/useError';
+import useTaskHandler from './@common/useTaskHandler';
 
 interface Batch {
   id: number;
@@ -43,8 +43,7 @@ const useFileUpload = ({
   const [, setUploadFiles] = useState<UploadFile[]>([]);
   const [, setBatches] = useState<Batch[]>();
   const [session, setSession] = useState<Session>();
-  const [isUploading, setIsUploading] = useState(false);
-  const { tryFetch } = useError();
+  const { loadingState, tryFetch } = useTaskHandler();
   const [progress, setProgress] = useState(0);
 
   const ensureGuestId = async () => {
@@ -147,17 +146,12 @@ const useFileUpload = ({
     validGuestId: number,
     nickName: string,
   ) => {
-    if (successFiles.length !== localFiles.length) {
-      throw new Error('성공한 파일이 없습니다.');
-    }
-
     const uploadedPhotos = successFiles.map((file) => ({
       uploadFileName: file.objectKey,
       originalName: file.originFile.name,
       capturedAt: file.capturedAt,
       capacityValue: file.capacityValue,
     }));
-
     const response = await tryFetch({
       task: async () =>
         await photoService.notifyUploadComplete(
@@ -221,6 +215,14 @@ const useFileUpload = ({
     const successFiles = updatedBatchFiles.filter(
       (f) => f.state === 'uploaded',
     );
+    const failedFiles = updatedBatchFiles.filter((f) => f.state === 'failed');
+
+    if (failedFiles.length > 0 || successFiles.length === 0) {
+      throw new Error(
+        `failed files exist(${failedFiles.length}) or no success files(${successFiles.length})`,
+      );
+    }
+
     await notifySuccessFiles(successFiles, validGuestId, nickName);
   };
 
@@ -297,7 +299,6 @@ const useFileUpload = ({
   const submitFileUpload = async () => {
     const currentSession = session ?? createSession(localFiles);
 
-    setIsUploading(true);
     const response = await tryFetch({
       task: async () => {
         const validGuestId = await ensureGuestId();
@@ -310,9 +311,7 @@ const useFileUpload = ({
           type: 'error',
         },
       },
-      onFinally: () => {
-        setIsUploading(false);
-      },
+      loadingStateKey: 'fileUpload',
     });
 
     if (response.success) {
@@ -325,7 +324,7 @@ const useFileUpload = ({
     submitFileUpload,
     total: session?.total,
     success: progress,
-    isUploading,
+    isUploading: loadingState.fileUpload === 'loading',
   };
 };
 

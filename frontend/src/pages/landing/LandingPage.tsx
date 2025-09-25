@@ -1,20 +1,26 @@
-import { ReactComponent as SaveIcon } from '@assets/icons/download.svg';
-import { ReactComponent as InstagramIcon } from '@assets/icons/instagram.svg';
-import { ReactComponent as KakaoTalkIcon } from '@assets/icons/kakaotalk.svg';
-import { ReactComponent as QrcodeIcon } from '@assets/icons/qrCode.svg';
-import { ReactComponent as MockupOne } from '@assets/images/mockup_1.svg';
-import { ReactComponent as MockupTwo } from '@assets/images/mockup_2.svg';
-import { ReactComponent as MockupThree } from '@assets/images/mockup_3.svg';
-import { ReactComponent as MockupFour } from '@assets/images/mockup_4.svg';
-import { ReactComponent as Logo } from '@assets/logo.svg';
 import { useEffect, useMemo, useRef } from 'react';
+import {
+  KakaoTalkIcon,
+  LogoIcon as Logo,
+  QrCodeIcon as QrcodeIcon,
+  DownloadIcon as SaveIcon,
+} from '../../@assets/icons';
+import {
+  InstagramImg as InstagramIcon,
+  MockupFourImg as MockupFour,
+  MockupOneImg as MockupOne,
+  MockupThreeImg as MockupThree,
+  MockupTwoImg as MockupTwo,
+} from '../../@assets/images';
 import Button from '../../components/@common/buttons/button/Button';
 import FloatingActionButton from '../../components/@common/buttons/floatingActionButton/FloatingActionButton';
 import IconLabelButton from '../../components/@common/buttons/iconLabelButton/IconLabelButton';
-import { Carousel } from '../../components/carousel/Carousel';
-import Footer from '../../components/footer/Footer';
-import KakaoLoginButton from '../../components/kakaoLoginButton/KakaoLoginButton';
-import LeftTimeInformationBox from '../../components/leftTimeInformationBox/LeftTimeInformationBox';
+import { Carousel } from '../../components/@common/carousel/Carousel';
+import Footer from '../../components/layout/global/footer/Footer';
+import KakaoLoginButton from '../../components/specific/kakaoLoginButton/KakaoLoginButton';
+import LeftTimeInformationBox from '../../components/specific/leftTimeInformationBox/LeftTimeInformationBox';
+import { AUTH_COOKIES } from '../../constants/keys';
+import useAuthActions from '../../hooks/@common/useAuthActions';
 import useLandingScroll from '../../hooks/@common/useLandingScroll';
 import useLeftTimer from '../../hooks/@common/useLeftTimer';
 import useKakaoAuth from '../../hooks/domain/useKakaoAuth';
@@ -36,7 +42,8 @@ const LandingPage = () => {
   const formattedLeftTime = formatTimer(leftTime);
   const { date, time } = formatDate(mockDate.toISOString());
   const mockupRef = useRef<HTMLDivElement>(null);
-  const { handleKakaoLogin, handleLogout } = useKakaoAuth();
+  const { handleKakaoLogin } = useKakaoAuth();
+  const { handleLogout } = useAuthActions();
 
   useEffect(() => {
     const target = mockupRef.current;
@@ -69,7 +76,7 @@ const LandingPage = () => {
 
           <S.LoginSection {...useLandingScroll({})}>
             <S.TextContainer>{`주인공은 당신이니까,\n사진은 우리가 책임질게요`}</S.TextContainer>
-            {CookieUtils.has('access') ? (
+            {CookieUtils.has(AUTH_COOKIES.ACCESS) ? (
               <Button
                 text="로그아웃"
                 variant="secondary"
@@ -107,10 +114,10 @@ const LandingPage = () => {
           <S.TextContainer>{`화질 걱정 없이,\n원본 그대로 보관하세요`}</S.TextContainer>
           <Carousel
             slides={[
-              <MockupOne key="one" width={'280px'} />,
-              <MockupTwo key="two" width={'280px'} />,
-              <MockupThree key="three" width={'280px'} />,
-              <MockupFour key="four" width={'280px'} />,
+              <S.Mockup src={MockupOne} key="one" />,
+              <S.Mockup src={MockupTwo} key="two" />,
+              <S.Mockup src={MockupThree} key="three" />,
+              <S.Mockup src={MockupFour} key="four" />,
             ]}
           />
         </S.SectionContainer>
@@ -138,10 +145,10 @@ const LandingPage = () => {
           <S.TextContainer>{`귀찮은 로그인 없이,\n사진 업로드 가능해요`}</S.TextContainer>
           <Carousel
             slides={[
-              <MockupOne key="one" width={'280px'} />,
-              <MockupTwo key="two" width={'280px'} />,
-              <MockupThree key="three" width={'280px'} />,
-              <MockupFour key="four" width={'280px'} />,
+              <S.Mockup src={MockupOne} key="one" />,
+              <S.Mockup src={MockupTwo} key="two" />,
+              <S.Mockup src={MockupThree} key="three" />,
+              <S.Mockup src={MockupFour} key="four" />,
             ]}
           />
         </S.SectionContainer>
@@ -154,15 +161,9 @@ const LandingPage = () => {
         >
           <S.TextContainer>{`인스타그램, 카카오톡, QR코드\n빠르게 공유하고 사진을 모아보세요`}</S.TextContainer>
           <S.RowContainer>
-            <InstagramIcon
-              style={{
-                height: '44px',
-                marginBottom: '4px',
-                cursor: 'default',
-                pointerEvents: 'none',
-              }}
-            />
+            <S.InstagramIcon src={InstagramIcon} />
             <IconLabelButton
+              variant="outline"
               icon={<KakaoTalkIcon />}
               style={{
                 backgroundColor: theme.colors.kakaoTalk,
@@ -172,6 +173,7 @@ const LandingPage = () => {
             />
             <IconLabelButton
               icon={<QrcodeIcon />}
+              variant="outline"
               style={{
                 width: '44px',
                 cursor: 'default',
