@@ -14,10 +14,10 @@ public interface HostRepository {
 
     default Host getByIdOrThrow(Long id) {
         if (id ==  null) {
-            throw new BaseException("id는 null일 수 없습니다.");
+            throw new BaseException("호스트의 id는 null일 수 없습니다. id: " + id);
         }
         return findById(id)
-            .orElseThrow(() -> new NotFoundException("Host를 찾을 수 없습니다. id: " + id));
+            .orElseThrow(() -> new NotFoundException("존재하지 않는 호스트입니다. id: " + id));
     }
 }
 

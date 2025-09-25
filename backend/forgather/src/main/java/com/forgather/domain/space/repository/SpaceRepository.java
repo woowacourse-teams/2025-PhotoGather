@@ -20,10 +20,10 @@ public interface SpaceRepository {
 
     default Space getByCode(String spaceCode) {
         if (spaceCode ==  null) {
-            throw new BaseException("스페이스 코드는 null일 수 없습니다.");
+            throw new BaseException("스페이스 코드는 null일 수 없습니다. code: " + spaceCode);
         }
         return findByCode(spaceCode)
-            .orElseThrow(() -> new NotFoundException("존재하지 않는 스페이스입니다. 스페이스 코드: " + spaceCode));
+            .orElseThrow(() -> new NotFoundException("존재하지 않는 스페이스입니다. spaceCode: " + spaceCode));
     }
 
     default Space getUnexpiredSpaceByCode(String spaceCode) {

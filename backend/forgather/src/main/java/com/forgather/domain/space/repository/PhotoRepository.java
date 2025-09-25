@@ -27,9 +27,9 @@ public interface PhotoRepository {
 
     default Photo getByIdOrThrow(Long id) {
         if (id ==  null) {
-            throw new BaseException("id는 null일 수 없습니다.");
+            throw new BaseException("사진의 id는 null일 수 없습니다. id: " + id);
         }
         return findById(id)
-            .orElseThrow(() -> new NotFoundException("존재하지 않는 사진입니다. 사진 ID: " + id));
+            .orElseThrow(() -> new NotFoundException("존재하지 않는 사진입니다. id: " + id));
     }
 }
