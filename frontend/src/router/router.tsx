@@ -1,26 +1,56 @@
+import { lazy, Suspense } from 'react';
 import { createBrowserRouter } from 'react-router-dom';
 import Layout from '../components/layout/global/layout/Layout';
-import KakaoAuthPage from '../pages/auth/KakaoAuthPage';
-import DownloadCompletePage from '../pages/complete/DownloadCompletePage';
-import UploadCompletePage from '../pages/complete/UploadCompletePage';
-import SpaceCreateFunnel from '../pages/create/funnel/SpaceCreateFunnel';
-import NetworkErrorPage from '../pages/error/NetworkErrorPage';
-import NotFoundErrorPage from '../pages/error/NotFoundErrorPage';
-import ImageUploadPage from '../pages/guest/imageUploadPage/ImageUploadPage';
-import SharePage from '../pages/guest/sharePage/SharePage';
-import InAppBrowserPage from '../pages/inAppBrowser/InAppBrowserPage';
-import LandingPage from '../pages/landing/LandingPage';
-import LoginPage from '../pages/login/LoginPage';
-import LogoutPage from '../pages/logout/LogoutPage';
-import MainPage from '../pages/MainPage';
-import DashboardPage from '../pages/manager/dashboard/DashboardPage';
-import SettingsPage from '../pages/manager/settings/SettingsPage';
-import SpaceHomePage from '../pages/manager/spaceHome/SpaceHomePage';
-import MyPage from '../pages/mypage/MyPage';
-import PrivacyConsentPage from '../pages/policies/PrivacyConsentPage';
-import PrivacyPolicyPage from '../pages/policies/PrivacyPolicyPage';
-import TermsOfServicePage from '../pages/policies/TermsOfServicePage';
 import type { AppRouteObject } from '../types/route.type';
+
+const KakaoAuthPage = lazy(() => import('../pages/auth/KakaoAuthPage'));
+const DownloadCompletePage = lazy(
+  () => import('../pages/complete/DownloadCompletePage'),
+);
+const UploadCompletePage = lazy(
+  () => import('../pages/complete/UploadCompletePage'),
+);
+const SpaceCreateFunnel = lazy(
+  () => import('../pages/create/funnel/SpaceCreateFunnel'),
+);
+const NetworkErrorPage = lazy(() => import('../pages/error/NetworkErrorPage'));
+const NotFoundErrorPage = lazy(
+  () => import('../pages/error/NotFoundErrorPage'),
+);
+const ImageUploadPage = lazy(
+  () => import('../pages/guest/imageUploadPage/ImageUploadPage'),
+);
+const SharePage = lazy(() => import('../pages/guest/sharePage/SharePage'));
+const InAppBrowserPage = lazy(
+  () => import('../pages/inAppBrowser/InAppBrowserPage'),
+);
+const LandingPage = lazy(() => import('../pages/landing/LandingPage'));
+const LoginPage = lazy(() => import('../pages/login/LoginPage'));
+const LogoutPage = lazy(() => import('../pages/logout/LogoutPage'));
+const MainPage = lazy(() => import('../pages/MainPage'));
+const DashboardPage = lazy(
+  () => import('../pages/manager/dashboard/DashboardPage'),
+);
+const SettingsPage = lazy(
+  () => import('../pages/manager/settings/SettingsPage'),
+);
+const SpaceHomePage = lazy(
+  () => import('../pages/manager/spaceHome/SpaceHomePage'),
+);
+const MyPage = lazy(() => import('../pages/mypage/MyPage'));
+const PrivacyConsentPage = lazy(
+  () => import('../pages/policies/PrivacyConsentPage'),
+);
+const PrivacyPolicyPage = lazy(
+  () => import('../pages/policies/PrivacyPolicyPage'),
+);
+const TermsOfServicePage = lazy(
+  () => import('../pages/policies/TermsOfServicePage'),
+);
+
+const withSuspense = (element: React.ReactNode) => (
+  <Suspense fallback={<div>불러오는 중...</div>}>{element}</Suspense>
+);
 
 const routes: AppRouteObject[] = [
   {
@@ -29,7 +59,7 @@ const routes: AppRouteObject[] = [
     children: [
       {
         path: '/',
-        element: <MainPage />,
+        element: withSuspense(<MainPage />),
         handle: {
           header: true,
           starField: true,
@@ -38,7 +68,7 @@ const routes: AppRouteObject[] = [
       },
       {
         path: '/landing',
-        element: <LandingPage />,
+        element: withSuspense(<LandingPage />),
         handle: {
           header: true,
           starField: true,
@@ -54,11 +84,11 @@ const routes: AppRouteObject[] = [
       // },
       {
         path: 'create',
-        element: <SpaceCreateFunnel />,
+        element: withSuspense(<SpaceCreateFunnel />),
       },
       {
         path: 'space/:spaceCode',
-        element: <SpaceHomePage />,
+        element: withSuspense(<SpaceHomePage />),
         handle: {
           header: true,
           starField: true,
@@ -68,7 +98,7 @@ const routes: AppRouteObject[] = [
 
       {
         path: 'space/:spaceCode/dashboard',
-        element: <DashboardPage />,
+        element: withSuspense(<DashboardPage />),
         handle: {
           header: true,
           highlight: true,
@@ -76,7 +106,7 @@ const routes: AppRouteObject[] = [
       },
       {
         path: 'space/:spaceCode/settings',
-        element: <SettingsPage />,
+        element: withSuspense(<SettingsPage />),
         handle: {
           header: true,
           highlight: true,
@@ -84,7 +114,7 @@ const routes: AppRouteObject[] = [
       },
       {
         path: 'guest/image-upload/:spaceCode',
-        element: <ImageUploadPage />,
+        element: withSuspense(<ImageUploadPage />),
         handle: {
           starField: true,
           highlight: true,
@@ -93,11 +123,11 @@ const routes: AppRouteObject[] = [
       },
       {
         path: 'share',
-        element: <SharePage />,
+        element: withSuspense(<SharePage />),
       },
       {
         path: 'mypage',
-        element: <MyPage />,
+        element: withSuspense(<MyPage />),
         handle: {
           header: true,
           highlight: true,
@@ -105,7 +135,7 @@ const routes: AppRouteObject[] = [
       },
       {
         path: 'logout',
-        element: <LogoutPage />,
+        element: withSuspense(<LogoutPage />),
         handle: {
           header: true,
           highlight: true,
@@ -116,20 +146,20 @@ const routes: AppRouteObject[] = [
         children: [
           {
             path: 'upload',
-            element: <UploadCompletePage />,
+            element: withSuspense(<UploadCompletePage />),
             handle: {
               isInAppBrowserAllow: true,
             },
           },
           {
             path: 'download',
-            element: <DownloadCompletePage />,
+            element: withSuspense(<DownloadCompletePage />),
           },
         ],
       },
       {
         path: 'login',
-        element: <LoginPage />,
+        element: withSuspense(<LoginPage />),
       },
       {
         path: 'auth',
@@ -139,7 +169,7 @@ const routes: AppRouteObject[] = [
             children: [
               {
                 path: 'kakao',
-                element: <KakaoAuthPage />,
+                element: withSuspense(<KakaoAuthPage />),
               },
             ],
           },
@@ -148,22 +178,31 @@ const routes: AppRouteObject[] = [
       {
         path: 'policy',
         children: [
-          { path: 'privacy-policy', element: <PrivacyPolicyPage /> },
-          { path: 'terms-of-service', element: <TermsOfServicePage /> },
-          { path: 'privacy-consent', element: <PrivacyConsentPage /> },
+          {
+            path: 'privacy-policy',
+            element: withSuspense(<PrivacyPolicyPage />),
+          },
+          {
+            path: 'terms-of-service',
+            element: withSuspense(<TermsOfServicePage />),
+          },
+          {
+            path: 'privacy-consent',
+            element: withSuspense(<PrivacyConsentPage />),
+          },
         ],
       },
       {
         path: 'in-app-browser',
-        element: <InAppBrowserPage />,
+        element: withSuspense(<InAppBrowserPage />),
       },
       {
         path: 'network-error',
-        element: <NetworkErrorPage />,
+        element: withSuspense(<NetworkErrorPage />),
       },
       {
         path: '*',
-        element: <NotFoundErrorPage />,
+        element: withSuspense(<NotFoundErrorPage />),
       },
     ],
   },
