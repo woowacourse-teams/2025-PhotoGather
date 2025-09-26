@@ -8,14 +8,14 @@
     />
     <script>
       if ('serviceWorker' in navigator) {
-          window.addEventListener('load', () => {
+          window.addEventListener('show', () => {
               navigator.serviceWorker.register(`/streaming-download.js?v=${Date.now()}`, {type: 'module'}).then(registration => {
                   console.log('Service Worker registered successfully.');
               }).catch(error => {
                   console.log('Service Worker registration failed:', error);
               });
           });
-          window.addEventListener('beforeunload', () => {
+          window.addEventListener('pagehide', () => {
             if (navigator.serviceWorker.controller) {
              navigator.serviceWorker.controller.postMessage({
              type: 'STOP_DOWNLOAD',
