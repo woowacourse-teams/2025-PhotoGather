@@ -46,20 +46,31 @@ const useLocalFile = ({ fileType }: UseLocalFileProps) => {
     }
   };
 
+  const processFile = async (file: File) => {
+    const isAndroidChrome =
+      /Android/i.test(navigator.userAgent) &&
+      /Chrome/i.test(navigator.userAgent);
+
+    if (isAndroidChrome) {
+      const buf = await file.arrayBuffer();
+      return new File([buf], file.name, { type: file.type });
+    }
+    return file;
+  };
+
   const addPreviewUrlsFromFiles = async (files: File[]) => {
     const startIndex = localFiles.length;
 
     const tmpFiles = await Promise.all(
       files.map(async (file, index) => {
-        const buf = await file.arrayBuffer();
-        const cloned = new File([buf], file.name, { type: file.type });
+        const processedFile = await processFile(file);
 
         return {
           id: startIndex + index,
-          originFile: cloned,
-          capturedAt: await extractDateTimeOriginal(cloned),
-          capacityValue: cloned.size,
-          previewUrl: await createImagePreviewUrl(cloned),
+          originFile: processedFile,
+          capturedAt: await extractDateTimeOriginal(processedFile),
+          capacityValue: processedFile.size,
+          previewUrl: await createImagePreviewUrl(processedFile),
         };
       }),
     );
