@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import Profile from '../components/profile/Profile';
+import Profile from '../components/@common/profile/Profile';
 import { theme } from '../styles/theme';
 
 const meta: Meta<typeof Profile> = {

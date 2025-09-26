@@ -1,11 +1,11 @@
 import { useNavigate } from 'react-router-dom';
-import AccessTypeIcon from '../../../../components/accessTypeIcon/AccessTypeIcon';
-import LeftTimeInformationBox from '../../../../components/leftTimeInformationBox/LeftTimeInformationBox';
+import AccessTypeIcon from '../../../../components/@common/accessTypeIcon/AccessTypeIcon';
+import LeftTimeInformationBox from '../../../../components/specific/leftTimeInformationBox/LeftTimeInformationBox';
 import { INFORMATION } from '../../../../constants/messages';
 import { ROUTES } from '../../../../constants/routes';
 import useLeftTimer from '../../../../hooks/@common/useLeftTimer';
-import useAgreements from '../../../../hooks/domain/useAgreements';
-import useCreateSpace from '../../../../hooks/useCreateSpace';
+import useAgreements from '../../../../hooks/domain/auth/useAgreements';
+import useCreateSpace from '../../../../hooks/domain/space/useCreateSpace';
 import type { FunnelElementProps } from '../../../../types/funnel.type';
 import type { SpaceFunnelInfo } from '../../../../types/space.type';
 import { calculateKstToday } from '../../../../utils/calculateKstToday';
@@ -49,6 +49,7 @@ const CheckSpaceInfoElement = ({
       validHours: 72,
       openedAt: calculatedOpenedAt,
       type: spaceInfo.accessType,
+      inbox: spaceInfo.isInboxEnabled,
     });
     if (!spaceCode) return;
 

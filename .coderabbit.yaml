@@ -1,0 +1,55 @@
+language: "ko-KR"  # 리뷰 언어
+tone_instructions: "각 코드 라인을 세심하게 검토하고, 개선점이 있는 라인에 직접 인라인 코멘트를 달아주세요. 정확한 피드백을 제공해주세요."
+reviews:
+  profile: "assertive"  # 리뷰 강도 설정
+  high_level_summary: false  # PR 전체 요약
+  high_level_summary_placeholder: ""  # PR 본문에 요약 삽입할 플레이스홀더
+  poem: false  # 시 생성
+  changed_files_summary: false  # 변경된 파일들의 요약 생성
+  sequence_diagrams: false  # 시퀀스 다이어그램 생성
+  estimate_code_review_effort: false  # 코드 리뷰 노력 추정
+  related_issues: false  # 관련 이슈 찾기
+  related_prs: false  # 관련 PR 찾기
+  suggested_labels: false  # 라벨 제안
+  suggested_reviewers: false  # 리뷰어 제안
+  auto_review:  # 자동 리뷰 설정
+    enabled: true  # 자동 리뷰 활성화
+    drafts: false  # 드래프트 PR 리뷰
+    base_branches:  # 리뷰할 기본 브랜치
+      - develop
+    ignore_usernames:  # 리뷰에서 제외할 사용자
+      - ShinjungOh
+      - hanheel
+      - H0ngJu
+      - MinSungJe
+      - songsunkook
+      - ykmxxi
+      - Hacanna42
+
+  finishing_touches:  # 마무리 작업
+    docstrings:  # 문서 문자열 생성
+      enabled: false  # docstring 자동 생성
+    unit_tests:  # 단위 테스트 생성
+      enabled: false  # unit test 자동 생성
+
+  pre_merge_checks:  # 머지 전 체크
+    docstrings:  # docstring 커버리지
+      mode: "off"
+    title:  # PR 제목
+      mode: "off"
+    description:  # PR 설명
+      mode: "off"
+    issue_assessment:  # 이슈 평가
+      mode: "off"
+
+tools:  # 추가 분석 도구
+  eslint:  # JavaScript/TypeScript
+    enabled: true
+  gitleaks:  # 민감정보 체크
+    enabled: true
+
+knowledge_base:  # 지식 베이스 설정
+  code_guidelines:  # 코딩 가이드라인 설정
+    enabled: true  # 코딩 가이드라인 활성화
+    filePatterns:  # 가이드라인 파일 패턴 목록
+      - "./coderabbit_rules.md"  # 프로젝트 루트의 CodeRabbit 규칙 파일
