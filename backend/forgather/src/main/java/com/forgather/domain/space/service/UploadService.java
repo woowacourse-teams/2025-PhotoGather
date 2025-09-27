@@ -44,7 +44,7 @@ public class UploadService {
     @Transactional
     public void saveAll(String spaceCode, List<MultipartFile> multipartFiles, Long guestId) {
         Space space = spaceRepository.getUnexpiredSpaceByCode(spaceCode);
-        Guest guest = guestRepository.getById(guestId);
+        Guest guest = guestRepository.getByIdOrThrow(guestId);
         space.validateGuest(guest);
         for (MultipartFile multipartFile : multipartFiles) {
             PhotoMetaData metaData = MetaDataExtractor.extractPhotoMetaData(multipartFile);
@@ -84,7 +84,7 @@ public class UploadService {
     @Transactional
     public void saveUploadedPhotos(String spaceCode, SaveUploadedPhotoRequest request, Long guestId) {
         Space space = spaceRepository.getUnexpiredSpaceByCode(spaceCode);
-        Guest guest = guestRepository.getById(guestId);
+        Guest guest = guestRepository.getByIdOrThrow(guestId);
         space.validateGuest(guest);
 
         List<Photo> photos = request.uploadedPhotos().stream()
@@ -95,7 +95,7 @@ public class UploadService {
 
     public void cancelUpload(String spaceCode, CancelUploadRequest request, Long guestId) {
         Space space = spaceRepository.getUnexpiredSpaceByCode(spaceCode);
-        Guest guest = guestRepository.getById(guestId);
+        Guest guest = guestRepository.getByIdOrThrow(guestId);
         space.validateGuest(guest);
 
         List<String> cancelFileNames = request.cancelFileNames()
