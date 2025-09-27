@@ -4,7 +4,7 @@ const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const DotenvPlugin = require('dotenv-webpack');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const ImageMinimizerPlugin = require('image-minimizer-webpack-plugin');
-
+const TerserPlugin = require('terser-webpack-plugin');
 const SpeedMeasurePlugin = require('speed-measure-webpack-plugin');
 const smp = new SpeedMeasurePlugin();
 
@@ -166,6 +166,20 @@ module.exports = (_, argv) => {
                     filename: 'static/images/[name][ext]',
                   },
                 ],
+              }),
+              new TerserPlugin({
+                parallel: true,
+                terserOptions: {
+                  compress: {
+                    drop_console: true,
+                    pure_funcs: ['console.log'],
+                  },
+                  format: {
+                    comments: false,
+                  },
+                  mangle: true,
+                },
+                extractComments: false,
               }),
             ]
           : []),
