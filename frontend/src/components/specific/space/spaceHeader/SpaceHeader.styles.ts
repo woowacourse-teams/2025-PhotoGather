@@ -20,9 +20,12 @@ export const TitleContainer = styled.div`
   gap: 8px;
 `;
 
-export const Title = styled.p`
+export const Title = styled.h1`
   ${({ theme }) => ({ ...theme.typography.header01 })};
   color: ${({ theme }) => theme.colors.white};
+  &:focus {
+    outline: none;
+  }
 `;
 
 export const IconContainer = styled.div`
@@ -35,7 +38,7 @@ export const TimerContainer = styled.div`
   gap: 7px;
 `;
 
-export const TextContainer = styled.p<{ $isWithinOneHour: boolean }>`
+export const TextContainer = styled.h2<{ $isWithinOneHour: boolean }>`
   ${({ theme }) => theme.typography.bodyRegular};
   color: ${({ theme, $isWithinOneHour }) =>
     $isWithinOneHour ? theme.colors.error : theme.colors.white};

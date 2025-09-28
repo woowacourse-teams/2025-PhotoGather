@@ -131,6 +131,7 @@ module.exports = (_, argv) => {
         },
       ],
       port: 3000,
+      allowedHosts: 'all',
       hot: true,
       open: true,
       historyApiFallback: true,

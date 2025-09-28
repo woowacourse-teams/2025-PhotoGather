@@ -168,6 +168,12 @@ const SpaceHomePage = () => {
     photosListLoadingState,
   ]);
 
+  useEffect(() => {
+    setTimeout(() => {
+      document.querySelector('h1')?.focus();
+    }, 100);
+  }, []);
+
   const renderBodyContent = () => {
     if (isEarlyTime) return <EarlyPage openedAt={spaceInfo?.openedAt ?? ''} />;
     if (isSpaceExpired) return <ExpiredPage />;

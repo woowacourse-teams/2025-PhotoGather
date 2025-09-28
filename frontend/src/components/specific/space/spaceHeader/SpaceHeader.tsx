@@ -18,7 +18,7 @@ SpaceHeader.TitleContainer = ({ children }: { children: React.ReactNode }) => (
 );
 
 SpaceHeader.Title = ({ children }: { children: React.ReactNode }) => (
-  <S.Title>{children}</S.Title>
+  <S.Title tabIndex={-1}>{children}</S.Title>
 );
 
 SpaceHeader.AccessType = ({ accessType }: { accessType: SpaceAccessType }) => (
