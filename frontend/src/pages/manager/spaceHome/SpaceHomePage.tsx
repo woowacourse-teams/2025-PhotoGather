@@ -59,6 +59,7 @@ const SpaceHomePage = () => {
     updatePhotos,
     isEndPage,
     thumbnailPhotoMap,
+    infiniteScrollAnnouncerRef,
   } = usePhotosBySpaceCode({
     reObserve,
     spaceCode: spaceInfo?.spaceCode ?? '',
@@ -163,9 +164,6 @@ const SpaceHomePage = () => {
     isSpaceExpired,
     isEarlyTime,
     hasAccess,
-    accessLoadingState,
-    spaceInfoLoadingState,
-    photosListLoadingState,
   ]);
 
   useEffect(() => {
@@ -251,7 +249,11 @@ const SpaceHomePage = () => {
           currentAmount={currentProgress}
         />
       )}
-
+      <div
+        ref={infiniteScrollAnnouncerRef}
+        aria-live="polite"
+        className="sr-only"
+      />
       <C.HeaderContainer ref={scrollTopTriggerRef}>
         <ManagerHeader
           spaceName={spaceInfo?.name ?? ''}

@@ -27,6 +27,8 @@ const usePhotosBySpaceCode = ({
   const totalPages = useRef(1);
   const { tryFetch, loadingState } = useTaskHandler();
 
+  const infiniteScrollAnnouncerRef = useRef<HTMLDivElement>(null);
+
   const thumbnailPhotoMap = useMemo(() => {
     // TODO : thumbnail 이미지 참조 실패시 원본 이미지 참조하도록 설정
     if (!photosList) return new Map();
@@ -58,23 +60,38 @@ const usePhotosBySpaceCode = ({
   };
 
   const fetchPhotosList = async () => {
+    if (!infiniteScrollAnnouncerRef.current) return;
+
     const pageToFetch = currentPage.current;
     const response = await fetchFunc(spaceCode, {
       page: pageToFetch,
       size: PAGE_SIZE,
     });
+    console.log('Fetch');
 
     if (!response || !response.data) return;
+
+    const { photos, totalPages: updatedTotalPages } = response.data;
+    appendPhotosList(photos, updatedTotalPages);
+    if (currentPage.current > 1) {
+      announcedPhotoLoad(photos.length);
+    }
+
     currentPage.current += 1;
 
-    const { photos, totalPages } = response.data;
-    appendPhotosList(photos, totalPages);
-
-    if (currentPage.current < totalPages) {
+    if (currentPage.current < updatedTotalPages) {
       requestAnimationFrame(() => {
         reObserve();
       });
     }
+  };
+
+  const announcedPhotoLoad = (newCount: number) => {
+    console.log(currentPage.current, totalPages.current);
+
+    if (!infiniteScrollAnnouncerRef.current) return;
+
+    infiniteScrollAnnouncerRef.current.textContent = `${newCount}장의 사진이 추가되었습니다.`;
   };
 
   const tryFetchPhotosList = async () => {
@@ -98,6 +115,7 @@ const usePhotosBySpaceCode = ({
     photosList,
     photosListLoadingState: loadingState.photosList,
     updatePhotos,
+    infiniteScrollAnnouncerRef,
   };
 };
 

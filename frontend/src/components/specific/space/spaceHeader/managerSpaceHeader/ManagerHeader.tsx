@@ -130,7 +130,7 @@ const ManagerHeader = ({
   return (
     <SpaceHeader>
       <div id="page-announcer" aria-live="polite" className="sr-only">
-        현재 스페이스에 100장의 사진이 있습니다.
+        100장의 사진이 있습니다.
       </div>
       <SpaceHeader.TitleSection>
         <SpaceHeader.TitleContainer>

@@ -43,7 +43,7 @@ const SpaceManagerImageElement = ({
     >
       <C.Image
         src={thumbnailUrl}
-        alt={alt}
+        alt={`2025-09-28 ${alt}`}
         className="clarity-mask-photo"
         loading="lazy"
       />
