@@ -29,6 +29,7 @@ const SpaceFooter = ({
             ariaLabel="페이지 상단으로 이동"
             icon={<UpwardArrowIcon fill={theme.colors.white} />}
             onClick={goToTop}
+            role="link"
           />
         )}
       </S.TopButtonContainer>
