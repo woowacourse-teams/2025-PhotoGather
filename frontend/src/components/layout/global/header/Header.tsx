@@ -51,7 +51,11 @@ const Header = ({
 
   return (
     <S.Wrapper>
-      <button type="button" onClick={() => navigate(ROUTES.MYPAGE)}>
+      <button
+        type="button"
+        onClick={() => navigate(ROUTES.MYPAGE)}
+        aria-label="메인 페이지로 이동"
+      >
         <Logo fill={theme.colors.white} width={100} />
       </button>
       {createActionButton()}

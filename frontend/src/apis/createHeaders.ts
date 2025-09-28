@@ -10,7 +10,7 @@ export const createHeaders = (
 
   const headers: HeadersInit = withTraceId
     ? {
-        // 'trace-id': traceId, /
+        // 'trace-id': traceId,
       }
     : {};
 
