@@ -38,7 +38,7 @@ export const TimerContainer = styled.div`
   gap: 7px;
 `;
 
-export const TextContainer = styled.h2<{ $isWithinOneHour: boolean }>`
+export const TextContainer = styled.p<{ $isWithinOneHour: boolean }>`
   ${({ theme }) => theme.typography.bodyRegular};
   color: ${({ theme, $isWithinOneHour }) =>
     $isWithinOneHour ? theme.colors.error : theme.colors.white};
