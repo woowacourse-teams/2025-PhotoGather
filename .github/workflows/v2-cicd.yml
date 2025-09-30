@@ -12,6 +12,10 @@ on:
     paths:
       - 'backend/**'
 
+defaults:
+  run:
+    working-directory: backend/forgather
+
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
