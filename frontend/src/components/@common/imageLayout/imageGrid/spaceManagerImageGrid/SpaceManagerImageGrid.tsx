@@ -24,7 +24,6 @@ const SpaceManagerImageGrid = ({
   selectedPhotoMap,
   isSelectMode,
 }: SpaceManagerImageGridProps) => {
-  console.log(photoData);
   return (
     <S.Wrapper $rowImageAmount={rowImageAmount}>
       {photoData.map((photo, index) => (

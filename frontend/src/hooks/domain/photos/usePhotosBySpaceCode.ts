@@ -87,8 +87,6 @@ const usePhotosBySpaceCode = ({
   };
 
   const announcedPhotoLoad = (newCount: number) => {
-    console.log(currentPage.current, totalPages.current);
-
     if (!infiniteScrollAnnouncerRef.current) return;
 
     infiniteScrollAnnouncerRef.current.textContent = `${newCount}장의 사진이 추가되었습니다.`;
