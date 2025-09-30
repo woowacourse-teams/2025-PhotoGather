@@ -44,3 +44,37 @@ jobs:
         if: always()
         with:
           files: '**/build/test-results/test/TEST-*.xml'
+
+deploy:
+  needs: build-and-test
+  runs-on: ubuntu-latest
+  if: github.event_name == 'push'
+
+  steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Download build artifacts
+      uses: actions/download-artifact@v4
+      with:
+        name: spring-boot-jar
+        path: build/libs/
+
+    - name: Deploy to Development Server
+      env:
+        DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+        DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
+        DEPLOY_KEY: ${{ secrets.DEPLOY_KEY }}
+      run: |
+        echo "Deploying to development server..."
+        # SSH를 통한 배포 예시
+        # mkdir -p ~/.ssh
+        # echo "$DEPLOY_KEY" > ~/.ssh/deploy_key
+        # chmod 600 ~/.ssh/deploy_key
+        # scp -i ~/.ssh/deploy_key build/libs/*.jar $DEPLOY_USER@$DEPLOY_HOST:/app/
+        # ssh -i ~/.ssh/deploy_key $DEPLOY_USER@$DEPLOY_HOST "sudo systemctl restart spring-app"
+
+    - name: Notify deployment status
+      if: always()
+      run: |
+        echo "Deployment completed with status: ${{ job.status }}"
