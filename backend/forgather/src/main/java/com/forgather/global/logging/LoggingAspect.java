@@ -18,6 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class LoggingAspect {
 
+    // TODO cicd 테스트
     @Around("@within(org.springframework.stereotype.Service))")
     public Object loggingService(final ProceedingJoinPoint joinPoint) throws Throwable {
         return logging(joinPoint);
