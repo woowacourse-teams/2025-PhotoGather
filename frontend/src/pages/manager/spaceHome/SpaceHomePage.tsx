@@ -183,7 +183,9 @@ const SpaceHomePage = () => {
       return (
         <>
           <C.ImageManagementContainer>
-            <div className="sr-only"></div>
+            <a href="#download-fab" className="skip-link">
+              모두 저장하기 바로가기
+            </a>
             <Button
               text="수신함 📩"
               variant="darkRounded"
@@ -200,6 +202,7 @@ const SpaceHomePage = () => {
             {!isSelectMode && (
               <S.DownloadButtonContainer>
                 <FloatingActionButton
+                  id="download-fab"
                   label="모두 저장하기"
                   icon={<DownloadIcon fill={theme.colors.gray06} />}
                   onClick={() => {
