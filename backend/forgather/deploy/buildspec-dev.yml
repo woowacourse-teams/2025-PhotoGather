@@ -7,7 +7,7 @@ phases:
     commands:
       - echo "Git clone 시작"
       - rm -rf *  # 소스 스테이지에서 내려온 불완전한 zip 제거
-      - git clone https://github.com/woowacourse-teams/2025-PhotoGather.git
+      - git clone -b v2/develop --single-branch https://github.com/woowacourse-teams/2025-PhotoGather.git
       - cd 2025-PhotoGather
       - echo "[install] git-crypt 설치"
       - sudo apt-get install git-crypt
