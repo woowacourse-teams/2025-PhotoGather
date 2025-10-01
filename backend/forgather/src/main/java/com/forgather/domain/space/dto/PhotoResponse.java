@@ -49,7 +49,7 @@ public record PhotoResponse(
     ) {
 
         public static InnerGuest from(Guest guest) {
-            return new InnerGuest(guest.getId(), guest.getName());
+            return new InnerGuest(guest.getId(), guest.getNickname());
         }
     }
 }

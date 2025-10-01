@@ -1,17 +1,13 @@
 package com.forgather.domain.guest.model;
 
 import com.forgather.domain.model.BaseTimeEntity;
-import com.forgather.domain.space.model.Space;
 import com.forgather.global.exception.BaseException;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import lombok.AccessLevel;
@@ -28,34 +24,21 @@ public class Guest extends BaseTimeEntity {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "space_id", nullable = false)
-    private Space space;
+    @Column(name = "nickname", length = 100)
+    private String nickname;
 
-    @Column(name = "name", length = 100)
-    private String name;
-
-    public Guest(Space space, String name) {
-        this.space = space;
-        this.name = name;
-        validate();
-    }
-
-    public void rename(String name) {
-        this.name = name;
+    public Guest(String nickname) {
+        this.nickname = nickname;
         validate();
     }
 
     @PrePersist
     @PreUpdate
     private void validate() {
-        if (space == null) {
-            throw new BaseException("스페이스가 설정되지 않았습니다.");
-        }
-        if (name == null || name.isEmpty()) {
+        if (nickname == null || nickname.isEmpty()) {
             throw new BaseException("게스트 이름이 비어있습니다.");
         }
-        if (name.length() > 10) {
+        if (nickname.length() > 10) {
             throw new BaseException("게스트 이름은 10자를 초과할 수 없습니다.");
         }
     }
