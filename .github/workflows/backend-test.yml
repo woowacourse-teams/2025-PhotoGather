@@ -5,12 +5,16 @@ on:
     branches:
       - main
       - develop
+      - v2/main
+      - v2/develop
     paths:
       - 'backend/**'
   pull_request:
     branches:
       - main
       - develop
+      - v2/main
+      - v2/develop
     paths:
       - 'backend/**'
 
