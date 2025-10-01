@@ -1,2 +1,0 @@
-ALTER TABLE host
-    ADD COLUMN agreed_terms BOOLEAN NOT NULL DEFAULT FALSE AFTER picture_url;

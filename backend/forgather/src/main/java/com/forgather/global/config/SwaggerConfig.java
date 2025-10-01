@@ -42,6 +42,6 @@ public class SwaggerConfig {
         return new Info()
             .title("Forgather API")
             .description("당신을 위한 순간, 흩어지지 않게. Forgather")
-            .version("1.0.0");
+            .version("2.0.0");
     }
 }

@@ -1,80 +1,143 @@
--- 1. space
-CREATE TABLE space
+CREATE TABLE `guest`
 (
-    id           BIGINT AUTO_INCREMENT PRIMARY KEY,
-    code         VARCHAR(64)                        NOT NULL,
-    name         VARCHAR(255) CHARACTER SET utf8mb4 NOT NULL,
-    valid_hours  INT                                NOT NULL,
-    opened_at    TIMESTAMP                          NOT NULL,
-    max_capacity BIGINT                             NOT NULL DEFAULT 10737418240, -- 10GB default
-    created_at   TIMESTAMP                          NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at   TIMESTAMP                          NOT NULL DEFAULT CURRENT_TIMESTAMP
+    `id`         BIGINT       NOT NULL AUTO_INCREMENT,
+    `nickname`   VARCHAR(255) NOT NULL,
+    `created_at` TIMESTAMP    NOT NULL,
+    `updated_at` TIMESTAMP    NOT NULL,
+    PRIMARY KEY (`id`)
 );
 
--- 2. guest
-CREATE TABLE guest
+CREATE TABLE `host`
 (
-    id         BIGINT AUTO_INCREMENT PRIMARY KEY,
-    space_id   BIGINT    NOT NULL,
-    name       VARCHAR(100),
-    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT guest_space_fk FOREIGN KEY (space_id) REFERENCES space (id)
+    `id`          BIGINT    NOT NULL AUTO_INCREMENT,
+    `name`        VARCHAR(255) NULL,
+    `picture_url` VARCHAR(255) NULL,
+    `created_at`  TIMESTAMP NOT NULL,
+    `updated_at`  TIMESTAMP NOT NULL,
+    PRIMARY KEY (`id`)
 );
 
-
--- 3. space_content
-CREATE TABLE space_content
+CREATE TABLE `space`
 (
-    id           BIGINT AUTO_INCREMENT PRIMARY KEY,
-    content_type VARCHAR(16) NOT NULL,
-    space_id     BIGINT      NOT NULL,
-    guest_id     BIGINT      NULL DEFAULT NULL,
-    CONSTRAINT space_content_space_fk FOREIGN KEY (space_id) REFERENCES space (id),
-    CONSTRAINT space_content_guest_fk FOREIGN KEY (guest_id) REFERENCES guest (id)
+    `id`                 BIGINT       NOT NULL AUTO_INCREMENT,
+    `code`               VARCHAR(64)  NOT NULL,
+    `name`               VARCHAR(255) NOT NULL,
+    `description`        VARCHAR(255) NULL,
+    `is_public`          TINYINT(1)	NOT NULL DEFAULT 0,
+    `instagram_username` VARCHAR(255) NULL,
+    `email`              VARCHAR(255) NULL,
+    `opened_at`          TIMESTAMP    NOT NULL,
+    `created_at`         TIMESTAMP    NOT NULL,
+    `updated_at`         TIMESTAMP    NOT NULL,
+    PRIMARY KEY (`id`)
 );
 
--- 4. photo
-CREATE TABLE photo
+CREATE TABLE `space_host_map`
 (
-    id            BIGINT       NOT NULL AUTO_INCREMENT,
-    original_name VARCHAR(255) NOT NULL,
-    path          VARCHAR(255) NOT NULL,
-    captured_at   TIMESTAMP    NULL     DEFAULT NULL,
-    capacity      BIGINT       NOT NULL,
-    created_at    TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    PRIMARY KEY (id),
-    CONSTRAINT photo_space_content_fk FOREIGN KEY (id) REFERENCES space_content (id)
+    `id`         BIGINT    NOT NULL AUTO_INCREMENT,
+    `space_id`   BIGINT    NOT NULL,
+    `host_id`    BIGINT    NOT NULL,
+    `created_at` TIMESTAMP NOT NULL,
+    `updated_at` TIMESTAMP NOT NULL,
+    PRIMARY KEY (`id`)
 );
 
--- 5. host
-CREATE TABLE host
+CREATE TABLE `host_kakao`
 (
-    id          BIGINT AUTO_INCREMENT PRIMARY KEY,
-    name        VARCHAR(100),
-    picture_url VARCHAR(255),
-    created_at  TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at  TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+    `id`      BIGINT       NOT NULL AUTO_INCREMENT,
+    `host_id` BIGINT       NOT NULL,
+    `user_id` VARCHAR(255) NOT NULL,
+    PRIMARY KEY (`id`)
 );
 
--- 6. space_host_map
-CREATE TABLE space_host_map
+CREATE TABLE `guest_book_card`
 (
-    id         BIGINT    NOT NULL AUTO_INCREMENT,
-    space_id   BIGINT    NOT NULL,
-    host_id    BIGINT    NOT NULL,
-    created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
-    PRIMARY KEY (id),
-    CONSTRAINT space_host_map_space_fk FOREIGN KEY (space_id) REFERENCES space (id),
-    CONSTRAINT space_host_map_host_fk FOREIGN KEY (host_id) REFERENCES host (id)
+    `id`         BIGINT    NOT NULL AUTO_INCREMENT,
+    `space_id`   BIGINT    NOT NULL,
+    `guest_id`   BIGINT    NOT NULL,
+    `message`    VARCHAR(255) NULL,
+    `created_at` TIMESTAMP NOT NULL,
+    `updated_at` TIMESTAMP NOT NULL,
+    PRIMARY KEY (`id`)
 );
 
--- 7. host_kakao
-CREATE TABLE host_kakao
+CREATE TABLE `guest_book_card_photo`
 (
-    id      BIGINT AUTO_INCREMENT PRIMARY KEY,
-    host_id BIGINT       NOT NULL,
-    user_id VARCHAR(100) NOT NULL,
-    CONSTRAINT fk_host_kakao_host FOREIGN KEY (host_id) REFERENCES host (id)
+    `id`                 BIGINT       NOT NULL AUTO_INCREMENT,
+    `guest_book_card_id` BIGINT       NOT NULL,
+    `original_name`      VARCHAR(255) NOT NULL,
+    `path`               VARCHAR(255) NOT NULL,
+    `captured_at`        TIMESTAMP NULL,
+    `capacity`           BIGINT       NOT NULL,
+    `created_at`         TIMESTAMP    NOT NULL,
+    `updated_at`         TIMESTAMP    NOT NULL,
+    PRIMARY KEY (`id`)
 );
+
+CREATE TABLE `product`
+(
+    `id`          BIGINT NOT NULL AUTO_INCREMENT,
+    `space_id`    BIGINT NOT NULL,
+    `title`       VARCHAR(255) NULL,
+    `category`    VARCHAR(255) NULL,
+    `author_name` VARCHAR(255) NULL,
+    `description` VARCHAR(255) NULL,
+    `created_at`  TIMESTAMP NULL,
+    `updated_at`  TIMESTAMP NULL,
+    PRIMARY KEY (`id`)
+);
+
+CREATE TABLE `product_photo`
+(
+    `id`            BIGINT NOT NULL AUTO_INCREMENT,
+    `product_id`    BIGINT NOT NULL,
+    `order`         INT NULL,
+    `original_name` VARCHAR(255) NULL,
+    `path`          VARCHAR(255) NULL,
+    `capacity`      BIGINT NULL,
+    `captured_at`   TIMESTAMP NULL,
+    `created_at`    TIMESTAMP NULL,
+    `updated_at`    TIMESTAMP NULL,
+    PRIMARY KEY (`id`)
+);
+
+CREATE TABLE `space_photo`
+(
+    `id`            BIGINT NOT NULL AUTO_INCREMENT,
+    `space_id`      BIGINT NOT NULL,
+    `original_name` VARCHAR(255) NULL,
+    `path`          VARCHAR(255) NULL,
+    `captured_at`   VARCHAR(255) NULL,
+    `capacity`      BIGINT NULL,
+    `created_at`    TIMESTAMP NULL,
+    `updated_at`    TIMESTAMP NULL,
+    PRIMARY KEY (`id`)
+);
+
+-- Foreign Key Constraints
+ALTER TABLE `space_host_map`
+    ADD CONSTRAINT `FK_space_TO_space_host_map` FOREIGN KEY (`space_id`) REFERENCES `space` (`id`);
+
+ALTER TABLE `space_host_map`
+    ADD CONSTRAINT `FK_host_TO_space_host_map` FOREIGN KEY (`host_id`) REFERENCES `host` (`id`);
+
+ALTER TABLE `host_kakao`
+    ADD CONSTRAINT `FK_host_TO_host_kakao` FOREIGN KEY (`host_id`) REFERENCES `host` (`id`);
+
+ALTER TABLE `guest_book_card`
+    ADD CONSTRAINT `FK_space_TO_guest_book_card` FOREIGN KEY (`space_id`) REFERENCES `space` (`id`);
+
+ALTER TABLE `guest_book_card`
+    ADD CONSTRAINT `FK_guest_TO_guest_book_card` FOREIGN KEY (`guest_id`) REFERENCES `guest` (`id`);
+
+ALTER TABLE `guest_book_card_photo`
+    ADD CONSTRAINT `FK_guest_book_card_TO_guest_book_card_photo` FOREIGN KEY (`guest_book_card_id`) REFERENCES `guest_book_card` (`id`);
+
+ALTER TABLE `product`
+    ADD CONSTRAINT `FK_space_TO_product` FOREIGN KEY (`space_id`) REFERENCES `space` (`id`);
+
+ALTER TABLE `product_photo`
+    ADD CONSTRAINT `FK_product_TO_product_photo` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`);
+
+ALTER TABLE `space_photo`
+    ADD CONSTRAINT `FK_space_TO_space_photo` FOREIGN KEY (`space_id`) REFERENCES `space` (`id`);
