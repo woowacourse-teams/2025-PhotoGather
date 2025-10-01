@@ -1,4 +1,4 @@
-package com.forgather.domain.space.model;
+package com.forgather.domain.upload.domain;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -7,7 +7,6 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import com.forgather.domain.upload.domain.UploadFileName;
 import com.forgather.global.exception.BaseException;
 
 class UploadFileNameTest {

@@ -1,4 +1,4 @@
-package com.forgather.domain.space.model;
+package com.forgather.domain.upload.domain;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 

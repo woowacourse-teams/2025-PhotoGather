@@ -1,6 +1,5 @@
 package com.forgather.domain.upload.domain;
 
-import com.forgather.domain.space.model.FileExtension;
 import com.forgather.global.exception.BaseException;
 
 public class UploadFileName {
