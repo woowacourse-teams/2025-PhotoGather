@@ -68,7 +68,6 @@ CREATE TABLE `guest_book_card_photo`
     `guest_book_card_id` BIGINT       NOT NULL,
     `original_name`      VARCHAR(255) NOT NULL,
     `path`               VARCHAR(255) NOT NULL,
-    `captured_at`        TIMESTAMP NULL,
     `capacity`           BIGINT       NOT NULL,
     `created_at`         TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `updated_at`         TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -96,7 +95,6 @@ CREATE TABLE `product_photo`
     `original_name` VARCHAR(255) NULL,
     `path`          VARCHAR(255) NULL,
     `capacity`      BIGINT NULL,
-    `captured_at`   TIMESTAMP NULL,
     `created_at`    TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `updated_at`    TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`)
@@ -109,7 +107,6 @@ CREATE TABLE `space_photo`
     `original_name` VARCHAR(255) NULL,
     `path`          VARCHAR(255) NULL,
     `capacity`      BIGINT NULL,
-    `captured_at`   TIMESTAMP NULL,
     `created_at`    TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `updated_at`    TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`)
