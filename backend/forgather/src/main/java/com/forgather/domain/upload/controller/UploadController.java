@@ -1,12 +1,10 @@
-package com.forgather.domain.space.controller;
+package com.forgather.domain.upload.controller;
 
 import static org.springframework.http.HttpStatus.CREATED;
-import static org.springframework.http.MediaType.APPLICATION_FORM_URLENCODED_VALUE;
 
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,15 +14,12 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.forgather.domain.space.dto.CancelUploadRequest;
 import com.forgather.domain.space.dto.IssueSignedUrlRequest;
 import com.forgather.domain.space.dto.IssueSignedUrlResponse;
 import com.forgather.domain.space.dto.SaveUploadedPhotoRequest;
-import com.forgather.domain.space.service.UploadService;
+import com.forgather.domain.upload.service.UploadService;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -58,20 +53,6 @@ public class UploadController {
     ) {
         var response = uploadService.issueSignedUrls(spaceCode, request);
         return ResponseEntity.ok(response);
-    }
-
-    @PostMapping(value = "/upload/cancel", consumes = APPLICATION_FORM_URLENCODED_VALUE, produces = "application/json")
-    @io.swagger.v3.oas.annotations.parameters.RequestBody(
-        content = @Content(mediaType = APPLICATION_FORM_URLENCODED_VALUE,
-            schema = @Schema(implementation = CancelUploadRequest.class)))
-    @Operation(summary = "사진 업로드 취소", description = "업로드 취소 발생 시 클라우드 저장소에 업로드 된 사진들을 일괄 삭제합니다.")
-    public ResponseEntity<Void> cancelUpload(
-        @PathVariable String spaceCode,
-        @ModelAttribute CancelUploadRequest request,
-        @RequestParam(name = "guestId", required = false) Long guestId
-    ) {
-        uploadService.cancelUpload(spaceCode, request, guestId);
-        return ResponseEntity.noContent().build();
     }
 
     @PostMapping

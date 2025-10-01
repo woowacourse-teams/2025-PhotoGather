@@ -23,7 +23,7 @@ public class LoggingAspect {
         return logging(joinPoint);
     }
 
-    @Around("execution(* com.forgather.domain.space.service.AwsS3Cloud.*(..))")
+    @Around("execution(* com.forgather.domain.upload.AwsS3Cloud.*(..))")
     public Object loggingCloudStorage(final ProceedingJoinPoint joinPoint) throws Throwable {
         return logging(joinPoint);
     }

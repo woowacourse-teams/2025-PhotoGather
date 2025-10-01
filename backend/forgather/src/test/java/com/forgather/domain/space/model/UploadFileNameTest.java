@@ -7,6 +7,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import com.forgather.domain.upload.domain.UploadFileName;
 import com.forgather.global.exception.BaseException;
 
 class UploadFileNameTest {

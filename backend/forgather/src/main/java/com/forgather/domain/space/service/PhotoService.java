@@ -29,6 +29,7 @@ import com.forgather.domain.space.model.Space;
 import com.forgather.domain.space.repository.PhotoRepository;
 import com.forgather.domain.space.repository.SpaceRepository;
 import com.forgather.domain.space.util.ZipGenerator;
+import com.forgather.domain.upload.ContentsStorage;
 import com.forgather.global.auth.model.Host;
 import com.forgather.global.exception.BaseException;
 import com.forgather.global.exception.UnauthorizedException;

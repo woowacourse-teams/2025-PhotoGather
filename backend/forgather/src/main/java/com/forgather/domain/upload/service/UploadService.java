@@ -1,4 +1,4 @@
-package com.forgather.domain.space.service;
+package com.forgather.domain.upload.service;
 
 import static com.forgather.domain.space.util.FilePathGenerator.generateContentsFilePath;
 
@@ -13,7 +13,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.forgather.domain.guest.model.Guest;
 import com.forgather.domain.guest.repository.GuestRepository;
-import com.forgather.domain.space.dto.CancelUploadRequest;
 import com.forgather.domain.space.dto.IssueSignedUrlRequest;
 import com.forgather.domain.space.dto.IssueSignedUrlResponse;
 import com.forgather.domain.space.dto.SaveUploadedPhotoRequest;
@@ -23,6 +22,7 @@ import com.forgather.domain.space.model.Space;
 import com.forgather.domain.space.repository.PhotoRepository;
 import com.forgather.domain.space.repository.SpaceRepository;
 import com.forgather.domain.space.util.MetaDataExtractor;
+import com.forgather.domain.upload.ContentsStorage;
 import com.forgather.global.exception.BaseException;
 import com.forgather.global.exception.FileUploadException;
 
@@ -45,7 +45,6 @@ public class UploadService {
     public void saveAll(String spaceCode, List<MultipartFile> multipartFiles, Long guestId) {
         Space space = spaceRepository.getUnexpiredSpaceByCode(spaceCode);
         Guest guest = guestRepository.getByIdOrThrow(guestId);
-        space.validateGuest(guest);
         for (MultipartFile multipartFile : multipartFiles) {
             PhotoMetaData metaData = MetaDataExtractor.extractPhotoMetaData(multipartFile);
             String uploadedPath = upload(spaceCode, multipartFile);
@@ -85,23 +84,10 @@ public class UploadService {
     public void saveUploadedPhotos(String spaceCode, SaveUploadedPhotoRequest request, Long guestId) {
         Space space = spaceRepository.getUnexpiredSpaceByCode(spaceCode);
         Guest guest = guestRepository.getByIdOrThrow(guestId);
-        space.validateGuest(guest);
 
         List<Photo> photos = request.uploadedPhotos().stream()
             .map(uploadedPhoto -> uploadedPhoto.toEntity(space, guest, contentsStorage.getRootDirectory()))
             .toList();
         photoRepository.saveAll(photos);
-    }
-
-    public void cancelUpload(String spaceCode, CancelUploadRequest request, Long guestId) {
-        Space space = spaceRepository.getUnexpiredSpaceByCode(spaceCode);
-        Guest guest = guestRepository.getByIdOrThrow(guestId);
-        space.validateGuest(guest);
-
-        List<String> cancelFileNames = request.cancelFileNames()
-            .stream()
-            .map(fileName -> generateContentsFilePath(contentsStorage.getRootDirectory(), spaceCode, fileName))
-            .toList();
-        contentsStorage.deleteContents(cancelFileNames);
     }
 }

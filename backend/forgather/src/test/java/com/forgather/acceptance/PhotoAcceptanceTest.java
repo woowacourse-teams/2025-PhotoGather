@@ -29,7 +29,7 @@ import com.forgather.domain.space.model.SpaceType;
 import com.forgather.domain.space.repository.HostRepository;
 import com.forgather.domain.space.repository.PhotoRepository;
 import com.forgather.domain.space.repository.SpaceRepository;
-import com.forgather.domain.space.service.AwsS3Cloud;
+import com.forgather.domain.upload.AwsS3Cloud;
 import com.forgather.global.auth.model.Host;
 import com.forgather.global.auth.util.JwtTokenProvider;
 
