@@ -15,7 +15,7 @@ reviews:
   auto_review:  # 자동 리뷰 설정
     enabled: true  # 자동 리뷰 활성화
     drafts: false  # 드래프트 PR 리뷰
-    base_branches: ["develop", "v2/develop"]# 리뷰할 기본 브랜치
+    base_branches: ["develop", "v2/develop"] # 리뷰할 기본 브랜치
     ignore_usernames: ["ShinjungOh", "hanheel", "H0ngJu", "MinSungJe", "songsunkook", "Hacanna42"] # 리뷰에서 제외할 사용자
   finishing_touches:  # 마무리 작업
     docstrings:  # 문서 문자열 생성
@@ -25,13 +25,13 @@ reviews:
 
   pre_merge_checks:  # 머지 전 체크
     docstrings:  # docstring 커버리지
-      mode: off
+      mode: "off"
     title:  # PR 제목
-      mode: off
+      mode: "off"
     description:  # PR 설명
-      mode: off
+      mode: "off"
     issue_assessment:  # 이슈 평가
-      mode: off
+      mode: "off"
 
 tools:  # 추가 분석 도구
   eslint:  # JavaScript/TypeScript

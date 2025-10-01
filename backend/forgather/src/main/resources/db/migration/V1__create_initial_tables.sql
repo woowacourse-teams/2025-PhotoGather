@@ -2,8 +2,8 @@ CREATE TABLE `guest`
 (
     `id`         BIGINT       NOT NULL AUTO_INCREMENT,
     `nickname`   VARCHAR(255) NOT NULL,
-    `created_at` TIMESTAMP    NOT NULL,
-    `updated_at` TIMESTAMP    NOT NULL,
+    `created_at` TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `updated_at` TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`)
 );
 
@@ -12,8 +12,8 @@ CREATE TABLE `host`
     `id`          BIGINT    NOT NULL AUTO_INCREMENT,
     `name`        VARCHAR(255) NULL,
     `picture_url` VARCHAR(255) NULL,
-    `created_at`  TIMESTAMP NOT NULL,
-    `updated_at`  TIMESTAMP NOT NULL,
+    `created_at`  TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `updated_at`  TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`)
 );
 
@@ -27,8 +27,8 @@ CREATE TABLE `space`
     `instagram_username` VARCHAR(255) NULL,
     `email`              VARCHAR(255) NULL,
     `opened_at`          TIMESTAMP    NOT NULL,
-    `created_at`         TIMESTAMP    NOT NULL,
-    `updated_at`         TIMESTAMP    NOT NULL,
+    `created_at`         TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `updated_at`         TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`)
 );
 
@@ -37,8 +37,8 @@ CREATE TABLE `space_host_map`
     `id`         BIGINT    NOT NULL AUTO_INCREMENT,
     `space_id`   BIGINT    NOT NULL,
     `host_id`    BIGINT    NOT NULL,
-    `created_at` TIMESTAMP NOT NULL,
-    `updated_at` TIMESTAMP NOT NULL,
+    `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`)
 );
 
@@ -56,8 +56,8 @@ CREATE TABLE `guest_book_card`
     `space_id`   BIGINT    NOT NULL,
     `guest_id`   BIGINT    NOT NULL,
     `message`    VARCHAR(255) NULL,
-    `created_at` TIMESTAMP NOT NULL,
-    `updated_at` TIMESTAMP NOT NULL,
+    `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`)
 );
 
@@ -69,48 +69,48 @@ CREATE TABLE `guest_book_card_photo`
     `path`               VARCHAR(255) NOT NULL,
     `captured_at`        TIMESTAMP NULL,
     `capacity`           BIGINT       NOT NULL,
-    `created_at`         TIMESTAMP    NOT NULL,
-    `updated_at`         TIMESTAMP    NOT NULL,
+    `created_at`         TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `updated_at`         TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`)
 );
 
 CREATE TABLE `product`
 (
-    `id`          BIGINT NOT NULL AUTO_INCREMENT,
-    `space_id`    BIGINT NOT NULL,
+    `id`          BIGINT    NOT NULL AUTO_INCREMENT,
+    `space_id`    BIGINT    NOT NULL,
     `title`       VARCHAR(255) NULL,
     `category`    VARCHAR(255) NULL,
     `author_name` VARCHAR(255) NULL,
     `description` VARCHAR(255) NULL,
-    `created_at`  TIMESTAMP NULL,
-    `updated_at`  TIMESTAMP NULL,
+    `created_at`  TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `updated_at`  TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`)
 );
 
 CREATE TABLE `product_photo`
 (
-    `id`            BIGINT NOT NULL AUTO_INCREMENT,
-    `product_id`    BIGINT NOT NULL,
-    `order`         INT NULL,
+    `id`            BIGINT    NOT NULL AUTO_INCREMENT,
+    `product_id`    BIGINT    NOT NULL,
+    `sort_order`    INT NULL,
     `original_name` VARCHAR(255) NULL,
     `path`          VARCHAR(255) NULL,
     `capacity`      BIGINT NULL,
     `captured_at`   TIMESTAMP NULL,
-    `created_at`    TIMESTAMP NULL,
-    `updated_at`    TIMESTAMP NULL,
+    `created_at`    TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `updated_at`    TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`)
 );
 
 CREATE TABLE `space_photo`
 (
-    `id`            BIGINT NOT NULL AUTO_INCREMENT,
-    `space_id`      BIGINT NOT NULL,
+    `id`            BIGINT    NOT NULL AUTO_INCREMENT,
+    `space_id`      BIGINT    NOT NULL,
     `original_name` VARCHAR(255) NULL,
     `path`          VARCHAR(255) NULL,
-    `captured_at`   VARCHAR(255) NULL,
     `capacity`      BIGINT NULL,
-    `created_at`    TIMESTAMP NULL,
-    `updated_at`    TIMESTAMP NULL,
+    `captured_at`   TIMESTAMP NULL,
+    `created_at`    TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `updated_at`    TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`)
 );
 
@@ -141,3 +141,5 @@ ALTER TABLE `product_photo`
 
 ALTER TABLE `space_photo`
     ADD CONSTRAINT `FK_space_TO_space_photo` FOREIGN KEY (`space_id`) REFERENCES `space` (`id`);
+
+CREATE UNIQUE INDEX `UX_space_code` ON `space` (`code`);
