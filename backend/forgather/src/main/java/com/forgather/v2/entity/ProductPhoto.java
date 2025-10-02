@@ -2,6 +2,8 @@ package com.forgather.v2.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.ManyToOne;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,6 +12,9 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ProductPhoto extends Photo {
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Product product;
 
     @Column(name = "sort_order", nullable = false)
     private int sortOrder;
