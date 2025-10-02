@@ -6,7 +6,9 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "lint": "eslint .",
+    "format:styles": "prettier --write 'src/styles/**/*.{ts,tsx,js,jsx}' 'src/**/*.styles.{ts,tsx,js,jsx}'",
+    "lint:biome": "biome check src",
+    "lint:styles": "prettier --check 'src/styles/**/*.{ts,tsx,js,jsx}' 'src/**/*.styles.{ts,tsx,js,jsx}'",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -16,6 +18,7 @@
     "react-dom": "^19.1.1"
   },
   "devDependencies": {
+    "@biomejs/biome": "2.2.4",
     "@eslint/js": "^9.36.0",
     "@types/node": "^24.6.0",
     "@types/react": "^19.1.16",
@@ -25,6 +28,7 @@
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.22",
     "globals": "^16.4.0",
+    "prettier": "3.6.2",
     "typescript": "~5.9.3",
     "typescript-eslint": "^8.45.0",
     "vite": "^7.1.7"
