@@ -1,5 +1,6 @@
 import { createBrowserRouter } from 'react-router-dom';
 import Layout from '../components/layout/global/layout/Layout';
+import MainPage from '../pages/MainPage';
 import type { AppRouteObject } from '../types/route.type';
 
 const routes: AppRouteObject[] = [

@@ -1,29 +1,20 @@
 import {
   cloneElement,
-  createContext,
   isValidElement,
   type PropsWithChildren,
   type ReactElement,
-  useContext,
   useEffect,
   useRef,
   useState,
 } from 'react';
 import Overlay from '../components/@common/overlay/Overlay';
 import type { BaseModalProps } from '../types/modal.type';
+import type { OverlayOpenFn, OverlayOptions } from '../types/overlay.type';
+import { OverlayContext } from './OverlayContext';
 
 const defaultOverlayClickOption = {
   clickOverlayClose: false,
 };
-
-type OverlayOptions = {
-  clickOverlayClose?: boolean;
-};
-
-type OverlayOpenFn = <T = unknown>(
-  children: ReactElement,
-  options?: OverlayOptions,
-) => Promise<T>;
 
 interface OverlayState<T> {
   content: ReactElement;
@@ -31,8 +22,6 @@ interface OverlayState<T> {
   resolver?: (value: T) => void;
   id: number;
 }
-
-export const OverlayContext = createContext<OverlayOpenFn | null>(null);
 
 const OverlayProvider = ({ children }: PropsWithChildren) => {
   //biome-ignore lint/suspicious/noExplicitAny: any 형식만 허용
@@ -135,13 +124,3 @@ const OverlayProvider = ({ children }: PropsWithChildren) => {
 };
 
 export default OverlayProvider;
-
-export const useOverlay = () => {
-  const context = useContext(OverlayContext);
-
-  if (context === null) {
-    throw new Error('useOverlay is only available within OverlayProvider.');
-  }
-
-  return context;
-};

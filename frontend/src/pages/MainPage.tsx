@@ -1,5 +1,11 @@
+import { PrivateIcon } from '../@assets/icons';
+
 const MainPage = () => {
-  return <div>MainPage</div>;
+  return (
+    <div>
+      <PrivateIcon color="white" />
+    </div>
+  );
 };
 
 export default MainPage;
