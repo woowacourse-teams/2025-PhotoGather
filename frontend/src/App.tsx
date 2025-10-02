@@ -1,11 +1,25 @@
-import './App.css';
+import { ThemeProvider } from '@emotion/react';
+import { useEffect } from 'react';
+import { RouterProvider } from 'react-router-dom';
+import { ToastProvider } from './contexts/ToastProvider';
+import router from './router/router';
+import GlobalStyle from './styles/GlobalStyle';
+import { theme } from './styles/theme';
+import { goToTop } from './utils/goToTop';
 
-function App() {
+const App = () => {
+  useEffect(() => {
+    goToTop();
+  }, []);
+
   return (
-    <div>
-      <p>새 프로젝트 설정중</p>
-    </div>
+    <ThemeProvider theme={theme}>
+      <GlobalStyle />
+      <ToastProvider>
+        <RouterProvider router={router} />
+      </ToastProvider>
+    </ThemeProvider>
   );
-}
+};
 
 export default App;

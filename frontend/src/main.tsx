@@ -1,5 +1,4 @@
 import { createRoot } from 'react-dom/client';
-import './index.css';
 import App from './App.tsx';
 
 // biome-ignore lint/style/noNonNullAssertion : 루트에서 non-null 무시
