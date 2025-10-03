@@ -2,6 +2,8 @@ package com.forgather.domain.product.model;
 
 import com.forgather.domain.model.BaseTimeEntity;
 import com.forgather.domain.space.model.Space;
+import com.forgather.global.exception.BaseException;
+import com.forgather.global.exception.BaseNullPointerException;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -41,10 +43,45 @@ public class Product extends BaseTimeEntity {
     private String description;
 
     public Product(Space space, String title, String category, String authorName, String description) {
+        validateSpace(space);
+        validateTitle(title);
+        validateCategory(category);
+        validateAuthorName(authorName);
+        validateDescription(description);
         this.space = space;
         this.title = title;
         this.category = category;
         this.authorName = authorName;
         this.description = description;
+    }
+
+    private void validateSpace(Space space) {
+        if (space == null) {
+            throw new BaseNullPointerException("스페이스는 null일 수 없습니다.");
+        }
+    }
+
+    private void validateTitle(String title) {
+        if (title != null && title.length() > 50) {
+            throw new BaseException("작품명은 최대 50자입니다. title.length(): " + title.length());
+        }
+    }
+
+    private void validateCategory(String category) {
+        if (category != null && category.length() > 20) {
+            throw new BaseException("작품 카테고리는 최대 20자입니다. category.length(): " + category.length());
+        }
+    }
+
+    private void validateAuthorName(String authorName) {
+        if (authorName != null && authorName.length() > 20) {
+            throw new BaseException("작가명은 최대 20자입니다. authorName.length(): " + authorName.length());
+        }
+    }
+
+    private void validateDescription(String description) {
+        if (description != null && description.length() > 1000) {
+            throw new BaseException("작품 설명은 최대 1000자입니다. description.length(): " + description.length());
+        }
     }
 }
