@@ -1,7 +1,8 @@
-package com.forgather.domain.product;
+package com.forgather.domain.product.dto;
 
 import java.util.List;
 
+import com.forgather.domain.product.model.Product;
 import com.forgather.domain.space.model.Space;
 
 public record CreateProductRequest(

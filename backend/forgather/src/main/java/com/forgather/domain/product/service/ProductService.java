@@ -1,4 +1,4 @@
-package com.forgather.domain.product;
+package com.forgather.domain.product.service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,6 +6,11 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.forgather.domain.product.dto.CreatePhotoRequest;
+import com.forgather.domain.product.dto.CreateProductRequest;
+import com.forgather.domain.product.dto.CreateProductResponse;
+import com.forgather.domain.product.model.Product;
+import com.forgather.domain.product.model.ProductPhoto;
 import com.forgather.domain.product.repository.ProductPhotoRepository;
 import com.forgather.domain.product.repository.ProductRepository;
 import com.forgather.domain.space.model.Space;

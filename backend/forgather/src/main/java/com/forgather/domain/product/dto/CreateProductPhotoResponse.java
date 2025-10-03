@@ -1,4 +1,6 @@
-package com.forgather.domain.product;
+package com.forgather.domain.product.dto;
+
+import com.forgather.domain.product.model.ProductPhoto;
 
 public record CreateProductPhotoResponse(
     long id,

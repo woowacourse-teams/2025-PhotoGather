@@ -1,4 +1,4 @@
-package com.forgather.domain.product;
+package com.forgather.domain.product.model;
 
 import com.forgather.domain.model.BaseTimeEntity;
 import com.forgather.domain.space.model.Space;
