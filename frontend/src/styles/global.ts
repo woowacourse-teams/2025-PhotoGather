@@ -1,16 +1,10 @@
 import { css } from '@emotion/react';
-import RobotoRegular from '../@assets/fonts/Roboto-Mono-regular.woff2';
 
 export const global = css`
   * {
     box-sizing: border-box;
     font-family: inherit;
     font-synthesis: none;
-  }
-  @font-face {
-    font-family: 'Roboto';
-    src: url(${RobotoRegular}) format('woff2');
-    font-display: swap;
   }
   body {
     font-family: 'SUIT', 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;
