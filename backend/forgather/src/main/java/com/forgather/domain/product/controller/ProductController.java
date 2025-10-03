@@ -28,7 +28,7 @@ public class ProductController {
     /**
      * TODO
      * 스페이스-호스트 검증
-     * 입력값 검증
+     * dto단 검증
      */
     @PostMapping
     public ResponseEntity<CreateProductResponse> create(

@@ -23,7 +23,8 @@ public class ProductPhoto extends Photo {
     @Column(name = "sort_order", nullable = false)
     private int sortOrder;
 
-    public ProductPhoto(Product product, int sortOrder) {
+    public ProductPhoto(Product product, String originalName, String path, long capacity, int sortOrder) {
+        super(originalName, path, capacity);
         this.product = product;
         this.sortOrder = sortOrder;
     }

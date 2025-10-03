@@ -1,7 +1,6 @@
 package com.forgather.domain.space.dto;
 
 import com.forgather.domain.space.model.Space;
-import com.forgather.global.auth.model.Host;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
@@ -23,7 +22,7 @@ public record CreateSpaceRequest(
     String email
 ) {
 
-    public Space toEntity(String spaceCode, String pictureUrl, Host host) {
-        return new Space(host, spaceCode, name, description, pictureUrl, isPublic, instagramUsername, email);
+    public Space toEntity(String spaceCode, String pictureUrl) {
+        return new Space(spaceCode, name, description, pictureUrl, isPublic, instagramUsername, email);
     }
 }

@@ -5,11 +5,11 @@ import com.forgather.domain.product.model.ProductPhoto;
 
 public record CreatePhotoRequest(
     String originalName,
-    long capacity,
-    String path
+    String path,
+    long capacity
 ) {
 
     public ProductPhoto toEntity(Product product, int sortOrder) {
-        return new ProductPhoto(product, sortOrder);
+        return new ProductPhoto(product, originalName, path, capacity, sortOrder);
     }
 }

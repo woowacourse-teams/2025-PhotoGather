@@ -8,9 +8,11 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.MappedSuperclass;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
 @MappedSuperclass
+@NoArgsConstructor
 public abstract class Photo extends BaseTimeEntity {
 
     @Id
@@ -25,4 +27,10 @@ public abstract class Photo extends BaseTimeEntity {
 
     @Column(name = "capacity", nullable = false)
     private Long capacity; // bytes
+
+    protected Photo(String originalName, String path, Long capacity) {
+        this.originalName = originalName;
+        this.path = path;
+        this.capacity = capacity;
+    }
 }

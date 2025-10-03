@@ -6,6 +6,7 @@ import com.forgather.domain.product.model.Product;
 import com.forgather.domain.product.model.ProductPhoto;
 
 public record CreateProductResponse(
+    Long id,
     String title,
     String category,
     String authorName,
@@ -14,7 +15,8 @@ public record CreateProductResponse(
 ) {
 
     public CreateProductResponse(Product product, List<ProductPhoto> photos) {
-        this(product.getTitle(),
+        this(product.getId(),
+            product.getTitle(),
             product.getCategory(),
             product.getAuthorName(),
             product.getDescription(),
