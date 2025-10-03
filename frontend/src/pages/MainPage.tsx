@@ -1,4 +1,3 @@
-import { PrivateIcon } from '../@assets/icons';
 import { useToast } from '../hooks/@common/useToast';
 
 const MainPage = () => {
@@ -6,7 +5,6 @@ const MainPage = () => {
 
   return (
     <div>
-      <PrivateIcon />
       <p>글꼴 확인</p>
       <button
         type="button"

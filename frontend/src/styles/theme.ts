@@ -46,4 +46,14 @@ export const theme = {
       lineHeight: '120%',
     },
   },
+  zIndex: {
+    toast: 500,
+  },
+  layout: {
+    width: '400px',
+    padding: {
+      topBottom: '32px',
+      leftRight: '16px',
+    },
+  },
 };

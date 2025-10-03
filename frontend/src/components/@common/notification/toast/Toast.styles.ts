@@ -1,5 +1,4 @@
 import styled from '@emotion/styled';
-import { InfoIcon } from '../../../../@assets/icons';
 
 export const Wrapper = styled.div<{
   $visible: boolean;
@@ -13,7 +12,7 @@ export const Wrapper = styled.div<{
   max-height: 100px;
   gap: 12px;
   background-color: ${({ theme, $type }) =>
-    $type === 'error' ? theme.colors.lightError : theme.colors.accent};
+    $type === 'error' ? theme.colors.error : theme.colors.white};
   padding: 8px 12px;
   border-radius: 50px;
   align-items: center;
@@ -47,20 +46,4 @@ export const TextContainer = styled.p`
   color: ${({ theme }) => theme.colors.gray06};
   ${({ theme }) => theme.typography.bodyRegular};
   white-space: pre-line;
-`;
-
-export const Icon = styled(InfoIcon, {
-  shouldForwardProp: (prop) => prop === 'type',
-})<{ $type: 'error' | 'info' }>`
-  width: 100%;
-  height: 100%;
-
-  & circle {
-    fill: ${({ theme, $type }) =>
-      $type === 'error' ? theme.colors.lightError : theme.colors.lightAccent};
-  }
-
-  & path {
-    fill: ${({ theme }) => theme.colors.gray06};
-  }
 `;
