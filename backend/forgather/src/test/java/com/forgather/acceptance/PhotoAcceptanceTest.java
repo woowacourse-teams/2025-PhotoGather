@@ -79,7 +79,8 @@ class PhotoAcceptanceTest extends AcceptanceTest {
     void getPhoto() {
         // given
         var host = hostRepository.save(new Host("모코", "pictureUrl"));
-        var space = spaceRepository.save(new Space(host, "space-code", "test-space", 3, LocalDateTime.now(), SpaceType.PRIVATE));
+        var space = spaceRepository.save(new Space(host, "space-code", "test-space", "description",
+            "forgather/temp.png", false, "forgather_official", "forgather@forgather.me"));
         var guest = guestRepository.save(new Guest("guest"));
         var photo = photoRepository.save(new Photo(space, guest, "originalName.jpg", "path",
             new PhotoMetaData(LocalDateTime.now()), 1024L));
@@ -106,7 +107,8 @@ class PhotoAcceptanceTest extends AcceptanceTest {
     void issuePreSignedUrls() {
         // given
         var host = hostRepository.save(new Host("모코", "pictureUrl"));
-        var space = spaceRepository.save(new Space(host, "space-code", "test-space", 3, LocalDateTime.now(), SpaceType.PRIVATE));
+        var space = spaceRepository.save(new Space(host, "space-code", "test-space", "description",
+            "forgather/temp.png", false, "forgather_official", "forgather@forgather.me"));
         var request = new IssueSignedUrlRequest(List.of("UUID1.png", "UUID2.png", "UUID3.png"));
 
         // when
@@ -132,7 +134,8 @@ class PhotoAcceptanceTest extends AcceptanceTest {
     void issueExceedPreSignedUrls() {
         // given
         var host = hostRepository.save(new Host("모코", "pictureUrl"));
-        var space = spaceRepository.save(new Space(host, "space-code", "test-space", 3, LocalDateTime.now(), SpaceType.PRIVATE));
+        var space = spaceRepository.save(new Space(host, "space-code", "test-space", "description",
+            "forgather/temp.png", false, "forgather_official", "forgather@forgather.me"));
         var request = new IssueSignedUrlRequest(IntStream.range(0, 101)
             .mapToObj(i -> "UUID" + (i + 1) + ".png")
             .toList());
@@ -159,7 +162,8 @@ class PhotoAcceptanceTest extends AcceptanceTest {
     void issueSingleDownloadUrl() {
         // given
         var host = hostRepository.save(new Host("모코", "pictureUrl"));
-        var space = spaceRepository.save(new Space(host, "space-code", "test-space", 3, LocalDateTime.now(), SpaceType.PRIVATE));
+        var space = spaceRepository.save(new Space(host, "space-code", "test-space", "description",
+            "forgather/temp.png", false, "forgather_official", "forgather@forgather.me"));
         var guest = guestRepository.save(new Guest("guest"));
         var photo = photoRepository.save(new Photo(space, guest, "origin1.png", "path",
             new PhotoMetaData(LocalDateTime.now()), 1024L));
@@ -186,7 +190,8 @@ class PhotoAcceptanceTest extends AcceptanceTest {
     void issueSelectedDownloadUrl() {
         // given
         var host = hostRepository.save(new Host("모코", "pictureUrl"));
-        var space = spaceRepository.save(new Space(host, "space-code", "test-space", 3, LocalDateTime.now(), SpaceType.PRIVATE));
+        var space = spaceRepository.save(new Space(host, "space-code", "test-space", "description",
+            "forgather/temp.png", false, "forgather_official", "forgather@forgather.me"));
         var guest = guestRepository.save(new Guest("guest"));
         Photo photo = photoRepository.save(
             new Photo(space, guest, "origin1.png", "path1", new PhotoMetaData(LocalDateTime.now()), 1024L));
@@ -217,9 +222,11 @@ class PhotoAcceptanceTest extends AcceptanceTest {
     void issueAllDownloadUrl() {
         // given
         var host = hostRepository.save(new Host("모코", "pictureUrl"));
-        var space = spaceRepository.save(new Space(host, "space-code", "test-space", 3, LocalDateTime.now(), SpaceType.PRIVATE));
+        var space = spaceRepository.save(new Space(host, "space-code", "test-space", "description",
+            "forgather/temp.png", false, "forgather_official", "forgather@forgather.me"));
         var guest = guestRepository.save(new Guest("guest"));
-        photoRepository.save(new Photo(space, guest, "origin1.png", "path1", new PhotoMetaData(LocalDateTime.now()), 1024L));
+        photoRepository.save(
+            new Photo(space, guest, "origin1.png", "path1", new PhotoMetaData(LocalDateTime.now()), 1024L));
         String token = jwtTokenProvider.generateAccessToken(host.getId());
 
         // when

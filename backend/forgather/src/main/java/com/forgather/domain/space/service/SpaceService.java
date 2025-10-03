@@ -4,18 +4,16 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.forgather.domain.space.dto.CreateSpaceRequest;
 import com.forgather.domain.space.dto.CreateSpaceResponse;
-import com.forgather.domain.space.dto.SpaceCapacityResponse;
 import com.forgather.domain.space.dto.SpaceResponse;
 import com.forgather.domain.space.dto.UpdateSpaceRequest;
-import com.forgather.domain.space.model.Photo;
 import com.forgather.domain.space.model.Space;
 import com.forgather.domain.space.repository.PhotoRepository;
 import com.forgather.domain.space.repository.SpaceRepository;
 import com.forgather.global.auth.model.Host;
-import com.forgather.global.exception.UnauthorizedException;
 import com.forgather.global.util.RandomCodeGenerator;
 
 import lombok.RequiredArgsConstructor;
@@ -28,9 +26,11 @@ public class SpaceService {
     private final PhotoRepository photoRepository;
     private final RandomCodeGenerator codeGenerator;
 
-    public CreateSpaceResponse create(CreateSpaceRequest request, Host host) {
+    public CreateSpaceResponse create(CreateSpaceRequest request, MultipartFile file, Host host) {
         String spaceCode = codeGenerator.generate(10);
-        Space space = spaceRepository.save(request.toEntity(spaceCode, host));
+        // TODO: 스페이스 프로필 저장 후 url 반환해서 전달
+        String pictureUrl = "temp";
+        Space space = spaceRepository.save(request.toEntity(spaceCode, pictureUrl, host));
         return CreateSpaceResponse.from(space);
     }
 
@@ -39,42 +39,11 @@ public class SpaceService {
         return SpaceResponse.from(space);
     }
 
-    public SpaceCapacityResponse getSpaceCapacity(String spaceCode, Host host) {
-        Space space = spaceRepository.getUnexpiredSpaceByCode(spaceCode);
-        if (host != null) {
-            // TODO: 추후 스페이스가 만료되어 소프트 딜리트 되는 경우 용량 정보 제공 고려
-            if (!space.isPublic()) {
-                space.validateHost(host);
-            }
-            // TODO: 부하 발생 때 최적화 고려
-            long usedValue = photoRepository.findAllBySpace(space)
-                .stream()
-                .mapToLong(Photo::getCapacity)
-                .sum();
-            return new SpaceCapacityResponse(space.getMaxCapacity(), usedValue);
-        }
-
-        if (space.isPublic()) {
-            long usedValue = photoRepository.findAllBySpace(space)
-                .stream()
-                .mapToLong(Photo::getCapacity)
-                .sum();
-            return new SpaceCapacityResponse(space.getMaxCapacity(), usedValue);
-        }
-        throw new UnauthorizedException();
-    }
-
     @Transactional
     public SpaceResponse update(String spaceCode, UpdateSpaceRequest request, Host host) {
         Space space = spaceRepository.getByCode(spaceCode);
         space.validateHost(host);
-        space.update(
-            request.name(),
-            request.validHours(),
-            request.openedAt(),
-            request.password(),
-            request.type()
-        );
+        // TODO: update space
 
         return SpaceResponse.from(space);
     }

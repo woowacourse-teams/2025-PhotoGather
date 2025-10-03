@@ -1,8 +1,5 @@
 package com.forgather.domain.space.dto;
 
-import java.time.LocalDateTime;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.forgather.domain.space.model.Space;
 import com.forgather.global.auth.dto.HostResponse;
 
@@ -19,28 +16,23 @@ public record SpaceResponse(
     @Schema(description = "스페이스 이름", example = "My Space")
     String name,
 
-    @Schema(description = "스페이스 유효 시간", example = "72")
-    int validHours,
+    @Schema(description = "스페이스 설명", example = "나의 졸업 전시.")
+    String description,
 
-    @Schema(description = "스페이스 시작 시간", example = "2023-10-01T10:00:00")
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
-    LocalDateTime openedAt,
+    @Schema(description = "스페이스 설명", example = "나의 졸업 전시.")
+    String pictureUrl,
 
-    @Schema(description = "스페이스 만료 시간", example = "2023-10-04T10:00:00")
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
-    LocalDateTime expiredAt,
+    @Schema(description = "스페이스 설명", example = "나의 졸업 전시.")
+    boolean isPublic,
 
-    @Schema(description = "스페이스 만료 여부", example = "false")
-    boolean isExpired,
+    @Schema(description = "스페이스 설명", example = "나의 졸업 전시.")
+    String instagramUsername,
+
+    @Schema(description = "스페이스 설명", example = "나의 졸업 전시.")
+    String email,
 
     @Schema(description = "호스트 정보")
-    HostResponse host,
-
-    @Schema(description = "스페이스에 업로드된 사진 수", example = "500")
-    long photoCount,
-
-    @Schema(description = "스페이스 타입", example = "PRIVATE")
-    String type
+    HostResponse host
 ) {
 
     public static SpaceResponse from(Space space) {
@@ -48,14 +40,13 @@ public record SpaceResponse(
             space.getId(),
             space.getCode(),
             space.getName(),
-            space.getValidHours(),
-            space.getOpenedAt(),
-            space.getExpiredAt(),
-            space.isExpired(LocalDateTime.now()),
+            space.getDescription(),
+            space.getPictureUrl(),
+            space.isPublic(),
+            space.getInstagramUsername(),
+            space.getEmail(),
             // TODO: 스페이스 : 호스트 m:n 관계로 변경 후 수정 필요
-            HostResponse.from(space.getSpaceHostMap().getFirst().getHost()),
-            space.getPhotoCount(),
-            space.getType().name()
+            HostResponse.from(space.getSpaceHostMap().getFirst().getHost())
         );
     }
 }

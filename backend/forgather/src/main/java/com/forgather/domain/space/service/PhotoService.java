@@ -48,7 +48,7 @@ public class PhotoService {
     private final ContentsStorage contentsStorage;
 
     public PhotoResponse get(String spaceCode, Long photoId, Host host) {
-        Space space = spaceRepository.getUnexpiredSpaceByCode(spaceCode);
+        Space space = spaceRepository.getByCode(spaceCode);
         if (!canAccess(space, host)) {
             throw new UnauthorizedException();
         }
@@ -58,7 +58,7 @@ public class PhotoService {
     }
 
     public PhotosResponse getAll(String spaceCode, Pageable pageable, Host host) {
-        Space space = spaceRepository.getUnexpiredSpaceByCode(spaceCode);
+        Space space = spaceRepository.getByCode(spaceCode);
         if (!canAccess(space, host)) {
             throw new UnauthorizedException();
         }
@@ -67,7 +67,7 @@ public class PhotoService {
     }
 
     public File compressSelected(String spaceCode, DownloadPhotosRequest request, Host host) throws IOException {
-        Space space = spaceRepository.getUnexpiredSpaceByCode(spaceCode);
+        Space space = spaceRepository.getByCode(spaceCode);
         if (!canAccess(space, host)) {
             throw new UnauthorizedException();
         }
@@ -77,7 +77,7 @@ public class PhotoService {
     }
 
     public DownloadPhotoResponse download(String spaceCode, Long photoId, Host host) {
-        Space space = spaceRepository.getUnexpiredSpaceByCode(spaceCode);
+        Space space = spaceRepository.getByCode(spaceCode);
         if (!canAccess(space, host)) {
             throw new UnauthorizedException();
         }
@@ -97,7 +97,7 @@ public class PhotoService {
      * 사진 원본 이름 대신 유의미한 이름 변경 추가 논의
      */
     public File compressAll(String spaceCode, Host host) throws IOException {
-        Space space = spaceRepository.getUnexpiredSpaceByCode(spaceCode);
+        Space space = spaceRepository.getByCode(spaceCode);
         if (!canAccess(space, host)) {
             throw new UnauthorizedException();
         }
@@ -121,7 +121,7 @@ public class PhotoService {
     }
 
     public DownloadUrlsResponse getDownloadUrl(String spaceCode, Long photoId, Host host) {
-        Space space = spaceRepository.getUnexpiredSpaceByCode(spaceCode);
+        Space space = spaceRepository.getByCode(spaceCode);
         if (!canAccess(space, host)) {
             throw new UnauthorizedException();
         }
@@ -131,7 +131,7 @@ public class PhotoService {
     }
 
     public DownloadUrlsResponse getSelectedDownloadUrls(String spaceCode, DownloadPhotosRequest request, Host host) {
-        Space space = spaceRepository.getUnexpiredSpaceByCode(spaceCode);
+        Space space = spaceRepository.getByCode(spaceCode);
         if (!canAccess(space, host)) {
             throw new UnauthorizedException();
         }
@@ -144,7 +144,7 @@ public class PhotoService {
     }
 
     public DownloadUrlsResponse getAllDownloadUrls(String spaceCode, Host host) {
-        Space space = spaceRepository.getUnexpiredSpaceByCode(spaceCode);
+        Space space = spaceRepository.getByCode(spaceCode);
         if (!canAccess(space, host)) {
             throw new UnauthorizedException();
         }
@@ -207,19 +207,19 @@ public class PhotoService {
 
     @Transactional
     public void delete(String spaceCode, Long photoId, Host host) {
-        Space space = spaceRepository.getUnexpiredSpaceByCode(spaceCode);
+        Space space = spaceRepository.getByCode(spaceCode);
         space.validateHost(host);
         Photo photo = photoRepository.getByIdOrThrow(photoId);
         photo.validateSpace(space);
 
         // photoRepository.delete(photo);
-        space.getContents().remove(photo); // orphanRemoval이 설정되어 있어 자동으로 삭제됨
+        // space.getContents().remove(photo); // orphanRemoval이 설정되어 있어 자동으로 삭제됨
         contentsStorage.deleteContent(photo.getPath());
     }
 
     @Transactional
     public void deleteSelected(String spaceCode, DeletePhotosRequest request, Host host) {
-        Space space = spaceRepository.getUnexpiredSpaceByCode(spaceCode);
+        Space space = spaceRepository.getByCode(spaceCode);
         space.validateHost(host);
         List<Photo> photos = photoRepository.findAllByIdIn(request.photoIds());
         photos.forEach(photo -> photo.validateSpace(space));
@@ -228,7 +228,7 @@ public class PhotoService {
             .toList();
 
         // photoRepository.deleteAll(photos);
-        space.getContents().removeAll(photos); // // orphanRemoval이 설정되어 있어 자동으로 삭제됨
+        // space.getContents().removeAll(photos); // // orphanRemoval이 설정되어 있어 자동으로 삭제됨
         contentsStorage.deleteContents(paths);
     }
 }

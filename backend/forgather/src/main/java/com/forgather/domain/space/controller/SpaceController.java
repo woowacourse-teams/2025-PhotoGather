@@ -13,11 +13,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.forgather.domain.space.dto.CreateSpaceRequest;
 import com.forgather.domain.space.dto.CreateSpaceResponse;
-import com.forgather.domain.space.dto.SpaceCapacityResponse;
 import com.forgather.domain.space.dto.SpaceResponse;
 import com.forgather.domain.space.dto.UpdateSpaceRequest;
 import com.forgather.domain.space.service.SpaceService;
@@ -40,9 +41,10 @@ public class SpaceController {
     @Operation(summary = "스페이스 생성", description = "새로운 스페이스를 생성합니다.")
     public ResponseEntity<CreateSpaceResponse> create(
         @RequestBody CreateSpaceRequest request,
+        @RequestPart("file") MultipartFile file,
         @LoginHost Host host
     ) {
-        var response = spaceService.create(request, host);
+        var response = spaceService.create(request, file, host);
         return ResponseEntity.status(CREATED).body(response);
     }
 
@@ -70,21 +72,10 @@ public class SpaceController {
         return ResponseEntity.ok(response);
     }
 
-    // TODO: 컨트롤러 분리 및 헷갈리는 도메인 용어 재정의 (호스트 -> 멤버)
     @GetMapping("/me")
     @Operation(summary = "호스트의 스페이스 조회", description = "호스트 ID를 통해 해당 호스트의 스페이스들을 조회합니다.")
     public ResponseEntity<List<SpaceResponse>> getSpacesInformation(@LoginHost Host host) {
         List<SpaceResponse> response = spaceService.getSpacesInformation(host);
-        return ResponseEntity.ok(response);
-    }
-
-    @GetMapping("/{spaceCode}/capacity")
-    @Operation(summary = "스페이스 용량 조회", description = "스페이스의 최대 용량과 현재 사용중인 용량을 조회합니다.")
-    public ResponseEntity<SpaceCapacityResponse> getSpaceCapacities(
-        @PathVariable(name = "spaceCode") String spaceCode,
-        @LoginHost(required = false) Host host
-    ) {
-        var response = spaceService.getSpaceCapacity(spaceCode, host);
         return ResponseEntity.ok(response);
     }
 }
