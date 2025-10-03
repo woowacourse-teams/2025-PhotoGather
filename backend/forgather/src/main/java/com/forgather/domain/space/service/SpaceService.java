@@ -33,13 +33,13 @@ public class SpaceService {
     }
 
     public SpaceResponse getSpaceInformation(String spaceCode) {
-        Space space = spaceRepository.getByCode(spaceCode);
+        Space space = spaceRepository.getByCodeOrThrow(spaceCode);
         return SpaceResponse.from(space);
     }
 
     @Transactional
     public SpaceResponse update(String spaceCode, UpdateSpaceRequest request, Host host) {
-        Space space = spaceRepository.getByCode(spaceCode);
+        Space space = spaceRepository.getByCodeOrThrow(spaceCode);
         space.validateHost(host);
         // TODO: update space
 
@@ -48,7 +48,7 @@ public class SpaceService {
 
     @Transactional
     public void delete(String spaceCode, Host host) {
-        Space space = spaceRepository.getByCode(spaceCode);
+        Space space = spaceRepository.getByCodeOrThrow(spaceCode);
         space.validateHost(host);
         spaceRepository.delete(space);
     }

@@ -1,4 +1,6 @@
-package com.forgather.domain.space.model;
+package com.forgather.domain.product;
+
+import com.forgather.domain.space.model.Photo;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -20,4 +22,9 @@ public class ProductPhoto extends Photo {
 
     @Column(name = "sort_order", nullable = false)
     private int sortOrder;
+
+    public ProductPhoto(Product product, int sortOrder) {
+        this.product = product;
+        this.sortOrder = sortOrder;
+    }
 }

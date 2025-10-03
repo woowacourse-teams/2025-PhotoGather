@@ -40,7 +40,7 @@ public class UploadService {
 
     @Transactional
     public void saveAll(String spaceCode, List<MultipartFile> multipartFiles, Long guestId) {
-        Space space = spaceRepository.getByCode(spaceCode);
+        Space space = spaceRepository.getByCodeOrThrow(spaceCode);
         Guest guest = guestRepository.getByIdOrThrow(guestId);
         for (MultipartFile multipartFile : multipartFiles) {
             PhotoMetaData metaData = MetaDataExtractor.extractPhotoMetaData(multipartFile);
@@ -62,7 +62,7 @@ public class UploadService {
     }
 
     public IssueSignedUrlResponse issueSignedUrls(String spaceCode, IssueSignedUrlRequest request) {
-        spaceRepository.getByCode(spaceCode);
+        spaceRepository.getByCodeOrThrow(spaceCode);
         if (request.uploadFileNames().size() > MAX_COUNT_PER_ISSUE) {
             throw new BaseException("한번에 발급 가능한 업로드 url 개수는 %d개 입니다.".formatted(MAX_COUNT_PER_ISSUE));
         }
