@@ -12,7 +12,7 @@ const routes: AppRouteObject[] = [
         path: '/',
         element: <MainPage />,
         handle: {
-          highlight: true,
+          highlight: false,
         },
       },
     ],
