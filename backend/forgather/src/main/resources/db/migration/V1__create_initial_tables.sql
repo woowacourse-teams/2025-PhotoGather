@@ -27,7 +27,6 @@ CREATE TABLE `space`
     `is_public`          TINYINT(1)	NOT NULL DEFAULT 0,
     `instagram_username` VARCHAR(255) NULL,
     `email`              VARCHAR(255) NULL,
-    `opened_at`          TIMESTAMP    NOT NULL,
     `created_at`         TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `updated_at`         TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`)
