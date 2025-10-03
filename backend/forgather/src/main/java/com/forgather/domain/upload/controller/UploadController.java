@@ -16,7 +16,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.forgather.domain.space.dto.IssueSignedUrlRequest;
 import com.forgather.domain.space.dto.IssueSignedUrlResponse;
-import com.forgather.domain.space.dto.SaveUploadedPhotoRequest;
 import com.forgather.domain.upload.service.UploadService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -59,10 +58,9 @@ public class UploadController {
     @Operation(summary = "업로드 된 사진 정보 일괄 저장", description = "업로드 된 사진 정보를 DB에 저장합니다.")
     public ResponseEntity<Void> saveAll(
         @PathVariable(name = "spaceCode") String spaceCode,
-        @RequestBody SaveUploadedPhotoRequest request,
+        // TODO: presigned-url 업로드 사진 저장 요청
         @RequestParam(name = "guestId", required = false) Long guestId
     ) {
-        uploadService.saveUploadedPhotos(spaceCode, request, guestId);
         return ResponseEntity.status(CREATED).build();
     }
 }

@@ -11,7 +11,6 @@ import com.forgather.domain.space.dto.CreateSpaceResponse;
 import com.forgather.domain.space.dto.SpaceResponse;
 import com.forgather.domain.space.dto.UpdateSpaceRequest;
 import com.forgather.domain.space.model.Space;
-import com.forgather.domain.space.repository.PhotoRepository;
 import com.forgather.domain.space.repository.SpaceRepository;
 import com.forgather.global.auth.model.Host;
 import com.forgather.global.util.RandomCodeGenerator;
@@ -23,7 +22,6 @@ import lombok.RequiredArgsConstructor;
 public class SpaceService {
 
     private final SpaceRepository spaceRepository;
-    private final PhotoRepository photoRepository;
     private final RandomCodeGenerator codeGenerator;
 
     public CreateSpaceResponse create(CreateSpaceRequest request, MultipartFile file, Host host) {

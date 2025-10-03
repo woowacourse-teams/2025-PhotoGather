@@ -120,8 +120,8 @@ public class Space extends BaseTimeEntity {
         if (name == null || name.isBlank()) {
             throw new BaseException("스페이스 이름은 비어있을 수 없습니다. 생성 시도 이름: " + name);
         }
-        if (getCharacterCount(name) > 10) {
-            throw new BaseException("스페이스 이름은 10자를 초과할 수 없습니다. 생성 시도 이름: " + name);
+        if (getCharacterCount(name) > 15) {
+            throw new BaseException("스페이스 이름은 15자를 초과할 수 없습니다. 생성 시도 이름: " + name);
         }
     }
 

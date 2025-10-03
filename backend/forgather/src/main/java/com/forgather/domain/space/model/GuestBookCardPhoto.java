@@ -1,4 +1,4 @@
-package com.forgather.v2.entity;
+package com.forgather.domain.space.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
