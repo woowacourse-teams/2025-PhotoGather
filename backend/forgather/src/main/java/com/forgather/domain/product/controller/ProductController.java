@@ -8,10 +8,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.forgather.domain.product.service.ProductService;
 import com.forgather.domain.product.dto.CreateProductRequest;
 import com.forgather.domain.product.dto.CreateProductResponse;
+import com.forgather.domain.product.service.ProductService;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,7 +30,9 @@ public class ProductController {
      * TODO
      * 스페이스-호스트 검증
      * dto단 검증
+     * 이미 존재하는 경우
      */
+    @Operation(summary = "작품 생성")
     @PostMapping
     public ResponseEntity<CreateProductResponse> create(
         @PathVariable(value = "spaceCode") String spaceCode,
