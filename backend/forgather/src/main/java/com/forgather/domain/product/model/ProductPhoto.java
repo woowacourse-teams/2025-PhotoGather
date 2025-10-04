@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ProductPhoto extends Photo {
+public class ProductPhoto extends Photo implements Comparable<ProductPhoto> {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id", nullable = false)
@@ -23,9 +23,29 @@ public class ProductPhoto extends Photo {
     @Column(name = "sort_order", nullable = false)
     private int sortOrder;
 
-    public ProductPhoto(Product product, String originalName, String path, long capacity, int sortOrder) {
+    // TODO 파라미터 검증
+    public ProductPhoto(long id, Product product, String originalName, String path, long capacity, int order) {
+        super(id, originalName, path, capacity);
+        this.product = product;
+        this.sortOrder = order;
+    }
+
+    public ProductPhoto(Product product, String originalName, String path, long capacity, int order) {
         super(originalName, path, capacity);
         this.product = product;
-        this.sortOrder = sortOrder;
+        this.sortOrder = order;
+    }
+
+    public void changeOrder(int order) {
+        sortOrder = order;
+    }
+
+    public void pullOrder() {
+        sortOrder--;
+    }
+
+    @Override
+    public int compareTo(ProductPhoto productPhoto) {
+        return sortOrder - productPhoto.sortOrder;
     }
 }

@@ -1,5 +1,6 @@
 package com.forgather.domain.product.model;
 
+import static com.forgather.fixture.ProductFixture.createProduct;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.jupiter.api.DisplayName;
@@ -11,7 +12,7 @@ class ProductPhotoTest {
     @Test
     void pullOrder() {
         // given
-        ProductPhoto productPhoto = new ProductPhoto(null, "originalName", "path", 1024, 3);
+        ProductPhoto productPhoto = new ProductPhoto(createProduct(), "originalName", "path", 1024, 3);
 
         // when
         productPhoto.pullOrder();

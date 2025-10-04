@@ -5,7 +5,10 @@ import static com.forgather.fixture.ProductFixture.createProductWithCategory;
 import static com.forgather.fixture.ProductFixture.createProductWithDescription;
 import static com.forgather.fixture.ProductFixture.createProductWithSpace;
 import static com.forgather.fixture.ProductFixture.createProductWithTitle;
+import static com.forgather.fixture.ProductFixture.createProductWithTitleCategoryAuthorNameDescription;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -70,5 +73,27 @@ class ProductTest {
         assertThatThrownBy(() -> createProductWithDescription(description))
             .isInstanceOf(BaseException.class)
             .hasMessageContaining("작품 설명은 최대");
+    }
+
+    @DisplayName("작품 조건부 수정")
+    @Test
+    void update() {
+        // given
+        String title = "title";
+        String category = "category";
+        String authorName = "authorName";
+        String description = "description";
+        Product product = createProductWithTitleCategoryAuthorNameDescription(title, category, authorName, description);
+
+        // when
+        product.update("foovar1", null, null, "foovar2");
+
+        // then
+        assertAll(
+            () -> assertThat(product.getTitle()).isEqualTo("foovar1"),
+            () -> assertThat(product.getCategory()).isEqualTo(category),
+            () -> assertThat(product.getAuthorName()).isEqualTo(authorName),
+            () -> assertThat(product.getDescription()).isEqualTo("foovar2")
+        );
     }
 }

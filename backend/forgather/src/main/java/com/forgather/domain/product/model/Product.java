@@ -55,6 +55,17 @@ public class Product extends BaseTimeEntity {
         this.description = description;
     }
 
+    public void update(String title, String category, String authorName, String description) {
+        validateTitle(title);
+        validateCategory(category);
+        validateAuthorName(authorName);
+        validateDescription(description);
+        if (title != null) this.title = title;
+        if (category != null) this.category = category;
+        if (authorName != null) this.authorName = authorName;
+        if (description != null) this.description = description;
+    }
+
     private void validateSpace(Space space) {
         if (space == null) {
             throw new BaseNullPointerException("스페이스는 null일 수 없습니다.");
