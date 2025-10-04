@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.forgather.domain.product.dto.CreateProductRequest;
-import com.forgather.domain.product.dto.CreateProductResponse;
+import com.forgather.domain.product.dto.RegisterProductRequest;
+import com.forgather.domain.product.dto.RegisterProductResponse;
 import com.forgather.domain.product.service.ProductService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -30,15 +30,14 @@ public class ProductController {
      * TODO
      * 스페이스-호스트 검증
      * dto단 검증
-     * 이미 존재하는 경우
      */
-    @Operation(summary = "작품 생성")
+    @Operation(summary = "작품 등록")
     @PostMapping
-    public ResponseEntity<CreateProductResponse> create(
+    public ResponseEntity<RegisterProductResponse> register(
         @PathVariable(value = "spaceCode") String spaceCode,
-        @RequestBody CreateProductRequest request
+        @RequestBody RegisterProductRequest request
     ) {
-        var createProductResponse = productService.create(spaceCode, request);
+        var createProductResponse = productService.register(spaceCode, request);
         return ResponseEntity.status(HttpStatus.CREATED).body(createProductResponse);
     }
 }

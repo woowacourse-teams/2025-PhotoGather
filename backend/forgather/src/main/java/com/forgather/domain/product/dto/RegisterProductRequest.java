@@ -7,7 +7,7 @@ import com.forgather.domain.space.model.Space;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
-public record CreateProductRequest(
+public record RegisterProductRequest(
     @Schema(description = "작품명", example = "고귀한 의자", maxLength = 50)
     String title,
 
@@ -39,7 +39,7 @@ public record CreateProductRequest(
             }
         ]
         """)
-    List<CreatePhotoRequest> photos
+    List<RegisterProductPhotoRequest> photos
 ) {
 
     public Product toEntity(Space space) {

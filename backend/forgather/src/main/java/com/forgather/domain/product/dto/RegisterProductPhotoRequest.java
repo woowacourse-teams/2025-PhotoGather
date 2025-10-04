@@ -3,7 +3,7 @@ package com.forgather.domain.product.dto;
 import com.forgather.domain.product.model.Product;
 import com.forgather.domain.product.model.ProductPhoto;
 
-public record CreatePhotoRequest(
+public record RegisterProductPhotoRequest(
     String originalName,
     String path,
     long capacity
