@@ -1,15 +1,13 @@
 package com.forgather.domain.product.service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.forgather.domain.product.dto.RegisterProductPhotoRequest;
-import com.forgather.domain.product.dto.RegisterProductRequest;
 import com.forgather.domain.product.dto.ProductResponse;
+import com.forgather.domain.product.dto.RegisterProductRequest;
 import com.forgather.domain.product.dto.UpdateProductRequest;
 import com.forgather.domain.product.model.Product;
 import com.forgather.domain.product.model.ProductPhoto;
@@ -43,17 +41,17 @@ public class ProductService {
     public ProductResponse register(String spaceCode, RegisterProductRequest request) {
         Space space = spaceRepository.getByCodeOrThrow(spaceCode);
         validateProductAlreadyExists(spaceCode);
-        Product product = request.toEntity(space);
-        Product savedProduct = productRepository.save(product);
+        Product product = productRepository.save(request.toEntity(space));
 
-        int order = 1;
-        List<ProductPhoto> savedPhotos = new ArrayList<>();
-        for (RegisterProductPhotoRequest photo : request.photos()) {
-            ProductPhoto productPhoto = photo.toEntity(savedProduct, order++);
-            ProductPhoto savedPhoto = productPhotoRepository.save(productPhoto);
-            savedPhotos.add(savedPhoto);
-        }
-        return new ProductResponse(savedProduct, savedPhotos);
+        ProductPhotos productPhotos = new ProductPhotos();
+        productPhotos.add(
+            request.photos()
+                .stream()
+                .map(photoRequest -> photoRequest.toEntity(product))
+                .toList()
+        );
+        productPhotoRepository.saveAll(productPhotos.getAll());
+        return new ProductResponse(product, productPhotos.getAll());
     }
 
     private void validateProductAlreadyExists(String spaceCode) {
