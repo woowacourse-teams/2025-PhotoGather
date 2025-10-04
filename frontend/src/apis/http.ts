@@ -1,22 +1,9 @@
 import type { ApiResponse, Method } from '../types/api.type';
+import { createQueryString } from '../utils/createQueryString';
 import { BASE_URL } from './config';
 
 const defaultHeaders: Record<string, string> = {
   'Content-Type': 'application/json',
-};
-
-const createQueryString = (params?: Record<string, unknown>): string => {
-  if (!params) return '';
-
-  const searchParams = new URLSearchParams();
-
-  Object.entries(params).forEach(([key, value]) => {
-    if (value !== undefined && value !== null) {
-      searchParams.append(key, String(value));
-    }
-  });
-
-  return searchParams.toString() ? `?${searchParams.toString()}` : '';
 };
 
 const request = async <T>(
