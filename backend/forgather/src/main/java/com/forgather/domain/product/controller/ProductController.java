@@ -1,9 +1,9 @@
 package com.forgather.domain.product.controller;
 
 import static org.springframework.http.HttpStatus.CREATED;
-import static org.springframework.http.HttpStatus.OK;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -66,6 +66,17 @@ public class ProductController {
         @RequestBody UpdateProductRequest request
     ) {
         var response = productService.update(spaceCode, request);
-        return ResponseEntity.status(OK).body(response);
+        return ResponseEntity.ok().body(response);
+    }
+
+    /**
+     * TODO
+     * 스페이스-호스트 검증
+     */
+    @Operation(summary = "작품 삭제")
+    @DeleteMapping
+    public ResponseEntity<Void> delete(@PathVariable(value = "spaceCode") String spaceCode) {
+        productService.delete(spaceCode);
+        return ResponseEntity.noContent().build();
     }
 }

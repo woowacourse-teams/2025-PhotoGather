@@ -18,4 +18,6 @@ public interface ProductRepository {
         return findBySpaceCode(spaceCode)
             .orElseThrow(() -> new NotFoundException("해당 스페이스 등록된 작품이 없습니다. spaceCode: " + spaceCode));
     }
+
+    void delete(Product product);
 }

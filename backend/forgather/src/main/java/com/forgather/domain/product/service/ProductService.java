@@ -85,4 +85,17 @@ public class ProductService {
 
         return new ProductResponse(product, photos.getAll());
     }
+
+    @Transactional
+    public void delete(String spaceCode) {
+        Product product = productRepository.getBySpaceCodeOrThrow(spaceCode);
+        deleteProductPhotos(product);
+        productRepository.delete(product);
+    }
+
+    private void deleteProductPhotos(Product product) {
+        List<ProductPhoto> productPhotos = productPhotoRepository.findAllByProduct(product);
+        productPhotoRepository.deleteAll(productPhotos);
+        contentsStorage.deletePhotos(productPhotos);
+    }
 }
