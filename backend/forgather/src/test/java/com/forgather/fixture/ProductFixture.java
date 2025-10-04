@@ -7,6 +7,10 @@ import com.forgather.domain.space.model.Space;
 
 public class ProductFixture {
 
+    public static Product createProduct() {
+        return new Product(createSpace(), "title", "category", "authorName", "description");
+    }
+
     public static Product createProductWithSpace(Space space) {
         return new Product(space, "title", "category", "authorName", "description");
     }
@@ -25,5 +29,14 @@ public class ProductFixture {
 
     public static Product createProductWithDescription(String description) {
         return new Product(createSpace(), "title", "category", "authorName", description);
+    }
+
+    public static Product createProductWithTitleCategoryAuthorNameDescription(
+        String title,
+        String category,
+        String authorName,
+        String description
+    ) {
+        return new Product(createSpace(), title, category, authorName, description);
     }
 }
