@@ -16,7 +16,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.forgather.domain.product.dto.RegisterProductPhotoRequest;
 import com.forgather.domain.product.dto.RegisterProductRequest;
-import com.forgather.domain.product.dto.RegisterProductResponse;
+import com.forgather.domain.product.dto.ProductResponse;
 import com.forgather.domain.space.model.Space;
 import com.forgather.domain.space.repository.SpaceRepository;
 
@@ -58,7 +58,7 @@ public class ProductAcceptanceTest extends AcceptanceTest {
 
         // when
         RestAssuredMockMvc.mockMvc(mockMvc);
-        RegisterProductResponse response = RestAssuredMockMvc.given()
+        ProductResponse response = RestAssuredMockMvc.given()
             .body(request)
             .contentType(ContentType.JSON)
             .accept(ContentType.JSON)
@@ -67,7 +67,7 @@ public class ProductAcceptanceTest extends AcceptanceTest {
             .then()
             .extract()
             .body()
-            .as(RegisterProductResponse.class);
+            .as(ProductResponse.class);
 
         // then
         assertAll(

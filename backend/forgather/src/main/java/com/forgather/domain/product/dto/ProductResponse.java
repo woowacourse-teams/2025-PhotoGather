@@ -7,7 +7,7 @@ import com.forgather.domain.product.model.ProductPhoto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
-public record RegisterProductResponse(
+public record ProductResponse(
 
     @Schema(description = "작품 id", example = "1")
     Long id,
@@ -46,16 +46,16 @@ public record RegisterProductResponse(
             }
         ]
         """)
-    List<RegisterProductPhotoResponse> photos
+    List<ProductPhotoResponse> photos
 ) {
 
-    public RegisterProductResponse(Product product, List<ProductPhoto> photos) {
+    public ProductResponse(Product product, List<ProductPhoto> photos) {
         this(product.getId(),
             product.getTitle(),
             product.getCategory(),
             product.getAuthorName(),
             product.getDescription(),
-            photos.stream().map(RegisterProductPhotoResponse::new).toList()
+            photos.stream().map(ProductPhotoResponse::new).toList()
         );
     }
 }

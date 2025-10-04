@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.forgather.domain.product.dto.RegisterProductPhotoRequest;
 import com.forgather.domain.product.dto.RegisterProductRequest;
-import com.forgather.domain.product.dto.RegisterProductResponse;
+import com.forgather.domain.product.dto.ProductResponse;
 import com.forgather.domain.product.model.Product;
 import com.forgather.domain.product.model.ProductPhoto;
 import com.forgather.domain.product.repository.ProductPhotoRepository;
@@ -28,8 +28,15 @@ public class ProductService {
     private final ProductPhotoRepository productPhotoRepository;
     private final SpaceRepository spaceRepository;
 
+    @Transactional(readOnly = true)
+    public ProductResponse get(String spaceCode) {
+        Product product = productRepository.getBySpaceCodeOrThrow(spaceCode);
+        List<ProductPhoto> photos = productPhotoRepository.findAllByProduct(product);
+        return new ProductResponse(product, photos);
+    }
+
     @Transactional
-    public RegisterProductResponse register(String spaceCode, RegisterProductRequest request) {
+    public ProductResponse register(String spaceCode, RegisterProductRequest request) {
         Space space = spaceRepository.getByCodeOrThrow(spaceCode);
         validateProductAlreadyExists(spaceCode);
         Product product = request.toEntity(space);
@@ -42,7 +49,7 @@ public class ProductService {
             ProductPhoto savedPhoto = productPhotoRepository.save(productPhoto);
             savedPhotos.add(savedPhoto);
         }
-        return new RegisterProductResponse(savedProduct, savedPhotos);
+        return new ProductResponse(savedProduct, savedPhotos);
     }
 
     private void validateProductAlreadyExists(String spaceCode) {

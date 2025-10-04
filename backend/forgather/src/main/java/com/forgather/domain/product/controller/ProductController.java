@@ -1,15 +1,17 @@
 package com.forgather.domain.product.controller;
 
-import org.springframework.http.HttpStatus;
+import static org.springframework.http.HttpStatus.CREATED;
+
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.forgather.domain.product.dto.ProductResponse;
 import com.forgather.domain.product.dto.RegisterProductRequest;
-import com.forgather.domain.product.dto.RegisterProductResponse;
 import com.forgather.domain.product.service.ProductService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -26,6 +28,13 @@ public class ProductController {
 
     private final ProductService productService;
 
+    @Operation(summary = "작품 조회")
+    @GetMapping
+    public ResponseEntity<ProductResponse> get(@PathVariable(value = "spaceCode") String spaceCode) {
+        var response = productService.get(spaceCode);
+        return ResponseEntity.ok().body(response);
+    }
+
     /**
      * TODO
      * 스페이스-호스트 검증
@@ -33,11 +42,11 @@ public class ProductController {
      */
     @Operation(summary = "작품 등록")
     @PostMapping
-    public ResponseEntity<RegisterProductResponse> register(
+    public ResponseEntity<ProductResponse> register(
         @PathVariable(value = "spaceCode") String spaceCode,
         @RequestBody RegisterProductRequest request
     ) {
-        var createProductResponse = productService.register(spaceCode, request);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createProductResponse);
+        var response = productService.register(spaceCode, request);
+        return ResponseEntity.status(CREATED).body(response);
     }
 }
