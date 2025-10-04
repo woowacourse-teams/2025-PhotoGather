@@ -12,4 +12,8 @@ public record RegisterProductPhotoRequest(
     public ProductPhoto toEntity(Product product, int sortOrder) {
         return new ProductPhoto(product, originalName, path, capacity, sortOrder);
     }
+
+    public ProductPhoto toEntity(Product product) {
+        return new ProductPhoto(product, originalName, path, capacity, 1);
+    }
 }

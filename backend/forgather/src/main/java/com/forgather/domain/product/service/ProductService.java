@@ -10,12 +10,15 @@ import org.springframework.transaction.annotation.Transactional;
 import com.forgather.domain.product.dto.RegisterProductPhotoRequest;
 import com.forgather.domain.product.dto.RegisterProductRequest;
 import com.forgather.domain.product.dto.ProductResponse;
+import com.forgather.domain.product.dto.UpdateProductRequest;
 import com.forgather.domain.product.model.Product;
 import com.forgather.domain.product.model.ProductPhoto;
+import com.forgather.domain.product.model.ProductPhotos;
 import com.forgather.domain.product.repository.ProductPhotoRepository;
 import com.forgather.domain.product.repository.ProductRepository;
 import com.forgather.domain.space.model.Space;
 import com.forgather.domain.space.repository.SpaceRepository;
+import com.forgather.domain.upload.ContentsStorage;
 import com.forgather.global.exception.BaseException;
 
 import lombok.RequiredArgsConstructor;
@@ -27,6 +30,7 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final ProductPhotoRepository productPhotoRepository;
     private final SpaceRepository spaceRepository;
+    private final ContentsStorage contentsStorage;
 
     @Transactional(readOnly = true)
     public ProductResponse get(String spaceCode) {
@@ -57,5 +61,30 @@ public class ProductService {
         if (optionalProduct.isPresent()) {
             throw new BaseException("이미 등록된 작품이 존재합니다. spaceCode: " + spaceCode);
         }
+    }
+
+    @Transactional
+    public ProductResponse update(String spaceCode, UpdateProductRequest request) {
+        // Product 정보 수정
+        Product product = productRepository.getBySpaceCodeOrThrow(spaceCode);
+        product.update(request.title(), request.category(), request.authorName(), request.description());
+
+        // 삭제 사진 제거 및 db 삭제
+        ProductPhotos photos = new ProductPhotos(productPhotoRepository.findAllByProduct(product));
+        List<ProductPhoto> deletedPhotos = photos.deleteByIds(request.deletePhotoIds());
+        productPhotoRepository.deleteAll(deletedPhotos);
+
+        // 새로운 사진 추가 및 db 저장
+        List<ProductPhoto> newPhotos = request.newPhotos()
+            .stream()
+            .map(photo -> photo.toEntity(product))
+            .toList();
+        photos.add(newPhotos);
+        productPhotoRepository.saveAll(newPhotos);
+
+        // 삭제 사진 클라우드 저장소에서 삭제
+        contentsStorage.deletePhotos(deletedPhotos);
+
+        return new ProductResponse(product, photos.getAll());
     }
 }

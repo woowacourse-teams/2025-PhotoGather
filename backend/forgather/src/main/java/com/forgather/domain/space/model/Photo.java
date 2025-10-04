@@ -33,4 +33,11 @@ public abstract class Photo extends BaseTimeEntity {
         this.path = path;
         this.capacity = capacity;
     }
+
+    public Photo(long id, String originalName, String path, long capacity) {
+        this.id = id;
+        this.originalName = originalName;
+        this.path = path;
+        this.capacity = capacity;
+    }
 }

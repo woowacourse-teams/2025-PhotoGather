@@ -67,7 +67,7 @@ public class ProductPhotos {
         productPhotos.add(newPhoto);
     }
 
-    public List<ProductPhoto> getProductPhotos() {
+    public List<ProductPhoto> getAll() {
         return Collections.unmodifiableList(productPhotos);
     }
 }
