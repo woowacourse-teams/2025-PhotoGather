@@ -20,6 +20,7 @@ import com.forgather.domain.product.dto.ProductResponse;
 import com.forgather.domain.product.dto.RegisterProductPhotoRequest;
 import com.forgather.domain.product.dto.RegisterProductRequest;
 import com.forgather.domain.product.dto.UpdateProductRequest;
+import com.forgather.domain.product.repository.ProductRepository;
 import com.forgather.domain.space.model.Space;
 import com.forgather.domain.space.repository.SpaceRepository;
 import com.forgather.domain.upload.AwsS3Cloud;
@@ -35,6 +36,9 @@ public class ProductAcceptanceTest extends AcceptanceTest {
 
     @Autowired
     private SpaceRepository spaceRepository;
+
+    @Autowired
+    private ProductRepository productRepository;
 
     @MockitoBean
     private AwsS3Cloud awsS3Cloud;
@@ -204,6 +208,22 @@ public class ProductAcceptanceTest extends AcceptanceTest {
             () -> assertThat(result.photos().get(3).originalName()).isEqualTo("photo5"),
             () -> assertThat(result.photos().get(3).order()).isEqualTo(4)
         );
+    }
+
+    @DisplayName("작품 삭제")
+    @Test
+    public void delete() {
+        // given
+        registerProduct();
+        Mockito.doNothing().when(awsS3Cloud).deleteContents(Mockito.anyList());
+
+        // when, then
+        RestAssuredMockMvc
+            .when()
+            .delete("/spaces/%s/products".formatted(space.getCode()))
+            .then()
+            .statusCode(204);
+        assertThat(productRepository.findBySpaceCode(space.getCode())).isEmpty();
     }
 
     private ProductResponse registerProduct() {
