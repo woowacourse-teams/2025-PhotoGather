@@ -1,0 +1,49 @@
+import styled from '@emotion/styled';
+import { MdClose } from 'react-icons/md';
+
+export const ModalSize = {
+  mobile: 240,
+  small: 320,
+  medium: 480,
+  large: 600,
+};
+
+export const ModalContent = styled.div<{
+  $size: keyof typeof ModalSize;
+}>`
+  height: 216px;
+  width: ${({ $size }) => ModalSize[$size]}px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 24px 32px;
+  border-radius: 8px;
+  color: #000;
+`;
+
+export const ModalBackdrop = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.35);
+`;
+
+export const CloseButton = styled(MdClose)`
+  cursor: pointer;
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  border-radius: 50%;
+  transition: background-color 0.3s;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  &:hover {
+    background-color: ${({ theme }) => theme.colors.gray03};
+  }
+`;
