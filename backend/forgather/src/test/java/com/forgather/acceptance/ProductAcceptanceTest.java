@@ -14,9 +14,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.test.web.servlet.MockMvc;
 
+import com.forgather.domain.product.dto.ProductResponse;
 import com.forgather.domain.product.dto.RegisterProductPhotoRequest;
 import com.forgather.domain.product.dto.RegisterProductRequest;
-import com.forgather.domain.product.dto.ProductResponse;
 import com.forgather.domain.space.model.Space;
 import com.forgather.domain.space.repository.SpaceRepository;
 
@@ -38,11 +38,77 @@ public class ProductAcceptanceTest extends AcceptanceTest {
     void setUp() {
         space = createSpace();
         spaceRepository.save(space);
+        RestAssuredMockMvc.mockMvc(mockMvc);
+    }
+
+    @DisplayName("작품 조회")
+    @Test
+    public void get() {
+        // given
+        RegisterProductRequest request = new RegisterProductRequest(
+            "title",
+            "category",
+            "authorName",
+            "description",
+            List.of(
+                new RegisterProductPhotoRequest("photo1", "path1", 1024),
+                new RegisterProductPhotoRequest("photo2", "path2", 2048),
+                new RegisterProductPhotoRequest("photo3", "path3", 4096)
+            )
+        );
+
+        RestAssuredMockMvc.given()
+            .body(request)
+            .contentType(ContentType.JSON)
+            .accept(ContentType.JSON)
+            .when()
+            .post("/spaces/%s/products".formatted(space.getCode()))
+            .then()
+            .statusCode(201);
+
+        // when
+        ProductResponse response = RestAssuredMockMvc.given()
+            .accept(ContentType.JSON)
+            .when()
+            .get("/spaces/%s/products".formatted(space.getCode()))
+            .then()
+            .statusCode(200)
+            .extract()
+            .body()
+            .as(ProductResponse.class);
+
+        // then
+        assertAll(
+            () -> assertThat(response.id()).isNotNull(),
+            () -> assertThat(response.title()).isEqualTo(request.title()),
+            () -> assertThat(response.category()).isEqualTo(request.category()),
+            () -> assertThat(response.authorName()).isEqualTo(request.authorName()),
+            () -> assertThat(response.description()).isEqualTo(request.description()),
+            () -> assertThat(response.photos().get(0).originalName()).isEqualTo("photo1"),
+            () -> assertThat(response.photos().get(0).order()).isEqualTo(1),
+            () -> assertThat(response.photos().get(1).originalName()).isEqualTo("photo2"),
+            () -> assertThat(response.photos().get(1).order()).isEqualTo(2),
+            () -> assertThat(response.photos().get(2).originalName()).isEqualTo("photo3"),
+            () -> assertThat(response.photos().get(2).order()).isEqualTo(3)
+        );
+    }
+
+    @DisplayName("작품 조회 시 등록된 작품이 없으면 예외를 던진다")
+    @Test
+    public void throwExceptionWhenNoProducts() {
+        // when, then
+        RestAssuredMockMvc.given()
+            .accept(ContentType.JSON)
+            .when()
+            .get("/spaces/%s/products".formatted(space.getCode()))
+            .then()
+            .statusCode(404)
+            .body("message", containsString("등록된 작품이"));
     }
 
     @DisplayName("작품 등록")
     @Test
-    public void registerProduct() {
+    public void register() {
         // given
         RegisterProductRequest request = new RegisterProductRequest(
             "title",
@@ -57,7 +123,6 @@ public class ProductAcceptanceTest extends AcceptanceTest {
         );
 
         // when
-        RestAssuredMockMvc.mockMvc(mockMvc);
         ProductResponse response = RestAssuredMockMvc.given()
             .body(request)
             .contentType(ContentType.JSON)
@@ -65,6 +130,7 @@ public class ProductAcceptanceTest extends AcceptanceTest {
             .when()
             .post("/spaces/%s/products".formatted(space.getCode()))
             .then()
+            .statusCode(201)
             .extract()
             .body()
             .as(ProductResponse.class);
@@ -98,7 +164,6 @@ public class ProductAcceptanceTest extends AcceptanceTest {
             )
         );
 
-        RestAssuredMockMvc.mockMvc(mockMvc);
         RestAssuredMockMvc.given()
             .body(request)
             .contentType(ContentType.JSON)
