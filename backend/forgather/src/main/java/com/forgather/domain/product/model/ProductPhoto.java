@@ -53,6 +53,6 @@ public class ProductPhoto extends Photo implements Comparable<ProductPhoto> {
 
     @Override
     public int compareTo(ProductPhoto productPhoto) {
-        return sortOrder - productPhoto.sortOrder;
+        return Integer.compare(sortOrder, productPhoto.sortOrder);
     }
 }
