@@ -12,11 +12,13 @@ import { useToast } from '../@common/useToast';
 
 interface UseLocalFileProps {
   fileType: string;
+  maxFileCount: number;
 }
 
-const useLocalFile = ({ fileType }: UseLocalFileProps) => {
+const useLocalFile = ({ fileType, maxFileCount }: UseLocalFileProps) => {
   const [localFiles, setLocalFiles] = useState<LocalFile[]>([]);
   const { showToast } = useToast();
+
   const previewFile = localFiles.map((file) => ({
     id: file.id,
     previewUrl: file.previewUrl,
@@ -88,16 +90,15 @@ const useLocalFile = ({ fileType }: UseLocalFileProps) => {
       checkInvalidFileType(invalidFiles);
       checkUploadLimit(validFiles);
     } catch (error) {
-      showToast({
-        text:
-          error instanceof Error
-            ? error.message
-            : '알 수 없는 오류가 발생했어요.',
-      });
-      return;
+      if (error instanceof Error) {
+        showToast({
+          text: '사진 업로드 중 오류가 발생했어요.',
+        });
+      }
+      console.error(error);
     }
 
-    const limitedValidFiles = validFiles.slice(0, CONSTRAINTS.MAX_FILE_COUNT);
+    const limitedValidFiles = validFiles.slice(0, maxFileCount);
     addPreviewUrlsFromFiles(limitedValidFiles);
   };
 
