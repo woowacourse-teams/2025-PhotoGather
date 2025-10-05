@@ -1,7 +1,8 @@
 import styled from '@emotion/styled';
 
-export const InputField = styled.input<{ $isError: boolean }>`
+export const TextareaField = styled.textarea<{ $isError: boolean }>`
   width: 100%;
+  min-height: 150px;
   padding: 8px 12px;
   border: 1px solid
     ${({ $isError, theme }) => ($isError ? theme.colors.error : theme.colors.gray02)};
@@ -14,4 +15,5 @@ export const InputField = styled.input<{ $isError: boolean }>`
     color: ${({ theme }) => theme.colors.gray04};
   }
   font-size: ${({ theme }) => theme.typography.bodyRegular};
+  border-radius: 4px;
 `;

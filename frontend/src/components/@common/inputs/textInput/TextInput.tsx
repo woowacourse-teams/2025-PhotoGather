@@ -1,6 +1,8 @@
+import * as C from '../input.common.styles';
 import * as S from './TextInput.styles';
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+  label: string;
   errorMessage?: string;
   maxCount: number;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -9,13 +11,15 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
 }
 
 const TextInput = ({
+  label,
   errorMessage,
   maxCount,
   validLength,
   ...inputProps
 }: InputProps) => {
   return (
-    <S.Wrapper>
+    <C.Wrapper>
+      <C.Label htmlFor={inputProps.id}>{label}</C.Label>
       <S.InputField
         {...inputProps}
         id={inputProps.id}
@@ -23,13 +27,13 @@ const TextInput = ({
         value={inputProps.value}
         $isError={!!errorMessage}
       />
-      <S.InputFooterContainer>
-        <S.ErrorMessage>{errorMessage ? errorMessage : ''}</S.ErrorMessage>
-        <S.InputCount>
+      <C.InputFooterContainer>
+        <C.ErrorMessage>{errorMessage ? errorMessage : ''}</C.ErrorMessage>
+        <C.InputCount>
           {maxCount && `${validLength} / ${maxCount}`}
-        </S.InputCount>
-      </S.InputFooterContainer>
-    </S.Wrapper>
+        </C.InputCount>
+      </C.InputFooterContainer>
+    </C.Wrapper>
   );
 };
 
