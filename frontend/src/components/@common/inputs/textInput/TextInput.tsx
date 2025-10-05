@@ -5,7 +5,6 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label: string;
   errorMessage?: string;
   maxCount?: number;
-  value: string;
   validLength?: number;
   isRequired?: boolean;
 }
@@ -27,7 +26,6 @@ const TextInput = ({
         {...inputProps}
         id={inputProps.id}
         aria-label={inputProps['aria-label']}
-        value={inputProps.value}
         $isError={!!errorMessage}
       />
       <C.InputFooterContainer>

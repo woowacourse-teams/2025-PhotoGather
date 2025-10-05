@@ -3,26 +3,13 @@ import { useState } from 'react';
 interface UseFormProps<T> {
   initialData: T;
   validators: Record<keyof T, (value: string) => void>;
-  validateBeforeSubmit?: () => void;
   onSubmit: () => void;
 }
-const useForm = <T>({
-  initialData,
-  validators,
-  validateBeforeSubmit,
-  onSubmit,
-}: UseFormProps<T>) => {
+const useForm = <T>({ initialData, validators, onSubmit }: UseFormProps<T>) => {
   const [formData, setFormData] = useState<T>(initialData);
   const [errorMessage, setErrorMessage] = useState<
     Partial<Record<keyof T, string>>
   >({});
-
-  const changeErrorMessage = (key: keyof T, value: string) => {
-    setErrorMessage({
-      ...errorMessage,
-      [key]: value,
-    });
-  };
 
   const checkValid = (name: keyof T, value: string) => {
     try {
@@ -35,6 +22,13 @@ const useForm = <T>({
       }
       changeErrorMessage(name, '알 수 없는 오류가 발생했어요');
     }
+  };
+
+  const changeErrorMessage = (key: keyof T, value: string) => {
+    setErrorMessage({
+      ...errorMessage,
+      [key]: value,
+    });
   };
 
   const changeFormData = (key: keyof T, value: string | File[]) => {
@@ -62,13 +56,10 @@ const useForm = <T>({
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (validateBeforeSubmit) {
-      validateBeforeSubmit();
-    }
-    console.log('formData', formData);
+
     onSubmit();
   };
 
-  return { formData, handleChange, handleSubmit, errorMessage };
+  return { formData, changeFormData, handleChange, handleSubmit, errorMessage };
 };
 export default useForm;

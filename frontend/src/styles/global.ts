@@ -32,6 +32,10 @@ export const global = css`
   }
   textarea {
     resize: none;
+    &:focus {
+      border: none;
+      outline: none;
+    }
   }
   .scroll-lock {
     overflow: hidden;
