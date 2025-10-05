@@ -1,4 +1,4 @@
-import LogoSvg from '../../../@assets/logo.svg?react';
+import LogoSvg from '../../../@assets/logo/logo.svg?react';
 import type { HeaderMode } from '../../../types/header.type';
 import * as S from './Header.styles';
 

@@ -1,5 +1,5 @@
 import { IoLogoInstagram, IoMailOutline } from 'react-icons/io5';
-import FooterLogo from '../../../@assets/footer-logo.svg?react';
+import FooterLogo from '../../../@assets/logo/footer-logo.svg?react';
 import Button from '../../../components/@common/buttons/button/Button';
 import IconButton from '../../../components/@common/buttons/iconButton/IconButton';
 import { DividerLine } from '../../../styles/@common/DividerLine.styles';
