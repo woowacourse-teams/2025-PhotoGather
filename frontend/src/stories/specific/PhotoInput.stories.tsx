@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import PhotoUploadButton from '../components/@common/buttons/photoUploadButton/PhotoUploadButton';
+import PhotoUploadButton from '../../components/specific/photoUploadButton/PhotoUploadButton';
 
 const meta: Meta<typeof PhotoUploadButton> = {
   title: 'Components/Input/Photo',
