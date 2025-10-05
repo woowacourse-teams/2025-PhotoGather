@@ -26,6 +26,7 @@ const Header = ({ mode = 'light', icons = [], onLogoClick }: HeaderProps) => {
         <S.IconsContainer>
           {icons.map((item, index) => (
             <S.IconButton
+              // biome-ignore lint/suspicious/noArrayIndexKey: header-icon idx 무시
               key={`header-icon-${index}`}
               $mode={mode}
               type="button"
