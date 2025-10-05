@@ -2,6 +2,7 @@ import { createBrowserRouter } from 'react-router-dom';
 import Layout from '../components/layout/global/layout/Layout';
 import Dashboard from '../pages/host/dashboard/Dashboard';
 import HostMainPage from '../pages/host/mainPage/HostMainPage';
+import WorkDetail from '../pages/host/workDetail/WorkDetail';
 import MainPage from '../pages/MainPage';
 import type { AppRouteObject } from '../types/route.type';
 
@@ -30,6 +31,10 @@ const routes: AppRouteObject[] = [
             handle: {
               headerIcons: ['settings'],
             },
+          },
+          {
+            path: 'work-detail',
+            element: <WorkDetail />,
           },
         ],
       },
