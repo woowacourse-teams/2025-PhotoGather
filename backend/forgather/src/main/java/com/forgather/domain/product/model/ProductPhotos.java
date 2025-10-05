@@ -46,7 +46,7 @@ public class ProductPhotos {
         return Collections.unmodifiableList(deletedPhotos);
     }
 
-    private void pullAfter(long order) {
+    private void pullAfter(int order) {
         productPhotos.stream()
             .filter(photo -> photo.getSortOrder() > order)
             .forEach(ProductPhoto::pullOrder);

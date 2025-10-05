@@ -13,7 +13,7 @@ public interface ProductRepository {
 
     default Product getBySpaceCodeOrThrow(String spaceCode) {
         if (spaceCode == null) {
-            throw new BaseNullPointerException("스페이스의 코드는 null일 수 없습니다. spaceCode: " + spaceCode);
+            throw new BaseNullPointerException("스페이스의 코드는 null일 수 없습니다.");
         }
         return findBySpaceCode(spaceCode)
             .orElseThrow(() -> new NotFoundException("해당 스페이스 등록된 작품이 없습니다. spaceCode: " + spaceCode));
