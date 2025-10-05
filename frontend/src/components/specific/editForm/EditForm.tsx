@@ -3,16 +3,12 @@ import { CONSTRAINTS } from '../../../constants/constraints';
 import useForm from '../../../hooks/@common/useForm';
 import useLocalFile from '../../../hooks/domain/useLocaleFile';
 import { calculateValidLength } from '../../../utils/grapheme';
-import {
-  checkEmailForm,
-  checkInputEmpty,
-  checkMaxLength,
-} from '../../../validators/form.validators';
 import Button from '../../@common/buttons/button/Button';
 import TextareaInput from '../../@common/inputs/textareaInput/TextareaInput';
 import TextInput from '../../@common/inputs/textInput/TextInput';
 import PhotoUploadButton from '../photoUploadButton/PhotoUploadButton';
 import * as S from './EditForm.styles';
+import { editFormValidators } from './editForm.validators';
 
 type visibilityType = 'public' | 'private';
 
@@ -35,28 +31,11 @@ const EditForm = () => {
     instagram: '',
   };
 
-  const validators = {
-    profileImage: () => {},
-    name: (value: string) => {
-      checkMaxLength(value, CONSTRAINTS.NAME_MAX_LENGTH);
-      checkInputEmpty(value);
-    },
-    visibility: () => {},
-    description: (value: string) => {
-      checkMaxLength(value, CONSTRAINTS.DESCRIPTION_MAX_LENGTH);
-      checkInputEmpty(value);
-    },
-    email: (value: string) => {
-      checkEmailForm(value);
-    },
-    instagram: () => {},
-  };
-
   const { formData, changeFormData, handleChange, handleSubmit, errorMessage } =
     useForm<SpaceFormData>({
       initialData,
       onSubmit: () => alert('제출됨'),
-      validators,
+      validators: editFormValidators,
     });
 
   const { previewFile, handleFilesUploadClick } = useLocalFile({
