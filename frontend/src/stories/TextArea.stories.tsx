@@ -1,12 +1,11 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { useState } from 'react';
-import TextInput from '../components/@common/inputs/textInput/TextInput';
-import { CONSTRAINTS } from '../constants/constraints';
+import Textarea from '../components/@common/inputs/textArea/Textarea';
 import useGraphemeInput from '../hooks/@common/useGraphemeInput';
 
-const meta: Meta<typeof TextInput> = {
-  title: 'Components/Input/Text',
-  component: TextInput,
+const meta: Meta<typeof Textarea> = {
+  title: 'Components/Input/Textarea',
+  component: Textarea,
   args: {
     maxCount: 10,
     placeholder: '내용을 입력하세요',
@@ -14,7 +13,7 @@ const meta: Meta<typeof TextInput> = {
 };
 
 export default meta;
-type Story = StoryObj<typeof TextInput>;
+type Story = StoryObj<typeof Textarea>;
 
 export const Default: Story = {
   render: (args) => {
@@ -24,16 +23,14 @@ export const Default: Story = {
       onChange: (e) => setValue(e.target.value),
     });
     return (
-      <TextInput
+      <Textarea
         {...args}
         value={validValue}
-        maxCount={CONSTRAINTS.NAME_MAX_LENGTH}
-        validLength={validLength}
+        maxCount={100}
+        validLength={value.length}
         onChange={(e) => setValue(e.target.value)}
         errorMessage={
-          validLength > CONSTRAINTS.NAME_MAX_LENGTH
-            ? '최대 10자까지 입력할 수 있습니다.'
-            : ''
+          validLength > 100 ? '최대 10자까지 입력할 수 있습니다.' : ''
         }
       />
     );
@@ -44,18 +41,5 @@ export const ShowError: Story = {
   args: {
     errorMessage: '올바르지 않은 입력입니다.',
     value: '잘못된 값',
-  },
-};
-
-export const FiveCharacters: Story = {
-  args: {
-    value: '12345',
-  },
-};
-
-export const OverMaxLength: Story = {
-  args: {
-    value: '12345678901',
-    errorMessage: '최대 10자까지 입력할 수 있습니다.',
   },
 };

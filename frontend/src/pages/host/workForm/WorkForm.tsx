@@ -1,22 +1,24 @@
-import { useState } from 'react';
 import { IoClose } from 'react-icons/io5';
 import Button from '../../../components/@common/buttons/button/Button';
 import Textarea from '../../../components/@common/inputs/textArea/Textarea';
 import TextInput from '../../../components/@common/inputs/textInput/TextInput';
 import UploadBox from '../../../components/host/uploadBox/UploadBox';
+import useGraphemeInput from '../../../hooks/@common/useGraphemeInput';
 import useLocalFile from '../../../hooks/@common/useLocalFile';
 import * as S from './WorkForm.styles';
 
 const WorkForm = () => {
-  const [title, setTitle] = useState('');
-  const [category, setCategory] = useState('');
-  const [designer, setDesigner] = useState('');
-  const [description, setDescription] = useState('');
+  const titleInput = useGraphemeInput({ initialValue: '' });
+  const categoryInput = useGraphemeInput({ initialValue: '' });
+  const designerInput = useGraphemeInput({ initialValue: '' });
+  const descriptionInput = useGraphemeInput({ initialValue: '' });
 
   const { previewFile, deleteFile, handleFilesUploadClick, handleFilesDrop } =
     useLocalFile({ fileType: 'image' });
 
-  const isFormValid = title.trim() !== '' && description.trim() !== '';
+  const isFormValid =
+    titleInput.validValue.trim() !== '' &&
+    descriptionInput.validValue.trim() !== '';
 
   return (
     <S.Wrapper>
@@ -26,9 +28,9 @@ const WorkForm = () => {
           <S.LabelContainer>작품명 *</S.LabelContainer>
           <TextInput
             maxCount={50}
-            value={title}
-            validLength={title.length}
-            onChange={(e) => setTitle(e.target.value.slice(0, 50))}
+            value={titleInput.validValue}
+            validLength={titleInput.validLength}
+            onChange={titleInput.handleChange}
             placeholder="작품명을 입력하세요"
           />
         </S.FormLabelContainer>
@@ -37,9 +39,9 @@ const WorkForm = () => {
           <S.LabelContainer>카테고리</S.LabelContainer>
           <TextInput
             maxCount={20}
-            value={category}
-            validLength={category.length}
-            onChange={(e) => setCategory(e.target.value.slice(0, 20))}
+            value={categoryInput.validValue}
+            validLength={categoryInput.validLength}
+            onChange={categoryInput.handleChange}
             placeholder="카테고리를 입력하세요"
           />
         </S.FormLabelContainer>
@@ -48,20 +50,20 @@ const WorkForm = () => {
           <S.LabelContainer>작가명</S.LabelContainer>
           <TextInput
             maxCount={20}
-            value={designer}
-            validLength={designer.length}
-            onChange={(e) => setDesigner(e.target.value.slice(0, 20))}
+            value={designerInput.validValue}
+            validLength={designerInput.validLength}
+            onChange={designerInput.handleChange}
             placeholder="작가명을 입력하세요"
-          />{' '}
+          />
         </S.FormLabelContainer>
 
         <S.FormLabelContainer>
           <S.LabelContainer>작품 설명 *</S.LabelContainer>
           <Textarea
             maxCount={1000}
-            value={description}
-            validLength={description.length}
-            onChange={(e) => setDescription(e.target.value.slice(0, 1000))}
+            value={descriptionInput.validValue}
+            validLength={descriptionInput.validLength}
+            onChange={descriptionInput.handleChange}
             placeholder="작품 설명을 입력하세요"
             rows={6}
           />
