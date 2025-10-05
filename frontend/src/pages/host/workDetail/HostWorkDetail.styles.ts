@@ -16,3 +16,25 @@ export const EditButton = styled.button`
   margin-left: auto;
   margin-bottom: 3px;
 `;
+
+export const EmptyStateContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 60px;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+`;
+
+export const EmptyMessage = styled.p`
+  ${({ theme }) => theme.typography.bodyRegular}
+  color: ${({ theme }) => theme.colors.gray04};
+`;
+
+export const BottomSectionContainer = styled.div`
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 60px;
+  width: 100%;
+`;

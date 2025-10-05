@@ -12,3 +12,17 @@ export const Wrapper = styled.div`
 export const TextContainer = styled.p`
   ${({ theme }) => theme.typography.bodyRegular}
 `;
+
+export const EmptyStateContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 60px;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+`;
+
+export const EmptyMessage = styled.p`
+  ${({ theme }) => theme.typography.bodyRegular}
+  color: ${({ theme }) => theme.colors.gray04};
+`;

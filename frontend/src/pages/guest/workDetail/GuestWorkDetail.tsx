@@ -6,18 +6,29 @@ import { mockWorkDetail } from '../../mockData';
 import * as S from './GuestWorkDetail.styles';
 
 const GuestWorkDetail = () => {
+  if (!mockWorkDetail) {
+    return (
+      <S.Wrapper>
+        <S.EmptyStateContainer>
+          <S.EmptyMessage>아직 작품 소개를 등록하지 않았어요</S.EmptyMessage>
+        </S.EmptyStateContainer>
+        <Footer />
+      </S.Wrapper>
+    );
+  }
+
+  const { title, category, designer, description, images } = mockWorkDetail;
+
   return (
     <S.Wrapper>
       <C.WorkContainer>
         <C.TitleRowContainer>
-          <C.TitleContainer>{mockWorkDetail.title}</C.TitleContainer>
-          <C.CategoryContainer>{mockWorkDetail.category}</C.CategoryContainer>
+          <C.TitleContainer>{title}</C.TitleContainer>
+          <C.CategoryContainer>{category}</C.CategoryContainer>
         </C.TitleRowContainer>
-        <C.DesignerContainer>{mockWorkDetail.designer}</C.DesignerContainer>
-        <C.DescriptionContainer>
-          {mockWorkDetail.description}
-        </C.DescriptionContainer>
-        {mockWorkDetail.images.map((image, index) => (
+        <C.DesignerContainer>{designer}</C.DesignerContainer>
+        <C.DescriptionContainer>{description}</C.DescriptionContainer>
+        {images.map((image: string, index: number) => (
           <C.ImageContainer
             // biome-ignore lint/suspicious/noArrayIndexKey: mock data라 무시
             key={index}

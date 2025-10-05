@@ -19,7 +19,16 @@ export const mockDashboardData = {
   email: 'forgather@forgather.me',
 };
 
-export const mockWorkDetail = {
+//TODO: null 타입추론으로 임시 interface 지정
+export interface WorkDetailData {
+  title: string;
+  category: string;
+  designer: string;
+  description: string;
+  images: string[];
+}
+
+export const mockWorkDetail: WorkDetailData | null = {
   title: '프로스페로 series 1.',
   category: 'Chair',
   designer: 'leesomyeong',
