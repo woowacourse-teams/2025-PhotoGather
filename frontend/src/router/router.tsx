@@ -1,6 +1,7 @@
 import { createBrowserRouter } from 'react-router-dom';
 import Layout from '../components/layout/global/layout/Layout';
 import GuestMainPage from '../pages/guest/mainpage/GuestMainPage';
+import SpaceCreateFunnel from '../pages/create/funnel/SpaceCreateFunnel';
 import Dashboard from '../pages/host/dashboard/Dashboard';
 import HostMainPage from '../pages/host/mainPage/HostMainPage';
 import SpaceEditPage from '../pages/host/spaceEditPage/SpaceEditPage';
@@ -50,6 +51,10 @@ const routes: AppRouteObject[] = [
             element: <GuestMainPage />,
           },
         ],
+      },
+      {
+        path: 'create',
+        element: <SpaceCreateFunnel />,
       },
     ],
   },
