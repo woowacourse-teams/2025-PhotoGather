@@ -1,8 +1,10 @@
 import { createBrowserRouter } from 'react-router-dom';
 import Layout from '../components/layout/global/layout/Layout';
+import GuestWorkDetail from '../pages/guest/workDetail/GuestWorkDetail';
 import Dashboard from '../pages/host/dashboard/Dashboard';
 import HostMainPage from '../pages/host/mainPage/HostMainPage';
-import WorkDetail from '../pages/host/workDetail/WorkDetail';
+import WorkDetail from '../pages/host/workDetail/HostWorkDetail';
+import HostWorkDetail from '../pages/host/workDetail/HostWorkDetail';
 import MainPage from '../pages/MainPage';
 import type { AppRouteObject } from '../types/route.type';
 
@@ -34,7 +36,16 @@ const routes: AppRouteObject[] = [
           },
           {
             path: 'work-detail',
-            element: <WorkDetail />,
+            element: <HostWorkDetail />,
+          },
+        ],
+      },
+      {
+        path: 'guest',
+        children: [
+          {
+            path: 'work-detail',
+            element: <GuestWorkDetail />,
           },
         ],
       },

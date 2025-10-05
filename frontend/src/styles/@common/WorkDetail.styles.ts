@@ -1,26 +1,9 @@
 import styled from '@emotion/styled';
 
-export const Wrapper = styled.div`
+export const WorkContainer = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 60px;
-  min-height: ${({ theme }) =>
-    `calc(100dvh - 2 * ${theme.layout.padding.topBottom} - ${theme.layout.headerHeight})`};
-`;
-
-export const WorkContainer = styled.div`
-    display: flex;
-  flex-direction: column;
   gap: 16px;
-`;
-
-export const EditButton = styled.button`
-  ${({ theme }) => theme.typography.captionSmall}
-  color: ${({ theme }) => theme.colors.gray02};
-  align-self: flex-end;
-  display: block;
-  margin-left: auto;
-  margin-bottom: 3px;
 `;
 
 export const TitleRowContainer = styled.div`
@@ -43,9 +26,9 @@ export const DesignerContainer = styled.p`
 `;
 
 export const DescriptionContainer = styled.p`
-    ${({ theme }) => theme.typography.captionSmall}
-    white-space: pre-line;
-    `;
+  ${({ theme }) => theme.typography.captionSmall}
+  white-space: pre-line;
+`;
 
 export const ImageContainer = styled.img`
   width: 100%;
