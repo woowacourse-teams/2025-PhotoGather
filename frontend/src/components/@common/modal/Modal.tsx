@@ -1,5 +1,6 @@
 import { Activity, useContext } from 'react';
 import ModalContext from '../../../contexts/ModalContext';
+import useScrollLock from '../../../hooks/@common/useScrollLock';
 import useEscapeKeyClose from '../../../hooks/domain/modal/useEscapeKeyClose';
 import type {
   BackdropProps,
@@ -14,6 +15,7 @@ const Modal = ({
   onClose,
   closeOnEscape = true,
 }: ModalProps) => {
+  useScrollLock(isOpen);
   useEscapeKeyClose({ closeOnEscape, isOpen, onClose });
   const isModalVisible = isOpen ? 'visible' : 'hidden';
 
