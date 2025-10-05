@@ -17,6 +17,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.forgather.domain.space.model.Photo;
 import com.forgather.global.config.S3Properties;
 import com.forgather.global.exception.FileDownloadException;
 import com.forgather.global.util.RandomCodeGenerator;
@@ -148,7 +149,14 @@ public class AwsS3Cloud implements ContentsStorage {
             );
     }
 
-    // TODO: 추후 스케줄로 DB에 존재하지 않는 S3 객체 삭제 기능 필요
+    @Override
+    public void deletePhotos(List<? extends Photo> deletedPhotos) {
+        List<String> paths = deletedPhotos.stream()
+            .map(Photo::getPath)
+            .toList();
+        deleteContents(paths);
+    }
+
     @Override
     public void deleteContent(String contentPath) {
         List<String> deletePaths = getPathWithThumbnails(contentPath);

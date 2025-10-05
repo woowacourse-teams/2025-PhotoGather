@@ -1,6 +1,5 @@
 package com.forgather.domain.space.dto;
 
-import com.forgather.domain.space.model.Space;
 import com.forgather.global.auth.dto.HostResponse;
 
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -35,18 +34,18 @@ public record SpaceResponse(
     HostResponse host
 ) {
 
-    public static SpaceResponse from(Space space) {
-        return new SpaceResponse(
-            space.getId(),
-            space.getCode(),
-            space.getName(),
-            space.getDescription(),
-            space.getPictureUrl(),
-            space.isPublic(),
-            space.getInstagramUsername(),
-            space.getEmail(),
-            // TODO: 스페이스 : 호스트 m:n 관계로 변경 후 수정 필요
-            HostResponse.from(space.getSpaceHostMap().getFirst().getHost())
-        );
-    }
+    // public static SpaceResponse from(Space space) {
+    //     return new SpaceResponse(
+    //         space.getId(),
+    //         space.getCode(),
+    //         space.getName(),
+    //         space.getDescription(),
+    //         space.getPictureUrl(),
+    //         space.isPublic(),
+    //         space.getInstagramUsername(),
+    //         space.getEmail(),
+    //         // TODO: 스페이스 : 호스트 m:n 관계로 변경 후 수정 필요
+    //         // HostResponse.from(space.getSpaceHostMap().getFirst().getHost())
+    //     );
+    // }
 }

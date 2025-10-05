@@ -1,6 +1,5 @@
 import { IoSettingsSharp, IoShareOutline } from 'react-icons/io5';
 import { Outlet, useMatches } from 'react-router-dom';
-import OverlayProvider from '../../../../contexts/OverlayProvider';
 import type { AppRouteObject } from '../../../../types/route.type';
 import Header from '../../../@common/header/Header';
 import * as S from './Layout.styles';
@@ -25,12 +24,12 @@ const Layout = () => {
   );
 
   return (
-    <OverlayProvider>
+    <>
       <Header mode={isDarkPage ? 'dark' : 'light'} icons={matchedIcons} />
       <S.Container $isDarkPage={isDarkPage}>
         <Outlet />
       </S.Container>
-    </OverlayProvider>
+    </>
   );
 };
 

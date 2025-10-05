@@ -1,0 +1,14 @@
+SET FOREIGN_KEY_CHECKS = 0;
+
+TRUNCATE TABLE guest_book_card_photo;
+TRUNCATE TABLE product_photo;
+TRUNCATE TABLE space_photo;
+TRUNCATE TABLE guest_book_card;
+TRUNCATE TABLE product;
+TRUNCATE TABLE space_host_map;
+TRUNCATE TABLE host_kakao;
+TRUNCATE TABLE space;
+TRUNCATE TABLE host;
+TRUNCATE TABLE guest;
+
+SET FOREIGN_KEY_CHECKS = 1;

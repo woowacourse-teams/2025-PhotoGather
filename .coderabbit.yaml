@@ -12,11 +12,12 @@ reviews:
   related_prs: false  # 관련 PR 찾기
   suggested_labels: false  # 라벨 제안
   suggested_reviewers: false  # 리뷰어 제안
+  assess_linked_issues: false # 관련 이슈 기반 평가
   auto_review:  # 자동 리뷰 설정
     enabled: true  # 자동 리뷰 활성화
     drafts: false  # 드래프트 PR 리뷰
     base_branches: ["develop", "v2/develop"] # 리뷰할 기본 브랜치
-    ignore_usernames: ["ShinjungOh", "hanheel", "H0ngJu", "MinSungJe", "songsunkook", "Hacanna42"] # 리뷰에서 제외할 사용자
+    ignore_usernames: ["ShinjungOh", "songsunkook", "Hacanna42"] # 리뷰에서 제외할 사용자
   finishing_touches:  # 마무리 작업
     docstrings:  # 문서 문자열 생성
       enabled: false  # docstring 자동 생성

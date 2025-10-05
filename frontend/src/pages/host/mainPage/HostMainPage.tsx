@@ -5,13 +5,14 @@ import IconButton from '../../../components/@common/buttons/iconButton/IconButto
 import { DividerLine } from '../../../styles/@common/DividerLine.styles';
 import { createInstagramUrl } from '../../../utils/createExternalLinks';
 import { mockData } from '../../mockData';
+import * as C from '../Host.common.styles';
 import * as S from './HostMainPage.styles';
 
 const HostMainPage = () => {
   return (
     <S.Wrapper>
       <S.ProfileContainer>
-        <S.Thumbnail src={mockData.thumbnail} />
+        <C.Thumbnail src={mockData.thumbnail} />
         <S.InfoContainer>
           <S.Name>{mockData.title}</S.Name>
           <S.Introduction>{mockData.introduction}</S.Introduction>

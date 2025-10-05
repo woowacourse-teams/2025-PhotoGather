@@ -28,7 +28,7 @@ class SpaceTest {
 
         // when & then
         assertThatCode(
-            () -> new Space(host, spaceCode, name, description, pictureUrl, false, instagramUsername, email)
+            () -> new Space(spaceCode, name, description, pictureUrl, false, instagramUsername, email)
         ).doesNotThrowAnyException();
     }
 
@@ -45,7 +45,7 @@ class SpaceTest {
 
         // when & then
         assertThatThrownBy(
-            () -> new Space(host, "1234567890", invalidName, description, pictureUrl, false, instagramUsername, email)
+            () -> new Space("1234567890", invalidName, description, pictureUrl, false, instagramUsername, email)
         ).isInstanceOf(BaseException.class)
             .hasMessageContaining("스페이스 이름");
     }
@@ -63,7 +63,7 @@ class SpaceTest {
 
         // when & then
         assertThatThrownBy(
-            () -> new Space(host, "123456789", name, description, pictureUrl, false, instagramUsername, email)
+            () -> new Space("123456789", name, description, pictureUrl, false, instagramUsername, email)
         ).isInstanceOf(BaseException.class)
             .hasMessageContaining("스페이스 코드");
     }

@@ -1,5 +1,6 @@
 import { createBrowserRouter } from 'react-router-dom';
 import Layout from '../components/layout/global/layout/Layout';
+import Dashboard from '../pages/host/dashboard/Dashboard';
 import HostMainPage from '../pages/host/mainPage/HostMainPage';
 import SpaceEditPage from '../pages/host/spaceEditPage/SpaceEditPage';
 import MainPage from '../pages/MainPage';
@@ -25,9 +26,20 @@ const routes: AppRouteObject[] = [
             },
           },
           {
-            // TODO : dashboard 내부로 변경
-            path: 'edit',
-            element: <SpaceEditPage />,
+            path: 'dashboard',
+            element: <Dashboard />,
+            handle: {
+              headerIcons: ['settings'],
+            },
+            children: [
+              {
+                path: 'edit',
+                element: <SpaceEditPage />,
+                handle: {
+                  headerIcons: ['settings'],
+                },
+              },
+            ],
           },
         ],
       },

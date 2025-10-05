@@ -8,6 +8,8 @@ import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import com.forgather.domain.space.model.Photo;
+
 public interface ContentsStorage {
 
     String upload(String spaceCode, MultipartFile file) throws IOException;
@@ -25,4 +27,6 @@ public interface ContentsStorage {
     String issueSignedUrl(String path);
 
     String getRootDirectory();
+
+    void deletePhotos(List<? extends Photo> deletedPhotos);
 }

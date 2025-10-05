@@ -1,22 +1,16 @@
 package com.forgather.domain.space.model;
 
 import java.text.BreakIterator;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 import com.forgather.domain.model.BaseTimeEntity;
-import com.forgather.global.auth.model.Host;
-import com.forgather.global.auth.model.SpaceHostMap;
 import com.forgather.global.exception.BaseException;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import lombok.AccessLevel;
@@ -31,9 +25,6 @@ public class Space extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @OneToMany(mappedBy = "space", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<SpaceHostMap> spaceHostMap = new ArrayList<>();
 
     @Column(name = "code", nullable = false, length = 64)
     private String code;
@@ -56,10 +47,9 @@ public class Space extends BaseTimeEntity {
     @Column(name = "email")
     private String email;
 
-    public Space(Host host, String code, String name, String description, String pictureUrl, boolean isPublic,
+    public Space(String code, String name, String description, String pictureUrl, boolean isPublic,
         String instagramUsername, String email) {
         validate(code, name);
-        spaceHostMap.add(new SpaceHostMap(this, host));
         this.code = code;
         this.name = name;
         this.description = description;
@@ -69,15 +59,15 @@ public class Space extends BaseTimeEntity {
         this.email = email;
     }
 
-    public void validateHost(Host host) {
-        if (host == null) {
-            throw new BaseException("호스트 정보가 없습니다.");
-        }
-        if (spaceHostMap.stream()
-            .noneMatch(map -> Objects.equals(map.getHost().getId(), host.getId()))) {
-            throw new BaseException("해당 호스트는 이 스페이스의 호스트가 아닙니다. hostId: " + host.getId() + ", spaceCode:" + code);
-        }
-    }
+    // public void validateHost(Host host) {
+    //     if (host == null) {
+    //         throw new BaseException("호스트 정보가 없습니다.");
+    //     }
+    //     if (spaceHostMap.stream()
+    //         .noneMatch(map -> Objects.equals(map.getHost().getId(), host.getId()))) {
+    //         throw new BaseException("해당 호스트는 이 스페이스의 호스트가 아닙니다. hostId: " + host.getId() + ", spaceCode:" + code);
+    //     }
+    // }
 
     public void update(String name, String description, String instagramUsername, String email) {
         if (name != null) {
