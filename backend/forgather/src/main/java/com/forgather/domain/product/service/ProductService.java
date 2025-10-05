@@ -33,8 +33,8 @@ public class ProductService {
     @Transactional(readOnly = true)
     public ProductResponse get(String spaceCode) {
         Product product = productRepository.getBySpaceCodeOrThrow(spaceCode);
-        List<ProductPhoto> photos = productPhotoRepository.findAllByProduct(product);
-        return new ProductResponse(product, photos);
+        ProductPhotos productPhotos = new ProductPhotos(productPhotoRepository.findAllByProduct(product));
+        return new ProductResponse(product, productPhotos.getAll());
     }
 
     @Transactional
