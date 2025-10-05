@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import useFunnel from './useFunnel';
+import useFunnel from './useFunnel.tsx';
 
 const useFormFunnel = <Step extends string, Form>(
   initialStep: Step,

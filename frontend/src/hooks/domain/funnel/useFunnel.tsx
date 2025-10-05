@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { Activity, useState } from 'react';
 import useFunnelHistory from './useFunnelHistory';
 
 interface FunnelStepProps<T> {
@@ -17,8 +17,8 @@ const useFunnel = <Step extends string>(initialStep: Step) => {
   };
 
   const Step = ({ name, children }: FunnelStepProps<Step>) => {
-    if (funnelStep === name) return children;
-    return null;
+    const isStepVisible = funnelStep === name ? 'visible' : 'hidden';
+    return <Activity mode={isStepVisible}>{children}</Activity>;
   };
 
   return { Step, funnelStep, setFunnelStep, goNextStep };
