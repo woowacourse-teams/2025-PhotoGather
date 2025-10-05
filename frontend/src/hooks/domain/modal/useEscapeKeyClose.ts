@@ -15,9 +15,9 @@ const useEscapeKeyClose = ({
     if (!closeOnEscape) return;
     if (!isOpen) return;
 
-    function handleKeyDown(e: KeyboardEvent) {
+    const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose();
-    }
+    };
 
     addEventListener('keyup', handleKeyDown);
 
