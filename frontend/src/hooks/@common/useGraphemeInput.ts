@@ -4,7 +4,11 @@ const segmenter = new Intl.Segmenter('und', { granularity: 'grapheme' });
 
 interface UseGraphemeInputProps {
   initialValue?: string;
-  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange?: (
+    e:
+      | React.ChangeEvent<HTMLInputElement>
+      | React.ChangeEvent<HTMLTextAreaElement>,
+  ) => void;
 }
 
 const useGraphemeInput = ({
@@ -20,7 +24,11 @@ const useGraphemeInput = ({
   const validValue = graphemes.join('');
   const validLength = graphemes.length;
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (
+    e:
+      | React.ChangeEvent<HTMLInputElement>
+      | React.ChangeEvent<HTMLTextAreaElement>,
+  ) => {
     setValue(e.target.value);
     onChange?.(e);
   };
