@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { useState } from 'react';
-import TextInput from '../components/@common/inputs/TextInput';
+import TextInput from '../components/@common/inputs/textInput/TextInput';
 import { CONSTRAINTS } from '../constants/constraints';
 import useGraphemeInput from '../hooks/@common/useGraphemeInput';
 
