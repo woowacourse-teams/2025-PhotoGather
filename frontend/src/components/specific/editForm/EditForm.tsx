@@ -58,7 +58,6 @@ const EditForm = () => {
       onSubmit: () => alert('제출됨'),
       validators,
     });
-  console.log(errorMessage);
 
   const { previewFile, handleFilesUploadClick } = useLocalFile({
     fileType: 'image',
