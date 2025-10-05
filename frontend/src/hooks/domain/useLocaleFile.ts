@@ -98,6 +98,10 @@ const useLocalFile = ({ fileType, maxFileCount }: UseLocalFileProps) => {
       console.error(error);
     }
 
+    if (maxFileCount === 1 && localFiles.length > 0) {
+      clearFiles();
+    }
+
     const limitedValidFiles = validFiles.slice(0, maxFileCount);
     addPreviewUrlsFromFiles(limitedValidFiles);
   };
