@@ -5,9 +5,9 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label: string;
   errorMessage?: string;
   maxCount?: number;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   value: string;
   validLength?: number;
+  isRequired?: boolean;
 }
 
 const TextInput = ({
@@ -15,11 +15,14 @@ const TextInput = ({
   errorMessage,
   maxCount,
   validLength,
+  isRequired = false,
   ...inputProps
 }: InputProps) => {
   return (
     <C.Wrapper>
-      <C.Label htmlFor={inputProps.id}>{label} *</C.Label>
+      <C.Label htmlFor={inputProps.id}>
+        {label} {isRequired && '*'}
+      </C.Label>
       <S.InputField
         {...inputProps}
         id={inputProps.id}

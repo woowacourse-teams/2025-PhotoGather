@@ -3,15 +3,16 @@ import * as S from './TextareaInput.styles';
 
 interface TextareaInputProps
   extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
+  isRequired?: boolean;
   label: string;
   errorMessage?: string;
   maxCount: number;
-  onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
   value: string;
   validLength: number;
 }
 
 const TextareaInput = ({
+  isRequired = false,
   label,
   errorMessage,
   maxCount,
@@ -20,7 +21,10 @@ const TextareaInput = ({
 }: TextareaInputProps) => {
   return (
     <C.Wrapper>
-      <C.Label htmlFor={textareaProps.id}>{label}</C.Label>
+      <C.Label htmlFor={textareaProps.id}>
+        {label}
+        {isRequired && '*'}
+      </C.Label>
       <S.TextareaField {...textareaProps} $isError={!!errorMessage} />
       <C.InputFooterContainer>
         <C.ErrorMessage>{errorMessage ? errorMessage : ''}</C.ErrorMessage>

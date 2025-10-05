@@ -30,7 +30,7 @@ export const global = css`
       cursor: default;
     }
   }
-  textarea{
+  textarea {
     resize: none;
   }
   .scroll-lock {

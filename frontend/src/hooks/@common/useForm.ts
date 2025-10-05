@@ -6,7 +6,7 @@ interface UseFormProps<T> {
   validateBeforeSubmit?: () => void;
   onSubmit: () => void;
 }
-const useForm = <T extends Record<string, string | File[]>>({
+const useForm = <T>({
   initialData,
   validators,
   validateBeforeSubmit,
@@ -48,14 +48,15 @@ const useForm = <T extends Record<string, string | File[]>>({
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     const { name, type, value } = e.target;
+
     if (e.target instanceof HTMLInputElement && type === 'file') {
-      changeFormData(name, Array.from(e.target.files || []));
+      changeFormData(name as keyof T, Array.from(e.target.files || []));
     } else {
-      changeFormData(name, value);
+      changeFormData(name as keyof T, value);
     }
 
     if (validators[name as keyof T]) {
-      checkValid(name, value);
+      checkValid(name as keyof T, value);
     }
   };
 
