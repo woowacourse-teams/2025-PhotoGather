@@ -19,7 +19,7 @@ const TextInput = ({
 }: InputProps) => {
   return (
     <C.Wrapper>
-      <C.Label htmlFor={inputProps.id}>{label}</C.Label>
+      <C.Label htmlFor={inputProps.id}>{label} *</C.Label>
       <S.InputField
         {...inputProps}
         id={inputProps.id}
