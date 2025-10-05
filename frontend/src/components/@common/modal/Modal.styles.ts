@@ -1,5 +1,6 @@
 import styled from '@emotion/styled';
 import { MdClose } from 'react-icons/md';
+import { hexToRgba } from '../../../utils/hexToRgba';
 
 export const ModalSize = {
   mobile: 240,
@@ -17,10 +18,10 @@ export const ModalContent = styled.div<{
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background-color: white;
   padding: 24px 32px;
   border-radius: 8px;
-  color: #000;
+  background-color: ${({ theme }) => theme.colors.white};
+  color: ${({ theme }) => theme.colors.gray06};
 `;
 
 export const ModalBackdrop = styled.div`
@@ -29,7 +30,7 @@ export const ModalBackdrop = styled.div`
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.35);
+  background-color: ${({ theme }) => hexToRgba(theme.colors.gray06, 0.35)};
 `;
 
 export const CloseButton = styled(MdClose)`
