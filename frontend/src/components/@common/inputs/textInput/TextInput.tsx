@@ -4,10 +4,10 @@ import * as S from './TextInput.styles';
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label: string;
   errorMessage?: string;
-  maxCount: number;
+  maxCount?: number;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   value: string;
-  validLength: number;
+  validLength?: number;
 }
 
 const TextInput = ({
