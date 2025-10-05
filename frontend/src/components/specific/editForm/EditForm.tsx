@@ -55,9 +55,10 @@ const EditForm = () => {
   const { formData, changeFormData, handleChange, handleSubmit, errorMessage } =
     useForm<SpaceFormData>({
       initialData,
-      onSubmit: () => {},
+      onSubmit: () => alert('제출됨'),
       validators,
     });
+  console.log(errorMessage);
 
   const { previewFile, handleFilesUploadClick } = useLocalFile({
     fileType: 'image',

@@ -5,7 +5,11 @@ interface UseFormProps<T> {
   validators: Record<keyof T, (value: string) => void>;
   onSubmit: () => void;
 }
-const useForm = <T>({ initialData, validators, onSubmit }: UseFormProps<T>) => {
+const useForm = <T extends object>({
+  initialData,
+  validators,
+  onSubmit,
+}: UseFormProps<T>) => {
   const [formData, setFormData] = useState<T>(initialData);
   const [errorMessage, setErrorMessage] = useState<
     Partial<Record<keyof T, string>>
@@ -22,6 +26,30 @@ const useForm = <T>({ initialData, validators, onSubmit }: UseFormProps<T>) => {
       }
       changeErrorMessage(name, '알 수 없는 오류가 발생했어요');
     }
+  };
+
+  const checkAllValid = (): boolean => {
+    let isValid = true;
+    const newErrorMessages: Partial<Record<keyof T, string>> = {};
+
+    (Object.keys(formData) as Array<keyof T>).forEach((name) => {
+      if (validators[name] && typeof formData[name] === 'string') {
+        try {
+          validators[name](formData[name] as string);
+          newErrorMessages[name] = '';
+        } catch (error) {
+          isValid = false;
+          if (error instanceof Error) {
+            newErrorMessages[name] = error.message;
+          } else {
+            newErrorMessages[name] = '알 수 없는 오류가 발생했어요';
+          }
+        }
+      }
+    });
+
+    setErrorMessage(newErrorMessages);
+    return isValid;
   };
 
   const changeErrorMessage = (key: keyof T, value: string) => {
@@ -56,8 +84,10 @@ const useForm = <T>({ initialData, validators, onSubmit }: UseFormProps<T>) => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
-    onSubmit();
+    const isValid = checkAllValid();
+    if (isValid) {
+      onSubmit();
+    }
   };
 
   return { formData, changeFormData, handleChange, handleSubmit, errorMessage };
