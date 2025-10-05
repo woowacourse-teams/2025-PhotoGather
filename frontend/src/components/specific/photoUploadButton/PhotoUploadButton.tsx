@@ -2,7 +2,7 @@ import { useId } from 'react';
 import { IoCamera } from 'react-icons/io5';
 import defaultImage from '../../../@assets/images/default-image.png';
 import useLocalFile from '../../../hooks/domain/useLocaleFile';
-import { Thumbnail } from '../../../pages/host/mainPage/HostMainPage.styles';
+import { Thumbnail } from '../../../pages/host/Host.common.styles';
 import * as S from './PhotoUploadButton.styles';
 
 interface PhotoUploadButtonProps

@@ -30,6 +30,9 @@ export const global = css`
       cursor: default;
     }
   }
+  textarea{
+    resize: none;
+  }
   .scroll-lock {
     overflow: hidden;
     position: fixed;

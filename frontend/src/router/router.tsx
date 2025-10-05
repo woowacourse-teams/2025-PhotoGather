@@ -31,15 +31,13 @@ const routes: AppRouteObject[] = [
             handle: {
               headerIcons: ['settings'],
             },
-            children: [
-              {
-                path: 'edit',
-                element: <SpaceEditPage />,
-                handle: {
-                  headerIcons: ['settings'],
-                },
-              },
-            ],
+          },
+          {
+            path: 'dashboard-edit',
+            element: <SpaceEditPage />,
+            handle: {
+              headerIcons: ['settings'],
+            },
           },
         ],
       },
