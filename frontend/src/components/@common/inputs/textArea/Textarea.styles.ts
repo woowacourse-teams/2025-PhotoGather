@@ -13,8 +13,7 @@ export const TextareaField = styled.textarea<{ $isError: boolean }>`
   padding: 12px 16px;
   border-radius: 4px;
   border: 1px solid
-    ${({ theme, $isError }) =>
-      $isError ? theme.colors.error : theme.colors.gray02};
+    ${({ theme, $isError }) => ($isError ? theme.colors.error : theme.colors.gray02)};
   background-color: ${({ theme }) => theme.colors.white};
   ${({ theme }) => theme.typography.bodyRegular}
   color: ${({ theme }) => theme.colors.gray06};
@@ -26,8 +25,7 @@ export const TextareaField = styled.textarea<{ $isError: boolean }>`
 
   &:focus {
     outline: none;
-    border-color: ${({ theme, $isError }) =>
-      $isError ? theme.colors.error : theme.colors.gray06};
+    border-color: ${({ theme, $isError }) => ($isError ? theme.colors.error : theme.colors.gray06)};
   }
 
   &:disabled {

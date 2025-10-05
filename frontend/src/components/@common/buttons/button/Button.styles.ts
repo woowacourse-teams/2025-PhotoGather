@@ -41,21 +41,21 @@ export const buttonStyles = {
   `,
 
   tertiary: (theme: Theme) => css`
-background-color: ${theme.colors.gray06};
-color: ${theme.colors.white};
+    background-color: ${theme.colors.gray06};
+    color: ${theme.colors.white};
 
-&:active {
-  background-color: ${theme.colors.gray06};
-  box-shadow: 0px 2px 3px 0px rgba(0, 0, 0, 0.6) inset;
-  color: ${theme.colors.gray02};
-}
+    &:active {
+      background-color: ${theme.colors.gray06};
+      box-shadow: 0px 2px 3px 0px rgba(0, 0, 0, 0.6) inset;
+      color: ${theme.colors.gray02};
+    }
 
-&:disabled {
-  pointer-events: none;
-  background-color: ${theme.colors.gray02};
-  color: ${theme.colors.white};
-}
-`,
+    &:disabled {
+      pointer-events: none;
+      background-color: ${theme.colors.gray02};
+      color: ${theme.colors.white};
+    }
+  `,
 
   error: (theme: Theme) => css`
     ${theme.typography.captionSmall}
@@ -91,7 +91,7 @@ export const StyledButton = styled.button<{
   $variant: ButtonVariant;
 }>`
   width: 100%;
-  
+
   display: flex;
   padding: 12px 20px;
   justify-content: center;

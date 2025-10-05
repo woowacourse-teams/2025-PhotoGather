@@ -9,13 +9,13 @@ export const Wrapper = styled.div`
 `;
 
 export const TitleContainer = styled.h2`
-    ${({ theme }) => theme.typography.header02}
+  ${({ theme }) => theme.typography.header02}
 `;
 
 export const FormContainer = styled.form`
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 `;
 
 export const LabelContainer = styled.label`
