@@ -28,6 +28,7 @@ export const Overlay = styled.div`
     width: 32px;
     height: 32px;
     color: ${({ theme }) => theme.colors.white};
+    opacity: 0.8;
 
     &:active {
       scale: 0.95;

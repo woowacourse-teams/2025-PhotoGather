@@ -1,26 +1,31 @@
 import { useId } from 'react';
 import { IoCamera } from 'react-icons/io5';
 import defaultImage from '../../../@assets/images/default-image.png';
-import useLocalFile from '../../../hooks/domain/useLocaleFile';
 import { Thumbnail } from '../../../pages/host/Host.common.styles';
+import type { PreviewFile } from '../../../types/file.type';
 import * as S from './PhotoUploadButton.styles';
 
 interface PhotoUploadButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  uploadImage: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  previewFile: PreviewFile[];
   originalSrc?: string;
 }
 
-const PhotoUploadButton = ({ originalSrc }: PhotoUploadButtonProps) => {
-  const { handleFilesUploadClick } = useLocalFile({
-    fileType: 'image',
-    maxFileCount: 1,
-  });
+const PhotoUploadButton = ({
+  uploadImage,
+  originalSrc,
+  previewFile,
+}: PhotoUploadButtonProps) => {
   const fileInputId = useId();
+
+  const matchThumbnailImage = () =>
+    previewFile[0]?.previewUrl || originalSrc || defaultImage;
 
   return (
     <>
       <S.Label htmlFor={fileInputId}>
-        <Thumbnail src={originalSrc ? originalSrc : defaultImage} />
+        <Thumbnail src={matchThumbnailImage()} />
         <S.Overlay>
           <IoCamera />
         </S.Overlay>
@@ -29,7 +34,7 @@ const PhotoUploadButton = ({ originalSrc }: PhotoUploadButtonProps) => {
         id={fileInputId}
         type="file"
         accept="image/*"
-        onChange={handleFilesUploadClick}
+        onChange={uploadImage}
       />
     </>
   );
