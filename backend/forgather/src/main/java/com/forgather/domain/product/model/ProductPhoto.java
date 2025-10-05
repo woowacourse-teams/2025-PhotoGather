@@ -1,6 +1,7 @@
 package com.forgather.domain.product.model;
 
 import com.forgather.domain.space.model.Photo;
+import com.forgather.global.exception.BaseException;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -37,10 +38,16 @@ public class ProductPhoto extends Photo implements Comparable<ProductPhoto> {
     }
 
     public void changeOrder(int order) {
+        if (order < 1) {
+            throw new BaseException("정렬 순서는 1 이상이어야 합니다. order: " + order);
+        }
         sortOrder = order;
     }
 
     public void pullOrder() {
+        if (sortOrder <= 1) {
+            throw new BaseException("더 이상 정렬 순서를 당길 수 없습니다. order: " + sortOrder);
+        }
         sortOrder--;
     }
 
