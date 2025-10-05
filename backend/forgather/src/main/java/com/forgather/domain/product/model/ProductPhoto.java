@@ -44,13 +44,6 @@ public class ProductPhoto extends Photo implements Comparable<ProductPhoto> {
         sortOrder = order;
     }
 
-    public void pullOrder() {
-        if (sortOrder <= 1) {
-            throw new BaseException("더 이상 정렬 순서를 당길 수 없습니다. order: " + sortOrder);
-        }
-        sortOrder--;
-    }
-
     @Override
     public int compareTo(ProductPhoto productPhoto) {
         return Integer.compare(sortOrder, productPhoto.sortOrder);

@@ -44,7 +44,7 @@ class ProductPhotosTest {
         // when, then
         assertThatThrownBy(() -> new ProductPhotos(List.of(photo1, photo2, photo3)))
             .isInstanceOf(BaseException.class)
-            .hasMessageContaining("작품 사진은 정렬 순서는 중복될 수 없습니다.");
+            .hasMessageContaining("작품 사진의 정렬 순서는 중복될 수 없습니다.");
     }
 
     @DisplayName("작품 사진을 추가하고 정렬 순서를 유지한다")

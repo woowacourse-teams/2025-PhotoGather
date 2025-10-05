@@ -11,31 +11,6 @@ import com.forgather.global.exception.BaseException;
 
 class ProductPhotoTest {
 
-    @DisplayName("작품 사진의 정렬 순서를 앞당길 수 있다")
-    @Test
-    void pullOrder() {
-        // given
-        ProductPhoto productPhoto = new ProductPhoto(createProduct(), "originalName", "path", 1024, 3);
-
-        // when
-        productPhoto.pullOrder();
-
-        // then
-        assertThat(productPhoto.getSortOrder()).isEqualTo(2);
-    }
-
-    @DisplayName("첫 번째 사진의 정렬 순서를 앞당기면 예외를 던진다")
-    @Test
-    void throwExceptionWhenPullFirstPhoto() {
-        // given
-        ProductPhoto productPhoto = new ProductPhoto(createProduct(), "originalName", "path", 1024, 1);
-
-        // when, then
-        assertThatThrownBy(productPhoto::pullOrder)
-            .isInstanceOf(BaseException.class)
-            .hasMessageContaining("더 이상 정렬 순서를 당길 수 없습니다.");
-    }
-
     @DisplayName("작품 사진의 순서를 변경한다")
     @Test
     void changeOrder() {
