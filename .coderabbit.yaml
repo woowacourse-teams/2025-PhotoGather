@@ -43,4 +43,4 @@ tools:  # 추가 분석 도구
 knowledge_base:  # 지식 베이스 설정
   code_guidelines:  # 코딩 가이드라인 설정
     enabled: true  # 코딩 가이드라인 활성화
-    filePattern s: ["./coderabbit_rules.md"]  # 프로젝트 루트의 CodeRabbit 규칙 파일
+    filePatterns: ["./coderabbit_rules.md"]  # 프로젝트 루트의 CodeRabbit 규칙 파일
