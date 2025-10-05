@@ -15,7 +15,7 @@ public record UpdateProductRequest(
     @Schema(description = "작가명", example = "히비노카프카", maxLength = 20)
     String authorName,
 
-    @Schema(description = "작품 설명", example = "150 x 200 x 200\n\n고귀하지 않은 의자입니다.\n막 다뤄주세요.", maxLength = 20)
+    @Schema(description = "작품 설명", example = "150 x 200 x 200\n\n고귀하지 않은 의자입니다.\n막 다뤄주세요.", maxLength = 1000)
     String description,
 
     @Schema(description = "삭제할 작품 사진 목록", example = "[1, 3]")
