@@ -14,7 +14,7 @@ const Modal = ({
   onClose,
   closeOnEscape = true,
 }: ModalProps) => {
-  useEscapeKeyClose(closeOnEscape, isOpen, onClose);
+  useEscapeKeyClose({ closeOnEscape, isOpen, onClose });
   const isModalVisible = isOpen ? 'visible' : 'hidden';
 
   return (

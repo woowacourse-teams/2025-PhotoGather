@@ -1,10 +1,16 @@
 import { useEffect } from 'react';
 
-const useEscapeKeyClose = (
-  closeOnEscape: boolean,
-  isOpen: boolean,
-  onClose: () => void,
-) => {
+interface UseEscapeKeyCloseProps {
+  closeOnEscape: boolean;
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+const useEscapeKeyClose = ({
+  closeOnEscape,
+  isOpen,
+  onClose,
+}: UseEscapeKeyCloseProps) => {
   useEffect(() => {
     if (!closeOnEscape) return;
     if (!isOpen) return;
