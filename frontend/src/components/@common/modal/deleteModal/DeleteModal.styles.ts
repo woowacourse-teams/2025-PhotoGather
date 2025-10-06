@@ -22,7 +22,7 @@ export const DeleteModalMessageContainer = styled.div`
 `;
 
 export const DeleteConfirmComment = styled.p`
-  ${({ theme }) => theme.typography.header03}
+  ${({ theme }) => theme.typography.bodyLarge}
   color: ${({ theme }) => theme.colors.gray06};
 `;
 
