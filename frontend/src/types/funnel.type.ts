@@ -1,6 +1,9 @@
+import type { SpaceAccessType } from './space.type';
+
 export interface CreateFunnelForm {
   name: string;
   description: string;
+  accessType: SpaceAccessType;
 }
 
 export interface FunnelBaseElementProps {
