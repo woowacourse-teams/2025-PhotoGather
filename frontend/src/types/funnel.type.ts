@@ -1,9 +1,12 @@
-import type { SpaceAccessType } from './space.type';
+import type { SpaceVisibility } from './space.type';
 
 export interface CreateFunnelForm {
   name: string;
   description: string;
-  accessType: SpaceAccessType;
+  visibility: SpaceVisibility;
+  profileImage?: File[];
+  email?: string;
+  instagram?: string;
 }
 
 export interface FunnelBaseElementProps {

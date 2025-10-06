@@ -2,9 +2,9 @@ import StepProgressBar from '../../../components/@common/progressBar/step/StepPr
 import useConfirmBeforeRefresh from '../../../hooks/@common/useConfirmBeforeRefresh';
 import useFormFunnel from '../../../hooks/domain/funnel/useFormFunnel';
 import type { CreateFunnelForm } from '../../../types/funnel.type';
-import AccessTypeElement from '../funnelElements/accessTypeElement/AccessTypeElement';
 import SpaceDescriptionElement from '../funnelElements/SpaceDescriptionElement';
 import SpaceNameElement from '../funnelElements/SpaceNameElement';
+import SpaceVisibilityElement from '../funnelElements/spaceVisibilityElement/SpaceVisibilityElement';
 import * as S from './SpaceCreateFunnel.styles';
 
 type Step = 'name' | 'description' | 'check' | 'accessType';
@@ -17,7 +17,7 @@ const PROGRESS_STEP_LIST: readonly Step[] = [
 const initialCreateFunnelForm: CreateFunnelForm = {
   name: '',
   description: '',
-  accessType: 'PUBLIC',
+  visibility: 'PUBLIC',
 };
 
 const SpaceCreateFunnel = () => {
@@ -52,17 +52,17 @@ const SpaceCreateFunnel = () => {
           />
         </Funnel.Step>
         <Funnel.Step name="accessType">
-          <AccessTypeElement
-            onNext={(accessType) =>
-              Funnel.goNextWithData('check', { accessType })
+          <SpaceVisibilityElement
+            onNext={(visibility) =>
+              Funnel.goNextWithData('check', { visibility })
             }
-            initialValue={Funnel.form.accessType}
+            initialValue={Funnel.form.visibility}
           />
         </Funnel.Step>
         <Funnel.Step name="check">
           <p>{Funnel.form.name}</p>
           <p>{Funnel.form.description}</p>
-          <p>{Funnel.form.accessType}</p>
+          <p>{Funnel.form.visibility}</p>
         </Funnel.Step>
       </S.ContentContainer>
     </S.Wrapper>

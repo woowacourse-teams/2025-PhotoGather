@@ -2,9 +2,9 @@ import { useState } from 'react';
 import { IoGlobeOutline, IoLockClosedOutline } from 'react-icons/io5';
 import BorderButton from '../../../../components/@common/buttons/borderButton/BorderButton';
 import type { FunnelElementProps } from '../../../../types/funnel.type';
-import type { SpaceAccessType } from '../../../../types/space.type';
+import type { SpaceVisibility } from '../../../../types/space.type';
 import FunnelBasePage from '../../funnel/funnelBasePage/FunnelBasePage';
-import * as S from './AccessTypeElement.styles';
+import * as S from './SpaceVisibilityElement.styles';
 
 const INFORMATION = {
   ACCESS_TYPE: {
@@ -21,11 +21,11 @@ const INFORMATION = {
   },
 } as const;
 
-const AccessTypeElement = ({
+const SpaceVisibilityElement = ({
   onNext,
   initialValue = 'PUBLIC',
-}: FunnelElementProps<SpaceAccessType>) => {
-  const [accessType, setAccessType] = useState<SpaceAccessType>(initialValue);
+}: FunnelElementProps<SpaceVisibility>) => {
+  const [accessType, setAccessType] = useState<SpaceVisibility>(initialValue);
 
   const BorderButtons = [
     {
@@ -71,4 +71,4 @@ const AccessTypeElement = ({
   );
 };
 
-export default AccessTypeElement;
+export default SpaceVisibilityElement;
