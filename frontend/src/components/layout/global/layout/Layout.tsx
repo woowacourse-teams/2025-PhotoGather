@@ -10,7 +10,6 @@ const Layout = () => {
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const openShareModal = () => {
     setIsShareModalOpen(true);
-    console.log('작동');
   };
   const closeShareModal = () => {
     setIsShareModalOpen(false);
