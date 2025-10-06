@@ -3,6 +3,7 @@ import useConfirmBeforeRefresh from '../../../hooks/@common/useConfirmBeforeRefr
 import useFormFunnel from '../../../hooks/domain/funnel/useFormFunnel';
 import type { CreateFunnelForm } from '../../../types/funnel.type';
 import AccessTypeElement from '../funnelElements/accessTypeElement/AccessTypeElement';
+import DescriptionInputElement from '../funnelElements/DescriptionInputElement';
 import NameInputElement from '../funnelElements/NameInputElement';
 import * as S from './SpaceCreateFunnel.styles';
 
@@ -43,7 +44,7 @@ const SpaceCreateFunnel = () => {
           />
         </Funnel.Step>
         <Funnel.Step name="description">
-          <NameInputElement
+          <DescriptionInputElement
             onNext={(description) =>
               Funnel.goNextWithData('accessType', { description })
             }
@@ -61,6 +62,7 @@ const SpaceCreateFunnel = () => {
         <Funnel.Step name="check">
           <p>{Funnel.form.name}</p>
           <p>{Funnel.form.description}</p>
+          <p>{Funnel.form.accessType}</p>
         </Funnel.Step>
       </S.ContentContainer>
     </S.Wrapper>

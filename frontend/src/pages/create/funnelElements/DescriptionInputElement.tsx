@@ -4,7 +4,7 @@ import useGraphemeInput from '../../../hooks/@common/useGraphemeInput';
 import type { FunnelElementProps } from '../../../types/funnel.type';
 import FunnelBasePage from '../funnel/funnelBasePage/FunnelBasePage';
 
-const NameInputElement = ({
+const DescriptionInputElement = ({
   onNext,
   initialValue = '',
 }: FunnelElementProps) => {
@@ -36,4 +36,4 @@ const NameInputElement = ({
   );
 };
 
-export default NameInputElement;
+export default DescriptionInputElement;
