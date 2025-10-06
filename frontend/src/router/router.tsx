@@ -55,6 +55,9 @@ const routes: AppRouteObject[] = [
       {
         path: 'create',
         element: <SpaceCreateFunnel />,
+        handle: {
+          noHeader: true,
+        },
       },
     ],
   },

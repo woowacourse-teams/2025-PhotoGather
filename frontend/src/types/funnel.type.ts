@@ -1,3 +1,8 @@
+export interface CreateFunnelForm {
+  name: string;
+  description: string;
+}
+
 export interface FunnelBaseElementProps {
   title: string;
   description: string;
