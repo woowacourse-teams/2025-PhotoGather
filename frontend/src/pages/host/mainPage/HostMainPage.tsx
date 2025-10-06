@@ -1,4 +1,5 @@
-import { IoLogoInstagram, IoMailOutline } from 'react-icons/io5';
+import { IoLogoInstagram } from 'react-icons/io5';
+import { MdEmail } from 'react-icons/md';
 import FooterLogo from '../../../@assets/footer-logo.svg?react';
 import Button from '../../../components/@common/buttons/button/Button';
 import IconButton from '../../../components/@common/buttons/iconButton/IconButton';
@@ -29,7 +30,7 @@ const HostMainPage = () => {
         />
         <IconButton
           aria-label="이메일"
-          icon={<IoMailOutline />}
+          icon={<MdEmail />}
           variant="default"
           onClick={() => window.open(`mailto:${mockData.email}`, '_blank')}
         />
