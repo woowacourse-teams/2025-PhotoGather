@@ -59,7 +59,7 @@ class ProductTest {
 
     @DisplayName("작품명의 길이가 50자를 초과하면 예외를 던진다")
     @Test
-    void throwExceptionWhenBlankTitle() {
+    void throwExceptionWhenExceedTitleLength() {
         // given
         String title = "0123456789".repeat(5) + 1;
 

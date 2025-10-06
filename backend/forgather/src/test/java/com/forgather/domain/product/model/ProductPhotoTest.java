@@ -13,7 +13,7 @@ import com.forgather.global.exception.BaseException;
 
 class ProductPhotoTest {
 
-    @DisplayName("작품 사진의 정렬 순서 값이 유효하지 않으면 예외를 던진다")
+    @DisplayName("작품 정보가 null이면 예외를 던진다")
     @Test
     void throwExceptionWhenNoProduct() {
         // when, then
