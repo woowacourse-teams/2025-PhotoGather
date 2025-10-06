@@ -23,6 +23,11 @@ export const IconButtonStyles = {
     border-radius: 50%;
     background-color: ${theme.colors.gray06};
     color: ${theme.colors.white};
+    svg {
+      &:active{
+        scale: 0.95
+      }
+    }
   `,
 };
 
