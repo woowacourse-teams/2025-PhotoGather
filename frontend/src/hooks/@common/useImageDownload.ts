@@ -1,9 +1,7 @@
+import { shareByWebShareAPI } from '../../utils/webShareApi';
 import { validateCanWebShare } from '../../validators/share.validators';
-import useWebShareAPI from './useWebShareAPI';
 
 const useImageDownload = () => {
-  const { share } = useWebShareAPI();
-
   const downloadByAnchor = async (blob: Blob, fileName: string) => {
     const objectUrl = URL.createObjectURL(blob);
 
@@ -16,20 +14,24 @@ const useImageDownload = () => {
     link.click();
     document.body.removeChild(link);
 
-    URL.revokeObjectURL(objectUrl);
+    setTimeout(() => {
+      URL.revokeObjectURL(objectUrl);
+    }, 0);
   };
 
   const saveImage = async (blob: Blob, fileName: string) => {
     try {
       validateCanWebShare();
 
-      const file = new File([blob], 'qrcode.png', { type: 'image/png' });
-      await share({
+      const file = new File([blob], fileName, { type: blob.type });
+      await shareByWebShareAPI({
         files: [file],
         title: '스페이스 QR',
       });
-    } catch {
-      downloadByAnchor(blob, fileName);
+    } catch (error) {
+      if (error instanceof Error && error.name !== 'AbortError') {
+        downloadByAnchor(blob, fileName);
+      }
     }
   };
 
