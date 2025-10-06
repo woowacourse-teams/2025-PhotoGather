@@ -1,11 +1,11 @@
 import styled from '@emotion/styled';
 
-export const ShareModalCommentContainer = styled.div`
+export const CommentContainer = styled.div`
   display: flex;
   flex-direction: column;
 `;
 
-export const ShareModalContainer = styled.div`
+export const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -13,15 +13,20 @@ export const ShareModalContainer = styled.div`
   gap: 24px;
 `;
 
-export const ShareModalTitle = styled.p`
+export const Title = styled.p`
   ${({ theme }) => theme.typography.bodyLarge}
   color: ${({ theme }) => theme.colors.gray06};
   text-align: center;
 `;
 
-export const ShareModalDescription = styled.p`
+export const Description = styled.p`
   ${({ theme }) => theme.typography.captionSmall}
   color: ${({ theme }) => theme.colors.gray04};
   text-align: center;
   white-space: pre-wrap;
+`;
+
+export const ButtonContainer = styled.div`
+  display: flex;
+  gap: 16px;
 `;

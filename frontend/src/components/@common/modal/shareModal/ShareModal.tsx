@@ -1,3 +1,5 @@
+import { MdDownload, MdLink } from 'react-icons/md';
+import IconButton from '../../buttons/iconButton/IconButton';
 import QRCode from '../../qrCode/QRCode';
 import Modal from '../Modal';
 import * as S from './ShareModal.styles';
@@ -14,15 +16,17 @@ const ShareModal = ({ isOpen, onClose }: ShareModalProps) => {
     <Modal isOpen={isOpen} onClose={onClose}>
       <Modal.Backdrop />
       <Modal.Content>
-        <S.ShareModalContainer>
-          <S.ShareModalCommentContainer>
-            <S.ShareModalTitle>공유하기</S.ShareModalTitle>
-            <S.ShareModalDescription>
-              QR코드를 눌러 저장하세요
-            </S.ShareModalDescription>
-          </S.ShareModalCommentContainer>
+        <S.Container>
+          <S.CommentContainer>
+            <S.Title>공유하기</S.Title>
+            <S.Description>QR 저장 또는 링크 복사</S.Description>
+          </S.CommentContainer>
           <QRCode address={copyAddress} />
-        </S.ShareModalContainer>
+          <S.ButtonContainer>
+            <IconButton icon={<MdDownload />} variant="dark" />
+            <IconButton icon={<MdLink />} variant="dark" />
+          </S.ButtonContainer>
+        </S.Container>
       </Modal.Content>
     </Modal>
   );

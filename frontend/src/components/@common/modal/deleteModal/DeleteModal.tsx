@@ -1,4 +1,4 @@
-import { IoWarning } from 'react-icons/io5';
+import { MdWarning } from 'react-icons/md';
 import { useToast } from '../../../../hooks/@common/useToast';
 import Button from '../../buttons/button/Button';
 import Modal from '../Modal';
@@ -24,7 +24,7 @@ const DeleteModal = ({ isOpen, onClose }: DeleteModalProps) => {
       <Modal.Backdrop />
       <Modal.Content>
         <S.DeleteModalContainer>
-          <IoWarning />
+          <MdWarning />
           <S.DeleteModalMessageContainer>
             <S.DeleteConfirmComment>
               정말 삭제하시겠습니까?

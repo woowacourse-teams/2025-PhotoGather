@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { IoSettingsSharp, IoShareOutline } from 'react-icons/io5';
+import { MdOutlineIosShare, MdSettings } from 'react-icons/md';
 import { Outlet, useMatches } from 'react-router-dom';
 import type { AppRouteObject } from '../../../../types/route.type';
 import Header from '../../../@common/header/Header';
@@ -17,11 +17,11 @@ const Layout = () => {
 
   const headerIcons = {
     share: {
-      icon: <IoShareOutline />,
+      icon: <MdOutlineIosShare />,
       onClick: openShareModal,
     },
     settings: {
-      icon: <IoSettingsSharp />,
+      icon: <MdSettings />,
       onClick: () => console.log('Settings clicked'),
     },
   };
