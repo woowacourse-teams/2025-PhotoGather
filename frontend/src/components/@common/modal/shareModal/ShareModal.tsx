@@ -1,4 +1,6 @@
+import { useRef } from 'react';
 import { MdDownload, MdLink } from 'react-icons/md';
+import useImageDownload from '../../../../hooks/@common/useImageDownload';
 import { useToast } from '../../../../hooks/@common/useToast';
 import { copyLinkToClipboard } from '../../../../utils/coptLinkToClipboard';
 import IconButton from '../../buttons/iconButton/IconButton';
@@ -12,9 +14,22 @@ interface ShareModalProps {
 }
 
 const ShareModal = ({ isOpen, onClose }: ShareModalProps) => {
-  // TODO : spaceCode를 추가해서 변경 필요
-  const copyAddress = `${import.meta.env.VITE_DOMAIN}/space/guest-home`;
   const { showToast } = useToast();
+  const qrCodeRef = useRef<HTMLCanvasElement>(null);
+  const { saveImage } = useImageDownload();
+  const copyAddress = `${import.meta.env.VITE_DOMAIN}/guest/main`;
+
+  const saveQRCodeImage = async () => {
+    const canvas = qrCodeRef.current;
+    if (!canvas) return;
+
+    const blob = await new Promise<Blob | null>((resolve) =>
+      canvas.toBlob(resolve, 'image/png'),
+    );
+    if (!blob) return;
+    saveImage(blob, 'qrcode_share.png');
+  };
+
   const copyShareLink = () => {
     copyLinkToClipboard(copyAddress);
     showToast({
@@ -32,9 +47,13 @@ const ShareModal = ({ isOpen, onClose }: ShareModalProps) => {
             <S.Title>공유하기</S.Title>
             <S.Description>QR 저장 또는 링크 복사</S.Description>
           </S.CommentContainer>
-          <QRCode address={copyAddress} />
+          <QRCode address={copyAddress} ref={qrCodeRef} />
           <S.ButtonContainer>
-            <IconButton icon={<MdDownload />} variant="dark" />
+            <IconButton
+              icon={<MdDownload />}
+              variant="dark"
+              onClick={saveQRCodeImage}
+            />
             <IconButton
               icon={<MdLink style={{ rotate: '-45deg' }} />}
               variant="dark"
