@@ -5,6 +5,14 @@ export const ShareModalCommentContainer = styled.div`
   flex-direction: column;
 `;
 
+export const ShareModalContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+`;
+
 export const ShareModalTitle = styled.p`
   ${({ theme }) => theme.typography.bodyLarge}
   color: ${({ theme }) => theme.colors.gray06};
