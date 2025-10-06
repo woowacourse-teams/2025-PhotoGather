@@ -4,14 +4,16 @@ import useFormFunnel from '../../../hooks/domain/funnel/useFormFunnel';
 import type { CreateFunnelForm } from '../../../types/funnel.type';
 import SpaceDescriptionElement from '../funnelElements/SpaceDescriptionElement';
 import SpaceNameElement from '../funnelElements/SpaceNameElement';
+import SpaceDetailElement from '../funnelElements/spaceDetailElement/SpaceDetailElement';
 import SpaceVisibilityElement from '../funnelElements/spaceVisibilityElement/SpaceVisibilityElement';
 import * as S from './SpaceCreateFunnel.styles';
 
-type Step = 'name' | 'description' | 'check' | 'accessType';
+type Step = 'name' | 'description' | 'check' | 'detail' | 'accessType';
 const PROGRESS_STEP_LIST: readonly Step[] = [
   'name',
   'description',
   'accessType',
+  'detail',
   'check',
 ] as const;
 const initialCreateFunnelForm: CreateFunnelForm = {
@@ -54,7 +56,15 @@ const SpaceCreateFunnel = () => {
         <Funnel.Step name="accessType">
           <SpaceVisibilityElement
             onNext={(visibility) =>
-              Funnel.goNextWithData('check', { visibility })
+              Funnel.goNextWithData('detail', { visibility })
+            }
+            initialValue={Funnel.form.visibility}
+          />
+        </Funnel.Step>
+        <Funnel.Step name="detail">
+          <SpaceDetailElement
+            onNext={(detail) =>
+              Funnel.goNextWithData('check', { instagram: detail })
             }
             initialValue={Funnel.form.visibility}
           />
@@ -63,6 +73,7 @@ const SpaceCreateFunnel = () => {
           <p>{Funnel.form.name}</p>
           <p>{Funnel.form.description}</p>
           <p>{Funnel.form.visibility}</p>
+          <p>{Funnel.form.instagram}</p>
         </Funnel.Step>
       </S.ContentContainer>
     </S.Wrapper>
