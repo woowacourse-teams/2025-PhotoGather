@@ -36,7 +36,20 @@ const SpaceCreateFunnel = () => {
         <Funnel.Step name="name">
           <NameInputElement
             onNext={(name) => Funnel.goNextWithData('description', { name })}
+            initialValue={Funnel.form.name}
           />
+        </Funnel.Step>
+        <Funnel.Step name="description">
+          <NameInputElement
+            onNext={(description) =>
+              Funnel.goNextWithData('check', { description })
+            }
+            initialValue={Funnel.form.description}
+          />
+        </Funnel.Step>
+        <Funnel.Step name="check">
+          <p>{Funnel.form.name}</p>
+          <p>{Funnel.form.description}</p>
         </Funnel.Step>
       </S.ContentContainer>
     </S.Wrapper>
