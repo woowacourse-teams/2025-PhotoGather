@@ -1,4 +1,4 @@
-import * as S from "./Button.styles";
+import * as S from './Button.styles';
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   /** 버튼의 variant */
