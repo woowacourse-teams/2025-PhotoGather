@@ -24,7 +24,10 @@ const ShareModal = ({ isOpen, onClose }: ShareModalProps) => {
           <QRCode address={copyAddress} />
           <S.ButtonContainer>
             <IconButton icon={<MdDownload />} variant="dark" />
-            <IconButton icon={<MdLink />} variant="dark" />
+            <IconButton
+              icon={<MdLink style={{ rotate: '-45deg' }} />}
+              variant="dark"
+            />
           </S.ButtonContainer>
         </S.Container>
       </Modal.Content>
