@@ -44,9 +44,6 @@ public class Space extends BaseTimeEntity {
     @Column(name = "description")
     private String description;
 
-    @Column(name = "picture_url")
-    private String pictureUrl;
-
     @Column(name = "is_public", nullable = false)
     private boolean isPublic;
 
@@ -56,14 +53,13 @@ public class Space extends BaseTimeEntity {
     @Column(name = "email")
     private String email;
 
-    public Space(Host host, String code, String name, String description, String pictureUrl, boolean isPublic,
-        String instagramUsername, String email) {
+    public Space(Host host, String code, String name, String description, boolean isPublic, String instagramUsername,
+        String email) {
         validate(code, name);
         spaceHostMap.add(new SpaceHostMap(this, host));
         this.code = code;
         this.name = name;
         this.description = description;
-        this.pictureUrl = pictureUrl;
         this.isPublic = isPublic;
         this.instagramUsername = instagramUsername;
         this.email = email;

@@ -4,6 +4,7 @@ import static org.springframework.http.HttpStatus.CREATED;
 
 import java.util.List;
 
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -37,11 +38,11 @@ public class SpaceController {
 
     private final SpaceService spaceService;
 
-    @PostMapping
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Operation(summary = "스페이스 생성", description = "새로운 스페이스를 생성합니다.")
     public ResponseEntity<CreateSpaceResponse> create(
-        @RequestBody CreateSpaceRequest request,
-        @RequestPart("file") MultipartFile file,
+        @RequestPart("request") CreateSpaceRequest request,
+        @RequestPart(value = "file", required = false) MultipartFile file,
         @LoginHost Host host
     ) {
         var response = spaceService.create(request, file, host);

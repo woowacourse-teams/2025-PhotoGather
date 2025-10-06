@@ -80,8 +80,9 @@ class PhotoAcceptanceTest extends AcceptanceTest {
     void issuePreSignedUrls() {
         // given
         var host = hostRepository.save(new Host("모코", "pictureUrl"));
-        var space = spaceRepository.save(new Space(host, "space-code", "test-space", "description",
-            "forgather/temp.png", false, "forgather_official", "forgather@forgather.me"));
+        var space = spaceRepository.save(
+            new Space(host, "space-code", "test-space", "description", false, "forgather_official",
+                "forgather@forgather.me"));
         var request = new IssueSignedUrlRequest(List.of("UUID1.png", "UUID2.png", "UUID3.png"));
 
         // when
@@ -107,8 +108,9 @@ class PhotoAcceptanceTest extends AcceptanceTest {
     void issueExceedPreSignedUrls() {
         // given
         var host = hostRepository.save(new Host("모코", "pictureUrl"));
-        var space = spaceRepository.save(new Space(host, "space-code", "test-space", "description",
-            "forgather/temp.png", false, "forgather_official", "forgather@forgather.me"));
+        var space = spaceRepository.save(
+            new Space(host, "space-code", "test-space", "description", false, "forgather_official",
+                "forgather@forgather.me"));
         var request = new IssueSignedUrlRequest(IntStream.range(0, 101)
             .mapToObj(i -> "UUID" + (i + 1) + ".png")
             .toList());
@@ -149,8 +151,9 @@ class PhotoAcceptanceTest extends AcceptanceTest {
     void issueAllDownloadUrl() {
         // given
         var host = hostRepository.save(new Host("모코", "pictureUrl"));
-        var space = spaceRepository.save(new Space(host, "space-code", "test-space", "description",
-            "forgather/temp.png", false, "forgather_official", "forgather@forgather.me"));
+        var space = spaceRepository.save(
+            new Space(host, "space-code", "test-space", "description", false, "forgather_official",
+                "forgather@forgather.me"));
         var guest = guestRepository.save(new Guest("guest"));
         String token = jwtTokenProvider.generateAccessToken(host.getId());
 

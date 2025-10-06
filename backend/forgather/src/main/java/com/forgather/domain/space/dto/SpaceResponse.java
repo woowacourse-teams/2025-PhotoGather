@@ -20,9 +20,6 @@ public record SpaceResponse(
     String description,
 
     @Schema(description = "스페이스 설명", example = "나의 졸업 전시.")
-    String pictureUrl,
-
-    @Schema(description = "스페이스 설명", example = "나의 졸업 전시.")
     boolean isPublic,
 
     @Schema(description = "스페이스 설명", example = "나의 졸업 전시.")
@@ -41,7 +38,6 @@ public record SpaceResponse(
             space.getCode(),
             space.getName(),
             space.getDescription(),
-            space.getPictureUrl(),
             space.isPublic(),
             space.getInstagramUsername(),
             space.getEmail(),

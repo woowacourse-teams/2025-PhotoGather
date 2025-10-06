@@ -21,14 +21,13 @@ class SpaceTest {
         String emoji = "\uD83D\uDC68\u200D\uD83D\uDC69\u200D\uD83D\uDC67\u200D\uD83D\uDC66"; // // 가족 이모지, length 11
         String name = "우리의 모임12345678" + emoji; // 스페이스 이름에 이모지 포함
         String description = "스페이스 설명";
-        String pictureUrl = "/forgather/temp.png";
         String instagramUsername = "forgather_official";
         String email = "forgather@forgather.me";
         Host host = new Host("moko", "pictureUrl");
 
         // when & then
         assertThatCode(
-            () -> new Space(host, spaceCode, name, description, pictureUrl, false, instagramUsername, email)
+            () -> new Space(host, spaceCode, name, description, false, instagramUsername, email)
         ).doesNotThrowAnyException();
     }
 
@@ -38,14 +37,13 @@ class SpaceTest {
     void spaceNameValidationTest(String invalidName) {
         // given
         String description = "스페이스 설명";
-        String pictureUrl = "/forgather/temp.png";
         String instagramUsername = "forgather_official";
         String email = "forgather@forgather.me";
         Host host = new Host("moko", "pictureUrl");
 
         // when & then
         assertThatThrownBy(
-            () -> new Space(host, "1234567890", invalidName, description, pictureUrl, false, instagramUsername, email)
+            () -> new Space(host, "1234567890", invalidName, description, false, instagramUsername, email)
         ).isInstanceOf(BaseException.class)
             .hasMessageContaining("스페이스 이름");
     }
@@ -56,14 +54,13 @@ class SpaceTest {
         // given
         String name = "스페이스";
         String description = "스페이스 설명";
-        String pictureUrl = "/forgather/temp.png";
         String instagramUsername = "forgather_official";
         String email = "forgather@forgather.me";
         Host host = new Host("moko", "pictureUrl");
 
         // when & then
         assertThatThrownBy(
-            () -> new Space(host, "123456789", name, description, pictureUrl, false, instagramUsername, email)
+            () -> new Space(host, "123456789", name, description, false, instagramUsername, email)
         ).isInstanceOf(BaseException.class)
             .hasMessageContaining("스페이스 코드");
     }
