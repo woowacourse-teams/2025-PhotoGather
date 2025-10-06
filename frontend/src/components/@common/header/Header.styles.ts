@@ -11,7 +11,7 @@ export const HeaderContainer = styled.header<{ $mode: HeaderMode }>`
   margin: 0 auto;
   padding: 0 ${({ theme }) => theme.layout.padding.leftRight};
   background-color: ${({ theme, $mode }) =>
-    $mode === 'dark' ? theme.colors.gray06 : theme.colors.background};
+    $mode === 'dark' ? theme.colors.black : theme.colors.background};
 `;
 
 export const Logo = styled.div<{ $mode: HeaderMode }>`
@@ -21,7 +21,7 @@ export const Logo = styled.div<{ $mode: HeaderMode }>`
 
   svg {
     path {
-      fill: ${({ theme, $mode }) => ($mode === 'dark' ? theme.colors.white : theme.colors.gray06)};
+      fill: ${({ theme, $mode }) => ($mode === 'dark' ? theme.colors.white : theme.colors.black)};
     }
   }
 `;
@@ -40,7 +40,7 @@ export const IconButton = styled.button<{ $mode: HeaderMode }>`
   border: none;
   padding: 0;
   cursor: pointer;
-  color: ${({ theme, $mode }) => ($mode === 'dark' ? theme.colors.white : theme.colors.gray06)};
+  color: ${({ theme, $mode }) => ($mode === 'dark' ? theme.colors.white : theme.colors.black)};
   transition: opacity 0.2s;
 
   svg {
