@@ -1,14 +1,25 @@
+import { useState } from 'react';
 import { IoSettingsSharp, IoShareOutline } from 'react-icons/io5';
 import { Outlet, useMatches } from 'react-router-dom';
 import type { AppRouteObject } from '../../../../types/route.type';
 import Header from '../../../@common/header/Header';
+import ShareModal from '../../../@common/modal/shareModal/ShareModal';
 import * as S from './Layout.styles';
 
 const Layout = () => {
+  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
+  const openShareModal = () => {
+    setIsShareModalOpen(true);
+    console.log('작동');
+  };
+  const closeShareModal = () => {
+    setIsShareModalOpen(false);
+  };
+
   const headerIcons = {
     share: {
       icon: <IoShareOutline />,
-      onClick: () => console.log('Share clicked'),
+      onClick: openShareModal,
     },
     settings: {
       icon: <IoSettingsSharp />,
@@ -27,6 +38,7 @@ const Layout = () => {
     <>
       <Header mode={isDarkPage ? 'dark' : 'light'} icons={matchedIcons} />
       <S.Container $isDarkPage={isDarkPage}>
+        <ShareModal isOpen={isShareModalOpen} onClose={closeShareModal} />
         <Outlet />
       </S.Container>
     </>
