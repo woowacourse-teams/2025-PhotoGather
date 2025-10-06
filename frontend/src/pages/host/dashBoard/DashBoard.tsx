@@ -1,7 +1,7 @@
 import Button from '../../../components/@common/buttons/button/Button';
 import InfoRow from '../../../components/host/infoRow/InfoRow';
+import { Thumbnail } from '../../mainPage.common.styles';
 import { mockDashboardData } from '../../mockData';
-import { Thumbnail } from '../Host.common.styles';
 import * as S from './Dashboard.styles';
 
 const Dashboard = () => {
