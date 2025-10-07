@@ -3,6 +3,7 @@ import TextInput from '../../../components/@common/inputs/textInput/TextInput';
 import { CONSTRAINTS } from '../../../constants/constraints';
 import type { FunnelElementProps } from '../../../types/funnel.type';
 import { calculateValidLength } from '../../../utils/grapheme';
+import { createErrorMessageWithValidators } from '../../../validators/createErrorMessageWithValidators';
 import { funnelValidators } from '../funnel/funnel.validators';
 import FunnelBasePage from '../funnel/funnelBasePage/FunnelBasePage';
 
@@ -12,15 +13,10 @@ const SpaceNameElement = ({
 }: FunnelElementProps) => {
   const [name, setName] = useState(initialValue);
   const validLength = calculateValidLength(name);
-  let isError = false;
-  let errorMessage = '';
-  try {
-    isError = false;
-    funnelValidators.name(name);
-  } catch (error) {
-    if (error instanceof Error) errorMessage = error.message;
-    isError = true;
-  }
+  const { isError, errorMessage } = createErrorMessageWithValidators({
+    value: name,
+    validators: [funnelValidators.name],
+  });
   const isDisabled = isError || validLength === 0;
 
   return (
