@@ -17,7 +17,7 @@ const SpaceDescriptionElement = ({
     value: description,
     validators: [funnelValidators.description],
   });
-  const isDisabled = isError || validLength === 0;
+  const isDisabled = isError;
 
   return (
     <FunnelBasePage
@@ -25,7 +25,7 @@ const SpaceDescriptionElement = ({
       description="내 스페이스에 대한 정보를 알려주세요."
       element={
         <TextareaInput
-          isRequired={true}
+          isRequired={false}
           validLength={validLength}
           label="스페이스 설명"
           placeholder="매일 1시부터 6시까지 상주합니다."
