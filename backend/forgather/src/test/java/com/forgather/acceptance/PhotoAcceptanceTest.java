@@ -22,7 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.forgather.domain.guest.model.Guest;
 import com.forgather.domain.guest.repository.GuestRepository;
-import com.forgather.domain.space.dto.IssueSignedUrlRequest;
+import com.forgather.domain.upload.dto.IssueSignedUrlRequest;
 import com.forgather.domain.space.model.Space;
 import com.forgather.domain.space.repository.HostRepository;
 import com.forgather.domain.space.repository.SpaceRepository;

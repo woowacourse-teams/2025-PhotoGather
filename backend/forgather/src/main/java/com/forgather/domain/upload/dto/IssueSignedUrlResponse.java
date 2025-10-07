@@ -1,4 +1,4 @@
-package com.forgather.domain.space.dto;
+package com.forgather.domain.upload.dto;
 
 import java.util.Map;
 

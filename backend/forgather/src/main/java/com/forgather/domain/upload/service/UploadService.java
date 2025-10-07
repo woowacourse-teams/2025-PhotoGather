@@ -6,8 +6,8 @@ import java.util.Map;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.forgather.domain.space.dto.IssueSignedUrlRequest;
-import com.forgather.domain.space.dto.IssueSignedUrlResponse;
+import com.forgather.domain.upload.dto.IssueSignedUrlRequest;
+import com.forgather.domain.upload.dto.IssueSignedUrlResponse;
 import com.forgather.domain.space.repository.SpaceRepository;
 import com.forgather.domain.upload.domain.ContentsStorage;
 import com.forgather.domain.upload.domain.SignedUrlIssuer;

@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.forgather.domain.space.dto.IssueSignedUrlRequest;
-import com.forgather.domain.space.dto.IssueSignedUrlResponse;
+import com.forgather.domain.upload.dto.IssueSignedUrlRequest;
+import com.forgather.domain.upload.dto.IssueSignedUrlResponse;
 import com.forgather.domain.upload.service.UploadService;
 
 import io.swagger.v3.oas.annotations.Operation;

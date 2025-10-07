@@ -18,8 +18,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
-import com.forgather.domain.space.dto.IssueSignedUrlRequest;
-import com.forgather.domain.space.dto.IssueSignedUrlResponse;
+import com.forgather.domain.upload.dto.IssueSignedUrlRequest;
+import com.forgather.domain.upload.dto.IssueSignedUrlResponse;
 import com.forgather.domain.space.model.Space;
 import com.forgather.domain.space.repository.SpaceRepository;
 import com.forgather.domain.upload.AwsS3Cloud;
