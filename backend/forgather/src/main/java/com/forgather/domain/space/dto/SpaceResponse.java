@@ -32,8 +32,8 @@ public record SpaceResponse(
     @Schema(description = "호스트 정보")
     HostResponse host,
 
-    @Schema(description = "스페이스 사진 경로", example = "/forgather/1234567890/profile.png")
-    String pictureUrl
+    @Schema(description = "스페이스 프로필 경로", example = "/forgather/1234567890/profile.png")
+    String profilePath
 ) {
 
     public static SpaceResponse from(Space space, SpacePhoto spacePhoto) {

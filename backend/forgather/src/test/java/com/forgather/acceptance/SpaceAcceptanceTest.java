@@ -145,7 +145,7 @@ class SpaceAcceptanceTest extends AcceptanceTest {
         JsonPath jsonPath = response.body().jsonPath();
         assertAll(
             () -> assertThat(jsonPath.getString("spaceCode")).isEqualTo(space.getCode()),
-            () -> assertThat(jsonPath.getString("pictureUrl")).isEqualTo(spacePhoto.getPath())
+            () -> assertThat(jsonPath.getString("profilePath")).isEqualTo(spacePhoto.getPath())
         );
     }
 
