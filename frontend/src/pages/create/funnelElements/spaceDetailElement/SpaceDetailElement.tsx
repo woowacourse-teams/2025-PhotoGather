@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import TextInput from '../../../../components/@common/inputs/textInput/TextInput';
+import PhotoUploadButton from '../../../../components/specific/photoUploadButton/PhotoUploadButton';
+import useLocalFile from '../../../../hooks/domain/useLocaleFile';
 import type {
   FunnelElementProps,
   SpaceDetailElementInfos,
@@ -13,6 +15,10 @@ const SpaceDetailElement = ({
   onNext,
   initialValue = { profileImage: [], email: '', instagram: '' },
 }: FunnelElementProps<SpaceDetailElementInfos>) => {
+  const { localFiles, previewFile, handleFilesUploadClick } = useLocalFile({
+    fileType: 'image',
+    maxFileCount: 1,
+  });
   const [email, setEmail] = useState(initialValue.email);
   const [instagram, setInstagram] = useState(initialValue.instagram);
   const { isError: isEmailError, errorMessage: emailErrorMessage } =
@@ -34,7 +40,12 @@ const SpaceDetailElement = ({
       element={
         <S.Wrapper>
           <S.ImageUploadContainer>
-            <S.ImagePreviewBox />
+            <PhotoUploadButton
+              type="button"
+              previewFile={previewFile}
+              uploadImage={handleFilesUploadClick}
+              isOverlayVisible={false}
+            />
           </S.ImageUploadContainer>
           <S.InputContainer>
             <TextInput
@@ -59,7 +70,7 @@ const SpaceDetailElement = ({
       nextButtonDisabled={isDisabled}
       onNextButtonClick={() =>
         onNext({
-          profileImage: [],
+          profileImage: localFiles.map((localFile) => localFile.originFile),
           email,
           instagram,
         })

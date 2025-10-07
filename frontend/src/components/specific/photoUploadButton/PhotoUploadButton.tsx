@@ -10,12 +10,14 @@ interface PhotoUploadButtonProps
   uploadImage: (event: React.ChangeEvent<HTMLInputElement>) => void;
   previewFile: PreviewFile[];
   originalSrc?: string;
+  isOverlayVisible?: boolean;
 }
 
 const PhotoUploadButton = ({
   uploadImage,
   originalSrc,
   previewFile,
+  isOverlayVisible = true,
 }: PhotoUploadButtonProps) => {
   const fileInputId = useId();
 
@@ -26,9 +28,11 @@ const PhotoUploadButton = ({
     <>
       <S.Label htmlFor={fileInputId}>
         <Thumbnail src={matchThumbnailImage()} />
-        <S.Overlay>
-          <IoCamera />
-        </S.Overlay>
+        {isOverlayVisible && (
+          <S.Overlay>
+            <IoCamera />
+          </S.Overlay>
+        )}
       </S.Label>
       <S.FileInput
         id={fileInputId}
