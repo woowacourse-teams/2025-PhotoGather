@@ -60,7 +60,7 @@ public class SpaceService {
 
     public SpaceResponse getSpaceInformation(String spaceCode) {
         Space space = spaceRepository.getByCode(spaceCode);
-        SpacePhoto spacePhoto = spacePhotoRepository.findBySpace(space);
+        SpacePhoto spacePhoto = spacePhotoRepository.getBySpace(space);
         return SpaceResponse.from(space, spacePhoto);
     }
 
@@ -77,6 +77,9 @@ public class SpaceService {
     public void delete(String spaceCode, Host host) {
         Space space = spaceRepository.getByCode(spaceCode);
         space.validateHost(host);
+        SpacePhoto spacePhoto = spacePhotoRepository.getBySpace(space);
+        spacePhotoRepository.delete(spacePhoto);
+        contentsStorage.deleteContent(spacePhoto.getPath());
         spaceRepository.delete(space);
     }
 

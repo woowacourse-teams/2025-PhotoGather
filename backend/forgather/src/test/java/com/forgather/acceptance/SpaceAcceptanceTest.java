@@ -148,4 +148,29 @@ class SpaceAcceptanceTest extends AcceptanceTest {
             () -> assertThat(jsonPath.getString("pictureUrl")).isEqualTo(spacePhoto.getPath())
         );
     }
+
+    @DisplayName("RestAssuredMockMvc를 사용하여 스페이스를 삭제한다.")
+    @Test
+    void deleteSpaceWithRestAssuredMockMvc() {
+        // given
+        var host = hostRepository.save(new Host("모코", "pictureUrl"));
+        var token = jwtTokenProvider.generateAccessToken(host.getId());
+        var space = spaceRepository.save(new Space(host, "1234567890", "테스트", "테스트 스페이스", true,
+            "forgather_official", "forgather@forgather.me"));
+        var spacePhoto = spacePhotoRepository.save(
+            new SpacePhoto(space, "original.png", "/forgather/uuid.png", 1024L));
+
+        // when
+        var response = RestAssuredMockMvc.given()
+            .header("Authorization", "Bearer " + token)
+            .when()
+            .delete("/spaces/{spaceCode}", space.getCode())
+            .then()
+            .extract();
+
+        // then
+        assertThat(response.statusCode()).isEqualTo(204);
+        assertThat(spaceRepository.findByCode(space.getCode())).isEmpty();
+        assertThat(spacePhotoRepository.findBySpace(space)).isEmpty();
+    }
 }
