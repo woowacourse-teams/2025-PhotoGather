@@ -4,7 +4,7 @@ export const Wrapper = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    gap: 64px;
+    gap: 32px;
 `;
 
 export const ImageUploadContainer = styled.div`
@@ -25,7 +25,7 @@ export const ImagePreviewBox = styled.div`
 export const InputContainer = styled.div`
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 24px;
 `;
 
 export const Label = styled.label`
