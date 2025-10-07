@@ -1,4 +1,4 @@
-package com.forgather.domain.upload;
+package com.forgather.domain.upload.domain;
 
 import java.io.File;
 import java.io.IOException;
