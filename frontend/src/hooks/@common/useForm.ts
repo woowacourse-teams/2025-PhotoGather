@@ -70,15 +70,16 @@ const useForm = <T extends object>({
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     const { name, type, value } = e.target;
+    const key = name as keyof T;
 
     if (e.target instanceof HTMLInputElement && type === 'file') {
-      changeFormData(name as keyof T, Array.from(e.target.files || []));
+      changeFormData(key, Array.from(e.target.files || []));
     } else {
-      changeFormData(name as keyof T, value);
+      changeFormData(key, value);
     }
 
-    if (validators[name as keyof T]) {
-      checkValid(name as keyof T, value);
+    if (validators[key]) {
+      checkValid(key, value);
     }
   };
 
