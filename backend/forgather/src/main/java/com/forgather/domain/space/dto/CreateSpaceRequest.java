@@ -7,19 +7,19 @@ import io.swagger.v3.oas.annotations.media.Schema;
 
 public record CreateSpaceRequest(
 
-    @Schema(description = "스페이스 이름", example = "우리의 모임", maxLength = 15)
+    @Schema(description = "스페이스 이름", example = "졸업 전시", maxLength = 15)
     String name,
 
-    @Schema(description = "스페이스 설명", example = "우리의 모임", maxLength = 200)
+    @Schema(description = "스페이스 설명", example = "스페이스 설명", maxLength = 200, nullable = true)
     String description,
 
     @Schema(description = "스페이스 공개 여부", example = "true")
     boolean isPublic,
 
-    @Schema(description = "스페이스 호스트 인스타그램 아이디", example = "forgather_official", maxLength = 30)
+    @Schema(description = "스페이스 호스트 인스타그램 아이디", example = "forgather_official", maxLength = 30, nullable = true)
     String instagramUsername,
 
-    @Schema(description = "스페이스 호스트 이메일", example = "forgather@forgather.me", maxLength = 50)
+    @Schema(description = "스페이스 호스트 이메일", example = "forgather@forgather.me", maxLength = 50, nullable = true)
     String email
 ) {
 
