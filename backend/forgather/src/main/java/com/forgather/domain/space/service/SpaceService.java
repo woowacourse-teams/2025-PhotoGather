@@ -2,6 +2,7 @@ package com.forgather.domain.space.service;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -65,12 +66,32 @@ public class SpaceService {
     }
 
     @Transactional
-    public SpaceResponse update(String spaceCode, UpdateSpaceRequest request, Host host) {
+    public SpaceResponse update(String spaceCode, UpdateSpaceRequest request, MultipartFile file, Host host) {
         Space space = spaceRepository.getByCode(spaceCode);
         space.validateHost(host);
-        // TODO: update space
+        space.update(request.name(), request.description(), request.isPublic(), request.instagramUsername(),
+            request.email());
+        if (file != null && !file.isEmpty()) {
+            updateSpacePhoto(spaceCode, file, space);
+        }
+        SpacePhoto spacePhoto = spacePhotoRepository.getBySpace(space);
+        return SpaceResponse.from(space, spacePhoto);
+    }
 
-        return SpaceResponse.from(space, null);
+    private void updateSpacePhoto(String spaceCode, MultipartFile file, Space space) {
+        Optional<SpacePhoto> existingSpacePhoto = spacePhotoRepository.findBySpace(space);
+        String newPath = uploadSpacePicture(file, spaceCode);
+
+        if (existingSpacePhoto.isPresent()) {
+            // 이미 스페이스 프로필이 존재하면 기존 사진 삭제 후 엔티티 업데이트
+            SpacePhoto existingPhoto = existingSpacePhoto.get();
+            String oldPath = existingPhoto.getPath();
+            existingPhoto.update(file.getOriginalFilename(), newPath, file.getSize());
+            contentsStorage.deleteContent(oldPath);
+        } else {
+            // 스페이스 프로필이 없으면 새로 생성
+            spacePhotoRepository.save(new SpacePhoto(space, file.getOriginalFilename(), newPath, file.getSize()));
+        }
     }
 
     @Transactional

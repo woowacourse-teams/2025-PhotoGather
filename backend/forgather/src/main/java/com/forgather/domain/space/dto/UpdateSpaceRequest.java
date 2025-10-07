@@ -6,8 +6,23 @@ import io.swagger.v3.oas.annotations.media.Schema;
 
 public record UpdateSpaceRequest(
 
-    @Schema(description = "새로운 스페이스 이름", example = "우리의 모임", maxLength = 10, nullable = true)
-    @Length(max = 10)
-    String name
+    @Schema(description = "새로운 스페이스 이름", example = "나의 졸업전시", maxLength = 15, nullable = true)
+    @Length(max = 15)
+    String name,
+
+    @Schema(description = "새로운 스페이스 설명", example = "졸업전시 스페이스입니다.", maxLength = 200, nullable = true)
+    @Length(max = 200)
+    String description,
+
+    @Schema(description = "새로운 스페이스 공개여부", example = "true", nullable = true)
+    Boolean isPublic,
+
+    @Schema(description = "새로운 인스타그램 아이디", example = "forgather_official_new", maxLength = 30, nullable = true)
+    @Length(max = 30)
+    String instagramUsername,
+
+    @Schema(description = "새로운 이메일", example = "forgather_new@forgather.me", maxLength = 30, nullable = true)
+    @Length(max = 50)
+    String email
 ) {
 }

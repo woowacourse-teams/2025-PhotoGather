@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
@@ -63,13 +62,15 @@ public class SpaceController {
         return ResponseEntity.noContent().build();
     }
 
-    @PatchMapping("/{spaceCode}")
+    @PatchMapping(value = "/{spaceCode}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Operation(summary = "스페이스 정보 수정", description = "해당 스페이스 코드의 정보를 수정합니다.")
     public ResponseEntity<SpaceResponse> update(
         @PathVariable(name = "spaceCode") String spaceCode,
-        @RequestBody @Validated UpdateSpaceRequest request,
-        @LoginHost Host host) {
-        var response = spaceService.update(spaceCode, request, host);
+        @RequestPart("request") @Validated UpdateSpaceRequest request,
+        @RequestPart(value = "file", required = false) @Validated MultipartFile file,
+        @LoginHost Host host
+    ) {
+        var response = spaceService.update(spaceCode, request, file, host);
         return ResponseEntity.ok(response);
     }
 

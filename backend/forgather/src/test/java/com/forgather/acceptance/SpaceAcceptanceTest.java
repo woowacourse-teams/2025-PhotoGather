@@ -18,6 +18,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.forgather.domain.space.dto.CreateSpaceRequest;
+import com.forgather.domain.space.dto.UpdateSpaceRequest;
 import com.forgather.domain.space.model.Space;
 import com.forgather.domain.space.model.SpacePhoto;
 import com.forgather.domain.space.repository.HostRepository;
@@ -127,7 +128,7 @@ class SpaceAcceptanceTest extends AcceptanceTest {
         // given
         var host = hostRepository.save(new Host("모코", "pictureUrl"));
         var token = jwtTokenProvider.generateAccessToken(host.getId());
-        var space = spaceRepository.save(new Space(host, "1234567890", "테스트", "테스트 스페이스", true,
+        var space = spaceRepository.save(new Space(host, "1111111111", "테스트", "테스트 스페이스", true,
             "forgather_official", "forgather@forgather.me"));
         var spacePhoto = spacePhotoRepository.save(
             new SpacePhoto(space, "original.png", "/forgather/uuid.png", 1024L));
@@ -155,7 +156,7 @@ class SpaceAcceptanceTest extends AcceptanceTest {
         // given
         var host = hostRepository.save(new Host("모코", "pictureUrl"));
         var token = jwtTokenProvider.generateAccessToken(host.getId());
-        var space = spaceRepository.save(new Space(host, "1234567890", "테스트", "테스트 스페이스", true,
+        var space = spaceRepository.save(new Space(host, "2222222222", "테스트", "테스트 스페이스", true,
             "forgather_official", "forgather@forgather.me"));
         var spacePhoto = spacePhotoRepository.save(
             new SpacePhoto(space, "original.png", "/forgather/uuid.png", 1024L));
@@ -172,5 +173,47 @@ class SpaceAcceptanceTest extends AcceptanceTest {
         assertThat(response.statusCode()).isEqualTo(204);
         assertThat(spaceRepository.findByCode(space.getCode())).isEmpty();
         assertThat(spacePhotoRepository.findBySpace(space)).isEmpty();
+    }
+
+    @DisplayName("RestAssuredMockMvc를 사용하여 스페이스를 수정한다.")
+    @Test
+    void updateSpaceWithRestAssuredMockMvc() throws Exception {
+        // given
+        var host = hostRepository.save(new Host("모코", "pictureUrl"));
+        var token = jwtTokenProvider.generateAccessToken(host.getId());
+        var space = spaceRepository.save(new Space(host, "3333333333", "테스트", "테스트 스페이스", true,
+            "forgather_official", "forgather@forgather.me"));
+        var spacePhoto = spacePhotoRepository.save(
+            new SpacePhoto(space, "original.png", "/forgather/uuid.png", 1024L));
+
+        var newFile = new MockMultipartFile(
+            "file",
+            "new.jpg",
+            "image/jpeg",
+            "new image content".getBytes()
+        );
+        var request = objectMapper.writeValueAsString(new UpdateSpaceRequest(
+            "새로운 스페이스", "새로운 설명", false, "forgather_official_new", "forgather_new@forgather.me")
+        );
+
+        // when
+        var response = RestAssuredMockMvc.given()
+            .header("Authorization", "Bearer " + token)
+            .multiPart("request", request, "application/json")
+            .multiPart("file", newFile.getOriginalFilename(), newFile.getBytes(), newFile.getContentType())
+            .when()
+            .patch("/spaces/{spaceCode}", space.getCode())
+            .then()
+            .extract();
+
+        // then
+        JsonPath jsonPath = response.body().jsonPath();
+        assertThat(response.statusCode()).isEqualTo(200);
+        assertThat(jsonPath.getString("name")).isEqualTo("새로운 스페이스");
+        assertThat(jsonPath.getString("description")).isEqualTo("새로운 설명");
+        assertThat(jsonPath.getBoolean("isPublic")).isEqualTo(false);
+        assertThat(jsonPath.getString("instagramUsername")).isEqualTo("forgather_official_new");
+        assertThat(jsonPath.getString("email")).isEqualTo("forgather_new@forgather.me");
+        assertThat(spacePhotoRepository.getBySpace(space).getOriginalName()).isEqualTo("new.jpg");
     }
 }
