@@ -3,7 +3,7 @@ import { MdOutlineIosShare, MdSettings } from 'react-icons/md';
 import { Outlet, useMatches } from 'react-router-dom';
 import type { AppRouteObject } from '../../../../types/route.type';
 import Header from '../../../@common/header/Header';
-import ShareModal from '../../../@common/modal/shareModal/ShareModal';
+import SpaceShareModal from '../../../specific/modal/spaceShareModal/SpaceShareModal';
 import * as S from './Layout.styles';
 
 const Layout = () => {
@@ -37,7 +37,7 @@ const Layout = () => {
     <>
       <Header mode={isDarkPage ? 'dark' : 'light'} icons={matchedIcons} />
       <S.Container $isDarkPage={isDarkPage}>
-        <ShareModal isOpen={isShareModalOpen} onClose={closeShareModal} />
+        <SpaceShareModal isOpen={isShareModalOpen} onClose={closeShareModal} />
         <Outlet />
       </S.Container>
     </>

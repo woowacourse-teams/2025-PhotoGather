@@ -3,17 +3,17 @@ import { MdDownload, MdLink } from 'react-icons/md';
 import useImageDownload from '../../../../hooks/@common/useImageDownload';
 import { useToast } from '../../../../hooks/@common/useToast';
 import { copyLinkToClipboard } from '../../../../utils/coptLinkToClipboard';
-import IconButton from '../../buttons/iconButton/IconButton';
-import QRCode from '../../qrCode/QRCode';
-import Modal from '../Modal';
-import * as S from './ShareModal.styles';
+import IconButton from '../../../@common/buttons/iconButton/IconButton';
+import Modal from '../../../@common/modal/Modal';
+import QRCode from '../../../@common/qrCode/QRCode';
+import * as S from './SpaceShareModal.styles';
 
 interface ShareModalProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
-const ShareModal = ({ isOpen, onClose }: ShareModalProps) => {
+const SpaceShareModal = ({ isOpen, onClose }: ShareModalProps) => {
   const { showToast } = useToast();
   const qrCodeRef = useRef<HTMLCanvasElement>(null);
   const { saveImage } = useImageDownload();
@@ -66,4 +66,4 @@ const ShareModal = ({ isOpen, onClose }: ShareModalProps) => {
   );
 };
 
-export default ShareModal;
+export default SpaceShareModal;
