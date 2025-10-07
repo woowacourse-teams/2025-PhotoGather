@@ -25,6 +25,15 @@ public class SignedUrlIssuer {
         String spaceCode,
         UploadCategory category
     ) {
+        if (uploadFileNames == null || uploadFileNames.isEmpty()) {
+            throw new BaseException("업로드 파일명 목록은 null이거나 비어있을 수 없습니다.");
+        }
+        if (spaceCode == null || spaceCode.isEmpty()) {
+            throw new BaseException("스페이스 코드는 null이거나 비어있을 수 없습니다.");
+        }
+        if (category == null) {
+            throw new BaseException("업로드 카테고리는 필수입니다.");
+        }
         validateSize(uploadFileNames);
         Map<String, String> signedUrls = new HashMap<>();
         for (String uploadFileName : uploadFileNames) {
@@ -42,6 +51,9 @@ public class SignedUrlIssuer {
     }
 
     private String getFilePath(String spaceCode, UploadCategory category, String uploadFileName) {
+        if (uploadFileName == null || uploadFileName.isEmpty()) {
+            throw new BaseException("업로드 파일명은 null이거나 비어있을 수 없습니다.");
+        }
         return generateContentsFilePath(
             contentsStorage.getRootDirectory(),
             spaceCode,
