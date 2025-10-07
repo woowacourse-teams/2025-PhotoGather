@@ -1,5 +1,4 @@
 import styled from '@emotion/styled';
-import { theme } from '../../../styles/theme';
 import { hexToRgba } from '../../../utils/hexToRgba';
 
 export const Wrapper = styled.div`
@@ -39,7 +38,7 @@ export const CreateSpaceButton = styled.button`
   height: 28px;
   padding: 2px 12px;
   border-radius: 50px;
-  background-color: ${hexToRgba(theme.colors.gray05)};
+  background-color: ${({ theme }) => hexToRgba(theme.colors.gray05)};
   color: ${({ theme }) => theme.colors.white};
   ${({ theme }) => theme.typography.captionSmall};
   cursor: pointer;
