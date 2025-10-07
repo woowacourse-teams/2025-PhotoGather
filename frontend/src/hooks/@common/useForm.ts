@@ -35,7 +35,7 @@ const useForm = <T extends object>({
     (Object.keys(formData) as Array<keyof T>).forEach((name) => {
       if (validators[name] && typeof formData[name] === 'string') {
         try {
-          validators[name](formData[name] as string);
+          validators[name](formData[name]);
           newErrorMessages[name] = '';
         } catch (error) {
           isValid = false;
