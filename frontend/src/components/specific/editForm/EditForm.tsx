@@ -50,6 +50,7 @@ const EditForm = () => {
   return (
     <S.Form onSubmit={handleSubmit}>
       <PhotoUploadButton
+        type="button"
         previewFile={previewFile}
         uploadImage={handleFilesUploadClick}
       />
@@ -69,11 +70,13 @@ const EditForm = () => {
         <S.PublicButtonContainer>
           <Button
             text="공개"
+            type="button"
             variant={formData.visibility === 'public' ? 'primary' : 'secondary'}
             onClick={() => changeFormData('visibility', 'public')}
           />
           <Button
             text="비공개"
+            type="button"
             variant={
               formData.visibility === 'private' ? 'primary' : 'secondary'
             }
@@ -108,7 +111,12 @@ const EditForm = () => {
         onChange={(e) => handleChange(e)}
         errorMessage={errorMessage.instagram}
       />
-      <Button variant="primary" text="완료" disabled={!isAllValid} />
+      <Button
+        variant="primary"
+        type="submit"
+        text="완료"
+        disabled={!isAllValid}
+      />
     </S.Form>
   );
 };
