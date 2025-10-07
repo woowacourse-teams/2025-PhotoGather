@@ -27,7 +27,7 @@ const SpaceDescriptionElement = ({
         <TextareaInput
           isRequired={false}
           validLength={validLength}
-          label="스페이스 설명"
+          label=""
           placeholder="매일 1시부터 6시까지 상주합니다."
           name="description"
           value={description}

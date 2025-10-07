@@ -25,9 +25,9 @@ const SpaceNameElement = ({
       description="추억을 담을 공간의 이름을 작성해주세요."
       element={
         <TextInput
-          isRequired={true}
+          isRequired={false}
           validLength={validLength}
-          label="스페이스 이름"
+          label=""
           placeholder="전시명"
           name="name"
           value={name}
