@@ -77,10 +77,10 @@ CREATE TABLE `product`
 (
     `id`          BIGINT    NOT NULL AUTO_INCREMENT,
     `space_id`    BIGINT    NOT NULL,
-    `title`       VARCHAR(255) NULL,
+    `title`       VARCHAR(255) NOT NULL,
     `category`    VARCHAR(255) NULL,
     `author_name` VARCHAR(255) NULL,
-    `description` VARCHAR(255) NULL,
+    `description` VARCHAR(255) NOT NULL,
     `created_at`  TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `updated_at`  TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`)
@@ -90,10 +90,10 @@ CREATE TABLE `product_photo`
 (
     `id`            BIGINT    NOT NULL AUTO_INCREMENT,
     `product_id`    BIGINT    NOT NULL,
-    `sort_order`    INT NULL,
-    `original_name` VARCHAR(255) NULL,
-    `path`          VARCHAR(255) NULL,
-    `capacity`      BIGINT NULL,
+    `sort_order`    INT NOT NULL,
+    `original_name` VARCHAR(255) NOT NULL,
+    `path`          VARCHAR(255) NOT NULL,
+    `capacity`      BIGINT NOT NULL,
     `created_at`    TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `updated_at`    TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`)
@@ -103,9 +103,9 @@ CREATE TABLE `space_photo`
 (
     `id`            BIGINT    NOT NULL AUTO_INCREMENT,
     `space_id`      BIGINT    NOT NULL,
-    `original_name` VARCHAR(255) NULL,
-    `path`          VARCHAR(255) NULL,
-    `capacity`      BIGINT NULL,
+    `original_name` VARCHAR(255) NOT NULL,
+    `path`          VARCHAR(255) NOT NULL,
+    `capacity`      BIGINT NOT NULL,
     `created_at`    TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `updated_at`    TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`)

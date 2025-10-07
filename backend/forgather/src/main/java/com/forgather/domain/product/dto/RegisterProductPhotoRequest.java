@@ -6,7 +6,7 @@ import com.forgather.domain.product.model.ProductPhoto;
 public record RegisterProductPhotoRequest(
     String originalName,
     String path,
-    long capacity
+    Long capacity
 ) {
 
     // ProductPhotos.add()가 정렬 순서를 자동 할당하므로, 초기값(1)은 의미 없음
