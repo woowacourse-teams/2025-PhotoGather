@@ -108,6 +108,13 @@ const useLocalFileTmp = ({
         return;
       }
 
+      const availableSlots = maxFileCount - localFiles.length;
+      if (validFiles.length > availableSlots) {
+        showToast({
+          text: `최대 ${maxFileCount}장까지만 업로드할 수 있어요.`,
+        });
+      }
+
       await addPreviewUrlsFromFiles(validFiles);
     } catch (error) {
       console.error('파일 업로드 중 오류 발생:', error);
