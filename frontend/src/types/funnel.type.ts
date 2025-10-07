@@ -4,9 +4,15 @@ export interface CreateFunnelForm {
   name: string;
   description: string;
   visibility: SpaceVisibility;
-  profileImage?: File[];
-  email?: string;
-  instagram?: string;
+  profileImage: File[];
+  email: string;
+  instagram: string;
+}
+
+export interface SpaceDetailElementInfos {
+  profileImage: File[];
+  email: string;
+  instagram: string;
 }
 
 export interface FunnelBaseElementProps {

@@ -4,7 +4,7 @@ import useFormFunnel from '../../../hooks/domain/funnel/useFormFunnel';
 import type { CreateFunnelForm } from '../../../types/funnel.type';
 import SpaceDescriptionElement from '../funnelElements/SpaceDescriptionElement';
 import SpaceNameElement from '../funnelElements/SpaceNameElement';
-import SpaceDetailElement from '../funnelElements/spaceDetailElement/SpaceDetailElement';
+import SpaceDetailElementInfos from '../funnelElements/spaceDetailElement/SpaceDetailElement';
 import SpaceVisibilityElement from '../funnelElements/spaceVisibilityElement/SpaceVisibilityElement';
 import * as S from './SpaceCreateFunnel.styles';
 
@@ -20,6 +20,9 @@ const initialCreateFunnelForm: CreateFunnelForm = {
   name: '',
   description: '',
   visibility: 'PUBLIC',
+  profileImage: [],
+  email: '',
+  instagram: '',
 };
 
 const SpaceCreateFunnel = () => {
@@ -62,11 +65,13 @@ const SpaceCreateFunnel = () => {
           />
         </Funnel.Step>
         <Funnel.Step name="detail">
-          <SpaceDetailElement
-            onNext={(detail) =>
-              Funnel.goNextWithData('check', { instagram: detail })
-            }
-            initialValue={Funnel.form.visibility}
+          <SpaceDetailElementInfos
+            onNext={(detail) => Funnel.goNextWithData('check', { ...detail })}
+            initialValue={{
+              profileImage: Funnel.form.profileImage,
+              email: Funnel.form.email,
+              instagram: Funnel.form.instagram,
+            }}
           />
         </Funnel.Step>
         <Funnel.Step name="check">

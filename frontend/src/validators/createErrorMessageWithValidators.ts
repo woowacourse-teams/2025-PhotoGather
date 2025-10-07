@@ -7,12 +7,10 @@ interface NoErrorResult {
   isError: false;
   errorMessage: '';
 }
-
 interface ErrorResult {
   isError: true;
   errorMessage: string;
 }
-
 type createErrorMessageWithValidatorsResult = NoErrorResult | ErrorResult;
 
 export const createErrorMessageWithValidators = <T>({
