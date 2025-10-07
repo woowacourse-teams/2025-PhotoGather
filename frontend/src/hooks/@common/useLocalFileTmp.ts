@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import { CONSTRAINTS } from '../../constants/constraints';
+import { heicToJpegBlob, isHeic } from '../../utils/heic';
+import { useToast } from './useToast';
 
 interface UseLocalFileProps {
   fileType: string;
@@ -21,15 +23,12 @@ const useLocalFileTmp = ({
   maxFileCount = CONSTRAINTS.MAX_FILE_COUNT,
 }: UseLocalFileProps) => {
   const [localFiles, setLocalFiles] = useState<LocalFile[]>([]);
+  const { showToast } = useToast();
 
   const previewFile = localFiles.map((file) => ({
     id: file.id,
     previewUrl: file.previewUrl,
   }));
-
-  const createImagePreviewUrl = (file: File): string => {
-    return URL.createObjectURL(file);
-  };
 
   const processFile = async (file: File) => {
     const isAndroidChrome =
@@ -43,6 +42,22 @@ const useLocalFileTmp = ({
     return file;
   };
 
+  const createImagePreviewUrl = async (file: File) => {
+    if (!isHeic(file)) {
+      return URL.createObjectURL(file);
+    }
+    try {
+      const data = await heicToJpegBlob(file);
+      return URL.createObjectURL(data as Blob);
+    } catch (error) {
+      showToast({
+        text: '사진을 불러오는데 실패했어요. 다시 시도해주세요.',
+      });
+      console.error(error);
+      return URL.createObjectURL(file);
+    }
+  };
+
   const addPreviewUrlsFromFiles = async (files: File[]) => {
     const startIndex = localFiles.length;
     const availableSlots = maxFileCount - localFiles.length;
@@ -52,11 +67,13 @@ const useLocalFileTmp = ({
       filesToAdd.map((file) => processFile(file)),
     );
 
-    const tmpFiles: LocalFile[] = processedFiles.map((file, index) => ({
-      id: startIndex + index,
-      originFile: file,
-      previewUrl: createImagePreviewUrl(file),
-    }));
+    const tmpFiles: LocalFile[] = await Promise.all(
+      processedFiles.map(async (file, index) => ({
+        id: startIndex + index,
+        originFile: file,
+        previewUrl: await createImagePreviewUrl(file),
+      })),
+    );
 
     setLocalFiles((prev) => [...prev, ...tmpFiles]);
   };
