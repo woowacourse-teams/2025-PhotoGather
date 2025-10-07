@@ -2,7 +2,7 @@ import { IoClose } from 'react-icons/io5';
 import Button from '../../../components/@common/buttons/button/Button';
 import Textarea from '../../../components/@common/inputs/textArea/Textarea';
 import TextInput from '../../../components/@common/inputs/textInput/TextInput';
-import UploadBox from '../../../components/host/uploadBox/UploadBox';
+import PhotoUploadButton from '../../../components/host/photoUploadButton/PhotoUploadButton';
 import useGraphemeInput from '../../../hooks/@common/useGraphemeInput';
 import useLocalFile from '../../../hooks/@common/useLocalFile';
 import * as S from './WorkForm.styles';
@@ -71,7 +71,7 @@ const WorkForm = () => {
 
         <S.FormLabelContainer>
           <S.LabelContainer>작품 이미지</S.LabelContainer>
-          <UploadBox
+          <PhotoUploadButton
             mainText="사진을 선택해주세요"
             disabled={false}
             onChange={handleFilesUploadClick}

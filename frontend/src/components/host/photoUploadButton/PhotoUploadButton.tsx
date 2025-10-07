@@ -1,9 +1,9 @@
 import { useId } from 'react';
 import { IoCameraOutline } from 'react-icons/io5';
 import useDrag from '../../../hooks/@common/useDrag';
-import * as S from './UploadBox.styles';
+import * as S from './PhotoUploadButton.styles';
 
-interface UploadBoxProps {
+interface PhotoUploadButtonProps {
   /** 박스 내 들어갈 텍스트 */
   mainText: string;
   /** 용량 안내 텍스트 */
@@ -18,14 +18,14 @@ interface UploadBoxProps {
   disabled: boolean;
 }
 
-const UploadBox = ({
+const PhotoUploadButton = ({
   mainText,
   uploadLimitText,
   iconSize = 60,
   onChange,
   onDrop,
   disabled = false,
-}: UploadBoxProps) => {
+}: PhotoUploadButtonProps) => {
   const {
     isActive,
     handleDragEnter,
@@ -68,4 +68,4 @@ const UploadBox = ({
   );
 };
 
-export default UploadBox;
+export default PhotoUploadButton;
