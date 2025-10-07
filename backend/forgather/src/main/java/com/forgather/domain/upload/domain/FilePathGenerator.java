@@ -4,6 +4,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 public class FilePathGenerator {
 
+    private FilePathGenerator() {
+    }
+
     public static String generateContentsFilePath(
         String rootDirectory,
         String spaceCode,
