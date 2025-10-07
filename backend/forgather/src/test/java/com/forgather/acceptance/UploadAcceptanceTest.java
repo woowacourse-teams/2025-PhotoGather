@@ -65,7 +65,7 @@ public class UploadAcceptanceTest extends AcceptanceTest {
             .accept(ContentType.JSON)
             .body(request)
             .when()
-            .post("/spaces/1234567890/upload/signed-urls".formatted(space.getCode()))
+            .post("/spaces/%s/upload/signed-urls".formatted(space.getCode()))
             .then()
             .statusCode(200)
             .extract()
