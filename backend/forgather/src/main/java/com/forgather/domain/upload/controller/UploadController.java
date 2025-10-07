@@ -30,7 +30,12 @@ public class UploadController {
      * 아무런 검증이 없어도 되는가?
      */
     @PostMapping(path = "/signed-urls")
-    @Operation(summary = "업로드 URL 발급", description = "업로드 파일 별 서명된 URL을 발급합니다.")
+    @Operation(summary = "업로드 URL 발급", description = """
+        업로드 파일 별 서명된 URL을 발급합니다.
+        category는 업로드할 사진의 종류를 뜻합니다.
+        작품 사진 : PRODUCT
+        방명록 사진 : GUESTBOOK
+    """)
     public ResponseEntity<IssueSignedUrlResponse> issuePreSignedUrls(
         @PathVariable(name = "spaceCode") String spaceCode,
         @RequestBody IssueSignedUrlRequest request
