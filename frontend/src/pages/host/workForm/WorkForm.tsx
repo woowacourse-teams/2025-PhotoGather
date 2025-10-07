@@ -4,7 +4,7 @@ import Textarea from '../../../components/@common/inputs/textArea/Textarea';
 import TextInput from '../../../components/@common/inputs/textInput/TextInput';
 import PhotoUploadButton from '../../../components/host/photoUploadButton/PhotoUploadButton';
 import useGraphemeInput from '../../../hooks/@common/useGraphemeInput';
-import useLocalFile from '../../../hooks/@common/useLocalFile';
+import useLocalFile from '../../../hooks/@common/useLocalFileTmp';
 import * as S from './WorkForm.styles';
 
 const WorkForm = () => {
