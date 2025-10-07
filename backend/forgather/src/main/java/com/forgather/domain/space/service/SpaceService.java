@@ -60,7 +60,8 @@ public class SpaceService {
 
     public SpaceResponse getSpaceInformation(String spaceCode) {
         Space space = spaceRepository.getByCode(spaceCode);
-        return SpaceResponse.from(space);
+        SpacePhoto spacePhoto = spacePhotoRepository.findBySpace(space);
+        return SpaceResponse.from(space, spacePhoto);
     }
 
     @Transactional
@@ -69,7 +70,7 @@ public class SpaceService {
         space.validateHost(host);
         // TODO: update space
 
-        return SpaceResponse.from(space);
+        return SpaceResponse.from(space, null);
     }
 
     @Transactional
@@ -82,7 +83,7 @@ public class SpaceService {
     public List<SpaceResponse> getSpacesInformation(Host host) {
         return host.getSpaceHostMap().stream()
             .map(spaceHostMap ->
-                SpaceResponse.from(spaceHostMap.getSpace())
+                SpaceResponse.from(spaceHostMap.getSpace(), null)
             )
             .toList();
     }
