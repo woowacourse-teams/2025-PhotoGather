@@ -17,7 +17,7 @@ public interface SpaceRepository {
 
     List<Space> findAll();
 
-    default Space getByCode(String spaceCode) {
+    default Space getByCodeOrThrow(String spaceCode) {
         if (spaceCode == null) {
             throw new BaseException("스페이스 코드는 null일 수 없습니다. code: " + spaceCode);
         }

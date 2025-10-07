@@ -1,9 +1,8 @@
 import styled from '@emotion/styled';
-import type { ToastListPosition } from '../../../../types/toast.type';
 
-export const ToastList = styled.div<{ $position: ToastListPosition }>`
+export const ToastList = styled.div`
   position: fixed;
-  ${({ $position }) => ($position === 'top' ? 'top: 100px;' : 'bottom: 100px;')}
+  top: 50px;
 
   width: 100%;
   display: flex;

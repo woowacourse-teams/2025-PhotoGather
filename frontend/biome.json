@@ -5,7 +5,8 @@
     "useIgnoreFile": false
   },
   "files": {
-    "ignoreUnknown": false
+    "ignoreUnknown": false,
+    "experimentalScannerIgnores": ["node_modules", "dist", "build"]
   },
   "formatter": {
     "enabled": true,

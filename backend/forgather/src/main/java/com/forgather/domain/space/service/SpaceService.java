@@ -60,14 +60,14 @@ public class SpaceService {
     }
 
     public SpaceResponse getSpaceInformation(String spaceCode) {
-        Space space = spaceRepository.getByCode(spaceCode);
+        Space space = spaceRepository.getByCodeOrThrow(spaceCode);
         SpacePhoto spacePhoto = spacePhotoRepository.getBySpace(space);
         return SpaceResponse.from(space, spacePhoto);
     }
 
     @Transactional
     public SpaceResponse update(String spaceCode, UpdateSpaceRequest request, MultipartFile file, Host host) {
-        Space space = spaceRepository.getByCode(spaceCode);
+        Space space = spaceRepository.getByCodeOrThrow(spaceCode);
         space.validateHost(host);
         space.update(request.name(), request.description(), request.isPublic(), request.instagramUsername(),
             request.email());
@@ -96,7 +96,7 @@ public class SpaceService {
 
     @Transactional
     public void delete(String spaceCode, Host host) {
-        Space space = spaceRepository.getByCode(spaceCode);
+        Space space = spaceRepository.getByCodeOrThrow(spaceCode);
         space.validateHost(host);
         SpacePhoto spacePhoto = spacePhotoRepository.getBySpace(space);
         spacePhotoRepository.delete(spacePhoto);

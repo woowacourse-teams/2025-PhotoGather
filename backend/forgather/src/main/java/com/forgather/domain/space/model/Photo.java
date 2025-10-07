@@ -28,4 +28,18 @@ public abstract class Photo extends BaseTimeEntity {
 
     @Column(name = "capacity", nullable = false)
     protected Long capacity; // bytes
+
+    // TODO 검증 추가
+    protected Photo(String originalName, String path, Long capacity) {
+        this.originalName = originalName;
+        this.path = path;
+        this.capacity = capacity;
+    }
+
+    public Photo(Long id, String originalName, String path, Long capacity) {
+        this.id = id;
+        this.originalName = originalName;
+        this.path = path;
+        this.capacity = capacity;
+    }
 }
