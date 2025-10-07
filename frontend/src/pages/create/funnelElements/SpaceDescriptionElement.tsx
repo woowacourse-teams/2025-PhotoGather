@@ -1,17 +1,26 @@
-import TextInput from '../../../components/@common/inputs/TextInput';
+import { useState } from 'react';
+import TextareaInput from '../../../components/@common/inputs/textareaInput/TextareaInput';
 import { CONSTRAINTS } from '../../../constants/constraints';
-import useGraphemeInput from '../../../hooks/@common/useGraphemeInput';
 import type { FunnelElementProps } from '../../../types/funnel.type';
+import { calculateValidLength } from '../../../utils/grapheme';
+import { funnelValidators } from '../funnel/funnel.validators';
 import FunnelBasePage from '../funnel/funnelBasePage/FunnelBasePage';
 
 const SpaceDescriptionElement = ({
   onNext,
   initialValue = '',
 }: FunnelElementProps) => {
-  const { handleChange, validValue, validLength } = useGraphemeInput({
-    initialValue,
-  });
-  const isError = validLength > CONSTRAINTS.NAME_MAX_LENGTH;
+  const [description, setDescription] = useState(initialValue);
+  const validLength = calculateValidLength(description);
+  let isError = false;
+  let errorMessage = '';
+  try {
+    isError = false;
+    funnelValidators.description(description);
+  } catch (error) {
+    if (error instanceof Error) errorMessage = error.message;
+    isError = true;
+  }
   const isDisabled = isError || validLength === 0;
 
   return (
@@ -19,18 +28,19 @@ const SpaceDescriptionElement = ({
       title="스페이스의 설명을 작성해주세요"
       description="내 스페이스에 대한 정보를 알려주세요."
       element={
-        <TextInput
-          maxCount={CONSTRAINTS.NAME_MAX_LENGTH}
+        <TextareaInput
+          isRequired={true}
           validLength={validLength}
-          value={validValue}
-          placeholder="나의 첫 스페이스"
-          onChange={handleChange}
-          errorMessage={
-            isError ? '스페이스 이름은 10자 이하로 지을 수 있어요.' : ''
-          }
+          label="스페이스 설명"
+          placeholder="매일 1시부터 6시까지 상주합니다."
+          name="description"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          errorMessage={errorMessage}
+          maxCount={CONSTRAINTS.DESCRIPTION_MAX_LENGTH}
         />
       }
-      onNextButtonClick={() => onNext(validValue)}
+      onNextButtonClick={() => onNext(description)}
       nextButtonDisabled={isDisabled}
     />
   );
