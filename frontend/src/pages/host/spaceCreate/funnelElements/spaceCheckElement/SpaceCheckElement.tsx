@@ -49,6 +49,7 @@ const SpaceCheckElement = ({ createFunnelForm }: SpaceCheckElementProps) => {
       onNextButtonClick={() => {
         console.log(createFunnelForm);
       }}
+      buttonText="스페이스 생성하기"
     />
   );
 };
