@@ -14,8 +14,8 @@ const useSpacesDisplay = ({ mySpaces }: UseSpacesDisplayProps) => {
     setSortType(sort);
   };
 
-  const sortSpaces = (spaces: MySpace[]) => {
-    return [...spaces].sort((a: MySpace, b: MySpace) => {
+  const sortSpaces = () => {
+    return [...mySpaces].sort((a: MySpace, b: MySpace) => {
       if (sortType === 'latest') {
         const aCreatedAt = new Date(a.createdAt);
         const bCreatedAt = new Date(b.createdAt);
@@ -26,7 +26,7 @@ const useSpacesDisplay = ({ mySpaces }: UseSpacesDisplayProps) => {
     });
   };
 
-  const displaySpaces = sortSpaces(mySpaces);
+  const displaySpaces = sortSpaces();
 
   return {
     displaySpaces,
