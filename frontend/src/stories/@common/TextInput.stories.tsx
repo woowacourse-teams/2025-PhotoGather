@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { useState } from 'react';
-import TextInput from '../components/@common/inputs/TextInput';
-import { CONSTRAINTS } from '../constants/constraints';
-import useGraphemeInput from '../hooks/@common/useGraphemeInput';
+import TextInput from '../../components/@common/inputs/textInput/TextInput';
+import { CONSTRAINTS } from '../../constants/constraints';
+import useGraphemeInput from '../../hooks/@common/useGraphemeInput';
 
 const meta: Meta<typeof TextInput> = {
   title: 'Components/Input/Text',

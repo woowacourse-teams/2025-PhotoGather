@@ -1,7 +1,7 @@
-language: "ko-KR" # 리뷰 언어
+language: ko-KR # 리뷰 언어
 tone_instructions: "각 코드 라인을 세심하게 검토하고, 개선점이 있는 라인에 직접 인라인 코멘트를 달아주세요. 정확한 피드백을 제공해주세요."
 reviews:
-  profile: "assertive" # 리뷰 강도 설정
+  profile: assertive # 리뷰 강도 설정
   high_level_summary: false # PR 전체 요약
   high_level_summary_placeholder: "" # PR 본문에 요약 삽입할 플레이스홀더
   poem: false # 시 생성
@@ -12,23 +12,15 @@ reviews:
   related_prs: false # 관련 PR 찾기
   suggested_labels: false # 라벨 제안
   suggested_reviewers: false # 리뷰어 제안
+  assess_linked_issues: false # 관련 이슈 기반 평가
   auto_review: # 자동 리뷰 설정
     enabled: true # 자동 리뷰 활성화
     on_open: true # PR 생성 시 자동 리뷰
-    on_push: false # 커밋 추가(push) 시 자동 리뷰 비활성화
+    on_push: false # 커밋 추가(push) 시 자동 리뷰 ❌
     on_comment: true # 수동 요청 가능 ("@coderabbit-ai review")
     drafts: false # 드래프트 PR 리뷰
-    base_branches: # 리뷰할 기본 브랜치
-      - develop
-    ignore_usernames: # 리뷰에서 제외할 사용자
-      - ShinjungOh
-      - hanheel
-      - H0ngJu
-      - MinSungJe
-      - songsunkook
-      - ykmxxi
-      - Hacanna42
-
+    base_branches: ["develop", "v2/develop"] # 리뷰할 기본 브랜치
+    ignore_usernames: ["ShinjungOh", "songsunkook", "Hacanna42"] # 리뷰에서 제외할 사용자
   finishing_touches: # 마무리 작업
     docstrings: # 문서 문자열 생성
       enabled: false # docstring 자동 생성
@@ -54,5 +46,4 @@ tools: # 추가 분석 도구
 knowledge_base: # 지식 베이스 설정
   code_guidelines: # 코딩 가이드라인 설정
     enabled: true # 코딩 가이드라인 활성화
-    filePatterns: # 가이드라인 파일 패턴 목록
-      - "./coderabbit_rules.md" # 프로젝트 루트의 CodeRabbit 규칙 파일
+    filePatterns: ["./coderabbit_rules.md"] # 프로젝트 루트의 CodeRabbit 규칙 파일

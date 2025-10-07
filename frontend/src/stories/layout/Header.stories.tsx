@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import Header from '../components/@common/header/Header';
 import { FiSettings, FiShare2 } from 'react-icons/fi';
-import { theme } from '../styles/theme';
+import Header from '../../components/@common/header/Header';
+import { theme } from '../../styles/theme';
 
 const meta: Meta<typeof Header> = {
   title: 'Components/Header',

@@ -1,7 +1,6 @@
 import { css, type Theme } from '@emotion/react';
 import styled from '@emotion/styled';
 import type { IconButtonVariant } from '../../../../types/button.type';
-import { hexToRgba } from '../../../../utils/hexToRgba';
 
 export const IconButtonStyles = {
   default: (theme: Theme) => css`
@@ -20,13 +19,15 @@ export const IconButtonStyles = {
     background-color: ${theme.colors.white};
     color: ${theme.colors.gray06};
   `,
-  danger: (theme: Theme) => css`
-    background: ${hexToRgba(theme.colors.white, 0.7)};
-    color: ${theme.colors.error};
-  `,
   dark: (theme: Theme) => css`
-    background: ${hexToRgba(theme.colors.gray06, 0.7)};
+    border-radius: 50%;
+    background-color: ${theme.colors.gray06};
     color: ${theme.colors.white};
+    svg {
+      &:active{
+        scale: 0.95
+      }
+    }
   `,
 };
 

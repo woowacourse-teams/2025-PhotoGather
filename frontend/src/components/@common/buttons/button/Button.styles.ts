@@ -37,6 +37,10 @@ export const buttonStyles = {
       background-color: ${theme.colors.gray01};
     }
   `,
+  danger: (theme: Theme) => css`
+    background-color: ${theme.colors.error};
+    color: ${theme.colors.white};
+  `,
   error: (theme: Theme) => css`
     ${theme.typography.captionSmall}
     color: ${theme.colors.error};
