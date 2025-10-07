@@ -10,7 +10,7 @@ public class FilePathGenerator {
         UploadCategory category,
         String fileName
     ) {
-        return "%s/%s/%s/%s/%s/%s".formatted(
+        return "%s/%s/%s/%s/%s".formatted(
             rootDirectory,
             "spaces",
             spaceCode,
