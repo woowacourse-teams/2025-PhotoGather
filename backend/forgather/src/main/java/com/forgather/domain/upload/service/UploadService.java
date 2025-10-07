@@ -1,26 +1,16 @@
 package com.forgather.domain.upload.service;
 
-import static com.forgather.domain.space.util.FilePathGenerator.generateContentsFilePath;
-
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.forgather.domain.guest.model.Guest;
-import com.forgather.domain.guest.repository.GuestRepository;
 import com.forgather.domain.space.dto.IssueSignedUrlRequest;
 import com.forgather.domain.space.dto.IssueSignedUrlResponse;
-import com.forgather.domain.space.model.PhotoMetaData;
-import com.forgather.domain.space.model.Space;
 import com.forgather.domain.space.repository.SpaceRepository;
-import com.forgather.domain.space.util.MetaDataExtractor;
-import com.forgather.domain.upload.ContentsStorage;
-import com.forgather.global.exception.BaseException;
+import com.forgather.domain.upload.domain.ContentsStorage;
+import com.forgather.domain.upload.domain.SignedUrlIssuer;
 import com.forgather.global.exception.FileUploadException;
 
 import lombok.RequiredArgsConstructor;
@@ -74,16 +64,5 @@ public class UploadService {
             signedUrls.put(uploadFileName, signedUrl);
         }
         return new IssueSignedUrlResponse(signedUrls);
-    }
-
-    @Transactional
-    public void saveUploadedPhotos(String spaceCode, Long guestId) {
-        // Space space = spaceRepository.getByCode(spaceCode);
-        // Guest guest = guestRepository.getByIdOrThrow(guestId);
-        //
-        // List<Photo> photos = request.uploadedPhotos().stream()
-        //     .map(uploadedPhoto -> uploadedPhoto.toEntity(space, guest, contentsStorage.getRootDirectory()))
-        //     .toList();
-        // TODO: save photos
     }
 }
