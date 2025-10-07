@@ -25,14 +25,24 @@ const GuestMainPage = () => {
           icon={<IoLogoInstagram />}
           variant="default"
           onClick={() =>
-            window.open(createInstagramUrl(mockData.instagramId), '_blank')
+            window.open(
+              createInstagramUrl(mockData.instagramId),
+              '_blank',
+              'noopener,noreferrer',
+            )
           }
         />
         <IconButton
           aria-label="이메일"
           icon={<IoMailOutline />}
           variant="default"
-          onClick={() => window.open(`mailto:${mockData.email}`, '_blank')}
+          onClick={() =>
+            window.open(
+              `mailto:${mockData.email}`,
+              '_blank',
+              'noopener,noreferrer',
+            )
+          }
         />
       </MainPageStyles.IconButtonContainer>
       <DividerLine width="10%" />
