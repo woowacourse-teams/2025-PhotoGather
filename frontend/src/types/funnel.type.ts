@@ -1,5 +1,12 @@
 import type { SpaceVisibility } from './space.type';
 
+export type CreateFunnelStep =
+  | 'name'
+  | 'description'
+  | 'check'
+  | 'detail'
+  | 'accessType';
+
 export interface CreateFunnelForm {
   name: string;
   description: string;

@@ -1,15 +1,17 @@
 import StepProgressBar from '../../../components/@common/progressBar/step/StepProgressBar';
 import useConfirmBeforeRefresh from '../../../hooks/@common/useConfirmBeforeRefresh';
 import useFormFunnel from '../../../hooks/domain/funnel/useFormFunnel';
-import type { CreateFunnelForm } from '../../../types/funnel.type';
+import type {
+  CreateFunnelForm,
+  CreateFunnelStep,
+} from '../../../types/funnel.type';
 import SpaceDescriptionElement from '../funnelElements/SpaceDescriptionElement';
 import SpaceNameElement from '../funnelElements/SpaceNameElement';
 import SpaceDetailElementInfos from '../funnelElements/spaceDetailElement/SpaceDetailElement';
 import SpaceVisibilityElement from '../funnelElements/spaceVisibilityElement/SpaceVisibilityElement';
 import * as S from './SpaceCreateFunnel.styles';
 
-type Step = 'name' | 'description' | 'check' | 'detail' | 'accessType';
-const PROGRESS_STEP_LIST: readonly Step[] = [
+const PROGRESS_STEP_LIST: readonly CreateFunnelStep[] = [
   'name',
   'description',
   'accessType',
@@ -28,7 +30,7 @@ const initialCreateFunnelForm: CreateFunnelForm = {
 const SpaceCreateFunnel = () => {
   useConfirmBeforeRefresh();
 
-  const Funnel = useFormFunnel<Step, CreateFunnelForm>(
+  const Funnel = useFormFunnel<CreateFunnelStep, CreateFunnelForm>(
     'name',
     initialCreateFunnelForm,
   );
