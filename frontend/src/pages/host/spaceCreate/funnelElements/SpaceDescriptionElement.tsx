@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import TextareaInput from '../../../../components/@common/inputs/textareaInput/TextareaInput';
 import { CONSTRAINTS } from '../../../../constants/constraints';
+import { INFORMATION } from '../../../../constants/messages';
 import type { FunnelElementProps } from '../../../../types/funnel.type';
 import { calculateValidLength } from '../../../../utils/grapheme';
 import { createErrorMessageWithValidators } from '../../../../validators/createErrorMessageWithValidators';
@@ -21,8 +22,8 @@ const SpaceDescriptionElement = ({
 
   return (
     <FunnelBasePage
-      title="스페이스의 설명을 작성해주세요"
-      description="내 스페이스에 대한 정보를 알려주세요. (선택)"
+      title={INFORMATION.SPACE_CREATE.DESCRIPTION.TITLE}
+      description={INFORMATION.SPACE_CREATE.DESCRIPTION.DESCRIPTION}
       element={
         <TextareaInput
           isRequired={false}

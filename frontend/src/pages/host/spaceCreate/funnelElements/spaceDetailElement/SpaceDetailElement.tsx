@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import TextInput from '../../../../../components/@common/inputs/textInput/TextInput';
 import PhotoUploadButton from '../../../../../components/specific/photoUploadButton/PhotoUploadButton';
+import { INFORMATION } from '../../../../../constants/messages';
 import useLocalFile from '../../../../../hooks/domain/useLocaleFile';
 import type {
   FunnelElementProps,
@@ -35,8 +36,8 @@ const SpaceDetailElement = ({
 
   return (
     <FunnelBasePage
-      title="스페이스의 세부 정보를 입력해주세요"
-      description="프로필 사진과 연락처 정보를 입력할 수 있어요. (선택)"
+      title={INFORMATION.SPACE_CREATE.DETAIL.TITLE}
+      description={INFORMATION.SPACE_CREATE.DETAIL.DESCRIPTION}
       element={
         <S.Wrapper>
           <S.ImageUploadContainer>

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import TextInput from '../../../../components/@common/inputs/textInput/TextInput';
 import { CONSTRAINTS } from '../../../../constants/constraints';
+import { INFORMATION } from '../../../../constants/messages';
 import type { FunnelElementProps } from '../../../../types/funnel.type';
 import { calculateValidLength } from '../../../../utils/grapheme';
 import { createErrorMessageWithValidators } from '../../../../validators/createErrorMessageWithValidators';
@@ -21,8 +22,8 @@ const SpaceNameElement = ({
 
   return (
     <FunnelBasePage
-      title="스페이스 이름을 정해주세요"
-      description="추억을 담을 공간의 이름을 작성해주세요."
+      title={INFORMATION.SPACE_CREATE.NAME.TITLE}
+      description={INFORMATION.SPACE_CREATE.NAME.DESCRIPTION}
       element={
         <TextInput
           isRequired={false}

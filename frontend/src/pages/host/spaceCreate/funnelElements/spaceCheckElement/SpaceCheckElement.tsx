@@ -1,5 +1,6 @@
 import defaultImage from '../../../../../@assets/images/default-image.png';
 import InfoRow from '../../../../../components/host/infoRow/InfoRow';
+import { INFORMATION } from '../../../../../constants/messages';
 import type {
   CreateFunnelForm,
   FunnelElementProps,
@@ -28,8 +29,8 @@ const SpaceCheckElement = ({ createFunnelForm }: SpaceCheckElementProps) => {
 
   return (
     <FunnelBasePage
-      title="스페이스 정보를 확인해주세요"
-      description="생성하기를 누르면 링크가 발급돼요."
+      title={INFORMATION.SPACE_CREATE.CHECK.TITLE}
+      description={INFORMATION.SPACE_CREATE.CHECK.DESCRIPTION}
       element={
         <S.Wrapper>
           <Thumbnail src={matchThumbnailImage} />
