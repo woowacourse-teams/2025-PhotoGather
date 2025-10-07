@@ -22,7 +22,7 @@ const SpaceDescriptionElement = ({
   return (
     <FunnelBasePage
       title="스페이스의 설명을 작성해주세요"
-      description="내 스페이스에 대한 정보를 알려주세요."
+      description="내 스페이스에 대한 정보를 알려주세요. (선택)"
       element={
         <TextareaInput
           isRequired={false}
