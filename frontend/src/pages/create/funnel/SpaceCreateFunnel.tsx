@@ -14,8 +14,8 @@ import * as S from './SpaceCreateFunnel.styles';
 
 const PROGRESS_STEP_LIST: readonly CreateFunnelStep[] = [
   'name',
-  'description',
   'accessType',
+  'description',
   'detail',
   'check',
 ] as const;
@@ -47,24 +47,24 @@ const SpaceCreateFunnel = () => {
       <S.ContentContainer>
         <Funnel.Step name="name">
           <SpaceNameElement
-            onNext={(name) => Funnel.goNextWithData('description', { name })}
+            onNext={(name) => Funnel.goNextWithData('accessType', { name })}
             initialValue={Funnel.form.name}
-          />
-        </Funnel.Step>
-        <Funnel.Step name="description">
-          <SpaceDescriptionElement
-            onNext={(description) =>
-              Funnel.goNextWithData('accessType', { description })
-            }
-            initialValue={Funnel.form.description}
           />
         </Funnel.Step>
         <Funnel.Step name="accessType">
           <SpaceVisibilityElement
             onNext={(visibility) =>
-              Funnel.goNextWithData('detail', { visibility })
+              Funnel.goNextWithData('description', { visibility })
             }
             initialValue={Funnel.form.visibility}
+          />
+        </Funnel.Step>
+        <Funnel.Step name="description">
+          <SpaceDescriptionElement
+            onNext={(description) =>
+              Funnel.goNextWithData('detail', { description })
+            }
+            initialValue={Funnel.form.description}
           />
         </Funnel.Step>
         <Funnel.Step name="detail">
