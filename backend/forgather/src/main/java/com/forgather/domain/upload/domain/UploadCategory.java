@@ -1,7 +1,12 @@
 package com.forgather.domain.upload.domain;
 
 public enum UploadCategory {
-    product,
-    guestbook
+    PRODUCT,
+    GUESTBOOK
     ;
+
+    @Override
+    public String toString() {
+        return name().toLowerCase();
+    }
 }

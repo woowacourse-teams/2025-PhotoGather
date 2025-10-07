@@ -1,5 +1,6 @@
 package com.forgather.acceptance;
 
+import static com.forgather.domain.upload.domain.UploadCategory.PRODUCT;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
@@ -26,7 +27,6 @@ import com.forgather.domain.space.model.Space;
 import com.forgather.domain.space.repository.HostRepository;
 import com.forgather.domain.space.repository.SpaceRepository;
 import com.forgather.domain.upload.AwsS3Cloud;
-import com.forgather.domain.upload.domain.UploadCategory;
 import com.forgather.global.auth.model.Host;
 import com.forgather.global.auth.util.JwtTokenProvider;
 
@@ -83,7 +83,7 @@ class PhotoAcceptanceTest extends AcceptanceTest {
         var host = hostRepository.save(new Host("모코", "pictureUrl"));
         var space = spaceRepository.save(new Space("space-code", "test-space", "description",
             "forgather/temp.png", false, "forgather_official", "forgather@forgather.me"));
-        var request = new IssueSignedUrlRequest(UploadCategory.product, List.of("UUID1.png", "UUID2.png", "UUID3.png"));
+        var request = new IssueSignedUrlRequest(PRODUCT, List.of("UUID1.png", "UUID2.png", "UUID3.png"));
 
         // when
         var response = RestAssuredMockMvc.given()
@@ -110,7 +110,7 @@ class PhotoAcceptanceTest extends AcceptanceTest {
         var host = hostRepository.save(new Host("모코", "pictureUrl"));
         var space = spaceRepository.save(new Space("space-code", "test-space", "description",
             "forgather/temp.png", false, "forgather_official", "forgather@forgather.me"));
-        var request = new IssueSignedUrlRequest(UploadCategory.product, IntStream.range(0, 101)
+        var request = new IssueSignedUrlRequest(PRODUCT, IntStream.range(0, 101)
             .mapToObj(i -> "UUID" + (i + 1) + ".png")
             .toList());
 

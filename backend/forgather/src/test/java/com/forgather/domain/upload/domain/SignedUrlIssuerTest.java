@@ -1,5 +1,6 @@
 package com.forgather.domain.upload.domain;
 
+import static com.forgather.domain.upload.domain.UploadCategory.PRODUCT;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -27,7 +28,7 @@ class SignedUrlIssuerTest {
             .toList();
 
         // when, then
-        assertThatThrownBy(() -> signedUrlIssuer.issueSignedUrls(fileNames, "1234567890", UploadCategory.product))
+        assertThatThrownBy(() -> signedUrlIssuer.issueSignedUrls(fileNames, "1234567890", PRODUCT))
             .isInstanceOf(BaseException.class)
             .hasMessageContaining("한번에 발급 가능한 업로드 url 개수");
     }
@@ -42,7 +43,7 @@ class SignedUrlIssuerTest {
             .toList();
 
         // when
-        assertThatCode(() -> signedUrlIssuer.issueSignedUrls(fileNames, "1234567890", UploadCategory.product))
+        assertThatCode(() -> signedUrlIssuer.issueSignedUrls(fileNames, "1234567890", PRODUCT))
             .doesNotThrowAnyException();
     }
 
@@ -57,7 +58,7 @@ class SignedUrlIssuerTest {
         Map<String, String> result = signedUrlIssuer.issueSignedUrls(
             fileNames,
             "1234567890",
-            UploadCategory.product
+            PRODUCT
         );
 
         // then

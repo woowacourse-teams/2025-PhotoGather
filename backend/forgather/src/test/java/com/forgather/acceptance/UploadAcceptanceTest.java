@@ -1,6 +1,6 @@
 package com.forgather.acceptance;
 
-import static com.forgather.domain.upload.domain.UploadCategory.guestbook;
+import static com.forgather.domain.upload.domain.UploadCategory.GUESTBOOK;
 import static com.forgather.fixture.SpaceFixture.createSpace;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -52,7 +52,7 @@ public class UploadAcceptanceTest extends AcceptanceTest {
     @Test
     public void issueSignedUrls() {
         // given
-        IssueSignedUrlRequest request = new IssueSignedUrlRequest(guestbook, List.of("abc.jpg", "def.jpg", "hij.png"));
+        IssueSignedUrlRequest request = new IssueSignedUrlRequest(GUESTBOOK, List.of("abc.jpg", "def.jpg", "hij.png"));
         when(awsS3Cloud.getRootDirectory()).thenReturn("photogather/v2");
         when(awsS3Cloud.issueSignedUrl(anyString())).thenAnswer(invocation -> {
             String path = invocation.getArgument(0);
