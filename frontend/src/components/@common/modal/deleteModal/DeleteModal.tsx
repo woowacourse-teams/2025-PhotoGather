@@ -1,26 +1,17 @@
 import { MdWarning } from 'react-icons/md';
-import { useToast } from '../../../../hooks/@common/useToast';
 import Button from '../../buttons/button/Button';
 import Modal from '../Modal';
 import * as S from './DeleteModal.styles';
 
 interface DeleteModalProps {
   isOpen: boolean;
-  onClose: () => void;
+  onCloseModal: () => void;
+  onDelete: () => void;
 }
 
-const DeleteModal = ({ isOpen, onClose }: DeleteModalProps) => {
-  const { showToast } = useToast();
-  const deleteSpace = () => {
-    console.log('삭제 API 연동 + navigate');
-    onClose();
-    showToast({
-      text: '스페이스가 삭제되었습니다.',
-      type: 'info',
-    });
-  };
+const DeleteModal = ({ isOpen, onCloseModal, onDelete }: DeleteModalProps) => {
   return (
-    <Modal isOpen={isOpen} onClose={onClose}>
+    <Modal isOpen={isOpen} onClose={onCloseModal}>
       <Modal.Backdrop />
       <Modal.Content>
         <S.DeleteModalContainer>
@@ -34,8 +25,8 @@ const DeleteModal = ({ isOpen, onClose }: DeleteModalProps) => {
             </S.DeleteConfirmDescription>
           </S.DeleteModalMessageContainer>
           <S.ButtonContainer>
-            <Button variant="secondary" text="취소" onClick={onClose} />
-            <Button variant="danger" text="삭제" onClick={deleteSpace} />
+            <Button variant="secondary" text="취소" onClick={onCloseModal} />
+            <Button variant="danger" text="삭제" onClick={onDelete} />
           </S.ButtonContainer>
         </S.DeleteModalContainer>
       </Modal.Content>

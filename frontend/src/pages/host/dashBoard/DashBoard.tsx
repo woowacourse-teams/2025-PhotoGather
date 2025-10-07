@@ -2,21 +2,37 @@ import { useState } from 'react';
 import Button from '../../../components/@common/buttons/button/Button';
 import DeleteModal from '../../../components/@common/modal/deleteModal/DeleteModal';
 import InfoRow from '../../../components/host/infoRow/InfoRow';
+import { useToast } from '../../../hooks/@common/useToast';
 import { mockDashboardData } from '../../mockData';
 import { Thumbnail } from '../Host.common.styles';
 import * as S from './Dashboard.styles';
 
 const Dashboard = () => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const { showToast } = useToast();
+
   const openDeleteModal = () => {
     setIsDeleteModalOpen(true);
   };
   const closeDeleteModal = () => {
     setIsDeleteModalOpen(false);
   };
+  const deleteSpace = () => {
+    console.log('삭제 API 연동 + navigate');
+    closeDeleteModal();
+    showToast({
+      text: '스페이스가 삭제되었습니다.',
+      type: 'info',
+    });
+  };
+
   return (
     <S.Wrapper>
-      <DeleteModal isOpen={isDeleteModalOpen} onClose={closeDeleteModal} />
+      <DeleteModal
+        isOpen={isDeleteModalOpen}
+        onCloseModal={closeDeleteModal}
+        onDelete={deleteSpace}
+      />
       <S.Title>스페이스 정보</S.Title>
       <Thumbnail src={mockDashboardData.thumbnail} />
       <S.InfoRowContainer>
