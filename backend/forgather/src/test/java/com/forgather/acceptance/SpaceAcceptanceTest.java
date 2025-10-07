@@ -1,6 +1,6 @@
 package com.forgather.acceptance;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.ArgumentMatchers.any;
 
@@ -158,8 +158,7 @@ class SpaceAcceptanceTest extends AcceptanceTest {
         var token = jwtTokenProvider.generateAccessToken(host.getId());
         var space = spaceRepository.save(new Space(host, "2222222222", "테스트", "테스트 스페이스", true,
             "forgather_official", "forgather@forgather.me"));
-        var spacePhoto = spacePhotoRepository.save(
-            new SpacePhoto(space, "original.png", "/forgather/uuid.png", 1024L));
+        spacePhotoRepository.save(new SpacePhoto(space, "original.png", "/forgather/uuid.png", 1024L));
 
         // when
         var response = RestAssuredMockMvc.given()
@@ -214,5 +213,32 @@ class SpaceAcceptanceTest extends AcceptanceTest {
         assertThat(jsonPath.getString("instagramUsername")).isEqualTo("forgather_official_new");
         assertThat(jsonPath.getString("email")).isEqualTo("forgather_new@forgather.me");
         assertThat(spacePhotoRepository.getBySpace(space).getOriginalName()).isEqualTo("new.jpg");
+    }
+
+    @DisplayName("RestAssuredMockMvc를 사용하여 나의 스페이스 목록을 조회한다.")
+    @Test
+    void getSpacesWithRestAssuredMockMvc() {
+        // given
+        var host = hostRepository.save(new Host("모코", "pictureUrl"));
+        var token = jwtTokenProvider.generateAccessToken(host.getId());
+        var space1 = spaceRepository.save(new Space(host, "1234567890", "테스트1", "테스트 스페이스1", true,
+            "forgather_official", "forgather@forgather.me"));
+        spacePhotoRepository.save(new SpacePhoto(space1, "original.png", "/forgather/uuid.png", 1024L));
+        var space2 = spaceRepository.save(new Space(host, "0987654321", "테스트2", "테스트 스페이스2", true,
+            "forgather_official", "forgather@forgather.me"));
+        spacePhotoRepository.save(new SpacePhoto(space2, "original.png", "/forgather/uuid.png", 1024L));
+
+        // when
+        var response = RestAssuredMockMvc.given()
+            .header("Authorization", "Bearer " + token)
+            .when()
+            .get("/spaces/me")
+            .then()
+            .extract();
+
+        // then
+        assertThat(response.statusCode()).isEqualTo(200);
+        assertThat(response.body().jsonPath().getList("spaceCode"))
+            .containsExactlyInAnyOrder("1234567890", "0987654321");
     }
 }

@@ -75,7 +75,7 @@ public class SpaceController {
     }
 
     @GetMapping("/me")
-    @Operation(summary = "호스트의 스페이스 조회", description = "호스트 ID를 통해 해당 호스트의 스페이스들을 조회합니다.")
+    @Operation(summary = "호스트의 스페이스 목록 조회", description = "호스트 ID를 통해 해당 호스트의 스페이스 목록을 조회합니다.")
     public ResponseEntity<List<SpaceResponse>> getSpacesInformation(@LoginHost Host host) {
         List<SpaceResponse> response = spaceService.getSpacesInformation(host);
         return ResponseEntity.ok(response);

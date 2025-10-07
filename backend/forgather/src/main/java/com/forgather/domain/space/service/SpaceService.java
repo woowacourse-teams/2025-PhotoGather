@@ -106,9 +106,11 @@ public class SpaceService {
 
     public List<SpaceResponse> getSpacesInformation(Host host) {
         return host.getSpaceHostMap().stream()
-            .map(spaceHostMap ->
-                SpaceResponse.from(spaceHostMap.getSpace(), null)
-            )
+            .map(spaceHostMap -> {
+                Space space = spaceHostMap.getSpace();
+                SpacePhoto spacePhoto = spacePhotoRepository.getBySpace(space);
+                return SpaceResponse.from(space, spacePhoto);
+            })
             .toList();
     }
 }
