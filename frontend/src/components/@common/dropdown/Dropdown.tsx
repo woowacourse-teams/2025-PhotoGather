@@ -41,9 +41,7 @@ const Dropdown = ({
     };
   }, []);
 
-  const handleToggle = () => {
-    setIsOpen(!isOpen);
-  };
+  const handleToggle = () => setIsOpen((prev) => !prev);
 
   const handleSelect = (optionValue: string) => {
     onChange(optionValue);
