@@ -1,10 +1,10 @@
-import StepProgressBar from '../../../components/@common/progressBar/step/StepProgressBar';
-import useConfirmBeforeRefresh from '../../../hooks/@common/useConfirmBeforeRefresh';
-import useFormFunnel from '../../../hooks/domain/funnel/useFormFunnel';
+import StepProgressBar from '../../../../components/@common/progressBar/step/StepProgressBar';
+import useConfirmBeforeRefresh from '../../../../hooks/@common/useConfirmBeforeRefresh';
+import useFormFunnel from '../../../../hooks/domain/funnel/useFormFunnel';
 import type {
   CreateFunnelForm,
   CreateFunnelStep,
-} from '../../../types/funnel.type';
+} from '../../../../types/funnel.type';
 import SpaceDescriptionElement from '../funnelElements/SpaceDescriptionElement';
 import SpaceNameElement from '../funnelElements/SpaceNameElement';
 import SpaceCheckElement from '../funnelElements/spaceCheckElement/SpaceCheckElement';

@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { IoGlobeOutline, IoLockClosedOutline } from 'react-icons/io5';
-import BorderButton from '../../../../components/@common/buttons/borderButton/BorderButton';
-import type { FunnelElementProps } from '../../../../types/funnel.type';
-import type { SpaceVisibility } from '../../../../types/space.type';
+import BorderButton from '../../../../../components/@common/buttons/borderButton/BorderButton';
+import type { FunnelElementProps } from '../../../../../types/funnel.type';
+import type { SpaceVisibility } from '../../../../../types/space.type';
 import FunnelBasePage from '../../funnel/funnelBasePage/FunnelBasePage';
 import * as S from './SpaceVisibilityElement.styles';
 

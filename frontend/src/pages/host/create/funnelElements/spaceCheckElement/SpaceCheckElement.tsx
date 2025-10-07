@@ -1,10 +1,10 @@
-import defaultImage from '../../../../@assets/images/default-image.png';
-import InfoRow from '../../../../components/host/infoRow/InfoRow';
+import InfoRow from '../../../../../components/host/infoRow/InfoRow';
 import type {
   CreateFunnelForm,
   FunnelElementProps,
-} from '../../../../types/funnel.type';
-import { Thumbnail } from '../../../MainPage.common.styles';
+} from '../../../../../types/funnel.type';
+import defaultImage from '../../../../@assets/images/default-image.png';
+import { Thumbnail } from '../../../../MainPage.common.styles';
 import FunnelBasePage from '../../funnel/funnelBasePage/FunnelBasePage';
 import * as S from './SpaceCheckElement.styles';
 

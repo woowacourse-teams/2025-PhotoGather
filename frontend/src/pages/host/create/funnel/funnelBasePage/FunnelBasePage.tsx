@@ -1,5 +1,5 @@
-import Button from '../../../../components/@common/buttons/button/Button';
-import type { FunnelBaseElementProps } from '../../../../types/funnel.type';
+import Button from '../../../../../components/@common/buttons/button/Button';
+import type { FunnelBaseElementProps } from '../../../../../types/funnel.type';
 import * as S from './FunnelBasePage.styles';
 
 const FunnelBasePage = ({

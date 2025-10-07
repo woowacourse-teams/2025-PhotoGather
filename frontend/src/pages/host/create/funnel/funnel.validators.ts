@@ -1,8 +1,8 @@
-import { CONSTRAINTS } from '../../../constants/constraints';
+import { CONSTRAINTS } from '../../../../constants/constraints';
 import {
   checkEmailForm,
   checkMaxLength,
-} from '../../../validators/form.validators';
+} from '../../../../validators/form.validators';
 
 export const funnelValidators = {
   profileImage: () => {},
