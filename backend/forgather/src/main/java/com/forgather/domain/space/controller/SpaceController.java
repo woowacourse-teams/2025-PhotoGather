@@ -40,7 +40,7 @@ public class SpaceController {
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Operation(summary = "스페이스 생성", description = "새로운 스페이스를 생성합니다.")
     public ResponseEntity<CreateSpaceResponse> create(
-        @RequestPart("request") CreateSpaceRequest request,
+        @RequestPart("request") @Validated CreateSpaceRequest request,
         @RequestPart(value = "file", required = false) MultipartFile file,
         @LoginHost Host host
     ) {
