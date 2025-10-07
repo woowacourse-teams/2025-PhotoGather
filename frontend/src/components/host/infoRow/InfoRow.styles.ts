@@ -24,3 +24,12 @@ export const Value = styled.dd`
   })}
   color: ${({ theme }) => theme.colors.gray04};
 `;
+
+export const NoValueText = styled.dd`
+  width: 100%;
+  text-align: left;
+  ${({ theme }) => ({
+    ...theme.typography.bodyRegular,
+  })}
+  color: ${({ theme }) => theme.colors.gray03};
+`;

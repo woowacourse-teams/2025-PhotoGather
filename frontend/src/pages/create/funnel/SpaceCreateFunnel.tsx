@@ -7,6 +7,7 @@ import type {
 } from '../../../types/funnel.type';
 import SpaceDescriptionElement from '../funnelElements/SpaceDescriptionElement';
 import SpaceNameElement from '../funnelElements/SpaceNameElement';
+import SpaceCheckElement from '../funnelElements/spaceCheckElement/SpaceCheckElement';
 import SpaceDetailElement from '../funnelElements/spaceDetailElement/SpaceDetailElement';
 import SpaceVisibilityElement from '../funnelElements/spaceVisibilityElement/SpaceVisibilityElement';
 import * as S from './SpaceCreateFunnel.styles';
@@ -77,10 +78,7 @@ const SpaceCreateFunnel = () => {
           />
         </Funnel.Step>
         <Funnel.Step name="check">
-          <p>{Funnel.form.name}</p>
-          <p>{Funnel.form.description}</p>
-          <p>{Funnel.form.visibility}</p>
-          <p>{String(Funnel.form.profileImage)}</p>
+          <SpaceCheckElement createFunnelForm={Funnel.form} onNext={() => {}} />
         </Funnel.Step>
       </S.ContentContainer>
     </S.Wrapper>
