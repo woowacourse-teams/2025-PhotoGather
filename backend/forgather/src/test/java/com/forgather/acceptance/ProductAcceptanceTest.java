@@ -51,9 +51,9 @@ public class ProductAcceptanceTest extends AcceptanceTest {
         "authorName",
         "description",
         List.of(
-            new RegisterProductPhotoRequest("photo1", "path1", 1024),
-            new RegisterProductPhotoRequest("photo2", "path2", 2048),
-            new RegisterProductPhotoRequest("photo3", "path3", 4096)
+            new RegisterProductPhotoRequest("photo1", "path1", 1024L),
+            new RegisterProductPhotoRequest("photo2", "path2", 2048L),
+            new RegisterProductPhotoRequest("photo3", "path3", 4096L)
         )
     );
 
@@ -175,8 +175,8 @@ public class ProductAcceptanceTest extends AcceptanceTest {
             "description",
             List.of(2L),
             List.of(
-                new RegisterProductPhotoRequest("photo4", "path4", 1024),
-                new RegisterProductPhotoRequest("photo5", "path5", 1024)
+                new RegisterProductPhotoRequest("photo4", "path4", 1024L),
+                new RegisterProductPhotoRequest("photo5", "path5", 1024L)
             )
         );
 

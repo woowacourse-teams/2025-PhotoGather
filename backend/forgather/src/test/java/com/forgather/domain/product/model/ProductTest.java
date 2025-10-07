@@ -12,6 +12,8 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import com.forgather.global.exception.BaseException;
 import com.forgather.global.exception.BaseNullPointerException;
@@ -24,7 +26,35 @@ class ProductTest {
         // when, then
         assertThatThrownBy(() -> createProductWithSpace(null))
             .isInstanceOf(BaseNullPointerException.class)
-            .hasMessageContaining("스페이스는 null일 수 없습니다.");
+            .hasMessageContaining("스페이스는 필수입니다.");
+    }
+
+    @DisplayName("작품명이 null이면 예외를 던진다")
+    @Test
+    void throwExceptionWhenTitleIsNull() {
+        // when, then
+        assertThatThrownBy(() -> createProductWithTitle(null))
+            .isInstanceOf(BaseNullPointerException.class)
+            .hasMessageContaining("작품명은 필수입니다.");
+    }
+
+    @DisplayName("작품 설명이 null이면 예외를 던진다")
+    @Test
+    void throwExceptionWhenDescriptionIsNull() {
+        // when, then
+        assertThatThrownBy(() -> createProductWithDescription(null))
+            .isInstanceOf(BaseNullPointerException.class)
+            .hasMessageContaining("작품 설명은 필수입니다.");
+    }
+
+    @DisplayName("작품명이 공백이면 예외를 던진다")
+    @ValueSource(strings = {"", " "})
+    @ParameterizedTest
+    void throwExceptionWhenNoTitle(String title) {
+        // when, then
+        assertThatThrownBy(() -> createProductWithTitle(title))
+            .isInstanceOf(BaseException.class)
+            .hasMessageContaining("작품명은 공백만 입력할 수 없습니다.");
     }
 
     @DisplayName("작품명의 길이가 50자를 초과하면 예외를 던진다")
@@ -39,6 +69,16 @@ class ProductTest {
             .hasMessageContaining("작품명은 최대");
     }
 
+    @DisplayName("작품 카테고리가 공백이면 예외를 던진다")
+    @ValueSource(strings = {"", " "})
+    @ParameterizedTest
+    void throwExceptionWhenBlankCategory(String category) {
+        // when, then
+        assertThatThrownBy(() -> createProductWithCategory(category))
+            .isInstanceOf(BaseException.class)
+            .hasMessageContaining("작품 카테고리는 공백만 입력할 수 없습니다.");
+    }
+
     @DisplayName("작품 카테고리의 길이가 20자를 초과하면 예외를 던진다")
     @Test
     void throwExceptionWhenExceedCategoryLength() {
@@ -51,6 +91,16 @@ class ProductTest {
             .hasMessageContaining("작품 카테고리는 최대");
     }
 
+    @DisplayName("작가명이 공백이면 예외를 던진다")
+    @ValueSource(strings = {"", " "})
+    @ParameterizedTest
+    void throwExceptionWhenBlankAuthorName(String authorName) {
+        // when, then
+        assertThatThrownBy(() -> createProductWithAuthorName(authorName))
+            .isInstanceOf(BaseException.class)
+            .hasMessageContaining("작가명은 공백만 입력할 수 없습니다.");
+    }
+
     @DisplayName("작가명의 길이가 20자를 초과하면 예외를 던진다")
     @Test
     void throwExceptionWhenExceedAuthorNameLength() {
@@ -61,6 +111,16 @@ class ProductTest {
         assertThatThrownBy(() -> createProductWithAuthorName(authorName))
             .isInstanceOf(BaseException.class)
             .hasMessageContaining("작가명은 최대");
+    }
+
+    @DisplayName("작품 설명이 공백이면 예외를 던진다")
+    @ValueSource(strings = {"", " "})
+    @ParameterizedTest
+    void throwExceptionWhenBlankDescription(String description) {
+        // when, then
+        assertThatThrownBy(() -> createProductWithDescription(description))
+            .isInstanceOf(BaseException.class)
+            .hasMessageContaining("작품 설명은 공백만 입력할 수 없습니다.");
     }
 
     @DisplayName("작품 설명의 길이가 1000자를 초과하면 예외를 던진다")

@@ -205,4 +205,51 @@ class ProductPhotosTest {
             () -> assertThat(photo5.getSortOrder()).isEqualTo(2)
         );
     }
+
+    @DisplayName("작품 사진의 개수가 10개를 초과하면 예외를 던진다")
+    @Test
+    public void throwExceptionWhenExceedMaxCount() {
+        // given
+        List<ProductPhoto> productPhotos = List.of(
+            createProductPhotoWithOrder(1),
+            createProductPhotoWithOrder(2),
+            createProductPhotoWithOrder(3),
+            createProductPhotoWithOrder(4),
+            createProductPhotoWithOrder(5),
+            createProductPhotoWithOrder(6),
+            createProductPhotoWithOrder(7),
+            createProductPhotoWithOrder(8),
+            createProductPhotoWithOrder(9),
+            createProductPhotoWithOrder(10),
+            createProductPhotoWithOrder(10)
+        );
+
+        // when, then
+        assertThatThrownBy(() -> new ProductPhotos(productPhotos))
+            .isInstanceOf(BaseException.class)
+            .hasMessageContaining("작품 사진은 최대 10개까지만 등록 가능합니다.");
+    }
+
+    @DisplayName("작품 사진을 추가할 때 개수가 10개를 초과하면 예외를 던진다")
+    @Test
+    public void throwExceptionWhenAdditionExceedMaxCount() {
+        // given
+        List<ProductPhoto> productPhotos = List.of(
+            createProductPhotoWithOrder(1),
+            createProductPhotoWithOrder(2),
+            createProductPhotoWithOrder(3),
+            createProductPhotoWithOrder(4),
+            createProductPhotoWithOrder(5),
+            createProductPhotoWithOrder(6),
+            createProductPhotoWithOrder(7),
+            createProductPhotoWithOrder(8),
+            createProductPhotoWithOrder(9),
+            createProductPhotoWithOrder(10)
+        );
+
+        // when, then
+        assertThatThrownBy(() -> new ProductPhotos(productPhotos).add(createProductPhotoWithOrder(10)))
+            .isInstanceOf(BaseException.class)
+            .hasMessageContaining("작품 사진은 최대 10개까지만 등록 가능합니다.");
+    }
 }

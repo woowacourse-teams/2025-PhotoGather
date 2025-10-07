@@ -8,14 +8,14 @@ public class ProductPhotoFixture {
 
     // TODO Reflection으로 대체
     public static ProductPhoto createProductPhotoSetId(long id) {
-        return new ProductPhoto(id, createProduct(), "originalName", "path", 1024, 1);
+        return new ProductPhoto(id, createProduct(), "originalName", "path", 1024L, 1);
     }
 
     public static ProductPhoto createProductPhotoWithOrder(int order) {
-        return new ProductPhoto(createProduct(), "originalName", "path", 1024, order);
+        return new ProductPhoto(createProduct(), "originalName", "path", 1024L, order);
     }
 
     public static ProductPhoto createProductPhoto() {
-        return new ProductPhoto(createProduct(), "originalName", "path", 1024, 1);
+        return new ProductPhoto(createProduct(), "originalName", "path", 1024L, 1);
     }
 }
