@@ -1,10 +1,10 @@
 import { IoLogoInstagram, IoMailOutline } from 'react-icons/io5';
-import FooterLogo from '../../../@assets/footer-logo.svg?react';
+import FooterLogo from '../../../@assets/logo/footer-logo.svg?react';
 import Button from '../../../components/@common/buttons/button/Button';
 import IconButton from '../../../components/@common/buttons/iconButton/IconButton';
 import { DividerLine } from '../../../styles/@common/DividerLine.styles';
 import { createInstagramUrl } from '../../../utils/createExternalLinks';
-import * as MainPageStyles from '../../mainPage.common.styles';
+import * as MainPageStyles from '../../MainPage.common.styles';
 import { mockAccess, mockData } from '../../mockData';
 
 const GuestMainPage = () => {

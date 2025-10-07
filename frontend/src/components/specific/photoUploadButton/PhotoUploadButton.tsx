@@ -1,7 +1,7 @@
 import { useId } from 'react';
 import { IoCamera } from 'react-icons/io5';
 import defaultImage from '../../../@assets/images/default-image.png';
-import { Thumbnail } from '../../../pages/host/Host.common.styles';
+import { Thumbnail } from '../../../pages/MainPage.common.styles';
 import type { PreviewFile } from '../../../types/file.type';
 import * as S from './PhotoUploadButton.styles';
 
