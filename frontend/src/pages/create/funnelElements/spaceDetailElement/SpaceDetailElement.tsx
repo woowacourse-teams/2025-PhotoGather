@@ -70,7 +70,7 @@ const SpaceDetailElement = ({
       nextButtonDisabled={isDisabled}
       onNextButtonClick={() =>
         onNext({
-          profileImage: localFiles.map((localFile) => localFile.originFile),
+          profileImage: localFiles,
           email,
           instagram,
         })

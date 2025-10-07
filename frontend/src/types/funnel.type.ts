@@ -1,3 +1,4 @@
+import type { LocalFile } from './file.type';
 import type { SpaceVisibility } from './space.type';
 
 export type CreateFunnelStep =
@@ -11,13 +12,13 @@ export interface CreateFunnelForm {
   name: string;
   description: string;
   visibility: SpaceVisibility;
-  profileImage: File[];
+  profileImage: LocalFile[];
   email: string;
   instagram: string;
 }
 
 export interface SpaceDetailElementInfos {
-  profileImage: File[];
+  profileImage: LocalFile[];
   email: string;
   instagram: string;
 }
