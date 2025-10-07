@@ -67,7 +67,7 @@ public class SpaceController {
     public ResponseEntity<SpaceResponse> update(
         @PathVariable(name = "spaceCode") String spaceCode,
         @RequestPart("request") @Validated UpdateSpaceRequest request,
-        @RequestPart(value = "file", required = false) @Validated MultipartFile file,
+        @RequestPart(value = "file", required = false) MultipartFile file,
         @LoginHost Host host
     ) {
         var response = spaceService.update(spaceCode, request, file, host);
