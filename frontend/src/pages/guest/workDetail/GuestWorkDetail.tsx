@@ -12,7 +12,6 @@ const GuestWorkDetail = () => {
         <S.EmptyStateContainer>
           <S.EmptyMessage>아직 작품 소개를 등록하지 않았어요</S.EmptyMessage>
         </S.EmptyStateContainer>
-        <Footer />
       </S.Wrapper>
     );
   }
