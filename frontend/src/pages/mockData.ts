@@ -14,3 +14,9 @@ export const mockDashboardData = {
   instagramId: 'forgather_official',
   email: 'forgather@forgather.me',
 };
+
+export const mockAccess = {
+  introduce: true,
+  writeGuestbook: true,
+  viewGuestbook: false,
+};

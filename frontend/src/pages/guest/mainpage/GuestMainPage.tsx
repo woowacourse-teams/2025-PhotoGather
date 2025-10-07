@@ -1,14 +1,13 @@
-import { IoLogoInstagram } from 'react-icons/io5';
-import { MdEmail } from 'react-icons/md';
+import { IoLogoInstagram, IoMailOutline } from 'react-icons/io5';
 import FooterLogo from '../../../@assets/footer-logo.svg?react';
 import Button from '../../../components/@common/buttons/button/Button';
 import IconButton from '../../../components/@common/buttons/iconButton/IconButton';
 import { DividerLine } from '../../../styles/@common/DividerLine.styles';
 import { createInstagramUrl } from '../../../utils/createExternalLinks';
 import * as MainPageStyles from '../../mainPage.common.styles';
-import { mockData } from '../../mockData';
+import { mockAccess, mockData } from '../../mockData';
 
-const HostMainPage = () => {
+const GuestMainPage = () => {
   return (
     <MainPageStyles.Wrapper>
       <MainPageStyles.ProfileContainer>
@@ -26,20 +25,46 @@ const HostMainPage = () => {
           icon={<IoLogoInstagram />}
           variant="default"
           onClick={() =>
-            window.open(createInstagramUrl(mockData.instagramId), '_blank')
+            window.open(
+              createInstagramUrl(mockData.instagramId),
+              '_blank',
+              'noopener,noreferrer',
+            )
           }
         />
         <IconButton
           aria-label="이메일"
-          icon={<MdEmail />}
+          icon={<IoMailOutline />}
           variant="default"
-          onClick={() => window.open(`mailto:${mockData.email}`, '_blank')}
+          onClick={() =>
+            window.open(
+              `mailto:${mockData.email}`,
+              '_blank',
+              'noopener,noreferrer',
+            )
+          }
         />
       </MainPageStyles.IconButtonContainer>
       <DividerLine width="10%" />
       <MainPageStyles.ButtonContainer>
-        <Button variant="elevated" text="작품 소개 관리" onClick={() => {}} />
-        <Button variant="elevated" text="방명록 관리" onClick={() => {}} />
+        <Button
+          variant="elevated"
+          text="작품 소개"
+          onClick={() => {}}
+          disabled={!mockAccess.introduce}
+        />
+        <Button
+          variant="elevated"
+          text="방명록 작성하기"
+          onClick={() => {}}
+          disabled={!mockAccess.writeGuestbook}
+        />
+        <Button
+          variant="elevated"
+          text="방명록 구경하기"
+          onClick={() => {}}
+          disabled={!mockAccess.viewGuestbook}
+        />
       </MainPageStyles.ButtonContainer>
       <MainPageStyles.Footer>
         <FooterLogo />
@@ -48,4 +73,4 @@ const HostMainPage = () => {
   );
 };
 
-export default HostMainPage;
+export default GuestMainPage;

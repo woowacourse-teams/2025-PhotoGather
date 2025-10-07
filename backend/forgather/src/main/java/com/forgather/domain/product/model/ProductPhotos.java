@@ -12,11 +12,16 @@ import com.forgather.global.exception.BaseException;
  * 항상 productPhoto.sortOrder 기반 오름차순 정렬 유지.
  * productPhoto.sortOrder 중복 검증.
  * productPhotos#add/delete 시 productPhoto.sortOrder 조정.(정렬 순서는 1부터 시작)
+ * 최대 10개까지만 보관.
  */
 public class ProductPhotos {
+
+    private static final int MAX_COUNT = 10;
+
     private final List<ProductPhoto> productPhotos;
 
     public ProductPhotos(List<ProductPhoto> productPhotos) {
+        validateTotalCount(productPhotos.size());
         List<ProductPhoto> sortedProductPhotos = new ArrayList<>(productPhotos);
         sortedProductPhotos.sort(ProductPhoto::compareTo);
         validateDuplicateOrder(sortedProductPhotos);
@@ -59,18 +64,26 @@ public class ProductPhotos {
     }
 
     public void add(List<ProductPhoto> newPhotos) {
+        validateTotalCount(productPhotos.size() + newPhotos.size());
         for (ProductPhoto photo : newPhotos) {
             add(photo);
         }
     }
 
     public void add(ProductPhoto newPhoto) {
+        validateTotalCount(productPhotos.size() + 1);
         int order = 1;
         if (!productPhotos.isEmpty()) {
             order = productPhotos.getLast().getSortOrder() + 1; // 정렬이 보장되기에 가능한 로직.
         }
         newPhoto.changeOrder(order);
         productPhotos.add(newPhoto);
+    }
+
+    private void validateTotalCount(int totalCount) {
+        if (totalCount > MAX_COUNT) {
+            throw new BaseException("작품 사진은 최대 %s개까지만 등록 가능합니다. count: ".formatted(MAX_COUNT) + totalCount);
+        }
     }
 
     public List<ProductPhoto> getAll() {
