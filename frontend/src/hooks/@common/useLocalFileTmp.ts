@@ -31,12 +31,28 @@ const useLocalFileTmp = ({
     return URL.createObjectURL(file);
   };
 
+  const processFile = async (file: File) => {
+    const isAndroidChrome =
+      /Android/i.test(navigator.userAgent) &&
+      /Chrome/i.test(navigator.userAgent);
+
+    if (isAndroidChrome) {
+      const buf = await file.arrayBuffer();
+      return new File([buf], file.name, { type: file.type });
+    }
+    return file;
+  };
+
   const addPreviewUrlsFromFiles = async (files: File[]) => {
     const startIndex = localFiles.length;
     const availableSlots = maxFileCount - localFiles.length;
     const filesToAdd = files.slice(0, availableSlots);
 
-    const tmpFiles: LocalFile[] = filesToAdd.map((file, index) => ({
+    const processedFiles = await Promise.all(
+      filesToAdd.map((file) => processFile(file)),
+    );
+
+    const tmpFiles: LocalFile[] = processedFiles.map((file, index) => ({
       id: startIndex + index,
       originFile: file,
       previewUrl: createImagePreviewUrl(file),
