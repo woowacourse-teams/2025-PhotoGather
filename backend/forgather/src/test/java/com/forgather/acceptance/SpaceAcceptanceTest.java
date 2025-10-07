@@ -183,8 +183,7 @@ class SpaceAcceptanceTest extends AcceptanceTest {
         var token = jwtTokenProvider.generateAccessToken(host.getId());
         var space = spaceRepository.save(new Space(host, "3333333333", "테스트", "테스트 스페이스", true,
             "forgather_official", "forgather@forgather.me"));
-        var spacePhoto = spacePhotoRepository.save(
-            new SpacePhoto(space, "original.png", "/forgather/uuid.png", 1024L));
+        spacePhotoRepository.save(new SpacePhoto(space, "original.png", "/forgather/uuid.png", 1024L));
 
         var newFile = new MockMultipartFile(
             "file",
@@ -211,7 +210,7 @@ class SpaceAcceptanceTest extends AcceptanceTest {
         assertThat(response.statusCode()).isEqualTo(200);
         assertThat(jsonPath.getString("name")).isEqualTo("새로운 스페이스");
         assertThat(jsonPath.getString("description")).isEqualTo("새로운 설명");
-        assertThat(jsonPath.getBoolean("isPublic")).isEqualTo(false);
+        assertThat(jsonPath.getBoolean("isPublic")).isFalse();
         assertThat(jsonPath.getString("instagramUsername")).isEqualTo("forgather_official_new");
         assertThat(jsonPath.getString("email")).isEqualTo("forgather_new@forgather.me");
         assertThat(spacePhotoRepository.getBySpace(space).getOriginalName()).isEqualTo("new.jpg");
