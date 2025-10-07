@@ -59,7 +59,7 @@ const useForm = <T extends object>({
     });
   };
 
-  const changeFormData = (key: keyof T, value: string | File[]) => {
+  const changeFormData = <K extends keyof T>(key: K, value: T[K]) => {
     setFormData({
       ...formData,
       [key]: value,
@@ -73,9 +73,9 @@ const useForm = <T extends object>({
     const key = name as keyof T;
 
     if (e.target instanceof HTMLInputElement && type === 'file') {
-      changeFormData(key, Array.from(e.target.files || []));
+      changeFormData(key, Array.from(e.target.files || []) as T[keyof T]);
     } else {
-      changeFormData(key, value);
+      changeFormData(key, value as T[keyof T]);
     }
 
     if (validators[key]) {
