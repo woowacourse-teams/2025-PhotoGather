@@ -1,35 +1,40 @@
+import * as C from '../input.common.styles';
 import * as S from './TextInput.styles';
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+  label: string;
   errorMessage?: string;
-  maxCount: number;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  value: string;
-  validLength: number;
+  maxCount?: number;
+  validLength?: number;
+  isRequired?: boolean;
 }
 
 const TextInput = ({
+  label,
   errorMessage,
   maxCount,
   validLength,
+  isRequired = false,
   ...inputProps
 }: InputProps) => {
   return (
-    <S.Wrapper>
+    <C.Wrapper>
+      <C.Label htmlFor={inputProps.id}>
+        {label} {isRequired && '*'}
+      </C.Label>
       <S.InputField
         {...inputProps}
         id={inputProps.id}
         aria-label={inputProps['aria-label']}
-        value={inputProps.value}
         $isError={!!errorMessage}
       />
-      <S.InputFooterContainer>
-        <S.ErrorMessage>{errorMessage ? errorMessage : ''}</S.ErrorMessage>
-        <S.InputCount>
+      <C.InputFooterContainer>
+        <C.ErrorMessage>{errorMessage ? errorMessage : ''}</C.ErrorMessage>
+        <C.InputCount>
           {maxCount && `${validLength} / ${maxCount}`}
-        </S.InputCount>
-      </S.InputFooterContainer>
-    </S.Wrapper>
+        </C.InputCount>
+      </C.InputFooterContainer>
+    </C.Wrapper>
   );
 };
 

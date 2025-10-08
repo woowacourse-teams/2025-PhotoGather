@@ -1,17 +1,18 @@
+import { useState } from 'react';
 import { IoClose } from 'react-icons/io5';
 import Button from '../../../components/@common/buttons/button/Button';
 import Textarea from '../../../components/@common/inputs/textArea/Textarea';
 import TextInput from '../../../components/@common/inputs/textInput/TextInput';
 import PhotoUploadButton from '../../../components/host/photoUploadButton/PhotoUploadButton';
-import useGraphemeInput from '../../../hooks/@common/useGraphemeInput';
+// import useGraphemeInput from '../../../hooks/@common/useGraphemeInput';
 import useLocalFile from '../../../hooks/@common/useLocalFileTmp';
 import * as S from './WorkForm.styles';
 
 const WorkForm = () => {
-  const titleInput = useGraphemeInput({ initialValue: '' });
-  const categoryInput = useGraphemeInput({ initialValue: '' });
-  const designerInput = useGraphemeInput({ initialValue: '' });
-  const descriptionInput = useGraphemeInput({ initialValue: '' });
+  // const titleInput = useGraphemeInput({ initialValue: '' });
+  // const categoryInput = useGraphemeInput({ initialValue: '' });
+  // const designerInput = useGraphemeInput({ initialValue: '' });
+  // const descriptionInput = useGraphemeInput({ initialValue: '' });
 
   const { previewFile, deleteFile, handleFilesUploadClick, handleFilesDrop } =
     useLocalFile({ fileType: 'image' });

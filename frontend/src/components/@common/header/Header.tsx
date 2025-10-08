@@ -1,4 +1,4 @@
-import LogoSvg from '../../../@assets/logo.svg?react';
+import LogoSvg from '../../../@assets/logo/logo.svg?react';
 import type { HeaderMode } from '../../../types/header.type';
 import * as S from './Header.styles';
 
@@ -26,7 +26,7 @@ const Header = ({ mode = 'light', icons = [], onLogoClick }: HeaderProps) => {
         <S.IconsContainer>
           {icons.map((item, index) => (
             <S.IconButton
-              // biome-ignore lint/suspicious/noArrayIndexKey: header-icon idx 무시
+              // biome-ignore lint/suspicious/noArrayIndexKey: index is used as a key
               key={`header-icon-${index}`}
               $mode={mode}
               type="button"

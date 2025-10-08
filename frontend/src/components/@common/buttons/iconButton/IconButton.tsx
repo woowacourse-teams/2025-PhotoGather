@@ -1,5 +1,5 @@
 import type { IconButtonVariant } from '../../../../types/button.type';
-import * as S from "./IconButton.styles";
+import * as S from './IconButton.styles';
 
 interface IconButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {

@@ -18,6 +18,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.forgather.domain.space.model.Photo;
+import com.forgather.domain.upload.domain.ContentsStorage;
 import com.forgather.global.config.S3Properties;
 import com.forgather.global.exception.FileDownloadException;
 import com.forgather.global.util.RandomCodeGenerator;

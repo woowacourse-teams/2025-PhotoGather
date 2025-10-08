@@ -9,7 +9,7 @@ export const Wrapper = styled.div<{
   z-index: ${({ theme }) => theme.zIndex.toast};
   display: flex;
   max-width: ${({ theme }) =>
-    `${parseInt(theme.layout.width) - parseInt(theme.layout.padding.leftRight)}px`};
+    `${parseInt(theme.layout.width, 10) - parseInt(theme.layout.padding.leftRight, 10)}px`};
   max-height: 100px;
   gap: 12px;
   background-color: ${({ theme }) => hexToRgba(theme.colors.gray06, 0.8)};

@@ -17,7 +17,7 @@ export const ModalContent = styled.div<{
   max-width: min(${({ $size }) => ModalSize[$size]}px, 90vw);
   max-height: 90vh;
   overflow-y: auto;
-  padding: 16px 20px;
+  padding: 40px 32px;
   border-radius: 8px;
   position: fixed;
   top: 50%;
