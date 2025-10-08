@@ -3,13 +3,16 @@ export interface SpacePhoto {
   path: string;
 }
 
-export interface SpaceInfo {
+export interface SpaceInfo extends SpaceInfoFormData {
   id: number;
   spaceCode: string;
+  spacePhoto: SpacePhoto;
+}
+
+export interface SpaceInfoFormData {
   name: string;
   description: string;
   isPublic: boolean;
-  instagramUsername: string;
   email: string;
-  spacePhoto: SpacePhoto;
+  instagramUsername: string;
 }
