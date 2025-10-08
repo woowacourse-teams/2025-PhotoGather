@@ -222,7 +222,7 @@ class SpaceAcceptanceTest extends AcceptanceTest {
         assertThat(jsonPath.getBoolean("isPublic")).isFalse();
         assertThat(jsonPath.getString("instagramUsername")).isEqualTo("forgather_official_new");
         assertThat(jsonPath.getString("email")).isEqualTo("forgather_new@forgather.me");
-        assertThat(spacePhotoRepository.getBySpaceOrThrow(space).getOriginalName()).isEqualTo("new.jpg");
+        assertThat(spacePhotoRepository.getBySpaceOrEmpty(space).getOriginalName()).isEqualTo("new.jpg");
     }
 
     @DisplayName("RestAssuredMockMvc를 사용하여 스페이스 이름만 수정한다.")
