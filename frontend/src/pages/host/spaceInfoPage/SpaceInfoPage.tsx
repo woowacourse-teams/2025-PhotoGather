@@ -1,29 +1,16 @@
 import { useEffect, useState } from 'react';
-import { spaceService } from '../../../apis/services/space/space.service';
 import Button from '../../../components/@common/buttons/button/Button';
 import DeleteModal from '../../../components/@common/modal/deleteModal/DeleteModal';
 import Thumbnail from '../../../components/@common/thumbnail/Thumbnail';
 import InfoRow from '../../../components/specific/infoRow/InfoRow';
 import { useToast } from '../../../hooks/@common/useToast';
-import type { SpaceInfo } from '../../../types/domain/space.type';
+import useSpaceInfo from '../../../hooks/domain/space/useSpaceInfo';
 import { mockSpaceCode } from '../../mockData';
 import * as S from './SpaceInfoPage.styles';
 
 const SpaceInfoPage = () => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [spaceInfo, setSpaceInfo] = useState<SpaceInfo>({
-    id: 0,
-    spaceCode: '',
-    name: '',
-    description: '',
-    isPublic: false,
-    instagramUsername: '',
-    email: '',
-    spacePhoto: {
-      isExists: false,
-      path: '',
-    },
-  });
+
   const { showToast } = useToast();
 
   const openDeleteModal = () => {
@@ -41,13 +28,12 @@ const SpaceInfoPage = () => {
     });
   };
 
+  const { spaceInfo, fetchSpaceInfo } = useSpaceInfo({
+    spaceCode: mockSpaceCode,
+  });
+
+  //biome-ignore lint/correctness/useExhaustiveDependencies: 첫 렌더링 시 한 번만 실행
   useEffect(() => {
-    const fetchSpaceInfo = async () => {
-      const res = await spaceService.getSpaceInfo(mockSpaceCode);
-      if (res.success) {
-        setSpaceInfo(res.data);
-      }
-    };
     try {
       fetchSpaceInfo();
     } catch (error) {
