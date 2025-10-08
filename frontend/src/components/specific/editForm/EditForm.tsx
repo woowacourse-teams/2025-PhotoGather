@@ -42,9 +42,10 @@ const EditForm = () => {
     defaultValues: initialData,
   });
 
-  const { previewFile, handleFilesUploadClick } = useLocalFile({
+  const { localFiles, previewFile, handleFilesUploadClick } = useLocalFile({
     fileType: 'image',
     maxFileCount: 1,
+    appendForm: (file: File[]) => setValue('profileImage', file),
   });
 
   return (

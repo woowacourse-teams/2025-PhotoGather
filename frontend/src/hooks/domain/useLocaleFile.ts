@@ -13,9 +13,14 @@ import { useToast } from '../@common/useToast';
 interface UseLocalFileProps {
   fileType: string;
   maxFileCount: number;
+  appendForm?: (file: File[]) => void;
 }
 
-const useLocalFile = ({ fileType, maxFileCount }: UseLocalFileProps) => {
+const useLocalFile = ({
+  fileType,
+  maxFileCount,
+  appendForm,
+}: UseLocalFileProps) => {
   const [localFiles, setLocalFiles] = useState<LocalFile[]>([]);
   const { showToast } = useToast();
 
@@ -65,7 +70,16 @@ const useLocalFile = ({ fileType, maxFileCount }: UseLocalFileProps) => {
       }),
     );
 
-    setLocalFiles((prev) => [...prev, ...tmpFiles]);
+    if (maxFileCount === 1 && localFiles.length > 0) {
+      clearFiles();
+    }
+
+    setLocalFiles((prev) => {
+      if (appendForm) {
+        appendForm(tmpFiles.map((file) => file.originFile));
+      }
+      return [...prev, ...tmpFiles];
+    });
   };
 
   const splitValidFilesByType = (files: File[], type: string) => {
