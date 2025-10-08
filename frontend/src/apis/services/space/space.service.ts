@@ -3,6 +3,10 @@ import { http } from '../../http';
 
 export const spaceService = {
   getSpaceInfo: (spaceCode: string) =>
-    http.get<SpaceInfo>(`/spaces/${spaceCode}`),
-  deleteSpace: (spaceCode: string) => http.delete(`/spaces/${spaceCode}`),
+    http.get<SpaceInfo>(`/spaces/${spaceCode}`, {}),
+
+  deleteSpace: (spaceCode: string) => http.delete(`/spaces/${spaceCode}`, {}),
+
+  patchSpaceInfo: (spaceCode: string, data: FormData) =>
+    http.patch(`/spaces/${spaceCode}`, { body: data }),
 };
