@@ -16,7 +16,6 @@ const request = async <T>(
 ): Promise<ApiResponse<T>> => {
   const { method, body, params } = options;
   const url = `${BASE_URL}${endpoint}${createQueryString(params)}`;
-
   try {
     const response = await fetch(url, {
       method,
@@ -24,7 +23,8 @@ const request = async <T>(
       body: body ? JSON.stringify(body) : undefined,
     });
 
-    const data = await response.json();
+    const text = await response.text();
+    const data = text ? JSON.parse(text) : null;
 
     if (!response.ok)
       return {
