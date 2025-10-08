@@ -1,41 +1,34 @@
 import styled from '@emotion/styled';
-import { hexToRgba } from '../../../utils/hexToRgba';
 
-export const Label = styled.label`
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  width: 60px;
-  aspect-ratio: 1/1;
-  cursor: pointer;
+export const Wrapper = styled.label<{ $isActive: boolean }>`
+  width: 100%;
+  cursor: ${({ $isActive }) => ($isActive ? 'pointer' : 'default')};
   position: relative;
 `;
 
-export const Overlay = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-  background: ${({ theme }) => hexToRgba(theme.colors.gray06, 0.3)};
-  z-index: 1000;
+export const Container = styled.div<{ $isActive: boolean }>`
   width: 100%;
   height: 100%;
-  border-radius: 16px;
+  color: ${({ theme }) => theme.colors.gray02};
+  background-color: ${({ theme, $isActive }) =>
+    $isActive ? theme.colors.gray03 : theme.colors.white};
+  ${({ theme }) => ({ ...theme.typography.header03 })}
+  border-radius: 4px;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-
-  svg {
-    width: 32px;
-    height: 32px;
-    color: ${({ theme }) => theme.colors.white};
-    opacity: 0.8;
-
-    &:active {
-      scale: 0.95;
-    }
-  }
+  gap: 20px;
+  padding: 25px;
+  white-space: pre-line;
+  text-align: center;
+  border: 1px solid ${({ theme }) => theme.colors.gray02};
 `;
 
-export const FileInput = styled.input`
-  display: none;
+export const LimitTextContainer = styled.p`
+  color: ${({ theme }) => theme.colors.gray02};
+  ${({ theme }) => ({ ...theme.typography.captionSmall })}
+  text-align: center;
+  position: absolute;
+  bottom: 16px;
 `;
