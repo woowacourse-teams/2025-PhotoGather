@@ -4,6 +4,7 @@ import GuestMainPage from '../pages/guest/mainpage/GuestMainPage';
 import GuestWorkDetail from '../pages/guest/workDetail/GuestWorkDetail';
 import HostMainPage from '../pages/host/mainPage/HostMainPage';
 import MyPage from '../pages/host/mypage/MyPage';
+import SharePage from '../pages/host/share/SharePage';
 import SpaceCreateFunnel from '../pages/host/spaceCreate/funnel/SpaceCreateFunnel';
 import SpaceEditPage from '../pages/host/spaceEditPage/SpaceEditPage';
 import SpaceInfoPage from '../pages/host/spaceInfoPage/SpaceInfoPage';
@@ -67,6 +68,10 @@ const routes: AppRouteObject[] = [
           {
             path: 'work-form',
             element: <WorkForm />,
+          },
+          {
+            path: 'share',
+            element: <SharePage />,
           },
         ],
       },
