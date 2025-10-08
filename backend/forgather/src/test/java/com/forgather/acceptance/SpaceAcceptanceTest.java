@@ -137,7 +137,7 @@ class SpaceAcceptanceTest extends AcceptanceTest {
         var space = spaceRepository.save(new Space("1111111111", "테스트", "테스트 스페이스", true,
             "forgather_official", "forgather@forgather.me"));
         var spacePhoto = spacePhotoRepository.save(
-            new SpacePhoto(space, "original.png", "/forgather/uuid.png", 1024L));
+            new SpacePhoto(space, "original.png", "forgather/uuid.png", 1024L));
         spaceHostMapRepository.save(new SpaceHostMap(space, host));
 
         // when
@@ -166,7 +166,7 @@ class SpaceAcceptanceTest extends AcceptanceTest {
         // TODO: host 추가
         var space = spaceRepository.save(new Space("2222222222", "테스트", "테스트 스페이스", true,
             "forgather_official", "forgather@forgather.me"));
-        spacePhotoRepository.save(new SpacePhoto(space, "original.png", "/forgather/uuid.png", 1024L));
+        spacePhotoRepository.save(new SpacePhoto(space, "original.png", "forgather/uuid.png", 1024L));
         spaceHostMapRepository.save(new SpaceHostMap(space, host));
 
         // when
@@ -191,7 +191,7 @@ class SpaceAcceptanceTest extends AcceptanceTest {
         var token = jwtTokenProvider.generateAccessToken(host.getId());
         var space = spaceRepository.save(new Space("3333333333", "테스트", "테스트 스페이스", true,
             "forgather_official", "forgather@forgather.me"));
-        spacePhotoRepository.save(new SpacePhoto(space, "original.png", "/forgather/uuid.png", 1024L));
+        spacePhotoRepository.save(new SpacePhoto(space, "original.png", "forgather/uuid.png", 1024L));
         spaceHostMapRepository.save(new SpaceHostMap(space, host));
 
         var newFile = new MockMultipartFile(
@@ -225,6 +225,41 @@ class SpaceAcceptanceTest extends AcceptanceTest {
         assertThat(spacePhotoRepository.getBySpace(space).getOriginalName()).isEqualTo("new.jpg");
     }
 
+    @DisplayName("RestAssuredMockMvc를 사용하여 스페이스 이름만 수정한다.")
+    @Test
+    void updateOnlySpaceNameWithRestAssuredMockMvc() throws Exception {
+        // given
+        var host = hostRepository.save(new Host("모코", "pictureUrl"));
+        var token = jwtTokenProvider.generateAccessToken(host.getId());
+        var space = spaceRepository.save(new Space("4444444444", "테스트", "테스트 스페이스", true,
+            "forgather_official", "forgather@forgather.me"));
+        spacePhotoRepository.save(new SpacePhoto(space, "original.png", "forgather/origin.png", 1024L));
+        spaceHostMapRepository.save(new SpaceHostMap(space, host));
+        
+        var request = objectMapper.writeValueAsString(new UpdateSpaceRequest(
+            "새로운 스페이스", null, null, null, null)
+        );
+
+        // when
+        var response = RestAssuredMockMvc.given()
+            // .header("Authorization", "Bearer " + token)
+            .multiPart("request", request, "application/json")
+            .when()
+            .patch("/spaces/{spaceCode}", space.getCode())
+            .then()
+            .extract();
+
+        // then
+        JsonPath jsonPath = response.body().jsonPath();
+        assertThat(response.statusCode()).isEqualTo(200);
+        assertThat(jsonPath.getString("name")).isEqualTo("새로운 스페이스");
+        assertThat(jsonPath.getString("description")).isEqualTo("테스트 스페이스");
+        assertThat(jsonPath.getBoolean("isPublic")).isTrue();
+        assertThat(jsonPath.getString("instagramUsername")).isEqualTo("forgather_official");
+        assertThat(jsonPath.getString("email")).isEqualTo("forgather@forgather.me");
+        assertThat(jsonPath.getString("profilePath")).isEqualTo("forgather/origin.png");
+    }
+
     @DisplayName("RestAssuredMockMvc를 사용하여 나의 스페이스 목록을 조회한다.")
     @Test
     void getSpacesWithRestAssuredMockMvc() {
@@ -233,10 +268,10 @@ class SpaceAcceptanceTest extends AcceptanceTest {
         var token = jwtTokenProvider.generateAccessToken(host.getId());
         var space1 = spaceRepository.save(new Space("1234567890", "테스트1", "테스트 스페이스1", true,
             "forgather_official", "forgather@forgather.me"));
-        spacePhotoRepository.save(new SpacePhoto(space1, "original.png", "/forgather/uuid.png", 1024L));
+        spacePhotoRepository.save(new SpacePhoto(space1, "original.png", "forgather/uuid1.png", 1024L));
         var space2 = spaceRepository.save(new Space("0987654321", "테스트2", "테스트 스페이스2", true,
             "forgather_official", "forgather@forgather.me"));
-        spacePhotoRepository.save(new SpacePhoto(space2, "original.png", "/forgather/uuid.png", 1024L));
+        spacePhotoRepository.save(new SpacePhoto(space2, "original.png", "forgather/uuid2.png", 1024L));
         spaceHostMapRepository.save(new SpaceHostMap(space1, host));
         spaceHostMapRepository.save(new SpaceHostMap(space2, host));
 
