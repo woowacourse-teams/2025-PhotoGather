@@ -24,7 +24,7 @@ const useFunnelHistory = <TStep extends string>(
     };
   }, [step, setStep]);
 
-  const navigateToNext = useCallback((nextStepId: string) => {
+  const navigateToNext = useCallback((nextStepId: TStep) => {
     const nextState = {
       funnelStep: nextStepId,
     };
