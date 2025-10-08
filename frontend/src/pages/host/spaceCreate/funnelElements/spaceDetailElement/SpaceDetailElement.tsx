@@ -2,7 +2,7 @@ import { useState } from 'react';
 import TextInput from '../../../../../components/@common/inputs/textInput/TextInput';
 import PhotoPreviewButton from '../../../../../components/specific/photoPreviewButton/PhotoPreviewButton';
 import { INFORMATION } from '../../../../../constants/messages';
-import useLocalFile from '../../../../../hooks/domain/useLocaleFile';
+import useLocalFile from '../../../../../hooks/@common/useLocalFile';
 import type {
   FunnelElementProps,
   SpaceDetailElementInfos,
