@@ -1,14 +1,29 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { spaceService } from '../../../apis/services/space/space.service';
 import Button from '../../../components/@common/buttons/button/Button';
 import DeleteModal from '../../../components/@common/modal/deleteModal/DeleteModal';
 import Thumbnail from '../../../components/@common/thumbnail/Thumbnail';
 import InfoRow from '../../../components/specific/infoRow/InfoRow';
 import { useToast } from '../../../hooks/@common/useToast';
-import { mockDashboardData } from '../../mockData';
-import * as S from './Dashboard.styles';
+import type { SpaceInfo } from '../../../types/domain/space.type';
+import { mockSpaceCode } from '../../mockData';
+import * as S from './SpaceInfoPage.styles';
 
-const Dashboard = () => {
+const SpaceInfoPage = () => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [spaceInfo, setSpaceInfo] = useState<SpaceInfo>({
+    id: 0,
+    spaceCode: '',
+    name: '',
+    description: '',
+    isPublic: false,
+    instagramUsername: '',
+    email: '',
+    spacePhoto: {
+      isExists: false,
+      path: '',
+    },
+  });
   const { showToast } = useToast();
 
   const openDeleteModal = () => {
@@ -26,6 +41,20 @@ const Dashboard = () => {
     });
   };
 
+  useEffect(() => {
+    const fetchSpaceInfo = async () => {
+      const res = await spaceService.getSpaceInfo(mockSpaceCode);
+      if (res.success) {
+        setSpaceInfo(res.data);
+      }
+    };
+    try {
+      fetchSpaceInfo();
+    } catch (error) {
+      console.error(error);
+    }
+  }, []);
+
   return (
     <S.Wrapper>
       <DeleteModal
@@ -34,16 +63,16 @@ const Dashboard = () => {
         onDelete={deleteSpace}
       />
       <S.Title>스페이스 정보</S.Title>
-      <Thumbnail src={mockDashboardData.thumbnail} />
+      <Thumbnail src={spaceInfo?.spacePhoto.path ?? null} />
       <S.InfoRowContainer>
-        <InfoRow label="스페이스 이름" value={mockDashboardData.title} />
+        <InfoRow label="스페이스 이름" value={spaceInfo.name} />
         <InfoRow
           label="방명록 공개 범위"
-          value={mockDashboardData.publicRange}
+          value={spaceInfo.isPublic ? '공개' : '비공개'}
         />
-        <InfoRow label="스페이스 설명" value={mockDashboardData.introduction} />
-        <InfoRow label="E-mail" value={mockDashboardData.email} />
-        <InfoRow label="Instagram" value={mockDashboardData.instagramId} />
+        <InfoRow label="스페이스 설명" value={spaceInfo.description} />
+        <InfoRow label="E-mail" value={spaceInfo.email} />
+        <InfoRow label="Instagram" value={spaceInfo.instagramUsername} />
       </S.InfoRowContainer>
 
       <S.DeleteButtonContainer>
@@ -58,4 +87,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default SpaceInfoPage;
