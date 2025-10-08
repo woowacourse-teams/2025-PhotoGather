@@ -35,7 +35,9 @@ const SpaceInfoPage = () => {
         onDelete={deleteSpace}
       />
       <S.Title>스페이스 정보</S.Title>
-      <Thumbnail src={spaceInfo?.spacePhoto.path ?? null} />
+      <Thumbnail
+        src={`${import.meta.env.VITE_IMAGE_BASE_URL}${spaceInfo?.spacePhoto.path}`}
+      />
       <S.InfoRowContainer>
         <InfoRow label="스페이스 이름" value={spaceInfo.name} />
         <InfoRow
