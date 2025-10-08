@@ -153,7 +153,7 @@ class SpaceAcceptanceTest extends AcceptanceTest {
         JsonPath jsonPath = response.body().jsonPath();
         assertAll(
             () -> assertThat(jsonPath.getString("spaceCode")).isEqualTo(space.getCode()),
-            () -> assertThat(jsonPath.getString("profilePath")).isEqualTo(spacePhoto.getPath())
+            () -> assertThat(jsonPath.getString("spacePhoto.path")).isEqualTo(spacePhoto.getPath())
         );
     }
 
@@ -222,7 +222,7 @@ class SpaceAcceptanceTest extends AcceptanceTest {
         assertThat(jsonPath.getBoolean("isPublic")).isFalse();
         assertThat(jsonPath.getString("instagramUsername")).isEqualTo("forgather_official_new");
         assertThat(jsonPath.getString("email")).isEqualTo("forgather_new@forgather.me");
-        assertThat(spacePhotoRepository.getBySpace(space).getOriginalName()).isEqualTo("new.jpg");
+        assertThat(spacePhotoRepository.getBySpaceOrThrow(space).getOriginalName()).isEqualTo("new.jpg");
     }
 
     @DisplayName("RestAssuredMockMvc를 사용하여 스페이스 이름만 수정한다.")
@@ -257,7 +257,7 @@ class SpaceAcceptanceTest extends AcceptanceTest {
         assertThat(jsonPath.getBoolean("isPublic")).isTrue();
         assertThat(jsonPath.getString("instagramUsername")).isEqualTo("forgather_official");
         assertThat(jsonPath.getString("email")).isEqualTo("forgather@forgather.me");
-        assertThat(jsonPath.getString("profilePath")).isEqualTo("forgather/origin.png");
+        assertThat(jsonPath.getString("spacePhoto.path")).isEqualTo("forgather/origin.png");
     }
 
     @DisplayName("RestAssuredMockMvc를 사용하여 나의 스페이스 목록을 조회한다.")

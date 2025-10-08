@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.forgather.domain.space.dto.CreateSpaceRequest;
 import com.forgather.domain.space.dto.CreateSpaceResponse;
+import com.forgather.domain.space.dto.SpacePhotoResponse;
 import com.forgather.domain.space.dto.SpaceResponse;
 import com.forgather.domain.space.dto.UpdateSpaceRequest;
 import com.forgather.domain.space.model.Space;
@@ -68,8 +69,9 @@ public class SpaceService {
 
     public SpaceResponse getSpaceInformation(String spaceCode) {
         Space space = spaceRepository.getByCodeOrThrow(spaceCode);
-        SpacePhoto spacePhoto = spacePhotoRepository.getBySpace(space);
-        return SpaceResponse.from(space, spacePhoto);
+        return spacePhotoRepository.findBySpace(space)
+            .map(spacePhoto -> SpaceResponse.from(space, SpacePhotoResponse.exists(spacePhoto.getPath())))
+            .orElseGet(() -> SpaceResponse.from(space, SpacePhotoResponse.notExists()));
     }
 
     @Transactional
@@ -81,19 +83,20 @@ public class SpaceService {
         if (file != null && !file.isEmpty()) {
             updateSpacePhoto(spaceCode, file, space);
         }
-        SpacePhoto spacePhoto = spacePhotoRepository.getBySpace(space);
-        return SpaceResponse.from(space, spacePhoto);
+        return spacePhotoRepository.findBySpace(space)
+            .map(spacePhoto -> SpaceResponse.from(space, SpacePhotoResponse.exists(spacePhoto.getPath())))
+            .orElseGet(() -> SpaceResponse.from(space, SpacePhotoResponse.notExists()));
     }
 
     private void updateSpacePhoto(String spaceCode, MultipartFile file, Space space) {
-        Optional<SpacePhoto> existingSpacePhoto = spacePhotoRepository.findBySpace(space);
+        Optional<SpacePhoto> spacePhoto = spacePhotoRepository.findBySpace(space);
         String newPath = uploadSpacePicture(file, spaceCode);
 
-        if (existingSpacePhoto.isPresent()) {
+        if (spacePhoto.isPresent()) {
             // 이미 스페이스 프로필이 존재하면 기존 사진 삭제 후 엔티티 업데이트
-            SpacePhoto existingPhoto = existingSpacePhoto.get();
-            String oldPath = existingPhoto.getPath();
-            existingPhoto.update(file.getOriginalFilename(), newPath, file.getSize());
+            SpacePhoto existingSpacePhoto = spacePhoto.get();
+            String oldPath = existingSpacePhoto.getPath();
+            existingSpacePhoto.update(file.getOriginalFilename(), newPath, file.getSize());
             contentsStorage.deleteContent(oldPath);
         } else {
             // 스페이스 프로필이 없으면 새로 생성
@@ -105,10 +108,12 @@ public class SpaceService {
     public void delete(String spaceCode, Host host) {
         Space space = spaceRepository.getByCodeOrThrow(spaceCode);
         // TODO: host 검증
-        SpacePhoto spacePhoto = spacePhotoRepository.getBySpace(space);
         spaceHostMapRepository.deleteBySpace(space);
-        spacePhotoRepository.delete(spacePhoto);
-        contentsStorage.deleteContent(spacePhoto.getPath());
+        spacePhotoRepository.findBySpace(space)
+            .ifPresent(spacePhoto -> {
+                spacePhotoRepository.delete(spacePhoto);
+                contentsStorage.deleteContent(spacePhoto.getPath());
+            });
         spaceRepository.delete(space);
     }
 
@@ -117,8 +122,9 @@ public class SpaceService {
         return spaceHostMaps.stream()
             .map(spaceHostMap -> {
                 Space space = spaceHostMap.getSpace();
-                SpacePhoto spacePhoto = spacePhotoRepository.getBySpace(space);
-                return SpaceResponse.from(space, spacePhoto);
+                return spacePhotoRepository.findBySpace(space)
+                    .map(photo -> SpaceResponse.from(space, SpacePhotoResponse.exists(photo.getPath())))
+                    .orElseGet(() -> SpaceResponse.from(space, SpacePhotoResponse.notExists()));
             })
             .toList();
     }
