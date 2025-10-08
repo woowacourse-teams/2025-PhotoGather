@@ -1,33 +1,32 @@
 package com.forgather.domain.space.dto;
 
-import java.time.LocalDateTime;
-
 import org.hibernate.validator.constraints.Length;
 
-import com.forgather.domain.space.model.SpaceType;
-
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.FutureOrPresent;
-import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 
 public record UpdateSpaceRequest(
 
-    @Schema(description = "새로운 스페이스 이름", example = "우리의 모임", maxLength = 10, nullable = true)
-    @Length(max = 10)
+    @Schema(description = "새로운 스페이스 이름", example = "나의 졸업전시", maxLength = 15, nullable = true)
+    @Length(max = 15)
+    @NotBlank
     String name,
 
-    @Schema(description = "새로운 스페이스 지속 기간(시)", example = "48", nullable = true)
-    @Positive
-    Integer validHours,
+    @Schema(description = "새로운 스페이스 설명", example = "졸업전시 스페이스입니다.", maxLength = 200, nullable = true)
+    @Length(max = 200)
+    String description,
 
-    @Schema(description = "새로운 스페이스 오픈 시간(현재 혹은 미래)", example = "2023-10-01T10:00:00", nullable = true)
-    @FutureOrPresent
-    LocalDateTime openedAt,
+    @Schema(description = "새로운 스페이스 공개여부", example = "true", nullable = true)
+    Boolean isPublic,
 
-    @Schema(description = "새로운 스페이스 비밀번호", example = "password123", nullable = true)
-    String password,
+    @Schema(description = "새로운 인스타그램 아이디", example = "forgather_official_new", maxLength = 30, nullable = true)
+    @Length(max = 30)
+    String instagramUsername,
 
-    @Schema(description = "새로운 스페이스 유형", example = "PRIVATE", nullable = true)
-    SpaceType type
+    @Schema(description = "새로운 이메일", example = "forgather_new@forgather.me", maxLength = 50, nullable = true)
+    @Length(max = 50)
+    @Email
+    String email
 ) {
 }

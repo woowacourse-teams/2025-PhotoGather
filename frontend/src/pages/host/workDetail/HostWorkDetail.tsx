@@ -2,8 +2,8 @@ import { useNavigate } from 'react-router-dom';
 import Button from '../../../components/@common/buttons/button/Button';
 import Footer from '../../../components/@common/footer/Footer';
 import { DividerLine } from '../../../styles/@common/DividerLine.styles';
-import * as C from '../../../styles/@common/WorkDetail.styles';
 import { mockWorkDetail } from '../../mockData';
+import * as C from '../../WorkDetail.common.styles';
 import * as S from './HostWorkDetail.styles';
 
 const HostWorkDetail = () => {

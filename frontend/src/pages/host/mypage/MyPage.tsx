@@ -4,7 +4,7 @@ import Dropdown, {
   type DropdownOption,
 } from '../../../components/@common/dropdown/Dropdown';
 import Thumbnail from '../../../components/@common/thumbnail/Thumbnail';
-import SpaceCard from '../../../components/host/spaceCard/SpaceCard';
+import SpaceCard from '../../../components/specific/spaceCard/SpaceCard';
 import useSpacesDisplay from '../../../hooks/domain/useSpacesDisplay';
 import { MyPageMockData, SpaceMockData } from '../../mockData';
 import * as S from './MyPage.styles';

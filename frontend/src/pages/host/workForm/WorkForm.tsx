@@ -1,11 +1,11 @@
 import { useForm } from 'react-hook-form';
 import { IoClose } from 'react-icons/io5';
 import Button from '../../../components/@common/buttons/button/Button';
-import Textarea from '../../../components/@common/inputs/textArea/Textarea';
+import TextareaInput from '../../../components/@common/inputs/textareaInput/TextareaInput';
 import TextInput from '../../../components/@common/inputs/textInput/TextInput';
-import PhotoUploadButton from '../../../components/host/photoUploadButton/PhotoUploadButton';
+import PhotoUploadButton from '../../../components/specific/photoUploadButton/PhotoUploadButton';
 import { CONSTRAINTS } from '../../../constants/constraints';
-import useLocalFile from '../../../hooks/@common/useLocalFileTmp';
+import useLocalFile from '../../../hooks/@common/useLocalFile';
 import { calculateValidLength } from '../../../utils/grapheme';
 import * as S from './WorkForm.styles';
 import { workFormValidators } from './workForm.validators';
@@ -82,11 +82,12 @@ const WorkForm = () => {
         </S.FormLabelContainer>
 
         <S.FormLabelContainer>
-          <S.LabelContainer>작품 설명 *</S.LabelContainer>
-          <Textarea
+          <TextareaInput
             {...register('description', {
               validate: workFormValidators.description,
             })}
+            label="작품 설명"
+            isRequired
             maxCount={CONSTRAINTS.MAX_LENGTH.WORK.DESCRIPTION}
             placeholder="작품 설명을 입력하세요"
             rows={6}

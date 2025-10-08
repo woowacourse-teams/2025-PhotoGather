@@ -6,7 +6,7 @@ import { calculateValidLength } from '../../../utils/grapheme';
 import Button from '../../@common/buttons/button/Button';
 import TextareaInput from '../../@common/inputs/textareaInput/TextareaInput';
 import TextInput from '../../@common/inputs/textInput/TextInput';
-import PhotoUploadButton from '../photoUploadButton/PhotoUploadButton';
+import PhotoPreviewButton from '../photoPreviewButton/PhotoPreviewButton';
 import * as S from './EditForm.styles';
 import { editFormValidators } from './editForm.validators';
 
@@ -42,7 +42,7 @@ const EditForm = () => {
     defaultValues: initialData,
   });
 
-  const { localFiles, previewFile, handleFilesUploadClick } = useLocalFile({
+  const { previewFile, handleFilesUploadClick } = useLocalFile({
     fileType: 'image',
     maxFileCount: 1,
     appendForm: (file: File[]) => setValue('profileImage', file),
@@ -50,8 +50,7 @@ const EditForm = () => {
 
   return (
     <S.Form onSubmit={() => handleSubmit}>
-      <PhotoUploadButton
-        type="button"
+      <PhotoPreviewButton
         previewFile={previewFile}
         uploadImage={handleFilesUploadClick}
       />

@@ -1,6 +1,6 @@
 package com.forgather.domain.space.dto;
 
-import com.forgather.global.auth.dto.HostResponse;
+import com.forgather.domain.space.model.Space;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
@@ -18,34 +18,39 @@ public record SpaceResponse(
     @Schema(description = "스페이스 설명", example = "나의 졸업 전시.")
     String description,
 
-    @Schema(description = "스페이스 설명", example = "나의 졸업 전시.")
-    String pictureUrl,
-
-    @Schema(description = "스페이스 설명", example = "나의 졸업 전시.")
+    @Schema(description = "스페이스 공개여부", example = "true")
     boolean isPublic,
 
-    @Schema(description = "스페이스 설명", example = "나의 졸업 전시.")
+    @Schema(description = "스페이스 호스트 인스타그램 아이디", example = "forgather_official")
     String instagramUsername,
 
-    @Schema(description = "스페이스 설명", example = "나의 졸업 전시.")
+    @Schema(description = "스페이스 호스트 이메일", example = "forgather@forgather.me")
     String email,
 
-    @Schema(description = "호스트 정보")
-    HostResponse host
+    // @Schema(description = "호스트 정보")
+    // HostResponse host,
+
+    @Schema(description = "스페이스 프로필 사진", example = """
+        {
+            "isExists": true,
+            "path": "forgather/1234567890/profile.png"
+        }
+        """)
+    SpacePhotoResponse spacePhoto
 ) {
 
-    // public static SpaceResponse from(Space space) {
-    //     return new SpaceResponse(
-    //         space.getId(),
-    //         space.getCode(),
-    //         space.getName(),
-    //         space.getDescription(),
-    //         space.getPictureUrl(),
-    //         space.isPublic(),
-    //         space.getInstagramUsername(),
-    //         space.getEmail(),
-    //         // TODO: 스페이스 : 호스트 m:n 관계로 변경 후 수정 필요
-    //         // HostResponse.from(space.getSpaceHostMap().getFirst().getHost())
-    //     );
-    // }
+    public static SpaceResponse from(Space space, SpacePhotoResponse spacePhoto) {
+        return new SpaceResponse(
+            space.getId(),
+            space.getCode(),
+            space.getName(),
+            space.getDescription(),
+            space.isPublic(),
+            space.getInstagramUsername(),
+            space.getEmail(),
+            // TODO: 스페이스 : 호스트 m:n 관계로 변경 후 수정 필요
+            // HostResponse.from(space.getSpaceHostMap().getFirst().getHost()),
+            spacePhoto
+        );
+    }
 }

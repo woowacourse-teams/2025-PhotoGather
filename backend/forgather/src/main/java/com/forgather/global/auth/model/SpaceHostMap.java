@@ -3,7 +3,6 @@ package com.forgather.global.auth.model;
 import com.forgather.domain.model.BaseTimeEntity;
 import com.forgather.domain.space.model.Space;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;

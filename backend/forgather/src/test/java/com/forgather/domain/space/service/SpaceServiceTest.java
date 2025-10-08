@@ -13,6 +13,7 @@ import org.springframework.test.context.TestPropertySource;
 
 import com.forgather.domain.space.dto.CreateSpaceRequest;
 import com.forgather.domain.space.repository.HostRepository;
+import com.forgather.global.auth.repository.SpaceHostMapRepository;
 import com.forgather.domain.space.repository.SpaceRepository;
 import com.forgather.global.auth.model.Host;
 
@@ -24,12 +25,16 @@ class SpaceServiceTest {
     private final SpaceService spaceService;
     private final SpaceRepository spaceRepository;
     private final HostRepository hostRepository;
+    private final SpaceHostMapRepository spaceHostMapRepository;
 
     @Autowired
-    public SpaceServiceTest(SpaceService spaceService, SpaceRepository spaceRepository, HostRepository hostRepository) {
+    public SpaceServiceTest(SpaceService spaceService, SpaceRepository spaceRepository, HostRepository hostRepository,
+        SpaceHostMapRepository spaceHostMapRepository
+    ) {
         this.spaceService = spaceService;
         this.spaceRepository = spaceRepository;
         this.hostRepository = hostRepository;
+        this.spaceHostMapRepository = spaceHostMapRepository;
     }
 
     @DisplayName("스페이스 생성 시, 검증에 실패하면 스페이스가 DB에 저장되지 않는다.")
@@ -45,7 +50,6 @@ class SpaceServiceTest {
             "forgather@forgather.me"
         );
         Host host = hostRepository.save(new Host("testHost", "testPictureUrl"));
-
         assertThatException().isThrownBy(
             () -> spaceService.create(request, new MockMultipartFile("temp.png", new byte[] {}), host)
         );

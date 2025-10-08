@@ -22,11 +22,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.forgather.domain.guest.model.Guest;
 import com.forgather.domain.guest.repository.GuestRepository;
-import com.forgather.domain.upload.dto.IssueSignedUrlRequest;
 import com.forgather.domain.space.model.Space;
 import com.forgather.domain.space.repository.HostRepository;
 import com.forgather.domain.space.repository.SpaceRepository;
 import com.forgather.domain.upload.AwsS3Cloud;
+import com.forgather.domain.upload.dto.IssueSignedUrlRequest;
 import com.forgather.global.auth.model.Host;
 import com.forgather.global.auth.util.JwtTokenProvider;
 
@@ -80,9 +80,11 @@ class PhotoAcceptanceTest extends AcceptanceTest {
     @DisplayName("사진 업로드를 위한 서명된 URL을 발급한다.")
     void issuePreSignedUrls() {
         // given
+        // TODO: host 추가
         var host = hostRepository.save(new Host("모코", "pictureUrl"));
-        var space = spaceRepository.save(new Space("space-code", "test-space", "description",
-            "forgather/temp.png", false, "forgather_official", "forgather@forgather.me"));
+        var space = spaceRepository.save(
+            new Space("space-code", "test-space", "description", false, "forgather_official",
+                "forgather@forgather.me"));
         var request = new IssueSignedUrlRequest(PRODUCT, List.of("UUID1.png", "UUID2.png", "UUID3.png"));
 
         // when
@@ -107,9 +109,11 @@ class PhotoAcceptanceTest extends AcceptanceTest {
     @DisplayName("최대 발급 개수를 초과하면 서명된 URL 발급에 실패한다.")
     void issueExceedPreSignedUrls() {
         // given
+        // TODO: host 추가
         var host = hostRepository.save(new Host("모코", "pictureUrl"));
-        var space = spaceRepository.save(new Space("space-code", "test-space", "description",
-            "forgather/temp.png", false, "forgather_official", "forgather@forgather.me"));
+        var space = spaceRepository.save(
+            new Space("space-code", "test-space", "description", false, "forgather_official",
+                "forgather@forgather.me"));
         var request = new IssueSignedUrlRequest(PRODUCT, IntStream.range(0, 101)
             .mapToObj(i -> "UUID" + (i + 1) + ".png")
             .toList());
@@ -149,9 +153,11 @@ class PhotoAcceptanceTest extends AcceptanceTest {
     @DisplayName("사진 일괄 다운로드를 위한 URL을 발급한다.")
     void issueAllDownloadUrl() {
         // given
+        // TODO: host 추가
         var host = hostRepository.save(new Host("모코", "pictureUrl"));
-        var space = spaceRepository.save(new Space("space-code", "test-space", "description",
-            "forgather/temp.png", false, "forgather_official", "forgather@forgather.me"));
+        var space = spaceRepository.save(
+            new Space("space-code", "test-space", "description", false, "forgather_official",
+                "forgather@forgather.me"));
         var guest = guestRepository.save(new Guest("guest"));
         String token = jwtTokenProvider.generateAccessToken(host.getId());
 
