@@ -1,13 +1,12 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import Button from '../../../components/@common/buttons/button/Button';
 import DeleteModal from '../../../components/@common/modal/deleteModal/DeleteModal';
 import Thumbnail from '../../../components/@common/thumbnail/Thumbnail';
 import InfoRow from '../../../components/specific/infoRow/InfoRow';
-import { ROUTES } from '../../../constants/routes';
+import { createSpaceInfoEditRoute } from '../../../constants/routes';
 import useSpaceDelete from '../../../hooks/domain/space/useSpaceDelete';
 import useSpaceInfo from '../../../hooks/domain/space/useSpaceInfo';
-import { mockSpaceCode } from '../../mockData';
 import * as S from './SpaceInfoPage.styles';
 
 const SpaceInfoPage = () => {
@@ -22,9 +21,10 @@ const SpaceInfoPage = () => {
     setIsDeleteModalOpen(false);
   };
 
+  const { spaceCode } = useParams();
   const { deleteSpace } = useSpaceDelete({ closeDeleteModal });
   const { spaceInfo } = useSpaceInfo({
-    spaceCode: mockSpaceCode,
+    spaceCode: spaceCode ?? '',
   });
 
   return (
@@ -57,7 +57,7 @@ const SpaceInfoPage = () => {
       <Button
         variant="primary"
         text="수정하기"
-        onClick={() => navigate(ROUTES.HOST.DASHBOARD_EDIT)}
+        onClick={() => navigate(createSpaceInfoEditRoute(spaceCode ?? ''))}
       />
     </S.Wrapper>
   );
