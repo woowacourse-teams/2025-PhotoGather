@@ -11,8 +11,8 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import com.forgather.global.auth.model.Host;
 import com.forgather.global.exception.BaseException;
+import com.forgather.global.exception.BaseNullPointerException;
 
 class SpaceTest {
 
@@ -22,12 +22,37 @@ class SpaceTest {
         // given
         String spaceCode = "1234567890";
         String name = "나의 졸업전시";
-        Host host = new Host("moko", "pictureUrl");
 
         // when & then
         assertThatCode(
             () -> new Space(spaceCode, name, null, false, null, null)
         ).doesNotThrowAnyException();
+    }
+
+    @DisplayName("스페이스 코드가 존재하지 않으면 스페이스를 생성할 수 없다.")
+    @Test
+    void createSpaceWithoutCode() {
+        // given
+        String name = "나의 졸업전시";
+
+        // when & then
+        assertThatThrownBy(
+            () -> new Space(null, name, null, false, null, null)
+        ).isInstanceOf(BaseNullPointerException.class)
+            .hasMessageContaining("스페이스 코드");
+    }
+
+    @DisplayName("스페이스 이름이 존재하지 않으면 스페이스를 생성할 수 없다.")
+    @Test
+    void createSpaceWithoutName() {
+        // given
+        String code = "1234567890";
+
+        // when & then
+        assertThatThrownBy(
+            () -> new Space(code, null, null, false, null, null)
+        ).isInstanceOf(BaseNullPointerException.class)
+            .hasMessageContaining("스페이스 이름");
     }
 
     @DisplayName("스페이스 이름 이모지 1글자 처리")
@@ -40,7 +65,6 @@ class SpaceTest {
         String description = "스페이스 설명";
         String instagramUsername = "forgather_official";
         String email = "forgather@forgather.me";
-        Host host = new Host("moko", "pictureUrl");
 
         // when & then
         assertThatCode(
@@ -57,7 +81,6 @@ class SpaceTest {
         String description = "스페이스 설명";
         String instagramUsername = "forgather_official";
         String email = "forgather@forgather.me";
-        Host host = new Host("moko", "pictureUrl");
 
         // when & then
         assertThatThrownBy(
@@ -74,7 +97,6 @@ class SpaceTest {
         String description = "스페이스 설명";
         String instagramUsername = "forgather_official";
         String email = "forgather@forgather.me";
-        Host host = new Host("moko", "pictureUrl");
 
         // when & then
         assertThatThrownBy(
@@ -91,7 +113,6 @@ class SpaceTest {
         String description = getString(201); // 201자
         String instagramUsername = "forgather_official";
         String email = "forgather@forgather.me";
-        Host host = new Host("moko", "pictureUrl");
 
         // when & then
         assertThatThrownBy(() -> new Space("1234567890", name, description, false, instagramUsername, email))
@@ -107,7 +128,6 @@ class SpaceTest {
         String description = "스페이스 설명";
         String instagramUsername = getString(31);
         String email = "forgather@forgather.me";
-        Host host = new Host("moko", "pictureUrl");
 
         // when & then
         assertThatThrownBy(() -> new Space("1234567890", name, description, false, instagramUsername, email))
@@ -123,7 +143,6 @@ class SpaceTest {
         String description = "스페이스 설명";
         String instagramUsername = "forgather_official";
         String email = getString(51);
-        Host host = new Host("moko", "pictureUrl");
 
         // when & then
         assertThatThrownBy(() -> new Space("1234567890", name, description, false, instagramUsername, email))
@@ -131,11 +150,25 @@ class SpaceTest {
             .hasMessageContaining("이메일");
     }
 
+    @DisplayName("이메일은 올바른 형식을 따라야한다.")
+    @ValueSource(strings = {"invalid", "@invalid.com", "@", "invalid@invalid"})
+    @ParameterizedTest
+    void spaceEmailPatternValidationTest(String email) {
+        // given
+        String name = "스페이스";
+        String description = "스페이스 설명";
+        String instagramUsername = "forgather_official";
+
+        // when & then
+        assertThatThrownBy(() -> new Space("1234567890", name, description, false, instagramUsername, email))
+            .isInstanceOf(BaseException.class)
+            .hasMessageContaining("이메일 형식");
+    }
+
     @DisplayName("스페이스 이름을 수정할 수 있다.")
     @Test
     void updateSpaceName() {
         // given
-        Host host = new Host("moko", "pictureUrl");
         Space space = new Space("1234567890", "스페이스", "스페이스 설명", false, "forgather_official",
             "forgather@forgather.me");
 
@@ -156,7 +189,6 @@ class SpaceTest {
     @Test
     void updateSpaceDescription() {
         // given
-        Host host = new Host("moko", "pictureUrl");
         Space space = new Space("1234567890", "스페이스", "스페이스 설명", false, "forgather_official",
             "forgather@forgather.me");
 
@@ -177,7 +209,6 @@ class SpaceTest {
     @Test
     void updateSpaceIsPublic() {
         // given
-        Host host = new Host("moko", "pictureUrl");
         Space space = new Space("1234567890", "스페이스", "스페이스 설명", false, "forgather_official",
             "forgather@forgather.me");
 
@@ -198,7 +229,6 @@ class SpaceTest {
     @Test
     void updateSpaceInstagramUsername() {
         // given
-        Host host = new Host("moko", "pictureUrl");
         Space space = new Space("1234567890", "스페이스", "스페이스 설명", false, "forgather_official",
             "forgather@forgather.me");
 
@@ -219,7 +249,6 @@ class SpaceTest {
     @Test
     void updateSpaceEmail() {
         // given
-        Host host = new Host("moko", "pictureUrl");
         Space space = new Space("1234567890", "스페이스", "스페이스 설명", false, "forgather_official",
             "forgather@forgather.me");
 

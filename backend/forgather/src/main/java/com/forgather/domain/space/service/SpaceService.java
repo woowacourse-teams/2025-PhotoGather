@@ -38,6 +38,7 @@ public class SpaceService {
     private final RandomCodeGenerator codeGenerator;
     private final ContentsStorage contentsStorage;
 
+    // 선택 값(설명, 인스타그램, 이메일)이  공백 or empty인 경우 값 초기화로 볼것인가? 현재 초기화로 판단
     @Transactional
     public CreateSpaceResponse create(CreateSpaceRequest request, MultipartFile file, Host host) {
         String spaceCode = codeGenerator.generate(10);
