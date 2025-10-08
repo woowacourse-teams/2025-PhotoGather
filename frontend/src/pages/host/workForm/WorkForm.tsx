@@ -76,6 +76,7 @@ const WorkForm = () => {
             })}
             label="작가명"
             maxCount={CONSTRAINTS.MAX_LENGTH.WORK.DESIGNER}
+            validLength={calculateValidLength(watch('designer'))}
             placeholder="작가명을 입력하세요"
           />
         </S.FormLabelContainer>
