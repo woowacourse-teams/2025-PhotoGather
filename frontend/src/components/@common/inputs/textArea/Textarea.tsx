@@ -7,7 +7,6 @@ interface TextareaProps
   errorMessage?: string;
   maxCount: number;
   onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
-  value: string;
   validLength: number;
   customStyle?: CSSProperties;
 }
