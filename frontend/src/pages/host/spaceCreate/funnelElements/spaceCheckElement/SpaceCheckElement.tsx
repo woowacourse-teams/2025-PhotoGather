@@ -14,8 +14,8 @@ interface SpaceCheckElementProps extends FunnelElementProps<boolean> {
 }
 
 const SpaceCheckElement = ({ createFunnelForm }: SpaceCheckElementProps) => {
-  const matchThumbnailImage = (() =>
-    createFunnelForm.profileImage[0]?.previewUrl || defaultImage)();
+  const matchThumbnailImage =
+    createFunnelForm.profileImage[0]?.previewUrl || defaultImage;
   const visibility = (() => {
     switch (createFunnelForm.visibility) {
       case 'PUBLIC':
