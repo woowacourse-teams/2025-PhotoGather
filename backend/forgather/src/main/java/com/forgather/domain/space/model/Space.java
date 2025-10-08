@@ -1,12 +1,12 @@
 package com.forgather.domain.space.model;
 
-import java.text.BreakIterator;
 import java.util.Objects;
 import java.util.regex.Pattern;
 
 import com.forgather.domain.model.BaseTimeEntity;
 import com.forgather.global.exception.BaseException;
 import com.forgather.global.exception.BaseNullPointerException;
+import com.forgather.global.util.TextLengthCounter;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -120,7 +120,7 @@ public class Space extends BaseTimeEntity {
         if (name.isBlank()) {
             throw new BaseException("스페이스 이름은 공백만 입력할 수 없습니다.");
         }
-        if (getCharacterCount(name) > MAX_NAME_LENGTH) {
+        if (TextLengthCounter.count(name) > MAX_NAME_LENGTH) {
             throw new BaseException("스페이스 이름은 최대 %d자까지 가능합니다.".formatted(MAX_NAME_LENGTH));
         }
     }
@@ -129,7 +129,7 @@ public class Space extends BaseTimeEntity {
         if (description == null || description.isBlank()) {
             return;
         }
-        if (getCharacterCount(description) > MAX_DESCRIPTION_LENGTH) {
+        if (TextLengthCounter.count(description) > MAX_DESCRIPTION_LENGTH) {
             throw new BaseException("스페이스 설명은 최대 %d자까지 가능합니다.".formatted(MAX_DESCRIPTION_LENGTH));
         }
     }
@@ -153,17 +153,6 @@ public class Space extends BaseTimeEntity {
         if (!EMAIL_PATTERN.matcher(email).matches()) {
             throw new BaseException("이메일 형식이 올바르지 않습니다.");
         }
-    }
-
-    // 이모지의 길이를 1로 처리
-    private int getCharacterCount(String text) {
-        BreakIterator iterator = BreakIterator.getCharacterInstance();
-        iterator.setText(text);
-        int count = 0;
-        while (iterator.next() != BreakIterator.DONE) {
-            count++;
-        }
-        return count;
     }
 
     @Override
