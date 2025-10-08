@@ -15,6 +15,12 @@ export const mockDashboardData = {
   email: 'forgather@forgather.me',
 };
 
+export const mockAccess = {
+  introduce: true,
+  writeGuestbook: true,
+  viewGuestbook: false,
+};
+
 export const MyPageMockData = {
   name: 'Noma',
   img: 'https://picsum.photos/200/300',
