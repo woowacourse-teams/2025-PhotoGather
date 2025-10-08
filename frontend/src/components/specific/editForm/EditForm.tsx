@@ -58,12 +58,12 @@ const EditForm = () => {
         {...register('name', {
           validate: editFormValidators.name,
         })}
-        isRequired={true}
+        isRequired
         validLength={calculateValidLength(watch('name'))}
         label="스페이스 이름"
         placeholder="전시명"
         errorMessage={errors.name?.message}
-        maxCount={CONSTRAINTS.NAME_MAX_LENGTH}
+        maxCount={CONSTRAINTS.MAX_LENGTH.SPACE.NAME}
       />
       <S.ContentContainer>
         <C.Label>스페이스 공개 범위</C.Label>
@@ -88,12 +88,12 @@ const EditForm = () => {
         {...register('description', {
           validate: editFormValidators.description,
         })}
-        isRequired={true}
+        isRequired
         validLength={calculateValidLength(watch('description'))}
         label="스페이스 설명"
         placeholder="매일 1시부터 6시까지 상주합니다."
         errorMessage={errors.description?.message}
-        maxCount={CONSTRAINTS.DESCRIPTION_MAX_LENGTH}
+        maxCount={CONSTRAINTS.MAX_LENGTH.SPACE.DESCRIPTION}
       />
       <TextInput
         {...register('email', {
