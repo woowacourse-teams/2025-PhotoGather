@@ -87,12 +87,12 @@ const WorkForm = () => {
                     <>
                       <S.GridImage
                         src={imageData.previewUrl}
-                        alt={`작품 이미지 ${index + 1}`}
+                        alt={`작품 사진 ${index + 1}`}
                       />
                       <S.DeleteButton
                         type="button"
                         onClick={() => deleteFile(imageData.id)}
-                        aria-label="이미지 삭제"
+                        aria-label="사진 삭제"
                       >
                         <IoClose size={20} />
                       </S.DeleteButton>
