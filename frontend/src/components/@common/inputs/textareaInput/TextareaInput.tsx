@@ -7,7 +7,6 @@ interface TextareaInputProps
   label: string;
   errorMessage?: string;
   maxCount: number;
-  value: string;
   validLength: number;
 }
 
