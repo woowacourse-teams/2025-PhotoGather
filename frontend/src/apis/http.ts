@@ -1,8 +1,4 @@
-import type {
-  ApiResponse,
-  DefaultRequestOptions,
-  RequestOptions,
-} from '../types/api.type';
+import type { ApiResponse, RequestOptions } from '../types/api.type';
 import { createQueryString } from '../utils/createQueryString';
 import { BASE_URL } from './config';
 import { matchBody, matchHeaders } from './helper';
@@ -51,18 +47,17 @@ const request = async <T>(
 };
 
 export const http = {
-  get: <T>(endpoint: string, options: DefaultRequestOptions) =>
-    request<T>(endpoint, { method: 'GET', ...options }),
+  get: <T>(endpoint: string, params?: Record<string, unknown>) =>
+    request<T>(endpoint, { method: 'GET', params }),
 
-  post: <T>(endpoint: string, options: DefaultRequestOptions) =>
-    request<T>(endpoint, { method: 'POST', ...options }),
+  post: <T>(endpoint: string, body?: unknown) =>
+    request<T>(endpoint, { method: 'POST', body }),
 
-  put: <T>(endpoint: string, options: DefaultRequestOptions) =>
-    request<T>(endpoint, { method: 'PUT', ...options }),
+  put: <T>(endpoint: string, body?: unknown) =>
+    request<T>(endpoint, { method: 'PUT', body }),
 
-  patch: <T>(endpoint: string, options: DefaultRequestOptions) =>
-    request<T>(endpoint, { method: 'PATCH', ...options }),
+  patch: <T>(endpoint: string, body?: unknown) =>
+    request<T>(endpoint, { method: 'PATCH', body }),
 
-  delete: <T>(endpoint: string, options: DefaultRequestOptions) =>
-    request<T>(endpoint, { method: 'DELETE', ...options }),
+  delete: <T>(endpoint: string) => request<T>(endpoint, { method: 'DELETE' }),
 };

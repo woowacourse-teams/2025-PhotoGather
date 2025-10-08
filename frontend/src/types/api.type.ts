@@ -1,12 +1,6 @@
 export type Method = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
 
-export interface DefaultRequestOptions {
-  headers?: Record<string, string>;
-  body?: unknown;
-  params?: Record<string, unknown>;
-}
-
-export interface RequestOptions extends DefaultRequestOptions {
+export interface RequestOptions {
   method: Method;
   headers?: Record<string, string>;
   body?: unknown;
