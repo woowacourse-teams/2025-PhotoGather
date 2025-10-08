@@ -14,12 +14,12 @@ import com.forgather.domain.space.dto.SpaceResponse;
 import com.forgather.domain.space.dto.UpdateSpaceRequest;
 import com.forgather.domain.space.model.Space;
 import com.forgather.domain.space.model.SpacePhoto;
-import com.forgather.global.auth.repository.SpaceHostMapRepository;
 import com.forgather.domain.space.repository.SpacePhotoRepository;
 import com.forgather.domain.space.repository.SpaceRepository;
-import com.forgather.domain.upload.ContentsStorage;
+import com.forgather.domain.upload.domain.ContentsStorage;
 import com.forgather.global.auth.model.Host;
 import com.forgather.global.auth.model.SpaceHostMap;
+import com.forgather.global.auth.repository.SpaceHostMapRepository;
 import com.forgather.global.exception.FileUploadException;
 import com.forgather.global.util.RandomCodeGenerator;
 
@@ -41,7 +41,10 @@ public class SpaceService {
     public CreateSpaceResponse create(CreateSpaceRequest request, MultipartFile file, Host host) {
         String spaceCode = codeGenerator.generate(10);
         Space space = spaceRepository.save(request.toEntity(spaceCode));
-        spaceHostMapRepository.save(new SpaceHostMap(space, host));
+        // TODO: 호스트 검증 추가 & SpaceHostMap 등록 추가
+        if (host != null) {
+            spaceHostMapRepository.save(new SpaceHostMap(space, host));
+        }
         if (file == null || file.isEmpty()) {
             return CreateSpaceResponse.from(space);
         }

@@ -1,7 +1,11 @@
 import { createBrowserRouter } from 'react-router-dom';
 import Layout from '../components/layout/global/layout/Layout';
+import GuestMainPage from '../pages/guest/mainpage/GuestMainPage';
 import Dashboard from '../pages/host/dashboard/Dashboard';
 import HostMainPage from '../pages/host/mainPage/HostMainPage';
+import MyPage from '../pages/host/mypage/MyPage';
+import SpaceEditPage from '../pages/host/spaceEditPage/SpaceEditPage';
+
 import MainPage from '../pages/MainPage';
 import type { AppRouteObject } from '../types/route.type';
 
@@ -30,6 +34,30 @@ const routes: AppRouteObject[] = [
             handle: {
               headerIcons: ['settings'],
             },
+          },
+          {
+            path: 'my-page',
+            element: <MyPage />,
+            handle: {
+              highlight: true,
+              headerIcons: ['settings'],
+            },
+          },
+          {
+            path: 'dashboard-edit',
+            element: <SpaceEditPage />,
+            handle: {
+              headerIcons: ['settings'],
+            },
+          },
+        ],
+      },
+      {
+        path: 'guest',
+        children: [
+          {
+            path: 'main',
+            element: <GuestMainPage />,
           },
         ],
       },

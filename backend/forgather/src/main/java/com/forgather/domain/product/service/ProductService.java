@@ -16,7 +16,7 @@ import com.forgather.domain.product.repository.ProductPhotoRepository;
 import com.forgather.domain.product.repository.ProductRepository;
 import com.forgather.domain.space.model.Space;
 import com.forgather.domain.space.repository.SpaceRepository;
-import com.forgather.domain.upload.ContentsStorage;
+import com.forgather.domain.upload.domain.ContentsStorage;
 import com.forgather.global.exception.BaseException;
 
 import lombok.RequiredArgsConstructor;

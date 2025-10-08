@@ -22,12 +22,12 @@ import com.forgather.domain.space.dto.UpdateSpaceRequest;
 import com.forgather.domain.space.model.Space;
 import com.forgather.domain.space.model.SpacePhoto;
 import com.forgather.domain.space.repository.HostRepository;
-import com.forgather.global.auth.repository.SpaceHostMapRepository;
 import com.forgather.domain.space.repository.SpacePhotoRepository;
 import com.forgather.domain.space.repository.SpaceRepository;
-import com.forgather.domain.upload.ContentsStorage;
+import com.forgather.domain.upload.domain.ContentsStorage;
 import com.forgather.global.auth.model.Host;
 import com.forgather.global.auth.model.SpaceHostMap;
+import com.forgather.global.auth.repository.SpaceHostMapRepository;
 import com.forgather.global.auth.util.JwtTokenProvider;
 
 import io.restassured.module.mockmvc.RestAssuredMockMvc;

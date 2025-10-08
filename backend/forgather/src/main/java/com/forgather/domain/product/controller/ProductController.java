@@ -41,8 +41,8 @@ public class ProductController {
     /**
      * TODO
      * 스페이스-호스트 검증
+     *  검증 걸릴 시 업로드 사진 삭제
      * dto단 검증
-     * 사진 정렬
      */
     @Operation(summary = "작품 등록")
     @PostMapping
@@ -57,6 +57,7 @@ public class ProductController {
     /**
      * TODO
      * 스페이스-호스트 검증
+     *  검증 걸릴 시 업로드 사진 삭제
      * dto단 검증
      */
     @Operation(summary = "작품 수정")

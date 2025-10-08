@@ -1,26 +1,16 @@
 package com.forgather.domain.upload.service;
 
-import static com.forgather.domain.space.util.FilePathGenerator.generateContentsFilePath;
-
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.forgather.domain.guest.model.Guest;
-import com.forgather.domain.guest.repository.GuestRepository;
-import com.forgather.domain.space.dto.IssueSignedUrlRequest;
-import com.forgather.domain.space.dto.IssueSignedUrlResponse;
-import com.forgather.domain.space.model.PhotoMetaData;
-import com.forgather.domain.space.model.Space;
+import com.forgather.domain.upload.dto.IssueSignedUrlRequest;
+import com.forgather.domain.upload.dto.IssueSignedUrlResponse;
 import com.forgather.domain.space.repository.SpaceRepository;
-import com.forgather.domain.space.util.MetaDataExtractor;
-import com.forgather.domain.upload.ContentsStorage;
-import com.forgather.global.exception.BaseException;
+import com.forgather.domain.upload.domain.ContentsStorage;
+import com.forgather.domain.upload.domain.SignedUrlIssuer;
 import com.forgather.global.exception.FileUploadException;
 
 import lombok.RequiredArgsConstructor;
@@ -31,23 +21,9 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class UploadService {
 
-    private static final int MAX_COUNT_PER_ISSUE = 100;
-
     private final SpaceRepository spaceRepository;
     private final ContentsStorage contentsStorage;
-    private final GuestRepository guestRepository;
-    // private final PhotoRepository photoRepository;
-
-    @Transactional
-    public void saveAll(String spaceCode, List<MultipartFile> multipartFiles, Long guestId) {
-        Space space = spaceRepository.getByCodeOrThrow(spaceCode);
-        Guest guest = guestRepository.getByIdOrThrow(guestId);
-        for (MultipartFile multipartFile : multipartFiles) {
-            PhotoMetaData metaData = MetaDataExtractor.extractPhotoMetaData(multipartFile);
-            String uploadedPath = upload(spaceCode, multipartFile);
-            // TODO: save photo
-        }
-    }
+    private final SignedUrlIssuer signedUrlIssuer;
 
     private String upload(String spaceCode, MultipartFile multipartFile) {
         try {
@@ -63,27 +39,11 @@ public class UploadService {
 
     public IssueSignedUrlResponse issueSignedUrls(String spaceCode, IssueSignedUrlRequest request) {
         spaceRepository.getByCodeOrThrow(spaceCode);
-        if (request.uploadFileNames().size() > MAX_COUNT_PER_ISSUE) {
-            throw new BaseException("한번에 발급 가능한 업로드 url 개수는 %d개 입니다.".formatted(MAX_COUNT_PER_ISSUE));
-        }
-
-        Map<String, String> signedUrls = new HashMap<>();
-        for (String uploadFileName : request.uploadFileNames()) {
-            String path = generateContentsFilePath(contentsStorage.getRootDirectory(), spaceCode, uploadFileName);
-            String signedUrl = contentsStorage.issueSignedUrl(path);
-            signedUrls.put(uploadFileName, signedUrl);
-        }
+        Map<String, String> signedUrls = signedUrlIssuer.issueSignedUrls(
+            request.uploadFileNames(),
+            spaceCode,
+            request.category()
+        );
         return new IssueSignedUrlResponse(signedUrls);
-    }
-
-    @Transactional
-    public void saveUploadedPhotos(String spaceCode, Long guestId) {
-        // Space space = spaceRepository.getByCode(spaceCode);
-        // Guest guest = guestRepository.getByIdOrThrow(guestId);
-        //
-        // List<Photo> photos = request.uploadedPhotos().stream()
-        //     .map(uploadedPhoto -> uploadedPhoto.toEntity(space, guest, contentsStorage.getRootDirectory()))
-        //     .toList();
-        // TODO: save photos
     }
 }

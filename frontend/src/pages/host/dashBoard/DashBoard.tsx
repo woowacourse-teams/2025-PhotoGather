@@ -3,8 +3,8 @@ import Button from '../../../components/@common/buttons/button/Button';
 import DeleteModal from '../../../components/@common/modal/deleteModal/DeleteModal';
 import InfoRow from '../../../components/host/infoRow/InfoRow';
 import { useToast } from '../../../hooks/@common/useToast';
+import { Thumbnail } from '../../mainPage.common.styles';
 import { mockDashboardData } from '../../mockData';
-import { Thumbnail } from '../Host.common.styles';
 import * as S from './Dashboard.styles';
 
 const Dashboard = () => {

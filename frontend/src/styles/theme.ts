@@ -10,6 +10,7 @@ export const theme = {
     error: '#B00020',
     info: '#4CAF50',
     background: '#FCFCFC',
+    black: '#121212',
   },
   typography: {
     header01: {
