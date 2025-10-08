@@ -18,16 +18,16 @@ public abstract class Photo extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    protected Long id;
 
     @Column(name = "original_name", nullable = false)
-    private String originalName;
+    protected String originalName;
 
     @Column(name = "path", nullable = false)
-    private String path;
+    protected String path;
 
     @Column(name = "capacity", nullable = false)
-    private Long capacity; // bytes
+    protected Long capacity; // bytes
 
     // TODO 검증 추가
     protected Photo(String originalName, String path, Long capacity) {

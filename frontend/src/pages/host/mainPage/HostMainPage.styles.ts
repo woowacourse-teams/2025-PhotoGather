@@ -46,7 +46,3 @@ export const ButtonContainer = styled.div`
   gap: 24px;
   width: 100%;
 `;
-
-export const Footer = styled.footer`
-  margin-top: auto;
-`;

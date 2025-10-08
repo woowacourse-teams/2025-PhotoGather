@@ -16,4 +16,21 @@ public class SpacePhoto extends Photo {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "space_id", nullable = false)
     private Space space;
+
+    public SpacePhoto(Space space, String originalName, String path, Long capacity) {
+        this.space = space;
+        this.originalName = originalName;
+        this.path = path;
+        this.capacity = capacity;
+    }
+
+    public static SpacePhoto empty() {
+        return new SpacePhoto(null, "", "", 0L);
+    }
+
+    public void update(String originalName, String path, Long capacity) {
+        this.originalName = originalName;
+        this.path = path;
+        this.capacity = capacity;
+    }
 }

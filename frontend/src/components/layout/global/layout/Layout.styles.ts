@@ -8,5 +8,5 @@ export const Container = styled.main<{ $isDarkPage: boolean }>`
   padding: ${({ theme }) => `${theme.layout.padding.topBottom} ${theme.layout.padding.leftRight}`};
   min-height: calc(100dvh - ${({ theme }) => theme.layout.headerHeight});
   background: ${({ theme, $isDarkPage }) =>
-    $isDarkPage ? theme.colors.gray06 : theme.colors.background};
+    $isDarkPage ? theme.colors.black : theme.colors.background};
 `;

@@ -1,6 +1,5 @@
 package com.forgather.acceptance;
 
-import static com.forgather.fixture.SpaceFixture.createSpace;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -22,17 +21,23 @@ import com.forgather.domain.product.dto.RegisterProductRequest;
 import com.forgather.domain.product.dto.UpdateProductRequest;
 import com.forgather.domain.product.repository.ProductRepository;
 import com.forgather.domain.space.model.Space;
+import com.forgather.domain.space.repository.HostRepository;
 import com.forgather.domain.space.repository.SpaceRepository;
 import com.forgather.domain.upload.AwsS3Cloud;
+import com.forgather.fixture.SpaceFixture;
+import com.forgather.global.auth.model.Host;
 
 import io.restassured.http.ContentType;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
 
 @AutoConfigureMockMvc
-public class ProductAcceptanceTest extends AcceptanceTest {
+class ProductAcceptanceTest extends AcceptanceTest {
 
     @Autowired
     private MockMvc mockMvc;
+
+    @Autowired
+    private HostRepository hostRepository;
 
     @Autowired
     private SpaceRepository spaceRepository;
@@ -43,6 +48,7 @@ public class ProductAcceptanceTest extends AcceptanceTest {
     @MockitoBean
     private AwsS3Cloud awsS3Cloud;
 
+    private Host host;
     private Space space;
 
     private RegisterProductRequest registerRequest = new RegisterProductRequest(
@@ -59,14 +65,14 @@ public class ProductAcceptanceTest extends AcceptanceTest {
 
     @BeforeEach
     void setUp() {
-        space = createSpace();
+        space = SpaceFixture.createSpace();
         spaceRepository.save(space);
         RestAssuredMockMvc.mockMvc(mockMvc);
     }
 
     @DisplayName("작품 조회")
     @Test
-    public void get() {
+    void get() {
         // given
         ProductResponse registerResponse = registerProduct();
 
@@ -99,7 +105,7 @@ public class ProductAcceptanceTest extends AcceptanceTest {
 
     @DisplayName("작품 조회 시 등록된 작품이 없으면 예외를 던진다")
     @Test
-    public void throwExceptionWhenNoProducts() {
+    void throwExceptionWhenNoProducts() {
         // when, then
         RestAssuredMockMvc.given()
             .accept(ContentType.JSON)
@@ -112,7 +118,7 @@ public class ProductAcceptanceTest extends AcceptanceTest {
 
     @DisplayName("작품 등록")
     @Test
-    public void register() {
+    void register() {
         // when
         ProductResponse response = RestAssuredMockMvc.given()
             .body(registerRequest)
@@ -144,7 +150,7 @@ public class ProductAcceptanceTest extends AcceptanceTest {
 
     @DisplayName("중복 작품 등록 시 예외를 던진다")
     @Test
-    public void throwExceptionWhenProductAlreadyExists() {
+    void throwExceptionWhenProductAlreadyExists() {
         // given
         registerProduct();
 
@@ -162,7 +168,7 @@ public class ProductAcceptanceTest extends AcceptanceTest {
 
     @DisplayName("작품 정보 수정")
     @Test
-    public void update() {
+    void update() {
         // given
         ProductResponse registerResponse = registerProduct();
         Mockito.doNothing().when(awsS3Cloud).deleteContents(Mockito.anyList());
@@ -212,7 +218,7 @@ public class ProductAcceptanceTest extends AcceptanceTest {
 
     @DisplayName("작품 삭제")
     @Test
-    public void delete() {
+    void delete() {
         // given
         registerProduct();
         Mockito.doNothing().when(awsS3Cloud).deleteContents(Mockito.anyList());

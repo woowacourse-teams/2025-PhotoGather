@@ -63,3 +63,12 @@ export const Elevated: Story = {
     disabled: false,
   },
 };
+
+export const Tertiary: Story = {
+  args: {
+    variant: 'tertiary',
+    text: 'tertiary Button',
+    onClick: () => {},
+    disabled: false,
+  },
+};

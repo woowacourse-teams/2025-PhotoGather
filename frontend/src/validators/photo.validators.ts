@@ -1,10 +1,13 @@
 import { CONSTRAINTS } from '../constants/constraints';
 
-export const checkUploadLimit = (validFiles: File[]) => {
-  if (validFiles.length > CONSTRAINTS.MAX_FILE_COUNT) {
-    throw new Error(
-      `한 번에 ${CONSTRAINTS.MAX_FILE_COUNT}장까지 올릴 수 있어요`,
-    );
+export const checkUploadLimit = (
+  validFiles: File[],
+  maxFileCount: number = CONSTRAINTS.MAX_FILE_COUNT,
+  currentFileCount: number = 0,
+) => {
+  const availableSlots = maxFileCount - currentFileCount;
+  if (validFiles.length > availableSlots) {
+    throw new Error(`최대 ${maxFileCount}장까지만 업로드할 수 있어요.`);
   }
 };
 

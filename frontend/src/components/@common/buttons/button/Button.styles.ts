@@ -6,6 +6,7 @@ export const buttonStyles = {
   primary: (theme: Theme) => css`
     background-color: ${theme.colors.gray06};
     color: ${theme.colors.white};
+    border-radius: 4px;
 
     &:active {
       background-color: ${theme.colors.gray06};
@@ -24,6 +25,7 @@ export const buttonStyles = {
     color: ${theme.colors.gray04};
     background-color: ${theme.colors.white};
     border: 1px solid ${theme.colors.gray04};
+    border-radius: 4px;
 
     &:disabled {
       pointer-events: none;
@@ -37,6 +39,24 @@ export const buttonStyles = {
       background-color: ${theme.colors.gray01};
     }
   `,
+
+  tertiary: (theme: Theme) => css`
+    background-color: ${theme.colors.gray06};
+    color: ${theme.colors.white};
+
+    &:active {
+      background-color: ${theme.colors.gray06};
+      box-shadow: 0px 2px 3px 0px rgba(0, 0, 0, 0.6) inset;
+      color: ${theme.colors.gray02};
+    }
+
+    &:disabled {
+      pointer-events: none;
+      background-color: ${theme.colors.gray02};
+      color: ${theme.colors.white};
+    }
+  `,
+
   danger: (theme: Theme) => css`
     background-color: ${theme.colors.error};
     color: ${theme.colors.white};
@@ -75,7 +95,7 @@ export const StyledButton = styled.button<{
   $variant: ButtonVariant;
 }>`
   width: 100%;
-  border-radius: 4px;
+
   display: flex;
   padding: 12px 20px;
   justify-content: center;

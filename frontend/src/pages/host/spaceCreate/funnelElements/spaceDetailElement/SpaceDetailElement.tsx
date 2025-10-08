@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import TextInput from '../../../../../components/@common/inputs/textInput/TextInput';
-import PhotoUploadButton from '../../../../../components/specific/photoUploadButton/PhotoUploadButton';
+import PhotoPreviewButton from '../../../../../components/specific/photoPreviewButton/PhotoPreviewButton';
 import { INFORMATION } from '../../../../../constants/messages';
 import useLocalFile from '../../../../../hooks/domain/useLocaleFile';
 import type {
@@ -41,11 +41,10 @@ const SpaceDetailElement = ({
       element={
         <S.Wrapper>
           <S.ImageUploadContainer>
-            <PhotoUploadButton
+            <PhotoPreviewButton
               type="button"
               previewFile={previewFile}
               uploadImage={handleFilesUploadClick}
-              isOverlayVisible={false}
             />
           </S.ImageUploadContainer>
           <S.InputContainer>
