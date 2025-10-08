@@ -1,8 +1,8 @@
 import { IoClose } from 'react-icons/io5';
 import Button from '../../../components/@common/buttons/button/Button';
-import Textarea from '../../../components/@common/inputs/textArea/Textarea';
+import TextareaInput from '../../../components/@common/inputs/textareaInput/TextareaInput';
 import TextInput from '../../../components/@common/inputs/textInput/TextInput';
-import PhotoUploadButton from '../../../components/host/photoUploadButton/PhotoUploadButton';
+import PhotoUploadButton from '../../../components/specific/photoUploadButton/PhotoUploadButton';
 import useForm from '../../../hooks/@common/useForm';
 import useLocalFile from '../../../hooks/@common/useLocalFileTmp';
 import { calculateValidLength } from '../../../utils/grapheme';
@@ -112,8 +112,10 @@ const WorkForm = () => {
         </S.FormLabelContainer>
 
         <S.FormLabelContainer>
-          <S.LabelContainer>작품 설명 *</S.LabelContainer>
-          <Textarea
+          {/* <S.LabelContainer>작품 설명 *</S.LabelContainer> */}
+          <TextareaInput
+            label="작품 설명"
+            isRequired
             name="description"
             maxCount={MAX_LENGTH.description}
             value={formData.description}
