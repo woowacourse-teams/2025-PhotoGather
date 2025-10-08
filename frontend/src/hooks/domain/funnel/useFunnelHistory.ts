@@ -27,7 +27,6 @@ const useFunnelHistory = <TStep extends string>(
   const navigateToNext = useCallback((nextStepId: string) => {
     const nextState = {
       funnelStep: nextStepId,
-      timestamp: Date.now(),
     };
     window.history.pushState(nextState, '', window.location.href);
   }, []);
