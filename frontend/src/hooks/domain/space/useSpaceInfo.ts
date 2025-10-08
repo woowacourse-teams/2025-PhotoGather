@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { spaceService } from '../../../apis/services/space/space.service';
 import type { SpaceInfo } from '../../../types/domain/space.type';
 
@@ -7,7 +7,7 @@ interface UseSpaceInfoProps {
 }
 
 const useSpaceInfo = ({ spaceCode }: UseSpaceInfoProps) => {
-  const initialSpaceInfo: SpaceInfo = {
+  const initialData: SpaceInfo = {
     id: 0,
     spaceCode: '',
     name: '',
@@ -21,16 +21,23 @@ const useSpaceInfo = ({ spaceCode }: UseSpaceInfoProps) => {
     },
   };
 
-  const [spaceInfo, setSpaceInfo] = useState<SpaceInfo>(initialSpaceInfo);
+  const {
+    data: spaceInfo,
+    isLoading,
+    isError,
+  } = useQuery({
+    initialData,
+    queryKey: ['spaceInfo', spaceCode],
+    queryFn: async () => {
+      const res = await spaceService.getSpaceInfo(spaceCode);
+      if (res.success) {
+        return res.data;
+      }
+      throw new Error('스페이스 정보 조회에 실패했습니다');
+    },
+  });
 
-  const fetchSpaceInfo = async () => {
-    const res = await spaceService.getSpaceInfo(spaceCode);
-    if (res.success) {
-      setSpaceInfo(res.data);
-    }
-  };
-
-  return { spaceInfo, fetchSpaceInfo };
+  return { spaceInfo, isLoading, isError };
 };
 
 export default useSpaceInfo;

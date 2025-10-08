@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Button from '../../../components/@common/buttons/button/Button';
 import DeleteModal from '../../../components/@common/modal/deleteModal/DeleteModal';
 import Thumbnail from '../../../components/@common/thumbnail/Thumbnail';
@@ -28,18 +28,9 @@ const SpaceInfoPage = () => {
     });
   };
 
-  const { spaceInfo, fetchSpaceInfo } = useSpaceInfo({
+  const { spaceInfo } = useSpaceInfo({
     spaceCode: mockSpaceCode,
   });
-
-  //biome-ignore lint/correctness/useExhaustiveDependencies: 첫 렌더링 시 한 번만 실행
-  useEffect(() => {
-    try {
-      fetchSpaceInfo();
-    } catch (error) {
-      console.error(error);
-    }
-  }, []);
 
   return (
     <S.Wrapper>
