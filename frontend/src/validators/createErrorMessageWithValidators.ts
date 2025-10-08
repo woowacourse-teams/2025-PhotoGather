@@ -1,4 +1,4 @@
-interface createErrorMessageWithValidatorsProps<T> {
+interface CreateErrorMessageWithValidatorsProps<T> {
   value: T;
   validators: ((value: T) => void)[];
 }
@@ -11,12 +11,12 @@ interface ErrorResult {
   isError: true;
   errorMessage: string;
 }
-type createErrorMessageWithValidatorsResult = NoErrorResult | ErrorResult;
+type CreateErrorMessageWithValidatorsResult = NoErrorResult | ErrorResult;
 
 export const createErrorMessageWithValidators = <T>({
   value,
   validators,
-}: createErrorMessageWithValidatorsProps<T>): createErrorMessageWithValidatorsResult => {
+}: CreateErrorMessageWithValidatorsProps<T>): CreateErrorMessageWithValidatorsResult => {
   try {
     validators.forEach((validator) => {
       validator(value);
