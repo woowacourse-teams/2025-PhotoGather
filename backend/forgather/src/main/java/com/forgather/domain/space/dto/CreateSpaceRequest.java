@@ -6,11 +6,13 @@ import com.forgather.domain.space.model.Space;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 
 public record CreateSpaceRequest(
 
     @Schema(description = "스페이스 이름", example = "졸업 전시", maxLength = 15)
     @Length(max = 15)
+    @NotBlank
     String name,
 
     @Schema(description = "스페이스 설명", example = "스페이스 설명", maxLength = 200, nullable = true)
