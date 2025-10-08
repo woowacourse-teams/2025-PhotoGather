@@ -1,5 +1,18 @@
 export type Method = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
 
+export interface DefaultRequestOptions {
+  headers?: Record<string, string>;
+  body?: unknown;
+  params?: Record<string, unknown>;
+}
+
+export interface RequestOptions extends DefaultRequestOptions {
+  method: Method;
+  headers?: Record<string, string>;
+  body?: unknown;
+  params?: Record<string, unknown>;
+}
+
 export type ApiResponse<T> =
   | ApiSuccessResponse<T>
   | ApiErrorResponse

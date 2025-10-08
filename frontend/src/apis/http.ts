@@ -1,26 +1,24 @@
-import type { ApiResponse, Method } from '../types/api.type';
+import type {
+  ApiResponse,
+  DefaultRequestOptions,
+  RequestOptions,
+} from '../types/api.type';
 import { createQueryString } from '../utils/createQueryString';
 import { BASE_URL } from './config';
-
-const defaultHeaders: Record<string, string> = {
-  'Content-Type': 'application/json',
-};
+import { matchBody, matchHeaders } from './helper';
 
 const request = async <T>(
   endpoint: string,
-  options: {
-    method: Method;
-    body?: unknown;
-    params?: Record<string, unknown>;
-  },
+  options: RequestOptions,
 ): Promise<ApiResponse<T>> => {
-  const { method, body, params } = options;
+  const { method, body, params, headers } = options;
   const url = `${BASE_URL}${endpoint}${createQueryString(params)}`;
+
   try {
     const response = await fetch(url, {
       method,
-      headers: defaultHeaders,
-      body: body ? JSON.stringify(body) : undefined,
+      headers: matchHeaders(body, headers ?? {}),
+      body: matchBody(body),
     });
 
     const text = await response.text();
@@ -53,17 +51,18 @@ const request = async <T>(
 };
 
 export const http = {
-  get: <T>(endpoint: string, params?: Record<string, unknown>) =>
-    request<T>(endpoint, { method: 'GET', params }),
+  get: <T>(endpoint: string, options: DefaultRequestOptions) =>
+    request<T>(endpoint, { method: 'GET', ...options }),
 
-  post: <T>(endpoint: string, body?: unknown) =>
-    request<T>(endpoint, { method: 'POST', body }),
+  post: <T>(endpoint: string, options: DefaultRequestOptions) =>
+    request<T>(endpoint, { method: 'POST', ...options }),
 
-  put: <T>(endpoint: string, body?: unknown) =>
-    request<T>(endpoint, { method: 'PUT', body }),
+  put: <T>(endpoint: string, options: DefaultRequestOptions) =>
+    request<T>(endpoint, { method: 'PUT', ...options }),
 
-  patch: <T>(endpoint: string, body?: unknown) =>
-    request<T>(endpoint, { method: 'PATCH', body }),
+  patch: <T>(endpoint: string, options: DefaultRequestOptions) =>
+    request<T>(endpoint, { method: 'PATCH', ...options }),
 
-  delete: <T>(endpoint: string) => request<T>(endpoint, { method: 'DELETE' }),
+  delete: <T>(endpoint: string, options: DefaultRequestOptions) =>
+    request<T>(endpoint, { method: 'DELETE', ...options }),
 };
