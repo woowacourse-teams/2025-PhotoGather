@@ -70,7 +70,7 @@ const WorkForm = () => {
         </S.FormLabelContainer>
 
         <S.FormLabelContainer>
-          <S.LabelContainer>작품 이미지</S.LabelContainer>
+          <S.LabelContainer>작품 사진</S.LabelContainer>
           <PhotoUploadButton
             mainText="사진을 선택해주세요"
             disabled={false}
