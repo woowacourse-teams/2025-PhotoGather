@@ -52,15 +52,6 @@ const routes: AppRouteObject[] = [
               headerIcons: ['settings'],
             },
           },
-        ],
-      },
-      {
-        path: 'guest',
-        children: [
-          {
-            path: 'main',
-            element: <GuestMainPage />,
-          },
           {
             path: 'work-detail',
             element: <HostWorkDetail />,
@@ -74,6 +65,10 @@ const routes: AppRouteObject[] = [
       {
         path: 'guest',
         children: [
+          {
+            path: 'main',
+            element: <GuestMainPage />,
+          },
           {
             path: 'work-detail',
             element: <GuestWorkDetail />,
