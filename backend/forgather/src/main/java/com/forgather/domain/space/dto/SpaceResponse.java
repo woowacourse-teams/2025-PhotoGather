@@ -2,7 +2,6 @@ package com.forgather.domain.space.dto;
 
 import com.forgather.domain.space.model.Space;
 import com.forgather.domain.space.model.SpacePhoto;
-import com.forgather.global.auth.dto.HostResponse;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
@@ -29,8 +28,8 @@ public record SpaceResponse(
     @Schema(description = "스페이스 호스트 이메일", example = "forgather@forgather.me")
     String email,
 
-    @Schema(description = "호스트 정보")
-    HostResponse host,
+    // @Schema(description = "호스트 정보")
+    // HostResponse host,
 
     @Schema(description = "스페이스 프로필 경로", example = "/forgather/1234567890/profile.png")
     String profilePath
@@ -46,7 +45,7 @@ public record SpaceResponse(
             space.getInstagramUsername(),
             space.getEmail(),
             // TODO: 스페이스 : 호스트 m:n 관계로 변경 후 수정 필요
-            HostResponse.from(space.getSpaceHostMap().getFirst().getHost()),
+            // HostResponse.from(space.getSpaceHostMap().getFirst().getHost()),
             spacePhoto.getPath()
         );
     }

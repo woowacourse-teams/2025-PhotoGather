@@ -1,6 +1,5 @@
 package com.forgather.acceptance;
 
-import static com.forgather.fixture.HostFixture.createHost;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -66,8 +65,7 @@ class ProductAcceptanceTest extends AcceptanceTest {
 
     @BeforeEach
     void setUp() {
-        host = hostRepository.save(createHost());
-        space = SpaceFixture.createSpace(host);
+        space = SpaceFixture.createSpace();
         spaceRepository.save(space);
         RestAssuredMockMvc.mockMvc(mockMvc);
     }

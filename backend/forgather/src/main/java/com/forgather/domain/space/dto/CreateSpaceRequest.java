@@ -29,7 +29,7 @@ public record CreateSpaceRequest(
     String email
 ) {
 
-    public Space toEntity(String spaceCode, Host host) {
-        return new Space(host, spaceCode, name, description, isPublic, instagramUsername, email);
+    public Space toEntity(String spaceCode) {
+        return new Space(spaceCode, name, description, isPublic, instagramUsername, email);
     }
 }

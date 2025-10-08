@@ -14,10 +14,12 @@ import com.forgather.domain.space.dto.SpaceResponse;
 import com.forgather.domain.space.dto.UpdateSpaceRequest;
 import com.forgather.domain.space.model.Space;
 import com.forgather.domain.space.model.SpacePhoto;
+import com.forgather.global.auth.repository.SpaceHostMapRepository;
 import com.forgather.domain.space.repository.SpacePhotoRepository;
 import com.forgather.domain.space.repository.SpaceRepository;
 import com.forgather.domain.upload.ContentsStorage;
 import com.forgather.global.auth.model.Host;
+import com.forgather.global.auth.model.SpaceHostMap;
 import com.forgather.global.exception.FileUploadException;
 import com.forgather.global.util.RandomCodeGenerator;
 
@@ -31,13 +33,15 @@ public class SpaceService {
 
     private final SpaceRepository spaceRepository;
     private final SpacePhotoRepository spacePhotoRepository;
+    private final SpaceHostMapRepository spaceHostMapRepository;
     private final RandomCodeGenerator codeGenerator;
     private final ContentsStorage contentsStorage;
 
     @Transactional
     public CreateSpaceResponse create(CreateSpaceRequest request, MultipartFile file, Host host) {
         String spaceCode = codeGenerator.generate(10);
-        Space space = spaceRepository.save(request.toEntity(spaceCode, host));
+        Space space = spaceRepository.save(request.toEntity(spaceCode));
+        spaceHostMapRepository.save(new SpaceHostMap(space, host));
         if (file == null || file.isEmpty()) {
             return CreateSpaceResponse.from(space);
         }
@@ -68,7 +72,7 @@ public class SpaceService {
     @Transactional
     public SpaceResponse update(String spaceCode, UpdateSpaceRequest request, MultipartFile file, Host host) {
         Space space = spaceRepository.getByCodeOrThrow(spaceCode);
-        space.validateHost(host);
+        // TODO: host 검증
         space.update(request.name(), request.description(), request.isPublic(), request.instagramUsername(),
             request.email());
         if (file != null && !file.isEmpty()) {
@@ -97,15 +101,17 @@ public class SpaceService {
     @Transactional
     public void delete(String spaceCode, Host host) {
         Space space = spaceRepository.getByCodeOrThrow(spaceCode);
-        space.validateHost(host);
+        // TODO: host 검증
         SpacePhoto spacePhoto = spacePhotoRepository.getBySpace(space);
+        spaceHostMapRepository.deleteBySpace(space);
         spacePhotoRepository.delete(spacePhoto);
         contentsStorage.deleteContent(spacePhoto.getPath());
         spaceRepository.delete(space);
     }
 
     public List<SpaceResponse> getSpacesInformation(Host host) {
-        return host.getSpaceHostMap().stream()
+        List<SpaceHostMap> spaceHostMaps = spaceHostMapRepository.findAllByHost(host);
+        return spaceHostMaps.stream()
             .map(spaceHostMap -> {
                 Space space = spaceHostMap.getSpace();
                 SpacePhoto spacePhoto = spacePhotoRepository.getBySpace(space);

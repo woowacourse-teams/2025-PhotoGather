@@ -22,10 +22,12 @@ import com.forgather.domain.space.dto.UpdateSpaceRequest;
 import com.forgather.domain.space.model.Space;
 import com.forgather.domain.space.model.SpacePhoto;
 import com.forgather.domain.space.repository.HostRepository;
+import com.forgather.global.auth.repository.SpaceHostMapRepository;
 import com.forgather.domain.space.repository.SpacePhotoRepository;
 import com.forgather.domain.space.repository.SpaceRepository;
 import com.forgather.domain.upload.ContentsStorage;
 import com.forgather.global.auth.model.Host;
+import com.forgather.global.auth.model.SpaceHostMap;
 import com.forgather.global.auth.util.JwtTokenProvider;
 
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
@@ -48,6 +50,9 @@ class SpaceAcceptanceTest extends AcceptanceTest {
     private SpacePhotoRepository spacePhotoRepository;
 
     @Autowired
+    private SpaceHostMapRepository spaceHostMapRepository;
+
+    @Autowired
     private JwtTokenProvider jwtTokenProvider;
 
     @MockitoBean
@@ -60,7 +65,7 @@ class SpaceAcceptanceTest extends AcceptanceTest {
     void setUp() throws IOException {
         RestAssuredMockMvc.mockMvc(mockMvc);
         Mockito.when(contentsStorage.upload(any(), any()))
-            .thenReturn("/forgather/temp.png");
+            .thenReturn("forgather/temp.png");
     }
 
     @DisplayName("RestAssuredMockMvc를 사용하여 Space를 생성한다.")
@@ -128,14 +133,16 @@ class SpaceAcceptanceTest extends AcceptanceTest {
         // given
         var host = hostRepository.save(new Host("모코", "pictureUrl"));
         var token = jwtTokenProvider.generateAccessToken(host.getId());
-        var space = spaceRepository.save(new Space(host, "1111111111", "테스트", "테스트 스페이스", true,
+        // TODO: host 추가
+        var space = spaceRepository.save(new Space("1111111111", "테스트", "테스트 스페이스", true,
             "forgather_official", "forgather@forgather.me"));
         var spacePhoto = spacePhotoRepository.save(
             new SpacePhoto(space, "original.png", "/forgather/uuid.png", 1024L));
+        spaceHostMapRepository.save(new SpaceHostMap(space, host));
 
         // when
         var response = RestAssuredMockMvc.given()
-            .header("Authorization", "Bearer " + token)
+            // .header("Authorization", "Bearer " + token)
             .when()
             .get("/spaces/{spaceCode}", space.getCode())
             .then()
@@ -156,13 +163,15 @@ class SpaceAcceptanceTest extends AcceptanceTest {
         // given
         var host = hostRepository.save(new Host("모코", "pictureUrl"));
         var token = jwtTokenProvider.generateAccessToken(host.getId());
-        var space = spaceRepository.save(new Space(host, "2222222222", "테스트", "테스트 스페이스", true,
+        // TODO: host 추가
+        var space = spaceRepository.save(new Space("2222222222", "테스트", "테스트 스페이스", true,
             "forgather_official", "forgather@forgather.me"));
         spacePhotoRepository.save(new SpacePhoto(space, "original.png", "/forgather/uuid.png", 1024L));
+        spaceHostMapRepository.save(new SpaceHostMap(space, host));
 
         // when
         var response = RestAssuredMockMvc.given()
-            .header("Authorization", "Bearer " + token)
+            // .header("Authorization", "Bearer " + token)
             .when()
             .delete("/spaces/{spaceCode}", space.getCode())
             .then()
@@ -180,9 +189,10 @@ class SpaceAcceptanceTest extends AcceptanceTest {
         // given
         var host = hostRepository.save(new Host("모코", "pictureUrl"));
         var token = jwtTokenProvider.generateAccessToken(host.getId());
-        var space = spaceRepository.save(new Space(host, "3333333333", "테스트", "테스트 스페이스", true,
+        var space = spaceRepository.save(new Space("3333333333", "테스트", "테스트 스페이스", true,
             "forgather_official", "forgather@forgather.me"));
         spacePhotoRepository.save(new SpacePhoto(space, "original.png", "/forgather/uuid.png", 1024L));
+        spaceHostMapRepository.save(new SpaceHostMap(space, host));
 
         var newFile = new MockMultipartFile(
             "file",
@@ -196,7 +206,7 @@ class SpaceAcceptanceTest extends AcceptanceTest {
 
         // when
         var response = RestAssuredMockMvc.given()
-            .header("Authorization", "Bearer " + token)
+            // .header("Authorization", "Bearer " + token)
             .multiPart("request", request, "application/json")
             .multiPart("file", newFile.getOriginalFilename(), newFile.getBytes(), newFile.getContentType())
             .when()
@@ -221,12 +231,14 @@ class SpaceAcceptanceTest extends AcceptanceTest {
         // given
         var host = hostRepository.save(new Host("모코", "pictureUrl"));
         var token = jwtTokenProvider.generateAccessToken(host.getId());
-        var space1 = spaceRepository.save(new Space(host, "1234567890", "테스트1", "테스트 스페이스1", true,
+        var space1 = spaceRepository.save(new Space("1234567890", "테스트1", "테스트 스페이스1", true,
             "forgather_official", "forgather@forgather.me"));
         spacePhotoRepository.save(new SpacePhoto(space1, "original.png", "/forgather/uuid.png", 1024L));
-        var space2 = spaceRepository.save(new Space(host, "0987654321", "테스트2", "테스트 스페이스2", true,
+        var space2 = spaceRepository.save(new Space("0987654321", "테스트2", "테스트 스페이스2", true,
             "forgather_official", "forgather@forgather.me"));
         spacePhotoRepository.save(new SpacePhoto(space2, "original.png", "/forgather/uuid.png", 1024L));
+        spaceHostMapRepository.save(new SpaceHostMap(space1, host));
+        spaceHostMapRepository.save(new SpaceHostMap(space2, host));
 
         // when
         var response = RestAssuredMockMvc.given()

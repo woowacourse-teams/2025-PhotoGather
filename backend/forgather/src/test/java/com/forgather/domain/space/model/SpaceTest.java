@@ -26,7 +26,7 @@ class SpaceTest {
 
         // when & then
         assertThatCode(
-            () -> new Space(host, spaceCode, name, null, false, null, null)
+            () -> new Space(spaceCode, name, null, false, null, null)
         ).doesNotThrowAnyException();
     }
 
@@ -44,7 +44,7 @@ class SpaceTest {
 
         // when & then
         assertThatCode(
-            () -> new Space(host, spaceCode, name, description, false, instagramUsername, email)
+            () -> new Space(spaceCode, name, description, false, instagramUsername, email)
         ).doesNotThrowAnyException();
     }
 
@@ -61,7 +61,7 @@ class SpaceTest {
 
         // when & then
         assertThatThrownBy(
-            () -> new Space(host, "1234567890", invalidName, description, false, instagramUsername, email)
+            () -> new Space("1234567890", invalidName, description, false, instagramUsername, email)
         ).isInstanceOf(BaseException.class)
             .hasMessageContaining("스페이스 이름");
     }
@@ -78,7 +78,7 @@ class SpaceTest {
 
         // when & then
         assertThatThrownBy(
-            () -> new Space(host, "123456789", name, description, false, instagramUsername, email)
+            () -> new Space("123456789", name, description, false, instagramUsername, email)
         ).isInstanceOf(BaseException.class)
             .hasMessageContaining("스페이스 코드");
     }
@@ -94,7 +94,7 @@ class SpaceTest {
         Host host = new Host("moko", "pictureUrl");
 
         // when & then
-        assertThatThrownBy(() -> new Space(host, "1234567890", name, description, false, instagramUsername, email))
+        assertThatThrownBy(() -> new Space("1234567890", name, description, false, instagramUsername, email))
             .isInstanceOf(BaseException.class)
             .hasMessageContaining("스페이스 설명");
     }
@@ -110,7 +110,7 @@ class SpaceTest {
         Host host = new Host("moko", "pictureUrl");
 
         // when & then
-        assertThatThrownBy(() -> new Space(host, "1234567890", name, description, false, instagramUsername, email))
+        assertThatThrownBy(() -> new Space("1234567890", name, description, false, instagramUsername, email))
             .isInstanceOf(BaseException.class)
             .hasMessageContaining("인스타그램 아이디");
     }
@@ -126,7 +126,7 @@ class SpaceTest {
         Host host = new Host("moko", "pictureUrl");
 
         // when & then
-        assertThatThrownBy(() -> new Space(host, "1234567890", name, description, false, instagramUsername, email))
+        assertThatThrownBy(() -> new Space("1234567890", name, description, false, instagramUsername, email))
             .isInstanceOf(BaseException.class)
             .hasMessageContaining("이메일");
     }
@@ -136,7 +136,7 @@ class SpaceTest {
     void updateSpaceName() {
         // given
         Host host = new Host("moko", "pictureUrl");
-        Space space = new Space(host, "1234567890", "스페이스", "스페이스 설명", false, "forgather_official",
+        Space space = new Space("1234567890", "스페이스", "스페이스 설명", false, "forgather_official",
             "forgather@forgather.me");
 
         // when
@@ -157,7 +157,7 @@ class SpaceTest {
     void updateSpaceDescription() {
         // given
         Host host = new Host("moko", "pictureUrl");
-        Space space = new Space(host, "1234567890", "스페이스", "스페이스 설명", false, "forgather_official",
+        Space space = new Space("1234567890", "스페이스", "스페이스 설명", false, "forgather_official",
             "forgather@forgather.me");
 
         // when
@@ -178,7 +178,7 @@ class SpaceTest {
     void updateSpaceIsPublic() {
         // given
         Host host = new Host("moko", "pictureUrl");
-        Space space = new Space(host, "1234567890", "스페이스", "스페이스 설명", false, "forgather_official",
+        Space space = new Space("1234567890", "스페이스", "스페이스 설명", false, "forgather_official",
             "forgather@forgather.me");
 
         // when
@@ -199,7 +199,7 @@ class SpaceTest {
     void updateSpaceInstagramUsername() {
         // given
         Host host = new Host("moko", "pictureUrl");
-        Space space = new Space(host, "1234567890", "스페이스", "스페이스 설명", false, "forgather_official",
+        Space space = new Space("1234567890", "스페이스", "스페이스 설명", false, "forgather_official",
             "forgather@forgather.me");
 
         // when
@@ -220,7 +220,7 @@ class SpaceTest {
     void updateSpaceEmail() {
         // given
         Host host = new Host("moko", "pictureUrl");
-        Space space = new Space(host, "1234567890", "스페이스", "스페이스 설명", false, "forgather_official",
+        Space space = new Space("1234567890", "스페이스", "스페이스 설명", false, "forgather_official",
             "forgather@forgather.me");
 
         // when

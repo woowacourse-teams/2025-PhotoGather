@@ -42,7 +42,7 @@ public class SpaceController {
     public ResponseEntity<CreateSpaceResponse> create(
         @RequestPart("request") @Validated CreateSpaceRequest request,
         @RequestPart(value = "file", required = false) MultipartFile file,
-        @LoginHost Host host
+        @LoginHost(required = false) Host host
     ) {
         var response = spaceService.create(request, file, host);
         return ResponseEntity.status(CREATED).body(response);
@@ -57,7 +57,9 @@ public class SpaceController {
 
     @DeleteMapping("/{spaceCode}")
     @Operation(summary = "스페이스 삭제", description = "스페이스를 삭제합니다.")
-    public ResponseEntity<Void> delete(@PathVariable(name = "spaceCode") String spaceCode, @LoginHost Host host) {
+    public ResponseEntity<Void> delete(@PathVariable(name = "spaceCode") String spaceCode,
+        @LoginHost(required = false) Host host
+    ) {
         spaceService.delete(spaceCode, host);
         return ResponseEntity.noContent().build();
     }
@@ -68,7 +70,7 @@ public class SpaceController {
         @PathVariable(name = "spaceCode") String spaceCode,
         @RequestPart("request") @Validated UpdateSpaceRequest request,
         @RequestPart(value = "file", required = false) MultipartFile file,
-        @LoginHost Host host
+        @LoginHost(required = false) Host host
     ) {
         var response = spaceService.update(spaceCode, request, file, host);
         return ResponseEntity.ok(response);
