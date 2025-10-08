@@ -67,6 +67,7 @@ public class SpaceService {
         }
     }
 
+    @Transactional(readOnly = true)
     public SpaceResponse getSpaceInformation(String spaceCode) {
         Space space = spaceRepository.getByCodeOrThrow(spaceCode);
         return spacePhotoRepository.findBySpace(space)
@@ -117,6 +118,7 @@ public class SpaceService {
         spaceRepository.delete(space);
     }
 
+    @Transactional(readOnly = true)
     public List<SpaceResponse> getSpacesInformation(Host host) {
         List<SpaceHostMap> spaceHostMaps = spaceHostMapRepository.findAllByHost(host);
         return spaceHostMaps.stream()
