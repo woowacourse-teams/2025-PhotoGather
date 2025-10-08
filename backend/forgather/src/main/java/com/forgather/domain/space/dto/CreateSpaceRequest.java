@@ -3,9 +3,9 @@ package com.forgather.domain.space.dto;
 import org.hibernate.validator.constraints.Length;
 
 import com.forgather.domain.space.model.Space;
-import com.forgather.global.auth.model.Host;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.Email;
 
 public record CreateSpaceRequest(
 
@@ -26,6 +26,7 @@ public record CreateSpaceRequest(
 
     @Schema(description = "스페이스 호스트 이메일", example = "forgather@forgather.me", maxLength = 50, nullable = true)
     @Length(max = 50)
+    @Email
     String email
 ) {
 

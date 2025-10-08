@@ -3,6 +3,7 @@ package com.forgather.domain.space.dto;
 import org.hibernate.validator.constraints.Length;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.Email;
 
 public record UpdateSpaceRequest(
 
@@ -21,8 +22,9 @@ public record UpdateSpaceRequest(
     @Length(max = 30)
     String instagramUsername,
 
-    @Schema(description = "새로운 이메일", example = "forgather_new@forgather.me", maxLength = 30, nullable = true)
+    @Schema(description = "새로운 이메일", example = "forgather_new@forgather.me", maxLength = 50, nullable = true)
     @Length(max = 50)
+    @Email
     String email
 ) {
 }
