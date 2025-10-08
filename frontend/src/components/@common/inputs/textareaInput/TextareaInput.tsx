@@ -7,7 +7,7 @@ interface TextareaInputProps
   label: string;
   errorMessage?: string;
   maxCount: number;
-  validLength: number;
+  validLength?: number;
 }
 
 const TextareaInput = ({
