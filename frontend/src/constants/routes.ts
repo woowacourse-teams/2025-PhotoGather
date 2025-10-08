@@ -1,8 +1,6 @@
 export const ROUTES = {
   HOST: {
     MAIN: '/host/main',
-    DASHBOARD: '/host/dashboard',
-    DASHBOARD_EDIT: '/host/dashboard-edit',
     MY_PAGE: '/host/my-page',
     WORK_DETAIL: '/host/work-detail',
     WORK_FORM: '/host/work-form',
@@ -11,4 +9,12 @@ export const ROUTES = {
     MAIN: '/guest/main',
     WORK_DETAIL: '/guest/work-detail',
   },
+};
+
+export const createSpaceInfoRoute = (spaceCode: string) => {
+  return `/host/${spaceCode}/space-info`;
+};
+
+export const createSpaceInfoEditRoute = (spaceCode: string) => {
+  return `/host/${spaceCode}/space-info/edit`;
 };

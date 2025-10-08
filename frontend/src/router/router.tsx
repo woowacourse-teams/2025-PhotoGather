@@ -31,7 +31,7 @@ const routes: AppRouteObject[] = [
             },
           },
           {
-            path: 'dashboard',
+            path: ':spaceCode/space-info',
             element: <SpaceInfoPage />,
             handle: {
               headerIcons: ['settings'],
@@ -46,7 +46,7 @@ const routes: AppRouteObject[] = [
             },
           },
           {
-            path: 'dashboard-edit',
+            path: ':spaceCode/space-info/edit',
             element: <SpaceEditPage />,
             handle: {
               headerIcons: ['settings'],
