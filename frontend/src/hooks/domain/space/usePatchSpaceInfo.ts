@@ -26,7 +26,12 @@ const usePatchSpaceInfo = ({
   const createFormData = (data: Partial<SpaceInfoFormData>, image?: File) => {
     const updatedData = findUpdatedData(data);
     const formData = new FormData();
-    formData.append('request', JSON.stringify(updatedData));
+    formData.append(
+      'request',
+      new Blob([JSON.stringify(updatedData)], {
+        type: 'application/json',
+      }),
+    );
 
     if (image) {
       formData.append('file', image);
