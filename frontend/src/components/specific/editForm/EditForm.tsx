@@ -1,7 +1,7 @@
 import * as C from '../../../components/@common/inputs/input.common.styles';
 import { CONSTRAINTS } from '../../../constants/constraints';
 import useForm from '../../../hooks/@common/useForm';
-import useLocalFile from '../../../hooks/domain/useLocaleFile';
+import useLocalFile from '../../../hooks/@common/useLocalFile';
 import { calculateValidLength } from '../../../utils/grapheme';
 import Button from '../../@common/buttons/button/Button';
 import TextareaInput from '../../@common/inputs/textareaInput/TextareaInput';

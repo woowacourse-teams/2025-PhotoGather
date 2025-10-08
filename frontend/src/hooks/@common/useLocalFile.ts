@@ -1,6 +1,11 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { CONSTRAINTS } from '../../constants/constraints';
 import { heicToJpegBlob, isHeic } from '../../utils/heic';
+import {
+  checkInvalidFileType,
+  checkUploadLimit,
+  isValidFileType,
+} from '../../validators/photo.validators';
 import { useToast } from './useToast';
 
 interface UseLocalFileProps {
@@ -14,11 +19,7 @@ interface LocalFile {
   previewUrl: string;
 }
 
-const isValidFileType = (file: File, expectedType: string): boolean => {
-  return file.type.startsWith(`${expectedType}/`);
-};
-
-const useLocalFileTmp = ({
+const useLocalFile = ({
   fileType,
   maxFileCount = CONSTRAINTS.MAX_FILE_COUNT,
 }: UseLocalFileProps) => {
@@ -58,7 +59,28 @@ const useLocalFileTmp = ({
     }
   };
 
+  const replaceSingleFile = async (file: File) => {
+    const processedFile = await processFile(file);
+    const newFile: LocalFile = {
+      id: 0,
+      originFile: processedFile,
+      previewUrl: await createImagePreviewUrl(processedFile),
+    };
+
+    setLocalFiles((prev) => {
+      for (const prevFile of prev) {
+        URL.revokeObjectURL(prevFile.previewUrl);
+      }
+      return [newFile];
+    });
+  };
+
   const addPreviewUrlsFromFiles = async (files: File[]) => {
+    if (maxFileCount === 1) {
+      await replaceSingleFile(files[0]);
+      return;
+    }
+
     const startIndex = localFiles.length;
     const availableSlots = maxFileCount - localFiles.length;
     const filesToAdd = files.slice(0, availableSlots);
@@ -99,26 +121,17 @@ const useLocalFileTmp = ({
         fileType,
       );
 
-      if (invalidFiles.length > 0) {
-        alert('이미지 파일만 업로드 가능해요. 파일을 다시 확인해주세요.');
-        return;
-      }
+      checkInvalidFileType(invalidFiles);
 
-      if (validFiles.length === 0) {
-        return;
-      }
+      if (validFiles.length === 0) return;
 
-      const availableSlots = maxFileCount - localFiles.length;
-      if (validFiles.length > availableSlots) {
-        showToast({
-          text: `최대 ${maxFileCount}장까지만 업로드할 수 있어요.`,
-        });
-      }
+      if (maxFileCount !== 1)
+        checkUploadLimit(validFiles, maxFileCount, localFiles.length);
 
       await addPreviewUrlsFromFiles(validFiles);
     } catch (error) {
       console.error('파일 업로드 중 오류 발생:', error);
-      alert('파일 업로드에 실패했어요. 다시 시도해주세요.');
+      showToast({ text: '파일 업로드에 실패했어요. 다시 시도해주세요.' });
     }
   };
 
@@ -161,4 +174,4 @@ const useLocalFileTmp = ({
   };
 };
 
-export default useLocalFileTmp;
+export default useLocalFile;
