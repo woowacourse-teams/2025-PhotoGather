@@ -72,7 +72,11 @@ const SpaceInfoPage = () => {
           onClick={openDeleteModal}
         />
       </S.DeleteButtonContainer>
-      <Button variant="primary" text="수정하기" onClick={() => {}} />
+      <Button
+        variant="primary"
+        text="수정하기"
+        onClick={() => navigate(ROUTES.HOST.DASHBOARD_EDIT)}
+      />
     </S.Wrapper>
   );
 };

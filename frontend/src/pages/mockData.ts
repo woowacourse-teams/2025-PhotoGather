@@ -2,7 +2,7 @@ import img1 from '../@assets/workDetail_mock_1.png';
 import img2 from '../@assets/workDetail_mock_2.png';
 import img3 from '../@assets/workDetail_mock_3.png';
 
-export const mockSpaceCode = '80f4673f4d';
+export const mockSpaceCode = 'd90fbe4392';
 
 export const mockData = {
   title: '2025 PKNU VCD',
