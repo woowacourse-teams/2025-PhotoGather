@@ -1,19 +1,17 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { spaceService } from '../../../apis/services/space/space.service';
 import Button from '../../../components/@common/buttons/button/Button';
 import DeleteModal from '../../../components/@common/modal/deleteModal/DeleteModal';
 import Thumbnail from '../../../components/@common/thumbnail/Thumbnail';
 import InfoRow from '../../../components/specific/infoRow/InfoRow';
 import { ROUTES } from '../../../constants/routes';
-import { useToast } from '../../../hooks/@common/useToast';
+import useSpaceDelete from '../../../hooks/domain/space/useSpaceDelete';
 import useSpaceInfo from '../../../hooks/domain/space/useSpaceInfo';
 import { mockSpaceCode } from '../../mockData';
 import * as S from './SpaceInfoPage.styles';
 
 const SpaceInfoPage = () => {
   const navigate = useNavigate();
-  const { showToast } = useToast();
 
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
@@ -23,24 +21,8 @@ const SpaceInfoPage = () => {
   const closeDeleteModal = () => {
     setIsDeleteModalOpen(false);
   };
-  const deleteSpace = async () => {
-    const res = await spaceService.deleteSpace(mockSpaceCode);
-    closeDeleteModal();
-    console.log(res);
-    if (res.success) {
-      showToast({
-        text: '스페이스가 삭제되었습니다.',
-        type: 'info',
-      });
-      navigate(ROUTES.HOST.MAIN);
-      return;
-    }
-    showToast({
-      text: '스페이스 삭제에 실패했습니다.',
-      type: 'error',
-    });
-  };
 
+  const { deleteSpace } = useSpaceDelete({ closeDeleteModal });
   const { spaceInfo } = useSpaceInfo({
     spaceCode: mockSpaceCode,
   });
