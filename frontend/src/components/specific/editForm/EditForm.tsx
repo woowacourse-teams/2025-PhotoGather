@@ -1,7 +1,12 @@
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
+import { useParams } from 'react-router-dom';
 import * as C from '../../../components/@common/inputs/input.common.styles';
 import { CONSTRAINTS } from '../../../constants/constraints';
-import useLocalFile from '../../../hooks/domain/useLocaleFile';
+import useLocalFile from '../../../hooks/@common/useLocalFile';
+import usePatchSpaceInfo from '../../../hooks/domain/space/usePatchSpaceInfo';
+import useSpaceInfo from '../../../hooks/domain/space/useSpaceInfo';
+import type { SpaceInfoFormData } from '../../../types/domain/space.type';
 import { calculateValidLength } from '../../../utils/grapheme';
 import Button from '../../@common/buttons/button/Button';
 import TextareaInput from '../../@common/inputs/textareaInput/TextareaInput';
@@ -10,47 +15,69 @@ import PhotoPreviewButton from '../photoPreviewButton/PhotoPreviewButton';
 import * as S from './EditForm.styles';
 import { editFormValidators } from './editForm.validators';
 
-type visibilityType = 'public' | 'private';
-
-interface SpaceFormData {
-  profileImage: File[];
-  name: string;
-  description: string;
-  visibility: visibilityType;
-  email: string;
-  instagram: string;
-}
-
 const EditForm = () => {
-  const initialData: SpaceFormData = {
-    profileImage: [],
+  // TODO : 변경사항이 없을 경우 막기
+  const { spaceCode } = useParams();
+  const { isLoading: isSpaceInfoLoading, spaceInfo } = useSpaceInfo({
+    spaceCode: spaceCode ?? '',
+  });
+
+  const initialData: SpaceInfoFormData = {
     name: '',
     description: '',
-    visibility: 'public',
+    isPublic: false,
     email: '',
-    instagram: '',
+    instagramUsername: '',
   };
+
+  // biome-ignore lint/correctness/useExhaustiveDependencies: isSpaceInfoLoading, spaceInfo 변경 시에만 리셋
+  useEffect(() => {
+    if (!isSpaceInfoLoading && spaceInfo) {
+      reset({
+        name: spaceInfo.name,
+        description: spaceInfo.description,
+        isPublic: spaceInfo.isPublic,
+        email: spaceInfo.email,
+        instagramUsername: spaceInfo.instagramUsername,
+      });
+    }
+  }, [isSpaceInfoLoading, spaceInfo]);
 
   const {
     register,
     handleSubmit,
     watch,
+    reset,
     setValue,
-    formState: { errors, isValid: isAllValid },
-  } = useForm<SpaceFormData>({
+    formState: { errors, isValid: isAllValid, dirtyFields },
+  } = useForm<SpaceInfoFormData>({
     mode: 'onChange',
     defaultValues: initialData,
   });
 
-  const { previewFile, handleFilesUploadClick } = useLocalFile({
-    fileType: 'image',
-    maxFileCount: 1,
-    appendForm: (file: File[]) => setValue('profileImage', file),
+  const { localFiles, previewFile, handleFilesUploadClick, clearFiles } =
+    useLocalFile({
+      fileType: 'image',
+      maxFileCount: 1,
+    });
+  const { patchSpaceInfo } = usePatchSpaceInfo({
+    spaceCode: spaceCode ?? '',
+    dirtyFields,
+    afterPatch: clearFiles,
   });
 
+  const onSubmit = (data: SpaceInfoFormData) => {
+    if (localFiles.length !== 0 && localFiles[0].originFile) {
+      patchSpaceInfo(data, localFiles[0].originFile);
+      return;
+    }
+    patchSpaceInfo(data);
+  };
+
   return (
-    <S.Form onSubmit={() => handleSubmit}>
+    <S.Form onSubmit={handleSubmit(onSubmit)}>
       <PhotoPreviewButton
+        originalSrc={`${import.meta.env.VITE_IMAGE_BASE_URL}${spaceInfo?.spacePhoto.path}`}
         previewFile={previewFile}
         uploadImage={handleFilesUploadClick}
       />
@@ -71,16 +98,14 @@ const EditForm = () => {
           <Button
             text="공개"
             type="button"
-            variant={watch('visibility') === 'public' ? 'primary' : 'secondary'}
-            onClick={() => setValue('visibility', 'public')}
+            variant={watch('isPublic') === true ? 'primary' : 'secondary'}
+            onClick={() => setValue('isPublic', true)}
           />
           <Button
             text="비공개"
             type="button"
-            variant={
-              watch('visibility') === 'private' ? 'primary' : 'secondary'
-            }
-            onClick={() => setValue('visibility', 'private')}
+            variant={watch('isPublic') === false ? 'primary' : 'secondary'}
+            onClick={() => setValue('isPublic', false)}
           />
         </S.PublicButtonContainer>
       </S.ContentContainer>
@@ -104,10 +129,10 @@ const EditForm = () => {
         errorMessage={errors.email?.message}
       />
       <TextInput
-        {...register('instagram')}
+        {...register('instagramUsername')}
         label="Instagram ID"
         placeholder="forgather_official"
-        errorMessage={errors.instagram?.message}
+        errorMessage={errors.instagramUsername?.message}
       />
       <Button
         variant="primary"
