@@ -18,9 +18,7 @@ export const createErrorMessageWithValidators = <T>({
   validators,
 }: CreateErrorMessageWithValidatorsProps<T>): CreateErrorMessageWithValidatorsResult => {
   try {
-    validators.forEach((validator) => {
-      validator(value);
-    });
+    for (const validator of validators) validator(value);
     return { isError: false, errorMessage: '' };
   } catch (error) {
     if (error instanceof Error) {
