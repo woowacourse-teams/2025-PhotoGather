@@ -4,7 +4,6 @@ export const ROUTES = {
   },
   GUEST: {
     MAIN: '/guest/main',
-    WORK_DETAIL: '/guest/work-detail',
   },
 };
 
@@ -26,4 +25,8 @@ export const createWorkDetailRoute = (spaceCode: string) => {
 
 export const createWorkEditRoute = (spaceCode: string) => {
   return `/host/${spaceCode}/work-detail/edit`;
+};
+
+export const createGuestWorkDetailRoute = (spaceCode: string) => {
+  return `/guest/${spaceCode}/work-detail`;
 };

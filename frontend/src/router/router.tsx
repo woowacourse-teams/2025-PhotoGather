@@ -78,7 +78,7 @@ const routes: AppRouteObject[] = [
             element: <GuestMainPage />,
           },
           {
-            path: 'work-detail',
+            path: ':spaceCode/work-detail',
             element: <GuestWorkDetail />,
           },
         ],
