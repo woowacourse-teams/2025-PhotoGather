@@ -1,10 +1,11 @@
 import { useRef } from 'react';
 import { MdDownload, MdLink } from 'react-icons/md';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import CompleteImage from '../../../@assets/images/space-create.png';
 import Button from '../../../components/@common/buttons/button/Button';
 import IconButton from '../../../components/@common/buttons/iconButton/IconButton';
 import QRCode from '../../../components/@common/qrCode/QRCode';
+import { createSpaceMainRoute, ROUTES } from '../../../constants/routes';
 import useImageDownload from '../../../hooks/@common/useImageDownload';
 import { useToast } from '../../../hooks/@common/useToast';
 import { copyLinkToClipboard } from '../../../utils/copyLinkToClipboard';
@@ -12,23 +13,24 @@ import * as S from './SharePage.styles';
 
 const SharePage = () => {
   const navigate = useNavigate();
-
-  // TODO: 로직 구현 후 대체 필요
-  // const location = useLocation();
-  // const { spaceCode } = location.state;
-  const spaceCode = '123456789';
+  const location = useLocation();
+  const { spaceCode } = location.state;
 
   const { showToast } = useToast();
   const qrCodeRef = useRef<HTMLCanvasElement>(null);
   const { saveImage } = useImageDownload();
+
+  // TODO: 스페이스 코드 별 guest main 구현 후 대체 필요
   const copyAddress = `${import.meta.env.VITE_DOMAIN}/guest/main`;
 
-  const handleSpaceHomeButton = () => {
-    navigate('../main');
+  const handleSpaceMainButton = () => {
+    const spaceMainRoute = createSpaceMainRoute(spaceCode);
+    navigate(spaceMainRoute);
   };
 
   const handleMainButton = () => {
-    navigate('/');
+    // TODO: 랜딩 구현 후 대체 필요
+    navigate(ROUTES.HOST.MY_PAGE);
   };
 
   const copyShareLink = () => {
@@ -76,7 +78,7 @@ const SharePage = () => {
               />
             </S.IconLabelButtonContainer>
           </S.ShareContainer>
-          <Button text="나의 스페이스로 이동" onClick={handleSpaceHomeButton} />
+          <Button text="나의 스페이스로 이동" onClick={handleSpaceMainButton} />
         </S.BottomContainer>
       ) : (
         <Button text="메인 페이지로 이동" onClick={handleMainButton} />
