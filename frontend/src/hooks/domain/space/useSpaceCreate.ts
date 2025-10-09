@@ -28,7 +28,9 @@ export const useSpaceCreate = () => {
 
   const requestSpaceCode = async (spaceCreateInfoForm: FormData) => {
     const response = await spaceService.create(spaceCreateInfoForm);
-    if (!response.success) return '';
+    if (!response.success) {
+      throw new Error('스페이스 생성 API 호출 실패');
+    }
     return response.data.spaceCode;
   };
 
