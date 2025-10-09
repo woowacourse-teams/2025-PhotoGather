@@ -2,6 +2,8 @@ import type { SpaceInfo } from '../../../types/domain/space.type';
 import { http } from '../../http';
 
 export const spaceService = {
+  create: (data: FormData) => http.post<{ spaceCode: string }>('/spaces', data),
+
   getSpaceInfo: (spaceCode: string) =>
     http.get<SpaceInfo>(`/spaces/${spaceCode}`),
 
