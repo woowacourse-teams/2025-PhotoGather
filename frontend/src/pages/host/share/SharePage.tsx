@@ -14,7 +14,7 @@ import * as S from './SharePage.styles';
 const SharePage = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { spaceCode } = location.state;
+  const { spaceCode } = location.state || {};
 
   const { showToast } = useToast();
   const qrCodeRef = useRef<HTMLCanvasElement>(null);
