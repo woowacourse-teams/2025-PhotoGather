@@ -1,8 +1,6 @@
 export const ROUTES = {
   HOST: {
     MY_PAGE: '/host/my-page',
-    WORK_DETAIL: '/host/work-detail',
-    WORK_FORM: '/host/work-form',
   },
   GUEST: {
     MAIN: '/guest/main',
@@ -20,4 +18,12 @@ export const createSpaceInfoRoute = (spaceCode: string) => {
 
 export const createSpaceInfoEditRoute = (spaceCode: string) => {
   return `/host/${spaceCode}/space-info/edit`;
+};
+
+export const createWorkDetailRoute = (spaceCode: string) => {
+  return `/host/${spaceCode}/work-detail`;
+};
+
+export const createWorkEditRoute = (spaceCode: string) => {
+  return `/host/${spaceCode}/work-detail/edit`;
 };
