@@ -25,7 +25,7 @@ const routes: AppRouteObject[] = [
         path: 'host',
         children: [
           {
-            path: 'main',
+            path: ':spaceCode/main',
             element: <HostMainPage />,
             handle: {
               headerIcons: ['share', 'settings'],
