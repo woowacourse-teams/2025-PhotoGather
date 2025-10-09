@@ -14,7 +14,7 @@ export interface WorkPhoto {
 
 export interface PhotoUpload {
   originalName: string;
-  path: string;
+  uploadFileName: string;
   capacity: number;
 }
 

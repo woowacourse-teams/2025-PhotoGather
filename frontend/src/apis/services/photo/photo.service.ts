@@ -1,7 +1,4 @@
-import type {
-  PresignedUrlResponse,
-  UploadedPhoto,
-} from '../../../types/photo.type';
+import type { PresignedUrlResponse } from '../../../types/photo.type';
 import { http } from '../../http';
 
 export const photoService = {

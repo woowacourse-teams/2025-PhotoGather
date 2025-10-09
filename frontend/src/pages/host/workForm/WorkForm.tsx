@@ -11,8 +11,8 @@ import {
   useWorkForm,
   type WorkFormData,
 } from '../../../hooks/domain/useWorkForm';
+import { buildThumbnailUrl } from '../../../utils/buildThumbnailUrl';
 import { calculateValidLength } from '../../../utils/grapheme';
-import { buildThumbnailUrl } from '../../../utils/imageUrl';
 import * as S from './WorkForm.styles';
 import { workFormValidators } from './workForm.validators';
 
@@ -128,7 +128,7 @@ const WorkForm = () => {
             {existingPhotos.map((photo, index) => (
               <S.ImageGridItem key={`existing-${photo.id}`}>
                 <S.GridImage
-                  src={buildThumbnailUrl(spaceCode, photo.path, '800')}
+                  src={buildThumbnailUrl(photo.path, '800')}
                   alt={`작품 사진 ${index + 1}`}
                 />
                 <S.DeleteButton

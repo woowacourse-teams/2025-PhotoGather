@@ -43,7 +43,7 @@ export const uploadPhotosToS3 = async (
   // 4. 서버에게 notify
   return uploadFileData.map(({ file, uploadFileName }) => ({
     originalName: file.name,
-    path: `${uploadFileName}`,
+    uploadFileName: `${uploadFileName}`,
     capacity: file.size,
   }));
 };

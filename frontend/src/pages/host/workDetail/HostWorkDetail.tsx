@@ -8,7 +8,7 @@ import { createWorkEditRoute } from '../../../constants/routes';
 import { useToast } from '../../../hooks/@common/useToast';
 import { DividerLine } from '../../../styles/@common/DividerLine.styles';
 import type { WorkDetail } from '../../../types/domain/work.type';
-import { buildThumbnailUrl } from '../../../utils/imageUrl';
+import { buildThumbnailUrl } from '../../../utils/buildThumbnailUrl';
 import * as C from '../../WorkDetail.common.styles';
 import * as S from './HostWorkDetail.styles';
 
@@ -119,7 +119,7 @@ const HostWorkDetail = () => {
           {photos.map((photo, index) => (
             <C.ImageContainer
               key={photo.id}
-              src={buildThumbnailUrl(spaceCode, photo.path, '800')}
+              src={buildThumbnailUrl(photo.path, '800')}
               alt={`work-detail-${index}`}
             />
           ))}
