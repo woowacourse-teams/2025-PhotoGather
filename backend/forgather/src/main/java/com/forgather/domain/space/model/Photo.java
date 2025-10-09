@@ -23,7 +23,7 @@ public abstract class Photo extends BaseTimeEntity {
     @Column(name = "original_name", nullable = false)
     protected String originalName;
 
-    @Column(name = "path", nullable = false)
+    @Column(name = "uploadFileName", nullable = false)
     protected String path;
 
     @Column(name = "capacity", nullable = false)
