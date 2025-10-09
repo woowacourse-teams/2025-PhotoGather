@@ -65,7 +65,7 @@ public class Space extends BaseTimeEntity {
      */
     public Space(String code, String name, String description, boolean isPublic, String instagramUsername,
         String email) {
-        validateRequiredFields(code, name);
+        validateRequiredFields(code, name, description, instagramUsername, email);
         validateCode(code);
         validateName(name);
         validateDescription(description);
@@ -79,12 +79,22 @@ public class Space extends BaseTimeEntity {
         this.email = email;
     }
 
-    private void validateRequiredFields(String code, String name) {
+    private void validateRequiredFields(String code, String name, String description, String instagramUsername,
+        String email) {
         if (code == null) {
             throw new BaseNullPointerException("스페이스 코드는 필수입니다.");
         }
         if (name == null) {
             throw new BaseNullPointerException("스페이스 이름은 필수입니다.");
+        }
+        if (description == null) {
+            throw new BaseNullPointerException("스페이스 설명은 필수입니다.");
+        }
+        if (instagramUsername == null) {
+            throw new BaseNullPointerException("인스타그램 아이디는 필수입니다.");
+        }
+        if (email == null) {
+            throw new BaseNullPointerException("이메일은 필수입니다.");
         }
     }
 
@@ -126,25 +136,19 @@ public class Space extends BaseTimeEntity {
     }
 
     private void validateDescription(String description) {
-        if (description == null || description.isBlank()) {
-            return;
-        }
         if (TextLengthCounter.count(description) > MAX_DESCRIPTION_LENGTH) {
             throw new BaseException("스페이스 설명은 최대 %d자까지 가능합니다.".formatted(MAX_DESCRIPTION_LENGTH));
         }
     }
 
     private void validateInstagramUsername(String instagramUsername) {
-        if (instagramUsername == null || instagramUsername.isBlank()) {
-            return;
-        }
         if (instagramUsername.length() > MAX_INSTAGRAM_USERNAME_LENGTH) {
             throw new BaseException("인스타그램 아이디는 최대 %d자까지 가능합니다.".formatted(MAX_INSTAGRAM_USERNAME_LENGTH));
         }
     }
 
     private void validateEmail(String email) {
-        if (email == null || email.isBlank()) {
+        if (email.isBlank()) {
             return;
         }
         if (email.length() > MAX_EMAIL_LENGTH) {

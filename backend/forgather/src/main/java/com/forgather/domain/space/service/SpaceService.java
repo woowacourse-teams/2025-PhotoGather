@@ -2,7 +2,6 @@ package com.forgather.domain.space.service;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +20,7 @@ import com.forgather.domain.upload.domain.ContentsStorage;
 import com.forgather.global.auth.model.Host;
 import com.forgather.global.auth.model.SpaceHostMap;
 import com.forgather.global.auth.repository.SpaceHostMapRepository;
+import com.forgather.global.exception.BaseException;
 import com.forgather.global.exception.FileUploadException;
 import com.forgather.global.util.RandomCodeGenerator;
 
@@ -38,7 +38,6 @@ public class SpaceService {
     private final RandomCodeGenerator codeGenerator;
     private final ContentsStorage contentsStorage;
 
-    // 선택 값(설명, 인스타그램, 이메일)이  공백 or empty인 경우 값 초기화로 볼것인가? 현재 초기화로 판단
     @Transactional
     public CreateSpaceResponse create(CreateSpaceRequest request, MultipartFile file, Host host) {
         String spaceCode = codeGenerator.generate(10);
@@ -82,28 +81,74 @@ public class SpaceService {
         // TODO: host 검증
         space.update(request.name(), request.description(), request.isPublic(), request.instagramUsername(),
             request.email());
-        if (file != null && !file.isEmpty()) {
-            updateSpacePhoto(spaceCode, file, space);
+
+        if (request.isDeletePhoto()) {
+            handlePhotoWithDeleteRequest(space, file, spaceCode);
+        } else {
+            handlePhotoWithoutDeleteRequest(space, file, spaceCode);
         }
+
         return spacePhotoRepository.findBySpace(space)
             .map(spacePhoto -> SpaceResponse.from(space, SpacePhotoResponse.exists(spacePhoto.getPath())))
             .orElseGet(() -> SpaceResponse.from(space, SpacePhotoResponse.notExists()));
     }
 
-    private void updateSpacePhoto(String spaceCode, MultipartFile file, Space space) {
-        Optional<SpacePhoto> spacePhoto = spacePhotoRepository.findBySpace(space);
-        String newPath = uploadSpacePicture(file, spaceCode);
-
-        if (spacePhoto.isPresent()) {
-            // 이미 스페이스 프로필이 존재하면 기존 사진 삭제 후 엔티티 업데이트
-            SpacePhoto existingSpacePhoto = spacePhoto.get();
-            String oldPath = existingSpacePhoto.getPath();
-            existingSpacePhoto.update(file.getOriginalFilename(), newPath, file.getSize());
-            contentsStorage.deleteContent(oldPath);
+    /**
+     * 삭제 요청이 있는 경우: 기존 사진 삭제 후 새 파일이 있으면 업로드
+     */
+    private void handlePhotoWithDeleteRequest(Space space, MultipartFile file, String spaceCode) {
+        if (file == null || file.isEmpty()) {
+            deleteExistingPhoto(space);
         } else {
-            // 스페이스 프로필이 없으면 새로 생성
-            spacePhotoRepository.save(new SpacePhoto(space, file.getOriginalFilename(), newPath, file.getSize()));
+            updateExistingPhoto(space, file, spaceCode);
         }
+    }
+
+    /**
+     * 삭제 요청이 없는 경우: 새 파일이 있으면 업로드 (기존 사진이 없어야 함)
+     */
+    private void handlePhotoWithoutDeleteRequest(Space space, MultipartFile file, String spaceCode) {
+        if (file != null && !file.isEmpty()) {
+            uploadNewPhoto(space, file, spaceCode);
+        }
+    }
+
+    /**
+     * 기존 사진만 삭제
+     */
+    private void deleteExistingPhoto(Space space) {
+        SpacePhoto existingPhoto = spacePhotoRepository.findBySpace(space)
+            .orElseThrow(() -> new BaseException("삭제할 사진이 존재하지 않습니다."));
+
+        String path = existingPhoto.getPath();
+        spacePhotoRepository.delete(existingPhoto);
+        contentsStorage.deleteContent(path);
+    }
+
+    /**
+     * 기존 사진 삭제 후 새 사진 업로드 (수정)
+     */
+    private void updateExistingPhoto(Space space, MultipartFile file, String spaceCode) {
+        SpacePhoto existingPhoto = spacePhotoRepository.findBySpace(space)
+            .orElseThrow(() -> new BaseException("삭제할 사진이 존재하지 않습니다."));
+
+        String newPath = uploadSpacePicture(file, spaceCode);
+        String oldPath = existingPhoto.getPath();
+        existingPhoto.update(file.getOriginalFilename(), newPath, file.getSize());
+        contentsStorage.deleteContent(oldPath);
+    }
+
+    /**
+     * 새 사진 업로드 (기존 사진이 없어야 함)
+     */
+    private void uploadNewPhoto(Space space, MultipartFile file, String spaceCode) {
+        spacePhotoRepository.findBySpace(space)
+            .ifPresent(photo -> {
+                throw new BaseException("스페이스 사진이 이미 존재합니다. 기존 스페이스 사진을 삭제 해주세요.");
+            });
+
+        String path = uploadSpacePicture(file, spaceCode);
+        spacePhotoRepository.save(new SpacePhoto(space, file.getOriginalFilename(), path, file.getSize()));
     }
 
     @Transactional

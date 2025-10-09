@@ -19,6 +19,9 @@ public record UpdateSpaceRequest(
 
     @Schema(description = "새로운 이메일", example = "forgather_new@forgather.me", maxLength = 50, nullable = true)
     @Email
-    String email
+    String email,
+
+    @Schema(description = "스페이스 사진 삭제 여부", example = "true")
+    boolean isDeletePhoto
 ) {
 }

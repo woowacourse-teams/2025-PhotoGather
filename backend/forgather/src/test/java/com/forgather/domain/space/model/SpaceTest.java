@@ -25,7 +25,7 @@ class SpaceTest {
 
         // when & then
         assertThatCode(
-            () -> new Space(spaceCode, name, null, false, null, null)
+            () -> new Space(spaceCode, name, "", false, "", "")
         ).doesNotThrowAnyException();
     }
 

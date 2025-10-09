@@ -201,7 +201,7 @@ class SpaceAcceptanceTest extends AcceptanceTest {
             "new image content".getBytes()
         );
         var request = objectMapper.writeValueAsString(new UpdateSpaceRequest(
-            "새로운 스페이스", "새로운 설명", false, "forgather_official_new", "forgather_new@forgather.me")
+            "새로운 스페이스", "새로운 설명", false, "forgather_official_new", "forgather_new@forgather.me", true)
         );
 
         // when
@@ -237,7 +237,7 @@ class SpaceAcceptanceTest extends AcceptanceTest {
         spaceHostMapRepository.save(new SpaceHostMap(space, host));
         
         var request = objectMapper.writeValueAsString(new UpdateSpaceRequest(
-            "새로운 스페이스", null, null, null, null)
+            "새로운 스페이스", null, null, null, null, false)
         );
 
         // when
