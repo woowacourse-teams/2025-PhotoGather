@@ -8,7 +8,7 @@ import type {
   UpdateWorkRequest,
   WorkPhoto,
 } from '../../types/domain/work.type';
-import { uploadPhotosToS3 } from '../../utils/photoUpload';
+import { uploadPhotosToS3 } from '../../utils/uploadPhotosToS3';
 import { useToast } from '../@common/useToast';
 
 export interface WorkFormData {
