@@ -29,19 +29,19 @@ public record ProductResponse(
             {
                 "id": 1,
                 "originalName": "chair1.jpg",
-                "path": "1234567890/abc.jpg",
+                "path": "photogather/spaces/1234567890/product/abc.jpg",
                 "order": 1
             },
             {
                 "id": 2,
                 "originalName": "chair2.jpg",
-                "path": "1234567890/def.jpg",
+                "path": "photogather/spaces/1234567890/product/1234567890/def.jpg",
                 "order": 2
             },
             {
                 "id": 3,
                 "originalName": "chair3.jpg",
-                "path": "1234567890/ghi.jpg",
+                "path": "photogather/spaces/1234567890/product/1234567890/ghi.jpg",
                 "order": 3
             }
         ]

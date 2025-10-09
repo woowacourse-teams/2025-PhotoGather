@@ -1,6 +1,6 @@
 import { IoGlobeOutline, IoLockClosedOutline } from 'react-icons/io5';
 import { MdCelebration } from 'react-icons/md';
-import type { MySpace } from '../../../types/space.type';
+import type { MySpace } from '../../../types/domain/space.type';
 import * as S from './SpaceCard.styles';
 
 interface SpaceCardProps {

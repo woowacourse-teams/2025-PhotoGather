@@ -1,6 +1,7 @@
 import defaultImage from '../../../../../@assets/images/default-image.png';
 import InfoRow from '../../../../../components/specific/infoRow/InfoRow';
 import { INFORMATION } from '../../../../../constants/messages';
+import { useSpaceCreate } from '../../../../../hooks/domain/space/useSpaceCreate';
 import type {
   CreateFunnelForm,
   FunnelElementProps,
@@ -14,8 +15,11 @@ interface SpaceCheckElementProps extends FunnelElementProps<boolean> {
 }
 
 const SpaceCheckElement = ({ createFunnelForm }: SpaceCheckElementProps) => {
+  const { createSpace, isCreating } = useSpaceCreate();
+
   const matchThumbnailImage =
     createFunnelForm.profileImage[0]?.previewUrl || defaultImage;
+
   const visibility = (() => {
     switch (createFunnelForm.visibility) {
       case 'PUBLIC':
@@ -46,10 +50,9 @@ const SpaceCheckElement = ({ createFunnelForm }: SpaceCheckElementProps) => {
           </S.InfoRowContainer>
         </S.Wrapper>
       }
-      onNextButtonClick={() => {
-        console.log(createFunnelForm);
-      }}
-      buttonText="스페이스 생성하기"
+      onNextButtonClick={() => createSpace(createFunnelForm)}
+      buttonText={isCreating ? '생성 중...' : '스페이스 생성하기'}
+      nextButtonDisabled={isCreating}
     />
   );
 };

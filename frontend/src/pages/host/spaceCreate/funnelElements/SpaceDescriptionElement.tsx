@@ -34,7 +34,7 @@ const SpaceDescriptionElement = ({
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           errorMessage={errorMessage}
-          maxCount={CONSTRAINTS.DESCRIPTION_MAX_LENGTH}
+          maxCount={CONSTRAINTS.MAX_LENGTH.SPACE.DESCRIPTION}
         />
       }
       onNextButtonClick={() => onNext(description)}

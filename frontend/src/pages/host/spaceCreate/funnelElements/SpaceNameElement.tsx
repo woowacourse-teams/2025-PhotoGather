@@ -34,7 +34,7 @@ const SpaceNameElement = ({
           value={name}
           onChange={(e) => setName(e.target.value)}
           errorMessage={errorMessage}
-          maxCount={CONSTRAINTS.NAME_MAX_LENGTH}
+          maxCount={CONSTRAINTS.MAX_LENGTH.SPACE.NAME}
         />
       }
       onNextButtonClick={() => onNext(name)}

@@ -5,6 +5,7 @@ import Dropdown, {
 } from '../../../components/@common/dropdown/Dropdown';
 import Thumbnail from '../../../components/@common/thumbnail/Thumbnail';
 import SpaceCard from '../../../components/specific/spaceCard/SpaceCard';
+import { ROUTES } from '../../../constants/routes';
 import useSpacesDisplay from '../../../hooks/domain/useSpacesDisplay';
 import { MyPageMockData, SpaceMockData } from '../../mockData';
 import * as S from './MyPage.styles';
@@ -31,7 +32,7 @@ const MyPage = () => {
           <S.NameContainer>{MyPageMockData.name}</S.NameContainer>
         </S.InfoContainer>
       </S.ProfileContainer>
-      <S.CreateSpaceButton onClick={() => navigate('')}>
+      <S.CreateSpaceButton onClick={() => navigate(ROUTES.HOST.CREATE_SPACE)}>
         <IoAddOutline size={16} />
         스페이스 생성
       </S.CreateSpaceButton>

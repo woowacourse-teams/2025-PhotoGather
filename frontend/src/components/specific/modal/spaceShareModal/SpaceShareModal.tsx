@@ -2,7 +2,7 @@ import { useRef } from 'react';
 import { MdDownload, MdLink } from 'react-icons/md';
 import useImageDownload from '../../../../hooks/@common/useImageDownload';
 import { useToast } from '../../../../hooks/@common/useToast';
-import { copyLinkToClipboard } from '../../../../utils/coptLinkToClipboard';
+import { copyLinkToClipboard } from '../../../../utils/copyLinkToClipboard';
 import IconButton from '../../../@common/buttons/iconButton/IconButton';
 import Modal from '../../../@common/modal/Modal';
 import QRCode from '../../../@common/qrCode/QRCode';

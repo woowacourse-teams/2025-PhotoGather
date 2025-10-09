@@ -17,7 +17,7 @@ class ProductPhotoTest {
     @Test
     void throwExceptionWhenNoProduct() {
         // when, then
-        assertThatThrownBy(() -> new ProductPhoto(null, "originalName", "path", 1024L, 1))
+        assertThatThrownBy(() -> new ProductPhoto(null, "originalName", "uploadFileName", 1024L, 1))
             .isInstanceOf(BaseException.class)
             .hasMessageContaining("작품 정보는 필수입니다.");
     }
@@ -27,7 +27,7 @@ class ProductPhotoTest {
     @ParameterizedTest
     void throwExceptionWhenOrderIsInvalid(int order) {
         // when, then
-        assertThatThrownBy(() -> new ProductPhoto(createProduct(), "originalName", "path", 1024L, order))
+        assertThatThrownBy(() -> new ProductPhoto(createProduct(), "originalName", "uploadFileName", 1024L, order))
             .isInstanceOf(BaseException.class)
             .hasMessageContaining("작품 사진의 정렬 순서는 1 이상, 10 이하여야 합니다.");
     }
@@ -36,7 +36,7 @@ class ProductPhotoTest {
     @Test
     void changeOrder() {
         // given
-        ProductPhoto productPhoto = new ProductPhoto(createProduct(), "originalName", "path", 1024L, 3);
+        ProductPhoto productPhoto = new ProductPhoto(createProduct(), "originalName", "uploadFileName", 1024L, 3);
 
         // when
         productPhoto.changeOrder(1);
@@ -50,7 +50,7 @@ class ProductPhotoTest {
     @ParameterizedTest
     void throwExceptionWhenChangeOrderIsInvalid(int order) {
         // given
-        ProductPhoto productPhoto = new ProductPhoto(createProduct(), "originalName", "path", 1024L, 1);
+        ProductPhoto productPhoto = new ProductPhoto(createProduct(), "originalName", "uploadFileName", 1024L, 1);
 
         // when, then
         assertThatThrownBy(() -> productPhoto.changeOrder(order))

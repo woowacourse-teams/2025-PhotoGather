@@ -1,5 +1,9 @@
 package com.forgather.domain.product.service;
 
+import static com.forgather.domain.upload.domain.FilePathGenerator.generateContentsFilePath;
+import static com.forgather.domain.upload.domain.UploadCategory.PRODUCT;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -44,12 +48,15 @@ public class ProductService {
         Product product = productRepository.save(request.toEntity(space));
 
         ProductPhotos productPhotos = new ProductPhotos();
-        productPhotos.add(
-            request.photos()
-                .stream()
-                .map(photoRequest -> photoRequest.toEntity(product))
-                .toList()
-        );
+        for (var photoRequest : request.photos()) {
+            String path = generateContentsFilePath(
+                contentsStorage.getRootDirectory(),
+                spaceCode,
+                PRODUCT,
+                photoRequest.uploadFileName()
+            );
+            productPhotos.add(photoRequest.toEntity(product, path));
+        }
         productPhotoRepository.saveAll(productPhotos.getAll());
         return new ProductResponse(product, productPhotos.getAll());
     }
@@ -73,10 +80,16 @@ public class ProductService {
         productPhotoRepository.deleteAll(deletedPhotos);
 
         // 새로운 사진 추가 및 db 저장
-        List<ProductPhoto> newPhotos = request.newPhotos()
-            .stream()
-            .map(photo -> photo.toEntity(product))
-            .toList();
+        List<ProductPhoto> newPhotos = new ArrayList<>();
+        for (var photoRequest : request.newPhotos()) {
+            String path = generateContentsFilePath(
+                contentsStorage.getRootDirectory(),
+                spaceCode,
+                PRODUCT,
+                photoRequest.uploadFileName()
+            );
+            newPhotos.add(photoRequest.toEntity(product, path));
+        }
         photos.add(newPhotos);
         productPhotoRepository.saveAll(newPhotos);
 
