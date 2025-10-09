@@ -22,7 +22,10 @@ const SpaceInfoPage = () => {
   };
 
   const { spaceCode } = useParams();
-  const { deleteSpace, isPending } = useSpaceDelete({ closeDeleteModal });
+  const { deleteSpace, isPending } = useSpaceDelete({
+    closeDeleteModal,
+    spaceCode: spaceCode ?? '',
+  });
   const { spaceInfo } = useSpaceInfo({
     spaceCode: spaceCode ?? '',
   });
