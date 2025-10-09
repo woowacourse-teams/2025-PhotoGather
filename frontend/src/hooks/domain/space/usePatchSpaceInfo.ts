@@ -1,4 +1,6 @@
+import { useNavigate } from 'react-router-dom';
 import { spaceService } from '../../../apis/services/space/space.service';
+import { createSpaceInfoRoute } from '../../../constants/routes';
 import type { SpaceInfoFormData } from '../../../types/domain/space.type';
 import { useToast } from '../../@common/useToast';
 
@@ -14,6 +16,7 @@ const usePatchSpaceInfo = ({
   afterPatch,
 }: UsePatchSpaceInfoProps) => {
   const { showToast } = useToast();
+  const navigate = useNavigate();
 
   const findUpdatedData = (data: Partial<SpaceInfoFormData>) => {
     return Object.fromEntries(
@@ -52,6 +55,7 @@ const usePatchSpaceInfo = ({
         type: 'info',
       });
       afterPatch?.();
+      navigate(createSpaceInfoRoute(spaceCode));
       return;
     }
     showToast({

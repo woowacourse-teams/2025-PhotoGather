@@ -1,3 +1,4 @@
+import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { spaceService } from '../../../apis/services/space/space.service';
 import { ROUTES } from '../../../constants/routes';
@@ -12,25 +13,27 @@ const useSpaceDelete = ({ closeDeleteModal }: UseSpaceDeleteProps) => {
   const { showToast } = useToast();
   const navigate = useNavigate();
 
-  const deleteSpace = async () => {
-    const res = await spaceService.deleteSpace(mockSpaceCode);
-    closeDeleteModal();
+  const { mutate: deleteSpace, isPending } = useMutation({
+    mutationFn: () => spaceService.deleteSpace(mockSpaceCode),
 
-    if (res.success) {
-      showToast({
-        text: '스페이스가 삭제되었습니다.',
-        type: 'info',
-      });
-      navigate(ROUTES.HOST.MAIN);
-      return;
-    }
-    showToast({
-      text: '스페이스 삭제에 실패했습니다.',
-      type: 'error',
-    });
-  };
+    onSuccess: (res) => {
+      closeDeleteModal();
 
-  return { deleteSpace };
+      if (res.success) {
+        showToast({ text: '스페이스가 삭제되었습니다.', type: 'info' });
+        navigate(ROUTES.HOST.MAIN);
+      } else {
+        showToast({ text: '스페이스 삭제에 실패했습니다.', type: 'error' });
+      }
+    },
+
+    onError: () => {
+      closeDeleteModal();
+      showToast({ text: '삭제 중 오류가 발생했습니다.', type: 'error' });
+    },
+  });
+
+  return { deleteSpace, isPending };
 };
 
 export default useSpaceDelete;

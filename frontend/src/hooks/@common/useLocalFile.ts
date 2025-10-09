@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { CONSTRAINTS } from '../../constants/constraints';
+import type { LocalFile } from '../../types/file.type';
 import { heicToJpegBlob, isHeic } from '../../utils/heic';
 import {
   checkInvalidFileType,
@@ -11,12 +12,6 @@ import { useToast } from './useToast';
 interface UseLocalFileProps {
   fileType: string;
   maxFileCount?: number;
-}
-
-interface LocalFile {
-  id: number;
-  originFile: File;
-  previewUrl: string;
 }
 
 const useLocalFile = ({

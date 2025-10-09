@@ -22,7 +22,7 @@ const SpaceInfoPage = () => {
   };
 
   const { spaceCode } = useParams();
-  const { deleteSpace } = useSpaceDelete({ closeDeleteModal });
+  const { deleteSpace, isPending } = useSpaceDelete({ closeDeleteModal });
   const { spaceInfo } = useSpaceInfo({
     spaceCode: spaceCode ?? '',
   });
@@ -33,6 +33,7 @@ const SpaceInfoPage = () => {
         isOpen={isDeleteModalOpen}
         onCloseModal={closeDeleteModal}
         onDelete={deleteSpace}
+        buttonDisabled={isPending}
       />
       <S.Title>스페이스 정보</S.Title>
       <Thumbnail

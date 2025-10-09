@@ -3,6 +3,7 @@ import { IoCamera } from 'react-icons/io5';
 import defaultImage from '../../../@assets/images/default-image.png';
 import { Thumbnail } from '../../../pages/MainPage.common.styles';
 import type { PreviewFile } from '../../../types/file.type';
+import { createImageErrorHandler } from '../../../utils/createImageErrorHandler';
 import * as S from './PhotoPreviewButton.styles';
 
 interface PhotoPreviewButtonProps
@@ -25,7 +26,10 @@ const PhotoPreviewButton = ({
   return (
     <>
       <S.Label htmlFor={fileInputId}>
-        <Thumbnail src={matchThumbnailImage()} />
+        <Thumbnail
+          src={matchThumbnailImage()}
+          onError={createImageErrorHandler(defaultImage)}
+        />
         <S.Overlay>
           <IoCamera />
         </S.Overlay>

@@ -7,9 +7,15 @@ interface DeleteModalProps {
   isOpen: boolean;
   onCloseModal: () => void;
   onDelete: () => void;
+  buttonDisabled: boolean;
 }
 
-const DeleteModal = ({ isOpen, onCloseModal, onDelete }: DeleteModalProps) => {
+const DeleteModal = ({
+  isOpen,
+  onCloseModal,
+  onDelete,
+  buttonDisabled,
+}: DeleteModalProps) => {
   return (
     <Modal isOpen={isOpen} onClose={onCloseModal}>
       <Modal.Backdrop />
@@ -26,7 +32,12 @@ const DeleteModal = ({ isOpen, onCloseModal, onDelete }: DeleteModalProps) => {
           </S.DeleteModalMessageContainer>
           <S.ButtonContainer>
             <Button variant="secondary" text="취소" onClick={onCloseModal} />
-            <Button variant="danger" text="삭제" onClick={onDelete} />
+            <Button
+              variant="danger"
+              text="삭제"
+              onClick={onDelete}
+              disabled={buttonDisabled}
+            />
           </S.ButtonContainer>
         </S.DeleteModalContainer>
       </Modal.Content>

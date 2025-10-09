@@ -2,8 +2,6 @@ export interface LocalFile {
   id: number;
   originFile: File;
   previewUrl: string;
-  capturedAt: string | null;
-  capacityValue: number;
 }
 
 export interface PreviewFile {

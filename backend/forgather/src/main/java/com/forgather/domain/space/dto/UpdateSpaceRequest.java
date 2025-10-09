@@ -4,13 +4,11 @@ import org.hibernate.validator.constraints.Length;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
 
 public record UpdateSpaceRequest(
 
     @Schema(description = "새로운 스페이스 이름", example = "나의 졸업전시", maxLength = 15, nullable = true)
     @Length(max = 15)
-    @NotBlank
     String name,
 
     @Schema(description = "새로운 스페이스 설명", example = "졸업전시 스페이스입니다.", maxLength = 200, nullable = true)
