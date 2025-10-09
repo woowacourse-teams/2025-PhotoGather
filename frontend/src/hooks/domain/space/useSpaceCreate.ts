@@ -1,6 +1,7 @@
 import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { spaceService } from '../../../apis/services/space/space.service';
+import { ROUTES } from '../../../constants/routes';
 import type { SpaceInfoFormData } from '../../../types/domain/space.type';
 import type { CreateFunnelForm } from '../../../types/funnel.type';
 import { useToast } from '../../@common/useToast';
@@ -9,7 +10,7 @@ export const useSpaceCreate = () => {
   const navigate = useNavigate();
   const { showToast } = useToast();
 
-  // TODO: usePatchSpaceInfo에 있는 것과 통합 필요한지?
+  // TODO: usePatchSpaceInfo에 있는 것과 통합 필요한지? 차이점은 updatedData 처리 유무임
   const createFormData = (data: Partial<SpaceInfoFormData>, image?: File) => {
     const formData = new FormData();
     formData.append(
@@ -50,7 +51,7 @@ export const useSpaceCreate = () => {
     try {
       const spaceCode = await fetchCreateSpace(formData);
       if (!spaceCode) return;
-      navigate('../share', { state: { spaceCode } });
+      navigate(ROUTES.HOST.SHARE, { state: { spaceCode } });
     } catch (error) {
       showToast({
         text: '스페이스 생성에 실패했습니다',

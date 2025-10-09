@@ -3,6 +3,8 @@ export const ROUTES = {
     MY_PAGE: '/host/my-page',
     WORK_DETAIL: '/host/work-detail',
     WORK_FORM: '/host/work-form',
+    CREATE_SPACE: '/host/create-space',
+    SHARE: '/host/share',
   },
   GUEST: {
     MAIN: '/guest/main',
