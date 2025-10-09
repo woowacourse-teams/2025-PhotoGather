@@ -1,6 +1,10 @@
 import { Activity, useState } from 'react';
 import { IoSettingsSharp, IoShareOutline } from 'react-icons/io5';
-import { Outlet, useMatches } from 'react-router-dom';
+import { Outlet, useMatches, useNavigate, useParams } from 'react-router-dom';
+import {
+  createSpaceInfoRoute,
+  createSpaceMainRoute,
+} from '../../../../constants/routes';
 import type { AppRouteObject } from '../../../../types/route.type';
 import Header from '../../../@common/header/Header';
 import SpaceShareModal from '../../../specific/modal/spaceShareModal/SpaceShareModal';
@@ -8,6 +12,9 @@ import * as S from './Layout.styles';
 
 const Layout = () => {
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
+  const navigate = useNavigate();
+  const { spaceCode } = useParams();
+
   const openShareModal = () => {
     setIsShareModalOpen(true);
   };
@@ -22,7 +29,7 @@ const Layout = () => {
     },
     settings: {
       icon: <IoSettingsSharp />,
-      onClick: () => console.log('Settings clicked'),
+      onClick: () => navigate(createSpaceInfoRoute(spaceCode ?? '')),
     },
   };
 
@@ -37,7 +44,11 @@ const Layout = () => {
   return (
     <>
       <Activity mode={isNoHeader ? 'hidden' : 'visible'}>
-        <Header mode={isDarkPage ? 'dark' : 'light'} icons={matchedIcons} />
+        <Header
+          mode={isDarkPage ? 'dark' : 'light'}
+          icons={matchedIcons}
+          onLogoClick={() => navigate(createSpaceMainRoute(spaceCode ?? ''))}
+        />
       </Activity>
       <S.Container $isDarkPage={isDarkPage}>
         <SpaceShareModal isOpen={isShareModalOpen} onClose={closeShareModal} />
