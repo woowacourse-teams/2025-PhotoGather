@@ -1,10 +1,7 @@
 import { Activity, useState } from 'react';
 import { IoSettingsSharp, IoShareOutline } from 'react-icons/io5';
 import { Outlet, useMatches, useNavigate, useParams } from 'react-router-dom';
-import {
-  createSpaceInfoRoute,
-  createSpaceMainRoute,
-} from '../../../../constants/routes';
+import { createSpaceInfoRoute, ROUTES } from '../../../../constants/routes';
 import type { AppRouteObject } from '../../../../types/route.type';
 import Header from '../../../@common/header/Header';
 import SpaceShareModal from '../../../specific/modal/spaceShareModal/SpaceShareModal';
@@ -47,7 +44,7 @@ const Layout = () => {
         <Header
           mode={isDarkPage ? 'dark' : 'light'}
           icons={matchedIcons}
-          onLogoClick={() => navigate(createSpaceMainRoute(spaceCode ?? ''))}
+          onLogoClick={() => navigate(ROUTES.MAIN)}
         />
       </Activity>
       <S.Container $isDarkPage={isDarkPage}>

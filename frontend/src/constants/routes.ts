@@ -1,4 +1,5 @@
 export const ROUTES = {
+  MAIN: '/',
   HOST: {
     MY_PAGE: '/host/my-page',
     CREATE_SPACE: '/host/create-space',
