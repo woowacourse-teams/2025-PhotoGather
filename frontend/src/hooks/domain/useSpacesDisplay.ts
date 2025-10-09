@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import type { MySpace } from '../../types/space.type';
+import type { MySpace } from '../../types/domain/space.type';
 
 type SortType = 'latest' | 'guestCount';
 
