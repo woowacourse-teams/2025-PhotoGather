@@ -99,13 +99,13 @@ const EditForm = () => {
             text="공개"
             type="button"
             variant={watch('isPublic') === true ? 'primary' : 'secondary'}
-            onClick={() => setValue('isPublic', true)}
+            onClick={() => setValue('isPublic', true, { shouldDirty: true })}
           />
           <Button
             text="비공개"
             type="button"
             variant={watch('isPublic') === false ? 'primary' : 'secondary'}
-            onClick={() => setValue('isPublic', false)}
+            onClick={() => setValue('isPublic', false, { shouldDirty: true })}
           />
         </S.PublicButtonContainer>
       </S.ContentContainer>
