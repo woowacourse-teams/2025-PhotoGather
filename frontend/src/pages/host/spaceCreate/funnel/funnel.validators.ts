@@ -7,11 +7,11 @@ import {
 export const funnelValidators = {
   profileImage: () => {},
   name: (value: string) => {
-    checkMaxLength(value, CONSTRAINTS.NAME_MAX_LENGTH);
+    checkMaxLength(value, CONSTRAINTS.MAX_LENGTH.SPACE.NAME);
   },
   visibility: () => {},
   description: (value: string) => {
-    checkMaxLength(value, CONSTRAINTS.DESCRIPTION_MAX_LENGTH);
+    checkMaxLength(value, CONSTRAINTS.MAX_LENGTH.SPACE.DESCRIPTION);
   },
   email: (value: string) => {
     checkEmailForm(value);
