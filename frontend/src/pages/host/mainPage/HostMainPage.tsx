@@ -1,22 +1,32 @@
 import { IoLogoInstagram } from 'react-icons/io5';
 import { MdEmail } from 'react-icons/md';
+import { useParams } from 'react-router-dom';
 import FooterLogo from '../../../@assets/logo/footer-logo.svg?react';
 import Button from '../../../components/@common/buttons/button/Button';
 import IconButton from '../../../components/@common/buttons/iconButton/IconButton';
+import Thumbnail from '../../../components/@common/thumbnail/Thumbnail';
+import useSpaceInfo from '../../../hooks/domain/space/useSpaceInfo';
 import { DividerLine } from '../../../styles/@common/DividerLine.styles';
 import { createInstagramUrl } from '../../../utils/createExternalLinks';
 import * as MainPageStyles from '../../MainPage.common.styles';
 import { mockData } from '../../mockData';
 
 const HostMainPage = () => {
+  const { spaceCode } = useParams();
+  const { spaceInfo } = useSpaceInfo({
+    spaceCode: spaceCode ?? '',
+  });
+
   return (
     <MainPageStyles.Wrapper>
       <MainPageStyles.ProfileContainer>
-        <MainPageStyles.Thumbnail src={mockData.thumbnail} />
+        <Thumbnail
+          src={`${import.meta.env.VITE_IMAGE_BASE_URL}${spaceInfo.spacePhoto.path}`}
+        />
         <MainPageStyles.InfoContainer>
-          <MainPageStyles.Name>{mockData.title}</MainPageStyles.Name>
+          <MainPageStyles.Name>{spaceInfo.name}</MainPageStyles.Name>
           <MainPageStyles.Introduction>
-            {mockData.introduction}
+            {spaceInfo.description}
           </MainPageStyles.Introduction>
         </MainPageStyles.InfoContainer>
       </MainPageStyles.ProfileContainer>
