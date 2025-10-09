@@ -2,7 +2,6 @@ import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { spaceService } from '../../../apis/services/space/space.service';
 import { createSpaceMainRoute } from '../../../constants/routes';
-import { mockSpaceCode } from '../../../pages/mockData';
 import { useToast } from '../../@common/useToast';
 
 interface UseSpaceDeleteProps {
@@ -18,7 +17,7 @@ const useSpaceDelete = ({
   const navigate = useNavigate();
 
   const { mutate: deleteSpace, isPending } = useMutation({
-    mutationFn: () => spaceService.deleteSpace(mockSpaceCode),
+    mutationFn: () => spaceService.deleteSpace(spaceCode),
 
     onSuccess: (res) => {
       closeDeleteModal();
