@@ -39,8 +39,7 @@ public class Product extends BaseTimeEntity {
     @Column(name = "author_name", nullable = false)
     private String authorName;
 
-    // 1000자 제한이나, 이모지를 고려해 4000자
-    @Column(name = "description", length = 4000, nullable = false)
+    @Column(name = "description", length = 1000, nullable = false)
     private String description;
 
     /**
