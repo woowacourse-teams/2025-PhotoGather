@@ -27,10 +27,4 @@ public class SpacePhoto extends Photo {
     public static SpacePhoto empty() {
         return new SpacePhoto(null, "", "", 0L);
     }
-
-    public void update(String originalName, String path, Long capacity) {
-        this.originalName = originalName;
-        this.path = path;
-        this.capacity = capacity;
-    }
 }

@@ -94,17 +94,6 @@ public class SpaceService {
     }
 
     /**
-     * 삭제 요청이 있는 경우: 기존 사진 삭제 후 새 파일이 있으면 업로드
-     */
-    private void handlePhotoWithDeleteRequest(Space space, MultipartFile file, String spaceCode) {
-        if (file == null || file.isEmpty()) {
-            deleteExistingPhoto(space);
-        } else {
-            updateExistingPhoto(space, file, spaceCode);
-        }
-    }
-
-    /**
      * 삭제 요청이 없는 경우: 새 파일이 있으면 업로드 (기존 사진이 없어야 함)
      */
     private void handlePhotoWithoutDeleteRequest(Space space, MultipartFile file, String spaceCode) {
@@ -114,33 +103,15 @@ public class SpaceService {
     }
 
     /**
-     * 기존 사진만 삭제
+     * 삭제 요청이 있는 경우: 기존 사진을 삭제하고, 파일이 존재하면 업로드
      */
-    private void deleteExistingPhoto(Space space) {
-        SpacePhoto existingPhoto = spacePhotoRepository.findBySpace(space)
-            .orElseThrow(() -> new BaseException("삭제할 사진이 존재하지 않습니다."));
-
-        String path = existingPhoto.getPath();
-        spacePhotoRepository.delete(existingPhoto);
-        contentsStorage.deleteContent(path);
+    private void handlePhotoWithDeleteRequest(Space space, MultipartFile file, String spaceCode) {
+        deleteExistingPhoto(space);
+        if (file != null && !file.isEmpty()) {
+            uploadNewPhoto(space, file, spaceCode);
+        }
     }
 
-    /**
-     * 기존 사진 삭제 후 새 사진 업로드 (수정)
-     */
-    private void updateExistingPhoto(Space space, MultipartFile file, String spaceCode) {
-        SpacePhoto existingPhoto = spacePhotoRepository.findBySpace(space)
-            .orElseThrow(() -> new BaseException("삭제할 사진이 존재하지 않습니다."));
-
-        String newPath = uploadSpacePicture(file, spaceCode);
-        String oldPath = existingPhoto.getPath();
-        existingPhoto.update(file.getOriginalFilename(), newPath, file.getSize());
-        contentsStorage.deleteContent(oldPath);
-    }
-
-    /**
-     * 새 사진 업로드 (기존 사진이 없어야 함)
-     */
     private void uploadNewPhoto(Space space, MultipartFile file, String spaceCode) {
         spacePhotoRepository.findBySpace(space)
             .ifPresent(photo -> {
@@ -149,6 +120,15 @@ public class SpaceService {
 
         String path = uploadSpacePicture(file, spaceCode);
         spacePhotoRepository.save(new SpacePhoto(space, file.getOriginalFilename(), path, file.getSize()));
+    }
+
+    private void deleteExistingPhoto(Space space) {
+        SpacePhoto existingPhoto = spacePhotoRepository.findBySpace(space)
+            .orElseThrow(() -> new BaseException("삭제할 스페이스 사진이 존재하지 않습니다."));
+
+        String path = existingPhoto.getPath();
+        spacePhotoRepository.delete(existingPhoto);
+        contentsStorage.deleteContent(path);
     }
 
     @Transactional
