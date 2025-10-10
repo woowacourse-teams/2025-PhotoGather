@@ -43,7 +43,14 @@ export const useSpaceCreate = () => {
   });
 
   const createSpace = async (createFunnelForm: CreateFunnelForm) => {
-    const { profileImage, ...createFunnelRequest } = createFunnelForm;
+    const { profileImage, ...rest } = createFunnelForm;
+    const createFunnelRequest: Partial<SpaceInfoFormData> = {
+      name: rest.name,
+      isPublic: rest.visibility === 'PUBLIC',
+      description: rest.description,
+      email: rest.email,
+      instagramUsername: rest.instagram,
+    };
 
     const formData = createFormData(
       createFunnelRequest,
