@@ -126,7 +126,12 @@ const useLocalFile = ({
       await addPreviewUrlsFromFiles(validFiles);
     } catch (error) {
       console.error('파일 업로드 중 오류 발생:', error);
-      showToast({ text: '파일 업로드에 실패했어요. 다시 시도해주세요.' });
+      showToast({
+        text:
+          error instanceof Error
+            ? error.message
+            : '파일 업로드 중 오류가 발생했습니다.',
+      });
     }
   };
 
