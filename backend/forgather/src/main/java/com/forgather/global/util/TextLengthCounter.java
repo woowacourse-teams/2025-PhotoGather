@@ -12,7 +12,7 @@ public class TextLengthCounter {
      */
     public static int count(String text) {
         if (text == null) {
-            throw new IllegalArgumentException("");
+            throw new IllegalArgumentException("텍스트가 존재하지 않습니다.");
         }
         BreakIterator iterator = BreakIterator.getCharacterInstance();
         iterator.setText(text);

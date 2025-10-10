@@ -1,6 +1,7 @@
 package com.forgather.global.util;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -17,7 +18,7 @@ class TextLengthCounterTest {
     @ParameterizedTest
     void countEmoji(String emojis, int expectedLength) {
         // given
-        String text = "1" +emojis;
+        String text = "1" + emojis;
 
         // when
         int result = TextLengthCounter.count(text);
@@ -51,5 +52,13 @@ class TextLengthCounterTest {
 
         // then
         assertThat(result).isZero();
+    }
+
+    @DisplayName("문자열 길이 계산에 null은 들어올 수 없다.")
+    @Test
+    void countNullText() {
+        // when & then
+        assertThatThrownBy(() -> TextLengthCounter.count(null))
+            .isInstanceOf(IllegalArgumentException.class);
     }
 }
