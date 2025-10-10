@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 
 export const Wrapper = styled.div`
   width: 100%;
-  height: ${({ theme }) => `calc(100dvh - ${parseInt(theme.layout.padding.topBottom, 10) * 2}px)`};
+  min-height: ${({ theme }) => `calc(100dvh - ${parseInt(theme.layout.padding.topBottom, 10) * 2}px)`};
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -15,4 +15,6 @@ export const TopContainer = styled.div`
 
 export const ContentContainer = styled.div`
   flex-grow: 1;
+  display: flex;
+  flex-direction: column;
 `;

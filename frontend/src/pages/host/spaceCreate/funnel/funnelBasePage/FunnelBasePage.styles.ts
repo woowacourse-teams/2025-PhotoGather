@@ -12,6 +12,8 @@ export const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  flex-grow: 1;
+  gap: 32px;
 `;
 
 export const TopContainer = styled.div`
