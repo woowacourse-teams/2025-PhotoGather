@@ -104,9 +104,6 @@ const HostWorkDetail = () => {
         <S.EditButton onClick={() => navigate(createWorkEditRoute(spaceCode))}>
           수정
         </S.EditButton>
-        <S.DeleteButton onClick={() => setIsDeleteModalOpen(true)}>
-          삭제
-        </S.DeleteButton>
       </S.TopButtonContainer>
       <S.Wrapper>
         <C.WorkContainer>
