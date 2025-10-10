@@ -41,16 +41,16 @@ public class Space extends BaseTimeEntity {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "description")
+    @Column(name = "description", nullable = false)
     private String description;
 
     @Column(name = "is_public", nullable = false)
     private boolean isPublic = false;
 
-    @Column(name = "instagram_username")
+    @Column(name = "instagram_username", nullable = false)
     private String instagramUsername;
 
-    @Column(name = "email")
+    @Column(name = "email", nullable = false)
     private String email;
 
     /**
@@ -58,10 +58,10 @@ public class Space extends BaseTimeEntity {
      *
      * @param code              스페이스 코드 (필수, 10자)
      * @param name              스페이스 이름 (필수, 최대 15자)
-     * @param description       스페이스 설명 (선택, 최대 200자)
+     * @param description       스페이스 설명 (필수, 최대 200자)
      * @param isPublic          스페이스 공개 여부 (필수)
-     * @param instagramUsername 인스타그램 아이디 (선택, 최대 30자)
-     * @param email             이메일 (선택, 최대 50자)
+     * @param instagramUsername 인스타그램 아이디 (필수, 최대 30자)
+     * @param email             이메일 (필수, 최대 50자)
      */
     public Space(String code, String name, String description, boolean isPublic, String instagramUsername,
         String email) {
