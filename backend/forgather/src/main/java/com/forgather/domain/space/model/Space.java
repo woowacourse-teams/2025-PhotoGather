@@ -28,7 +28,7 @@ public class Space extends BaseTimeEntity {
     private static final int MAX_INSTAGRAM_USERNAME_LENGTH = 30;
     private static final int MAX_EMAIL_LENGTH = 50;
     private static final Pattern EMAIL_PATTERN = Pattern.compile(
-        "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$"
+        "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,63}$"
     );
 
     @Id
