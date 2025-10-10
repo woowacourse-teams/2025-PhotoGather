@@ -33,6 +33,7 @@ public class GuestBookCard extends BaseTimeEntity {
     @JoinColumn(name = "guest_id", nullable = false)
     private Guest guest;
 
-    @Column(name = "message", nullable = false)
+    // 300자 제한이나, 확장과 이모지를 고려해서 2000
+    @Column(name = "message", length = 2000, nullable = false)
     private String message;
 }
