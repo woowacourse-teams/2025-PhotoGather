@@ -4,21 +4,27 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 class TextLengthCounterTest {
 
     @DisplayName("이모지의 길이를 1로 계산한다.")
-    @Test
-    void countEmoji() {
+    @CsvSource(value = {
+        "😀😀😀😀😀😀😀😀😀,10",
+        "👨‍👩‍👧‍👦👨‍👩‍👧‍👦👨‍👩‍👧‍👦👨‍👩‍👧‍👦👨‍👩‍👧‍👦👨‍👩‍👧‍👦👨‍👩‍👧‍👦👨‍👩‍👧‍👦👨‍👩‍👧‍👦,10"
+    })
+    @ParameterizedTest
+    void countEmoji(String emojis, int expectedLength) {
         // given
-        String twoEmojis = "1" + "😀";
+        String text = "1" +emojis;
 
         // when
-        int result = TextLengthCounter.count(twoEmojis);
+        int result = TextLengthCounter.count(text);
 
         // then
-        assertThat(twoEmojis.length()).isNotEqualTo(2);
-        assertThat(result).isEqualTo(2);
+        assertThat(text.length()).isNotEqualTo(expectedLength);
+        assertThat(result).isEqualTo(expectedLength);
     }
 
     @DisplayName("공백의 길이를 1로 계산한다.")
