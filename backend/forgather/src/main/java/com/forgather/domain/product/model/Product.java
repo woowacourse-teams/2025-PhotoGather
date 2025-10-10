@@ -30,13 +30,13 @@ public class Product extends BaseTimeEntity {
     @JoinColumn(name = "space_id", nullable = false)
     private Space space;
 
-    @Column(name = "title",  nullable = false)
+    @Column(name = "title", nullable = false)
     private String title;
 
-    @Column(name = "category")
+    @Column(name = "category", nullable = false)
     private String category;
 
-    @Column(name = "author_name")
+    @Column(name = "author_name", nullable = false)
     private String authorName;
 
     @Column(name = "description", nullable = false)
@@ -45,36 +45,48 @@ public class Product extends BaseTimeEntity {
     /**
      * 작품을 생성합니다.
      *
-     * @param space 작품이 속한 스페이스 (필수)
-     * @param title 작품명 (필수, 최대 50자)
-     * @param category 카테고리 (선택, 최대 20자)
-     * @param authorName 작가명 (선택, 최대 20자)
+     * @param space       작품이 속한 스페이스 (필수)
+     * @param title       작품명 (필수, 최대 50자)
+     * @param category    카테고리 (필수, 최대 20자)
+     * @param authorName  작가명 (필수, 최대 20자)
      * @param description 작품 설명 (필수, 최대 1000자)
      * @throws BaseNullPointerException 필수 필드가 null인 경우
-     * @throws BaseException 필드 값이 유효하지 않은 경우
+     * @throws BaseException            필드 값이 유효하지 않은 경우
      */
     public Product(Space space, String title, String category, String authorName, String description) {
-        validateRequiredFields(space, title, description);
+        validateRequiredFields(space, title, category, authorName, description);
         validateTitle(title);
         validateCategory(category);
         validateAuthorName(authorName);
         validateDescription(description);
         this.space = space;
         this.title = title;
-        this.category = category;
-        this.authorName = authorName;
+        this.category = convertBlankToEmptyString(category);
+        this.authorName = convertBlankToEmptyString(authorName);
         this.description = description;
     }
 
-    private void validateRequiredFields(Space space, String title, String description) {
+    private void validateRequiredFields(
+        Space space,
+        String title,
+        String category,
+        String authorName,
+        String description
+    ) {
         if (space == null) {
-            throw new BaseNullPointerException("스페이스는 필수입니다.");
+            throw new BaseNullPointerException("스페이스는 null일 수 없습니다.");
         }
         if (title == null) {
-            throw new BaseNullPointerException("작품명은 필수입니다.");
+            throw new BaseNullPointerException("작품명은 null일 수 없습니다.");
+        }
+        if (category == null) {
+            throw new BaseNullPointerException("작품 카테고리는 null일 수 없습니다.");
+        }
+        if (authorName == null) {
+            throw new BaseNullPointerException("작가명은 null일 수 없습니다.");
         }
         if (description == null) {
-            throw new BaseNullPointerException("작품 설명은 필수입니다.");
+            throw new BaseNullPointerException("작품 설명은 null일 수 없습니다.");
         }
     }
 
@@ -82,9 +94,9 @@ public class Product extends BaseTimeEntity {
      * 작품 정보를 부분 업데이트합니다.
      * null인 필드는 업데이트하지 않습니다.
      *
-     * @param title 작품명 (선택)
-     * @param category 카테고리 (선택)
-     * @param authorName 작가명 (선택)
+     * @param title       작품명 (선택)
+     * @param category    카테고리 (선택)
+     * @param authorName  작가명 (선택)
      * @param description 작품 설명 (선택)
      * @throws BaseException 필드 값이 유효하지 않은 경우
      */
@@ -95,11 +107,11 @@ public class Product extends BaseTimeEntity {
         }
         if (category != null) {
             validateCategory(category);
-            this.category = category;
+            this.category = convertBlankToEmptyString(category);
         }
         if (authorName != null) {
             validateAuthorName(authorName);
-            this.authorName = authorName;
+            this.authorName = convertBlankToEmptyString(authorName);
         }
         if (description != null) {
             validateDescription(description);
@@ -117,24 +129,12 @@ public class Product extends BaseTimeEntity {
     }
 
     private void validateCategory(String category) {
-        if (category == null) {
-            return;
-        }
-        if (category.isBlank()) {
-            throw new BaseException("작품 카테고리는 공백만 입력할 수 없습니다.");
-        }
         if (category.length() > 20) {
             throw new BaseException("작품 카테고리는 최대 20자까지 입력 가능합니다.");
         }
     }
 
     private void validateAuthorName(String authorName) {
-        if (authorName == null) {
-            return;
-        }
-        if (authorName.isBlank()) {
-            throw new BaseException("작가명은 공백만 입력할 수 없습니다.");
-        }
         if (authorName.length() > 20) {
             throw new BaseException("작가명은 최대 20자까지 입력 가능합니다.");
         }
@@ -147,5 +147,12 @@ public class Product extends BaseTimeEntity {
         if (description.length() > 1000) {
             throw new BaseException("작품 설명은 최대 1000자까지 입력 가능합니다.");
         }
+    }
+
+    private String convertBlankToEmptyString(String string) {
+        if (string.isBlank()) {
+            return "";
+        }
+        return string;
     }
 }

@@ -1,128 +1,118 @@
+import { useForm } from 'react-hook-form';
 import { IoClose } from 'react-icons/io5';
+import { useParams } from 'react-router-dom';
 import Button from '../../../components/@common/buttons/button/Button';
 import TextareaInput from '../../../components/@common/inputs/textareaInput/TextareaInput';
 import TextInput from '../../../components/@common/inputs/textInput/TextInput';
 import PhotoUploadButton from '../../../components/specific/photoUploadButton/PhotoUploadButton';
-import useForm from '../../../hooks/@common/useForm';
+import { CONSTRAINTS } from '../../../constants/constraints';
 import useLocalFile from '../../../hooks/@common/useLocalFile';
+import {
+  useWorkForm,
+  type WorkFormData,
+} from '../../../hooks/domain/useWorkForm';
+import { buildThumbnailUrl } from '../../../utils/buildThumbnailUrl';
 import { calculateValidLength } from '../../../utils/grapheme';
 import * as S from './WorkForm.styles';
-
-//TODO: react-hook-form 도입 이후 삭제 예정
-interface WorkFormData {
-  title: string;
-  category: string;
-  designer: string;
-  description: string;
-}
-
-const MAX_LENGTH = {
-  title: 50,
-  category: 20,
-  designer: 20,
-  description: 1000,
-} as const;
+import { workFormValidators } from './workForm.validators';
 
 const WorkForm = () => {
-  const { formData, handleChange } = useForm<WorkFormData>({
-    initialData: {
+  const { spaceCode } = useParams<{ spaceCode: string }>();
+
+  const {
+    register,
+    handleSubmit,
+    watch,
+    reset,
+    formState: { errors, isValid: isAllValid },
+  } = useForm<WorkFormData>({
+    mode: 'onChange',
+    defaultValues: {
       title: '',
       category: '',
       designer: '',
       description: '',
     },
-    validators: {
-      title: (value: string) => {
-        if (calculateValidLength(value) > MAX_LENGTH.title) {
-          throw new Error(`작품명은 ${MAX_LENGTH.title}자 이내로 입력해주세요`);
-        }
-      },
-      category: (value: string) => {
-        if (calculateValidLength(value) > MAX_LENGTH.category) {
-          throw new Error(
-            `카테고리는 ${MAX_LENGTH.category}자 이내로 입력해주세요`,
-          );
-        }
-      },
-      designer: (value: string) => {
-        if (calculateValidLength(value) > MAX_LENGTH.designer) {
-          throw new Error(
-            `작가명은 ${MAX_LENGTH.designer}자 이내로 입력해주세요`,
-          );
-        }
-      },
-      description: (value: string) => {
-        if (calculateValidLength(value) > MAX_LENGTH.description) {
-          throw new Error(
-            `작품 설명은 ${MAX_LENGTH.description}자 이내로 입력해주세요`,
-          );
-        }
-      },
-    },
-    onSubmit: () => {
-      // TODO: 작품 소개 등록 로직
-    },
   });
 
-  const { previewFile, deleteFile, handleFilesUploadClick, handleFilesDrop } =
-    useLocalFile({ fileType: 'image' });
+  const {
+    localFiles,
+    previewFile,
+    deleteFile,
+    handleFilesUploadClick,
+    handleFilesDrop,
+  } = useLocalFile({ fileType: 'image' });
 
-  const isFormValid =
-    formData.title.trim() !== '' && formData.description.trim() !== '';
+  const { isEditMode, existingPhotos, handleDeleteExistingPhoto, submitWork } =
+    useWorkForm({ spaceCode, reset });
+
+  const onValid = async (data: WorkFormData) => {
+    const files = localFiles.map((file) => file.originFile);
+    await submitWork(data, files);
+  };
+
+  if (!spaceCode) {
+    return null;
+  }
+
+  const totalPhotos = existingPhotos.length + previewFile.length;
+  const remainingSlots = 10 - totalPhotos;
 
   return (
     <S.Wrapper>
-      <S.TitleContainer>작품 소개 등록</S.TitleContainer>
-      <S.FormContainer>
+      <S.TitleContainer>
+        {isEditMode ? '작품 소개 수정' : '작품 소개 등록'}
+      </S.TitleContainer>
+      <S.FormContainer onSubmit={handleSubmit(onValid)}>
         <S.FormLabelContainer>
           <TextInput
+            {...register('title', {
+              validate: workFormValidators.title,
+            })}
             label="작품명"
             isRequired
-            name="title"
-            maxCount={MAX_LENGTH.title}
-            value={formData.title}
-            validLength={calculateValidLength(formData.title)}
-            onChange={handleChange}
+            validLength={calculateValidLength(watch('title'))}
+            maxCount={CONSTRAINTS.MAX_LENGTH.WORK.TITLE}
             placeholder="작품명을 입력하세요"
+            errorMessage={errors.title?.message}
           />
         </S.FormLabelContainer>
 
         <S.FormLabelContainer>
           <TextInput
+            {...register('category', {
+              validate: workFormValidators.category,
+            })}
             label="카테고리"
-            name="category"
-            maxCount={MAX_LENGTH.category}
-            value={formData.category}
-            validLength={calculateValidLength(formData.category)}
-            onChange={handleChange}
+            maxCount={CONSTRAINTS.MAX_LENGTH.WORK.CATEGORY}
             placeholder="카테고리를 입력하세요"
+            validLength={calculateValidLength(watch('category'))}
           />
         </S.FormLabelContainer>
 
         <S.FormLabelContainer>
           <TextInput
+            {...register('designer', {
+              validate: workFormValidators.designer,
+            })}
             label="작가명"
-            name="designer"
-            maxCount={MAX_LENGTH.designer}
-            value={formData.designer}
-            validLength={calculateValidLength(formData.designer)}
-            onChange={handleChange}
+            maxCount={CONSTRAINTS.MAX_LENGTH.WORK.DESIGNER}
+            validLength={calculateValidLength(watch('designer'))}
             placeholder="작가명을 입력하세요"
           />
         </S.FormLabelContainer>
 
         <S.FormLabelContainer>
-          {/* <S.LabelContainer>작품 설명 *</S.LabelContainer> */}
           <TextareaInput
+            {...register('description', {
+              validate: workFormValidators.description,
+            })}
             label="작품 설명"
             isRequired
-            name="description"
-            maxCount={MAX_LENGTH.description}
-            value={formData.description}
-            validLength={calculateValidLength(formData.description)}
-            onChange={handleChange}
+            maxCount={CONSTRAINTS.MAX_LENGTH.WORK.DESCRIPTION}
             placeholder="작품 설명을 입력하세요"
             rows={6}
+            validLength={calculateValidLength(watch('description'))}
           />
         </S.FormLabelContainer>
 
@@ -135,42 +125,53 @@ const WorkForm = () => {
             onDrop={handleFilesDrop}
           />
           <S.ImageGridContainer>
-            {Array.from({ length: 10 }).map((_, index) => {
-              const imageData = previewFile[index];
-              return (
-                // biome-ignore lint/suspicious/noArrayIndexKey: index 무시
-                <S.ImageGridItem key={index}>
-                  {imageData ? (
-                    <>
-                      <S.GridImage
-                        src={imageData.previewUrl}
-                        alt={`작품 사진 ${index + 1}`}
-                      />
-                      <S.DeleteButton
-                        type="button"
-                        onClick={() => deleteFile(imageData.id)}
-                        aria-label="사진 삭제"
-                      >
-                        <IoClose size={20} />
-                      </S.DeleteButton>
-                    </>
-                  ) : (
-                    <S.EmptyGridItem>{index + 1}</S.EmptyGridItem>
-                  )}
-                </S.ImageGridItem>
-              );
-            })}
+            {existingPhotos.map((photo, index) => (
+              <S.ImageGridItem key={`existing-${photo.id}`}>
+                <S.GridImage
+                  src={buildThumbnailUrl(photo.path, '800')}
+                  alt={`작품 사진 ${index + 1}`}
+                />
+                <S.DeleteButton
+                  type="button"
+                  onClick={() => handleDeleteExistingPhoto(photo.id)}
+                  aria-label="사진 삭제"
+                >
+                  <IoClose size={20} />
+                </S.DeleteButton>
+              </S.ImageGridItem>
+            ))}
+            {previewFile.map((imageData, index) => (
+              <S.ImageGridItem key={`new-${imageData.id}`}>
+                <S.GridImage
+                  src={imageData.previewUrl}
+                  alt={`작품 사진 ${existingPhotos.length + index + 1}`}
+                />
+                <S.DeleteButton
+                  type="button"
+                  onClick={() => deleteFile(imageData.id)}
+                  aria-label="사진 삭제"
+                >
+                  <IoClose size={20} />
+                </S.DeleteButton>
+              </S.ImageGridItem>
+            ))}
+            {Array.from({ length: remainingSlots }).map((_, index) => (
+              // biome-ignore lint/suspicious/noArrayIndexKey: index is used as a key
+              <S.ImageGridItem key={`empty-${index}`}>
+                <S.EmptyGridItem>{totalPhotos + index + 1}</S.EmptyGridItem>
+              </S.ImageGridItem>
+            ))}
           </S.ImageGridContainer>
         </S.FormLabelContainer>
+        <S.ButtonContainer>
+          <Button
+            type="submit"
+            text={isEditMode ? '작품 소개 수정하기' : '작품 소개 등록하기'}
+            variant="tertiary"
+            disabled={!isAllValid}
+          />
+        </S.ButtonContainer>
       </S.FormContainer>
-      <S.ButtonContainer>
-        <Button
-          text="작품 소개 등록하기"
-          onClick={() => {}}
-          variant="tertiary"
-          disabled={!isFormValid}
-        />
-      </S.ButtonContainer>
     </S.Wrapper>
   );
 };

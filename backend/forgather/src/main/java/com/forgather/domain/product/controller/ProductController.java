@@ -60,7 +60,7 @@ public class ProductController {
      *  검증 걸릴 시 업로드 사진 삭제
      * dto단 검증
      */
-    @Operation(summary = "작품 수정")
+    @Operation(summary = "작품 수정", description = "변경 사항이 없는 데이터는 json에 포함하지 않거나 null로 요청한다.")
     @PatchMapping
     public ResponseEntity<ProductResponse> update(
         @PathVariable(value = "spaceCode") String spaceCode,

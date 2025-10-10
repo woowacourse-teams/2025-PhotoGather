@@ -10,6 +10,7 @@ export const ContentContainer = styled.div`
 export const Label = styled.dt`
   width: 100%;
   text-align: left;
+  min-height: 24px;
   ${({ theme }) => ({
     ...theme.typography.bodyLarge,
   })}
@@ -19,8 +20,18 @@ export const Label = styled.dt`
 export const Value = styled.dd`
   width: 100%;
   text-align: left;
+  min-height: 24px;
   ${({ theme }) => ({
     ...theme.typography.bodyRegular,
   })}
   color: ${({ theme }) => theme.colors.gray04};
+`;
+
+export const NoValueText = styled.dd`
+  width: 100%;
+  text-align: left;
+  ${({ theme }) => ({
+    ...theme.typography.bodyRegular,
+  })}
+  color: ${({ theme }) => theme.colors.gray03};
 `;

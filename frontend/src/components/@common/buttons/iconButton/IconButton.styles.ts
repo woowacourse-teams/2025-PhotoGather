@@ -24,8 +24,8 @@ export const IconButtonStyles = {
     background-color: ${theme.colors.gray06};
     color: ${theme.colors.white};
     svg {
-      &:active{
-        scale: 0.95
+      &:active {
+        scale: 0.95;
       }
     }
   `,

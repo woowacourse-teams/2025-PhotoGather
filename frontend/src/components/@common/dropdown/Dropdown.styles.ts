@@ -52,8 +52,7 @@ export const DropdownMenu = styled.ul`
 export const DropdownItem = styled.li<{ isSelected: boolean }>`
   padding: 10px 16px;
   ${({ theme }) => theme.typography.captionSmall};
-  color: ${({ theme, isSelected }) =>
-    isSelected ? theme.colors.white : theme.colors.gray06};
+  color: ${({ theme, isSelected }) => (isSelected ? theme.colors.white : theme.colors.gray06)};
   background-color: ${({ theme, isSelected }) =>
     isSelected ? theme.colors.gray06 : theme.colors.white};
   cursor: pointer;

@@ -9,7 +9,11 @@ const InfoRow = ({ label, value }: InfoRowProps) => {
   return (
     <S.ContentContainer>
       <S.Label>{label}</S.Label>
-      <S.Value>{value}</S.Value>
+      {value === '' ? (
+        <S.NoValueText>(미입력)</S.NoValueText>
+      ) : (
+        <S.Value>{value}</S.Value>
+      )}
     </S.ContentContainer>
   );
 };

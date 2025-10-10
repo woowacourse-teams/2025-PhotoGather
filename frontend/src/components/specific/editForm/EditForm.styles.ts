@@ -16,7 +16,7 @@ export const ContentContainer = styled.div`
 `;
 
 export const PublicButtonContainer = styled.div`
- display: flex;
- gap: 8px;
- width: 100%;
+  display: flex;
+  gap: 8px;
+  width: 100%;
 `;

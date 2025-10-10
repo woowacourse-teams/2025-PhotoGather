@@ -1,30 +1,24 @@
-import type { ApiResponse, Method } from '../types/api.type';
+import type { ApiResponse, RequestOptions } from '../types/api.type';
 import { createQueryString } from '../utils/createQueryString';
 import { BASE_URL } from './config';
-
-const defaultHeaders: Record<string, string> = {
-  'Content-Type': 'application/json',
-};
+import { matchBody, matchHeaders } from './helper';
 
 const request = async <T>(
   endpoint: string,
-  options: {
-    method: Method;
-    body?: unknown;
-    params?: Record<string, unknown>;
-  },
+  options: RequestOptions,
 ): Promise<ApiResponse<T>> => {
-  const { method, body, params } = options;
+  const { method, body, params, headers } = options;
   const url = `${BASE_URL}${endpoint}${createQueryString(params)}`;
 
   try {
     const response = await fetch(url, {
       method,
-      headers: defaultHeaders,
-      body: body ? JSON.stringify(body) : undefined,
+      headers: matchHeaders(body, headers ?? {}),
+      body: matchBody(body),
     });
 
-    const data = await response.json();
+    const text = await response.text();
+    const data = text ? JSON.parse(text) : null;
 
     if (!response.ok)
       return {
