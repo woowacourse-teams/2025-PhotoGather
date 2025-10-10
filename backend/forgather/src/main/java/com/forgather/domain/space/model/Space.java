@@ -73,10 +73,10 @@ public class Space extends BaseTimeEntity {
         validateEmail(email);
         this.code = code;
         this.name = name;
-        this.description = description;
+        this.description = convertBlankToEmptyString(description);
         this.isPublic = isPublic;
-        this.instagramUsername = instagramUsername;
-        this.email = email;
+        this.instagramUsername = convertBlankToEmptyString(instagramUsername);
+        this.email = convertBlankToEmptyString(email);
     }
 
     private void validateRequiredFields(String code, String name, String description, String instagramUsername,
@@ -157,6 +157,13 @@ public class Space extends BaseTimeEntity {
         if (!EMAIL_PATTERN.matcher(email).matches()) {
             throw new BaseException("이메일 형식이 올바르지 않습니다.");
         }
+    }
+
+    private String convertBlankToEmptyString(String string) {
+        if (string.isBlank()) {
+            return "";
+        }
+        return string;
     }
 
     @Override

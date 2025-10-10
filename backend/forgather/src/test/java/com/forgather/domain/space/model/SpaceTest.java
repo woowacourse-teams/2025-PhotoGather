@@ -29,6 +29,25 @@ class SpaceTest {
         ).doesNotThrowAnyException();
     }
 
+    @DisplayName("설명, 인스타그램 아이디, 이메일은 공백인 경우 빈 문자열로 저장한다.")
+    @Test
+    void createSpaceWithBlank() {
+        // given
+        String description = "  ";
+        String instagramUsername = "  ";
+        String email = "  ";
+
+        // when
+        Space space = new Space("1234567890", "나의 졸업전시", description, false, instagramUsername, email);
+
+        // then
+        assertAll(
+            () -> assertThat(space.getDescription()).isEmpty(),
+            () -> assertThat(space.getInstagramUsername()).isEmpty(),
+            () -> assertThat(space.getEmail()).isEmpty()
+        );
+    }
+
     @DisplayName("스페이스 코드가 존재하지 않으면 스페이스를 생성할 수 없다.")
     @Test
     void createSpaceWithoutCode() {
