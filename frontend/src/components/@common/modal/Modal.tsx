@@ -49,7 +49,9 @@ const Content = ({
 
   return (
     <S.ModalContent $size={size} {...props}>
-      {hasTopCloseButton && <S.CloseButton onClick={() => onClose()} />}
+      {hasTopCloseButton && (
+        <S.CloseButton size={20} onClick={() => onClose()} />
+      )}
       {children}
     </S.ModalContent>
   );
