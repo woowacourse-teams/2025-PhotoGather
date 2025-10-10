@@ -82,19 +82,19 @@ public class Space extends BaseTimeEntity {
     private void validateRequiredFields(String code, String name, String description, String instagramUsername,
         String email) {
         if (code == null) {
-            throw new BaseNullPointerException("스페이스 코드는 필수입니다.");
+            throw new BaseNullPointerException("스페이스 코드는 null일 수 없습니다.");
         }
         if (name == null) {
-            throw new BaseNullPointerException("스페이스 이름은 필수입니다.");
+            throw new BaseNullPointerException("스페이스 이름은 null일 수 없습니다.");
         }
         if (description == null) {
-            throw new BaseNullPointerException("스페이스 설명은 필수입니다.");
+            throw new BaseNullPointerException("스페이스 설명은 null일 수 없습니다.");
         }
         if (instagramUsername == null) {
-            throw new BaseNullPointerException("인스타그램 아이디는 필수입니다.");
+            throw new BaseNullPointerException("인스타그램 아이디는 null일 수 없습니다.");
         }
         if (email == null) {
-            throw new BaseNullPointerException("이메일은 필수입니다.");
+            throw new BaseNullPointerException("이메일은 null일 수 없습니다.");
         }
     }
 
