@@ -82,10 +82,10 @@ public class SpaceService {
         space.update(request.name(), request.description(), request.isPublic(), request.instagramUsername(),
             request.email());
 
-        if (request.isDeletePhoto()) {
-            handlePhotoWithDeleteRequest(space, file, spaceCode);
-        } else {
+        if (request.isDeletePhoto() == null || !request.isDeletePhoto()) {
             handlePhotoWithoutDeleteRequest(space, file, spaceCode);
+        } else {
+            handlePhotoWithDeleteRequest(space, file, spaceCode);
         }
 
         return spacePhotoRepository.findBySpace(space)

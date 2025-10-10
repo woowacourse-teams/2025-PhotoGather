@@ -22,6 +22,6 @@ public record UpdateSpaceRequest(
     String email,
 
     @Schema(description = "스페이스 사진 삭제 여부", example = "true")
-    boolean isDeletePhoto
+    Boolean isDeletePhoto
 ) {
 }
