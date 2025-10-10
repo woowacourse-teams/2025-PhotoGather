@@ -18,10 +18,6 @@ export const EditButton = styled.button`
   ${({ theme }) => theme.typography.captionSmall}
   color: ${({ theme }) => theme.colors.gray04};
 `;
-export const DeleteButton = styled.button`
-  ${({ theme }) => theme.typography.captionSmall}
-  color: ${({ theme }) => theme.colors.error};
-`;
 
 export const EmptyStateContainer = styled.div`
   display: flex;
