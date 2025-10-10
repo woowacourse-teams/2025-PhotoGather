@@ -110,6 +110,7 @@ export const useWorkForm = ({ spaceCode, reset }: UseWorkFormParams) => {
     const response = await workService.updateWork(spaceCode, updateData);
 
     if (response.success) {
+      showToast({ text: '작품을 수정했습니다.', type: 'info' });
       navigate(createWorkDetailRoute(spaceCode));
     } else {
       console.error(response.error);
@@ -132,6 +133,7 @@ export const useWorkForm = ({ spaceCode, reset }: UseWorkFormParams) => {
     });
 
     if (response.success) {
+      showToast({ text: '작품을 등록했습니다.', type: 'info' });
       navigate(createWorkDetailRoute(spaceCode));
     } else {
       console.error(response.error);
