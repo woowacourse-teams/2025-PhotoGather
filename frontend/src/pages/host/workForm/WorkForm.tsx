@@ -102,9 +102,11 @@ const WorkForm = () => {
           <S.TitleContainer>
             {isEditMode ? '작품 소개 수정' : '작품 소개 등록'}
           </S.TitleContainer>
-          <S.DeleteButton onClick={() => setIsDeleteModalOpen(true)}>
-            삭제
-          </S.DeleteButton>
+          {isEditMode && (
+            <S.DeleteButton onClick={() => setIsDeleteModalOpen(true)}>
+              삭제
+            </S.DeleteButton>
+          )}
         </S.TopContainer>
         <S.FormContainer onSubmit={handleSubmit(onValid)}>
           <S.FormLabelContainer>
