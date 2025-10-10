@@ -168,6 +168,28 @@ class ProductAcceptanceTest extends AcceptanceTest {
             .body("message", containsString("이미 등록된"));
     }
 
+    @DisplayName("작품 설명을 1000자까지 작성할 수 있다")
+    @Test
+    void doesNotThrowAnyExceptionWhenMaxDescriptionLength() {
+        // given
+        RegisterProductRequest registerRequest = new RegisterProductRequest(
+            "title",
+            "category",
+            "authorName",
+            "1234567890".repeat(100),
+            List.of()
+        );
+        // when, then
+        RestAssuredMockMvc.given()
+            .body(registerRequest)
+            .contentType(ContentType.JSON)
+            .accept(ContentType.JSON)
+            .when()
+            .post("/spaces/%s/products".formatted(space.getCode()))
+            .then()
+            .statusCode(201);
+    }
+
     @DisplayName("작품 정보 수정")
     @Test
     void update() {
