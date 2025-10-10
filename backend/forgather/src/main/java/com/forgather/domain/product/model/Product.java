@@ -129,18 +129,12 @@ public class Product extends BaseTimeEntity {
     }
 
     private void validateCategory(String category) {
-        if (category == null) {
-            return;
-        }
         if (category.length() > 20) {
             throw new BaseException("작품 카테고리는 최대 20자까지 입력 가능합니다.");
         }
     }
 
     private void validateAuthorName(String authorName) {
-        if (authorName == null) {
-            return;
-        }
         if (authorName.length() > 20) {
             throw new BaseException("작가명은 최대 20자까지 입력 가능합니다.");
         }
