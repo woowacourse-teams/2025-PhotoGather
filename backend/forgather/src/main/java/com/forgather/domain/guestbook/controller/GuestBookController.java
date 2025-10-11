@@ -1,5 +1,8 @@
 package com.forgather.domain.guestbook.controller;
 
+import static software.amazon.awssdk.http.HttpStatusCode.CREATED;
+
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -49,20 +52,23 @@ public class GuestBookController {
      */
     @Operation(summary = "방명록 카드 작성", description = "방문자 닉네임(10자), 메세지(300자)")
     @PostMapping
-    public WriteGuestBookCardResponse writeCard(
+    public ResponseEntity<WriteGuestBookCardResponse> writeCard(
         @PathVariable(value = "spaceCode") String spaceCode,
         @RequestBody WriteGuestBookCardRequest request
     ) {
-        return null;
+        return ResponseEntity.status(CREATED).body(null);
     }
 
     /**
      * TODO
      * 호스트 검증
      */
+    @Operation(summary = "방명록 카드 삭제 (호스트)")
     @DeleteMapping("/{guestBookCardId}")
-    public void deleteCard() {
-        return;
+    public ResponseEntity<Void> deleteCard(
+        @PathVariable(value = "guestBookCardId") Long guestBookCardId
+    ) {
+        return ResponseEntity.noContent().build();
     }
 
     /**
