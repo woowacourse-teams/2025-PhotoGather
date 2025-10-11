@@ -4,6 +4,7 @@ import com.forgather.domain.model.BaseTimeEntity;
 import com.forgather.domain.space.model.Space;
 import com.forgather.global.exception.BaseException;
 import com.forgather.global.exception.BaseNullPointerException;
+import com.forgather.global.util.TextLengthCounter;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -123,19 +124,19 @@ public class Product extends BaseTimeEntity {
         if (title.isBlank()) {
             throw new BaseException("작품명은 공백만 입력할 수 없습니다.");
         }
-        if (title.length() > 50) {
+        if (TextLengthCounter.count(title) > 50) {
             throw new BaseException("작품명은 최대 50자까지 입력 가능합니다.");
         }
     }
 
     private void validateCategory(String category) {
-        if (category.length() > 20) {
+        if (TextLengthCounter.count(category) > 20) {
             throw new BaseException("작품 카테고리는 최대 20자까지 입력 가능합니다.");
         }
     }
 
     private void validateAuthorName(String authorName) {
-        if (authorName.length() > 20) {
+        if (TextLengthCounter.count(authorName) > 20) {
             throw new BaseException("작가명은 최대 20자까지 입력 가능합니다.");
         }
     }
@@ -144,7 +145,7 @@ public class Product extends BaseTimeEntity {
         if (description.isBlank()) {
             throw new BaseException("작품 설명은 공백만 입력할 수 없습니다.");
         }
-        if (description.length() > 1000) {
+        if (TextLengthCounter.count(description) > 1000) {
             throw new BaseException("작품 설명은 최대 1000자까지 입력 가능합니다.");
         }
     }
