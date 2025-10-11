@@ -4,8 +4,6 @@ import static com.forgather.domain.upload.domain.UploadCategory.PRODUCT;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
-import java.net.MalformedURLException;
-import java.net.URI;
 import java.util.List;
 import java.util.stream.IntStream;
 
@@ -60,12 +58,6 @@ class PhotoAcceptanceTest extends AcceptanceTest {
         RestAssuredMockMvc.mockMvc(mockMvc);
         Mockito.when(awsS3Cloud.issueSignedUrl(Mockito.anyString()))
             .thenReturn("url");
-        try {
-            Mockito.when(awsS3Cloud.issueDownloadUrl(Mockito.anyString()))
-                .thenReturn(URI.create("https://example.com/dummy.jpg").toURL());
-        } catch (MalformedURLException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     @Test
