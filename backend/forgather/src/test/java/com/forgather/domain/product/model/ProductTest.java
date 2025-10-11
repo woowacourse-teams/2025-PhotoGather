@@ -7,6 +7,7 @@ import static com.forgather.fixture.ProductFixture.createProductWithSpace;
 import static com.forgather.fixture.ProductFixture.createProductWithTitle;
 import static com.forgather.fixture.ProductFixture.createProductWithTitleCategoryAuthorNameDescription;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
@@ -87,6 +88,17 @@ class ProductTest {
             .hasMessageContaining("작품명은 최대");
     }
 
+    @DisplayName("작품명은 이모지를 한 글자로 간주해 50자까지 입력 가능하다")
+    @ValueSource(strings = {"😀", "👦", "👨", "‍👩‍", "‍👦", "‍👩‍👧‍", "👨‍👩‍👧", "👨‍👩‍👧‍👦"})
+    @ParameterizedTest
+    void countEmojiAsOneCharAtTitle(String emoji) {
+        // given
+        String title = emoji.repeat(49) + "c";
+
+        // when, then
+        assertThatCode(() -> createProductWithTitle(title)).doesNotThrowAnyException();
+    }
+
     @DisplayName("작품 카테고리는 공백일 수 있다")
     @ValueSource(strings = {"", " "})
     @ParameterizedTest
@@ -108,6 +120,17 @@ class ProductTest {
         assertThatThrownBy(() -> createProductWithCategory(category))
             .isInstanceOf(BaseException.class)
             .hasMessageContaining("작품 카테고리는 최대");
+    }
+
+    @DisplayName("작품 카테고리은 이모지를 한 글자로 간주해 20자까지 입력 가능하다")
+    @ValueSource(strings = {"😀", "👦", "👨", "‍👩‍", "‍👦", "‍👩‍👧‍", "👨‍👩‍👧", "👨‍👩‍👧‍👦"})
+    @ParameterizedTest
+    void countEmojiAsOneCharAtCategory(String emoji) {
+        // given
+        String category = emoji.repeat(19) + "c";
+
+        // when, then
+        assertThatCode(() -> createProductWithCategory(category)).doesNotThrowAnyException();
     }
 
     @DisplayName("작가명은 공백일 수 있다")
@@ -133,6 +156,17 @@ class ProductTest {
             .hasMessageContaining("작가명은 최대");
     }
 
+    @DisplayName("작가명은 이모지를 한 글자로 간주해 20자까지 입력 가능하다")
+    @ValueSource(strings = {"😀", "👦", "👨", "‍👩‍", "‍👦", "‍👩‍👧‍", "👨‍👩‍👧", "👨‍👩‍👧‍👦"})
+    @ParameterizedTest
+    void countEmojiAsOneCharAtAuthorName(String emoji) {
+        // given
+        String authorName = emoji.repeat(19) + "c";
+
+        // when, then
+        assertThatCode(() -> createProductWithAuthorName(authorName)).doesNotThrowAnyException();
+    }
+
     @DisplayName("작품 설명이 공백이면 예외를 던진다")
     @ValueSource(strings = {"", " "})
     @ParameterizedTest
@@ -153,6 +187,17 @@ class ProductTest {
         assertThatThrownBy(() -> createProductWithDescription(description))
             .isInstanceOf(BaseException.class)
             .hasMessageContaining("작품 설명은 최대");
+    }
+
+    @DisplayName("작품 설명은 이모지를 한 글자로 간주해 1000자까지 입력 가능하다")
+    @ValueSource(strings = {"😀", "👦", "👨", "‍👩‍", "‍👦", "‍👩‍👧‍", "👨‍👩‍👧", "👨‍👩‍👧‍👦"})
+    @ParameterizedTest
+    void countEmojiAsOneCharAtDescription(String emoji) {
+        // given
+        String description = emoji.repeat(999) + "c";
+
+        // when, then
+        assertThatCode(() -> createProductWithDescription(description)).doesNotThrowAnyException();
     }
 
     @DisplayName("작품 조건부 수정-1")
