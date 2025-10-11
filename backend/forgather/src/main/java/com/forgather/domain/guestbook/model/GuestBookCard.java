@@ -1,7 +1,7 @@
-package com.forgather.domain.space.model;
+package com.forgather.domain.guestbook.model;
 
-import com.forgather.domain.guest.model.Guest;
 import com.forgather.domain.model.BaseTimeEntity;
+import com.forgather.domain.space.model.Space;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

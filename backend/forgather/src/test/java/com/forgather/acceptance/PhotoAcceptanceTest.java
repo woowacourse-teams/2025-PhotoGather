@@ -20,8 +20,8 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.forgather.domain.guest.model.Guest;
-import com.forgather.domain.guest.repository.GuestRepository;
+import com.forgather.domain.guestbook.model.Guest;
+import com.forgather.domain.guestbook.repository.GuestRepository;
 import com.forgather.domain.space.model.Space;
 import com.forgather.domain.space.repository.HostRepository;
 import com.forgather.domain.space.repository.SpaceRepository;

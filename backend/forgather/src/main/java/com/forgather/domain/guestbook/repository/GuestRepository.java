@@ -1,10 +1,10 @@
-package com.forgather.domain.guest.repository;
+package com.forgather.domain.guestbook.repository;
 
 import java.util.Optional;
 
 import org.springframework.stereotype.Repository;
 
-import com.forgather.domain.guest.model.Guest;
+import com.forgather.domain.guestbook.model.Guest;
 import com.forgather.global.exception.BaseException;
 import com.forgather.global.exception.NotFoundException;
 

@@ -1,4 +1,4 @@
-package com.forgather.domain.guest.model;
+package com.forgather.domain.guestbook.model;
 
 import com.forgather.domain.model.BaseTimeEntity;
 import com.forgather.global.exception.BaseException;
