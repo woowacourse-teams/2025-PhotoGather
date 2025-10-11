@@ -24,7 +24,7 @@ public class GuestBookController {
      * 사진 존재 여부
      */
     @GetMapping
-    public void getAll() {
+    public void getCards() {
         return;
     }
 
@@ -33,8 +33,8 @@ public class GuestBookController {
      * 읽음 처리 (호스트)
      * 사진
      */
-    @GetMapping
-    public void get() {
+    @GetMapping("/{guestBookCardId}")
+    public void getCard() {
         return;
     }
 
@@ -42,7 +42,7 @@ public class GuestBookController {
      * TODO
      */
     @PostMapping
-    public void write() {
+    public void writeCard() {
         return;
     }
 
@@ -50,8 +50,8 @@ public class GuestBookController {
      * TODO
      * 호스트 검증
      */
-    @DeleteMapping
-    public void delete() {
+    @DeleteMapping("/{guestBookCardId}")
+    public void deleteCard() {
         return;
     }
 
@@ -59,8 +59,8 @@ public class GuestBookController {
      * TODO
      * 호스트 검증
      */
-    @DeleteMapping
-    public void deletePhotos() {
+    @DeleteMapping("/{guestBookCardId}/photos")
+    public void deleteCardPhotos() {
         return;
     }
 }
