@@ -32,7 +32,7 @@ public record GuestBookResponse(
     @Schema(description = "현재 페이지 번호", example = "1")
     int currentPage,
 
-    @Schema(description = "페이지 당 사진 개수", example = "15")
+    @Schema(description = "페이지 당 방명록 카드 개수", example = "15")
     int pageSize,
 
     @Schema(description = "총 방명록 카드 개수", example = "3")
