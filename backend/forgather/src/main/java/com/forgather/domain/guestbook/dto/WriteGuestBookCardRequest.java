@@ -7,7 +7,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 public record WriteGuestBookCardRequest(
 
     @Schema(description = "방문자 닉네임", example = "밍퐁루블", maxLength = 10)
-    String guestNickname,
+    String nickname,
 
     @Schema(description = "메세지", example = "전시 잘봤다~~ 너가 최고야 🤙", maxLength = 10)
     String message,
