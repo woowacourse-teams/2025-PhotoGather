@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.forgather.domain.guestbook.dto.DeleteGuestBookCardPhotosRequest;
 import com.forgather.domain.guestbook.dto.WriteGuestBookCardRequest;
 import com.forgather.domain.guestbook.dto.WriteGuestBookCardResponse;
 
@@ -66,6 +67,7 @@ public class GuestBookController {
     @Operation(summary = "방명록 카드 삭제 (호스트)")
     @DeleteMapping("/{guestBookCardId}")
     public ResponseEntity<Void> deleteCard(
+        @PathVariable(value = "spaceCode") String spaceCode,
         @PathVariable(value = "guestBookCardId") Long guestBookCardId
     ) {
         return ResponseEntity.noContent().build();
@@ -75,8 +77,13 @@ public class GuestBookController {
      * TODO
      * 호스트 검증
      */
+    @Operation(summary = "방명록 카드 사진 선택 삭제 (호스트)")
     @DeleteMapping("/{guestBookCardId}/photos")
-    public void deleteCardPhotos() {
-        return;
+    public ResponseEntity<Void> deleteCardPhotos(
+        @PathVariable(value = "spaceCode") String spaceCode,
+        @PathVariable(value = "guestBookCardId") Long guestBookCardId,
+        @RequestBody DeleteGuestBookCardPhotosRequest request
+    ) {
+        return ResponseEntity.noContent().build();
     }
 }
