@@ -1,6 +1,4 @@
-package com.forgather.domain.space.model;
-
-import com.forgather.domain.model.BaseTimeEntity;
+package com.forgather.domain.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.GeneratedValue;

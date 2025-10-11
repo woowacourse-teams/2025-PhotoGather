@@ -1,24 +1,15 @@
 package com.forgather.domain.upload.domain;
 
-import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
 import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
 
-import com.forgather.domain.space.model.Photo;
+import com.forgather.domain.model.Photo;
 
 public interface ContentsStorage {
 
     String upload(String spaceCode, MultipartFile file) throws IOException;
-
-    InputStream download(String photoPath);
-
-    File downloadSelected(String tempPath, String spaceCode, List<String> photoPaths);
-
-    URL issueDownloadUrl(String photoPath);
 
     void deleteContent(String contentPath);
 

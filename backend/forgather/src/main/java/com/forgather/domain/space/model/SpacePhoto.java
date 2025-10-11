@@ -1,5 +1,7 @@
 package com.forgather.domain.space.model;
 
+import com.forgather.domain.model.Photo;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;

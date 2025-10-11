@@ -1,6 +1,6 @@
 package com.forgather.domain.guestbook.model;
 
-import com.forgather.domain.space.model.Photo;
+import com.forgather.domain.model.Photo;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
