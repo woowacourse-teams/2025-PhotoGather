@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.forgather.domain.guestbook.dto.DeleteGuestBookCardPhotosRequest;
+import com.forgather.domain.guestbook.dto.GuestBookCardResponse;
 import com.forgather.domain.guestbook.dto.WriteGuestBookCardRequest;
 import com.forgather.domain.guestbook.dto.WriteGuestBookCardResponse;
 
@@ -43,9 +44,13 @@ public class GuestBookController {
      * 읽음 처리 (호스트)
      * 사진
      */
+    @Operation(summary = "방명록 카드 조회")
     @GetMapping("/{guestBookCardId}")
-    public void getCard() {
-        return;
+    public ResponseEntity<GuestBookCardResponse> getCard(
+        @PathVariable(value = "spaceCode") String spaceCode,
+        @PathVariable(value = "guestBookCardId") Long guestBookCardId
+    ) {
+        return ResponseEntity.ok(null);
     }
 
     /**
