@@ -122,7 +122,7 @@ class ProductTest {
             .hasMessageContaining("작품 카테고리는 최대");
     }
 
-    @DisplayName("작품 카테고리은 이모지를 한 글자로 간주해 20자까지 입력 가능하다")
+    @DisplayName("작품 카테고리는 이모지를 한 글자로 간주해 20자까지 입력 가능하다")
     @ValueSource(strings = {"😀", "👦", "👨", "‍👩‍", "‍👦", "‍👩‍👧‍", "👨‍👩‍👧", "👨‍👩‍👧‍👦"})
     @ParameterizedTest
     void countEmojiAsOneCharAtCategory(String emoji) {
