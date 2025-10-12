@@ -15,6 +15,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
+import com.forgather.domain.guestbook.dto.GuestBookCardResponse;
 import com.forgather.domain.guestbook.dto.WriteGuestBookCardPhotoRequest;
 import com.forgather.domain.guestbook.dto.WriteGuestBookCardRequest;
 import com.forgather.domain.guestbook.dto.WriteGuestBookCardResponse;
@@ -26,6 +27,10 @@ import com.forgather.fixture.SpaceFixture;
 import io.restassured.http.ContentType;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
 
+/**
+ * TODO
+ * 비공개 스페이스 & 호스트 -> 방명록 조회 가능
+ */
 @AutoConfigureMockMvc
 public class GuestBookCardAcceptanceTest extends AcceptanceTest {
 
@@ -38,7 +43,8 @@ public class GuestBookCardAcceptanceTest extends AcceptanceTest {
     @MockitoBean
     private AwsS3Cloud awsS3Cloud;
 
-    private Space space;
+    private Space publicSpace;
+    private Space privateSpace;
     private WriteGuestBookCardRequest writeRequest = new WriteGuestBookCardRequest(
         "nickname",
         "message",
@@ -51,41 +57,83 @@ public class GuestBookCardAcceptanceTest extends AcceptanceTest {
 
     @BeforeEach
     void setUp() {
-        space = SpaceFixture.createSpace();
-        spaceRepository.save(space);
+        publicSpace = SpaceFixture.createSpace();
+        privateSpace = SpaceFixture.createPrivateSpace();
+        spaceRepository.save(publicSpace);
+        spaceRepository.save(privateSpace);
         RestAssuredMockMvc.mockMvc(mockMvc);
+    }
+
+    @DisplayName("공개 스페이스인 경우 방문자도 방명록 카드를 조회할 수 있다")
+    @Test
+    void guestCanReadCardInPublicSpace() {
+        // given
+        WriteGuestBookCardResponse writeResponse = writeGuestBookCard(publicSpace);
+
+        // when
+        GuestBookCardResponse result = RestAssuredMockMvc.given()
+            .accept(ContentType.JSON)
+            .when()
+            .get("/spaces/%s/guestbook/%d".formatted(publicSpace.getCode(), writeResponse.id()))
+            .then()
+            .statusCode(200)
+            .extract()
+            .body()
+            .as(GuestBookCardResponse.class);
+
+        // then
+        assertAll(
+            () -> assertThat(result.id()).isNotNull(),
+            () -> assertThat(result.nickname()).isEqualTo(writeRequest.nickname()),
+            () -> assertThat(result.message()).isEqualTo(writeRequest.message()),
+
+            () -> assertThat(result.photos().get(0).originalName()).isEqualTo("photo1.jpg"),
+            () -> assertThat(result.photos().get(0).path()).endsWith("/spaces/1234567890/guestbook/abc.jpg"),
+
+            () -> assertThat(result.photos().get(1).originalName()).isEqualTo("photo2.jpg"),
+            () -> assertThat(result.photos().get(1).path()).endsWith("/spaces/1234567890/guestbook/def.jpg"),
+
+            () -> assertThat(result.photos().get(2).originalName()).isEqualTo("photo3.jpg"),
+            () -> assertThat(result.photos().get(2).path()).endsWith("/spaces/1234567890/guestbook/ghi.jpg")
+        );
+    }
+
+    @DisplayName("비공개 스페이스인 경우 방문자는 방명록 카드를 조회할 수 없다")
+    @Test
+    void throwExceptionWhenGuestReadCardInPrivateSpace() {
+        // given
+        WriteGuestBookCardResponse writeResponse = writeGuestBookCard(privateSpace);
+
+        // when, then
+        RestAssuredMockMvc.given()
+            .accept(ContentType.JSON)
+            .when()
+            .get("/spaces/%s/guestbook/%d".formatted(privateSpace.getCode(), writeResponse.id()))
+            .then()
+            .statusCode(400)
+            .body("message", containsString("방문자는 비공개 스페이스의 방명록을 조회할 수 없습니다."));
     }
 
     @DisplayName("방명록 카드 작성")
     @Test
     void write() {
         // when
-        WriteGuestBookCardResponse response = RestAssuredMockMvc.given()
-            .body(writeRequest)
-            .contentType(ContentType.JSON)
-            .accept(ContentType.JSON)
-            .when()
-            .post("/spaces/%s/guestbook".formatted(space.getCode()))
-            .then()
-            .statusCode(201)
-            .extract()
-            .body()
-            .as(WriteGuestBookCardResponse.class);
+        WriteGuestBookCardResponse result = writeGuestBookCard(publicSpace);
 
         // then
         assertAll(
-            () -> assertThat(response.id()).isNotNull(),
-            () -> assertThat(response.nickname()).isEqualTo(writeRequest.nickname()),
-            () -> assertThat(response.message()).isEqualTo(writeRequest.message()),
+            () -> assertThat(result.id()).isNotNull(),
+            () -> assertThat(result.nickname()).isEqualTo(writeRequest.nickname()),
+            () -> assertThat(result.message()).isEqualTo(writeRequest.message()),
 
-            () -> assertThat(response.photos().get(0).originalName()).isEqualTo("photo1.jpg"),
-            () -> assertThat(response.photos().get(0).path()).endsWith("/spaces/1234567890/guestbook/abc.jpg"),
+            () -> assertThat(result.photos().get(0).originalName()).isEqualTo("photo1.jpg"),
+            () -> assertThat(result.photos().get(0).path()).endsWith("/spaces/1234567890/guestbook/abc.jpg"),
 
-            () -> assertThat(response.photos().get(1).originalName()).isEqualTo("photo2.jpg"),
-            () -> assertThat(response.photos().get(1).path()).endsWith("/spaces/1234567890/guestbook/def.jpg"),
+            () -> assertThat(result.photos().get(1).originalName()).isEqualTo("photo2.jpg"),
+            () -> assertThat(result.photos().get(1).path()).endsWith("/spaces/1234567890/guestbook/def.jpg"),
 
-            () -> assertThat(response.photos().get(2).originalName()).isEqualTo("photo3.jpg"),
-            () -> assertThat(response.photos().get(2).path()).endsWith("/spaces/1234567890/guestbook/ghi.jpg")
+            () -> assertThat(result.photos().get(2).originalName()).isEqualTo("photo3.jpg"),
+            () -> assertThat(result.photos().get(2).path()).endsWith("/spaces/1234567890/guestbook/ghi.jpg")
         );
     }
 
@@ -109,7 +157,7 @@ public class GuestBookCardAcceptanceTest extends AcceptanceTest {
             .contentType(ContentType.JSON)
             .accept(ContentType.JSON)
             .when()
-            .post("/spaces/%s/guestbook".formatted(space.getCode()))
+            .post("/spaces/%s/guestbook".formatted(publicSpace.getCode()))
             .then()
             .statusCode(400)
             .body("message", containsString("방문자 닉네임은 최대 10자까지 입력 가능합니다."));
@@ -134,9 +182,24 @@ public class GuestBookCardAcceptanceTest extends AcceptanceTest {
             .contentType(ContentType.JSON)
             .accept(ContentType.JSON)
             .when()
-            .post("/spaces/%s/guestbook".formatted(space.getCode()))
+            .post("/spaces/%s/guestbook".formatted(publicSpace.getCode()))
             .then()
             .statusCode(400)
             .body("message", containsString("방명록 카드 사진은 최대"));
+    }
+
+    private WriteGuestBookCardResponse writeGuestBookCard(Space space) {
+        WriteGuestBookCardResponse response = RestAssuredMockMvc.given()
+            .body(writeRequest)
+            .contentType(ContentType.JSON)
+            .accept(ContentType.JSON)
+            .when()
+            .post("/spaces/%s/guestbook".formatted(space.getCode()))
+            .then()
+            .statusCode(201)
+            .extract()
+            .body()
+            .as(WriteGuestBookCardResponse.class);
+        return response;
     }
 }
