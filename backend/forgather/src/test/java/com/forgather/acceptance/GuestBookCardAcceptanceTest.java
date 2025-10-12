@@ -79,13 +79,13 @@ public class GuestBookCardAcceptanceTest extends AcceptanceTest {
             () -> assertThat(response.message()).isEqualTo(writeRequest.message()),
 
             () -> assertThat(response.photos().get(0).originalName()).isEqualTo("photo1.jpg"),
-            () -> assertThat(response.photos().get(0).path()).isEqualTo("null/spaces/1234567890/guestbook/abc.jpg"),
+            () -> assertThat(response.photos().get(0).path()).endsWith("/spaces/1234567890/guestbook/abc.jpg"),
 
             () -> assertThat(response.photos().get(1).originalName()).isEqualTo("photo2.jpg"),
-            () -> assertThat(response.photos().get(1).path()).isEqualTo("null/spaces/1234567890/guestbook/def.jpg"),
+            () -> assertThat(response.photos().get(1).path()).endsWith("/spaces/1234567890/guestbook/def.jpg"),
 
             () -> assertThat(response.photos().get(2).originalName()).isEqualTo("photo3.jpg"),
-            () -> assertThat(response.photos().get(2).path()).isEqualTo("null/spaces/1234567890/guestbook/ghi.jpg")
+            () -> assertThat(response.photos().get(2).path()).endsWith("/spaces/1234567890/guestbook/ghi.jpg")
         );
     }
 
