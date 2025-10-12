@@ -90,6 +90,7 @@ export const buttonStyles = {
     margin: 0 auto;
     background-color: ${theme.colors.gray06};
     color: ${theme.colors.white};
+    z-index: ${theme.zIndex.fixedButton};
 
     &:active {
       background-color: ${theme.colors.gray06};

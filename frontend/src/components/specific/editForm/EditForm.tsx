@@ -75,10 +75,20 @@ const EditForm = () => {
     patchSpaceInfo(data);
   };
 
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setValue('email', e.target.value, {
+      shouldValidate: false,
+      shouldDirty: true,
+    });
+    if (errors.email) {
+      trigger('email');
+    }
+  };
+
   return (
     <S.Form onSubmit={handleSubmit(onSubmit)}>
       <PhotoPreviewButton
-        originalSrc={`${import.meta.env.VITE_IMAGE_BASE_URL}${spaceInfo?.spacePhoto.path}`}
+        originalSrc={spaceInfo?.spacePhoto.path}
         previewFile={previewFile}
         uploadImage={handleFilesUploadClick}
         clearFiles={clearFiles}
@@ -133,15 +143,7 @@ const EditForm = () => {
         placeholder="forgather@forgather.me"
         errorMessage={errors.email?.message}
         maxLength={CONSTRAINTS.MAX_LENGTH.SPACE.EMAIL}
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-          setValue('email', e.target.value, {
-            shouldValidate: false,
-            shouldDirty: true,
-          });
-          if (errors.email) {
-            trigger('email');
-          }
-        }}
+        onChange={handleChange}
         onBlur={() => trigger('email')}
       />
       <TextInput

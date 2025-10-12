@@ -51,6 +51,7 @@ export const theme = {
   },
   zIndex: {
     toast: 500,
+    fixedButton: 600,
   },
   layout: {
     width: '400px',

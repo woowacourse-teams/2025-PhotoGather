@@ -26,13 +26,15 @@ const PhotoPreviewButton = ({
   const fileInputId = useId();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const matchThumbnailImage = () =>
-    previewFile[0]?.previewUrl || originalSrc || defaultImage;
+  const originalImagePath = `${import.meta.env.VITE_IMAGE_BASE_URL}${originalSrc}`;
 
-  const isPhotoExist = !!previewFile[0]?.previewUrl && !!originalSrc;
+  const matchThumbnailImage = () =>
+    previewFile[0]?.previewUrl || originalImagePath || defaultImage;
+
+  const isPhotoExist = !!previewFile[0]?.previewUrl || !!originalSrc;
 
   const deletePhoto = () => {
-    if (originalSrc) {
+    if (originalImagePath) {
       deleteImage();
     }
     // TODO : 성공시 아래 로직 실행
