@@ -26,9 +26,9 @@ import com.forgather.global.auth.annotation.LoginHost;
 import com.forgather.global.auth.model.Host;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Encoding;
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
@@ -40,11 +40,11 @@ public class SpaceController {
 
     private final SpaceService spaceService;
 
-    @RequestBody(content = @Content(
-        encoding = @Encoding(name = "request", contentType = MediaType.APPLICATION_JSON_VALUE)))
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Operation(summary = "스페이스 생성", description = "새로운 스페이스를 생성합니다.")
     public ResponseEntity<CreateSpaceResponse> create(
+        @Parameter(description = "스페이스 생성 정보 (JSON, text/plain)", required = true,
+            content = @Content(schema = @Schema(implementation = CreateSpaceRequest.class)))
         @RequestPart("request") @Validated CreateSpaceRequest request,
         @RequestPart(value = "file", required = false) MultipartFile file,
         @LoginHost(required = false) Host host
@@ -69,12 +69,12 @@ public class SpaceController {
         return ResponseEntity.noContent().build();
     }
 
-    @RequestBody(content = @Content(
-        encoding = @Encoding(name = "request", contentType = MediaType.APPLICATION_JSON_VALUE)))
     @PatchMapping(value = "/{spaceCode}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Operation(summary = "스페이스 정보 수정", description = "해당 스페이스 코드의 정보를 수정합니다.")
     public ResponseEntity<SpaceResponse> update(
         @PathVariable(name = "spaceCode") String spaceCode,
+        @Parameter(description = "스페이스 생성 정보 (JSON, text/plain)", required = true,
+            content = @Content(schema = @Schema(implementation = UpdateSpaceRequest.class)))
         @RequestPart("request") @Validated UpdateSpaceRequest request,
         @RequestPart(value = "file", required = false) MultipartFile file,
         @LoginHost(required = false) Host host

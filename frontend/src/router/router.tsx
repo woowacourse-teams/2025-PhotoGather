@@ -62,11 +62,11 @@ const routes: AppRouteObject[] = [
             },
           },
           {
-            path: 'work-detail',
+            path: ':spaceCode/work-detail',
             element: <HostWorkDetail />,
           },
           {
-            path: 'work-form',
+            path: ':spaceCode/work-detail/edit',
             element: <WorkForm />,
           },
           {
@@ -83,7 +83,7 @@ const routes: AppRouteObject[] = [
             element: <GuestMainPage />,
           },
           {
-            path: 'work-detail',
+            path: ':spaceCode/work-detail',
             element: <GuestWorkDetail />,
           },
         ],

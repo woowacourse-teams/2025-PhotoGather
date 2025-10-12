@@ -1,6 +1,6 @@
 package com.forgather.domain.product.model;
 
-import com.forgather.domain.space.model.Photo;
+import com.forgather.domain.model.Photo;
 import com.forgather.global.exception.BaseException;
 import com.forgather.global.exception.BaseNullPointerException;
 

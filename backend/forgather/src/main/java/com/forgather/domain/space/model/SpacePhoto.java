@@ -1,5 +1,7 @@
 package com.forgather.domain.space.model;
 
+import com.forgather.domain.model.Photo;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
@@ -26,11 +28,5 @@ public class SpacePhoto extends Photo {
 
     public static SpacePhoto empty() {
         return new SpacePhoto(null, "", "", 0L);
-    }
-
-    public void update(String originalName, String path, Long capacity) {
-        this.originalName = originalName;
-        this.path = path;
-        this.capacity = capacity;
     }
 }

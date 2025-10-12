@@ -25,17 +25,17 @@ public record UpdateProductRequest(
         [
             {
                 "originalName": "chair4.jpg",
-                "path": "1234567890/jkl.jpg",
+                "uploadFileName": "jkl.jpg",
                 "capacity": 1024
             },
             {
                 "originalName": "chair5.jpg",
-                "path": "1234567890/mno.jpg",
+                "uploadFileName": "mno.jpg",
                 "capacity": 2048
             },
             {
                 "originalName": "chair6.jpg",
-                "path": "1234567890/pqr.jpg",
+                "uploadFileName": "pqr.jpg",
                 "capacity": 4096
             }
         ]
