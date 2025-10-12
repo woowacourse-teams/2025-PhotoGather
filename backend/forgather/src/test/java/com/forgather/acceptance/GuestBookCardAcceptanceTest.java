@@ -1,9 +1,11 @@
 package com.forgather.acceptance;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.containsString;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import java.util.List;
+import java.util.stream.IntStream;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -39,7 +41,7 @@ public class GuestBookCardAcceptanceTest extends AcceptanceTest {
     private Space space;
     private WriteGuestBookCardRequest writeRequest = new WriteGuestBookCardRequest(
         "nickname",
-            "message",
+        "message",
         List.of(
             new WriteGuestBookCardPhotoRequest("photo1.jpg", "abc.jpg", 1024L),
             new WriteGuestBookCardPhotoRequest("photo2.jpg", "def.jpg", 2048L),
@@ -85,5 +87,56 @@ public class GuestBookCardAcceptanceTest extends AcceptanceTest {
             () -> assertThat(response.photos().get(2).originalName()).isEqualTo("photo3.jpg"),
             () -> assertThat(response.photos().get(2).path()).isEqualTo("null/spaces/1234567890/guestbook/ghi.jpg")
         );
+    }
+
+    @DisplayName("방문자 닉네임이 10자를 초과하면 예외를 던진다")
+    @Test
+    void throwExceptionWhenNicknameExceedMaxLength() {
+        // given
+        WriteGuestBookCardRequest request = new WriteGuestBookCardRequest(
+            "12345678901",
+            "message",
+            List.of(
+                new WriteGuestBookCardPhotoRequest("photo1.jpg", "abc.jpg", 1024L),
+                new WriteGuestBookCardPhotoRequest("photo2.jpg", "def.jpg", 2048L),
+                new WriteGuestBookCardPhotoRequest("photo3.jpg", "ghi.jpg", 4096L)
+            )
+        );
+
+        // when, then
+        RestAssuredMockMvc.given()
+            .body(request)
+            .contentType(ContentType.JSON)
+            .accept(ContentType.JSON)
+            .when()
+            .post("/spaces/%s/guestbook".formatted(space.getCode()))
+            .then()
+            .statusCode(400)
+            .body("message", containsString("방문자 닉네임은 최대 10자까지 입력 가능합니다."));
+    }
+
+    @DisplayName("방명록 카드 사진이 20개를 초과하면 예외를 던진다")
+    @Test
+    void throwExceptionWhenPhotoExceedMaxSize() {
+        // given
+        List<WriteGuestBookCardPhotoRequest> photos = IntStream.range(0, 21)
+            .mapToObj(i -> new WriteGuestBookCardPhotoRequest("photo.jpg", "abc.jpg", 1024L))
+            .toList();
+        WriteGuestBookCardRequest request = new WriteGuestBookCardRequest(
+            "nickname",
+            "message",
+            photos
+        );
+
+        // when, then
+        RestAssuredMockMvc.given()
+            .body(request)
+            .contentType(ContentType.JSON)
+            .accept(ContentType.JSON)
+            .when()
+            .post("/spaces/%s/guestbook".formatted(space.getCode()))
+            .then()
+            .statusCode(400)
+            .body("message", containsString("방명록 카드 사진은 최대"));
     }
 }

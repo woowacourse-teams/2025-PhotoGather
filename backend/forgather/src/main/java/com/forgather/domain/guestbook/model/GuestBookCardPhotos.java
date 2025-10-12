@@ -8,7 +8,7 @@ import com.forgather.global.exception.BaseException;
 
 public class GuestBookCardPhotos {
 
-    private static final int MAX_COUNT = 10;
+    private static final int MAX_COUNT = 20;
 
     private final List<GuestBookCardPhoto> photos;
 
@@ -19,7 +19,7 @@ public class GuestBookCardPhotos {
 
     private void validateTotalCount(int totalCount) {
         if (totalCount > MAX_COUNT) {
-            throw new BaseException("작품 사진은 최대 %d개까지만 등록 가능합니다. count: ".formatted(MAX_COUNT) + totalCount);
+            throw new BaseException("방명록 카드 사진은 최대 %d개까지만 등록 가능합니다. count: ".formatted(MAX_COUNT) + totalCount);
         }
     }
 
