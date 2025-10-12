@@ -34,7 +34,7 @@ const PhotoPreviewButton = ({
   const isPhotoExist = !!previewFile[0]?.previewUrl || !!originalSrc;
 
   const deletePhoto = () => {
-    if (originalImagePath) {
+    if (originalSrc) {
       deleteImage();
     }
     // TODO : 성공시 아래 로직 실행
