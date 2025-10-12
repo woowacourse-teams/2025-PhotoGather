@@ -1,5 +1,7 @@
 package com.forgather.domain.guestbook.dto;
 
+import com.forgather.domain.guestbook.model.GuestBookCardPhoto;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 
 public record GuestBookCardPhotoResponse(
@@ -12,4 +14,8 @@ public record GuestBookCardPhotoResponse(
     @Schema(description = "사진 업로드 경로", example = "photogather/v2/spaces/1234567890/guestbook/abc.jpg")
     String path
 ) {
+
+    public GuestBookCardPhotoResponse(GuestBookCardPhoto photo) {
+        this(photo.getId(), photo.getOriginalName(), photo.getPath());
+    }
 }

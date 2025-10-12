@@ -2,6 +2,10 @@ package com.forgather.domain.guestbook.dto;
 
 import java.util.List;
 
+import com.forgather.domain.guestbook.model.Guest;
+import com.forgather.domain.guestbook.model.GuestBookCard;
+import com.forgather.domain.space.model.Space;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 
 public record WriteGuestBookCardRequest(
@@ -33,4 +37,8 @@ public record WriteGuestBookCardRequest(
         """)
     List<WriteGuestBookCardPhotoRequest> photos
 ) {
+
+    public GuestBookCard toEntity(Space space, Guest guest) {
+        return new GuestBookCard(space, guest, message);
+    }
 }

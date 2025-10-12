@@ -82,7 +82,7 @@ public class ProductPhotos {
 
     private void validateTotalCount(int totalCount) {
         if (totalCount > MAX_COUNT) {
-            throw new BaseException("작품 사진은 최대 %s개까지만 등록 가능합니다. count: ".formatted(MAX_COUNT) + totalCount);
+            throw new BaseException("작품 사진은 최대 %d개까지만 등록 가능합니다. count: ".formatted(MAX_COUNT) + totalCount);
         }
     }
 

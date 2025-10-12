@@ -39,12 +39,16 @@ public class GuestBookCard extends BaseTimeEntity {
     @Column(name = "message", length = 500, nullable = false)
     private String message;
 
+    @Column(name = "is_read", nullable = false)
+    private boolean isRead;
+
     public GuestBookCard(Space space, Guest guest, String message) {
         validateRequiredFields(space, guest, message);
         validateMessage(message);
         this.space = space;
         this.guest = guest;
         this.message = message;
+        this.isRead = false;
     }
 
     private void validateRequiredFields(Space space, Guest guest, String message) {
@@ -63,5 +67,9 @@ public class GuestBookCard extends BaseTimeEntity {
         if (TextLengthCounter.count(message) > 300) {
             throw new BaseException("방명록 카드 메세지는 최대 300까지 입력 가능합니다. message.length: " + message.length());
         }
+    }
+
+    public String getGuestNickname() {
+        return guest.getNickname();
     }
 }

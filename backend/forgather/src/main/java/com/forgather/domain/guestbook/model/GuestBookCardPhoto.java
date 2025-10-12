@@ -18,4 +18,9 @@ public class GuestBookCardPhoto extends Photo {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "guest_book_card_id", nullable = false)
     private GuestBookCard guestBookCard;
+
+    public GuestBookCardPhoto(String originalName, String path, Long capacity, GuestBookCard guestBookCard) {
+        super(originalName, path, capacity);
+        this.guestBookCard = guestBookCard;
+    }
 }

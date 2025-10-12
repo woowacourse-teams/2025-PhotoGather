@@ -1,0 +1,2 @@
+ALTER TABLE guest_book_card
+    ADD COLUMN is_read TINYINT NOT NULL DEFAULT 0;
