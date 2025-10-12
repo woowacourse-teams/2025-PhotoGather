@@ -2,14 +2,14 @@ package com.forgather.domain.guestbook.model;
 
 import com.forgather.domain.model.BaseTimeEntity;
 import com.forgather.global.exception.BaseException;
+import com.forgather.global.exception.BaseNullPointerException;
+import com.forgather.global.util.TextLengthCounter;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.PrePersist;
-import jakarta.persistence.PreUpdate;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,25 +21,29 @@ public class Guest extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name = "nickname", length = 100)
+    @Column(name = "nickname", length = 10, nullable = false)
     private String nickname;
 
     public Guest(String nickname) {
+        validateRequiredFields(nickname);
+        validateNickname(nickname);
         this.nickname = nickname;
-        validate();
     }
 
-    @PrePersist
-    @PreUpdate
-    private void validate() {
-        if (nickname == null || nickname.isEmpty()) {
-            throw new BaseException("게스트 이름이 비어있습니다.");
+    private void validateRequiredFields(String nickname) {
+        if (nickname == null) {
+            throw new BaseNullPointerException("방문자 닉네임은 null일 수 없습니다.");
         }
-        if (nickname.length() > 10) {
-            throw new BaseException("게스트 이름은 10자를 초과할 수 없습니다.");
+    }
+
+    private void validateNickname(String nickname) {
+        if (nickname.isBlank()) {
+            throw new BaseException("방문자 닉네임은 공백만 입력할 수 없습니다.");
+        }
+        if (TextLengthCounter.count(nickname) > 10) {
+            throw new BaseException("방문자 닉네임은 최대 10자까지 입력 가능합니다. nickname.length: " + nickname.length());
         }
     }
 }

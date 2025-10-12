@@ -19,6 +19,7 @@ import com.forgather.domain.guestbook.dto.GuestBookCardResponse;
 import com.forgather.domain.guestbook.dto.GuestBookResponse;
 import com.forgather.domain.guestbook.dto.WriteGuestBookCardRequest;
 import com.forgather.domain.guestbook.dto.WriteGuestBookCardResponse;
+import com.forgather.domain.guestbook.service.GuestBookService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -32,6 +33,8 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/spaces/{spaceCode}/guestbook")
 @RestController
 public class GuestBookController {
+
+    private final GuestBookService guestBookService;
 
     /**
      * TODO
@@ -83,7 +86,8 @@ public class GuestBookController {
         @PathVariable(value = "spaceCode") String spaceCode,
         @RequestBody WriteGuestBookCardRequest request
     ) {
-        return ResponseEntity.status(CREATED).body(null);
+        var response = guestBookService.writeCard(spaceCode, request);
+        return ResponseEntity.status(CREATED).body(response);
     }
 
     /**
