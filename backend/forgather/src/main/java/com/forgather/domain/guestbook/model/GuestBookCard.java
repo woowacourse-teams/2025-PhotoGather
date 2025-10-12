@@ -1,5 +1,7 @@
 package com.forgather.domain.guestbook.model;
 
+import org.springframework.http.HttpStatus;
+
 import com.forgather.domain.model.BaseTimeEntity;
 import com.forgather.domain.space.model.Space;
 import com.forgather.global.exception.BaseException;
@@ -59,7 +61,7 @@ public class GuestBookCard extends BaseTimeEntity {
             throw new BaseNullPointerException("방명록 카드 방문자는 null일 수 없습니다.");
         }
         if (message == null) {
-            throw new BaseNullPointerException("방명록 카드 메세지는 null일 수 없습니다.");
+            throw new BaseNullPointerException("방명록 카드 메세지는 null일 수 없습니다.", HttpStatus.BAD_REQUEST);
         }
     }
 

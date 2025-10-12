@@ -3,6 +3,8 @@ package com.forgather.domain.space.model;
 import java.util.Objects;
 import java.util.regex.Pattern;
 
+import org.springframework.http.HttpStatus;
+
 import com.forgather.domain.model.BaseTimeEntity;
 import com.forgather.global.exception.BaseException;
 import com.forgather.global.exception.BaseNullPointerException;
@@ -82,19 +84,19 @@ public class Space extends BaseTimeEntity {
     private void validateRequiredFields(String code, String name, String description, String instagramUsername,
         String email) {
         if (code == null) {
-            throw new BaseNullPointerException("스페이스 코드는 null일 수 없습니다.");
+            throw new BaseNullPointerException("스페이스 코드는 null일 수 없습니다.", HttpStatus.BAD_REQUEST);
         }
         if (name == null) {
-            throw new BaseNullPointerException("스페이스 이름은 null일 수 없습니다.");
+            throw new BaseNullPointerException("스페이스 이름은 null일 수 없습니다.", HttpStatus.BAD_REQUEST);
         }
         if (description == null) {
-            throw new BaseNullPointerException("스페이스 설명은 null일 수 없습니다.");
+            throw new BaseNullPointerException("스페이스 설명은 null일 수 없습니다.", HttpStatus.BAD_REQUEST);
         }
         if (instagramUsername == null) {
-            throw new BaseNullPointerException("인스타그램 아이디는 null일 수 없습니다.");
+            throw new BaseNullPointerException("인스타그램 아이디는 null일 수 없습니다.", HttpStatus.BAD_REQUEST);
         }
         if (email == null) {
-            throw new BaseNullPointerException("이메일은 null일 수 없습니다.");
+            throw new BaseNullPointerException("이메일은 null일 수 없습니다.", HttpStatus.BAD_REQUEST);
         }
     }
 

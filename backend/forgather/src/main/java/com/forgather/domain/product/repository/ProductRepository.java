@@ -2,6 +2,8 @@ package com.forgather.domain.product.repository;
 
 import java.util.Optional;
 
+import org.springframework.http.HttpStatus;
+
 import com.forgather.domain.product.model.Product;
 import com.forgather.global.exception.BaseNullPointerException;
 import com.forgather.global.exception.NotFoundException;
@@ -13,7 +15,7 @@ public interface ProductRepository {
 
     default Product getBySpaceCodeOrThrow(String spaceCode) {
         if (spaceCode == null) {
-            throw new BaseNullPointerException("스페이스의 코드는 null일 수 없습니다.");
+            throw new BaseNullPointerException("스페이스의 코드는 null일 수 없습니다.", HttpStatus.BAD_REQUEST);
         }
         return findBySpaceCode(spaceCode)
             .orElseThrow(() -> new NotFoundException("해당 스페이스 등록된 작품이 없습니다. spaceCode: " + spaceCode));

@@ -1,5 +1,7 @@
 package com.forgather.domain.product.model;
 
+import org.springframework.http.HttpStatus;
+
 import com.forgather.domain.model.BaseTimeEntity;
 import com.forgather.domain.space.model.Space;
 import com.forgather.global.exception.BaseException;
@@ -78,16 +80,16 @@ public class Product extends BaseTimeEntity {
             throw new BaseNullPointerException("스페이스는 null일 수 없습니다.");
         }
         if (title == null) {
-            throw new BaseNullPointerException("작품명은 null일 수 없습니다.");
+            throw new BaseNullPointerException("작품명은 null일 수 없습니다.", HttpStatus.BAD_REQUEST);
         }
         if (category == null) {
-            throw new BaseNullPointerException("작품 카테고리는 null일 수 없습니다.");
+            throw new BaseNullPointerException("작품 카테고리는 null일 수 없습니다.", HttpStatus.BAD_REQUEST);
         }
         if (authorName == null) {
-            throw new BaseNullPointerException("작가명은 null일 수 없습니다.");
+            throw new BaseNullPointerException("작가명은 null일 수 없습니다.", HttpStatus.BAD_REQUEST);
         }
         if (description == null) {
-            throw new BaseNullPointerException("작품 설명은 null일 수 없습니다.");
+            throw new BaseNullPointerException("작품 설명은 null일 수 없습니다.", HttpStatus.BAD_REQUEST);
         }
     }
 

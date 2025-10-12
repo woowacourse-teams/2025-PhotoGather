@@ -1,5 +1,7 @@
 package com.forgather.domain.product.model;
 
+import org.springframework.http.HttpStatus;
+
 import com.forgather.domain.model.Photo;
 import com.forgather.global.exception.BaseException;
 import com.forgather.global.exception.BaseNullPointerException;
@@ -46,7 +48,7 @@ public class ProductPhoto extends Photo implements Comparable<ProductPhoto> {
 
     private void validateRequiredFields(Product product) {
         if (product == null) {
-            throw new BaseNullPointerException("작품 정보는 필수입니다.");
+            throw new BaseNullPointerException("작품 정보는 필수입니다.", HttpStatus.BAD_REQUEST);
         }
     }
 
