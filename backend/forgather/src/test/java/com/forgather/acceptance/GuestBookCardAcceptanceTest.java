@@ -128,18 +128,15 @@ public class GuestBookCardAcceptanceTest extends AcceptanceTest {
 
             () -> assertThat(result.photos().get(0).originalName()).isEqualTo("photo1.jpg"),
             () -> assertThat(result.photos().get(0).path()).endsWith(
-                "/spaces/%s/guestbook/abc.jpg".formatted(publicSpace.getCode())
-            ),
+                "/spaces/%s/guestbook/abc.jpg".formatted(publicSpace.getCode())),
 
             () -> assertThat(result.photos().get(1).originalName()).isEqualTo("photo2.jpg"),
             () -> assertThat(result.photos().get(1).path()).endsWith(
-                "/spaces/%s/guestbook/def.jpg".formatted(publicSpace.getCode())
-            ),
+                "/spaces/%s/guestbook/def.jpg".formatted(publicSpace.getCode())),
 
             () -> assertThat(result.photos().get(2).originalName()).isEqualTo("photo3.jpg"),
             () -> assertThat(result.photos().get(2).path()).endsWith(
-                "/spaces/%s/guestbook/ghi.jpg".formatted(publicSpace.getCode())
-            )
+                "/spaces/%s/guestbook/ghi.jpg".formatted(publicSpace.getCode()))
         );
     }
 

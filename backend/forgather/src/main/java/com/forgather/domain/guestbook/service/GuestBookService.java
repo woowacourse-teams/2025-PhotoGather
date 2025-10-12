@@ -26,6 +26,7 @@ import com.forgather.domain.upload.domain.ContentsStorage;
 import com.forgather.global.auth.model.Host;
 import com.forgather.global.auth.repository.SpaceHostMapRepository;
 import com.forgather.global.exception.BaseException;
+import com.forgather.global.exception.NotFoundException;
 
 import lombok.RequiredArgsConstructor;
 
@@ -38,7 +39,7 @@ public class GuestBookService {
     private final GuestRepository guestRepository;
     private final GuestBookCardRepository guestBookCardRepository;
     private final GuestBookCardPhotoRepository guestBookCardPhotoRepository;
-    private final ContentsStorage  contentsStorage;
+    private final ContentsStorage contentsStorage;
 
     @Transactional
     public WriteGuestBookCardResponse writeCard(String spaceCode, WriteGuestBookCardRequest request) {
@@ -77,9 +78,20 @@ public class GuestBookService {
         if (!canRead) {
             throw new BaseException("방문자는 비공개 스페이스의 방명록을 조회할 수 없습니다. spaceCode: " + spaceCode);
         }
-        GuestBookCard guestBookCard = guestBookCardRepository.getByIdOrThrow(guestBookCardId);
+        GuestBookCard guestBookCard = getGuestBookCard(guestBookCardId, space);
         List<GuestBookCardPhoto> photos = guestBookCardPhotoRepository.findAllByGuestBookCard(guestBookCard);
         return new GuestBookCardResponse(guestBookCard, photos);
+    }
+
+    private GuestBookCard getGuestBookCard(Long guestBookCardId, Space space) {
+        GuestBookCard guestBookCard = guestBookCardRepository.getByIdOrThrow(guestBookCardId);
+        if (guestBookCard.equalsSpace(space)) {
+            return guestBookCard;
+        }
+        throw new NotFoundException(
+            "해당 스페이스에 존재하지 않는 방명록 카드입니다. spaceCode: %s, guestBookCardId: %d"
+                .formatted(space.getCode(), guestBookCardId)
+        );
     }
 
     private boolean canRead(Space space, Host host) {
