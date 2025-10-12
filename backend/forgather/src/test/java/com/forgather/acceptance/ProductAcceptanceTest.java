@@ -24,7 +24,6 @@ import com.forgather.domain.space.model.Space;
 import com.forgather.domain.space.repository.SpaceRepository;
 import com.forgather.domain.upload.AwsS3Cloud;
 import com.forgather.fixture.SpaceFixture;
-import com.forgather.global.auth.model.Host;
 
 import io.restassured.http.ContentType;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
@@ -44,7 +43,6 @@ class ProductAcceptanceTest extends AcceptanceTest {
     @MockitoBean
     private AwsS3Cloud awsS3Cloud;
 
-    private Host host;
     private Space space;
 
     private RegisterProductRequest registerRequest = new RegisterProductRequest(
