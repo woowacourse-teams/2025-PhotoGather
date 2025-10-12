@@ -35,20 +35,13 @@ public class GuestBookService {
     private final ContentsStorage  contentsStorage;
 
     public WriteGuestBookCardResponse writeCard(String spaceCode, WriteGuestBookCardRequest request) {
-        // 스페이스 찾아오기
         Space space = spaceRepository.getByCodeOrThrow(spaceCode);
-
-        // 게스트 저장
         Guest guest = guestRepository.save(new Guest(request.nickname()));
-
-        // 방명록 카드 저장
         GuestBookCard guestBookCard = guestBookCardRepository.save(request.toEntity(space, guest));
 
-        // 사진 저장
         GuestBookCardPhotos guestBookCardPhotos = getGuestBookCardPhotos(spaceCode, request, guestBookCard);
         guestBookCardPhotoRepository.saveAll(guestBookCardPhotos.getAll());
 
-        // entity -> response
         return new WriteGuestBookCardResponse(guestBookCard, guestBookCardPhotos.getAll());
     }
 
