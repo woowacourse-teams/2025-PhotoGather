@@ -9,6 +9,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.forgather.domain.guestbook.dto.GuestBookCardResponse;
 import com.forgather.domain.guestbook.dto.WriteGuestBookCardPhotoRequest;
 import com.forgather.domain.guestbook.dto.WriteGuestBookCardRequest;
 import com.forgather.domain.guestbook.dto.WriteGuestBookCardResponse;
@@ -22,6 +23,9 @@ import com.forgather.domain.guestbook.repository.GuestRepository;
 import com.forgather.domain.space.model.Space;
 import com.forgather.domain.space.repository.SpaceRepository;
 import com.forgather.domain.upload.domain.ContentsStorage;
+import com.forgather.global.auth.model.Host;
+import com.forgather.global.auth.repository.SpaceHostMapRepository;
+import com.forgather.global.exception.BaseException;
 
 import lombok.RequiredArgsConstructor;
 
@@ -30,6 +34,7 @@ import lombok.RequiredArgsConstructor;
 public class GuestBookService {
 
     private final SpaceRepository spaceRepository;
+    private final SpaceHostMapRepository spaceHostMapRepository;
     private final GuestRepository guestRepository;
     private final GuestBookCardRepository guestBookCardRepository;
     private final GuestBookCardPhotoRepository guestBookCardPhotoRepository;
@@ -64,5 +69,26 @@ public class GuestBookService {
             photos.add(photo);
         }
         return new GuestBookCardPhotos(photos);
+    }
+
+    public GuestBookCardResponse readCard(Host host, String spaceCode, Long guestBookCardId) {
+        Space space = spaceRepository.getByCodeOrThrow(spaceCode);
+        boolean canRead = canAccess(space, host);
+        if (!canRead) {
+            throw new BaseException("방문자는 비공개 스페이스의 방명록을 조회할 수 없습니다. spaceCode: " + spaceCode);
+        }
+        GuestBookCard guestBookCard = guestBookCardRepository.getByIdOrThrow(guestBookCardId);
+        List<GuestBookCardPhoto> photos = guestBookCardPhotoRepository.findAllByGuestBookCard(guestBookCard);
+        return new GuestBookCardResponse(guestBookCard, photos);
+    }
+
+    private boolean canAccess(Space space, Host host) {
+        if (space.isPublic()) { // 공개
+            return true;
+        }
+        if (host == null) { // 비공개 & 방문자
+            return false;
+        }
+        return spaceHostMapRepository.findBySpaceAndHost(space, host).isPresent(); // 비공개 & 호스트
     }
 }

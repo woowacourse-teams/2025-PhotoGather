@@ -2,6 +2,9 @@ package com.forgather.domain.guestbook.dto;
 
 import java.util.List;
 
+import com.forgather.domain.guestbook.model.GuestBookCard;
+import com.forgather.domain.guestbook.model.GuestBookCardPhoto;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 
 public record GuestBookCardResponse(
@@ -10,7 +13,7 @@ public record GuestBookCardResponse(
     Long id,
 
     @Schema(description = "방문자 닉네임", example = "밍퐁루블")
-    String guestNickname,
+    String nickname,
 
     @Schema(description = "메세지", example = "전시 잘봤다~~ 너가 최고야 🤙")
     String message,
@@ -36,4 +39,12 @@ public record GuestBookCardResponse(
         """)
     List<GuestBookCardPhotoResponse> photos
 ) {
+
+    public GuestBookCardResponse(GuestBookCard guestBookCard, List<GuestBookCardPhoto> photos) {
+        this(guestBookCard.getId(),
+            guestBookCard.getNickname(),
+            guestBookCard.getMessage(),
+            photos.stream().map(GuestBookCardPhotoResponse::new).toList()
+        );
+    }
 }

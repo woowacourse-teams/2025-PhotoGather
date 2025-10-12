@@ -20,6 +20,8 @@ import com.forgather.domain.guestbook.dto.GuestBookResponse;
 import com.forgather.domain.guestbook.dto.WriteGuestBookCardRequest;
 import com.forgather.domain.guestbook.dto.WriteGuestBookCardResponse;
 import com.forgather.domain.guestbook.service.GuestBookService;
+import com.forgather.global.auth.annotation.LoginHost;
+import com.forgather.global.auth.model.Host;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -62,24 +64,17 @@ public class GuestBookController {
         return ResponseEntity.ok(null);
     }
 
-    /**
-     * TODO
-     * 공개 검증 (게스트)
-     * 읽음 처리 (호스트)
-     * 사진
-     */
     @Operation(summary = "방명록 카드 조회", description = "공개 스페이스가 아닌 경우 호스트만 조회 가능")
     @GetMapping("/{guestBookCardId}")
-    public ResponseEntity<GuestBookCardResponse> getCard(
+    public ResponseEntity<GuestBookCardResponse> readCard(
         @PathVariable(value = "spaceCode") String spaceCode,
-        @PathVariable(value = "guestBookCardId") Long guestBookCardId
+        @PathVariable(value = "guestBookCardId") Long guestBookCardId,
+        @LoginHost(required = false) Host host
     ) {
-        return ResponseEntity.ok(null);
+        GuestBookCardResponse response = guestBookService.readCard(host, spaceCode, guestBookCardId);
+        return ResponseEntity.ok(response);
     }
 
-    /**
-     * TODO
-     */
     @Operation(summary = "방명록 카드 작성", description = "방문자 닉네임(10자), 메세지(300자)")
     @PostMapping
     public ResponseEntity<WriteGuestBookCardResponse> writeCard(

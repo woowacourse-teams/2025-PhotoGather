@@ -43,7 +43,7 @@ public record WriteGuestBookCardResponse(
     public WriteGuestBookCardResponse(GuestBookCard guestBookCard, List<GuestBookCardPhoto> photos) {
         this(
             guestBookCard.getId(),
-            guestBookCard.getGuestNickname(),
+            guestBookCard.getNickname(),
             guestBookCard.getMessage(),
             photos.stream().map(GuestBookCardPhotoResponse::new).toList()
         );
