@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.forgather.domain.guestbook.dto.WriteGuestBookCardPhotoRequest;
 import com.forgather.domain.guestbook.dto.WriteGuestBookCardRequest;
@@ -34,6 +35,7 @@ public class GuestBookService {
     private final GuestBookCardPhotoRepository guestBookCardPhotoRepository;
     private final ContentsStorage  contentsStorage;
 
+    @Transactional
     public WriteGuestBookCardResponse writeCard(String spaceCode, WriteGuestBookCardRequest request) {
         Space space = spaceRepository.getByCodeOrThrow(spaceCode);
         Guest guest = guestRepository.save(new Guest(request.nickname()));
