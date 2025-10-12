@@ -73,7 +73,7 @@ public class GuestBookService {
 
     public GuestBookCardResponse readCard(Host host, String spaceCode, Long guestBookCardId) {
         Space space = spaceRepository.getByCodeOrThrow(spaceCode);
-        boolean canRead = canAccess(space, host);
+        boolean canRead = canRead(space, host);
         if (!canRead) {
             throw new BaseException("방문자는 비공개 스페이스의 방명록을 조회할 수 없습니다. spaceCode: " + spaceCode);
         }
@@ -82,7 +82,7 @@ public class GuestBookService {
         return new GuestBookCardResponse(guestBookCard, photos);
     }
 
-    private boolean canAccess(Space space, Host host) {
+    private boolean canRead(Space space, Host host) {
         if (space.isPublic()) { // 공개
             return true;
         }
