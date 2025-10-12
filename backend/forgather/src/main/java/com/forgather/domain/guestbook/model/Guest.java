@@ -44,8 +44,9 @@ public class Guest extends BaseTimeEntity {
         if (nickname.isBlank()) {
             throw new BaseException("방문자 닉네임은 공백만 입력할 수 없습니다.");
         }
-        if (TextLengthCounter.count(nickname) > 10) {
-            throw new BaseException("방문자 닉네임은 최대 10자까지 입력 가능합니다. nickname.length: " + nickname.length());
+        int length = TextLengthCounter.count(nickname);
+        if (length > 10) {
+            throw new BaseException("방문자 닉네임은 최대 10자까지 입력 가능합니다. nickname.length: " + length);
         }
     }
 }

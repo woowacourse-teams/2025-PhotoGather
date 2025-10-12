@@ -66,8 +66,9 @@ public class GuestBookCard extends BaseTimeEntity {
     }
 
     private void validateMessage(String message) {
-        if (TextLengthCounter.count(message) > 300) {
-            throw new BaseException("방명록 카드 메세지는 최대 300까지 입력 가능합니다. message.length: " + message.length());
+        int length = TextLengthCounter.count(message);
+        if (length > 300) {
+            throw new BaseException("방명록 카드 메세지는 최대 300까지 입력 가능합니다. message.length: " + length);
         }
     }
 
