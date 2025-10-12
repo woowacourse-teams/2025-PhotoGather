@@ -24,17 +24,17 @@ public record RegisterProductRequest(
         [
             {
                 "originalName": "chair1.jpg",
-                "path": "1234567890/abc.jpg",
+                "uploadFileName": "abc.jpg",
                 "capacity": 1024
             },
             {
                 "originalName": "chair2.jpg",
-                "path": "1234567890/def.jpg",
+                "uploadFileName": "def.jpg",
                 "capacity": 2048
             },
             {
                 "originalName": "chair3.jpg",
-                "path": "1234567890/ghi.jpg",
+                "uploadFileName": "ghi.jpg",
                 "capacity": 4096
             }
         ]

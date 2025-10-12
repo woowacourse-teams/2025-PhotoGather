@@ -1,6 +1,10 @@
 import { useNavigate } from 'react-router-dom';
 import Button from '../components/@common/buttons/button/Button';
-import { ROUTES } from '../constants/routes';
+import {
+  createGuestWorkDetailRoute,
+  createWorkDetailRoute,
+  ROUTES,
+} from '../constants/routes';
 
 const MainPage = () => {
   const navigate = useNavigate();
@@ -23,8 +27,12 @@ const MainPage = () => {
         onClick={() => navigate(ROUTES.GUEST.MAIN)}
       />
       <Button
+        text="[HOST] 작품 소개 이동"
+        onClick={() => navigate(createWorkDetailRoute('b17359bb41'))}
+      />
+      <Button
         text="[GUEST] 작품 소개 이동"
-        onClick={() => navigate(ROUTES.GUEST.WORK_DETAIL)}
+        onClick={() => navigate(createGuestWorkDetailRoute('b17359bb41'))}
       />
     </div>
   );

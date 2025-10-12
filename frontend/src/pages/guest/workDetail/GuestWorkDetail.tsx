@@ -1,12 +1,51 @@
+import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { workService } from '../../../apis/services/work/work.service';
 import Button from '../../../components/@common/buttons/button/Button';
 import Footer from '../../../components/@common/footer/Footer';
+import { useToast } from '../../../hooks/@common/useToast';
 import { DividerLine } from '../../../styles/@common/DividerLine.styles';
-import { mockWorkDetail } from '../../mockData';
+import type { WorkDetail } from '../../../types/domain/work.type';
+import { buildThumbnailUrl } from '../../../utils/buildThumbnailUrl';
 import * as C from '../../WorkDetail.common.styles';
 import * as S from './GuestWorkDetail.styles';
 
 const GuestWorkDetail = () => {
-  if (!mockWorkDetail) {
+  const { spaceCode } = useParams<{ spaceCode: string }>();
+  const [workDetail, setWorkDetail] = useState<WorkDetail | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const { showToast } = useToast();
+
+  // biome-ignore lint/correctness/useExhaustiveDependencies: showToast is stable
+  useEffect(() => {
+    const fetchWorkDetail = async () => {
+      if (!spaceCode) return;
+
+      try {
+        const response = await workService.getWork(spaceCode);
+
+        if (response.success) {
+          setWorkDetail(response.data);
+        } else {
+          setWorkDetail(null);
+        }
+      } catch (error) {
+        console.error(error);
+        showToast({ text: '작품 정보를 불러오는 데 실패했습니다.' });
+        setWorkDetail(null);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchWorkDetail();
+  }, [spaceCode]);
+
+  if (isLoading) {
+    return null;
+  }
+
+  if (!workDetail || !spaceCode) {
     return (
       <S.Wrapper>
         <S.EmptyStateContainer>
@@ -16,7 +55,7 @@ const GuestWorkDetail = () => {
     );
   }
 
-  const { title, category, designer, description, images } = mockWorkDetail;
+  const { title, category, authorName, description, photos } = workDetail;
 
   return (
     <S.Wrapper>
@@ -25,13 +64,12 @@ const GuestWorkDetail = () => {
           <C.TitleContainer>{title}</C.TitleContainer>
           <C.CategoryContainer>{category}</C.CategoryContainer>
         </C.TitleRowContainer>
-        <C.DesignerContainer>{designer}</C.DesignerContainer>
+        <C.DesignerContainer>{authorName}</C.DesignerContainer>
         <C.DescriptionContainer>{description}</C.DescriptionContainer>
-        {images.map((image: string, index: number) => (
+        {photos.map((photo, index) => (
           <C.ImageContainer
-            // biome-ignore lint/suspicious/noArrayIndexKey: mock data라 무시
-            key={index}
-            src={image}
+            key={photo.id}
+            src={buildThumbnailUrl(photo.path, '800')}
             alt={`work-detail-${index}`}
           />
         ))}

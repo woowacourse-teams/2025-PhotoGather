@@ -1,27 +1,19 @@
 package com.forgather.domain.upload;
 
-import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
 import java.nio.file.Path;
 import java.time.Duration;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
 
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.forgather.domain.space.model.Photo;
+import com.forgather.domain.model.Photo;
 import com.forgather.domain.upload.domain.ContentsStorage;
 import com.forgather.global.config.S3Properties;
-import com.forgather.global.exception.FileDownloadException;
-import com.forgather.global.util.RandomCodeGenerator;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,17 +22,12 @@ import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.Delete;
 import software.amazon.awssdk.services.s3.model.DeleteObjectsRequest;
 import software.amazon.awssdk.services.s3.model.DeleteObjectsResponse;
-import software.amazon.awssdk.services.s3.model.GetObjectRequest;
-import software.amazon.awssdk.services.s3.model.GetUrlRequest;
 import software.amazon.awssdk.services.s3.model.ObjectIdentifier;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 import software.amazon.awssdk.services.s3.model.S3Error;
 import software.amazon.awssdk.services.s3.presigner.S3Presigner;
 import software.amazon.awssdk.services.s3.presigner.model.PresignedPutObjectRequest;
 import software.amazon.awssdk.services.s3.presigner.model.PutObjectPresignRequest;
-import software.amazon.awssdk.transfer.s3.S3TransferManager;
-import software.amazon.awssdk.transfer.s3.model.CompletedFileDownload;
-import software.amazon.awssdk.transfer.s3.model.DownloadFileRequest;
 
 @Component
 @Slf4j
@@ -56,9 +43,7 @@ public class AwsS3Cloud implements ContentsStorage {
 
     private final S3Client s3Client;
     private final S3Properties s3Properties;
-    private final S3TransferManager transferManager;
     private final S3Presigner s3Presigner;
-    private final RandomCodeGenerator randomCodeGenerator;
 
     @Override
     public String upload(String spaceCode, MultipartFile file) throws IOException {
@@ -84,70 +69,6 @@ public class AwsS3Cloud implements ContentsStorage {
         String uploadFileName = UUID.randomUUID().toString();
         return String.format("%s/%s/%s/%s.%s", s3Properties.getRootDirectory(), CONTENTS_INNER_PATH, spaceCode,
             uploadFileName, extension);
-    }
-
-    @Override
-    public InputStream download(String photoPath) {
-        GetObjectRequest request = GetObjectRequest.builder()
-            .bucket(s3Properties.getBucketName())
-            .key(photoPath)
-            .build();
-
-        return s3Client.getObject(request);
-    }
-
-    @Override
-    public File downloadSelected(String tempPath, String spaceCode, List<String> photoPaths) {
-        File localDownloadDirectory = createLocalDownloadDirectory(tempPath, spaceCode);
-        Map<String, Path> paths = getPhotoPathNames(spaceCode, photoPaths, localDownloadDirectory);
-
-        CompletableFuture.allOf(paths.entrySet().stream()
-            .map(entry -> downloadFileAsync(entry.getKey(), entry.getValue()))
-            .toArray(CompletableFuture[]::new)
-        ).join();
-        return localDownloadDirectory;
-    }
-
-    private File createLocalDownloadDirectory(String tempPath, String spaceCode) {
-        File localDownloadDirectory = new File(tempPath,
-            "images-" + spaceCode + "-" + randomCodeGenerator.generate(10));
-        if (!localDownloadDirectory.exists()) {
-            boolean created = localDownloadDirectory.mkdirs();
-            if (!created) {
-                throw new FileDownloadException("다운로드 디렉토리 생성 실패: " + localDownloadDirectory.getAbsolutePath());
-            }
-        }
-        return localDownloadDirectory;
-    }
-
-    private Map<String, Path> getPhotoPathNames(String spaceCode, List<String> paths, File localDownloadDirectory) {
-        Map<String, Path> photoPaths = new LinkedHashMap<>();
-        for (int i = 0; i < paths.size(); i++) {
-            String photoPath = paths.get(i);
-            String changedName = String.format("%s.%s", spaceCode + "-" + (i + 1),
-                StringUtils.getFilenameExtension(photoPath));
-            photoPaths.put(photoPath, localDownloadDirectory.toPath().resolve(changedName));
-        }
-        return photoPaths;
-    }
-
-    private CompletableFuture<CompletedFileDownload> downloadFileAsync(String key, Path localPath) {
-        DownloadFileRequest request = DownloadFileRequest.builder()
-            .getObjectRequest(r -> r.bucket(s3Properties.getBucketName()).key(key))
-            .destination(localPath)
-            .build();
-        return transferManager.downloadFile(request).completionFuture();
-    }
-
-    @Deprecated(since = "2025-09-19", forRemoval = true)
-    @Override
-    public URL issueDownloadUrl(String photoPath) {
-        return s3Client.utilities()
-            .getUrl(GetUrlRequest.builder()
-                .bucket(s3Properties.getBucketName())
-                .key(photoPath)
-                .build()
-            );
     }
 
     @Override
