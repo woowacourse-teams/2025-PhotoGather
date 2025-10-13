@@ -5,6 +5,7 @@ import java.util.Optional;
 import org.springframework.http.HttpStatus;
 
 import com.forgather.domain.guestbook.model.GuestBookCard;
+import com.forgather.domain.space.model.Space;
 import com.forgather.global.exception.BaseNullPointerException;
 import com.forgather.global.exception.NotFoundException;
 
@@ -15,6 +16,8 @@ public interface GuestBookCardRepository {
     Optional<GuestBookCard> findById(Long id);
 
     void delete(GuestBookCard guestBookCard);
+
+    Long countBySpace(Space space);
 
     default GuestBookCard getByIdOrThrow(Long id) {
         if (id == null) {

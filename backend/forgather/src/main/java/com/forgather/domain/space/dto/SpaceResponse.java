@@ -36,10 +36,13 @@ public record SpaceResponse(
             "path": "forgather/1234567890/profile.png"
         }
         """)
-    SpacePhotoResponse spacePhoto
+    SpacePhotoResponse spacePhoto,
+
+    @Schema(description = "스페이스 방명록 카드 개수", example = "15")
+    Long guestBookCardCount
 ) {
 
-    public static SpaceResponse from(Space space, SpacePhotoResponse spacePhoto) {
+    public static SpaceResponse from(Space space, SpacePhotoResponse spacePhoto, Long guestBookCardCount) {
         return new SpaceResponse(
             space.getId(),
             space.getCode(),
@@ -50,7 +53,8 @@ public record SpaceResponse(
             space.getEmail(),
             // TODO: 스페이스 : 호스트 m:n 관계로 변경 후 수정 필요
             // HostResponse.from(space.getSpaceHostMap().getFirst().getHost()),
-            spacePhoto
+            spacePhoto,
+            guestBookCardCount
         );
     }
 }

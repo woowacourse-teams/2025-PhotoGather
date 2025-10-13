@@ -2,8 +2,6 @@ package com.forgather.domain.space.controller;
 
 import static org.springframework.http.HttpStatus.CREATED;
 
-import java.util.List;
-
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -19,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.forgather.domain.space.dto.CreateSpaceRequest;
 import com.forgather.domain.space.dto.CreateSpaceResponse;
+import com.forgather.domain.space.dto.HostSpaceResponse;
 import com.forgather.domain.space.dto.SpaceResponse;
 import com.forgather.domain.space.dto.UpdateSpaceRequest;
 import com.forgather.domain.space.service.SpaceService;
@@ -85,8 +84,8 @@ public class SpaceController {
 
     @GetMapping("/me")
     @Operation(summary = "호스트의 스페이스 목록 조회", description = "호스트 ID를 통해 해당 호스트의 스페이스 목록을 조회합니다.")
-    public ResponseEntity<List<SpaceResponse>> getSpacesInformation(@LoginHost Host host) {
-        List<SpaceResponse> response = spaceService.getSpacesInformation(host);
+    public ResponseEntity<HostSpaceResponse> getSpacesInformation(@LoginHost Host host) {
+        var response = spaceService.getSpacesInformation(host);
         return ResponseEntity.ok(response);
     }
 }
