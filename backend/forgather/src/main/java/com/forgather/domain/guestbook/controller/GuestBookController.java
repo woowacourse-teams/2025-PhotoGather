@@ -49,7 +49,6 @@ public class GuestBookController {
     @GetMapping
     public ResponseEntity<GuestBookResponse> getCards(
         @PathVariable(value = "spaceCode") String spaceCode,
-
         @Schema(example = """
             {
               "page": 1,
@@ -93,8 +92,10 @@ public class GuestBookController {
     @DeleteMapping("/{guestBookCardId}")
     public ResponseEntity<Void> deleteCard(
         @PathVariable(value = "spaceCode") String spaceCode,
-        @PathVariable(value = "guestBookCardId") Long guestBookCardId
+        @PathVariable(value = "guestBookCardId") Long guestBookCardId,
+        @LoginHost(required = false) Host host // TODO true로 전환
     ) {
+        guestBookService.deleteCard(host, spaceCode, guestBookCardId);
         return ResponseEntity.noContent().build();
     }
 

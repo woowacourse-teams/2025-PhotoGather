@@ -25,7 +25,8 @@ import com.forgather.domain.space.repository.SpaceRepository;
 import com.forgather.domain.upload.domain.ContentsStorage;
 import com.forgather.global.auth.model.Host;
 import com.forgather.global.auth.repository.SpaceHostMapRepository;
-import com.forgather.global.exception.BaseException;
+import com.forgather.global.exception.BaseNullPointerException;
+import com.forgather.global.exception.ForbiddenException;
 import com.forgather.global.exception.NotFoundException;
 
 import lombok.RequiredArgsConstructor;
@@ -77,7 +78,7 @@ public class GuestBookService {
         validateCanRead(space, host);
 
         GuestBookCard guestBookCard = getGuestBookCard(guestBookCardId, space);
-        if (isSpaceHost(space, host)) {
+        if (host != null && isSpaceHost(space, host)) {
             guestBookCard.read();
         }
 
@@ -86,16 +87,37 @@ public class GuestBookService {
     }
 
     private void validateCanRead(Space space, Host host) {
-        if (isSpaceHost(space, host)) { // 스페이스 호스트
-            return;
-        }
         if (space.isPublic()) { // 공개 스페이스
             return;
         }
-        throw new BaseException("방문자는 비공개 스페이스의 방명록을 조회할 수 없습니다. spaceCode: " + space.getCode());
+        if (host != null && isSpaceHost(space, host)) { // 스페이스 호스트
+            return;
+        }
+        throw new ForbiddenException("방문자는 비공개 스페이스의 방명록을 조회할 수 없습니다. spaceCode: " + space.getCode());
+    }
+
+    @Transactional
+    public void deleteCard(Host host, String spaceCode, Long guestBookCardId) {
+        Space space = spaceRepository.getByCodeOrThrow(spaceCode);
+        // validateSpaceHost(host, space); // TODO 검증 활성화
+        GuestBookCard guestBookCard = getGuestBookCard(guestBookCardId, space);
+        deleteGuestBookCardPhotos(guestBookCard);
+        guestBookCardRepository.delete(guestBookCard);
+    }
+
+    private void validateSpaceHost(Host host, Space space) {
+        if (isSpaceHost(space, host)) {
+            return;
+        }
+        throw new ForbiddenException(
+            "해당 스페이스에 대한 접근 권한이 없습니다. spaceCode: %s, hostId: %d".formatted(space.getCode(), host.getId())
+        );
     }
 
     private boolean isSpaceHost(Space space, Host host) {
+        if (space == null || host == null) {
+            throw new BaseNullPointerException("스페이스와 호스트는 null일 수 없습니다.");
+        }
         return spaceHostMapRepository.findBySpaceAndHost(space, host).isPresent();
     }
 
@@ -108,5 +130,11 @@ public class GuestBookService {
             "해당 스페이스에 존재하지 않는 방명록 카드입니다. spaceCode: %s, guestBookCardId: %d"
                 .formatted(space.getCode(), guestBookCardId)
         );
+    }
+
+    private void deleteGuestBookCardPhotos(GuestBookCard guestBookCard) {
+        List<GuestBookCardPhoto> photos = guestBookCardPhotoRepository.findAllByGuestBookCard(guestBookCard);
+        guestBookCardPhotoRepository.deleteAll(photos);
+        contentsStorage.deletePhotos(photos);
     }
 }

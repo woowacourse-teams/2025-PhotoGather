@@ -14,6 +14,8 @@ public interface GuestBookCardRepository {
 
     Optional<GuestBookCard> findById(Long id);
 
+    void delete(GuestBookCard guestBookCard);
+
     default GuestBookCard getByIdOrThrow(Long id) {
         if (id == null) {
             throw new BaseNullPointerException("방명록 카드의 id는 null일 수 없습니다.", HttpStatus.BAD_REQUEST);

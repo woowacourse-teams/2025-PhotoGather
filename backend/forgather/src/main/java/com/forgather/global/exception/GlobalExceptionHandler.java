@@ -140,7 +140,7 @@ public class GlobalExceptionHandler {
         logClientWarning(e);
         return ResponseEntity.status(e.getStatusCode())
             .contentType(APPLICATION_JSON)
-            .body(ErrorResponse.from("접근 권한이 없습니다."));
+            .body(ErrorResponse.from(e.getMessage()));
     }
 
     @ExceptionHandler(UnauthorizedException.class)

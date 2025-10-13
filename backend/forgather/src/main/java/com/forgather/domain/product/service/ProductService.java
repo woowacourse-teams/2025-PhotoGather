@@ -99,6 +99,10 @@ public class ProductService {
         return new ProductResponse(product, photos.getAll());
     }
 
+    /**
+     * TODO
+     * s3에서 삭제했지만 트랜잭션 롤백 고려
+     */
     @Transactional
     public void delete(String spaceCode) {
         Product product = productRepository.getBySpaceCodeOrThrow(spaceCode);

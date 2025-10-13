@@ -113,7 +113,7 @@ public class GuestBookCardAcceptanceTest extends AcceptanceTest {
             .when()
             .get("/spaces/%s/guestbook/%d".formatted(privateSpace.getCode(), writeResponse.id()))
             .then()
-            .statusCode(400)
+            .statusCode(403)
             .body("message", containsString("방문자는 비공개 스페이스의 방명록을 조회할 수 없습니다."));
     }
 
