@@ -5,7 +5,6 @@ import java.nio.file.Path;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -13,6 +12,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.forgather.domain.model.Photo;
 import com.forgather.domain.upload.domain.ContentsStorage;
+import com.forgather.domain.upload.domain.FilePathGenerator;
+import com.forgather.domain.upload.domain.UploadCategory;
 import com.forgather.global.config.S3Properties;
 
 import lombok.RequiredArgsConstructor;
@@ -34,7 +35,6 @@ import software.amazon.awssdk.services.s3.presigner.model.PutObjectPresignReques
 @RequiredArgsConstructor
 public class AwsS3Cloud implements ContentsStorage {
 
-    private static final String CONTENTS_INNER_PATH = "contents";
     private static final String THUMBNAILS_INNER_PATH = "thumbnails";
     private static final String MOBILE_THUMBNAIL_SIZE = "x800";
     private static final String DESKTOP_THUMBNAIL_SIZE = "x1080";
@@ -47,7 +47,8 @@ public class AwsS3Cloud implements ContentsStorage {
 
     @Override
     public String upload(String spaceCode, MultipartFile file) throws IOException {
-        String path = generateFilePath(spaceCode, file);
+        String path = FilePathGenerator.generateContentsFilePath(s3Properties.getRootDirectory(), spaceCode,
+            UploadCategory.SPACE, file);
         PutObjectRequest putObjectRequest = PutObjectRequest.builder()
             .bucket(s3Properties.getBucketName())
             .key(path)
@@ -60,15 +61,7 @@ public class AwsS3Cloud implements ContentsStorage {
             .addKeyValue("originalName", file.getOriginalFilename())
             .addKeyValue("uploadedPath", path)
             .log("S3 업로드 완료");
-
         return path;
-    }
-
-    private String generateFilePath(String spaceCode, MultipartFile file) {
-        String extension = StringUtils.getFilenameExtension(file.getOriginalFilename());
-        String uploadFileName = UUID.randomUUID().toString();
-        return String.format("%s/%s/%s/%s.%s", s3Properties.getRootDirectory(), CONTENTS_INNER_PATH, spaceCode,
-            uploadFileName, extension);
     }
 
     @Override
