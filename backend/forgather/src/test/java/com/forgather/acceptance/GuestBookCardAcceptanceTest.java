@@ -32,6 +32,8 @@ import io.restassured.module.mockmvc.RestAssuredMockMvc;
  * TODO
  * 비공개 스페이스 & 호스트 -> 방명록 조회 가능
  * 미읽음 스페이스 호스트 조회 -> 읽음 처리
+ * 호스트가 아니면 방명록 카드 삭제 불가
+ * 다른 스페이스에 대한 작업
  */
 @AutoConfigureMockMvc
 public class GuestBookCardAcceptanceTest extends AcceptanceTest {
@@ -194,6 +196,28 @@ public class GuestBookCardAcceptanceTest extends AcceptanceTest {
             .then()
             .statusCode(400)
             .body("message", containsString("방명록 카드 사진은 최대"));
+    }
+
+    @DisplayName("방명록 카드를 삭제한다")
+    @Test
+    void deleteCard() {
+        // given
+        WriteGuestBookCardResponse writeResponse = writeGuestBookCard(publicSpace);
+
+        // when
+        RestAssuredMockMvc.given()
+            .when()
+            .delete("/spaces/%s/guestbook/%d".formatted(publicSpace.getCode(), writeResponse.id()))
+            .then()
+            .statusCode(204);
+
+        // then
+        RestAssuredMockMvc.given()
+            .accept(ContentType.JSON)
+            .when()
+            .get("/spaces/%s/guestbook/%d".formatted(publicSpace.getCode(), writeResponse.id()))
+            .then()
+            .statusCode(404);
     }
 
     private WriteGuestBookCardResponse writeGuestBookCard(Space space) {
