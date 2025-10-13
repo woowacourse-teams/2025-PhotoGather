@@ -6,11 +6,11 @@ export const createHeaders = (
   withTraceId: boolean = true,
   method?: string,
 ): HeadersInit => {
-  // const traceId = crypto.randomUUID().slice(0, 8);
+  const traceId = crypto.randomUUID().slice(0, 8);
 
   const headers: HeadersInit = withTraceId
     ? {
-        // 'trace-id': traceId,
+        'trace-id': traceId,
       }
     : {};
 
