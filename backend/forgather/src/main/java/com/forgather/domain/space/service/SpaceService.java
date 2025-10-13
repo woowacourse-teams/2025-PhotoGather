@@ -1,16 +1,19 @@
 package com.forgather.domain.space.service;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.forgather.domain.guestbook.repository.GuestBookCardRepository;
 import com.forgather.domain.space.dto.CreateSpaceRequest;
 import com.forgather.domain.space.dto.CreateSpaceResponse;
 import com.forgather.domain.space.dto.SpacePhotoResponse;
 import com.forgather.domain.space.dto.SpaceResponse;
+import com.forgather.domain.space.dto.SpaceSimpleResponse;
 import com.forgather.domain.space.dto.UpdateSpaceRequest;
 import com.forgather.domain.space.model.Space;
 import com.forgather.domain.space.model.SpacePhoto;
@@ -35,6 +38,7 @@ public class SpaceService {
     private final SpaceRepository spaceRepository;
     private final SpacePhotoRepository spacePhotoRepository;
     private final SpaceHostMapRepository spaceHostMapRepository;
+    private final GuestBookCardRepository guestBookCardRepository;
     private final RandomCodeGenerator codeGenerator;
     private final ContentsStorage contentsStorage;
 
@@ -70,9 +74,13 @@ public class SpaceService {
     @Transactional(readOnly = true)
     public SpaceResponse getSpaceInformation(String spaceCode) {
         Space space = spaceRepository.getByCodeOrThrow(spaceCode);
+        Long guestBookCardCount = guestBookCardRepository.countBySpace(space);
+
         return spacePhotoRepository.findBySpace(space)
-            .map(spacePhoto -> SpaceResponse.from(space, SpacePhotoResponse.exists(spacePhoto.getPath())))
-            .orElseGet(() -> SpaceResponse.from(space, SpacePhotoResponse.notExists()));
+            .map(spacePhoto -> new SpaceResponse(List.of(
+                SpaceSimpleResponse.from(space, SpacePhotoResponse.exists(spacePhoto.getPath()), guestBookCardCount))))
+            .orElseGet(() -> new SpaceResponse(List.of(
+                SpaceSimpleResponse.from(space, SpacePhotoResponse.notExists(), guestBookCardCount))));
     }
 
     @Transactional
@@ -87,10 +95,13 @@ public class SpaceService {
         } else {
             handlePhotoWithDeleteRequest(space, file, spaceCode);
         }
+        Long guestBookCardCount = guestBookCardRepository.countBySpace(space);
 
         return spacePhotoRepository.findBySpace(space)
-            .map(spacePhoto -> SpaceResponse.from(space, SpacePhotoResponse.exists(spacePhoto.getPath())))
-            .orElseGet(() -> SpaceResponse.from(space, SpacePhotoResponse.notExists()));
+            .map(spacePhoto -> new SpaceResponse(List.of(
+                SpaceSimpleResponse.from(space, SpacePhotoResponse.exists(spacePhoto.getPath()), guestBookCardCount))))
+            .orElseGet(() -> new SpaceResponse(List.of(
+                SpaceSimpleResponse.from(space, SpacePhotoResponse.notExists(), guestBookCardCount))));
     }
 
     /**
@@ -145,15 +156,19 @@ public class SpaceService {
     }
 
     @Transactional(readOnly = true)
-    public List<SpaceResponse> getSpacesInformation(Host host) {
+    public SpaceResponse getSpacesInformation(Host host) {
         List<SpaceHostMap> spaceHostMaps = spaceHostMapRepository.findAllByHost(host);
-        return spaceHostMaps.stream()
-            .map(spaceHostMap -> {
-                Space space = spaceHostMap.getSpace();
-                return spacePhotoRepository.findBySpace(space)
-                    .map(photo -> SpaceResponse.from(space, SpacePhotoResponse.exists(photo.getPath())))
-                    .orElseGet(() -> SpaceResponse.from(space, SpacePhotoResponse.notExists()));
-            })
-            .toList();
+        List<SpaceSimpleResponse> simpleResponses = new ArrayList<>();
+        spaceHostMaps.forEach(spaceHostMap -> {
+            Space space = spaceHostMap.getSpace();
+            Long guestBookCardCount = guestBookCardRepository.countBySpace(space);
+            SpaceSimpleResponse spaceSimpleResponse = spacePhotoRepository.findBySpace(space)
+                .map(photo -> SpaceSimpleResponse.from(space, SpacePhotoResponse.exists(photo.getPath()),
+                    guestBookCardCount))
+                .orElseGet(
+                    () -> SpaceSimpleResponse.from(space, SpacePhotoResponse.notExists(), guestBookCardCount));
+            simpleResponses.add(spaceSimpleResponse);
+        });
+        return new SpaceResponse(simpleResponses);
     }
 }

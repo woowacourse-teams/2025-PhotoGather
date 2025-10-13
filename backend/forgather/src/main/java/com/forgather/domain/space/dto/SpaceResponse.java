@@ -1,56 +1,43 @@
 package com.forgather.domain.space.dto;
 
-import com.forgather.domain.space.model.Space;
+import java.util.List;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
 public record SpaceResponse(
 
-    @Schema(description = "스페이스 ID", example = "1")
-    Long id,
-
-    @Schema(description = "스페이스 코드", example = "1234567890")
-    String spaceCode,
-
-    @Schema(description = "스페이스 이름", example = "My Space")
-    String name,
-
-    @Schema(description = "스페이스 설명", example = "나의 졸업 전시.")
-    String description,
-
-    @Schema(description = "스페이스 공개여부", example = "true")
-    boolean isPublic,
-
-    @Schema(description = "스페이스 호스트 인스타그램 아이디", example = "forgather_official")
-    String instagramUsername,
-
-    @Schema(description = "스페이스 호스트 이메일", example = "forgather@forgather.me")
-    String email,
-
-    // @Schema(description = "호스트 정보")
-    // HostResponse host,
-
-    @Schema(description = "스페이스 프로필 사진", example = """
-        {
-            "isExists": true,
-            "path": "forgather/1234567890/profile.png"
-        }
+    @Schema(description = "스페이스 목록", example = """
+        [
+            {
+               "id": 1,
+               "spaceCode": "1234567890",
+               "name": "서양화 졸업 전시",
+               "description": "나의 서양화 졸업 전시",
+               "isPublic": true,
+               "instagramUsername": "forgather_official1",
+               "email": "forgather1@forgather.me",
+               "spacePhoto": {
+                 "isExists": true,
+                 "path": "forgather/1234567890/profile1.png"
+               },
+               "guestBookCardCount": 15
+            },
+            {
+              "id": 2,
+              "spaceCode": "0987654321",
+              "name": "동양화 졸업 전시",
+              "description": "나의 동양화 졸업 전시",
+              "isPublic": true,
+              "instagramUsername": "forgather_official2",
+              "email": "forgather2@forgather.me",
+              "spacePhoto": {
+                "isExists": false,
+                "path": ""
+              },
+              "guestBookCardCount": 0
+            }
+        ]
         """)
-    SpacePhotoResponse spacePhoto
+    List<SpaceSimpleResponse> spaces
 ) {
-
-    public static SpaceResponse from(Space space, SpacePhotoResponse spacePhoto) {
-        return new SpaceResponse(
-            space.getId(),
-            space.getCode(),
-            space.getName(),
-            space.getDescription(),
-            space.isPublic(),
-            space.getInstagramUsername(),
-            space.getEmail(),
-            // TODO: 스페이스 : 호스트 m:n 관계로 변경 후 수정 필요
-            // HostResponse.from(space.getSpaceHostMap().getFirst().getHost()),
-            spacePhoto
-        );
-    }
 }
