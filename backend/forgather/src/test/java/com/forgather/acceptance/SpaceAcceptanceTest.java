@@ -21,6 +21,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.forgather.domain.guestbook.repository.GuestBookCardRepository;
 import com.forgather.domain.guestbook.repository.GuestRepository;
 import com.forgather.domain.space.dto.CreateSpaceRequest;
+import com.forgather.domain.space.dto.HostSpaceResponse;
 import com.forgather.domain.space.dto.SpaceResponse;
 import com.forgather.domain.space.dto.UpdateSpaceRequest;
 import com.forgather.domain.space.model.Space;
@@ -168,9 +169,9 @@ class SpaceAcceptanceTest extends AcceptanceTest {
 
         // then
         assertAll(
-            () -> assertThat(result.spaces().getFirst().spaceCode()).isEqualTo(space.getCode()),
-            () -> assertThat(result.spaces().getFirst().spacePhoto().path()).isEqualTo(spacePhoto.getPath()),
-            () -> assertThat(result.spaces().getFirst().guestBookCardCount()).isEqualTo(2)
+            () -> assertThat(result.spaceCode()).isEqualTo(space.getCode()),
+            () -> assertThat(result.spacePhoto().path()).isEqualTo(spacePhoto.getPath()),
+            () -> assertThat(result.guestBookCardCount()).isEqualTo(2)
         );
     }
 
@@ -236,13 +237,13 @@ class SpaceAcceptanceTest extends AcceptanceTest {
 
         // then
         assertAll(
-            () -> assertThat(result.spaces().getFirst().name()).isEqualTo("새로운 스페이스"),
-            () -> assertThat(result.spaces().getFirst().description()).isEqualTo("새로운 설명"),
-            () -> assertThat(result.spaces().getFirst().isPublic()).isFalse(),
-            () -> assertThat(result.spaces().getFirst().instagramUsername()).isEqualTo("forgather_official_new"),
-            () -> assertThat(result.spaces().getFirst().email()).isEqualTo("forgather_new@forgather.me"),
+            () -> assertThat(result.name()).isEqualTo("새로운 스페이스"),
+            () -> assertThat(result.description()).isEqualTo("새로운 설명"),
+            () -> assertThat(result.isPublic()).isFalse(),
+            () -> assertThat(result.instagramUsername()).isEqualTo("forgather_official_new"),
+            () -> assertThat(result.email()).isEqualTo("forgather_new@forgather.me"),
             () -> assertThat(spacePhotoRepository.getBySpaceOrEmpty(space).getOriginalName()).isEqualTo("new.jpg"),
-            () -> assertThat(result.spaces().getFirst().guestBookCardCount()).isZero()
+            () -> assertThat(result.guestBookCardCount()).isZero()
         );
     }
 
@@ -275,12 +276,12 @@ class SpaceAcceptanceTest extends AcceptanceTest {
 
         // then
         assertAll(
-            () -> assertThat(response.spaces().getFirst().name()).isEqualTo("새로운 스페이스"),
-            () -> assertThat(response.spaces().getFirst().description()).isEqualTo("테스트 스페이스"),
-            () -> assertThat(response.spaces().getFirst().isPublic()).isTrue(),
-            () -> assertThat(response.spaces().getFirst().instagramUsername()).isEqualTo("forgather_official"),
-            () -> assertThat(response.spaces().getFirst().email()).isEqualTo("forgather@forgather.me"),
-            () -> assertThat(response.spaces().getFirst().spacePhoto().path()).isEqualTo("forgather/origin.png")
+            () -> assertThat(response.name()).isEqualTo("새로운 스페이스"),
+            () -> assertThat(response.description()).isEqualTo("테스트 스페이스"),
+            () -> assertThat(response.isPublic()).isTrue(),
+            () -> assertThat(response.instagramUsername()).isEqualTo("forgather_official"),
+            () -> assertThat(response.email()).isEqualTo("forgather@forgather.me"),
+            () -> assertThat(response.spacePhoto().path()).isEqualTo("forgather/origin.png")
         );
     }
 
@@ -310,7 +311,7 @@ class SpaceAcceptanceTest extends AcceptanceTest {
             .statusCode(HttpStatus.OK.value())
             .extract()
             .body()
-            .as(SpaceResponse.class);
+            .as(HostSpaceResponse.class);
 
         // then
         assertAll(
