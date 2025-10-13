@@ -54,25 +54,25 @@ export const global = css`
     padding: 0;
     border: 0;
     overflow: hidden;
-    clip: rect(0, 0, 0, 0);     
-    clip-path: inset(50%);        
-    white-space: nowrap;      
+    clip: rect(0, 0, 0, 0);
+    clip-path: inset(50%);
+    white-space: nowrap;
   }
 
   .skip-link {
     position: absolute;
-    top: -400px;      
+    top: -400px;
     left: 0;
-    background: #000; 
-    color: #fff;      
+    background: #000;
+    color: #fff;
     padding: 8px 16px;
     z-index: 1000;
     text-decoration: none;
     border-radius: 4px;
     font-size: 14px;
   }
-  
+
   .skip-link:focus {
-    top: 0;            
+    top: 0;
   }
 `;
