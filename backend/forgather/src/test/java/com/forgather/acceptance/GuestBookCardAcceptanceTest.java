@@ -128,6 +128,7 @@ public class GuestBookCardAcceptanceTest extends AcceptanceTest {
             () -> assertThat(result.id()).isNotNull(),
             () -> assertThat(result.nickname()).isEqualTo(writeRequest.nickname()),
             () -> assertThat(result.message()).isEqualTo(writeRequest.message()),
+            () -> assertThat(result.isRead()).isFalse(),
             () -> assertThat(result.createdAt()).isBetween(LocalDateTime.now().minusMinutes(1), LocalDateTime.now()),
 
             () -> assertThat(result.photos().get(0).originalName()).isEqualTo("photo1.jpg"),

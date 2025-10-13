@@ -20,6 +20,9 @@ public record WriteGuestBookCardResponse(
     @Schema(example = "전시 잘봤다~~ 너가 최고야 🤙")
     String message,
 
+    @Schema(example = "false")
+    Boolean isRead,
+
     @Schema(description = "방명록 카드 생성 시각", example = "2025-10-13T13:05")
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     LocalDateTime createdAt,
@@ -51,6 +54,7 @@ public record WriteGuestBookCardResponse(
             guestBookCard.getId(),
             guestBookCard.getNickname(),
             guestBookCard.getMessage(),
+            guestBookCard.isRead(),
             guestBookCard.getCreatedAt(),
             photos.stream().map(GuestBookCardPhotoResponse::new).toList()
         );
