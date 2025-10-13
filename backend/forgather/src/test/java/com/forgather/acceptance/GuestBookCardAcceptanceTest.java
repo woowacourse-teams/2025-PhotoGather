@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.IntStream;
 
@@ -30,6 +31,7 @@ import io.restassured.module.mockmvc.RestAssuredMockMvc;
 /**
  * TODO
  * 비공개 스페이스 & 호스트 -> 방명록 조회 가능
+ * 미읽음 스페이스 호스트 조회 -> 읽음 처리
  */
 @AutoConfigureMockMvc
 public class GuestBookCardAcceptanceTest extends AcceptanceTest {
@@ -86,6 +88,7 @@ public class GuestBookCardAcceptanceTest extends AcceptanceTest {
             () -> assertThat(result.id()).isNotNull(),
             () -> assertThat(result.nickname()).isEqualTo(writeRequest.nickname()),
             () -> assertThat(result.message()).isEqualTo(writeRequest.message()),
+            () -> assertThat(result.createdAt()).isBetween(LocalDateTime.now().minusMinutes(1), LocalDateTime.now()),
 
             () -> assertThat(result.photos().get(0).originalName()).isEqualTo("photo1.jpg"),
             () -> assertThat(result.photos().get(0).path()).endsWith("/spaces/1234567890/guestbook/abc.jpg"),
@@ -125,6 +128,7 @@ public class GuestBookCardAcceptanceTest extends AcceptanceTest {
             () -> assertThat(result.id()).isNotNull(),
             () -> assertThat(result.nickname()).isEqualTo(writeRequest.nickname()),
             () -> assertThat(result.message()).isEqualTo(writeRequest.message()),
+            () -> assertThat(result.createdAt()).isBetween(LocalDateTime.now().minusMinutes(1), LocalDateTime.now()),
 
             () -> assertThat(result.photos().get(0).originalName()).isEqualTo("photo1.jpg"),
             () -> assertThat(result.photos().get(0).path()).endsWith(
@@ -192,7 +196,7 @@ public class GuestBookCardAcceptanceTest extends AcceptanceTest {
     }
 
     private WriteGuestBookCardResponse writeGuestBookCard(Space space) {
-        WriteGuestBookCardResponse response = RestAssuredMockMvc.given()
+        return RestAssuredMockMvc.given()
             .body(writeRequest)
             .contentType(ContentType.JSON)
             .accept(ContentType.JSON)
@@ -203,6 +207,5 @@ public class GuestBookCardAcceptanceTest extends AcceptanceTest {
             .extract()
             .body()
             .as(WriteGuestBookCardResponse.class);
-        return response;
     }
 }
