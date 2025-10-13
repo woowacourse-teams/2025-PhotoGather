@@ -74,13 +74,29 @@ public class GuestBookService {
 
     public GuestBookCardResponse readCard(Host host, String spaceCode, Long guestBookCardId) {
         Space space = spaceRepository.getByCodeOrThrow(spaceCode);
-        boolean canRead = canRead(space, host);
-        if (!canRead) {
-            throw new BaseException("방문자는 비공개 스페이스의 방명록을 조회할 수 없습니다. spaceCode: " + spaceCode);
-        }
+        validateCanRead(space, host);
+
         GuestBookCard guestBookCard = getGuestBookCard(guestBookCardId, space);
+        if (isSpaceHost(space, host)) {
+            guestBookCard.read();
+        }
+
         List<GuestBookCardPhoto> photos = guestBookCardPhotoRepository.findAllByGuestBookCard(guestBookCard);
         return new GuestBookCardResponse(guestBookCard, photos);
+    }
+
+    private void validateCanRead(Space space, Host host) {
+        if (isSpaceHost(space, host)) { // 스페이스 호스트
+            return;
+        }
+        if (space.isPublic()) { // 공개 스페이스
+            return;
+        }
+        throw new BaseException("방문자는 비공개 스페이스의 방명록을 조회할 수 없습니다. spaceCode: " + space.getCode());
+    }
+
+    private boolean isSpaceHost(Space space, Host host) {
+        return spaceHostMapRepository.findBySpaceAndHost(space, host).isPresent();
     }
 
     private GuestBookCard getGuestBookCard(Long guestBookCardId, Space space) {
@@ -92,15 +108,5 @@ public class GuestBookService {
             "해당 스페이스에 존재하지 않는 방명록 카드입니다. spaceCode: %s, guestBookCardId: %d"
                 .formatted(space.getCode(), guestBookCardId)
         );
-    }
-
-    private boolean canRead(Space space, Host host) {
-        if (space.isPublic()) { // 공개
-            return true;
-        }
-        if (host == null) { // 비공개 & 방문자
-            return false;
-        }
-        return spaceHostMapRepository.findBySpaceAndHost(space, host).isPresent(); // 비공개 & 호스트
     }
 }

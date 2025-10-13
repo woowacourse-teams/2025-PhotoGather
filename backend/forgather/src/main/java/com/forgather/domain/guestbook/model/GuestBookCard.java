@@ -79,4 +79,8 @@ public class GuestBookCard extends BaseTimeEntity {
     public boolean equalsSpace(Space other) {
         return space.equals(other);
     }
+
+    public void read() {
+        isRead = true;
+    }
 }

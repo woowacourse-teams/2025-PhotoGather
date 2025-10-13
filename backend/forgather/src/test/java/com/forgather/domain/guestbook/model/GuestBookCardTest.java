@@ -1,8 +1,10 @@
 package com.forgather.domain.guestbook.model;
 
+import static com.forgather.fixture.GuestBookCardFixture.createGuestBookCard;
 import static com.forgather.fixture.GuestBookCardFixture.createGuestBookCardWithGuest;
 import static com.forgather.fixture.GuestBookCardFixture.createGuestBookCardWithMessage;
 import static com.forgather.fixture.GuestBookCardFixture.createGuestBookCardWithSpace;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -64,5 +66,28 @@ class GuestBookCardTest {
 
         // when, then
         assertThatCode(() -> createGuestBookCardWithMessage(message)).doesNotThrowAnyException();
+    }
+
+    @DisplayName("방명록 카드를 생성하면 미읽음 처리된다")
+    @Test
+    void aaa() {
+        // given
+        GuestBookCard guestBookCard = createGuestBookCard();
+
+        // then
+        assertThat(guestBookCard.isRead()).isFalse();
+    }
+
+    @DisplayName("방명록 카드를 읽음 처리한다")
+    @Test
+    void aa() {
+        // given
+        GuestBookCard guestBookCard = createGuestBookCard();
+
+        // when
+        guestBookCard.read();
+
+        // then
+        assertThat(guestBookCard.isRead()).isTrue();
     }
 }
