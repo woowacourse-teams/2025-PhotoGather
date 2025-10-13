@@ -9,6 +9,7 @@ export const theme = {
     gray06: '#2C2C2C',
     error: '#B00020',
     info: '#4CAF50',
+    newGuestbook: '#6DFFAF',
     background: '#FCFCFC',
     black: '#121212',
   },
