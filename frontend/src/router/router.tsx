@@ -1,5 +1,6 @@
 import { createBrowserRouter } from 'react-router-dom';
 import Layout from '../components/layout/global/layout/Layout';
+import CompletePage from '../pages/guest/completePage/CompletePage';
 import GuestBookFunnel from '../pages/guest/guestbookPage/funnel/GuestbookFunnel';
 import GuestMainPage from '../pages/guest/mainpage/GuestMainPage';
 import GuestWorkDetail from '../pages/guest/workDetail/GuestWorkDetail';
@@ -89,6 +90,10 @@ const routes: AppRouteObject[] = [
             handle: {
               noHeader: true,
             },
+          },
+          {
+            path: 'create-guestbook-complete',
+            element: <CompletePage />,
           },
           {
             path: ':spaceCode/work-detail',
