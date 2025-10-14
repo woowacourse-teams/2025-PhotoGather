@@ -1,21 +1,25 @@
 import { MdArrowForward, MdOutlinePhoto } from 'react-icons/md';
 import { theme } from '../../../../../styles/theme';
-import * as S from './GuestbookCard.styles';
+import * as S from './GuestbookElement.styles';
 
-interface GuestbookCardProps {
+interface GuestbookElementProps {
   guestName: string;
   hasPhoto: boolean;
-  isNew: boolean;
+  isRead: boolean;
 }
 
-const GuestbookCard = ({ guestName, hasPhoto, isNew }: GuestbookCardProps) => {
+const GuestbookElement = ({
+  guestName,
+  hasPhoto,
+  isRead,
+}: GuestbookElementProps) => {
   return (
     <S.Wrapper>
       <S.LeftContainer>
         <S.Text>From. {guestName}</S.Text>
         <S.IconContainer>
           {hasPhoto && <MdOutlinePhoto color={theme.colors.gray03} />}
-          {isNew && <S.Circle />}
+          {!isRead && <S.Circle />}
         </S.IconContainer>
       </S.LeftContainer>
       <S.RightContainer>
@@ -25,4 +29,4 @@ const GuestbookCard = ({ guestName, hasPhoto, isNew }: GuestbookCardProps) => {
   );
 };
 
-export default GuestbookCard;
+export default GuestbookElement;
