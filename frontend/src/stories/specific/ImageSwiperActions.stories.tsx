@@ -5,7 +5,7 @@ import image1 from '../../@assets/workDetail_mock_1.png';
 import image2 from '../../@assets/workDetail_mock_2.png';
 import image3 from '../../@assets/workDetail_mock_3.png';
 import ImageSwiperActions from '../../components/specific/imageSwiperActions/ImageSwiperActions';
-import useImageSwiper from '../../hooks/domain/image/useImageSwiper';
+import useSwiperActions from '../../hooks/domain/image/useSwiperActions';
 import { theme } from '../../styles/theme';
 import type { ImageInfoType } from '../../types/swiper.type';
 
@@ -27,7 +27,7 @@ export const Default: Story = {
     const INITIAL_INDEX = 0;
     const [imageInfo, setImageInfo] = useState(mockImageInfo);
 
-    const { currentIndex, updateCurrentIndex } = useImageSwiper({
+    const { currentIndex, updateCurrentIndex } = useSwiperActions({
       initialIndex: INITIAL_INDEX,
     });
     const deleteImage = (index: number) => {
