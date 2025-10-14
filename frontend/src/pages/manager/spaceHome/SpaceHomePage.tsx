@@ -166,7 +166,6 @@ const SpaceHomePage = () => {
     hasAccess,
   ]);
 
-
   useEffect(() => {
     setTimeout(() => {
       document.querySelector('h1')?.focus();
@@ -175,7 +174,6 @@ const SpaceHomePage = () => {
 
   const progressBarWidth =
     parseInt(theme.layout.width) - parseInt(theme.layout.padding.leftRight) * 8;
-
 
   const renderBodyContent = () => {
     if (isEarlyTime) return <EarlyPage openedAt={spaceInfo?.openedAt ?? ''} />;
