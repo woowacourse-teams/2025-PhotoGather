@@ -36,7 +36,7 @@ const SpaceCreateFunnel = () => {
     'name',
     'date',
     'accessType',
-    'inbox',
+    // 'inbox',
     'check',
   ];
   const [step, setStep] = useState<STEP>('name');
@@ -118,7 +118,7 @@ const SpaceCreateFunnel = () => {
         {step === 'accessType' && (
           <AccessTypeElement
             onNext={(accessType) => {
-              goNextStep('inbox');
+              goNextStep('check');
               setSpaceInfo((prev) => ({
                 ...prev,
                 accessType: accessType,
@@ -127,7 +127,7 @@ const SpaceCreateFunnel = () => {
             initialValue={spaceInfo.accessType}
           />
         )}
-        {step === 'inbox' && (
+        {/* {step === 'inbox' && (
           <InboxElement
             onNext={(isInboxEnabled) => {
               goNextStep('check');
@@ -138,7 +138,7 @@ const SpaceCreateFunnel = () => {
             }}
             initialValue={spaceInfo.isInboxEnabled}
           />
-        )}
+        )} */}
         {step === 'check' && (
           <CheckSpaceInfoElement
             spaceInfo={spaceInfo}
