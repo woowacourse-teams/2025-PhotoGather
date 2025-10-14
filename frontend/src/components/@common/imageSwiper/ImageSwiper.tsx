@@ -25,7 +25,7 @@ const ImageSwiper = ({
   const swiperRef = useRef<SwiperRef>(null);
 
   const initIndex = (swiper: SwiperType) => {
-    if (initialIndex > imageInfo.length) {
+    if (initialIndex >= imageInfo.length) {
       console.error('initialIndex is out of range');
       swiper.activeIndex = 0;
       return;
