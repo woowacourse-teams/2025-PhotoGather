@@ -1,6 +1,7 @@
 import { MdArrowLeft, MdArrowRight, MdOutlinePhoto } from 'react-icons/md';
 import Button from '../../../../components/@common/buttons/button/Button';
 import Line from '../../../../components/@common/line/Line';
+import PhotoGrid from '../../../../components/specific/photoGrid/PhotoGrid';
 import { parseTimestamp } from '../../../../utils/parseTimestamp';
 import { mockGuestbookCard } from '../../../mockData';
 import * as S from './GuestbookCardPage.styles';
@@ -21,10 +22,12 @@ const GuestbookCardPage = () => {
       <S.InfoSection>
         <S.InfoTitle>"{guestbookCard.nickname}"의 방명록</S.InfoTitle>
         <S.InfoDescription>{createdTimeDescription}</S.InfoDescription>
-        <S.IconInfoContainer>
-          <MdOutlinePhoto />
-          {photoListLength > 0 && <p>{photoListLength}</p>}
-        </S.IconInfoContainer>
+        {photoListLength > 0 && (
+          <S.IconInfoContainer>
+            <MdOutlinePhoto />
+            <p>{photoListLength}</p>
+          </S.IconInfoContainer>
+        )}
       </S.InfoSection>
       <Line
         leftElement={
@@ -45,7 +48,7 @@ const GuestbookCardPage = () => {
       </S.MessageSection>
       {photoListLength > 0 && (
         <S.PhotoSection>
-          <S.PhotoContainer></S.PhotoContainer>
+          <PhotoGrid photoList={guestbookCard.photos} />
           <Button
             type="button"
             variant="secondary"

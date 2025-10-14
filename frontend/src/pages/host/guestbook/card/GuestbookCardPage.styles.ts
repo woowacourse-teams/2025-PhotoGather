@@ -49,7 +49,12 @@ export const Message = styled.p`
   white-space: pre-wrap;
 `;
 
-export const PhotoSection = styled.section``;
+export const PhotoSection = styled.section`
+display: flex;
+flex-direction: column;
+gap: 36px;
+align-items: center;
+`;
 
 export const PhotoContainer = styled.div`
 

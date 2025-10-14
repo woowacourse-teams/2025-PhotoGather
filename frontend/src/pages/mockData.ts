@@ -77,23 +77,44 @@ export const mockWorkDetail: WorkDetailData | null = {
 export const mockGuestbookCard: GuestbookCard = {
   id: 1,
   nickname: '밍퐁루블',
-  message: '전시 잘봤다~~ 너가 최고야 🤙',
+  message:
+    '와 진짜 멋지다 👏 졸업전시 준비하느라 고생 많았어! 작품 보니까 네가 얼마나 열심히 했는지 느껴져서 나까지 뿌듯하더라. 졸업전시 축하하고, 앞으로도 멋진 길만 가자!!',
   createdAt: '2025-10-14T05:49:46.383Z',
   photos: [
     {
       id: 1,
       originalName: 'photo1.jpg',
-      path: 'photogather/v2/spaces/1234567890/guestbook/abc.jpg',
+      path: 'https://picsum.photos/200/300',
     },
     {
       id: 2,
       originalName: 'photo2.jpg',
-      path: 'photogather/v2/spaces/1234567890/guestbook/def.jpg',
+      path: 'https://picsum.photos/200/300',
     },
     {
       id: 3,
       originalName: 'photo3.jpg',
-      path: 'photogather/v2/spaces/1234567890/guestbook/ghi.jpg',
+      path: 'https://picsum.photos/200/300',
+    },
+    {
+      id: 4,
+      originalName: 'photo4.jpg',
+      path: 'https://picsum.photos/200/300',
+    },
+    {
+      id: 5,
+      originalName: 'photo5.jpg',
+      path: 'https://picsum.photos/200/300',
+    },
+    {
+      id: 6,
+      originalName: 'photo6.jpg',
+      path: 'https://picsum.photos/200/300',
+    },
+    {
+      id: 7,
+      originalName: 'photo7.jpg',
+      path: 'https://picsum.photos/200/300',
     },
   ],
 };
