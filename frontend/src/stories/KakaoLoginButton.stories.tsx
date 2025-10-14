@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-webpack5';
-import KakaoLoginButton from '../components/kakaoLoginButton/KakaoLoginButton';
+import KakaoLoginButton from '../components/specific/kakaoLoginButton/KakaoLoginButton';
 
 const meta: Meta<typeof KakaoLoginButton> = {
   title: 'Components/Button/KakaoLogin',

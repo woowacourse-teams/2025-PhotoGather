@@ -2,7 +2,7 @@ import * as Sentry from '@sentry/react';
 import { useNavigate } from 'react-router-dom';
 import { RocketImg as rocketImage } from '../../@assets/images';
 import Button from '../../components/@common/buttons/button/Button';
-import KakaoLoginButton from '../../components/kakaoLoginButton/KakaoLoginButton';
+import KakaoLoginButton from '../../components/specific/kakaoLoginButton/KakaoLoginButton';
 import { AUTH_COOKIES } from '../../constants/keys';
 import { ROUTES } from '../../constants/routes';
 import useAuthActions from '../../hooks/@common/useAuthActions';

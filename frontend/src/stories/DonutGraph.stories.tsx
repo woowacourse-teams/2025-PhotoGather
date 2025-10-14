@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-webpack5';
-import DonutGraph from '../components/donutGraph/DonutGraph';
+import DonutGraph from '../components/@common/donutGraph/DonutGraph';
 
 const meta: Meta<typeof DonutGraph> = {
   title: 'Components/DonutGraph',

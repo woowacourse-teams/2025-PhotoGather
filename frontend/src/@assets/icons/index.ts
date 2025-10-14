@@ -10,6 +10,8 @@ export { ReactComponent as DefaultImageIcon } from './default-image.svg';
 export { ReactComponent as DownloadIcon } from './download.svg';
 export { ReactComponent as EditIcon } from './edit.svg';
 export { ReactComponent as ExternalLinkIcon } from './external-link.svg';
+export { ReactComponent as FolderIcon } from './folder.svg';
+export { ReactComponent as CrossedFolderIcon } from './folder-cross.svg';
 export { ReactComponent as GroupIcon } from './group.svg';
 export { ReactComponent as InfoIcon } from './info.svg';
 export { ReactComponent as KakaoTalkIcon } from './kakaotalk.svg';

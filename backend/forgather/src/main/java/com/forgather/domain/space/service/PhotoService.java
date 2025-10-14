@@ -51,7 +51,7 @@ public class PhotoService {
         if (!canAccess(space, host)) {
             throw new UnauthorizedException();
         }
-        Photo photo = photoRepository.getById(photoId);
+        Photo photo = photoRepository.getByIdOrThrow(photoId);
         photo.validateSpace(space);
         return PhotoResponse.from(photo);
     }
@@ -80,7 +80,7 @@ public class PhotoService {
         if (!canAccess(space, host)) {
             throw new UnauthorizedException();
         }
-        Photo photo = photoRepository.getById(photoId);
+        Photo photo = photoRepository.getByIdOrThrow(photoId);
         photo.validateSpace(space);
 
         String photoPath = photo.getPath();
@@ -124,7 +124,7 @@ public class PhotoService {
         if (!canAccess(space, host)) {
             throw new UnauthorizedException();
         }
-        Photo photo = photoRepository.getById(photoId);
+        Photo photo = photoRepository.getByIdOrThrow(photoId);
         photo.validateSpace(space);
         return new DownloadUrlsResponse(List.of(DownloadUrl.from(photo.getOriginalName(), photo.getPath())));
     }
@@ -208,7 +208,7 @@ public class PhotoService {
     public void delete(String spaceCode, Long photoId, Host host) {
         Space space = spaceRepository.getUnexpiredSpaceByCode(spaceCode);
         space.validateHost(host);
-        Photo photo = photoRepository.getById(photoId);
+        Photo photo = photoRepository.getByIdOrThrow(photoId);
         photo.validateSpace(space);
 
         // photoRepository.delete(photo);

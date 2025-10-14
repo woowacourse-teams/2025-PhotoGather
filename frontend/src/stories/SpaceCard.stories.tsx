@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import SpaceCard from '../components/spaceCard/SpaceCard';
+import SpaceCard from '../components/specific/spaceCard/SpaceCard';
 import type { MySpace } from '../types/space.type';
 
 const meta: Meta<typeof SpaceCard> = {
