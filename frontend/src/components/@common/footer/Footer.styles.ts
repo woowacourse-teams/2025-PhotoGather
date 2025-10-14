@@ -5,7 +5,6 @@ export const Footer = styled.footer<{ $mode: FooterMode }>`
   max-width: ${({ theme }) => theme.layout.width};
   margin: auto auto 0 auto;
   display: flex;
-  padding: 20px;
   justify-content: center;
   align-items: center;
   height: ${({ theme }) => theme.layout.footerHeight};
