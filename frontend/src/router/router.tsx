@@ -75,6 +75,9 @@ const routes: AppRouteObject[] = [
           {
             path: 'share',
             element: <SharePage />,
+            handle: {
+              noFooter: true,
+            },
           },
           {
             path: 'guestbook/card',
