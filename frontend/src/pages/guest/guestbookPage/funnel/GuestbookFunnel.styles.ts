@@ -8,7 +8,7 @@ export const Wrapper = styled.div`
   justify-content: center;
   height: 100%;
   min-height: ${({ theme }) =>
-    `calc(100dvh - ${parseInt(theme.layout.padding.topBottom, 10) * 2}px - ${theme.layout.headerHeight})`};
+    `calc(100dvh - ${parseInt(theme.layout.padding.topBottom, 10) * 2}px)`};
 `;
 
 export const DisplayInfoContainer = styled.div`
