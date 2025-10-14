@@ -4,7 +4,7 @@ import * as S from './TextareaInput.styles';
 interface TextareaInputProps
   extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
   isRequired?: boolean;
-  label: string;
+  label?: string;
   errorMessage?: string;
   maxCount: number;
   validLength?: number;
@@ -21,7 +21,7 @@ const TextareaInput = ({
   return (
     <C.Wrapper>
       <C.Label htmlFor={textareaProps.id}>
-        {label}
+        {label && label}
         {isRequired && '*'}
       </C.Label>
       <S.TextareaField {...textareaProps} $isError={!!errorMessage} />
