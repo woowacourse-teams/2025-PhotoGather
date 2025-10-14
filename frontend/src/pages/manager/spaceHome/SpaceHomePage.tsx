@@ -182,13 +182,13 @@ const SpaceHomePage = () => {
       return (
         <>
           <C.ImageManagementContainer>
-            <Button
+            {/* <Button
               text="수신함 📩"
               variant="darkRounded"
               onClick={() => {
                 navigate(ROUTES.MANAGER.INBOX(spaceInfo?.spaceCode ?? ''));
               }}
-            />
+            /> */}
             <SpaceHomeTopActionBar
               isSelectMode={isSelectMode}
               isAllSelected={isAllSelected}
