@@ -15,6 +15,8 @@ interface LoadingLayoutProps {
   currentAmount: number;
   /** 전체 진행해야 할 양 */
   totalAmount: number;
+  /** 진행 바 너비 */
+  progressBarWidth: number;
 }
 
 interface IconProps {
@@ -26,6 +28,7 @@ const LoadingLayout = ({
   loadingContents,
   currentAmount,
   totalAmount,
+  progressBarWidth,
 }: LoadingLayoutProps) => {
   useScrollLock();
   const progress =
@@ -50,7 +53,10 @@ const LoadingLayout = ({
             <S.Text>{currentContent.description}</S.Text>
           </S.IconTextContainer>
           <S.Percentage>{percentage}%</S.Percentage>
-          <LinearProgressBar percentage={percentage} />
+          <LinearProgressBar
+            progressBarWidth={progressBarWidth}
+            percentage={percentage}
+          />
         </S.ContentContainer>
       </S.Container>
     </C.BackDrop>

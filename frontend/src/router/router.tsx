@@ -1,6 +1,7 @@
 import { lazy, Suspense } from 'react';
 import { createBrowserRouter } from 'react-router-dom';
 import Layout from '../components/layout/global/layout/Layout';
+import InboxPage from '../pages/manager/inbox/InboxPage';
 import type { AppRouteObject } from '../types/route.type';
 
 const KakaoAuthPage = lazy(() => import('../pages/auth/KakaoAuthPage'));
@@ -49,7 +50,7 @@ const TermsOfServicePage = lazy(
 );
 
 const withSuspense = (element: React.ReactNode) => (
-  <Suspense fallback={<div>불러오는 중...</div>}>{element}</Suspense>
+  <Suspense fallback={<div />}>{element}</Suspense>
 );
 
 const routes: AppRouteObject[] = [
@@ -107,6 +108,22 @@ const routes: AppRouteObject[] = [
       {
         path: 'space/:spaceCode/settings',
         element: withSuspense(<SettingsPage />),
+        handle: {
+          header: true,
+          highlight: true,
+        },
+      },
+      {
+        path: 'space/:spaceCode/inbox',
+        element: <InboxPage />,
+        handle: {
+          header: true,
+          highlight: true,
+        },
+      },
+      {
+        path: 'space/:spaceCode/inbox',
+        element: <InboxPage />,
         handle: {
           header: true,
           highlight: true,
