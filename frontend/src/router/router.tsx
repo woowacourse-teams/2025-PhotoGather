@@ -46,6 +46,7 @@ const routes: AppRouteObject[] = [
             handle: {
               highlight: true,
               headerIcons: ['settings'],
+              noFooter: true,
             },
           },
           {
@@ -60,6 +61,7 @@ const routes: AppRouteObject[] = [
             element: <SpaceCreateFunnel />,
             handle: {
               noHeader: true,
+              noFooter: true,
             },
           },
           {

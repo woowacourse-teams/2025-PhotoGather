@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import type { HeaderMode } from '../../../types/header.type';
+import type { HeaderMode } from '../../../types/uiMode.type';
 
 export const HeaderContainer = styled.header<{ $mode: HeaderMode }>`
   display: flex;
@@ -7,7 +7,7 @@ export const HeaderContainer = styled.header<{ $mode: HeaderMode }>`
   align-items: center;
   max-width: ${({ theme }) => theme.layout.width};
   width: 100%;
-  height: 60px;
+  height: ${({ theme }) => theme.layout.headerHeight};
   margin: 0 auto;
   padding: 0 ${({ theme }) => theme.layout.padding.leftRight};
   background-color: ${({ theme, $mode }) =>
