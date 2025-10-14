@@ -33,6 +33,11 @@ export const theme = {
       fontSize: '16px',
       lineHeight: '150%',
     },
+    bodyWideLineHeight: {
+      fontWeight: 500,
+      fontSize: '16px',
+      lineHeight: '200%',
+    },
     bodyRegular: {
       fontWeight: 400,
       fontSize: '16px',
