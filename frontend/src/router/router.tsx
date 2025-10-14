@@ -2,6 +2,7 @@ import { createBrowserRouter } from 'react-router-dom';
 import Layout from '../components/layout/global/layout/Layout';
 import GuestMainPage from '../pages/guest/mainpage/GuestMainPage';
 import GuestWorkDetail from '../pages/guest/workDetail/GuestWorkDetail';
+import GuestbookPage from '../pages/host/guestbook/detail/GuestbookPage';
 import HostMainPage from '../pages/host/mainPage/HostMainPage';
 import MyPage from '../pages/host/mypage/MyPage';
 import SharePage from '../pages/host/share/SharePage';
@@ -72,6 +73,10 @@ const routes: AppRouteObject[] = [
           {
             path: 'share',
             element: <SharePage />,
+          },
+          {
+            path: 'guestbook/detail',
+            element: <GuestbookPage />,
           },
         ],
       },
