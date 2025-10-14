@@ -24,6 +24,8 @@ import com.forgather.global.auth.annotation.LoginHost;
 import com.forgather.global.auth.model.Host;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -38,25 +40,33 @@ public class GuestBookController {
 
     private final GuestBookService guestBookService;
 
-    /**
-     * 공개 검증 (게스트)
-     * 읽음/안읽음 여부 (호스트)
-     * 사진 존재 여부
-     */
-    @Operation(summary = "방명록 조회", description = "페이지네이션 1페이지부터 시작 / 공개 스페이스가 아닌 경우 호스트만 조회 가능")
+    @Operation(summary = "방명록 조회",
+        description = "공개 스페이스가 아닌 경우 호스트만 조회 가능, 방문자는 isRead 필드 누락",
+        parameters = {
+            @Parameter(
+                name = "page",
+                description = "페이지 번호 (1부터 시작)",
+                example = "1"
+            ),
+            @Parameter(
+                name = "size",
+                description = "페이지 크기",
+                example = "15"
+            ),
+            @Parameter(
+                name = "sort",
+                description = "정렬 조건 (여러개 지정 가능) (id,desc 포함 필수)",
+                example = "createdAt,desc",
+                array = @ArraySchema(schema = @Schema(type = "string"))
+            )
+        }
+    )
     @GetMapping
     public ResponseEntity<GuestBookResponse> readGuestBook(
         @PathVariable(value = "spaceCode") String spaceCode,
-        @Schema(example = """
-            {
-              "page": 1,
-              "size": 15,
-              "sort": [
-                "createdAt", "id"
-              ]
-            }
-            """)
-        @PageableDefault(size = 15, sort = {"createdAt", "id"}, direction = Sort.Direction.DESC) Pageable pageable,
+        @Parameter(hidden = true)
+        @PageableDefault(size = 15, sort = {"createdAt", "id"}, direction = Sort.Direction.DESC)
+        Pageable pageable,
         @LoginHost(required = false) Host host
     ) {
         GuestBookResponse response = guestBookService.read(host, spaceCode, pageable);
