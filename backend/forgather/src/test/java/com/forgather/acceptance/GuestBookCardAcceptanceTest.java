@@ -16,6 +16,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
+import com.forgather.domain.guestbook.dto.DeleteGuestBookCardPhotosRequest;
 import com.forgather.domain.guestbook.dto.GuestBookCardResponse;
 import com.forgather.domain.guestbook.dto.WriteGuestBookCardPhotoRequest;
 import com.forgather.domain.guestbook.dto.WriteGuestBookCardRequest;
@@ -34,6 +35,7 @@ import io.restassured.module.mockmvc.RestAssuredMockMvc;
  * 미읽음 스페이스 호스트 조회 -> 읽음 처리
  * 호스트가 아니면 방명록 카드 삭제 불가
  * 다른 스페이스에 대한 작업
+ * 호스트가 아니면 방명록 카드 사진 삭제 불가
  */
 @AutoConfigureMockMvc
 public class GuestBookCardAcceptanceTest extends AcceptanceTest {
@@ -218,6 +220,43 @@ public class GuestBookCardAcceptanceTest extends AcceptanceTest {
             .get("/spaces/%s/guestbook/%d".formatted(publicSpace.getCode(), writeResponse.id()))
             .then()
             .statusCode(404);
+    }
+
+    @DisplayName("방명록 카드 사진을 일부 삭제한다")
+    @Test
+    void deleteCardPhotos() {
+        // given
+        WriteGuestBookCardResponse writeResponse = writeGuestBookCard(publicSpace);
+        DeleteGuestBookCardPhotosRequest request = new DeleteGuestBookCardPhotosRequest(
+            List.of(
+                writeResponse.photos().get(0).id(),
+                writeResponse.photos().get(2).id()
+            )
+        );
+
+        // when
+        RestAssuredMockMvc.given()
+            .contentType(ContentType.JSON)
+            .body(request)
+            .when()
+            .delete("/spaces/%s/guestbook/%d/photos".formatted(publicSpace.getCode(), writeResponse.id()))
+            .then()
+            .statusCode(204);
+
+        // then
+        GuestBookCardResponse response = RestAssuredMockMvc.given()
+            .accept(ContentType.JSON)
+            .when()
+            .get("/spaces/%s/guestbook/%d".formatted(publicSpace.getCode(), writeResponse.id()))
+            .then()
+            .statusCode(200)
+            .extract()
+            .body()
+            .as(GuestBookCardResponse.class);
+        assertAll(
+            () -> assertThat(response.photos()).size().isEqualTo(1),
+            () -> assertThat(response.photos().getFirst().id()).isEqualTo(writeResponse.photos().get(1).id())
+        );
     }
 
     private WriteGuestBookCardResponse writeGuestBookCard(Space space) {
