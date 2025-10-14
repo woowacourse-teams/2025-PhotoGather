@@ -47,12 +47,13 @@ export const ImageSwiperContainer = styled.div`
     position: absolute;
     bottom: 0;
   }
-  & img {
-    width: 100%;
-    max-width: ${({ theme }) => theme.layout.swiper.imageMaxWidth};
-    aspect-ratio: 3/4;
-    height: 100%;
-    border-radius: 4px;
-    object-fit: cover;
-  }
+`;
+
+export const Image = styled.img`
+  width: 100%;
+  max-width: ${({ theme }) => theme.layout.swiper.imageMaxWidth};
+  aspect-ratio: 3/4;
+  height: 100%;
+  border-radius: 4px;
+  object-fit: cover;
 `;

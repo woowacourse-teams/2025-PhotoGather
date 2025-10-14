@@ -68,7 +68,7 @@ const ImageSwiper = ({
             key={`${imageInfo.alt}-${index}`}
             style={{ display: 'flex' }}
           >
-            <img src={imageInfo.src} alt={imageInfo.alt} />
+            <S.Image src={imageInfo.src} alt={imageInfo.alt} />
           </SwiperSlide>
         ))}
       </Swiper>
