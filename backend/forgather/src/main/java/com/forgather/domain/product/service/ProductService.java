@@ -68,6 +68,10 @@ public class ProductService {
         }
     }
 
+    /**
+     * TODO #766
+     * deletePhotos가 실제 해당 Product것인지 검증
+     */
     @Transactional
     public ProductResponse update(String spaceCode, UpdateProductRequest request) {
         // Product 정보 수정

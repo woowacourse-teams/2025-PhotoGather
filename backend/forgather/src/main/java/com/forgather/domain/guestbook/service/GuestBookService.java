@@ -9,6 +9,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.forgather.domain.guestbook.dto.DeleteGuestBookCardPhotosRequest;
 import com.forgather.domain.guestbook.dto.GuestBookCardResponse;
 import com.forgather.domain.guestbook.dto.WriteGuestBookCardPhotoRequest;
 import com.forgather.domain.guestbook.dto.WriteGuestBookCardRequest;
@@ -105,6 +106,40 @@ public class GuestBookService {
         guestBookCardRepository.delete(guestBookCard);
     }
 
+    private void deleteGuestBookCardPhotos(GuestBookCard guestBookCard) {
+        List<GuestBookCardPhoto> photos = guestBookCardPhotoRepository.findAllByGuestBookCard(guestBookCard);
+        deleteGuestBookCardPhotos(photos);
+    }
+
+    public void deleteCardPhotos(
+        Host host,
+        String spaceCode,
+        Long guestBookCardId,
+        DeleteGuestBookCardPhotosRequest request
+    ) {
+        Space space = spaceRepository.getByCodeOrThrow(spaceCode);
+        // validateSpaceHost(host, space); // TODO 검증 활성화
+        GuestBookCardPhotos guestBookCardPhotos = getGuestBookCardPhotos(space, guestBookCardId);
+        List<GuestBookCardPhoto> deletedPhotos = guestBookCardPhotos.deleteByIds(request.deletePhotoIds());
+        deleteGuestBookCardPhotos(deletedPhotos);
+    }
+
+    private GuestBookCardPhotos getGuestBookCardPhotos(Space space, Long guestBookCardId) {
+        GuestBookCard guestBookCard = getGuestBookCard(guestBookCardId, space);
+        return new GuestBookCardPhotos(guestBookCardPhotoRepository.findAllByGuestBookCard(guestBookCard));
+    }
+
+    private GuestBookCard getGuestBookCard(Long guestBookCardId, Space space) {
+        GuestBookCard guestBookCard = guestBookCardRepository.getByIdOrThrow(guestBookCardId);
+        if (guestBookCard.equalsSpace(space)) {
+            return guestBookCard;
+        }
+        throw new NotFoundException(
+            "해당 스페이스에 존재하지 않는 방명록 카드입니다. spaceCode: %s, guestBookCardId: %d"
+                .formatted(space.getCode(), guestBookCardId)
+        );
+    }
+
     private void validateSpaceHost(Host host, Space space) {
         if (isSpaceHost(space, host)) {
             return;
@@ -121,19 +156,7 @@ public class GuestBookService {
         return spaceHostMapRepository.findBySpaceAndHost(space, host).isPresent();
     }
 
-    private GuestBookCard getGuestBookCard(Long guestBookCardId, Space space) {
-        GuestBookCard guestBookCard = guestBookCardRepository.getByIdOrThrow(guestBookCardId);
-        if (guestBookCard.equalsSpace(space)) {
-            return guestBookCard;
-        }
-        throw new NotFoundException(
-            "해당 스페이스에 존재하지 않는 방명록 카드입니다. spaceCode: %s, guestBookCardId: %d"
-                .formatted(space.getCode(), guestBookCardId)
-        );
-    }
-
-    private void deleteGuestBookCardPhotos(GuestBookCard guestBookCard) {
-        List<GuestBookCardPhoto> photos = guestBookCardPhotoRepository.findAllByGuestBookCard(guestBookCard);
+    private void deleteGuestBookCardPhotos(List<GuestBookCardPhoto> photos) {
         guestBookCardPhotoRepository.deleteAll(photos);
         contentsStorage.deletePhotos(photos);
     }

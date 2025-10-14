@@ -84,10 +84,6 @@ public class GuestBookController {
         return ResponseEntity.status(CREATED).body(response);
     }
 
-    /**
-     * TODO
-     * 호스트 검증
-     */
     @Operation(summary = "방명록 카드 삭제 (호스트)")
     @DeleteMapping("/{guestBookCardId}")
     public ResponseEntity<Void> deleteCard(
@@ -99,17 +95,15 @@ public class GuestBookController {
         return ResponseEntity.noContent().build();
     }
 
-    /**
-     * TODO
-     * 호스트 검증
-     */
     @Operation(summary = "방명록 카드 사진 선택 삭제 (호스트)")
     @DeleteMapping("/{guestBookCardId}/photos")
     public ResponseEntity<Void> deleteCardPhotos(
         @PathVariable(value = "spaceCode") String spaceCode,
         @PathVariable(value = "guestBookCardId") Long guestBookCardId,
-        @RequestBody DeleteGuestBookCardPhotosRequest request
+        @RequestBody DeleteGuestBookCardPhotosRequest request,
+        @LoginHost(required = false) Host host // TODO true로 전환
     ) {
+        guestBookService.deleteCardPhotos(host, spaceCode, guestBookCardId, request);
         return ResponseEntity.noContent().build();
     }
 }
