@@ -6,11 +6,15 @@ import static com.forgather.domain.upload.domain.UploadCategory.GUESTBOOK;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.forgather.domain.guestbook.dto.DeleteGuestBookCardPhotosRequest;
 import com.forgather.domain.guestbook.dto.GuestBookCardResponse;
+import com.forgather.domain.guestbook.dto.GuestBookCardSimpleResponse;
+import com.forgather.domain.guestbook.dto.GuestBookResponse;
 import com.forgather.domain.guestbook.dto.WriteGuestBookCardPhotoRequest;
 import com.forgather.domain.guestbook.dto.WriteGuestBookCardRequest;
 import com.forgather.domain.guestbook.dto.WriteGuestBookCardResponse;
@@ -72,6 +76,33 @@ public class GuestBookService {
             photos.add(photo);
         }
         return new GuestBookCardPhotos(photos);
+    }
+
+    public GuestBookResponse read(Host host, String spaceCode, Pageable pageable) {
+        Space space = spaceRepository.getByCodeOrThrow(spaceCode);
+        validateCanRead(space, host);
+        Page<GuestBookCard> guestBookCards = guestBookCardRepository.findAllBySpace(space, pageable);
+        Page<GuestBookCardSimpleResponse> simpleResponses;
+        if (host != null && isSpaceHost(space, host)) {
+            simpleResponses = guestBookCards.map(
+                guestBookCard -> new GuestBookCardSimpleResponse(
+                    guestBookCard.getId(),
+                    guestBookCard.getNickname(),
+                    guestBookCardPhotoRepository.existsByGuestBookCard(guestBookCard),
+                    guestBookCard.isRead()
+                )
+            );
+        } else {
+            simpleResponses = guestBookCards.map(
+                guestBookCard -> new GuestBookCardSimpleResponse(
+                    guestBookCard.getId(),
+                    guestBookCard.getNickname(),
+                    guestBookCardPhotoRepository.existsByGuestBookCard(guestBookCard),
+                    null
+                )
+            );
+        }
+        return new GuestBookResponse(simpleResponses);
     }
 
     public GuestBookCardResponse readCard(Host host, String spaceCode, Long guestBookCardId) {

@@ -39,15 +39,13 @@ public class GuestBookController {
     private final GuestBookService guestBookService;
 
     /**
-     * TODO
      * 공개 검증 (게스트)
-     * 페이지네이션
      * 읽음/안읽음 여부 (호스트)
      * 사진 존재 여부
      */
     @Operation(summary = "방명록 조회", description = "페이지네이션 1페이지부터 시작 / 공개 스페이스가 아닌 경우 호스트만 조회 가능")
     @GetMapping
-    public ResponseEntity<GuestBookResponse> getCards(
+    public ResponseEntity<GuestBookResponse> readGuestBook(
         @PathVariable(value = "spaceCode") String spaceCode,
         @Schema(example = """
             {
@@ -58,9 +56,11 @@ public class GuestBookController {
               ]
             }
             """)
-        @PageableDefault(size = 15, sort = {"createdAt", "id"}, direction = Sort.Direction.DESC) Pageable pageable
+        @PageableDefault(size = 15, sort = {"createdAt", "id"}, direction = Sort.Direction.DESC) Pageable pageable,
+        @LoginHost(required = false) Host host
     ) {
-        return ResponseEntity.ok(null);
+        GuestBookResponse response = guestBookService.read(host, spaceCode, pageable);
+        return ResponseEntity.ok(response);
     }
 
     @Operation(summary = "방명록 카드 조회", description = "공개 스페이스가 아닌 경우 호스트만 조회 가능")
