@@ -1,6 +1,6 @@
 import { DEBUG_MESSAGES } from '../constants/debugMessages';
 
-export const parsedImagePath = (path: string): string => {
+export const extractImageFileName = (path: string): string => {
   const cleanPath = path.split('?')[0];
   const segments = cleanPath.split('/');
   const lastSegment = segments.pop();
@@ -20,4 +20,10 @@ export const parsedImagePath = (path: string): string => {
 
   const fileName = parts.join('.');
   return fileName;
+};
+
+export const parseImagePath = (path: string): string => {
+  const arr = path.split('contents/');
+  const parsedPath = arr[arr.length - 1];
+  return parsedPath;
 };

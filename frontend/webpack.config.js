@@ -22,7 +22,9 @@ module.exports = (_, argv) => {
     entry: './src/index.tsx',
     output: {
       filename:
-        argv.mode === 'production' ? '[name].[contenthash].js' : '[name].js',
+        argv.mode === 'production' || argv.mode === 'development'
+          ? '[name].[contenthash].js'
+          : '[name].js',
       path: path.resolve(__dirname, 'dist'),
       publicPath: '/',
       clean: true,
@@ -115,6 +117,7 @@ module.exports = (_, argv) => {
           { from: 'public/favicon-32x32.png', to: 'favicon-32x32.png' },
           { from: 'public/favicon-16x16.png', to: 'favicon-16x16.png' },
           { from: 'public/apple-touch-icon.png', to: 'apple-touch-icon.png' },
+          { from: 'public/streaming-download.js', to: 'streaming-download.js' },
         ],
       }),
     ],

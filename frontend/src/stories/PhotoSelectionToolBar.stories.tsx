@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-webpack5';
-import PhotoSelectionToolBar from '../components/photoSelectionToolBar/PhotoSelectionToolBar';
+import PhotoSelectionToolBar from '../components/specific/photoSelectionToolBar/PhotoSelectionToolBar';
 
 const meta: Meta<typeof PhotoSelectionToolBar> = {
   title: 'Components/PhotoSelectionToolBar',

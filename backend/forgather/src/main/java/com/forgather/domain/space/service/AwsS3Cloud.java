@@ -137,6 +137,7 @@ public class AwsS3Cloud implements ContentsStorage {
         return transferManager.downloadFile(request).completionFuture();
     }
 
+    @Deprecated(since = "2025-09-19", forRemoval = true)
     @Override
     public URL issueDownloadUrl(String photoPath) {
         return s3Client.utilities()

@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import useTaskHandler from '../../hooks/@common/useTaskHandler';
-import useKakaoAuth from '../../hooks/domain/useKakaoAuth';
+import useKakaoAuth from '../../hooks/domain/auth/useKakaoAuth';
 
 const KakaoAuthPage = () => {
   const { tryFetch } = useTaskHandler();

@@ -71,7 +71,6 @@ export const ListItem = styled.li`
     position: absolute;
     left: -20px;
     color: ${({ theme }) => theme.colors.primary60};
-    font-weight: bold;
   }
 `;
 

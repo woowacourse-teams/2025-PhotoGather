@@ -7,6 +7,7 @@ export interface SpaceCreateInfo {
   validHours: number;
   openedAt: string;
   type?: string;
+  inbox?: boolean;
 }
 
 export interface Agreements {
@@ -20,6 +21,7 @@ export interface SpaceFunnelInfo {
   time: string;
   accessType: SpaceAccessType;
   isImmediateOpen: boolean | null;
+  isInboxEnabled: boolean;
   agreements: Agreements | null;
 }
 
@@ -39,14 +41,17 @@ export interface Space {
   guestCount?: number;
   photoCount?: number;
   host: MyInfo;
-  type?: SpaceAccessType;
-}
-
-export interface UpdateSpaceInput {
-  spaceCode?: string;
-  name?: string;
-  openedAt?: Date | string;
-  expiredAt?: Date | string;
+  type: SpaceAccessType;
+  // TODO: 서버에서 inbox 필드 추가되면 optional 제거 필요
+  inbox?:
+    | {
+        status: true;
+        count: number;
+      }
+    | {
+        status: false;
+        count: 0;
+      };
 }
 
 export interface SpaceCapacity {

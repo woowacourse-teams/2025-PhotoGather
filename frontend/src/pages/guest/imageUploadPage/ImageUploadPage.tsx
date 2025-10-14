@@ -10,19 +10,19 @@ import FloatingIconButton from '../../../components/@common/buttons/floatingIcon
 import HighlightText from '../../../components/@common/highlightText/HighlightText';
 import GuestImageGrid from '../../../components/@common/imageLayout/imageGrid/guestImageGrid/GuestImageGrid';
 import PhotoModal from '../../../components/@common/modal/photoModal/PhotoModal';
-import SpaceHeader from '../../../components/header/spaceHeader/SpaceHeader';
+import UserBadge from '../../../components/@common/userBadge/UserBadge';
 import LoadingLayout from '../../../components/layout/loadingLayout/LoadingLayout';
-import UploadBox from '../../../components/uploadBox/UploadBox';
-import UserBadge from '../../../components/userBadge/UserBadge';
+import GuestSpaceHeader from '../../../components/specific/space/spaceHeader/guestSpaceHeader/GuestSpaceHeader';
+import UploadBox from '../../../components/specific/uploadBox/UploadBox';
 import { ROUTES } from '../../../constants/routes';
 import { useOverlay } from '../../../contexts/OverlayProvider';
-import useIntersectionObserver from '../../../hooks/@common/useIntersectionObserver';
 import useLeftTimer from '../../../hooks/@common/useLeftTimer';
-import useLocalFile from '../../../hooks/@common/useLocalFile';
-import useFileUpload from '../../../hooks/useFileUpload';
-import useGuestNickName from '../../../hooks/useGuestNickName';
-import useSpaceCodeFromPath from '../../../hooks/useSpaceCodeFromPath';
-import useSpaceInfo from '../../../hooks/useSpaceInfo';
+import useGuestNickName from '../../../hooks/domain/guest/useGuestNickName';
+import useFileUpload from '../../../hooks/domain/photos/useFileUpload';
+import useLocalFile from '../../../hooks/domain/photos/useLocalFile';
+import useSpaceCodeFromPath from '../../../hooks/domain/space/useSpaceCodeFromPath';
+import useSpaceInfo from '../../../hooks/domain/space/useSpaceInfo';
+import useScrollUITriggers from '../../../hooks/domain/ui/useScrollUITriggers';
 import { ScrollableBlurArea } from '../../../styles/@common/ScrollableBlurArea.styles';
 import { theme } from '../../../styles/theme';
 import { checkIsEarlyDate } from '../../../utils/checkIsEarlyTime';
@@ -34,11 +34,12 @@ import * as S from './ImageUploadPage.styles';
 
 const ImageUploadPage = () => {
   const { spaceCode } = useSpaceCodeFromPath();
-  const { spaceInfo } = useSpaceInfo(spaceCode ?? '');
+  const { spaceInfo, spaceInfoLoadingState } = useSpaceInfo(spaceCode ?? '');
   const isNoData = !spaceInfo;
-  const isSpaceExpired = spaceInfo?.isExpired;
-  const isEarlyTime =
-    spaceInfo?.openedAt && checkIsEarlyDate(spaceInfo.openedAt);
+  const isSpaceExpired = spaceInfo ? spaceInfo.isExpired : false;
+  const isEarlyTime = spaceInfo
+    ? spaceInfo.openedAt && checkIsEarlyDate(spaceInfo.openedAt)
+    : false;
   const shouldShowFakeUploadBox = isNoData || isEarlyTime || isSpaceExpired;
 
   const overlay = useOverlay();
@@ -47,6 +48,8 @@ const ImageUploadPage = () => {
   const { nickName, guestId, showNickNameEditModal, tryCreateNickName } =
     useGuestNickName({
       spaceCode: spaceCode ?? '',
+      shouldShowNickNameModal:
+        spaceInfoLoadingState === 'success' && !isEarlyTime && !isSpaceExpired,
     });
 
   const navigateToUploadComplete = () => {
@@ -80,10 +83,7 @@ const ImageUploadPage = () => {
   });
 
   const hasImages = Array.isArray(previewFile) && previewFile.length > 0;
-  const { targetRef: hideBlurAreaTriggerRef, isIntersecting: isAtPageBottom } =
-    useIntersectionObserver({});
-  const { targetRef: scrollTopTriggerRef, isIntersecting: isAtPageTop } =
-    useIntersectionObserver({ isInitialInView: true });
+  const scrollUITriggers = useScrollUITriggers();
   const { leftTime } = useLeftTimer({
     targetTime: (spaceInfo?.expiredAt as string) ?? '',
   });
@@ -134,19 +134,25 @@ const ImageUploadPage = () => {
     },
   ];
 
+  const progressBarWidth =
+    parseInt(theme.layout.width) - parseInt(theme.layout.padding.leftRight) * 8;
+
   return (
     <S.Wrapper $hasImages={hasImages}>
-      {isEarlyTime && <EarlyPage openedAt={spaceInfo.openedAt} />}
+      {isEarlyTime && (
+        <EarlyPage openedAt={spaceInfo ? spaceInfo.openedAt : ''} />
+      )}
       {isSpaceExpired && <ExpiredPage />}
       {isUploading && (
         <LoadingLayout
+          progressBarWidth={progressBarWidth}
           loadingContents={loadingContents}
           totalAmount={total ?? 10}
           currentAmount={success ?? 5}
         />
       )}
-      <S.ScrollTopAnchor ref={scrollTopTriggerRef} />
-      <SpaceHeader
+      <S.ScrollTopAnchor ref={scrollUITriggers.scrollTopTriggerRef} />
+      <GuestSpaceHeader
         title={spaceName}
         timer={leftTime}
         accessType={spaceInfo?.type}
@@ -216,7 +222,7 @@ const ImageUploadPage = () => {
               });
             }}
           />
-          <S.TopButtonContainer $isVisible={!isAtPageTop}>
+          <S.TopButtonContainer $isVisible={!scrollUITriggers.isAtPageTop}>
             <FloatingIconButton
               icon={<ArrowUpSvg fill={theme.colors.white} />}
               onClick={goToTop}
@@ -224,8 +230,11 @@ const ImageUploadPage = () => {
           </S.TopButtonContainer>
         </>
       )}
-      <S.IntersectionArea ref={hideBlurAreaTriggerRef} />
-      <ScrollableBlurArea $isHide={isAtPageBottom} $position="bottom" />
+      <S.IntersectionArea ref={scrollUITriggers.hideBlurAreaTriggerRef} />
+      <ScrollableBlurArea
+        $isHide={scrollUITriggers.isAtPageBottom}
+        $position="bottom"
+      />
     </S.Wrapper>
   );
 };

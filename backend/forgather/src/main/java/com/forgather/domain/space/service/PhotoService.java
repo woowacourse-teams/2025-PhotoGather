@@ -5,7 +5,6 @@ import static com.forgather.domain.space.dto.DownloadUrlsResponse.DownloadUrl;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -52,7 +51,7 @@ public class PhotoService {
         if (!canAccess(space, host)) {
             throw new UnauthorizedException();
         }
-        Photo photo = photoRepository.getById(photoId);
+        Photo photo = photoRepository.getByIdOrThrow(photoId);
         photo.validateSpace(space);
         return PhotoResponse.from(photo);
     }
@@ -81,7 +80,7 @@ public class PhotoService {
         if (!canAccess(space, host)) {
             throw new UnauthorizedException();
         }
-        Photo photo = photoRepository.getById(photoId);
+        Photo photo = photoRepository.getByIdOrThrow(photoId);
         photo.validateSpace(space);
 
         String photoPath = photo.getPath();
@@ -125,10 +124,9 @@ public class PhotoService {
         if (!canAccess(space, host)) {
             throw new UnauthorizedException();
         }
-        Photo photo = photoRepository.getById(photoId);
+        Photo photo = photoRepository.getByIdOrThrow(photoId);
         photo.validateSpace(space);
-        URL downloadUrl = contentsStorage.issueDownloadUrl(photo.getPath());
-        return new DownloadUrlsResponse(List.of(DownloadUrl.from(photo.getOriginalName(), downloadUrl.toString())));
+        return new DownloadUrlsResponse(List.of(DownloadUrl.from(photo.getOriginalName(), photo.getPath())));
     }
 
     public DownloadUrlsResponse getSelectedDownloadUrls(String spaceCode, DownloadPhotosRequest request, Host host) {
@@ -174,8 +172,7 @@ public class PhotoService {
 
         for (Photo photo : photos) {
             String uniqueFileName = createUniqueFileName(photo, originalNameCounts);
-            String downloadUrl = contentsStorage.issueDownloadUrl(photo.getPath()).toString();
-            downloadUrls.put(uniqueFileName, downloadUrl);
+            downloadUrls.put(uniqueFileName, photo.getPath());
         }
 
         return createDownloadUrlsResponse(downloadUrls);
@@ -211,7 +208,7 @@ public class PhotoService {
     public void delete(String spaceCode, Long photoId, Host host) {
         Space space = spaceRepository.getUnexpiredSpaceByCode(spaceCode);
         space.validateHost(host);
-        Photo photo = photoRepository.getById(photoId);
+        Photo photo = photoRepository.getByIdOrThrow(photoId);
         photo.validateSpace(space);
 
         // photoRepository.delete(photo);

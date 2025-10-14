@@ -1,36 +1,44 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { DiamondImg as diamondImage } from '../../../@assets/images';
-import StepProgressBar from '../../../components/progressBar/step/StepProgressBar';
+import StepProgressBar from '../../../components/@common/progressBar/step/StepProgressBar';
 import { ROUTES } from '../../../constants/routes';
-import useAuthConditionTasks from '../../../hooks/@common/useAuthConditionTasks';
 import useConfirmBeforeRefresh from '../../../hooks/@common/useConfirmBeforeRefresh';
-import useAgreements from '../../../hooks/domain/useAgreements';
+import useAgreements from '../../../hooks/domain/auth/useAgreements';
+import useAuthConditionTasks from '../../../hooks/domain/auth/useAuthConditionTasks';
 import useFunnelHistory from '../../../hooks/useFunnelHistory';
 import type { SpaceFunnelInfo } from '../../../types/space.type';
 import AccessTypeElement from '../funnelElements/accessTypeElement/AccessTypeElement';
 import AgreementElement from '../funnelElements/agreementElement/AgreementElement';
 import CheckSpaceInfoElement from '../funnelElements/checkSpaceInfoElement/CheckSpaceInfoElement';
 import ImmediateOpenElement from '../funnelElements/immediateOpenElement/ImmediateOpenElement';
+import InboxElement from '../funnelElements/inboxElement/InboxElement';
 import NameInputElement from '../funnelElements/NameInputElement';
 import * as S from './SpaceCreateFunnel.styles';
 
-type STEP = 'agreement' | 'name' | 'date' | 'accessType' | 'check';
+type STEP = 'agreement' | 'name' | 'date' | 'accessType' | 'inbox' | 'check';
 
 const initialFunnelValue: SpaceFunnelInfo = {
+  agreements: null,
   name: '',
   date: '',
   time: '',
-  accessType: 'PUBLIC',
   isImmediateOpen: null,
-  agreements: null,
+  accessType: 'PUBLIC',
+  isInboxEnabled: true,
 };
 
 const SpaceCreateFunnel = () => {
   useConfirmBeforeRefresh();
   const { handleAgree, isAgree, loadingAgreements } = useAgreements();
   const needsAgreement = !isAgree;
-  const PROGRESS_STEP_LIST: STEP[] = ['name', 'date', 'accessType', 'check'];
+  const PROGRESS_STEP_LIST: STEP[] = [
+    'name',
+    'date',
+    'accessType',
+    'inbox',
+    'check',
+  ];
   const [step, setStep] = useState<STEP>('name');
   useEffect(() => {
     if (!loadingAgreements && needsAgreement) setStep('agreement');
@@ -110,13 +118,25 @@ const SpaceCreateFunnel = () => {
         {step === 'accessType' && (
           <AccessTypeElement
             onNext={(accessType) => {
-              goNextStep('check');
+              goNextStep('inbox');
               setSpaceInfo((prev) => ({
                 ...prev,
                 accessType: accessType,
               }));
             }}
             initialValue={spaceInfo.accessType}
+          />
+        )}
+        {step === 'inbox' && (
+          <InboxElement
+            onNext={(isInboxEnabled) => {
+              goNextStep('check');
+              setSpaceInfo((prev) => ({
+                ...prev,
+                isInboxEnabled,
+              }));
+            }}
+            initialValue={spaceInfo.isInboxEnabled}
           />
         )}
         {step === 'check' && (

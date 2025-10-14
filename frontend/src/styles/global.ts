@@ -1,17 +1,11 @@
 import { css } from '@emotion/react';
 import RobotoRegular from '../@assets/fonts/Roboto-Mono-regular.woff2';
-import SUITVariable from '../@assets/fonts/SUIT-Variable.woff2';
 
 export const global = css`
   * {
     box-sizing: border-box;
     font-family: inherit;
     font-synthesis: none;
-  }
-  @font-face {
-    font-family: 'SUIT';
-    src: url(${SUITVariable}) format('woff2');
-    font-display: swap;
   }
   @font-face {
     font-family: 'Roboto';

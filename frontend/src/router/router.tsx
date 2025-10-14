@@ -1,5 +1,5 @@
 import { createBrowserRouter } from 'react-router-dom';
-import Layout from '../components/layout/Layout';
+import Layout from '../components/layout/global/layout/Layout';
 import KakaoAuthPage from '../pages/auth/KakaoAuthPage';
 import DownloadCompletePage from '../pages/complete/DownloadCompletePage';
 import UploadCompletePage from '../pages/complete/UploadCompletePage';
@@ -14,6 +14,7 @@ import LoginPage from '../pages/login/LoginPage';
 import LogoutPage from '../pages/logout/LogoutPage';
 import MainPage from '../pages/MainPage';
 import DashboardPage from '../pages/manager/dashboard/DashboardPage';
+import InboxPage from '../pages/manager/inbox/InboxPage';
 import SettingsPage from '../pages/manager/settings/SettingsPage';
 import SpaceHomePage from '../pages/manager/spaceHome/SpaceHomePage';
 import MyPage from '../pages/mypage/MyPage';
@@ -77,6 +78,14 @@ const routes: AppRouteObject[] = [
       {
         path: 'space/:spaceCode/settings',
         element: <SettingsPage />,
+        handle: {
+          header: true,
+          highlight: true,
+        },
+      },
+      {
+        path: 'space/:spaceCode/inbox',
+        element: <InboxPage />,
         handle: {
           header: true,
           highlight: true,
