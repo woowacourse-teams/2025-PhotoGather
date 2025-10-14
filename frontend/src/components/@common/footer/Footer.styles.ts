@@ -10,7 +10,7 @@ export const Footer = styled.footer<{ $mode: FooterMode }>`
   align-items: center;
   height: ${({ theme }) => theme.layout.footerHeight};
   width: 100%;
-  
+
   background-color: ${({ theme, $mode }) =>
     $mode === 'dark' ? theme.colors.black : theme.colors.background};
 `;

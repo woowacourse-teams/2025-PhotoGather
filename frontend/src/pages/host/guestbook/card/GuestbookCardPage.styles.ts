@@ -50,15 +50,13 @@ export const Message = styled.p`
 `;
 
 export const PhotoSection = styled.section`
-display: flex;
-flex-direction: column;
-gap: 36px;
-align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: 36px;
+  align-items: center;
 `;
 
-export const PhotoContainer = styled.div`
-
-`;
+export const PhotoContainer = styled.div``;
 
 export const ButtonElementContainer = styled.div`
   display: flex;
