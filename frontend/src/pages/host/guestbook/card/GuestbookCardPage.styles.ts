@@ -45,7 +45,7 @@ export const MessageSection = styled.section`
 `;
 
 export const Message = styled.p`
-  ${({ theme }) => theme.typography.bodyWideLineHeight}
+  ${({ theme }) => theme.typography.bodyWideLineHeight};
   white-space: pre-wrap;
 `;
 
