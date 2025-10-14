@@ -2,6 +2,7 @@ import img1 from '../@assets/workDetail_mock_1.png';
 import img2 from '../@assets/workDetail_mock_2.png';
 import img3 from '../@assets/workDetail_mock_3.png';
 import type { GuestbookCard } from '../types/domain/guestbook.type';
+import type { GuestbookList } from '../types/domain/guestbook.type';
 
 export const mockSpaceCode = 'fb216ef6b1';
 
@@ -117,4 +118,31 @@ export const mockGuestbookCard: GuestbookCard = {
       path: 'https://picsum.photos/200/300',
     },
   ],
+};
+
+export const mockGuestbookCards: GuestbookList = {
+  guestBookCards: [
+    {
+      id: 1,
+      nickname: '밍퐁루블',
+      containsPhoto: false,
+      isRead: false,
+    },
+    {
+      id: 2,
+      nickname: '레오',
+      containsPhoto: true,
+      isRead: false,
+    },
+    {
+      id: 3,
+      nickname: '포스티',
+      containsPhoto: true,
+      isRead: true,
+    },
+  ],
+  currentPage: 1,
+  pageSize: 15,
+  totalCount: 3,
+  totalPages: 1,
 };

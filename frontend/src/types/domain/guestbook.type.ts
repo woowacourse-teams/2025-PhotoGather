@@ -7,3 +7,18 @@ export interface GuestbookCard {
   createdAt: string | Date;
   photos: Photo[];
 }
+
+export interface GuestbookList {
+  guestBookCards: GuestbookElement[];
+  currentPage: number;
+  pageSize: number;
+  totalCount: number;
+  totalPages: number;
+}
+
+export interface GuestbookElement {
+  id: number;
+  nickname: string;
+  containsPhoto: boolean;
+  isRead: boolean;
+}
