@@ -12,6 +12,10 @@ export const CONSTRAINTS = {
       DESIGNER: 20,
       DESCRIPTION: 1000,
     },
+    GUESTBOOK: {
+      MESSAGE: 400,
+      NICKNAME: 10,
+    },
   },
   MAX_FILE_COUNT: 10,
   NOT_ALLOWED_FILE_TYPES: ['image/gif', 'image/svg', 'image/svg+xml'],

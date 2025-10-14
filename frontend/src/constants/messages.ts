@@ -33,4 +33,12 @@ export const INFORMATION = {
       DESCRIPTION: '생성하기를 누르면 링크가 발급돼요.',
     },
   },
+  GUESTBOOK: {
+    MESSAGE: {
+      PROMPT: '전달할 메세지를 남겨주세요',
+    },
+    NICKNAME: {
+      PROMPT: '전달할 닉네임을 입력해주세요',
+    },
+  },
 } as const;
