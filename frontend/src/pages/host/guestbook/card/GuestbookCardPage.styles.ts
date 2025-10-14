@@ -35,22 +35,18 @@ export const IconInfoContainer = styled.div`
   gap: 4px;
 `;
 
-export const TextSection = styled.section`
+export const MessageSection = styled.section`
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-items: center;
   padding: 36px;
   gap: 40px;
 `;
 
-export const Text = styled.p`
+export const Message = styled.p`
   ${({ theme }) => theme.typography.bodyWideLineHeight}
   white-space: pre-wrap;
-`;
-
-export const SenderText = styled.p`
-  ${({ theme }) => theme.typography.bodyLarge}
-  text-align: end;
 `;
 
 export const PhotoSection = styled.section``;
