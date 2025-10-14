@@ -8,7 +8,7 @@
     />
     <script>
       if ('serviceWorker' in navigator) {
-          window.addEventListener('show', () => {
+          window.addEventListener('load', () => {
               navigator.serviceWorker.register(`/streaming-download.js?v=${Date.now()}`, {type: 'module'}).then(registration => {
                   console.log('Service Worker registered successfully.');
               }).catch(error => {
