@@ -2,23 +2,6 @@ import styled from '@emotion/styled';
 import { Z_INDEX } from '../../../constants/constants';
 import { hexToRgba } from '../../../utils/hexToRgba';
 
-export const Wrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  position: relative;
-`;
-
-export const Label = styled.label`
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  width: 60px;
-  aspect-ratio: 1/1;
-  cursor: pointer;
-  position: relative;
-`;
-
 export const Overlay = styled.div<{ $isPhotoExist: boolean }>`
   position: absolute;
   top: 0;
@@ -43,10 +26,6 @@ export const Overlay = styled.div<{ $isPhotoExist: boolean }>`
       scale: 0.95;
     }
   }
-`;
-
-export const FileInput = styled.input`
-  display: none;
 `;
 
 export const OverlayButton = styled.div<{ $position: 'top' | 'bottom' }>`
