@@ -5,9 +5,10 @@ import type { GuestbookFunnelInfo } from '../../../../types/domain/guestbook.typ
 import { mockData } from '../../../mockData';
 import MessageElement from '../funnelElements/messageElement/MessageElement';
 import NicknameElement from '../funnelElements/nicknameElement/NicknameElement';
+import PhotosElement from '../funnelElements/photosElement/PhotosElement';
 import * as S from './GuestbookFunnel.styles';
 
-type STEP = 'message' | 'photos' | 'nickname';
+type STEP = 'message' | 'photos' | 'nickname' | 'complete';
 
 const initialFunnelValue: GuestbookFunnelInfo = {
   message: '',
@@ -35,15 +36,22 @@ const GuestBookFunnel = () => {
         <MessageElement
           receiver={MOCK_RECEIVER}
           initialValue={Funnel.form.message}
-          // TODO : photos 단계로 변경
-          onNext={(message) => Funnel.goNextWithData('nickname', { message })}
+          onNext={(message) => Funnel.goNextWithData('photos', { message })}
+        />
+      </Funnel.Step>
+      <Funnel.Step name="photos">
+        <PhotosElement
+          receiver={MOCK_RECEIVER}
+          onNextButtonClick={() =>
+            Funnel.goNextWithData('nickname', { photos: Funnel.form.photos })
+          }
         />
       </Funnel.Step>
       <Funnel.Step name="nickname">
         <NicknameElement
           receiver={MOCK_RECEIVER}
           initialValue={Funnel.form.nickname}
-          onNext={(nickname) => Funnel.goNextWithData('photos', { nickname })}
+          onNext={(nickname) => Funnel.goNextWithData('complete', { nickname })}
         />
       </Funnel.Step>
     </S.Wrapper>
