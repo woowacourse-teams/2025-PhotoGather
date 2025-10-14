@@ -27,10 +27,10 @@ const NicknameElement = ({
     validators: [funnelValidators.nickname.maxLength],
   });
   const validLength = calculateValidLength(nickname);
-  const isDisabled = isError || validLength === 0;
 
   return (
     <FunnelBasePage
+      isOptional
       prompt={INFORMATION.GUESTBOOK.NICKNAME.PROMPT}
       receiver={receiver}
       element={
@@ -45,8 +45,9 @@ const NicknameElement = ({
           maxCount={CONSTRAINTS.MAX_LENGTH.GUESTBOOK.NICKNAME}
         />
       }
+      buttonText="전송"
       onNextButtonClick={() => onNext(nickname)}
-      nextButtonDisabled={isDisabled}
+      nextButtonDisabled={isError}
     />
   );
 };
