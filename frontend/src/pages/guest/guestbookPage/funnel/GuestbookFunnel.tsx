@@ -1,3 +1,5 @@
+import { useNavigate } from 'react-router-dom';
+import { ROUTES } from '../../../../constants/routes';
 import useConfirmBeforeRefresh from '../../../../hooks/@common/useConfirmBeforeRefresh';
 import useFormFunnel from '../../../../hooks/domain/funnel/useFormFunnel';
 import { DividerLine } from '../../../../styles/@common/DividerLine.styles';
@@ -8,7 +10,7 @@ import NicknameElement from '../funnelElements/nicknameElement/NicknameElement';
 import PhotosElement from '../funnelElements/photosElement/PhotosElement';
 import * as S from './GuestbookFunnel.styles';
 
-type STEP = 'message' | 'photos' | 'nickname' | 'complete';
+type STEP = 'message' | 'photos' | 'nickname';
 
 const initialFunnelValue: GuestbookFunnelInfo = {
   message: '',
@@ -17,6 +19,8 @@ const initialFunnelValue: GuestbookFunnelInfo = {
 };
 
 const GuestBookFunnel = () => {
+  const navigate = useNavigate();
+
   useConfirmBeforeRefresh();
   const MOCK_RECEIVER = '방명록 주인장';
 
@@ -51,7 +55,7 @@ const GuestBookFunnel = () => {
         <NicknameElement
           receiver={MOCK_RECEIVER}
           initialValue={Funnel.form.nickname}
-          onNext={(nickname) => Funnel.goNextWithData('complete', { nickname })}
+          updateFormData={Funnel.updateFormData}
         />
       </Funnel.Step>
     </S.Wrapper>
