@@ -17,6 +17,7 @@ export const NoImageComment = styled.h2`
 
 export const ImageSwiperContainer = styled.div`
   width: 100%;
+
   & .swiper {
     width: 100%;
     min-height: ${({ theme }) => theme.layout.swiper.minHeight};
