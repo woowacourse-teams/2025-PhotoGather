@@ -1,0 +1,77 @@
+import { MdAddAPhoto, MdDeleteOutline } from 'react-icons/md';
+import ImageSwiperActions from '../../../../../components/specific/imageSwiperActions/ImageSwiperActions';
+import PhotoUploadButton from '../../../../../components/specific/photoUploadButton/PhotoUploadButton';
+import { INFORMATION } from '../../../../../constants/messages';
+import useLocalFile from '../../../../../hooks/@common/useLocalFile';
+import useSwiperActions from '../../../../../hooks/domain/image/useSwiperActions';
+import * as C from '../../../../../styles/@common/PhotoInput.styles';
+import { theme } from '../../../../../styles/theme';
+import FunnelBasePage from '../../funnel/funnelBasePage/FunnelBasePage';
+
+interface PhotosElementProps {
+  receiver: string;
+  onNextButtonClick: () => void;
+}
+
+const PhotosElement = ({ receiver, onNextButtonClick }: PhotosElementProps) => {
+  const { currentIndex, updateCurrentIndex } = useSwiperActions({
+    initialIndex: 0,
+  });
+  const { localFiles, handleFilesUploadClick, handleFilesDrop, deleteFile } =
+    useLocalFile({
+      fileType: 'image',
+    });
+
+  const swiperActions = [
+    {
+      icon: <MdDeleteOutline fill={theme.colors.error} />,
+      onClick: () => {
+        deleteFile(localFiles[currentIndex].id);
+      },
+    },
+    {
+      icon: (
+        <C.Wrapper>
+          <C.Label>
+            <MdAddAPhoto size={12} />
+            <C.FileInput
+              type="file"
+              multiple
+              accept="image/*"
+              onChange={handleFilesUploadClick}
+            />
+          </C.Label>
+        </C.Wrapper>
+      ),
+      onClick: () => {},
+    },
+  ];
+
+  return (
+    <FunnelBasePage
+      isOptional
+      prompt={INFORMATION.GUESTBOOK.PHOTOS.PROMPT}
+      receiver={receiver}
+      element={
+        localFiles.length === 0 ? (
+          <PhotoUploadButton
+            mainText={INFORMATION.GUESTBOOK.PHOTOS.PROMPT}
+            onChange={handleFilesUploadClick}
+            onDrop={handleFilesDrop}
+            disabled={false}
+          />
+        ) : (
+          <ImageSwiperActions
+            imageInfo={localFiles}
+            initialIndex={0}
+            updateCurrentIndex={updateCurrentIndex}
+            actions={swiperActions}
+          />
+        )
+      }
+      onNextButtonClick={onNextButtonClick}
+    />
+  );
+};
+
+export default PhotosElement;
