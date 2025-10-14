@@ -6,7 +6,7 @@ export const Wrapper = styled.div`
   gap: 40px;
 `;
 
-export const InfoContainer = styled.section`
+export const InfoSection = styled.section`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -35,7 +35,7 @@ export const IconInfoContainer = styled.div`
   gap: 4px;
 `;
 
-export const TextContainer = styled.section`
+export const TextSection = styled.section`
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -51,4 +51,28 @@ export const Text = styled.p`
 export const SenderText = styled.p`
   ${({ theme }) => theme.typography.bodyLarge}
   text-align: end;
+`;
+
+export const PhotoSection = styled.div``;
+
+export const ButtonContainer = styled.div`
+  max-width: 64px;
+`;
+
+export const ButtonElementContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+`;
+
+export const LineContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+export const Line = styled.div<{ $width: number }>`
+  width: ${({ $width }) => $width}px;
+  border-bottom: 1px solid ${({ theme }) => theme.colors.gray02};
 `;
