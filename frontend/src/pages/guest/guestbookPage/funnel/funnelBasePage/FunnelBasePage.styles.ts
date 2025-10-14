@@ -13,9 +13,11 @@ export const Wrapper = styled.div`
 export const ContentContainer = styled.div`
   flex-grow: 1;
   display: flex;
-  gap: 24px;
+  gap: 16px;
   flex-direction: column;
   width: 100%;
+  height: 100%;
+  align-items: center;
 `;
 
 export const TextContainer = styled.div`
