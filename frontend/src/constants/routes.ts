@@ -7,6 +7,7 @@ export const ROUTES = {
   },
   GUEST: {
     MAIN: '/guest/main',
+    CREATE_GUESTBOOK_COMPLETE: '/guest/create-guestbook-complete',
   },
 };
 

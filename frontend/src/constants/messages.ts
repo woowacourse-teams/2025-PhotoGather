@@ -46,3 +46,8 @@ export const INFORMATION = {
     },
   },
 } as const;
+
+export const createGuestbookCompleteMessage = (
+  receiver: string,
+  guestNickName: string,
+) => `${receiver}님에게\n ${guestNickName}님의\n 방명록 카드를 전달했어요.`;
