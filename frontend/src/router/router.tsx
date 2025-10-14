@@ -86,6 +86,9 @@ const routes: AppRouteObject[] = [
           {
             path: 'create-guestbook',
             element: <GuestBookFunnel />,
+            handle: {
+              noHeader: true,
+            },
           },
           {
             path: ':spaceCode/work-detail',
