@@ -1,5 +1,6 @@
 import { MdArrowLeft, MdArrowRight, MdOutlinePhoto } from 'react-icons/md';
 import Button from '../../../../components/@common/buttons/button/Button';
+import Line from '../../../../components/@common/line/Line';
 import * as S from './GuestbookCardPage.styles';
 
 const GuestbookCardPage = () => {
@@ -39,6 +40,7 @@ const GuestbookCardPage = () => {
         <S.SenderText>from. 덥고냉정한금성</S.SenderText>
       </S.TextSection>
       <S.PhotoSection>
+        <S.PhotoContainer></S.PhotoContainer>
         <Button
           type="button"
           variant="secondary"
@@ -48,26 +50,6 @@ const GuestbookCardPage = () => {
       </S.PhotoSection>
       <Line width={192} />
     </S.Wrapper>
-  );
-};
-
-interface LineProps {
-  width?: number;
-  leftElement?: React.ReactNode;
-  rightElement?: React.ReactNode;
-}
-
-const Line = ({ width = 100, leftElement, rightElement }: LineProps) => {
-  return (
-    <S.LineContainer>
-      <S.ButtonContainer>
-        <Button type="button" variant="tertiary" text={leftElement} />
-      </S.ButtonContainer>
-      <S.Line $width={width} />
-      <S.ButtonContainer>
-        <Button type="button" variant="tertiary" text={rightElement} />
-      </S.ButtonContainer>
-    </S.LineContainer>
   );
 };
 

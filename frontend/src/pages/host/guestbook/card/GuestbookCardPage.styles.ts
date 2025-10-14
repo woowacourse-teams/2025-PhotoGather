@@ -53,10 +53,10 @@ export const SenderText = styled.p`
   text-align: end;
 `;
 
-export const PhotoSection = styled.div``;
+export const PhotoSection = styled.section``;
 
-export const ButtonContainer = styled.div`
-  max-width: 64px;
+export const PhotoContainer = styled.div`
+
 `;
 
 export const ButtonElementContainer = styled.div`
@@ -64,15 +64,4 @@ export const ButtonElementContainer = styled.div`
   justify-content: space-between;
   align-items: center;
   gap: 8px;
-`;
-
-export const LineContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-`;
-
-export const Line = styled.div<{ $width: number }>`
-  width: ${({ $width }) => $width}px;
-  border-bottom: 1px solid ${({ theme }) => theme.colors.gray02};
 `;
