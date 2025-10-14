@@ -1,8 +1,8 @@
-import type { UploadFile } from '../file.type';
+import type { LocalFile, UploadFile } from '../file.type';
 
 export interface GuestbookFunnelInfo {
   message: string;
-  photos: GuestbookFunnelPhotos[];
+  photos: LocalFile[];
   nickname: string;
 }
 

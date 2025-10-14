@@ -25,8 +25,6 @@ const GuestBookFunnel = () => {
     initialFunnelValue,
   );
 
-  console.log(Funnel.form);
-
   return (
     <S.Wrapper>
       <S.DisplayInfoContainer>
@@ -47,6 +45,7 @@ const GuestBookFunnel = () => {
           onNextButtonClick={(photos) =>
             Funnel.goNextWithData('nickname', { photos })
           }
+          initialLocalFiles={Funnel.form.photos}
         />
       </Funnel.Step>
       <Funnel.Step name="nickname">

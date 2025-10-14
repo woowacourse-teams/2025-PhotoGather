@@ -6,22 +6,33 @@ import useLocalFile from '../../../../../hooks/@common/useLocalFile';
 import useSwiperActions from '../../../../../hooks/domain/image/useSwiperActions';
 import * as C from '../../../../../styles/@common/PhotoInput.styles';
 import { theme } from '../../../../../styles/theme';
-import type { GuestbookFunnelPhotos } from '../../../../../types/domain/guestbook.type';
+import type { LocalFile } from '../../../../../types/file.type';
 import FunnelBasePage from '../../funnel/funnelBasePage/FunnelBasePage';
 
 interface PhotosElementProps {
   receiver: string;
-  onNextButtonClick: (photos: GuestbookFunnelPhotos[]) => void;
+  onNextButtonClick: (photos: LocalFile[]) => void;
+  initialLocalFiles: LocalFile[];
 }
 
-const PhotosElement = ({ receiver, onNextButtonClick }: PhotosElementProps) => {
+const PhotosElement = ({
+  receiver,
+  onNextButtonClick,
+  initialLocalFiles,
+}: PhotosElementProps) => {
   const { currentIndex, updateCurrentIndex } = useSwiperActions({
     initialIndex: 0,
   });
-  const { localFiles, handleFilesUploadClick, handleFilesDrop, deleteFile } =
-    useLocalFile({
-      fileType: 'image',
-    });
+  const {
+    localFiles,
+    handleFilesUploadClick,
+    handleFilesDrop,
+    deleteFile,
+    clearFiles,
+  } = useLocalFile({
+    fileType: 'image',
+    initialLocalFiles: initialLocalFiles,
+  });
 
   const swiperActions = [
     {

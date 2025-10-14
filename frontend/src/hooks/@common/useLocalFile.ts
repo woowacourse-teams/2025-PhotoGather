@@ -10,15 +10,19 @@ import {
 import { useToast } from './useToast';
 
 interface UseLocalFileProps {
+  initialLocalFiles?: LocalFile[];
   fileType: string;
   maxFileCount?: number;
 }
 
 const useLocalFile = ({
+  initialLocalFiles,
   fileType,
   maxFileCount = CONSTRAINTS.MAX_FILE_COUNT,
 }: UseLocalFileProps) => {
-  const [localFiles, setLocalFiles] = useState<LocalFile[]>([]);
+  const [localFiles, setLocalFiles] = useState<LocalFile[]>(
+    initialLocalFiles ?? [],
+  );
   const { showToast } = useToast();
 
   const previewFile = localFiles.map((file) => ({
@@ -60,6 +64,8 @@ const useLocalFile = ({
       id: 0,
       originFile: processedFile,
       previewUrl: await createImagePreviewUrl(processedFile),
+      capacityValue: processedFile.size,
+      capturedAt: null,
     };
 
     setLocalFiles((prev) => {
@@ -89,6 +95,8 @@ const useLocalFile = ({
         id: startIndex + index,
         originFile: file,
         previewUrl: await createImagePreviewUrl(file),
+        capacityValue: file.size,
+        capturedAt: null,
       })),
     );
 
