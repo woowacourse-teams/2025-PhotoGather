@@ -6,11 +6,12 @@ import useLocalFile from '../../../../../hooks/@common/useLocalFile';
 import useSwiperActions from '../../../../../hooks/domain/image/useSwiperActions';
 import * as C from '../../../../../styles/@common/PhotoInput.styles';
 import { theme } from '../../../../../styles/theme';
+import type { GuestbookFunnelPhotos } from '../../../../../types/domain/guestbook.type';
 import FunnelBasePage from '../../funnel/funnelBasePage/FunnelBasePage';
 
 interface PhotosElementProps {
   receiver: string;
-  onNextButtonClick: () => void;
+  onNextButtonClick: (photos: GuestbookFunnelPhotos[]) => void;
 }
 
 const PhotosElement = ({ receiver, onNextButtonClick }: PhotosElementProps) => {
@@ -69,7 +70,7 @@ const PhotosElement = ({ receiver, onNextButtonClick }: PhotosElementProps) => {
           />
         )
       }
-      onNextButtonClick={onNextButtonClick}
+      onNextButtonClick={() => onNextButtonClick(localFiles)}
     />
   );
 };

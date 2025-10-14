@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import useFunnel from './useFunnel.tsx';
+import useFunnel from './useFunnel';
 
 const useFormFunnel = <Step extends string, Form>(
   initialStep: Step,
@@ -13,6 +13,7 @@ const useFormFunnel = <Step extends string, Form>(
   };
 
   const goNextWithData = (nextStep: Step, data: Partial<Form>) => {
+    console.log(data);
     updateFormData(data);
     funnel.goNextStep(nextStep);
   };

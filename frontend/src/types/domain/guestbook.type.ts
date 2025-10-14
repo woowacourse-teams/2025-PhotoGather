@@ -1,6 +1,8 @@
+import type { UploadFile } from '../file.type';
+
 export interface GuestbookFunnelInfo {
   message: string;
-  photos: File[];
+  photos: GuestbookFunnelPhotos[];
   nickname: string;
 }
 
@@ -12,4 +14,8 @@ export interface FunnelBaseElementProps {
   onNextButtonClick: () => void;
   nextButtonDisabled?: boolean;
   buttonText?: string;
+}
+
+export interface GuestbookFunnelPhotos {
+  photos: UploadFile[];
 }

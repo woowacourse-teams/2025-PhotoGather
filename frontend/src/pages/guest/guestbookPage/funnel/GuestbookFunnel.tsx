@@ -1,5 +1,3 @@
-import { useNavigate } from 'react-router-dom';
-import { ROUTES } from '../../../../constants/routes';
 import useConfirmBeforeRefresh from '../../../../hooks/@common/useConfirmBeforeRefresh';
 import useFormFunnel from '../../../../hooks/domain/funnel/useFormFunnel';
 import { DividerLine } from '../../../../styles/@common/DividerLine.styles';
@@ -19,8 +17,6 @@ const initialFunnelValue: GuestbookFunnelInfo = {
 };
 
 const GuestBookFunnel = () => {
-  const navigate = useNavigate();
-
   useConfirmBeforeRefresh();
   const MOCK_RECEIVER = '방명록 주인장';
 
@@ -28,6 +24,8 @@ const GuestBookFunnel = () => {
     'message',
     initialFunnelValue,
   );
+
+  console.log(Funnel.form);
 
   return (
     <S.Wrapper>
@@ -46,8 +44,8 @@ const GuestBookFunnel = () => {
       <Funnel.Step name="photos">
         <PhotosElement
           receiver={MOCK_RECEIVER}
-          onNextButtonClick={() =>
-            Funnel.goNextWithData('nickname', { photos: Funnel.form.photos })
+          onNextButtonClick={(photos) =>
+            Funnel.goNextWithData('nickname', { photos })
           }
         />
       </Funnel.Step>
