@@ -46,6 +46,7 @@ export const IconContainer = styled.button<{
   $variant: IconButtonVariant;
 }>`
   max-width: 44px;
+  width: 100%;
   aspect-ratio: 1/1;
   display: flex;
   padding: 10px;
@@ -56,10 +57,6 @@ export const IconContainer = styled.button<{
   gap: 10px;
   border-radius: 12px;
 
-  svg {
-    width: 28px;
-    height: 28px;
-  }
 
   ${({ $variant, theme }) => $variant && IconButtonStyles[$variant](theme)}
 `;

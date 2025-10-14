@@ -36,7 +36,7 @@ const PhotosElement = ({
 
   const swiperActions = [
     {
-      icon: <MdDeleteOutline fill={theme.colors.error} />,
+      icon: <MdDeleteOutline fill={theme.colors.error} size={24} />,
       onClick: () => {
         deleteFile(localFiles[currentIndex].id);
       },
@@ -45,7 +45,7 @@ const PhotosElement = ({
       icon: (
         <C.Wrapper>
           <C.Label>
-            <MdAddAPhoto size={12} />
+            <MdAddAPhoto size={20} />
             <C.FileInput
               type="file"
               multiple

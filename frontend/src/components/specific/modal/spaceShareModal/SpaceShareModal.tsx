@@ -50,12 +50,12 @@ const SpaceShareModal = ({ isOpen, onClose }: ShareModalProps) => {
           <QRCode address={copyAddress} ref={qrCodeRef} />
           <S.ButtonContainer>
             <IconButton
-              icon={<MdDownload />}
+              icon={<MdDownload size={24} />}
               variant="dark"
               onClick={saveQRCodeImage}
             />
             <IconButton
-              icon={<MdLink style={{ rotate: '-45deg' }} />}
+              icon={<MdLink style={{ rotate: '-45deg' }} size={24} />}
               variant="dark"
               onClick={copyShareLink}
             />

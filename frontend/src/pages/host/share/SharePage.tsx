@@ -67,12 +67,12 @@ const SharePage = () => {
             <S.ShareLabel>스페이스 링크를 공유해 보세요.</S.ShareLabel>
             <S.IconLabelButtonContainer>
               <IconButton
-                icon={<MdDownload />}
+                icon={<MdDownload size={24} />}
                 variant="dark"
                 onClick={saveQRCodeImage}
               />
               <IconButton
-                icon={<MdLink style={{ rotate: '-45deg' }} />}
+                icon={<MdLink style={{ rotate: '-45deg' }} size={24} />}
                 variant="dark"
                 onClick={copyShareLink}
               />
