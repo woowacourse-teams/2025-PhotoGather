@@ -6,6 +6,7 @@ import static com.forgather.domain.upload.domain.UploadCategory.GUESTBOOK;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,6 +24,7 @@ import com.forgather.domain.guestbook.repository.GuestRepository;
 import com.forgather.domain.space.model.Space;
 import com.forgather.domain.space.repository.SpaceRepository;
 import com.forgather.domain.upload.domain.ContentsStorage;
+import com.forgather.domain.upload.event.DeletePhotoEvent;
 import com.forgather.global.auth.model.Host;
 import com.forgather.global.auth.repository.SpaceHostMapRepository;
 import com.forgather.global.exception.BaseNullPointerException;
@@ -35,6 +37,7 @@ import lombok.RequiredArgsConstructor;
 @Service
 public class GuestBookService {
 
+    private final ApplicationEventPublisher eventPublisher;
     private final SpaceRepository spaceRepository;
     private final SpaceHostMapRepository spaceHostMapRepository;
     private final GuestRepository guestRepository;
@@ -132,9 +135,12 @@ public class GuestBookService {
         );
     }
 
+    /**
+     * guestBookCard와 연관된 모든 GuestBookCardPhoto 삭제
+     */
     private void deleteGuestBookCardPhotos(GuestBookCard guestBookCard) {
         List<GuestBookCardPhoto> photos = guestBookCardPhotoRepository.findAllByGuestBookCard(guestBookCard);
         guestBookCardPhotoRepository.deleteAll(photos);
-        contentsStorage.deletePhotos(photos);
+        eventPublisher.publishEvent(new DeletePhotoEvent(this, photos)); // 클라우드 삭제 이벤트 발행
     }
 }
