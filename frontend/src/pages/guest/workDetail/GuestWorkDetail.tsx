@@ -69,7 +69,7 @@ const GuestWorkDetail = () => {
         {photos.map((photo, index) => (
           <C.ImageContainer
             key={photo.id}
-            src={buildThumbnailUrl(photo.path, '800')}
+            src={buildThumbnailUrl(photo.path, 'product', '800')}
             alt={`work-detail-${index}`}
           />
         ))}
