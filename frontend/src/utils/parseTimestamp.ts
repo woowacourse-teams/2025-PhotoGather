@@ -2,7 +2,7 @@ export const parseTimestamp = (timestamp: string | Date) => {
   if (timestamp instanceof Date) {
     return {
       year: timestamp.getFullYear(),
-      month: timestamp.getMonth(),
+      month: timestamp.getMonth() + 1,
       day: timestamp.getDate(),
       hour: timestamp.getHours(),
       minute: timestamp.getMinutes(),
