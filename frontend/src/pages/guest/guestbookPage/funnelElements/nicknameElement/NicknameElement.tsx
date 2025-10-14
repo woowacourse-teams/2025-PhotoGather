@@ -1,10 +1,7 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import TextInput from '../../../../../components/@common/inputs/textInput/TextInput';
 import { CONSTRAINTS } from '../../../../../constants/constraints';
 import { INFORMATION } from '../../../../../constants/messages';
-import { ROUTES } from '../../../../../constants/routes';
-import type { GuestbookFunnelInfo } from '../../../../../types/domain/guestbook.type';
 import { calculateValidLength } from '../../../../../utils/grapheme';
 import { createErrorMessageWithValidators } from '../../../../../validators/createErrorMessageWithValidators';
 import { funnelValidators } from '../../funnel/funnel.validators';
@@ -13,15 +10,14 @@ import FunnelBasePage from '../../funnel/funnelBasePage/FunnelBasePage';
 interface NicknameElementProps {
   receiver: string;
   initialValue: string;
-  updateFormData: (data: Partial<GuestbookFunnelInfo>) => void;
+  onSubmit: (nickname: string) => Promise<void>;
 }
 
 const NicknameElement = ({
   receiver,
   initialValue,
-  updateFormData,
+  onSubmit,
 }: NicknameElementProps) => {
-  const navigate = useNavigate();
   const [nickname, setNickname] = useState(initialValue);
   const handleChangeNickname = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNickname(e.target.value);
@@ -50,14 +46,8 @@ const NicknameElement = ({
         />
       }
       buttonText="전송"
-      onNextButtonClick={() => {
-        updateFormData({ nickname });
-        navigate(ROUTES.GUEST.CREATE_GUESTBOOK_COMPLETE, {
-          state: {
-            receiver: receiver,
-            guestNickName: nickname,
-          },
-        });
+      onNextButtonClick={async () => {
+        await onSubmit(nickname);
       }}
       nextButtonDisabled={isError}
     />

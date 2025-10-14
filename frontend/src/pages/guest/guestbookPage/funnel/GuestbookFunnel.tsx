@@ -1,7 +1,17 @@
+import { useNavigate, useParams } from 'react-router-dom';
+import { guestbookService } from '../../../../apis/services/guestbook/guestbook.service';
+import { ROUTES } from '../../../../constants/routes';
 import useConfirmBeforeRefresh from '../../../../hooks/@common/useConfirmBeforeRefresh';
+import useLocalFile from '../../../../hooks/@common/useLocalFile';
+import { useToast } from '../../../../hooks/@common/useToast';
 import useFormFunnel from '../../../../hooks/domain/funnel/useFormFunnel';
+import useFileUpload from '../../../../hooks/domain/image/useFileUpload';
 import { DividerLine } from '../../../../styles/@common/DividerLine.styles';
-import type { GuestbookFunnelInfo } from '../../../../types/domain/guestbook.type';
+import type {
+  GuestbookForm,
+  GuestbookFunnelInfo,
+} from '../../../../types/domain/guestbook.type';
+import type { UploadFile } from '../../../../types/file.type';
 import { mockData } from '../../../mockData';
 import MessageElement from '../funnelElements/messageElement/MessageElement';
 import NicknameElement from '../funnelElements/nicknameElement/NicknameElement';
@@ -17,6 +27,9 @@ const initialFunnelValue: GuestbookFunnelInfo = {
 };
 
 const GuestBookFunnel = () => {
+  const navigate = useNavigate();
+  const { showToast } = useToast();
+
   useConfirmBeforeRefresh();
   const MOCK_RECEIVER = '방명록 주인장';
 
@@ -24,6 +37,85 @@ const GuestBookFunnel = () => {
     'message',
     initialFunnelValue,
   );
+
+  const {
+    localFiles,
+    handleFilesUploadClick,
+    handleFilesDrop,
+    deleteFile,
+    clearFiles,
+  } = useLocalFile({
+    fileType: 'image',
+    initialLocalFiles: Funnel.form.photos,
+  });
+
+  const { spaceCode } = useParams<{ spaceCode: string }>();
+
+  const { processFileUpload } = useFileUpload({
+    spaceCode: spaceCode ?? '',
+    localFiles: localFiles,
+    onUploadSuccess: () => {},
+    clearFiles: clearFiles,
+  });
+
+  const createSubmitImage = (uploadFiles: UploadFile[]) => {
+    return uploadFiles.map((file) => {
+      return {
+        originalName: file.originFile.name,
+        uploadFileName: file.objectKey,
+        capacity: file.originFile.size,
+      };
+    });
+  };
+
+  // TODO : nickname 값을 다르게 처리할 방법 물색
+  const createGuestbookForm = async (
+    nickname: string,
+  ): Promise<GuestbookForm> => {
+    const baseForm: GuestbookForm = {
+      nickname,
+      message: Funnel.form.message,
+      photos: [],
+    };
+
+    if (localFiles.length === 0) {
+      return baseForm;
+    }
+
+    const uploadFiles = await processFileUpload('GUESTBOOK');
+    if (!uploadFiles) {
+      throw new Error('uploadFiles is null');
+    }
+
+    return {
+      ...baseForm,
+      photos: createSubmitImage(uploadFiles),
+    };
+  };
+
+  const submitForm = async (nickname: string) => {
+    try {
+      const form = await createGuestbookForm(nickname);
+      const result = await guestbookService.createGuestbook(
+        spaceCode ?? '',
+        form,
+      );
+
+      if (!result.success) {
+        throw new Error('createGuestbook is failed');
+      }
+
+      navigate(ROUTES.GUEST.CREATE_GUESTBOOK_COMPLETE, {
+        state: {
+          receiver: MOCK_RECEIVER,
+          guestNickName: nickname,
+        },
+      });
+    } catch (error) {
+      console.error(error);
+      showToast({ text: '전송에 실패했습니다.', type: 'error' });
+    }
+  };
 
   return (
     <S.Wrapper>
@@ -45,14 +137,17 @@ const GuestBookFunnel = () => {
           onNextButtonClick={(photos) =>
             Funnel.goNextWithData('nickname', { photos })
           }
-          initialLocalFiles={Funnel.form.photos}
+          localFiles={localFiles}
+          deleteFile={deleteFile}
+          handleFilesUploadClick={handleFilesUploadClick}
+          handleFilesDrop={handleFilesDrop}
         />
       </Funnel.Step>
       <Funnel.Step name="nickname">
         <NicknameElement
           receiver={MOCK_RECEIVER}
           initialValue={Funnel.form.nickname}
-          updateFormData={Funnel.updateFormData}
+          onSubmit={submitForm}
         />
       </Funnel.Step>
     </S.Wrapper>

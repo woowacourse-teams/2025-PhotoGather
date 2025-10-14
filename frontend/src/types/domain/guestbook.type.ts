@@ -19,3 +19,15 @@ export interface FunnelBaseElementProps {
 export interface GuestbookFunnelPhotos {
   photos: UploadFile[];
 }
+
+interface GuestbookImageType {
+  originalName: string;
+  uploadFileName: string;
+  capacity: number;
+}
+
+export interface GuestbookForm {
+  nickname: string;
+  message: string;
+  photos: GuestbookImageType[];
+}

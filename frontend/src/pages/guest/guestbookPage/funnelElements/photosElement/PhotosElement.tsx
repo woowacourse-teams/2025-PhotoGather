@@ -2,7 +2,6 @@ import { MdAddAPhoto, MdDeleteOutline } from 'react-icons/md';
 import ImageSwiperActions from '../../../../../components/specific/imageSwiperActions/ImageSwiperActions';
 import PhotoUploadButton from '../../../../../components/specific/photoUploadButton/PhotoUploadButton';
 import { INFORMATION } from '../../../../../constants/messages';
-import useLocalFile from '../../../../../hooks/@common/useLocalFile';
 import useSwiperActions from '../../../../../hooks/domain/image/useSwiperActions';
 import * as C from '../../../../../styles/@common/PhotoInput.styles';
 import { theme } from '../../../../../styles/theme';
@@ -12,26 +11,22 @@ import FunnelBasePage from '../../funnel/funnelBasePage/FunnelBasePage';
 interface PhotosElementProps {
   receiver: string;
   onNextButtonClick: (photos: LocalFile[]) => void;
-  initialLocalFiles: LocalFile[];
+  localFiles: LocalFile[];
+  deleteFile: (id: number) => void;
+  handleFilesUploadClick: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  handleFilesDrop: (event: React.DragEvent<HTMLLabelElement>) => void;
 }
 
 const PhotosElement = ({
   receiver,
   onNextButtonClick,
-  initialLocalFiles,
+  localFiles,
+  deleteFile,
+  handleFilesUploadClick,
+  handleFilesDrop,
 }: PhotosElementProps) => {
   const { currentIndex, updateCurrentIndex } = useSwiperActions({
     initialIndex: 0,
-  });
-  const {
-    localFiles,
-    handleFilesUploadClick,
-    handleFilesDrop,
-    deleteFile,
-    clearFiles,
-  } = useLocalFile({
-    fileType: 'image',
-    initialLocalFiles: initialLocalFiles,
   });
 
   const swiperActions = [

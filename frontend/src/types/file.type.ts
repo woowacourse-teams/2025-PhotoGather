@@ -11,7 +11,7 @@ export interface PreviewFile {
   previewUrl: string;
 }
 
-export type ImageCategoryType = 'product ' | 'guestbook';
+export type ImageCategoryType = 'PRODUCT ' | 'GUESTBOOK';
 
 export type UploadFileState = 'idle' | 'signed' | 'uploaded' | 'failed';
 
