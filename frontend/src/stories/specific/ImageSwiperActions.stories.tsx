@@ -5,6 +5,7 @@ import image1 from '../../@assets/workDetail_mock_1.png';
 import image2 from '../../@assets/workDetail_mock_2.png';
 import image3 from '../../@assets/workDetail_mock_3.png';
 import ImageSwiperActions from '../../components/specific/imageSwiperActions/ImageSwiperActions';
+import useImageSwiper from '../../hooks/domain/image/useImageSwiper';
 import { theme } from '../../styles/theme';
 import type { ImageInfoType } from '../../types/swiper.type';
 
@@ -24,13 +25,11 @@ const mockImageInfo: ImageInfoType[] = [
 export const Default: Story = {
   render: () => {
     const INITIAL_INDEX = 0;
-    const [currentIndex, setCurrentIndex] = useState(INITIAL_INDEX);
     const [imageInfo, setImageInfo] = useState(mockImageInfo);
 
-    const updateCurrentIndex = (index: number) => {
-      setCurrentIndex(index);
-    };
-
+    const { currentIndex, updateCurrentIndex } = useImageSwiper({
+      initialIndex: INITIAL_INDEX,
+    });
     const deleteImage = (index: number) => {
       setImageInfo((prev) => prev.filter((_, i) => i !== index));
     };
