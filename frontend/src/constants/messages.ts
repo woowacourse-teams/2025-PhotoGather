@@ -40,5 +40,9 @@ export const INFORMATION = {
     NICKNAME: {
       PROMPT: '전달할 닉네임을 입력해주세요',
     },
+    PHOTOS: {
+      PROMPT: '함께 전달할 사진을 선택해주세요',
+      UPLOAD_LIMIT_TEXT: '20장까지 선택할 수 있어요',
+    },
   },
 } as const;
