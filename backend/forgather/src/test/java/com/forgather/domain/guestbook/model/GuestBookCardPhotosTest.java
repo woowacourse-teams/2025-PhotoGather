@@ -44,7 +44,7 @@ class GuestBookCardPhotosTest {
 
         // then
         assertAll(
-            () -> assertThat(result).contains(guestBookCardPhoto1, guestBookCardPhoto2),
+            () -> assertThat(result).containsExactlyInAnyOrder(guestBookCardPhoto1, guestBookCardPhoto2),
             () -> assertThat(guestBookCardPhotos.getAll()).contains(guestBookCardPhoto3)
         );
 
