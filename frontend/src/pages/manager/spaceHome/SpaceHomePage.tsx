@@ -166,11 +166,16 @@ const SpaceHomePage = () => {
     hasAccess,
   ]);
 
+
   useEffect(() => {
     setTimeout(() => {
       document.querySelector('h1')?.focus();
     }, 100);
   }, []);
+
+  const progressBarWidth =
+    parseInt(theme.layout.width) - parseInt(theme.layout.padding.leftRight) * 8;
+
 
   const renderBodyContent = () => {
     if (isEarlyTime) return <EarlyPage openedAt={spaceInfo?.openedAt ?? ''} />;
@@ -248,6 +253,7 @@ const SpaceHomePage = () => {
     <C.Wrapper>
       {isDownloading && (
         <LoadingLayout
+          progressBarWidth={progressBarWidth}
           loadingContents={loadingContents}
           totalAmount={totalProgress}
           currentAmount={currentProgress}

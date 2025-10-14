@@ -117,6 +117,7 @@ module.exports = (_, argv) => {
           { from: 'public/favicon-32x32.png', to: 'favicon-32x32.png' },
           { from: 'public/favicon-16x16.png', to: 'favicon-16x16.png' },
           { from: 'public/apple-touch-icon.png', to: 'apple-touch-icon.png' },
+          { from: 'public/streaming-download.js', to: 'streaming-download.js' },
         ],
       }),
     ],
