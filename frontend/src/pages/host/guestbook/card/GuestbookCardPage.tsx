@@ -73,6 +73,7 @@ const GuestbookCardPage = () => {
               onClick={handlePreviousCardMove}
               icon={<MdArrowBackIosNew color={theme.colors.gray04} />}
               variant="default"
+              size="small"
             />
           )
         }
@@ -82,6 +83,7 @@ const GuestbookCardPage = () => {
               onClick={handleNextCardMove}
               icon={<MdArrowForwardIos color={theme.colors.gray04} />}
               variant="default"
+              size="small"
             />
           )
         }
