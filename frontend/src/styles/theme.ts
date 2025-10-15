@@ -9,6 +9,7 @@ export const theme = {
     gray06: '#2C2C2C',
     error: '#B00020',
     info: '#4CAF50',
+    newGuestbook: '#6DFFAF',
     background: '#FCFCFC',
     black: '#121212',
   },
@@ -32,6 +33,11 @@ export const theme = {
       fontWeight: 500,
       fontSize: '16px',
       lineHeight: '150%',
+    },
+    bodyWideLineHeight: {
+      fontWeight: 500,
+      fontSize: '16px',
+      lineHeight: '200%',
     },
     bodyRegular: {
       fontWeight: 400,
@@ -65,5 +71,6 @@ export const theme = {
       imageMaxWidth: '280px',
     },
     headerHeight: '60px',
+    footerHeight: '60px',
   },
 };

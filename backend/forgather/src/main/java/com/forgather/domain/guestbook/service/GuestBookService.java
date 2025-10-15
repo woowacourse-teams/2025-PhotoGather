@@ -6,10 +6,16 @@ import static com.forgather.domain.upload.domain.UploadCategory.GUESTBOOK;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.forgather.domain.guestbook.dto.DeleteGuestBookCardPhotosRequest;
 import com.forgather.domain.guestbook.dto.GuestBookCardResponse;
+import com.forgather.domain.guestbook.dto.GuestBookCardSimpleResponse;
+import com.forgather.domain.guestbook.dto.GuestBookResponse;
 import com.forgather.domain.guestbook.dto.WriteGuestBookCardPhotoRequest;
 import com.forgather.domain.guestbook.dto.WriteGuestBookCardRequest;
 import com.forgather.domain.guestbook.dto.WriteGuestBookCardResponse;
@@ -23,6 +29,7 @@ import com.forgather.domain.guestbook.repository.GuestRepository;
 import com.forgather.domain.space.model.Space;
 import com.forgather.domain.space.repository.SpaceRepository;
 import com.forgather.domain.upload.domain.ContentsStorage;
+import com.forgather.domain.upload.event.DeletePhotoEvent;
 import com.forgather.global.auth.model.Host;
 import com.forgather.global.auth.repository.SpaceHostMapRepository;
 import com.forgather.global.exception.BaseNullPointerException;
@@ -35,6 +42,7 @@ import lombok.RequiredArgsConstructor;
 @Service
 public class GuestBookService {
 
+    private final ApplicationEventPublisher eventPublisher;
     private final SpaceRepository spaceRepository;
     private final SpaceHostMapRepository spaceHostMapRepository;
     private final GuestRepository guestRepository;
@@ -73,6 +81,22 @@ public class GuestBookService {
         return new GuestBookCardPhotos(photos);
     }
 
+    public GuestBookResponse read(Host host, String spaceCode, Pageable pageable) {
+        Space space = spaceRepository.getByCodeOrThrow(spaceCode);
+        validateCanRead(space, host);
+        Page<GuestBookCard> guestBookCards = guestBookCardRepository.findAllBySpace(space, pageable);
+        boolean isHost = host != null && isSpaceHost(space, host);
+        Page<GuestBookCardSimpleResponse> simpleResponses = guestBookCards.map(
+            guestBookCard -> new GuestBookCardSimpleResponse(
+                guestBookCard.getId(),
+                guestBookCard.getNickname(),
+                guestBookCardPhotoRepository.existsByGuestBookCard(guestBookCard),
+                isHost ? guestBookCard.isRead() : null
+            )
+        );
+        return new GuestBookResponse(simpleResponses);
+    }
+
     public GuestBookCardResponse readCard(Host host, String spaceCode, Long guestBookCardId) {
         Space space = spaceRepository.getByCodeOrThrow(spaceCode);
         validateCanRead(space, host);
@@ -105,6 +129,40 @@ public class GuestBookService {
         guestBookCardRepository.delete(guestBookCard);
     }
 
+    private void deleteGuestBookCardPhotos(GuestBookCard guestBookCard) {
+        List<GuestBookCardPhoto> photos = guestBookCardPhotoRepository.findAllByGuestBookCard(guestBookCard);
+        deleteGuestBookCardPhotos(photos);
+    }
+
+    public void deleteCardPhotos(
+        Host host,
+        String spaceCode,
+        Long guestBookCardId,
+        DeleteGuestBookCardPhotosRequest request
+    ) {
+        Space space = spaceRepository.getByCodeOrThrow(spaceCode);
+        // validateSpaceHost(host, space); // TODO 검증 활성화
+        GuestBookCardPhotos guestBookCardPhotos = getGuestBookCardPhotos(space, guestBookCardId);
+        List<GuestBookCardPhoto> deletedPhotos = guestBookCardPhotos.deleteByIds(request.deletePhotoIds());
+        deleteGuestBookCardPhotos(deletedPhotos);
+    }
+
+    private GuestBookCardPhotos getGuestBookCardPhotos(Space space, Long guestBookCardId) {
+        GuestBookCard guestBookCard = getGuestBookCard(guestBookCardId, space);
+        return new GuestBookCardPhotos(guestBookCardPhotoRepository.findAllByGuestBookCard(guestBookCard));
+    }
+
+    private GuestBookCard getGuestBookCard(Long guestBookCardId, Space space) {
+        GuestBookCard guestBookCard = guestBookCardRepository.getByIdOrThrow(guestBookCardId);
+        if (guestBookCard.equalsSpace(space)) {
+            return guestBookCard;
+        }
+        throw new NotFoundException(
+            "해당 스페이스에 존재하지 않는 방명록 카드입니다. spaceCode: %s, guestBookCardId: %d"
+                .formatted(space.getCode(), guestBookCardId)
+        );
+    }
+
     private void validateSpaceHost(Host host, Space space) {
         if (isSpaceHost(space, host)) {
             return;
@@ -121,20 +179,8 @@ public class GuestBookService {
         return spaceHostMapRepository.findBySpaceAndHost(space, host).isPresent();
     }
 
-    private GuestBookCard getGuestBookCard(Long guestBookCardId, Space space) {
-        GuestBookCard guestBookCard = guestBookCardRepository.getByIdOrThrow(guestBookCardId);
-        if (guestBookCard.equalsSpace(space)) {
-            return guestBookCard;
-        }
-        throw new NotFoundException(
-            "해당 스페이스에 존재하지 않는 방명록 카드입니다. spaceCode: %s, guestBookCardId: %d"
-                .formatted(space.getCode(), guestBookCardId)
-        );
-    }
-
-    private void deleteGuestBookCardPhotos(GuestBookCard guestBookCard) {
-        List<GuestBookCardPhoto> photos = guestBookCardPhotoRepository.findAllByGuestBookCard(guestBookCard);
+    private void deleteGuestBookCardPhotos(List<GuestBookCardPhoto> photos) {
         guestBookCardPhotoRepository.deleteAll(photos);
-        contentsStorage.deletePhotos(photos);
+        eventPublisher.publishEvent(new DeletePhotoEvent(this, photos)); // 클라우드 삭제 이벤트 발행
     }
 }

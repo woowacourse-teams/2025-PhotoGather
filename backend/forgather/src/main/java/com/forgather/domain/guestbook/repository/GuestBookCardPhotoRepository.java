@@ -11,4 +11,6 @@ public interface GuestBookCardPhotoRepository {
     List<GuestBookCardPhoto> findAllByGuestBookCard(GuestBookCard guestBookCard);
 
     void deleteAll(Iterable<? extends GuestBookCardPhoto> photos);
+
+    Boolean existsByGuestBookCard(GuestBookCard guestBookCard);
 }

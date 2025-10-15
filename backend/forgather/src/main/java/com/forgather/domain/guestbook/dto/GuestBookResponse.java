@@ -2,6 +2,8 @@ package com.forgather.domain.guestbook.dto;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 
 public record GuestBookResponse(
@@ -27,7 +29,7 @@ public record GuestBookResponse(
             }
           ]
         """)
-    List<GuestBookCardSimpleResponse>  guestBookCards,
+    List<GuestBookCardSimpleResponse> guestBookCards,
 
     @Schema(description = "현재 페이지 번호", example = "1")
     int currentPage,
@@ -36,9 +38,17 @@ public record GuestBookResponse(
     int pageSize,
 
     @Schema(description = "총 방명록 카드 개수", example = "3")
-    int totalCount,
+    long totalCount,
 
     @Schema(description = "총 페이지 수", example = "1")
     int totalPages
 ) {
+
+    public GuestBookResponse(Page<GuestBookCardSimpleResponse> guestBookCards) {
+        this(guestBookCards.toList(),
+            guestBookCards.getNumber() + 1,
+            guestBookCards.getSize(),
+            guestBookCards.getTotalElements(),
+            guestBookCards.getTotalPages());
+    }
 }

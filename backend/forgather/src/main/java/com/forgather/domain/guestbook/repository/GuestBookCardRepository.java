@@ -2,6 +2,8 @@ package com.forgather.domain.guestbook.repository;
 
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 
 import com.forgather.domain.guestbook.model.GuestBookCard;
@@ -26,4 +28,6 @@ public interface GuestBookCardRepository {
         return findById(id)
             .orElseThrow(() -> new NotFoundException("존재하지 않는 방명록 카드입니다. id: " + id));
     }
+
+    Page<GuestBookCard> findAllBySpace(Space space, Pageable pageable);
 }

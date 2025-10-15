@@ -3,8 +3,8 @@ import * as S from './Button.styles';
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   /** 버튼의 variant */
   variant?: keyof typeof S.buttonStyles;
-  /** 버튼 내부 텍스트 */
-  text: string;
+  /** 버튼 내부 요소 */
+  text: string | React.ReactNode;
   /** 버튼 활성화 여부*/
   disabled?: boolean;
 }

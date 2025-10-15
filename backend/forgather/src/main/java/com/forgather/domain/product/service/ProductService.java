@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,6 +22,7 @@ import com.forgather.domain.product.repository.ProductRepository;
 import com.forgather.domain.space.model.Space;
 import com.forgather.domain.space.repository.SpaceRepository;
 import com.forgather.domain.upload.domain.ContentsStorage;
+import com.forgather.domain.upload.event.DeletePhotoEvent;
 import com.forgather.global.exception.BaseException;
 
 import lombok.RequiredArgsConstructor;
@@ -29,6 +31,7 @@ import lombok.RequiredArgsConstructor;
 @Service
 public class ProductService {
 
+    private final ApplicationEventPublisher eventPublisher;
     private final ProductRepository productRepository;
     private final ProductPhotoRepository productPhotoRepository;
     private final SpaceRepository spaceRepository;
@@ -48,7 +51,7 @@ public class ProductService {
         Product product = productRepository.save(request.toEntity(space));
 
         ProductPhotos productPhotos = new ProductPhotos();
-        for (var photoRequest : request.photos()) {
+        for (var photoRequest : request.photos()) { // TODO NPE
             String path = generateContentsFilePath(
                 contentsStorage.getRootDirectory(),
                 spaceCode,
@@ -74,10 +77,10 @@ public class ProductService {
         Product product = productRepository.getBySpaceCodeOrThrow(spaceCode);
         product.update(request.title(), request.category(), request.authorName(), request.description());
 
-        // 삭제 사진 제거 및 db 삭제
+        // 삭제 사진 db 및 클라우드 삭제
         ProductPhotos photos = new ProductPhotos(productPhotoRepository.findAllByProduct(product));
         List<ProductPhoto> deletedPhotos = photos.deleteByIds(request.deletePhotoIds());
-        productPhotoRepository.deleteAll(deletedPhotos);
+        deleteProductPhotos(deletedPhotos);
 
         // 새로운 사진 추가 및 db 저장
         List<ProductPhoto> newPhotos = new ArrayList<>();
@@ -93,26 +96,29 @@ public class ProductService {
         photos.add(newPhotos);
         productPhotoRepository.saveAll(newPhotos);
 
-        // 삭제 사진 클라우드 저장소에서 삭제
-        contentsStorage.deletePhotos(deletedPhotos);
-
         return new ProductResponse(product, photos.getAll());
     }
 
-    /**
-     * TODO
-     * s3에서 삭제했지만 트랜잭션 롤백 고려
-     */
     @Transactional
     public void delete(String spaceCode) {
         Product product = productRepository.getBySpaceCodeOrThrow(spaceCode);
-        deleteProductPhotos(product);
+        deleteAllProductPhotos(product);
         productRepository.delete(product);
     }
 
-    private void deleteProductPhotos(Product product) {
-        List<ProductPhoto> productPhotos = productPhotoRepository.findAllByProduct(product);
+    /**
+     * product와 연관된 모든 ProductPhoto 삭제
+     */
+    private void deleteAllProductPhotos(Product product) {
+        List<ProductPhoto> photos = productPhotoRepository.findAllByProduct(product);
+        deleteProductPhotos(photos);
+    }
+
+    /**
+     * productPhotos만 삭제
+     */
+    private void deleteProductPhotos(List<ProductPhoto> productPhotos) {
         productPhotoRepository.deleteAll(productPhotos);
-        contentsStorage.deletePhotos(productPhotos);
+        eventPublisher.publishEvent(new DeletePhotoEvent(this, productPhotos)); // 클라우드 삭제 이벤트 발행
     }
 }

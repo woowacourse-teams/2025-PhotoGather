@@ -18,7 +18,7 @@ public interface ProductRepository {
             throw new BaseNullPointerException("스페이스의 코드는 null일 수 없습니다.", HttpStatus.BAD_REQUEST);
         }
         return findBySpaceCode(spaceCode)
-            .orElseThrow(() -> new NotFoundException("해당 스페이스 등록된 작품이 없습니다. spaceCode: " + spaceCode));
+            .orElseThrow(() -> new NotFoundException("해당 스페이스에 등록된 작품이 없습니다. spaceCode: " + spaceCode));
     }
 
     void delete(Product product);

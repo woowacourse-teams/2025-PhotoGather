@@ -1,19 +1,23 @@
 import { IoLogoInstagram } from 'react-icons/io5';
 import { MdEmail } from 'react-icons/md';
-import { useParams } from 'react-router-dom';
-import FooterLogo from '../../../@assets/logo/footer-logo.svg?react';
+import { useNavigate, useParams } from 'react-router-dom';
 import Button from '../../../components/@common/buttons/button/Button';
 import IconButton from '../../../components/@common/buttons/iconButton/IconButton';
 import Thumbnail from '../../../components/@common/thumbnail/Thumbnail';
+import {
+  createGuestbookRoute,
+  createWorkDetailRoute,
+} from '../../../constants/routes';
 import useSpaceInfo from '../../../hooks/domain/space/useSpaceInfo';
 import { DividerLine } from '../../../styles/@common/DividerLine.styles';
 import { createInstagramUrl } from '../../../utils/createExternalLinks';
 import * as MainPageStyles from '../../MainPage.common.styles';
 
 const HostMainPage = () => {
-  const { spaceCode } = useParams();
+  const navigate = useNavigate();
+  const { spaceCode = '' } = useParams();
   const { spaceInfo } = useSpaceInfo({
-    spaceCode: spaceCode ?? '',
+    spaceCode,
   });
 
   return (
@@ -54,12 +58,22 @@ const HostMainPage = () => {
       </MainPageStyles.IconButtonContainer>
       <DividerLine width="10%" />
       <MainPageStyles.ButtonContainer>
-        <Button variant="elevated" text="작품 소개 관리" onClick={() => {}} />
-        <Button variant="elevated" text="방명록 관리" onClick={() => {}} />
+        <Button
+          variant="elevated"
+          text="작품 소개 관리"
+          onClick={() => {
+            navigate(createWorkDetailRoute(spaceCode));
+          }}
+        />
+        <Button
+          variant="elevated"
+          text="방명록 관리"
+          onClick={() => {
+            navigate(createGuestbookRoute(spaceCode));
+          }}
+        />
       </MainPageStyles.ButtonContainer>
-      <MainPageStyles.Footer>
-        <FooterLogo />
-      </MainPageStyles.Footer>
+      <MainPageStyles.Footer></MainPageStyles.Footer>
     </MainPageStyles.Wrapper>
   );
 };

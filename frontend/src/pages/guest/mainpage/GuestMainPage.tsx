@@ -1,5 +1,4 @@
 import { IoLogoInstagram, IoMailOutline } from 'react-icons/io5';
-import FooterLogo from '../../../@assets/logo/footer-logo.svg?react';
 import Button from '../../../components/@common/buttons/button/Button';
 import IconButton from '../../../components/@common/buttons/iconButton/IconButton';
 import { DividerLine } from '../../../styles/@common/DividerLine.styles';
@@ -66,9 +65,7 @@ const GuestMainPage = () => {
           disabled={!mockAccess.viewGuestbook}
         />
       </MainPageStyles.ButtonContainer>
-      <MainPageStyles.Footer>
-        <FooterLogo />
-      </MainPageStyles.Footer>
+      <MainPageStyles.Footer></MainPageStyles.Footer>
     </MainPageStyles.Wrapper>
   );
 };
