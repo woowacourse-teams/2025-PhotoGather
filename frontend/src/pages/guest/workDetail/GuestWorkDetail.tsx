@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { workService } from '../../../apis/services/work/work.service';
 import Button from '../../../components/@common/buttons/button/Button';
-import Footer from '../../../components/@common/footer/Footer';
 import { useToast } from '../../../hooks/@common/useToast';
 import { DividerLine } from '../../../styles/@common/DividerLine.styles';
 import type { WorkDetail } from '../../../types/domain/work.type';
@@ -69,7 +68,7 @@ const GuestWorkDetail = () => {
         {photos.map((photo, index) => (
           <C.ImageContainer
             key={photo.id}
-            src={buildThumbnailUrl(photo.path, '800')}
+            src={buildThumbnailUrl(photo.path, 'product', '800')}
             alt={`work-detail-${index}`}
           />
         ))}
@@ -77,7 +76,6 @@ const GuestWorkDetail = () => {
       </C.WorkContainer>
       <S.TextContainer>축하와 응원의 한 마디를 적어주세요</S.TextContainer>
       <Button text="방명록 작성하기" onClick={() => {}} />
-      <Footer />
     </S.Wrapper>
   );
 };

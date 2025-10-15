@@ -242,6 +242,32 @@ class ProductAcceptanceTest extends AcceptanceTest {
         );
     }
 
+    @DisplayName("작품 정보 수정 중 작품 것이 아닌 사진 삭제 시 예외를 던진다")
+    @Test
+    void throwExceptionWhenInvalidDeleteId() {
+        // given
+        ProductResponse registerResponse = registerProduct();
+        UpdateProductRequest request = new UpdateProductRequest(
+            "foovar1",
+            null,
+            null,
+            "description",
+            List.of((long)(registerResponse.photos().size() + 10)),
+            List.of()
+        );
+
+        // when, then
+        RestAssuredMockMvc.given()
+            .body(request)
+            .contentType(ContentType.JSON)
+            .accept(ContentType.JSON)
+            .when()
+            .patch("/spaces/%s/products".formatted(space.getCode()))
+            .then()
+            .statusCode(400)
+            .body("message", containsString("작품에 존재하지 않는 사진입니다."));
+    }
+
     @DisplayName("작품 삭제")
     @Test
     void delete() {

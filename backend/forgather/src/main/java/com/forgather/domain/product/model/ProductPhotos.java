@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.forgather.domain.model.Photo;
 import com.forgather.global.exception.BaseException;
 
 /**
@@ -18,14 +19,14 @@ public class ProductPhotos {
 
     private static final int MAX_COUNT = 10;
 
-    private final List<ProductPhoto> productPhotos;
+    private final List<ProductPhoto> photos;
 
     public ProductPhotos(List<ProductPhoto> productPhotos) {
         validateTotalCount(productPhotos.size());
         List<ProductPhoto> sortedProductPhotos = new ArrayList<>(productPhotos);
         sortedProductPhotos.sort(ProductPhoto::compareTo);
         validateDuplicateOrder(sortedProductPhotos);
-        this.productPhotos = sortedProductPhotos;
+        this.photos = sortedProductPhotos;
     }
 
     private void validateDuplicateOrder(List<ProductPhoto> sortedProductPhotos) {
@@ -43,41 +44,51 @@ public class ProductPhotos {
     }
 
     public ProductPhotos() {
-        this.productPhotos = new ArrayList<>();
+        this.photos = new ArrayList<>();
     }
 
     public List<ProductPhoto> deleteByIds(List<Long> ids) {
+        validateIds(ids);
         Set<Long> idSet = new HashSet<>(ids);
-        List<ProductPhoto> deletedPhotos = productPhotos.stream()
+        List<ProductPhoto> deletedPhotos = photos.stream()
             .filter(photo -> idSet.contains(photo.getId()))
             .toList();
 
-        productPhotos.removeAll(deletedPhotos);
+        photos.removeAll(deletedPhotos);
         reorderAll();
         return deletedPhotos;
     }
 
+    private void validateIds(List<Long> deleteIds) {
+        Set<Long> photosIdSet = new HashSet<>(photos.stream().map(Photo::getId).toList());
+        for (Long deleteId : deleteIds) {
+            if (!photosIdSet.contains(deleteId)) {
+                throw new BaseException("작품에 존재하지 않는 사진입니다. deletePhotoId: " + deleteId);
+            }
+        }
+    }
+
     private void reorderAll() {
-        for (int i = 0; i < productPhotos.size(); i++) {
-            productPhotos.get(i).changeOrder(i + 1);
+        for (int i = 0; i < photos.size(); i++) {
+            photos.get(i).changeOrder(i + 1);
         }
     }
 
     public void add(List<ProductPhoto> newPhotos) {
-        validateTotalCount(productPhotos.size() + newPhotos.size());
+        validateTotalCount(photos.size() + newPhotos.size());
         for (ProductPhoto photo : newPhotos) {
             add(photo);
         }
     }
 
     public void add(ProductPhoto newPhoto) {
-        validateTotalCount(productPhotos.size() + 1);
+        validateTotalCount(photos.size() + 1);
         int order = 1;
-        if (!productPhotos.isEmpty()) {
-            order = productPhotos.getLast().getSortOrder() + 1; // 정렬이 보장되기에 가능한 로직.
+        if (!photos.isEmpty()) {
+            order = photos.getLast().getSortOrder() + 1; // 정렬이 보장되기에 가능한 로직.
         }
         newPhoto.changeOrder(order);
-        productPhotos.add(newPhoto);
+        photos.add(newPhoto);
     }
 
     private void validateTotalCount(int totalCount) {
@@ -87,6 +98,6 @@ public class ProductPhotos {
     }
 
     public List<ProductPhoto> getAll() {
-        return Collections.unmodifiableList(productPhotos);
+        return Collections.unmodifiableList(photos);
     }
 }

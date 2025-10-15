@@ -1,8 +1,9 @@
-import { Activity, useState } from 'react';
+import { useState } from 'react';
 import { IoSettingsSharp, IoShareOutline } from 'react-icons/io5';
 import { Outlet, useMatches, useNavigate, useParams } from 'react-router-dom';
 import { createSpaceInfoRoute, ROUTES } from '../../../../constants/routes';
 import type { AppRouteObject } from '../../../../types/route.type';
+import Footer from '../../../@common/footer/Footer';
 import Header from '../../../@common/header/Header';
 import ScrollToTop from '../../../@common/scrollToTop/ScrollToTop';
 import SpaceShareModal from '../../../specific/modal/spaceShareModal/SpaceShareModal';
@@ -38,21 +39,23 @@ const Layout = () => {
     (icon: keyof typeof headerIcons) => headerIcons[icon],
   );
   const isNoHeader = current?.handle?.noHeader;
+  const isNoFooter = current?.handle?.noFooter;
 
   return (
     <>
       <ScrollToTop />
-      <Activity mode={isNoHeader ? 'hidden' : 'visible'}>
+      {!isNoHeader && (
         <Header
           mode={isDarkPage ? 'dark' : 'light'}
           icons={matchedIcons}
           onLogoClick={() => navigate(ROUTES.MAIN)}
         />
-      </Activity>
+      )}
       <S.Container $isDarkPage={isDarkPage}>
         <SpaceShareModal isOpen={isShareModalOpen} onClose={closeShareModal} />
         <Outlet />
       </S.Container>
+      {!isNoFooter && <Footer />}
     </>
   );
 };

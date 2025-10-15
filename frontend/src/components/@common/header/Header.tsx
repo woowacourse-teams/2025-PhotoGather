@@ -1,5 +1,5 @@
 import LogoSvg from '../../../@assets/logo/logo.svg?react';
-import type { HeaderMode } from '../../../types/header.type';
+import type { HeaderMode } from '../../../types/uiMode.type';
 import * as S from './Header.styles';
 
 interface IconItem {

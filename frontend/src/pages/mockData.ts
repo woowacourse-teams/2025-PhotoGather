@@ -1,6 +1,7 @@
 import img1 from '../@assets/workDetail_mock_1.png';
 import img2 from '../@assets/workDetail_mock_2.png';
 import img3 from '../@assets/workDetail_mock_3.png';
+import type { GuestbookCard } from '../types/domain/guestbook.type';
 
 export const mockSpaceCode = 'fb216ef6b1';
 
@@ -71,4 +72,49 @@ export const mockWorkDetail: WorkDetailData | null = {
   description:
     '485 x 710 x 700\nBioplastic, Walnut\n\n3D 모델링으로 설계한 바이오 플라스틱 구조는 밴딩우드의 미세한 곡률 변화를 통제하고 고정한다. 이는 예측할 수 없는 것을 통제하려는 시도인 동시에 바라는 바를 가시화한 형태다. 이러한 작업과정과 형태는, 불확실한 미래에 대한 본능적 공포에서 탈피하고자한 주술적 행위의 총체가 된다.',
   images: [img1, img2, img3],
+};
+
+export const mockGuestbookCard: GuestbookCard = {
+  id: 1,
+  nickname: '밍퐁루블',
+  message:
+    '와 진짜 멋지다 👏 졸업전시 준비하느라 고생 많았어! 작품 보니까 네가 얼마나 열심히 했는지 느껴져서 나까지 뿌듯하더라. 졸업전시 축하하고, 앞으로도 멋진 길만 가자!!',
+  createdAt: '2025-10-14T05:49:46.383Z',
+  photos: [
+    {
+      id: 1,
+      originalName: 'photo1.jpg',
+      path: 'https://picsum.photos/200/300',
+    },
+    {
+      id: 2,
+      originalName: 'photo2.jpg',
+      path: 'https://picsum.photos/200/300',
+    },
+    {
+      id: 3,
+      originalName: 'photo3.jpg',
+      path: 'https://picsum.photos/200/300',
+    },
+    {
+      id: 4,
+      originalName: 'photo4.jpg',
+      path: 'https://picsum.photos/200/300',
+    },
+    {
+      id: 5,
+      originalName: 'photo5.jpg',
+      path: 'https://picsum.photos/200/300',
+    },
+    {
+      id: 6,
+      originalName: 'photo6.jpg',
+      path: 'https://picsum.photos/200/300',
+    },
+    {
+      id: 7,
+      originalName: 'photo7.jpg',
+      path: 'https://picsum.photos/200/300',
+    },
+  ],
 };

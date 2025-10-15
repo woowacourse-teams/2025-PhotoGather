@@ -2,6 +2,7 @@ import { createBrowserRouter } from 'react-router-dom';
 import Layout from '../components/layout/global/layout/Layout';
 import GuestMainPage from '../pages/guest/mainpage/GuestMainPage';
 import GuestWorkDetail from '../pages/guest/workDetail/GuestWorkDetail';
+import GuestbookCardPage from '../pages/host/guestbook/card/GuestbookCardPage';
 import HostMainPage from '../pages/host/mainPage/HostMainPage';
 import MyPage from '../pages/host/mypage/MyPage';
 import SharePage from '../pages/host/share/SharePage';
@@ -45,6 +46,7 @@ const routes: AppRouteObject[] = [
             handle: {
               highlight: true,
               headerIcons: ['settings'],
+              noFooter: true,
             },
           },
           {
@@ -59,6 +61,7 @@ const routes: AppRouteObject[] = [
             element: <SpaceCreateFunnel />,
             handle: {
               noHeader: true,
+              noFooter: true,
             },
           },
           {
@@ -72,6 +75,13 @@ const routes: AppRouteObject[] = [
           {
             path: 'share',
             element: <SharePage />,
+            handle: {
+              noFooter: true,
+            },
+          },
+          {
+            path: 'guestbook/card',
+            element: <GuestbookCardPage />,
           },
         ],
       },

@@ -4,8 +4,9 @@ import { hexToRgba } from '../../../utils/hexToRgba';
 export const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
+  min-height: ${({ theme }) =>
+    `calc(100dvh - 2 * ${theme.layout.padding.topBottom} - ${theme.layout.headerHeight})`};
 `;
 
 export const ProfileContainer = styled.section`

@@ -1,7 +1,6 @@
 import { IoLogoInstagram } from 'react-icons/io5';
 import { MdEmail } from 'react-icons/md';
 import { useParams } from 'react-router-dom';
-import FooterLogo from '../../../@assets/logo/footer-logo.svg?react';
 import Button from '../../../components/@common/buttons/button/Button';
 import IconButton from '../../../components/@common/buttons/iconButton/IconButton';
 import Thumbnail from '../../../components/@common/thumbnail/Thumbnail';
@@ -57,9 +56,7 @@ const HostMainPage = () => {
         <Button variant="elevated" text="작품 소개 관리" onClick={() => {}} />
         <Button variant="elevated" text="방명록 관리" onClick={() => {}} />
       </MainPageStyles.ButtonContainer>
-      <MainPageStyles.Footer>
-        <FooterLogo />
-      </MainPageStyles.Footer>
+      <MainPageStyles.Footer></MainPageStyles.Footer>
     </MainPageStyles.Wrapper>
   );
 };

@@ -65,6 +65,6 @@ export const OverlayButton = styled.div<{ $position: 'top' | 'bottom' }>`
   z-index: ${Z_INDEX.PHOTO_PREVIEW.CLOSE_BUTTON};
 
   svg {
-     width: 100%;
+    width: 100%;
   }
 `;

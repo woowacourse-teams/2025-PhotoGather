@@ -30,6 +30,16 @@ export const IconButtonStyles = {
       }
     }
   `,
+  light: (theme: Theme) => css`
+    border-radius: 50%;
+    background-color: ${theme.colors.gray02};
+    color: ${theme.colors.gray04};
+    svg {
+      &:active {
+        scale: 0.95;
+      }
+    }
+  `,
 };
 
 export const IconContainer = styled.button<{

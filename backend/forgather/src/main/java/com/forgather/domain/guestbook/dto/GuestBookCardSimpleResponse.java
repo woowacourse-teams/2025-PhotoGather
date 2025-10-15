@@ -1,5 +1,7 @@
 package com.forgather.domain.guestbook.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 
 public record GuestBookCardSimpleResponse(
@@ -13,6 +15,7 @@ public record GuestBookCardSimpleResponse(
     Boolean containsPhoto,
 
     @Schema(description = "호스트 읽음 여부", example = "false")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     Boolean isRead
 ) {
 }

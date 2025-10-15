@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import Button from '../../components/@common/buttons/button/Button';
+import { buttonStyles } from '../../components/@common/buttons/button/Button.styles';
 
 const meta: Meta<typeof Button> = {
   title: 'Components/Button/Button',
@@ -8,7 +9,7 @@ const meta: Meta<typeof Button> = {
     variant: {
       description: '버튼의 스타일 variant',
       control: { type: 'select' },
-      options: ['primary', 'secondary', 'tertiary', 'darkRounded'],
+      options: Object.keys(buttonStyles),
     },
     text: {
       description: '버튼에 표시될 텍스트',

@@ -9,7 +9,7 @@ export const Wrapper = styled.div`
   justify-content: center;
   gap: 32px;
   min-height: ${({ theme }) =>
-    `calc(100dvh - 2 * ${theme.layout.padding.topBottom} - ${theme.layout.headerHeight})`};
+    `calc(100dvh - 2 * ${theme.layout.padding.topBottom} - ${theme.layout.headerHeight} - ${theme.layout.footerHeight})`};
 `;
 
 export const ProfileContainer = styled.section`

@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { workService } from '../../../apis/services/work/work.service';
 import Button from '../../../components/@common/buttons/button/Button';
-import Footer from '../../../components/@common/footer/Footer';
 import DeleteModal from '../../../components/@common/modal/deleteModal/DeleteModal';
 import { createWorkEditRoute } from '../../../constants/routes';
 import { useToast } from '../../../hooks/@common/useToast';
@@ -116,7 +115,7 @@ const HostWorkDetail = () => {
           {photos.map((photo, index) => (
             <C.ImageContainer
               key={photo.id}
-              src={buildThumbnailUrl(photo.path, '800')}
+              src={buildThumbnailUrl(photo.path, 'product', '800')}
               alt={`work-detail-${index}`}
             />
           ))}
@@ -127,7 +126,6 @@ const HostWorkDetail = () => {
             text="작품 소개 수정하기"
             onClick={() => navigate(createWorkEditRoute(spaceCode))}
           />
-          <Footer />
         </S.BottomSectionContainer>
       </S.Wrapper>
     </>

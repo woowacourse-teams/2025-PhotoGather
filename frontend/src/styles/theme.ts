@@ -33,6 +33,11 @@ export const theme = {
       fontSize: '16px',
       lineHeight: '150%',
     },
+    bodyWideLineHeight: {
+      fontWeight: 500,
+      fontSize: '16px',
+      lineHeight: '200%',
+    },
     bodyRegular: {
       fontWeight: 400,
       fontSize: '16px',
@@ -59,6 +64,12 @@ export const theme = {
       topBottom: '32px',
       leftRight: '16px',
     },
+    swiper: {
+      minHeight: '300px',
+      paddingBottom: '30px',
+      imageMaxWidth: '280px',
+    },
     headerHeight: '60px',
+    footerHeight: '60px',
   },
 };
