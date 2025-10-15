@@ -1,8 +1,8 @@
-import Button from '../../@common/buttons/button/Button';
-import * as S from './CompleteLayout.styles';
+import Button from '../../../components/@common/buttons/button/Button';
+import * as S from './CompletePageLayout.styles';
 
 interface CompletePageProps {
-  message: string;
+  message: string | React.ReactNode;
   buttonText: string;
   onButtonClick: () => void;
 }
@@ -12,8 +12,6 @@ const CompletePageLayout = ({
   buttonText,
   onButtonClick,
 }: CompletePageProps) => {
-  // TODO : 붕 뜨는 애니메이션
-  // TODO : confetti 애니메이션
   return (
     <S.Wrapper>
       <S.Message>{message}</S.Message>
