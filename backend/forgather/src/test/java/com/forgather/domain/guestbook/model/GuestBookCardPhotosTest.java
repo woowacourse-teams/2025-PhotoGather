@@ -52,7 +52,7 @@ class GuestBookCardPhotosTest {
 
     @DisplayName("주어진 id의 방명록 카드 사진이 존재하지 않을 경우 예외를 던진다")
     @Test
-    void throwExceptionWhenInValidId() {
+    void throwExceptionWhenInvalidDeleteId() {
         // given
         List<GuestBookCardPhoto> photos = List.of(
             createGuestBookCardPhotoSetId(1L),
