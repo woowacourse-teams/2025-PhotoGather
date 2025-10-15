@@ -3,6 +3,7 @@ import { guestbookService } from '../../../apis/services/guestbook/guestbook.ser
 import { ROUTES } from '../../../constants/routes';
 import type { GuestbookForm } from '../../../types/domain/guestbook.type';
 import type { LocalFile } from '../../../types/file.type';
+import { clearFiles } from '../../../utils/clearFiles';
 import { uploadPhotosToS3 } from '../../../utils/uploadPhotosToS3';
 import { useToast } from '../../@common/useToast';
 
@@ -71,6 +72,7 @@ const usePostGuestbook = ({
           guestNickName: formData.nickname,
         },
       });
+      clearFiles(photos);
     } catch (error) {
       console.error(error);
       showToast({ text: '전송에 실패했습니다.', type: 'error' });
