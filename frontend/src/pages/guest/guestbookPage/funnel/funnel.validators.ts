@@ -1,8 +1,5 @@
 import { CONSTRAINTS } from '../../../../constants/constraints';
-import {
-  checkInputEmpty,
-  checkMaxLength,
-} from '../../../../validators/form.validators';
+import { checkMaxLength } from '../../../../validators/form.validators';
 
 export const funnelValidators = {
   message: {
