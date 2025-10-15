@@ -23,6 +23,7 @@
     "heic2any": "^0.0.4",
     "qrcode.react": "^4.2.0",
     "react": "^19.1.1",
+    "react-canvas-confetti": "^2.0.7",
     "react-dom": "^19.1.1",
     "react-hook-form": "^7.64.0",
     "react-icons": "^5.5.0",

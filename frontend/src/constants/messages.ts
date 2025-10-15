@@ -36,6 +36,7 @@ export const INFORMATION = {
   GUESTBOOK: {
     MESSAGE: {
       PROMPT: '전달할 메세지를 남겨주세요',
+      COMPLETE: '방명록 카드를 전달했어요.',
     },
     NICKNAME: {
       PROMPT: '전달할 닉네임을 입력해주세요',
@@ -46,8 +47,3 @@ export const INFORMATION = {
     },
   },
 } as const;
-
-export const createGuestbookCompleteMessage = (
-  receiver: string,
-  guestNickName: string,
-) => `${receiver}님에게\n ${guestNickName}님의\n 방명록 카드를 전달했어요.`;
