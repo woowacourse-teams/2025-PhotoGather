@@ -1,5 +1,6 @@
+import { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import Button from '../../../../components/@common/buttons/button/Button';
+import useIntersectionObserver from '../../../../hooks/@common/useIntersectionObserver';
 import useGuestbookList from '../../../../hooks/domain/guestbook/useGuestbookList';
 import useSpaceInfo from '../../../../hooks/domain/space/useSpaceInfo';
 import GuestbookElement from './element/GuestbookElement';
@@ -11,6 +12,12 @@ const GuestbookListPage = () => {
   const { spaceInfo } = useSpaceInfo({ spaceCode });
   const { guestbookList, totalCount, fetchNextPage } =
     useGuestbookList(spaceCode);
+  const { targetRef, isIntersecting } = useIntersectionObserver({});
+
+  // biome-ignore lint/correctness/useExhaustiveDependencies: isIntersecting에만 의존
+  useEffect(() => {
+    if (isIntersecting) fetchNextPage();
+  }, [isIntersecting]);
 
   return (
     <S.Wrapper>
@@ -30,8 +37,7 @@ const GuestbookListPage = () => {
           />
         ))}
       </S.ListContainer>
-
-      <Button text="다음" variant="primary" onClick={() => fetchNextPage()} />
+      <S.IntersectionArea ref={targetRef} />
     </S.Wrapper>
   );
 };

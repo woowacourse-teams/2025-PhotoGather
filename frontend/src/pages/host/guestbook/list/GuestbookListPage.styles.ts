@@ -29,3 +29,8 @@ export const ListContainer = styled.div`
   flex-direction: column;
   gap: 12px;
 `;
+
+export const IntersectionArea = styled.div`
+  position: absolute;
+  bottom: ${({ theme }) => theme.layout.padding.topBottom};
+`;
