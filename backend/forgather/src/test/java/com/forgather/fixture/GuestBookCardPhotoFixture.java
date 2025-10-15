@@ -9,6 +9,10 @@ public class GuestBookCardPhotoFixture {
 
     private static GuestBookCard guestBookCard = GuestBookCardFixture.createGuestBookCard();
 
+    public static GuestBookCardPhoto createGuestBookCardPhoto() {
+        return new GuestBookCardPhoto("originalName", "path", 1024L, guestBookCard);
+    }
+
     public static GuestBookCardPhoto createGuestBookCardPhotoSetId(Long id) {
         GuestBookCardPhoto guestBookCardPhoto = new GuestBookCardPhoto("originalName", "path", 1024L, guestBookCard);
         ReflectionTestUtils.setField(guestBookCardPhoto, "id", id);
