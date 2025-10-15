@@ -132,10 +132,10 @@ public class GuestBookCardAcceptanceTest extends AcceptanceTest {
 
     @DisplayName("방명록은 각 방명록 카드의 방문자 닉네임과 사진 여부를 포함한다")
     @Test
-    void guestBookContainsNicknameAnd() {
+    void guestBookContainsNicknameAndPhoto() {
         // given
         WriteGuestBookCardResponse writeResponse = writeGuestBookCard(publicSpace);
-        WriteGuestBookCardResponse writeResponseWithNoPhoto = writeGuesetBookCardWithNoPhoto(publicSpace);
+        WriteGuestBookCardResponse writeResponseWithNoPhoto = writeGuestBookCardWithNoPhoto(publicSpace);
 
         // when
         GuestBookResponse result = RestAssuredMockMvc.given()
@@ -389,7 +389,7 @@ public class GuestBookCardAcceptanceTest extends AcceptanceTest {
             .as(WriteGuestBookCardResponse.class);
     }
 
-    private WriteGuestBookCardResponse writeGuesetBookCardWithNoPhoto(Space space) {
+    private WriteGuestBookCardResponse writeGuestBookCardWithNoPhoto(Space space) {
         WriteGuestBookCardRequest writeRequestWithNoPicture = new WriteGuestBookCardRequest(
             "nickname2",
             "message2",
