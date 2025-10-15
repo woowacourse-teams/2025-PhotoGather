@@ -2,6 +2,7 @@ import { useState } from 'react';
 import TextInput from '../../../../../components/@common/inputs/textInput/TextInput';
 import { CONSTRAINTS } from '../../../../../constants/constraints';
 import { INFORMATION } from '../../../../../constants/messages';
+import { createRandomNickName } from '../../../../../utils/createRandomNickname';
 import { calculateValidLength } from '../../../../../utils/grapheme';
 import { createErrorMessageWithValidators } from '../../../../../validators/createErrorMessageWithValidators';
 import { funnelValidators } from '../../funnel/funnel.validators';
@@ -10,15 +11,18 @@ import FunnelBasePage from '../../funnel/funnelBasePage/FunnelBasePage';
 interface NicknameElementProps {
   receiver: string;
   initialValue: string;
-  onSubmit: (nickname: string) => Promise<void>;
+  onNext: (nickname: string) => void;
 }
 
 const NicknameElement = ({
   receiver,
   initialValue,
-  onSubmit,
+  onNext,
 }: NicknameElementProps) => {
-  const [nickname, setNickname] = useState(initialValue);
+  const [nickname, setNickname] = useState(
+    initialValue.length > 0 ? initialValue : createRandomNickName(),
+  );
+
   const handleChangeNickname = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNickname(e.target.value);
   };
@@ -27,10 +31,10 @@ const NicknameElement = ({
     validators: [funnelValidators.nickname.maxLength],
   });
   const validLength = calculateValidLength(nickname);
+  const isDisabled = isError || validLength === 0;
 
   return (
     <FunnelBasePage
-      isOptional
       prompt={INFORMATION.GUESTBOOK.NICKNAME.PROMPT}
       receiver={receiver}
       element={
@@ -45,11 +49,8 @@ const NicknameElement = ({
           maxCount={CONSTRAINTS.MAX_LENGTH.GUESTBOOK.NICKNAME}
         />
       }
-      buttonText="전송"
-      onNextButtonClick={async () => {
-        await onSubmit(nickname);
-      }}
-      nextButtonDisabled={isError}
+      onNextButtonClick={() => onNext(nickname)}
+      nextButtonDisabled={isDisabled}
     />
   );
 };

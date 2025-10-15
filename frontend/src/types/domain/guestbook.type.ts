@@ -20,7 +20,7 @@ export interface GuestbookFunnelPhotos {
   photos: UploadFile[];
 }
 
-interface GuestbookImageType {
+export interface GuestbookImageType {
   originalName: string;
   uploadFileName: string;
   capacity: number;

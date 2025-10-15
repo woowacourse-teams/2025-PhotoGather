@@ -13,7 +13,6 @@ const useFormFunnel = <Step extends string, Form>(
   };
 
   const goNextWithData = (nextStep: Step, data: Partial<Form>) => {
-    console.log(data);
     updateFormData(data);
     funnel.goNextStep(nextStep);
   };

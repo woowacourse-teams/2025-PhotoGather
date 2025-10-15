@@ -76,6 +76,7 @@ const PhotosElement = ({
           />
         )
       }
+      buttonText="전송"
       onNextButtonClick={() => onNextButtonClick(localFiles)}
     />
   );

@@ -11,19 +11,19 @@ import type {
   GuestbookForm,
   GuestbookFunnelInfo,
 } from '../../../../types/domain/guestbook.type';
-import type { UploadFile } from '../../../../types/file.type';
+import type { LocalFile, UploadFile } from '../../../../types/file.type';
 import { mockData } from '../../../mockData';
 import MessageElement from '../funnelElements/messageElement/MessageElement';
 import NicknameElement from '../funnelElements/nicknameElement/NicknameElement';
 import PhotosElement from '../funnelElements/photosElement/PhotosElement';
 import * as S from './GuestbookFunnel.styles';
 
-type STEP = 'message' | 'photos' | 'nickname';
+type STEP = 'nickname' | 'message' | 'photos';
 
 const initialFunnelValue: GuestbookFunnelInfo = {
+  nickname: '',
   message: '',
   photos: [],
-  nickname: '',
 };
 
 const GuestBookFunnel = () => {
@@ -34,7 +34,7 @@ const GuestBookFunnel = () => {
   const MOCK_RECEIVER = '방명록 주인장';
 
   const Funnel = useFormFunnel<STEP, GuestbookFunnelInfo>(
-    'message',
+    'nickname',
     initialFunnelValue,
   );
 
@@ -70,18 +70,19 @@ const GuestBookFunnel = () => {
 
   // TODO : nickname 값을 다르게 처리할 방법 물색
   const createGuestbookForm = async (
-    nickname: string,
+    photos: LocalFile[],
   ): Promise<GuestbookForm> => {
     const baseForm: GuestbookForm = {
-      nickname,
+      nickname: Funnel.form.nickname,
       message: Funnel.form.message,
       photos: [],
     };
 
-    if (localFiles.length === 0) {
+    if (photos.length === 0) {
       return baseForm;
     }
 
+    // TODO : 사진 업로드 기능 분리
     const uploadFiles = await processFileUpload('GUESTBOOK');
     if (!uploadFiles) {
       throw new Error('uploadFiles is null');
@@ -93,9 +94,9 @@ const GuestBookFunnel = () => {
     };
   };
 
-  const submitForm = async (nickname: string) => {
+  const submitForm = async (photos: LocalFile[]) => {
     try {
-      const form = await createGuestbookForm(nickname);
+      const form = await createGuestbookForm(photos);
       const result = await guestbookService.createGuestbook(
         spaceCode ?? '',
         form,
@@ -108,7 +109,7 @@ const GuestBookFunnel = () => {
       navigate(ROUTES.GUEST.CREATE_GUESTBOOK_COMPLETE, {
         state: {
           receiver: MOCK_RECEIVER,
-          guestNickName: nickname,
+          guestNickName: Funnel.form.nickname,
         },
       });
     } catch (error) {
@@ -124,6 +125,13 @@ const GuestBookFunnel = () => {
         <S.DisplayName>{mockData.title}</S.DisplayName>
       </S.DisplayInfoContainer>
       <DividerLine width="15%" />
+      <Funnel.Step name="nickname">
+        <NicknameElement
+          receiver={MOCK_RECEIVER}
+          initialValue={Funnel.form.nickname}
+          onNext={(nickname) => Funnel.goNextWithData('message', { nickname })}
+        />
+      </Funnel.Step>
       <Funnel.Step name="message">
         <MessageElement
           receiver={MOCK_RECEIVER}
@@ -134,20 +142,11 @@ const GuestBookFunnel = () => {
       <Funnel.Step name="photos">
         <PhotosElement
           receiver={MOCK_RECEIVER}
-          onNextButtonClick={(photos) =>
-            Funnel.goNextWithData('nickname', { photos })
-          }
+          onNextButtonClick={(photos) => submitForm(photos)}
           localFiles={localFiles}
           deleteFile={deleteFile}
           handleFilesUploadClick={handleFilesUploadClick}
           handleFilesDrop={handleFilesDrop}
-        />
-      </Funnel.Step>
-      <Funnel.Step name="nickname">
-        <NicknameElement
-          receiver={MOCK_RECEIVER}
-          initialValue={Funnel.form.nickname}
-          onSubmit={submitForm}
         />
       </Funnel.Step>
     </S.Wrapper>
