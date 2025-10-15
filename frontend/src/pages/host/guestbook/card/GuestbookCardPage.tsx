@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import {
   MdArrowBackIosNew,
   MdArrowForwardIos,
@@ -20,8 +21,8 @@ const GuestbookCardPage = () => {
   const navigate = useNavigate();
   const { spaceCode = '', guestbookCardId = '' } = useParams();
   const { guestbookCard } = useGuestbookCard({ spaceCode, guestbookCardId });
-  const { guestbookList } = useGuestbookList({ spaceCode });
-  const guestbookCardIdList = guestbookList.guestBookCards.map(
+  const { guestbookList, fetchNextPage } = useGuestbookList(spaceCode);
+  const guestbookCardIdList = guestbookList.map(
     (guestbookCard) => guestbookCard.id,
   );
   const { prevId: prevGuestbookId, nextId: nextGuestbookId } =
@@ -31,6 +32,7 @@ const GuestbookCardPage = () => {
   );
   const createdTimeDescription = `${year}년 ${month}월 ${day}일 ${hour}시 ${minute}분`;
   const photoListLength = guestbookCard.photos.length;
+  const currentIdIndex = guestbookCardIdList.indexOf(guestbookCard.id);
 
   const handlePreviousCardMove = () => {
     if (prevGuestbookId === null) return;
@@ -41,6 +43,11 @@ const GuestbookCardPage = () => {
     if (nextGuestbookId === null) return;
     navigate(createGuestbookCardRoute(spaceCode, nextGuestbookId));
   };
+
+  // biome-ignore lint/correctness/useExhaustiveDependencies: currentIdIndex에만 의존
+  useEffect(() => {
+    if (guestbookList.length - currentIdIndex <= 3) fetchNextPage();
+  }, [currentIdIndex]);
 
   return (
     <S.Wrapper>
