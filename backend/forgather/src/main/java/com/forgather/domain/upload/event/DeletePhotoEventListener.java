@@ -19,7 +19,8 @@ public class DeletePhotoEventListener {
     private final ContentsStorage contentsStorage;
 
     /**
-     * 해당 작업은 기존 트랜잭션을 필요로 하면 안됨
+     * AFTER_COMMIT으로 이벤트 발행부의 트랜잭션이 커밋된 후 동작합니다.
+     * 비동기로 별도 스레드에서 실행되며 기존 트랜잭션 컨텍스트를 공유하지 않습니다.
      */
     @Async
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
@@ -29,6 +30,7 @@ public class DeletePhotoEventListener {
             contentsStorage.deletePhotos(event.getPhotos());
         } catch (SdkClientException e) {
             log.warn("클라우드 저장소 사진 삭제 실패 - 대상: {}개", event.getPhotos().size(), e);
+            return;
         }
         log.info("클라우드 저장소 사진 삭제 완료 - {}개", event.getPhotos().size());
     }

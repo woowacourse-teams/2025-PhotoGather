@@ -12,7 +12,7 @@ import lombok.Getter;
 @Getter
 public class DeletePhotoEvent extends ApplicationEvent {
 
-    List<Photo> photos;
+    private List<Photo> photos;
 
     public DeletePhotoEvent(Object source, List<? extends Photo> photos) {
         super(source);
