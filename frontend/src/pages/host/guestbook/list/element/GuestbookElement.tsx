@@ -2,7 +2,8 @@ import { MdArrowForward, MdOutlinePhoto } from 'react-icons/md';
 import { theme } from '../../../../../styles/theme';
 import * as S from './GuestbookElement.styles';
 
-interface GuestbookElementProps {
+interface GuestbookElementProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   guestName: string;
   hasPhoto: boolean;
   isRead: boolean;
@@ -12,9 +13,10 @@ const GuestbookElement = ({
   guestName,
   hasPhoto,
   isRead,
+  ...buttonProps
 }: GuestbookElementProps) => {
   return (
-    <S.Wrapper>
+    <S.Wrapper {...buttonProps}>
       <S.LeftContainer>
         <S.Text>From. {guestName}</S.Text>
         <S.IconContainer>

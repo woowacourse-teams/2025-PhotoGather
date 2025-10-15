@@ -1,7 +1,6 @@
 import styled from '@emotion/styled';
 
-export const Wrapper = styled.div`
-  cursor: pointer;
+export const Wrapper = styled.button`
   color: ${({ theme }) => theme.colors.white};
   background-color: ${({ theme }) => theme.colors.gray06};
   display: flex;

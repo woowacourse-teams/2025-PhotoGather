@@ -1,10 +1,11 @@
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import useGuestbookList from '../../../../hooks/domain/guestbook/useGuestbookList';
 import useSpaceInfo from '../../../../hooks/domain/space/useSpaceInfo';
 import GuestbookElement from './element/GuestbookElement';
 import * as S from './GuestbookListPage.styles';
 
 const GuestbookListPage = () => {
+  const navigate = useNavigate();
   const { spaceCode } = useParams();
   const { spaceInfo } = useSpaceInfo({ spaceCode: spaceCode ?? '' });
   const { guestbookList } = useGuestbookList({
@@ -28,6 +29,9 @@ const GuestbookListPage = () => {
             guestName={card.nickname}
             hasPhoto={card.containsPhoto}
             isRead={card.isRead}
+            onClick={() => {
+              navigate(String(card.id));
+            }}
           />
         ))}
       </S.ListContainer>
