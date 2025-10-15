@@ -82,26 +82,15 @@ public class GuestBookService {
         Space space = spaceRepository.getByCodeOrThrow(spaceCode);
         validateCanRead(space, host);
         Page<GuestBookCard> guestBookCards = guestBookCardRepository.findAllBySpace(space, pageable);
-        Page<GuestBookCardSimpleResponse> simpleResponses;
-        if (host != null && isSpaceHost(space, host)) {
-            simpleResponses = guestBookCards.map(
-                guestBookCard -> new GuestBookCardSimpleResponse(
-                    guestBookCard.getId(),
-                    guestBookCard.getNickname(),
-                    guestBookCardPhotoRepository.existsByGuestBookCard(guestBookCard),
-                    guestBookCard.isRead()
-                )
-            );
-        } else {
-            simpleResponses = guestBookCards.map(
-                guestBookCard -> new GuestBookCardSimpleResponse(
-                    guestBookCard.getId(),
-                    guestBookCard.getNickname(),
-                    guestBookCardPhotoRepository.existsByGuestBookCard(guestBookCard),
-                    null
-                )
-            );
-        }
+        boolean isHost = host != null && isSpaceHost(space, host);
+        Page<GuestBookCardSimpleResponse> simpleResponses = guestBookCards.map(
+            guestBookCard -> new GuestBookCardSimpleResponse(
+                guestBookCard.getId(),
+                guestBookCard.getNickname(),
+                guestBookCardPhotoRepository.existsByGuestBookCard(guestBookCard),
+                isHost ? guestBookCard.isRead() : null
+            )
+        );
         return new GuestBookResponse(simpleResponses);
     }
 
