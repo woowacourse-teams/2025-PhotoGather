@@ -2,9 +2,9 @@ import { useNavigate } from 'react-router-dom';
 import { guestbookService } from '../../../apis/services/guestbook/guestbook.service';
 import { ROUTES } from '../../../constants/routes';
 import type { GuestbookForm } from '../../../types/domain/guestbook.type';
-import type { LocalFile, UploadFile } from '../../../types/file.type';
+import type { LocalFile } from '../../../types/file.type';
+import { uploadPhotosToS3 } from '../../../utils/uploadPhotosToS3';
 import { useToast } from '../../@common/useToast';
-import useFileUpload from '../image/useFileUpload';
 
 interface UsePostGuestbookProps {
   spaceCode: string;
@@ -24,48 +24,38 @@ const usePostGuestbook = ({
   const { showToast } = useToast();
   const navigate = useNavigate();
 
-  const { processFileUpload } = useFileUpload({
-    spaceCode: spaceCode ?? '',
-    localFiles: formData.photos,
-    onUploadSuccess: () => {},
-  });
-
-  const createSubmitImage = (uploadFiles: UploadFile[]) => {
-    return uploadFiles.map((file) => {
-      return {
-        originalName: file.originFile.name,
-        uploadFileName: file.objectKey,
-        capacity: file.originFile.size,
-      };
-    });
-  };
-
-  const createGuestbookForm = async (): Promise<GuestbookForm> => {
+  const createGuestbookForm = async (
+    photos: LocalFile[],
+  ): Promise<GuestbookForm> => {
     const baseForm: GuestbookForm = {
       nickname: formData.nickname,
       message: formData.message,
       photos: [],
     };
 
-    if (formData.photos.length === 0) {
+    if (photos.length === 0) {
       return baseForm;
     }
 
-    // TODO : 사진 업로드 기능 분리
-    const uploadFiles = await processFileUpload('GUESTBOOK');
+    const uploadFiles = await uploadPhotosToS3(
+      spaceCode,
+      'GUESTBOOK',
+      photos.map((photo) => photo.originFile),
+    );
     if (!uploadFiles) {
       throw new Error('uploadFiles is null');
     }
 
     return {
       ...baseForm,
-      photos: createSubmitImage(uploadFiles),
+      photos: uploadFiles,
     };
   };
 
-  const submitForm = async () => {
+  const submitForm = async (photos: LocalFile[]) => {
+    console.log(photos);
     try {
-      const form = await createGuestbookForm();
+      const form = await createGuestbookForm(photos);
       const result = await guestbookService.createGuestbook(
         spaceCode ?? '',
         form,

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { CONSTRAINTS } from '../../constants/constraints';
 import type { LocalFile } from '../../types/file.type';
 import { heicToJpegBlob, isHeic } from '../../utils/heic';
@@ -24,12 +24,6 @@ const useLocalFile = ({
     initialLocalFiles ?? [],
   );
   const { showToast } = useToast();
-
-  useEffect(() => {
-    return () => {
-      clearFiles();
-    };
-  }, []);
 
   const previewFile = localFiles.map((file) => ({
     id: file.id,
@@ -60,6 +54,7 @@ const useLocalFile = ({
         text: '사진을 불러오는데 실패했어요. 다시 시도해주세요.',
       });
       console.error(error);
+      setLocalFiles([]);
       return URL.createObjectURL(file);
     }
   };
@@ -146,6 +141,7 @@ const useLocalFile = ({
             ? error.message
             : '파일 업로드 중 오류가 발생했습니다.',
       });
+      setLocalFiles([]);
     }
   };
 
@@ -169,13 +165,6 @@ const useLocalFile = ({
   const handleFilesDrop = (event: React.DragEvent<HTMLLabelElement>) => {
     const files = Array.from(event.dataTransfer.files || []);
     updateFiles(files);
-  };
-
-  const clearFiles = () => {
-    for (const file of localFiles) {
-      URL.revokeObjectURL(file.previewUrl);
-    }
-    setLocalFiles([]);
   };
 
   return {

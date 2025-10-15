@@ -63,7 +63,7 @@ const GuestBookFunnel = () => {
       <Funnel.Step name="photos">
         <PhotosElement
           receiver={MOCK_RECEIVER}
-          onNextButtonClick={submitForm}
+          onNextButtonClick={(photos) => submitForm(photos)}
           initialLocalFiles={Funnel.form.photos}
         />
       </Funnel.Step>
