@@ -17,6 +17,6 @@ export const CONSTRAINTS = {
       NICKNAME: 10,
     },
   },
-  MAX_FILE_COUNT: 10,
+  MAX_FILE_COUNT: 20,
   NOT_ALLOWED_FILE_TYPES: ['image/gif', 'image/svg', 'image/svg+xml'],
 } as const;
