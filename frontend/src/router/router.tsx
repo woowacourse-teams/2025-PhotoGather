@@ -81,7 +81,7 @@ const routes: AppRouteObject[] = [
             },
           },
           {
-            path: 'guestbook',
+            path: ':spaceCode/guestbook',
             element: <GuestbookListPage />,
             handle: {
               headerIcons: ['share', 'settings'],
