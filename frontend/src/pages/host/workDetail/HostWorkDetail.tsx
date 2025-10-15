@@ -115,7 +115,11 @@ const HostWorkDetail = () => {
           {photos.map((photo, index) => (
             <C.ImageContainer
               key={photo.id}
-              src={buildThumbnailUrl(photo.path, 'product', '800')}
+              src={buildThumbnailUrl({
+                path: photo.path,
+                replacePath: 'product',
+                preset: '800',
+              })}
               alt={`work-detail-${index}`}
             />
           ))}

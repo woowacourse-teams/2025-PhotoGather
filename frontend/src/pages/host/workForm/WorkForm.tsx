@@ -173,7 +173,11 @@ const WorkForm = () => {
               {existingPhotos.map((photo, index) => (
                 <S.ImageGridItem key={`existing-${photo.id}`}>
                   <S.GridImage
-                    src={buildThumbnailUrl(photo.path, 'product', '800')}
+                    src={buildThumbnailUrl({
+                      path: photo.path,
+                      replacePath: 'product',
+                      preset: '800',
+                    })}
                     alt={`작품 사진 ${index + 1}`}
                   />
                   <S.ImageDeleteButton

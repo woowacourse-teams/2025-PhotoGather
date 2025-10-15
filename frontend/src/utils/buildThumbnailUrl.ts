@@ -1,10 +1,17 @@
 type ReplacePath = 'product' | 'guestbook' | 'space';
+type Preset = '300' | '800' | '1080';
 
-export const buildThumbnailUrl = (
-  path: string,
-  replacePath: ReplacePath,
+interface BuildThumbnailUrlProps {
+  path: string;
+  replacePath?: ReplacePath;
+  preset?: Preset;
+}
+
+export const buildThumbnailUrl = ({
+  path,
+  replacePath = 'product',
   preset = '800',
-): string => {
+}: BuildThumbnailUrlProps): string => {
   const lastDotIndex = path.lastIndexOf('.');
   const pathWithoutExt =
     lastDotIndex !== -1 ? path.substring(0, lastDotIndex) : path;
