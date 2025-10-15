@@ -1,4 +1,3 @@
-import Button from '../buttons/button/Button';
 import * as S from './Line.styles';
 
 interface LineProps {
@@ -13,13 +12,9 @@ interface LineProps {
 const Line = ({ width = 100, leftElement, rightElement }: LineProps) => {
   return (
     <S.LineContainer>
-      <S.ButtonContainer>
-        <Button type="button" variant="tertiary" text={leftElement} />
-      </S.ButtonContainer>
+      <S.ButtonContainer>{leftElement}</S.ButtonContainer>
       <S.Line $width={width} />
-      <S.ButtonContainer>
-        <Button type="button" variant="tertiary" text={rightElement} />
-      </S.ButtonContainer>
+      <S.ButtonContainer>{rightElement}</S.ButtonContainer>
     </S.LineContainer>
   );
 };

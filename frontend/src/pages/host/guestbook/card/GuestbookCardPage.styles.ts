@@ -63,4 +63,9 @@ export const ButtonElementContainer = styled.div`
   justify-content: space-between;
   align-items: center;
   gap: 8px;
+  border-radius: 50%;
+  transition: background-color 0.1s;
+  &:active {
+    background-color: ${({ theme }) => theme.colors.gray02};
+  }
 `;

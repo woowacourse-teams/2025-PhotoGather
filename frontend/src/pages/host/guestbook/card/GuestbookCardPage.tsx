@@ -1,14 +1,20 @@
-import { MdArrowLeft, MdArrowRight, MdOutlinePhoto } from 'react-icons/md';
+import {
+  MdArrowBackIosNew,
+  MdArrowForwardIos,
+  MdOutlinePhoto,
+} from 'react-icons/md';
+import { useParams } from 'react-router-dom';
 import Button from '../../../../components/@common/buttons/button/Button';
+import IconButton from '../../../../components/@common/buttons/iconButton/IconButton';
 import Line from '../../../../components/@common/line/Line';
 import PhotoGrid from '../../../../components/specific/photoGrid/PhotoGrid';
 import useGuestbookCard from '../../../../hooks/domain/guestbook/useGuestbookCard';
+import { theme } from '../../../../styles/theme';
 import { parseTimestamp } from '../../../../utils/parseTimestamp';
 import * as S from './GuestbookCardPage.styles';
 
 const GuestbookCardPage = () => {
-  const spaceCode = '3ad5eae6fb';
-  const guestbookCardId = 1;
+  const { spaceCode = '', guestbookCardId = '' } = useParams();
   const { guestbookCard } = useGuestbookCard({ spaceCode, guestbookCardId });
   const { year, month, day, hour, minute } = parseTimestamp(
     guestbookCard.createdAt,
@@ -33,16 +39,16 @@ const GuestbookCardPage = () => {
       </S.InfoSection>
       <Line
         leftElement={
-          <S.ButtonElementContainer>
-            <MdArrowLeft />
-            이전
-          </S.ButtonElementContainer>
+          <IconButton
+            icon={<MdArrowBackIosNew color={theme.colors.gray04} />}
+            variant="default"
+          />
         }
         rightElement={
-          <S.ButtonElementContainer>
-            다음
-            <MdArrowRight />
-          </S.ButtonElementContainer>
+          <IconButton
+            icon={<MdArrowForwardIos color={theme.colors.gray04} />}
+            variant="default"
+          />
         }
       />
       <S.MessageSection>
