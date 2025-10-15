@@ -8,7 +8,10 @@ export const Wrapper = styled.div`
   gap: 8px;
   flex-grow: 1;
   width: 100%;
-  height: calc(100dvh - 2 * ${({ theme }) => theme.layout.padding.topBottom} - ${({ theme }) => theme.layout.headerHeight});
+  height: calc(
+    100dvh - 2 * ${({ theme }) => theme.layout.padding.topBottom} -
+      ${({ theme }) => theme.layout.headerHeight}
+  );
   align-items: center;
 `;
 

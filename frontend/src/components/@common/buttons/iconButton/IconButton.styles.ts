@@ -57,6 +57,5 @@ export const IconContainer = styled.button<{
   gap: 10px;
   border-radius: 12px;
 
-
   ${({ $variant, theme }) => $variant && IconButtonStyles[$variant](theme)}
 `;

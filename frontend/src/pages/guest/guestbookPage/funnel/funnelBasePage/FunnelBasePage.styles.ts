@@ -1,13 +1,13 @@
 import styled from '@emotion/styled';
 
 export const Wrapper = styled.div`
- display: flex;
- flex-direction: column;
- width: 100%;
- text-align: center;
- justify-content: flex-start;
- align-items: center;
- flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  text-align: center;
+  justify-content: flex-start;
+  align-items: center;
+  flex-grow: 1;
 `;
 
 export const ContentContainer = styled.div`
