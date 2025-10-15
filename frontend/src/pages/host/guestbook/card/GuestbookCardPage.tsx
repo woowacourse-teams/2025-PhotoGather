@@ -3,24 +3,42 @@ import {
   MdArrowForwardIos,
   MdOutlinePhoto,
 } from 'react-icons/md';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import Button from '../../../../components/@common/buttons/button/Button';
 import IconButton from '../../../../components/@common/buttons/iconButton/IconButton';
 import Line from '../../../../components/@common/line/Line';
 import PhotoGrid from '../../../../components/specific/photoGrid/PhotoGrid';
+import { createGuestbookCardRoute } from '../../../../constants/routes';
 import useGuestbookCard from '../../../../hooks/domain/guestbook/useGuestbookCard';
+import useGuestbookList from '../../../../hooks/domain/guestbook/useGuestbookList';
 import { theme } from '../../../../styles/theme';
+import { calculatePrevNextId } from '../../../../utils/calculatePrevNextIndex';
 import { parseTimestamp } from '../../../../utils/parseTimestamp';
 import * as S from './GuestbookCardPage.styles';
 
 const GuestbookCardPage = () => {
+  const navigate = useNavigate();
   const { spaceCode = '', guestbookCardId = '' } = useParams();
   const { guestbookCard } = useGuestbookCard({ spaceCode, guestbookCardId });
+  const { guestbookList } = useGuestbookList({ spaceCode });
+  const guestbookIdList = guestbookList.map((guestbook) => guestbook.id);
+  const { prevId: prevGuestbookId, nextId: nextGuestbookId } =
+    calculatePrevNextId(guestbookIdList, guestbookCard.id);
   const { year, month, day, hour, minute } = parseTimestamp(
     guestbookCard.createdAt,
   );
   const createdTimeDescription = `${year}년 ${month}월 ${day}일 ${hour}시 ${minute}분`;
   const photoListLength = guestbookCard.photos.length;
+
+  const handlePreviousCardMove = () => {
+    if (prevGuestbookId === null) return;
+    navigate(createGuestbookCardRoute(spaceCode, prevGuestbookId));
+  };
+
+  const handleNextCardMove = () => {
+    if (nextGuestbookId === null) return;
+    navigate(createGuestbookCardRoute(spaceCode, nextGuestbookId));
+  };
 
   return (
     <S.Wrapper>
@@ -39,16 +57,22 @@ const GuestbookCardPage = () => {
       </S.InfoSection>
       <Line
         leftElement={
-          <IconButton
-            icon={<MdArrowBackIosNew color={theme.colors.gray04} />}
-            variant="default"
-          />
+          prevGuestbookId && (
+            <IconButton
+              onClick={handlePreviousCardMove}
+              icon={<MdArrowBackIosNew color={theme.colors.gray04} />}
+              variant="default"
+            />
+          )
         }
         rightElement={
-          <IconButton
-            icon={<MdArrowForwardIos color={theme.colors.gray04} />}
-            variant="default"
-          />
+          nextGuestbookId && (
+            <IconButton
+              onClick={handleNextCardMove}
+              icon={<MdArrowForwardIos color={theme.colors.gray04} />}
+              variant="default"
+            />
+          )
         }
       />
       <S.MessageSection>
