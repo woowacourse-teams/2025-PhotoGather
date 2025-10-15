@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import { guestbookService } from '../../../apis/services/guestbook/guestbook.service';
 import type {
-  GuestbookElement,
+  GuestbookList,
   GuestbookListSort,
 } from '../../../types/domain/guestbook.type';
 import { useToast } from '../../@common/useToast';
@@ -19,7 +19,13 @@ interface UseGuestbookListProps {
 const useGuestbookList = ({ spaceCode, options }: UseGuestbookListProps) => {
   const { showToast } = useToast();
 
-  const initialData: GuestbookElement[] = [];
+  const initialData: GuestbookList = {
+    guestBookCards: [],
+    currentPage: 0,
+    pageSize: 0,
+    totalCount: 0,
+    totalPages: 0,
+  };
 
   const {
     data: guestbookList,
@@ -31,7 +37,7 @@ const useGuestbookList = ({ spaceCode, options }: UseGuestbookListProps) => {
     queryFn: async () => {
       const res = await guestbookService.getList(spaceCode, options);
       if (res.success) {
-        return res.data.guestBookCards;
+        return res.data;
       }
       throw new Error('방명록 목록 조회에 실패했습니다');
     },

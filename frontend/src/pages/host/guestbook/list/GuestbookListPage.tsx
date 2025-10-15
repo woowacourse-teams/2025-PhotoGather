@@ -15,15 +15,16 @@ const GuestbookListPage = () => {
       size: 15,
     },
   });
+  const guestbookCards = guestbookList.guestBookCards;
 
   return (
     <S.Wrapper>
       <S.InfoContainer>
         <S.Title>{spaceInfo.name}</S.Title>
-        <S.Description>{guestbookList.length}명 참여</S.Description>
+        <S.Description>{guestbookList.totalCount}명 참여</S.Description>
       </S.InfoContainer>
       <S.ListContainer>
-        {guestbookList.map((card) => (
+        {guestbookCards.map((card) => (
           <GuestbookElement
             key={card.id}
             guestName={card.nickname}

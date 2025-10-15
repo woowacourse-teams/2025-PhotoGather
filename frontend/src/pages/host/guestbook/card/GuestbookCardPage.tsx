@@ -21,9 +21,11 @@ const GuestbookCardPage = () => {
   const { spaceCode = '', guestbookCardId = '' } = useParams();
   const { guestbookCard } = useGuestbookCard({ spaceCode, guestbookCardId });
   const { guestbookList } = useGuestbookList({ spaceCode });
-  const guestbookIdList = guestbookList.map((guestbook) => guestbook.id);
+  const guestbookCardIdList = guestbookList.guestBookCards.map(
+    (guestbookCard) => guestbookCard.id,
+  );
   const { prevId: prevGuestbookId, nextId: nextGuestbookId } =
-    calculatePrevNextId(guestbookIdList, guestbookCard.id);
+    calculatePrevNextId(guestbookCardIdList, guestbookCard.id);
   const { year, month, day, hour, minute } = parseTimestamp(
     guestbookCard.createdAt,
   );
