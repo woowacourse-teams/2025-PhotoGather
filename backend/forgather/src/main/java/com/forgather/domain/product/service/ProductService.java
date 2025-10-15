@@ -51,7 +51,7 @@ public class ProductService {
         Product product = productRepository.save(request.toEntity(space));
 
         ProductPhotos productPhotos = new ProductPhotos();
-        for (var photoRequest : request.photos()) {
+        for (var photoRequest : request.photos()) { // TODO NPE
             String path = generateContentsFilePath(
                 contentsStorage.getRootDirectory(),
                 spaceCode,

@@ -9,6 +9,7 @@ import com.forgather.domain.upload.domain.ContentsStorage;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import software.amazon.awssdk.core.exception.SdkClientException;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -23,6 +24,12 @@ public class DeletePhotoEventListener {
     @Async
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void delete(DeletePhotoEvent event) {
-        contentsStorage.deletePhotos(event.getPhotos());
+        log.info("클라우드 저장소 사진 삭제 시작 - 대상: {}개", event.getPhotos().size());
+        try {
+            contentsStorage.deletePhotos(event.getPhotos());
+        } catch (SdkClientException e) {
+            log.warn("클라우드 저장소 사진 삭제 실패 - 대상: {}개", event.getPhotos().size(), e);
+        }
+        log.info("클라우드 저장소 사진 삭제 완료 - {}개", event.getPhotos().size());
     }
 }
