@@ -1,6 +1,5 @@
 import { useParams } from 'react-router-dom';
 import useConfirmBeforeRefresh from '../../../../hooks/@common/useConfirmBeforeRefresh';
-import useLocalFile from '../../../../hooks/@common/useLocalFile';
 import useFormFunnel from '../../../../hooks/domain/funnel/useFormFunnel';
 import usePostGuestbook from '../../../../hooks/domain/guestbook/usePostGuestbook';
 import { DividerLine } from '../../../../styles/@common/DividerLine.styles';
@@ -28,17 +27,6 @@ const GuestBookFunnel = () => {
     initialFunnelValue,
   );
 
-  const {
-    localFiles,
-    handleFilesUploadClick,
-    handleFilesDrop,
-    deleteFile,
-    clearFiles,
-  } = useLocalFile({
-    fileType: 'image',
-    initialLocalFiles: Funnel.form.photos,
-  });
-
   const { spaceCode } = useParams<{ spaceCode: string }>();
 
   const { submitForm } = usePostGuestbook({
@@ -47,9 +35,8 @@ const GuestBookFunnel = () => {
     formData: {
       nickname: Funnel.form.nickname,
       message: Funnel.form.message,
-      photos: localFiles,
+      photos: Funnel.form.photos,
     },
-    clearFiles,
   });
 
   return (
@@ -77,10 +64,7 @@ const GuestBookFunnel = () => {
         <PhotosElement
           receiver={MOCK_RECEIVER}
           onNextButtonClick={submitForm}
-          localFiles={localFiles}
-          deleteFile={deleteFile}
-          handleFilesUploadClick={handleFilesUploadClick}
-          handleFilesDrop={handleFilesDrop}
+          initialLocalFiles={Funnel.form.photos}
         />
       </Funnel.Step>
     </S.Wrapper>

@@ -9,14 +9,9 @@ interface UseFileUploadProps {
   spaceCode: string;
   localFiles: LocalFile[];
   onUploadSuccess: () => void;
-  clearFiles: () => void;
 }
 
-const useFileUpload = ({
-  spaceCode,
-  localFiles,
-  clearFiles,
-}: UseFileUploadProps) => {
+const useFileUpload = ({ spaceCode, localFiles }: UseFileUploadProps) => {
   const processFileUpload = async (category: ImageCategoryType) => {
     try {
       const uploadFiles = createUploadFiles();
@@ -31,7 +26,6 @@ const useFileUpload = ({
       return uploadedFiles;
     } catch (error) {
       console.error('파일 업로드 실패', error);
-      clearFiles();
       throw error;
     }
   };

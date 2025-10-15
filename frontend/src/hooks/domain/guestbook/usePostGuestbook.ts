@@ -14,14 +14,12 @@ interface UsePostGuestbookProps {
     message: string;
     photos: LocalFile[];
   };
-  clearFiles: () => void;
 }
 
 const usePostGuestbook = ({
   spaceCode,
   receiver,
   formData,
-  clearFiles,
 }: UsePostGuestbookProps) => {
   const { showToast } = useToast();
   const navigate = useNavigate();
@@ -30,7 +28,6 @@ const usePostGuestbook = ({
     spaceCode: spaceCode ?? '',
     localFiles: formData.photos,
     onUploadSuccess: () => {},
-    clearFiles: clearFiles,
   });
 
   const createSubmitImage = (uploadFiles: UploadFile[]) => {
@@ -43,7 +40,6 @@ const usePostGuestbook = ({
     });
   };
 
-  // TODO : nickname 값을 다르게 처리할 방법 물색
   const createGuestbookForm = async (): Promise<GuestbookForm> => {
     const baseForm: GuestbookForm = {
       nickname: formData.nickname,

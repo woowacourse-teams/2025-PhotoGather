@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { CONSTRAINTS } from '../../constants/constraints';
 import type { LocalFile } from '../../types/file.type';
 import { heicToJpegBlob, isHeic } from '../../utils/heic';
@@ -24,6 +24,12 @@ const useLocalFile = ({
     initialLocalFiles ?? [],
   );
   const { showToast } = useToast();
+
+  useEffect(() => {
+    return () => {
+      clearFiles();
+    };
+  }, []);
 
   const previewFile = localFiles.map((file) => ({
     id: file.id,
@@ -172,15 +178,12 @@ const useLocalFile = ({
     setLocalFiles([]);
   };
 
-  // TODO : 특정 위치에 파일 추가 함수 구현
-
   return {
     localFiles,
     previewFile,
     deleteFile,
     handleFilesUploadClick,
     handleFilesDrop,
-    clearFiles,
   };
 };
 
