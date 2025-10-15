@@ -2,12 +2,14 @@ import { MdArrowLeft, MdArrowRight, MdOutlinePhoto } from 'react-icons/md';
 import Button from '../../../../components/@common/buttons/button/Button';
 import Line from '../../../../components/@common/line/Line';
 import PhotoGrid from '../../../../components/specific/photoGrid/PhotoGrid';
+import useGuestbookCard from '../../../../hooks/domain/guestbook/useGuestbookCard';
 import { parseTimestamp } from '../../../../utils/parseTimestamp';
-import { mockGuestbookCard } from '../../../mockData';
 import * as S from './GuestbookCardPage.styles';
 
 const GuestbookCardPage = () => {
-  const guestbookCard = mockGuestbookCard;
+  const spaceCode = '3ad5eae6fb';
+  const guestbookCardId = 1;
+  const { guestbookCard } = useGuestbookCard({ spaceCode, guestbookCardId });
   const { year, month, day, hour, minute } = parseTimestamp(
     guestbookCard.createdAt,
   );
