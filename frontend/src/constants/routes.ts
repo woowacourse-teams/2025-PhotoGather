@@ -33,3 +33,7 @@ export const createWorkEditRoute = (spaceCode: string) => {
 export const createGuestWorkDetailRoute = (spaceCode: string) => {
   return `/guest/${spaceCode}/work-detail`;
 };
+
+export const createGuestbookRoute = (spaceCode: string) => {
+  return `/host/${spaceCode}/guestbook`;
+};
