@@ -16,6 +16,14 @@ export interface GuestbookList {
   totalPages: number;
 }
 
+export type GuestbookListSort = 'id' | 'createdAt';
+
+export interface GuestbookListQuery {
+  page: number;
+  size: number;
+  sort?: GuestbookListSort;
+}
+
 export interface GuestbookElement {
   id: number;
   nickname: string;
