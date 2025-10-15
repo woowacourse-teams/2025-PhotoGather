@@ -252,4 +252,22 @@ class ProductPhotosTest {
             .isInstanceOf(BaseException.class)
             .hasMessageContaining("작품 사진은 최대 10개까지만 등록 가능합니다.");
     }
+
+    @DisplayName("주어진 삭제 id의 작품 사진이 존재하지 않을 경우 예외를 던진다")
+    @Test
+    void throwExceptionWhenInvalidDeleteId() {
+        // given
+        ProductPhotos productPhotos = new ProductPhotos();
+        List<ProductPhoto> photos = List.of(
+            createProductPhotoSetId(1L),
+            createProductPhotoSetId(2L),
+            createProductPhotoSetId(3L)
+        );
+        productPhotos.add(photos);
+
+        // when, then
+        assertThatThrownBy(() -> productPhotos.deleteByIds(List.of(1L, 4L)))
+            .isInstanceOf(BaseException.class)
+            .hasMessageContaining("작품에 존재하지 않는 사진입니다.");
+    }
 }
