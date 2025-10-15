@@ -8,8 +8,8 @@ interface PhotoGridProps {
 const PhotoGrid = ({ photoList }: PhotoGridProps) => {
   return (
     <S.Wrapper>
-      {photoList.map((photo, index) => (
-        <S.Image key={photo.id} src={photo.path} alt={`photo-grid-${index}`} />
+      {photoList.map((photo) => (
+        <S.Image key={photo.id} src={photo.path} alt="" />
       ))}
     </S.Wrapper>
   );
