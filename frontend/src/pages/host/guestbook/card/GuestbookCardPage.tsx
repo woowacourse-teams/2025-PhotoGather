@@ -48,12 +48,14 @@ const GuestbookCardPage = () => {
       <S.InfoSection>
         <S.InfoTitle>"{guestbookCard.nickname}"의 방명록</S.InfoTitle>
         <S.InfoDescription>{createdTimeDescription}</S.InfoDescription>
-        {photoListLength > 0 && (
-          <S.IconInfoContainer>
-            <MdOutlinePhoto />
-            <p>{photoListLength}</p>
-          </S.IconInfoContainer>
-        )}
+        <S.IconInfoContainer>
+          {photoListLength > 0 && (
+            <>
+              <MdOutlinePhoto />
+              <p>{photoListLength}</p>
+            </>
+          )}
+        </S.IconInfoContainer>
       </S.InfoSection>
       <Line
         leftElement={

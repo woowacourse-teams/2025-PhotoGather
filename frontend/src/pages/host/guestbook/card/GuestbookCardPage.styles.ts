@@ -33,6 +33,7 @@ export const IconInfoContainer = styled.div`
   display: flex;
   align-items: center;
   gap: 4px;
+  min-height: 24px;
 `;
 
 export const MessageSection = styled.section`
