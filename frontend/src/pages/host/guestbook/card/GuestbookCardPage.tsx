@@ -17,6 +17,7 @@ import {
 } from '../../../../constants/routes';
 import useSwipeElement from '../../../../hooks/@common/useSwipeElement';
 import useGuestbookCard from '../../../../hooks/domain/guestbook/useGuestbookCard';
+import useGuestbookDelete from '../../../../hooks/domain/guestbook/useGuestbookDelete';
 import useGuestbookList from '../../../../hooks/domain/guestbook/useGuestbookList';
 import { theme } from '../../../../styles/theme';
 import { calculatePrevNextId } from '../../../../utils/calculatePrevNextIndex';
@@ -28,6 +29,7 @@ const GuestbookCardPage = () => {
   const { spaceCode = '', guestbookCardId = '' } = useParams();
   const { guestbookCard } = useGuestbookCard({ spaceCode, guestbookCardId });
   const { guestbookList, fetchNextPage } = useGuestbookList(spaceCode);
+  const { mutateAsync } = useGuestbookDelete(spaceCode, guestbookCardId);
   const guestbookCardIdList = guestbookList.map(
     (guestbookCard) => guestbookCard.id,
   );
@@ -52,6 +54,12 @@ const GuestbookCardPage = () => {
   const handleNextCardMove = () => {
     if (nextGuestbookId === null) return;
     navigate(createGuestbookCardRoute(spaceCode, nextGuestbookId));
+  };
+
+  const handleDelete = async () => {
+    await mutateAsync();
+    if (prevGuestbookId === null) navigate(createGuestbookRoute(spaceCode));
+    else navigate(createGuestbookCardRoute(spaceCode, prevGuestbookId));
   };
 
   const { handleTouchStart, handleTouchEnd, handleTouchCancel } =
@@ -84,7 +92,12 @@ const GuestbookCardPage = () => {
           }
           onClick={handleBackMove}
         />
-        <Button type="button" variant="error" text="삭제" />
+        <Button
+          type="button"
+          variant="error"
+          text="삭제"
+          onClick={handleDelete}
+        />
       </S.DeleteButtonContainer>
       <S.InfoSection>
         <S.InfoTitle>"{guestbookCard.nickname}"의 방명록</S.InfoTitle>

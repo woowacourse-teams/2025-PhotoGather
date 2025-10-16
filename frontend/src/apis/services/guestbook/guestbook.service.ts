@@ -18,4 +18,7 @@ export const guestbookService = {
     http.get<GuestbookCard>(
       `/spaces/${spaceCode}/guestbook/${guestbookCardId}`,
     ),
+
+  deleteCard: (spaceCode: string, guestbookCardId: number | string) =>
+    http.delete(`/spaces/${spaceCode}/guestbook/${guestbookCardId}`),
 };
