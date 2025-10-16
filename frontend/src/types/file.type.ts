@@ -2,6 +2,8 @@ export interface LocalFile {
   id: number;
   originFile: File;
   previewUrl: string;
+  capturedAt: string | null;
+  capacityValue: number;
 }
 
 export interface PreviewFile {
@@ -9,12 +11,9 @@ export interface PreviewFile {
   previewUrl: string;
 }
 
-export type UploadFileState =
-  | 'idle'
-  | 'signed'
-  | 'uploaded'
-  | 'success'
-  | 'failed';
+export type ImageCategoryType = 'PRODUCT ' | 'GUESTBOOK';
+
+export type UploadFileState = 'idle' | 'signed' | 'uploaded' | 'failed';
 
 export interface UploadFile {
   id: number;

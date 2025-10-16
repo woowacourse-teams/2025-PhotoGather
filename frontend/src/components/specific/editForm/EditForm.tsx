@@ -7,6 +7,7 @@ import useLocalFile from '../../../hooks/@common/useLocalFile';
 import usePatchSpaceInfo from '../../../hooks/domain/space/usePatchSpaceInfo';
 import useSpaceInfo from '../../../hooks/domain/space/useSpaceInfo';
 import type { SpaceInfoFormData } from '../../../types/domain/space.type';
+import { clearFiles } from '../../../utils/clearFiles';
 import { calculateValidLength } from '../../../utils/grapheme';
 import Button from '../../@common/buttons/button/Button';
 import TextareaInput from '../../@common/inputs/textareaInput/TextareaInput';
@@ -56,15 +57,14 @@ const EditForm = () => {
     defaultValues: initialData,
   });
 
-  const { localFiles, previewFile, handleFilesUploadClick, clearFiles } =
-    useLocalFile({
-      fileType: 'image',
-      maxFileCount: 1,
-    });
+  const { localFiles, previewFile, handleFilesUploadClick } = useLocalFile({
+    fileType: 'image',
+    maxFileCount: 1,
+  });
   const { patchSpaceInfo } = usePatchSpaceInfo({
     spaceCode: spaceCode ?? '',
     dirtyFields,
-    afterPatch: clearFiles,
+    afterPatch: () => clearFiles(localFiles),
   });
 
   const onSubmit = (data: SpaceInfoFormData) => {
@@ -91,7 +91,7 @@ const EditForm = () => {
         originalSrc={spaceInfo?.spacePhoto.path}
         previewFile={previewFile}
         uploadImage={handleFilesUploadClick}
-        clearFiles={clearFiles}
+        clearFiles={() => clearFiles(localFiles)}
         deleteImage={() => {
           console.log('사진 삭제 로직');
         }}

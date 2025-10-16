@@ -7,6 +7,7 @@ export const ROUTES = {
   },
   GUEST: {
     MAIN: '/guest/main',
+    CREATE_GUESTBOOK_COMPLETE: '/guest/create-guestbook-complete',
   },
 };
 
@@ -36,6 +37,10 @@ export const createGuestWorkDetailRoute = (spaceCode: string) => {
 
 export const createGuestbookRoute = (spaceCode: string) => {
   return `/host/${spaceCode}/guestbook`;
+};
+
+export const createCreateGuestbookRoute = (spaceCode: string) => {
+  return `/guest/${spaceCode}/create-guestbook`;
 };
 
 export const createGuestbookCardRoute = (

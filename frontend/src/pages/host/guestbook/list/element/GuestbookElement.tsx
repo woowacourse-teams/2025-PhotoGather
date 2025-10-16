@@ -21,7 +21,7 @@ const GuestbookElement = ({
         <S.Text>From. {guestName}</S.Text>
         <S.IconContainer>
           {hasPhoto && <MdOutlinePhoto color={theme.colors.gray03} />}
-          {!isRead && <S.Circle />}
+          {isRead === false && <S.Circle />}
         </S.IconContainer>
       </S.LeftContainer>
       <S.RightContainer>

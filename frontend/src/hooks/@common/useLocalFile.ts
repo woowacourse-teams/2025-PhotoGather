@@ -10,15 +10,19 @@ import {
 import { useToast } from './useToast';
 
 interface UseLocalFileProps {
+  initialLocalFiles?: LocalFile[];
   fileType: string;
   maxFileCount?: number;
 }
 
 const useLocalFile = ({
+  initialLocalFiles,
   fileType,
   maxFileCount = CONSTRAINTS.MAX_FILE_COUNT,
 }: UseLocalFileProps) => {
-  const [localFiles, setLocalFiles] = useState<LocalFile[]>([]);
+  const [localFiles, setLocalFiles] = useState<LocalFile[]>(
+    initialLocalFiles ?? [],
+  );
   const { showToast } = useToast();
 
   const previewFile = localFiles.map((file) => ({
@@ -50,6 +54,7 @@ const useLocalFile = ({
         text: '사진을 불러오는데 실패했어요. 다시 시도해주세요.',
       });
       console.error(error);
+      setLocalFiles([]);
       return URL.createObjectURL(file);
     }
   };
@@ -60,6 +65,8 @@ const useLocalFile = ({
       id: 0,
       originFile: processedFile,
       previewUrl: await createImagePreviewUrl(processedFile),
+      capacityValue: processedFile.size,
+      capturedAt: null,
     };
 
     setLocalFiles((prev) => {
@@ -89,6 +96,8 @@ const useLocalFile = ({
         id: startIndex + index,
         originFile: file,
         previewUrl: await createImagePreviewUrl(file),
+        capacityValue: file.size,
+        capturedAt: null,
       })),
     );
 
@@ -132,6 +141,7 @@ const useLocalFile = ({
             ? error.message
             : '파일 업로드 중 오류가 발생했습니다.',
       });
+      setLocalFiles([]);
     }
   };
 
@@ -157,20 +167,12 @@ const useLocalFile = ({
     updateFiles(files);
   };
 
-  const clearFiles = () => {
-    for (const file of localFiles) {
-      URL.revokeObjectURL(file.previewUrl);
-    }
-    setLocalFiles([]);
-  };
-
   return {
     localFiles,
     previewFile,
     deleteFile,
     handleFilesUploadClick,
     handleFilesDrop,
-    clearFiles,
   };
 };
 

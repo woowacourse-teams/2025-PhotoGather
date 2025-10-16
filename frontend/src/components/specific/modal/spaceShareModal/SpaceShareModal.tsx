@@ -1,8 +1,8 @@
 import { useRef } from 'react';
 import { MdDownload, MdLink } from 'react-icons/md';
-import useImageDownload from '../../../../hooks/@common/useImageDownload';
 import { useToast } from '../../../../hooks/@common/useToast';
 import { copyLinkToClipboard } from '../../../../utils/copyLinkToClipboard';
+import { saveImage } from '../../../../utils/saveImage';
 import IconButton from '../../../@common/buttons/iconButton/IconButton';
 import Modal from '../../../@common/modal/Modal';
 import QRCode from '../../../@common/qrCode/QRCode';
@@ -16,7 +16,6 @@ interface ShareModalProps {
 const SpaceShareModal = ({ isOpen, onClose }: ShareModalProps) => {
   const { showToast } = useToast();
   const qrCodeRef = useRef<HTMLCanvasElement>(null);
-  const { saveImage } = useImageDownload();
   const copyAddress = `${import.meta.env.VITE_DOMAIN}/guest/main`;
 
   const saveQRCodeImage = async () => {
@@ -50,12 +49,12 @@ const SpaceShareModal = ({ isOpen, onClose }: ShareModalProps) => {
           <QRCode address={copyAddress} ref={qrCodeRef} />
           <S.ButtonContainer>
             <IconButton
-              icon={<MdDownload />}
+              icon={<MdDownload size={24} />}
               variant="dark"
               onClick={saveQRCodeImage}
             />
             <IconButton
-              icon={<MdLink style={{ rotate: '-45deg' }} />}
+              icon={<MdLink style={{ rotate: '-45deg' }} size={24} />}
               variant="dark"
               onClick={copyShareLink}
             />

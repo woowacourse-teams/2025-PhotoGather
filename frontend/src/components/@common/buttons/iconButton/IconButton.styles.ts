@@ -1,6 +1,15 @@
 import { css, type Theme } from '@emotion/react';
 import styled from '@emotion/styled';
-import type { IconButtonVariant } from '../../../../types/button.type';
+import type {
+  IconButtonSize,
+  IconButtonVariant,
+} from '../../../../types/button.type';
+
+export const IconButtonSizes = {
+  small: 20,
+  medium: 28,
+  large: 36,
+};
 
 export const IconButtonStyles = {
   default: (theme: Theme) => css`
@@ -44,8 +53,10 @@ export const IconButtonStyles = {
 
 export const IconContainer = styled.button<{
   $variant: IconButtonVariant;
+  $size: IconButtonSize;
 }>`
   max-width: 44px;
+  width: 100%;
   aspect-ratio: 1/1;
   display: flex;
   padding: 10px;
@@ -57,8 +68,8 @@ export const IconContainer = styled.button<{
   border-radius: 12px;
 
   svg {
-    width: 28px;
-    height: 28px;
+    width: ${({ $size }) => IconButtonSizes[$size]}px;
+    height: ${({ $size }) => IconButtonSizes[$size]}px;
   }
 
   ${({ $variant, theme }) => $variant && IconButtonStyles[$variant](theme)}

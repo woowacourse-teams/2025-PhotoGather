@@ -6,21 +6,24 @@ import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import { useRef } from 'react';
 import type { Swiper as SwiperType } from 'swiper';
-import type { ImageInfoType } from '../../../types/swiper.type';
+import type { LocalFile } from '../../../types/file.type';
 
 interface ImageSwiperProps {
   /** 초기 인덱스 */
   initialIndex: number;
   /** 이미지 정보 */
-  imageInfo: ImageInfoType[];
+  imageInfo: LocalFile[];
   /** 현재 인덱스 업데이트 */
   updateCurrentIndex: (index: number) => void;
+  /** 슬라이드 크기 */
+  size?: 'default' | 'large';
 }
 
 const ImageSwiper = ({
   initialIndex,
   imageInfo,
   updateCurrentIndex,
+  size = 'default',
 }: ImageSwiperProps) => {
   const swiperRef = useRef<SwiperRef>(null);
 
@@ -40,7 +43,7 @@ const ImageSwiper = ({
       </S.NoImageContainer>
     );
   return (
-    <S.ImageSwiperContainer>
+    <S.ImageSwiperContainer $size={size}>
       <Swiper
         /** swiper 스타일 설정 */
         slidesPerView="auto"
@@ -63,12 +66,15 @@ const ImageSwiper = ({
         }}
         ref={swiperRef}
       >
-        {imageInfo.map((imageInfo: ImageInfoType, index) => (
+        {imageInfo.map((imageInfo: LocalFile, index) => (
           <SwiperSlide
-            key={`${imageInfo.alt}-${index}`}
+            key={`${imageInfo.originFile.name}-${index}`}
             style={{ display: 'flex' }}
           >
-            <S.Image src={imageInfo.src} alt={imageInfo.alt} />
+            <S.Image
+              src={imageInfo.previewUrl}
+              alt={imageInfo.originFile.name}
+            />
           </SwiperSlide>
         ))}
       </Swiper>

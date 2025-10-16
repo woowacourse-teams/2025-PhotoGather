@@ -36,7 +36,7 @@ const HostMainPage = () => {
       <MainPageStyles.IconButtonContainer>
         <IconButton
           aria-label="인스타그램"
-          icon={<IoLogoInstagram />}
+          icon={<IoLogoInstagram size={24} />}
           variant="default"
           onClick={() =>
             window.open(
@@ -50,7 +50,7 @@ const HostMainPage = () => {
         />
         <IconButton
           aria-label="이메일"
-          icon={<MdEmail />}
+          icon={<MdEmail size={24} />}
           variant="default"
           onClick={() => window.open(`mailto:${spaceInfo.email}`, '_blank')}
           disabled={!spaceInfo.email || spaceInfo.email === ''}

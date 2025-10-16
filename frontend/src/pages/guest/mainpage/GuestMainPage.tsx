@@ -21,7 +21,7 @@ const GuestMainPage = () => {
       <MainPageStyles.IconButtonContainer>
         <IconButton
           aria-label="인스타그램"
-          icon={<IoLogoInstagram />}
+          icon={<IoLogoInstagram size={24} />}
           variant="default"
           onClick={() =>
             window.open(
@@ -33,7 +33,7 @@ const GuestMainPage = () => {
         />
         <IconButton
           aria-label="이메일"
-          icon={<IoMailOutline />}
+          icon={<IoMailOutline size={24} />}
           variant="default"
           onClick={() =>
             window.open(

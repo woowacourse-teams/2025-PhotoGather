@@ -1,10 +1,13 @@
 import { useNavigate } from 'react-router-dom';
 import Button from '../components/@common/buttons/button/Button';
 import {
+  createCreateGuestbookRoute,
+  createGuestbookRoute,
   createGuestWorkDetailRoute,
   createWorkDetailRoute,
   ROUTES,
 } from '../constants/routes';
+import { DividerLine } from '../styles/@common/DividerLine.styles';
 
 const MainPage = () => {
   const navigate = useNavigate();
@@ -25,7 +28,9 @@ const MainPage = () => {
       <Button
         text="[GUEST] 스페이스 메인 이동"
         onClick={() => navigate(ROUTES.GUEST.MAIN)}
+        variant="secondary"
       />
+      <DividerLine width="100%" />
       <Button
         text="[HOST] 작품 소개 이동"
         onClick={() => navigate(createWorkDetailRoute('b17359bb41'))}
@@ -33,6 +38,17 @@ const MainPage = () => {
       <Button
         text="[GUEST] 작품 소개 이동"
         onClick={() => navigate(createGuestWorkDetailRoute('b17359bb41'))}
+        variant="secondary"
+      />
+      <DividerLine width="100%" />
+      <Button
+        text="[HOST] 방명록 이동"
+        onClick={() => navigate(createGuestbookRoute('f205850861'))}
+      />
+      <Button
+        text="[GUEST] 방명록 작성 이동"
+        onClick={() => navigate(createCreateGuestbookRoute('f205850861'))}
+        variant="secondary"
       />
     </div>
   );

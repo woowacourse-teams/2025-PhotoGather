@@ -33,4 +33,17 @@ export const INFORMATION = {
       DESCRIPTION: '생성하기를 누르면 링크가 발급돼요.',
     },
   },
+  GUESTBOOK: {
+    MESSAGE: {
+      PROMPT: '전달할 메세지를 남겨주세요',
+      COMPLETE: '방명록 카드를 전달했어요.',
+    },
+    NICKNAME: {
+      PROMPT: '전달할 닉네임을 입력해주세요',
+    },
+    PHOTOS: {
+      PROMPT: '함께 전달할 사진을 선택해주세요',
+      UPLOAD_LIMIT_TEXT: '20장까지 선택할 수 있어요',
+    },
+  },
 } as const;

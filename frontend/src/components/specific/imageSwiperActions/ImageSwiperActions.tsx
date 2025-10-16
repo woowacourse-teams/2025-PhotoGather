@@ -1,4 +1,4 @@
-import type { ImageInfoType } from '../../../types/swiper.type';
+import type { LocalFile } from '../../../types/file.type';
 import IconButton from '../../@common/buttons/iconButton/IconButton';
 import ImageSwiper from '../../@common/imageSwiper/ImageSwiper';
 import * as S from './ImageSwiperActions.styles';
@@ -10,13 +10,15 @@ interface ImageSwiperActionsType {
 
 interface ImageSwiperActionsProps {
   /** 이미지 정보 */
-  imageInfo: ImageInfoType[];
+  imageInfo: LocalFile[];
   /** 초기 인덱스 */
   initialIndex: number;
   /** 현재 인덱스 업데이트 */
   updateCurrentIndex: (index: number) => void;
   /** 액션 버튼 */
   actions: ImageSwiperActionsType[];
+  /** 슬라이드 크기 */
+  size?: 'default' | 'large';
 }
 
 const ImageSwiperActions = ({
@@ -24,6 +26,7 @@ const ImageSwiperActions = ({
   updateCurrentIndex,
   imageInfo,
   actions,
+  size = 'default',
 }: ImageSwiperActionsProps) => {
   return (
     <S.Wrapper>
@@ -31,6 +34,7 @@ const ImageSwiperActions = ({
         initialIndex={initialIndex}
         imageInfo={imageInfo}
         updateCurrentIndex={updateCurrentIndex}
+        size={size}
       />
       <S.ButtonContainer>
         {actions.map((action, index) => (

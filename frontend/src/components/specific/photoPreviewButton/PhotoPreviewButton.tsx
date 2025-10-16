@@ -2,6 +2,7 @@ import { useId, useRef } from 'react';
 import { IoCamera, IoClose } from 'react-icons/io5';
 import defaultImage from '../../../@assets/images/default-image.png';
 import { Thumbnail } from '../../../pages/MainPage.common.styles';
+import * as C from '../../../styles/@common/PhotoInput.styles';
 import type { PreviewFile } from '../../../types/file.type';
 import { createImageErrorHandler } from '../../../utils/createImageErrorHandler';
 import { handleKeyboardClick } from '../../../utils/keyboard';
@@ -42,7 +43,7 @@ const PhotoPreviewButton = ({
   };
 
   return (
-    <S.Wrapper>
+    <C.Wrapper>
       {isPhotoExist && (
         <S.OverlayButton
           $position="top"
@@ -55,7 +56,7 @@ const PhotoPreviewButton = ({
           <IoClose />
         </S.OverlayButton>
       )}
-      <S.Label
+      <C.Label
         htmlFor={fileInputId}
         tabIndex={0}
         onKeyDown={handleKeyboardClick}
@@ -67,8 +68,8 @@ const PhotoPreviewButton = ({
           src={matchThumbnailImage()}
           onError={createImageErrorHandler(defaultImage)}
         />
-      </S.Label>
-      <S.FileInput
+      </C.Label>
+      <C.FileInput
         id={fileInputId}
         type="file"
         accept="image/*"
@@ -80,7 +81,7 @@ const PhotoPreviewButton = ({
         }}
         ref={fileInputRef}
       />
-    </S.Wrapper>
+    </C.Wrapper>
   );
 };
 
