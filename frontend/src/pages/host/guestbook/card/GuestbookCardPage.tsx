@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { Activity, useState } from 'react';
 import {
   MdArrowBackIosNew,
   MdArrowForwardIos,
@@ -10,18 +10,22 @@ import Button from '../../../../components/@common/buttons/button/Button';
 import IconButton from '../../../../components/@common/buttons/iconButton/IconButton';
 import Line from '../../../../components/@common/line/Line';
 import OnBoardingModal from '../../../../components/specific/modal/onBoardingModal/OnBoardingModal';
+import PhotoModal from '../../../../components/specific/modal/photoModal/PhotoModal';
 import PhotoGrid from '../../../../components/specific/photoGrid/PhotoGrid';
 import { createGuestbookCardRoute } from '../../../../constants/routes';
 import useGuestbookCard from '../../../../hooks/domain/guestbook/useGuestbookCard';
 import useGuestbookList from '../../../../hooks/domain/guestbook/useGuestbookList';
 import { theme } from '../../../../styles/theme';
+import type { Photo } from '../../../../types/photo.type';
 import { calculatePrevNextId } from '../../../../utils/calculatePrevNextIndex';
 import { parseTimestamp } from '../../../../utils/parseTimestamp';
 import * as S from './GuestbookCardPage.styles';
 
 const GuestbookCardPage = () => {
   const navigate = useNavigate();
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOnboardingOpen, setIsOnboardingOpen] = useState(true);
+  const [isPhotoModalOpen, setIsPhotoModalOpen] = useState(false);
+  const [selectedPhotoIndex, setSelectedPhotoIndex] = useState(0);
   const { spaceCode = '', guestbookCardId = '' } = useParams();
   const { guestbookCard } = useGuestbookCard({ spaceCode, guestbookCardId });
   const { guestbookList } = useGuestbookList({ spaceCode });
@@ -47,7 +51,17 @@ const GuestbookCardPage = () => {
   };
 
   const handleModalClose = () => {
-    setIsOpen((prev) => !prev);
+    setIsOnboardingOpen((prev) => !prev);
+  };
+
+  const handlePhotoModalClose = () => {
+    setIsPhotoModalOpen(false);
+  };
+
+  const handlePhotoClick = (photo: Photo) => {
+    const photoIndex = guestbookCard.photos.findIndex((p) => p.id === photo.id);
+    setSelectedPhotoIndex(photoIndex);
+    setIsPhotoModalOpen(true);
   };
 
   return (
@@ -55,9 +69,19 @@ const GuestbookCardPage = () => {
       <OnBoardingModal
         text={'스와이프하여 다음 방명록으로 이동'}
         icon={<MdSwipe />}
-        isOpen={isOpen}
+        isOpen={isOnboardingOpen}
         onClose={handleModalClose}
       />
+      <Activity mode={isPhotoModalOpen ? 'visible' : 'hidden'}>
+        <PhotoModal
+          isOpen={isPhotoModalOpen}
+          photoList={guestbookCard.photos}
+          initialPhotoIndex={selectedPhotoIndex}
+          spaceCode={spaceCode}
+          guestbookCardId={guestbookCardId}
+          onClose={handlePhotoModalClose}
+        />
+      </Activity>
       <S.Wrapper>
         <S.DeleteButtonContainer>
           <Button type="button" variant="error" text="삭제" />
@@ -99,7 +123,10 @@ const GuestbookCardPage = () => {
         </S.MessageSection>
         {photoListLength > 0 && (
           <S.PhotoSection>
-            <PhotoGrid photoList={guestbookCard.photos} />
+            <PhotoGrid
+              photoList={guestbookCard.photos}
+              onPhotoClick={handlePhotoClick}
+            />
             <Button
               type="button"
               variant="secondary"
