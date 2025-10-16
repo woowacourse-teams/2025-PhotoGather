@@ -21,4 +21,15 @@ export const guestbookService = {
 
   deleteCard: (spaceCode: string, guestbookCardId: number | string) =>
     http.delete(`/spaces/${spaceCode}/guestbook/${guestbookCardId}`),
+
+  deleteGuestbookCardPhotos: (
+    spaceCode: string,
+    guestBookCardId: number,
+    deletePhotoIds: number[],
+  ) => {
+    return http.delete(
+      `/spaces/${spaceCode}/guestbook/${guestBookCardId}/photos`,
+      { deletePhotoIds },
+    );
+  },
 };

@@ -33,7 +33,7 @@ export const ModalBackdrop = styled.div`
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: ${({ theme }) => hexToRgba(theme.colors.gray06, 0.35)};
+  background-color: ${({ theme }) => hexToRgba(theme.colors.black, 0.8)};
 `;
 
 export const CloseButton = styled(MdClose)`

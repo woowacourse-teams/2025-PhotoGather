@@ -4,9 +4,10 @@ import * as S from './PhotoGrid.styles';
 
 interface PhotoGridProps {
   photoList: Photo[];
+  onPhotoClick?: (photo: Photo) => void;
 }
 
-const PhotoGrid = ({ photoList }: PhotoGridProps) => {
+const PhotoGrid = ({ photoList, onPhotoClick }: PhotoGridProps) => {
   return (
     <S.Wrapper>
       {photoList.map((photo) => (
@@ -17,6 +18,7 @@ const PhotoGrid = ({ photoList }: PhotoGridProps) => {
             replacePath: 'guestbook',
           })}
           alt=""
+          onClick={() => onPhotoClick?.(photo)}
         />
       ))}
     </S.Wrapper>

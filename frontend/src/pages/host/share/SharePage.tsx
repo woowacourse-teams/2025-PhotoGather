@@ -6,9 +6,9 @@ import Button from '../../../components/@common/buttons/button/Button';
 import IconButton from '../../../components/@common/buttons/iconButton/IconButton';
 import QRCode from '../../../components/@common/qrCode/QRCode';
 import { createSpaceMainRoute, ROUTES } from '../../../constants/routes';
-import useImageDownload from '../../../hooks/@common/useImageDownload';
 import { useToast } from '../../../hooks/@common/useToast';
 import { copyLinkToClipboard } from '../../../utils/copyLinkToClipboard';
+import { saveImage } from '../../../utils/saveImage';
 import * as S from './SharePage.styles';
 
 const SharePage = () => {
@@ -18,7 +18,6 @@ const SharePage = () => {
 
   const { showToast } = useToast();
   const qrCodeRef = useRef<HTMLCanvasElement>(null);
-  const { saveImage } = useImageDownload();
 
   // TODO: 스페이스 코드 별 guest main 구현 후 대체 필요
   const copyAddress = `${import.meta.env.VITE_DOMAIN}/guest/main`;

@@ -17,6 +17,8 @@ interface ImageSwiperActionsProps {
   updateCurrentIndex: (index: number) => void;
   /** 액션 버튼 */
   actions: ImageSwiperActionsType[];
+  /** 슬라이드 크기 */
+  size?: 'default' | 'large';
 }
 
 const ImageSwiperActions = ({
@@ -24,6 +26,7 @@ const ImageSwiperActions = ({
   updateCurrentIndex,
   imageInfo,
   actions,
+  size = 'default',
 }: ImageSwiperActionsProps) => {
   return (
     <S.Wrapper>
@@ -31,6 +34,7 @@ const ImageSwiperActions = ({
         initialIndex={initialIndex}
         imageInfo={imageInfo}
         updateCurrentIndex={updateCurrentIndex}
+        size={size}
       />
       <S.ButtonContainer>
         {actions.map((action, index) => (

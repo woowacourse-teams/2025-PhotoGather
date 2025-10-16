@@ -6,6 +6,7 @@ export const Wrapper = styled.div`
   justify-content: center;
   align-items: center;
   width: 100%;
+  margin: 0 auto;
 `;
 
 export const ButtonContainer = styled.div`
