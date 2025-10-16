@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import {
   MdArrowBack,
   MdArrowBackIosNew,
@@ -9,6 +9,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import Button from '../../../../components/@common/buttons/button/Button';
 import IconButton from '../../../../components/@common/buttons/iconButton/IconButton';
 import Line from '../../../../components/@common/line/Line';
+import DeleteModal from '../../../../components/@common/modal/deleteModal/DeleteModal';
 import PhotoGrid from '../../../../components/specific/photoGrid/PhotoGrid';
 import { CONSTRAINTS } from '../../../../constants/constraints';
 import {
@@ -26,10 +27,14 @@ import * as S from './GuestbookCardPage.styles';
 
 const GuestbookCardPage = () => {
   const navigate = useNavigate();
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const { spaceCode = '', guestbookCardId = '' } = useParams();
   const { guestbookCard } = useGuestbookCard({ spaceCode, guestbookCardId });
   const { guestbookList, fetchNextPage } = useGuestbookList(spaceCode);
-  const { mutateAsync } = useGuestbookDelete(spaceCode, guestbookCardId);
+  const { mutateAsync, isPending } = useGuestbookDelete(
+    spaceCode,
+    guestbookCardId,
+  );
   const guestbookCardIdList = guestbookList.map(
     (guestbookCard) => guestbookCard.id,
   );
@@ -80,6 +85,14 @@ const GuestbookCardPage = () => {
       onTouchEnd={handleTouchEnd}
       onTouchCancel={handleTouchCancel}
     >
+      <DeleteModal
+        isOpen={isDeleteModalOpen}
+        onCloseModal={() => {
+          setIsDeleteModalOpen(false);
+        }}
+        onDelete={handleDelete}
+        buttonDisabled={isPending}
+      />
       <S.DeleteButtonContainer>
         <Button
           type="button"
@@ -96,7 +109,9 @@ const GuestbookCardPage = () => {
           type="button"
           variant="error"
           text="삭제"
-          onClick={handleDelete}
+          onClick={() => {
+            setIsDeleteModalOpen(true);
+          }}
         />
       </S.DeleteButtonContainer>
       <S.InfoSection>
