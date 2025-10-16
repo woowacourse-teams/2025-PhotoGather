@@ -4,6 +4,8 @@ export const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: 40px;
+  min-height: ${({ theme }) =>
+    `calc(100dvh - 2 * ${theme.layout.padding.topBottom} - ${theme.layout.headerHeight} - ${theme.layout.footerHeight})`};
 `;
 
 export const InfoSection = styled.section`
