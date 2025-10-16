@@ -39,6 +39,10 @@ export const createGuestbookRoute = (spaceCode: string) => {
   return `/host/${spaceCode}/guestbook`;
 };
 
+export const createCreateGuestbookRoute = (spaceCode: string) => {
+  return `/guest/${spaceCode}/create-guestbook`;
+};
+
 export const createGuestbookCardRoute = (
   spaceCode: string,
   guestbookCardId: number | string,
