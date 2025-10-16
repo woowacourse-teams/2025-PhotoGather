@@ -98,6 +98,7 @@ const GuestbookCardPage = () => {
 
   const handleDelete = async () => {
     await mutateAsync();
+    setIsDeleteModalOpen(false);
     if (prevGuestbookId === null) navigate(createGuestbookRoute(spaceCode));
     else navigate(createGuestbookCardRoute(spaceCode, prevGuestbookId));
   };
