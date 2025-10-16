@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import {
+  MdArrowBack,
   MdArrowBackIosNew,
   MdArrowForwardIos,
   MdOutlinePhoto,
@@ -9,7 +10,10 @@ import Button from '../../../../components/@common/buttons/button/Button';
 import IconButton from '../../../../components/@common/buttons/iconButton/IconButton';
 import Line from '../../../../components/@common/line/Line';
 import PhotoGrid from '../../../../components/specific/photoGrid/PhotoGrid';
-import { createGuestbookCardRoute } from '../../../../constants/routes';
+import {
+  createGuestbookCardRoute,
+  createGuestbookRoute,
+} from '../../../../constants/routes';
 import useGuestbookCard from '../../../../hooks/domain/guestbook/useGuestbookCard';
 import useGuestbookList from '../../../../hooks/domain/guestbook/useGuestbookList';
 import { theme } from '../../../../styles/theme';
@@ -34,6 +38,10 @@ const GuestbookCardPage = () => {
   const photoListLength = guestbookCard.photos.length;
   const currentIdIndex = guestbookCardIdList.indexOf(guestbookCard.id);
 
+  const handleBackMove = () => {
+    navigate(createGuestbookRoute(spaceCode));
+  };
+
   const handlePreviousCardMove = () => {
     if (prevGuestbookId === null) return;
     navigate(createGuestbookCardRoute(spaceCode, prevGuestbookId));
@@ -52,6 +60,17 @@ const GuestbookCardPage = () => {
   return (
     <S.Wrapper>
       <S.DeleteButtonContainer>
+        <Button
+          type="button"
+          variant="fit"
+          text={
+            <>
+              <MdArrowBack />
+              <p>목록</p>
+            </>
+          }
+          onClick={handleBackMove}
+        />
         <Button type="button" variant="error" text="삭제" />
       </S.DeleteButtonContainer>
       <S.InfoSection>

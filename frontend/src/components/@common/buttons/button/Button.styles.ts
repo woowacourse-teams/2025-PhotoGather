@@ -62,6 +62,18 @@ export const buttonStyles = {
     }
   `,
 
+  fit: (theme: Theme) => css`
+    ${theme.typography.captionSmall}
+    color: ${theme.colors.gray06};
+    padding: 0;
+    width: fit-content;
+
+    &:disabled {
+      pointer-events: none;
+      color: ${theme.colors.gray03};
+    }
+  `,
+
   elevated: (theme: Theme) => css`
     border-radius: 4px;
     background-color: ${theme.colors.white};
