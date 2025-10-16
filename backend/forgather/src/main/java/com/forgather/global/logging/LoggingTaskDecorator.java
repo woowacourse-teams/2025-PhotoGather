@@ -16,8 +16,12 @@ public class LoggingTaskDecorator implements TaskDecorator {
         Map<String, String> copyOfContextMap = MDC.getCopyOfContextMap();
         if (copyOfContextMap != null) {
             return () -> {
-                MDC.setContextMap(copyOfContextMap);
-                runnable.run();
+                try {
+                    MDC.setContextMap(copyOfContextMap);
+                    runnable.run();
+                } finally {
+                    MDC.clear();
+                }
             };
         }
         return runnable;
