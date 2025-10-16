@@ -26,7 +26,7 @@ const OnBoardingModal = ({
       const closeTimer = setTimeout(onClose, 400);
 
       return () => clearTimeout(closeTimer);
-    }, 3000);
+    }, 1500);
 
     return () => clearTimeout(timer);
   }, [isOpen, onClose]);

@@ -19,6 +19,7 @@ export const Wrapper = styled.div`
 
 export const TextContainer = styled.p`
     color: ${({ theme }) => theme.colors.white};
+    ${({ theme }) => theme.typography.captionSmall};
 `;
 
 export const IconContainer = styled.div`
