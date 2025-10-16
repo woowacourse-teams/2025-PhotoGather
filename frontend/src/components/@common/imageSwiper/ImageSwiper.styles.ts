@@ -15,8 +15,11 @@ export const NoImageComment = styled.h2`
   text-align: center;
 `;
 
-export const ImageSwiperContainer = styled.div`
+export const ImageSwiperContainer = styled.div<{
+  $size?: 'default' | 'large';
+}>`
   width: 100%;
+  margin: 0 auto;
 
   & .swiper {
     width: 100%;
@@ -28,8 +31,8 @@ export const ImageSwiperContainer = styled.div`
     position: relative;
   }
   & .swiper-slide {
-    width: 50%;
-    height: 100%;
+   max-width: 80%;
+    height: auto;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -51,10 +54,10 @@ export const ImageSwiperContainer = styled.div`
 `;
 
 export const Image = styled.img`
-  width: 100%;
-  max-width: ${({ theme }) => theme.layout.swiper.imageMaxWidth};
-  aspect-ratio: 3/4;
-  height: 100%;
+  max-width: 100%;
+  max-height: 40vh;
+  width: auto;
+  height: auto;
   border-radius: 4px;
-  object-fit: cover;
+  object-fit: contain;
 `;

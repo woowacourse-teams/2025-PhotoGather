@@ -15,12 +15,15 @@ interface ImageSwiperProps {
   imageInfo: LocalFile[];
   /** 현재 인덱스 업데이트 */
   updateCurrentIndex: (index: number) => void;
+  /** 슬라이드 크기 */
+  size?: 'default' | 'large';
 }
 
 const ImageSwiper = ({
   initialIndex,
   imageInfo,
   updateCurrentIndex,
+  size = 'default',
 }: ImageSwiperProps) => {
   const swiperRef = useRef<SwiperRef>(null);
 
@@ -40,7 +43,7 @@ const ImageSwiper = ({
       </S.NoImageContainer>
     );
   return (
-    <S.ImageSwiperContainer>
+    <S.ImageSwiperContainer $size={size}>
       <Swiper
         /** swiper 스타일 설정 */
         slidesPerView="auto"
