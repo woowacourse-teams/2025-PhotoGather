@@ -14,7 +14,7 @@ public class AsyncConfig {
     /**
      * maxPoolSize queueCapacity는 기본 설정 사용한다.
      * 기본 설정 둘 다 Integer.MAX_VALUE 이다.
-     * ThreadPoolTaskExecutor는 유휴 스레드가 존재하지 않고 대기큐가 꽉차면 max 아애로 스레드를 추가 생성한다.
+     * ThreadPoolTaskExecutor는 유휴 스레드가 존재하지 않고 대기큐가 꽉차면 max 아래로 스레드를 추가 생성한다.
      * 이론 상 대기큐를 꽉 채우지 못하므로 maxPoolSize는 의미 없는 설정이라고 볼 수 있다.
      * 추가 생성 없이 지정한 coreThread 수만큼의 스레드가 작업을 처리한다.
      *
