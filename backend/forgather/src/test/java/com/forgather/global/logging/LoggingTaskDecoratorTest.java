@@ -20,7 +20,7 @@ class LoggingTaskDecoratorTest {
     @Autowired
     private TaskExecutor taskExecutor;
 
-    @DisplayName("")
+    @DisplayName("비동기 스레드 작업 전에 MDC 컨텍스트를 복사한다")
     @Test
     void decorate() throws ExecutionException, InterruptedException, TimeoutException {
         // given
