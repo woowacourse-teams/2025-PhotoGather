@@ -18,6 +18,7 @@ interface PhotoModalProps {
   spaceCode: string;
   guestbookCardId: string;
   onClose: () => void;
+  onDelete?: (photoId: number) => void;
 }
 
 const PhotoModal = ({
@@ -27,6 +28,7 @@ const PhotoModal = ({
   spaceCode,
   guestbookCardId,
   onClose,
+  onDelete,
 }: PhotoModalProps) => {
   const [currentIndex, setCurrentIndex] = useState(initialPhotoIndex);
   const queryClient = useQueryClient();
@@ -56,11 +58,12 @@ const PhotoModal = ({
         throw new Error('사진 삭제에 실패했습니다.');
       }
 
-      return response;
+      return { photoId };
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ['guestbook', spaceCode] });
       showToast({ text: '사진이 삭제되었습니다.', type: 'info' });
+      onDelete?.(data.photoId);
     },
     onError: (error) => {
       console.error('Failed to delete photo:', error);

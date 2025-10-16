@@ -1,4 +1,4 @@
-import { Activity, useState } from 'react';
+import { Activity, useEffect, useState } from 'react';
 import {
   MdArrowBackIosNew,
   MdArrowForwardIos,
@@ -26,6 +26,7 @@ const GuestbookCardPage = () => {
   const [isOnboardingOpen, setIsOnboardingOpen] = useState(true);
   const [isPhotoModalOpen, setIsPhotoModalOpen] = useState(false);
   const [selectedPhotoIndex, setSelectedPhotoIndex] = useState(0);
+  const [localPhotoList, setLocalPhotoList] = useState<Photo[]>([]);
   const { spaceCode = '', guestbookCardId = '' } = useParams();
   const { guestbookCard } = useGuestbookCard({ spaceCode, guestbookCardId });
   const { guestbookList } = useGuestbookList({ spaceCode });
@@ -38,7 +39,12 @@ const GuestbookCardPage = () => {
     guestbookCard.createdAt,
   );
   const createdTimeDescription = `${year}년 ${month}월 ${day}일 ${hour}시 ${minute}분`;
-  const photoListLength = guestbookCard.photos.length;
+  const photoListLength = localPhotoList.length;
+
+  // guestbookCard.photos가 변경되면 localPhotoList를 업데이트
+  useEffect(() => {
+    setLocalPhotoList(guestbookCard.photos);
+  }, [guestbookCard.photos]);
 
   const handlePreviousCardMove = () => {
     if (prevGuestbookId === null) return;
@@ -59,9 +65,17 @@ const GuestbookCardPage = () => {
   };
 
   const handlePhotoClick = (photo: Photo) => {
-    const photoIndex = guestbookCard.photos.findIndex((p) => p.id === photo.id);
+    const photoIndex = localPhotoList.findIndex((p) => p.id === photo.id);
     setSelectedPhotoIndex(photoIndex);
     setIsPhotoModalOpen(true);
+  };
+
+  const handlePhotoDelete = (photoId: number) => {
+    setLocalPhotoList((prev) => prev.filter((photo) => photo.id !== photoId));
+
+    if (localPhotoList.length === 1) {
+      setIsPhotoModalOpen(false);
+    }
   };
 
   return (
@@ -75,11 +89,12 @@ const GuestbookCardPage = () => {
       <Activity mode={isPhotoModalOpen ? 'visible' : 'hidden'}>
         <PhotoModal
           isOpen={isPhotoModalOpen}
-          photoList={guestbookCard.photos}
+          photoList={localPhotoList}
           initialPhotoIndex={selectedPhotoIndex}
           spaceCode={spaceCode}
           guestbookCardId={guestbookCardId}
           onClose={handlePhotoModalClose}
+          onDelete={handlePhotoDelete}
         />
       </Activity>
       <S.Wrapper>
@@ -124,7 +139,7 @@ const GuestbookCardPage = () => {
         {photoListLength > 0 && (
           <S.PhotoSection>
             <PhotoGrid
-              photoList={guestbookCard.photos}
+              photoList={localPhotoList}
               onPhotoClick={handlePhotoClick}
             />
             <Button
