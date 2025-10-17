@@ -35,11 +35,10 @@ const PhotoPreviewButton = ({
   const isPhotoExist = !!previewFile[0]?.previewUrl || !!originalSrc;
 
   const deletePhoto = () => {
+    clearFiles();
     if (originalSrc) {
       deleteImage();
     }
-    // TODO : 성공시 아래 로직 실행
-    clearFiles();
   };
 
   return (
