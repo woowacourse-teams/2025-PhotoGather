@@ -132,6 +132,7 @@ const WorkForm = () => {
               maxCount={CONSTRAINTS.MAX_LENGTH.WORK.CATEGORY}
               placeholder="카테고리를 입력하세요"
               validLength={calculateValidLength(watch('category'))}
+              errorMessage={errors.category?.message}
             />
           </S.FormLabelContainer>
 
@@ -144,6 +145,7 @@ const WorkForm = () => {
               maxCount={CONSTRAINTS.MAX_LENGTH.WORK.DESIGNER}
               validLength={calculateValidLength(watch('designer'))}
               placeholder="작가명을 입력하세요"
+              errorMessage={errors.designer?.message}
             />
           </S.FormLabelContainer>
 
@@ -158,6 +160,7 @@ const WorkForm = () => {
               placeholder="작품 설명을 입력하세요"
               rows={6}
               validLength={calculateValidLength(watch('description'))}
+              errorMessage={errors.description?.message}
             />
           </S.FormLabelContainer>
 

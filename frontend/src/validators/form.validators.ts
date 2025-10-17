@@ -1,7 +1,7 @@
 import { calculateValidLength } from '../utils/grapheme';
 
 export const checkInputEmpty = (value: string) => {
-  if (value.length === 0) {
+  if (value.trim() === '' || value.length === 0) {
     throw new Error('필수 항목입니다.');
   }
 };
