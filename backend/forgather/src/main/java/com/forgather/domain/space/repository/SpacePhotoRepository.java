@@ -15,6 +15,6 @@ public interface SpacePhotoRepository {
 
     default SpacePhoto getBySpaceOrEmpty(Space space) {
         return findBySpace(space)
-            .orElse(SpacePhoto.empty());
+            .orElse(SpacePhoto.empty(space));
     }
 }
