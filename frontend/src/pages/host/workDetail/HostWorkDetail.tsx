@@ -127,7 +127,7 @@ const HostWorkDetail = () => {
         </C.WorkContainer>
         <S.BottomSectionContainer>
           <Button
-            text="작품 소개 수정하기"
+            text="수정하기"
             onClick={() => navigate(createWorkEditRoute(spaceCode))}
           />
         </S.BottomSectionContainer>

@@ -215,8 +215,8 @@ const WorkForm = () => {
           <S.ButtonContainer>
             <Button
               type="submit"
-              text={isEditMode ? '작품 소개 수정하기' : '작품 소개 등록하기'}
-              variant="tertiary"
+              text={isEditMode ? '수정하기' : '등록하기'}
+              variant="fixed"
               disabled={!isAllValid}
             />
           </S.ButtonContainer>
