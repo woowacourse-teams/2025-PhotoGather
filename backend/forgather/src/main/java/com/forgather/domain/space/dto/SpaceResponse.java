@@ -33,7 +33,7 @@ public record SpaceResponse(
     @Schema(description = "스페이스 프로필 사진", example = """
         {
             "isExists": true,
-            "path": "forgather/1234567890/profile.png"
+            "path": "photogather/v2/spaces/1234567890/space/profile.png"
         }
         """)
     SpacePhotoResponse spacePhoto,
