@@ -21,4 +21,5 @@ export const CONSTRAINTS = {
   NOT_ALLOWED_FILE_TYPES: ['image/gif', 'image/svg', 'image/svg+xml'],
   GUESTBOOK_PAGINATION_UNIT: 15,
   GUEST_BOOK_CARD_SWIPE_DISTANCE: 80,
+  MAX_COUNT_FOR_REFRESH: 3,
 } as const;

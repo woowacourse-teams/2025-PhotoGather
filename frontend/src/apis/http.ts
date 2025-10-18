@@ -1,7 +1,9 @@
 import type { ApiResponse, RequestOptions } from '../types/api.type';
+import { HttpError } from '../types/error.type';
 import { createQueryString } from '../utils/createQueryString';
 import { BASE_URL } from './config';
 import { matchBody, matchHeaders } from './helper';
+import { retryAuth } from './refresh';
 
 const request = async <T>(
   endpoint: string,
@@ -10,12 +12,34 @@ const request = async <T>(
   const { method, body, params, headers, token } = options;
   const url = `${BASE_URL}${endpoint}${createQueryString(params)}`;
 
-  try {
+  const doFetch = async () => {
     const response = await fetch(url, {
       method,
       headers: matchHeaders(body, headers ?? {}, token),
       body: matchBody(body),
     });
+    return response;
+  };
+
+  try {
+    let response = await doFetch();
+
+    if (response.status === 401) {
+      try {
+        response = await retryAuth(doFetch);
+      } catch (error) {
+        if (error instanceof HttpError) {
+          return {
+            success: false,
+            error: {
+              type: 'http',
+              status: error.status,
+              message: error.message,
+            },
+          };
+        }
+      }
+    }
 
     const text = await response.text();
     const data = text ? JSON.parse(text) : null;

@@ -9,7 +9,7 @@ import SpaceCard from '../../../components/specific/spaceCard/SpaceCard';
 import { ROUTES } from '../../../constants/routes';
 import { UserContext } from '../../../contexts/UserContext';
 import useSpacesDisplay from '../../../hooks/domain/useSpacesDisplay';
-import { MyPageMockData, SpaceMockData } from '../../mockData';
+import { SpaceMockData } from '../../mockData';
 import * as S from './MyPage.styles';
 
 const MyPage = () => {
