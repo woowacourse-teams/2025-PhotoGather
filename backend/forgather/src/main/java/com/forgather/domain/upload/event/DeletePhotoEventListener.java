@@ -11,7 +11,6 @@ import com.forgather.domain.upload.reposistory.DeletionFailLogRepository;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import software.amazon.awssdk.core.exception.SdkException;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -28,10 +27,6 @@ public class DeletePhotoEventListener {
      * AFTER_COMMIT으로 이벤트 발행부의 트랜잭션이 커밋된 후 동작합니다.
      * 비동기로 별도 스레드에서 실행되며 기존 트랜잭션 컨텍스트를 공유하지 않습니다.
      * <p>
-     * contentStorage.deletePhotos는 아래 예외를 던짐
-     * - SdkException(모든 예외)
-     * - SdkClientException(우리 서버 측에서 발생한 예외)
-     * - SdkServiceException(s3 서버 측에서 발생한 예외)
      */
     @Async
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
@@ -40,7 +35,7 @@ public class DeletePhotoEventListener {
         try {
             contentsStorage.deletePhotos(event.getPhotos());
             log.info("저장소 사진 삭제 완료 - 대상: {}개", event.getPhotos().size());
-        } catch (SdkException e) {
+        } catch (Exception e) {
             log.warn("저장소 사진 삭제 실패 - 대상: {}개", event.getPhotos().size(), e);
             retry(event, 1);
         }
@@ -58,13 +53,13 @@ public class DeletePhotoEventListener {
             log.info("저장소 사진 삭제 재시도 ({}/{}회) - 대상: {}개", retryCount, MAX_RETRY_COUNT, event.getPhotos().size());
             contentsStorage.deletePhotos(event.getPhotos());
             log.info("저장소 사진 삭제 재시도 성공 ({}/{}회) - 대상: {}개", retryCount, MAX_RETRY_COUNT, event.getPhotos().size());
-        } catch (SdkException e) {
-            log.warn("저장소 사진 삭제 재시도 실패 ({}/{}회) - 대상: {}개", retryCount, MAX_RETRY_COUNT, event.getPhotos().size(), e);
-            retry(event, retryCount + 1);
         } catch (InterruptedException e) { // Thread.sleep 중 인터럽트 발생 시
             log.warn("저장소 사진 삭제 재시도 중 인터럽트 발생 - 대상: {}개", event.getPhotos().size(), e);
             saveFailLog(event);
             Thread.currentThread().interrupt();
+        } catch (Exception e) {
+            log.warn("저장소 사진 삭제 재시도 실패 ({}/{}회) - 대상: {}개", retryCount, MAX_RETRY_COUNT, event.getPhotos().size(), e);
+            retry(event, retryCount + 1);
         }
     }
 
