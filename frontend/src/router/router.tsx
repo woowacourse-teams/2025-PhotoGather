@@ -1,5 +1,6 @@
 import { createBrowserRouter } from 'react-router-dom';
 import Layout from '../components/layout/global/layout/Layout';
+import KakaoAuthPage from '../pages/auth/KakaoAuthPage';
 import CompletePage from '../pages/guest/completePage/CompletePage';
 import GuestBookFunnel from '../pages/guest/guestbookPage/funnel/GuestbookFunnel';
 import GuestMainPage from '../pages/guest/mainpage/GuestMainPage';
@@ -14,6 +15,7 @@ import SpaceEditPage from '../pages/host/spaceEditPage/SpaceEditPage';
 import SpaceInfoPage from '../pages/host/spaceInfoPage/SpaceInfoPage';
 import HostWorkDetail from '../pages/host/workDetail/HostWorkDetail';
 import WorkForm from '../pages/host/workForm/WorkForm';
+import LoginPage from '../pages/login/LoginPage';
 import MainPage from '../pages/MainPage';
 import type { AppRouteObject } from '../types/route.type';
 
@@ -25,6 +27,14 @@ const routes: AppRouteObject[] = [
       {
         path: '/',
         element: <MainPage />,
+      },
+      {
+        path: '/login',
+        element: <LoginPage />,
+      },
+      {
+        path: '/auth/login/kakao',
+        element: <KakaoAuthPage />,
       },
       {
         path: 'host',
