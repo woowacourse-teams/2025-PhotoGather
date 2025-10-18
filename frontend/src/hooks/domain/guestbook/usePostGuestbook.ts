@@ -1,3 +1,4 @@
+import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { guestbookService } from '../../../apis/services/guestbook/guestbook.service';
 import { ROUTES } from '../../../constants/routes';
@@ -53,9 +54,9 @@ const usePostGuestbook = ({
     };
   };
 
-  const submitForm = async (photos: LocalFile[]) => {
-    console.log(photos);
-    try {
+  const mutation = useMutation({
+    mutationFn: async (photos: LocalFile[]) => {
+      console.log(photos);
       const form = await createGuestbookForm(photos);
       const result = await guestbookService.createGuestbook(
         spaceCode ?? '',
@@ -66,21 +67,26 @@ const usePostGuestbook = ({
         throw new Error('createGuestbook is failed');
       }
 
+      return { photos };
+    },
+    onSuccess: (data) => {
       navigate(ROUTES.GUEST.CREATE_GUESTBOOK_COMPLETE, {
         state: {
           receiver: receiver,
           guestNickName: formData.nickname,
         },
       });
-      clearFiles(photos);
-    } catch (error) {
+      clearFiles(data.photos);
+    },
+    onError: (error) => {
       console.error(error);
       showToast({ text: '전송에 실패했습니다.', type: 'error' });
-    }
-  };
+    },
+  });
 
   return {
-    submitForm,
+    submitForm: mutation.mutate,
+    isLoading: mutation.isPending,
   };
 };
 

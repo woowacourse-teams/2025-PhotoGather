@@ -63,6 +63,7 @@ const PhotoUploadButton = ({
         onChange={handleChange}
         accept="image/*"
         disabled={disabled}
+        style={{ display: 'none' }}
       />
     </S.Wrapper>
   );
