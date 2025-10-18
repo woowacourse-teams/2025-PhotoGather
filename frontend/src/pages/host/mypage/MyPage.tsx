@@ -1,3 +1,4 @@
+import { useContext } from 'react';
 import { IoAddOutline } from 'react-icons/io5';
 import { useNavigate } from 'react-router-dom';
 import Dropdown, {
@@ -6,13 +7,14 @@ import Dropdown, {
 import Thumbnail from '../../../components/@common/thumbnail/Thumbnail';
 import SpaceCard from '../../../components/specific/spaceCard/SpaceCard';
 import { ROUTES } from '../../../constants/routes';
+import { UserContext } from '../../../contexts/UserContext';
 import useSpacesDisplay from '../../../hooks/domain/useSpacesDisplay';
 import { MyPageMockData, SpaceMockData } from '../../mockData';
 import * as S from './MyPage.styles';
 
 const MyPage = () => {
   const navigate = useNavigate();
-
+  const userInfo = useContext(UserContext);
   const { displaySpaces, changeSortType, sortType } = useSpacesDisplay({
     mySpaces: SpaceMockData.spaces,
   });
@@ -27,9 +29,9 @@ const MyPage = () => {
   return (
     <S.Wrapper>
       <S.ProfileContainer>
-        <Thumbnail src={MyPageMockData.img} alt={MyPageMockData.name} />
+        <Thumbnail src={userInfo?.pictureUrl ?? ''} alt={userInfo?.name} />
         <S.InfoContainer>
-          <S.NameContainer>{MyPageMockData.name}</S.NameContainer>
+          <S.NameContainer>{userInfo?.name}</S.NameContainer>
         </S.InfoContainer>
       </S.ProfileContainer>
       <S.CreateSpaceButton onClick={() => navigate(ROUTES.HOST.CREATE_SPACE)}>
@@ -62,7 +64,7 @@ const MyPage = () => {
 
           {displaySpaces.map((space) => (
             <SpaceCard
-              key={space.id}
+              key={space.createdAt}
               space={space}
               onClick={() => navigate('')}
             />

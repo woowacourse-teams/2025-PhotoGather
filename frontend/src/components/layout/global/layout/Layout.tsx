@@ -1,11 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { IoSettingsSharp, IoShareOutline } from 'react-icons/io5';
 import { Outlet, useMatches, useNavigate, useParams } from 'react-router-dom';
-import { authService } from '../../../../apis/services/auth/auth.service';
-import { AUTH_COOKIES } from '../../../../constants/cookie';
 import { createSpaceInfoRoute, ROUTES } from '../../../../constants/routes';
+import { UserProvider } from '../../../../contexts/UserContext';
 import type { AppRouteObject } from '../../../../types/route.type';
-import { CookieUtils } from '../../../../utils/cookie';
 import Footer from '../../../@common/footer/Footer';
 import Header from '../../../@common/header/Header';
 import ScrollToTop from '../../../@common/scrollToTop/ScrollToTop';
@@ -44,18 +42,8 @@ const Layout = () => {
   const isNoHeader = current?.handle?.noHeader;
   const isNoFooter = current?.handle?.noFooter;
 
-  useEffect(() => {
-    const token = CookieUtils.get(AUTH_COOKIES.ACCESS);
-    console.log(token);
-    if (token) {
-      authService.getUserInfo(token).then((response) => {
-        console.log(response);
-      });
-    }
-  }, []);
-
   return (
-    <>
+    <UserProvider>
       <ScrollToTop />
       {!isNoHeader && (
         <Header
@@ -69,7 +57,7 @@ const Layout = () => {
         <Outlet />
       </S.Container>
       {!isNoFooter && <Footer />}
-    </>
+    </UserProvider>
   );
 };
 

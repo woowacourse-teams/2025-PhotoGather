@@ -20,3 +20,10 @@ export interface AuthTokenResponse {
   accessToken: string;
   refreshToken: string;
 }
+
+export interface UserInfo {
+  id: number;
+  name: string;
+  pictureUrl: string;
+  agreedTerms: false;
+}
