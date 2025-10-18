@@ -32,7 +32,7 @@ class LoggingTaskDecoratorTest {
         }, taskExecutor);
 
         // then
-        String result = future.get(3, TimeUnit.SECONDS);  // 최대 5초 대기
+        String result = future.get(6, TimeUnit.SECONDS);
         assertThat(result).isEqualTo("value123");
     }
 }

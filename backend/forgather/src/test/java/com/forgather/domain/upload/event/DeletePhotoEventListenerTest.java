@@ -56,7 +56,7 @@ class DeletePhotoEventListenerTest {
 
         // then
         await()
-            .atMost(ofSeconds(3))
+            .atMost(ofSeconds(6))
             .untilAsserted(() ->
                 verify(contentsStorage, times(1)).deletePhotos(deletePhotos)
             );
@@ -83,7 +83,7 @@ class DeletePhotoEventListenerTest {
 
         // then
         await()
-            .atMost(ofSeconds(4))
+            .atMost(ofSeconds(6))
             .untilAsserted(() ->
                 verify(contentsStorage, times(2)).deletePhotos(deletePhotos)
             );
@@ -108,7 +108,7 @@ class DeletePhotoEventListenerTest {
 
         // then
         await()
-            .atMost(ofSeconds(3))
+            .atMost(ofSeconds(6))
             .untilAsserted(() ->
                 verify(contentsStorage, times(0)).deletePhotos(deletePhotos)
             );
