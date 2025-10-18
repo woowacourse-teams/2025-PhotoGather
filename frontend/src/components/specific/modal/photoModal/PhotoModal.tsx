@@ -135,7 +135,6 @@ const PhotoModal = ({
           imageInfo={imageInfo}
           updateCurrentIndex={setCurrentIndex}
           actions={actions}
-          size="large"
         />
       </S.Wrapper>
     </Modal>
