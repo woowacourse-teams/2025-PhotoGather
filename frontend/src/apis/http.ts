@@ -7,13 +7,13 @@ const request = async <T>(
   endpoint: string,
   options: RequestOptions,
 ): Promise<ApiResponse<T>> => {
-  const { method, body, params, headers } = options;
+  const { method, body, params, headers, token } = options;
   const url = `${BASE_URL}${endpoint}${createQueryString(params)}`;
 
   try {
     const response = await fetch(url, {
       method,
-      headers: matchHeaders(body, headers ?? {}),
+      headers: matchHeaders(body, headers ?? {}, token),
       body: matchBody(body),
     });
 
@@ -47,18 +47,21 @@ const request = async <T>(
 };
 
 export const http = {
-  get: <T>(endpoint: string, params?: Record<string, unknown>) =>
-    request<T>(endpoint, { method: 'GET', params }),
+  get: <T>(
+    endpoint: string,
+    params?: Record<string, unknown>,
+    token?: string,
+  ) => request<T>(endpoint, { method: 'GET', params, token }),
 
-  post: <T>(endpoint: string, body?: unknown) =>
-    request<T>(endpoint, { method: 'POST', body }),
+  post: <T>(endpoint: string, body?: unknown, token?: string) =>
+    request<T>(endpoint, { method: 'POST', body, token }),
 
-  put: <T>(endpoint: string, body?: unknown) =>
-    request<T>(endpoint, { method: 'PUT', body }),
+  put: <T>(endpoint: string, body?: unknown, token?: string) =>
+    request<T>(endpoint, { method: 'PUT', body, token }),
 
-  patch: <T>(endpoint: string, body?: unknown) =>
-    request<T>(endpoint, { method: 'PATCH', body }),
+  patch: <T>(endpoint: string, body?: unknown, token?: string) =>
+    request<T>(endpoint, { method: 'PATCH', body, token }),
 
-  delete: <T>(endpoint: string, body?: unknown) =>
-    request<T>(endpoint, { method: 'DELETE', body }),
+  delete: <T>(endpoint: string, body?: unknown, token?: string) =>
+    request<T>(endpoint, { method: 'DELETE', body, token }),
 };

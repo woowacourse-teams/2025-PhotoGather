@@ -5,6 +5,7 @@ export interface RequestOptions {
   headers?: Record<string, string>;
   body?: unknown;
   params?: Record<string, unknown>;
+  token?: string;
 }
 
 export type ApiResponse<T> =
