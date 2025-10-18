@@ -59,7 +59,6 @@ const GuestbookCardPage = () => {
     navigate(createGuestbookRoute(spaceCode));
   };
 
-  // guestbookCard.photos가 변경되면 localPhotoList를 업데이트
   useEffect(() => {
     setLocalPhotoList(guestbookCard.photos);
   }, [guestbookCard.photos]);
@@ -131,22 +130,20 @@ const GuestbookCardPage = () => {
         isOpen={isOnboardingOpen}
         onClose={handleModalClose}
       />
+      <PhotoModal
+        isOpen={isPhotoModalOpen}
+        photoList={localPhotoList}
+        initialPhotoIndex={selectedPhotoIndex}
+        spaceCode={spaceCode}
+        guestbookCardId={guestbookCardId}
+        onClose={handlePhotoModalClose}
+        onDelete={handlePhotoDelete}
+      />
       <S.Wrapper
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
         onTouchCancel={handleTouchCancel}
       >
-        <Activity mode={isPhotoModalOpen ? 'visible' : 'hidden'}>
-          <PhotoModal
-            isOpen={isPhotoModalOpen}
-            photoList={localPhotoList}
-            initialPhotoIndex={selectedPhotoIndex}
-            spaceCode={spaceCode}
-            guestbookCardId={guestbookCardId}
-            onClose={handlePhotoModalClose}
-            onDelete={handlePhotoDelete}
-          />
-        </Activity>
         <S.DeleteButtonContainer>
           <Button
             type="button"

@@ -12,9 +12,10 @@ export const buildThumbnailUrl = ({
   replacePath = 'product',
   preset = '800',
 }: BuildThumbnailUrlProps): string => {
-  const lastDotIndex = path.lastIndexOf('.');
+  const parsedPath = path.replace(/^photogather\//, '');
+  const lastDotIndex = parsedPath.lastIndexOf('.');
   const pathWithoutExt =
-    lastDotIndex !== -1 ? path.substring(0, lastDotIndex) : path;
+    lastDotIndex !== -1 ? parsedPath.substring(0, lastDotIndex) : parsedPath;
 
   const thumbnailPath = pathWithoutExt.replace(
     `/${replacePath}/`,
@@ -22,5 +23,5 @@ export const buildThumbnailUrl = ({
   );
 
   const baseUrl = import.meta.env.VITE_IMAGE_BASE_URL || '';
-  return `${baseUrl}${thumbnailPath}_x${preset}.webp`;
+  return `${baseUrl}/${thumbnailPath}_x${preset}.webp`;
 };

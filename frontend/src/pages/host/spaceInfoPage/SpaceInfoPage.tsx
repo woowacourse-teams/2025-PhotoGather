@@ -7,6 +7,7 @@ import InfoRow from '../../../components/specific/infoRow/InfoRow';
 import { createSpaceInfoEditRoute } from '../../../constants/routes';
 import useSpaceDelete from '../../../hooks/domain/space/useSpaceDelete';
 import useSpaceInfo from '../../../hooks/domain/space/useSpaceInfo';
+import { buildImageUrl } from '../../../utils/buildImageUrl';
 import * as S from './SpaceInfoPage.styles';
 
 const SpaceInfoPage = () => {
@@ -30,6 +31,8 @@ const SpaceInfoPage = () => {
     spaceCode: spaceCode ?? '',
   });
 
+  console.log(spaceInfo);
+
   return (
     <S.Wrapper>
       <DeleteModal
@@ -39,9 +42,7 @@ const SpaceInfoPage = () => {
         buttonDisabled={isPending}
       />
       <S.Title>스페이스 정보</S.Title>
-      <Thumbnail
-        src={`${import.meta.env.VITE_IMAGE_BASE_URL}${spaceInfo?.spacePhoto.path}`}
-      />
+      <Thumbnail src={buildImageUrl(spaceInfo.spacePhoto.path)} />
       <S.InfoRowContainer>
         <InfoRow label="스페이스 이름" value={spaceInfo.name} />
         <InfoRow

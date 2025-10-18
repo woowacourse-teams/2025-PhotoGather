@@ -1,10 +1,11 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { MdDeleteOutline, MdDownload } from 'react-icons/md';
 import { guestbookService } from '../../../../apis/services/guestbook/guestbook.service';
 import { useToast } from '../../../../hooks/@common/useToast';
 import { theme } from '../../../../styles/theme';
 import type { Photo } from '../../../../types/photo.type';
+import { buildImageUrl } from '../../../../utils/buildImageUrl';
 import { buildThumbnailUrl } from '../../../../utils/buildThumbnailUrl';
 import { downloadByAnchor, saveImage } from '../../../../utils/saveImage';
 import Modal from '../../../@common/modal/Modal';
@@ -34,7 +35,12 @@ const PhotoModal = ({
   const queryClient = useQueryClient();
   const { showToast } = useToast();
 
-  // TODO: 타입 수정 필요
+  useEffect(() => {
+    if (isOpen) {
+      setCurrentIndex(initialPhotoIndex);
+    }
+  }, [isOpen, initialPhotoIndex]);
+
   const imageInfo = photoList.map((photo) => ({
     id: photo.id,
     originFile: new File([], photo.originalName),
@@ -73,7 +79,7 @@ const PhotoModal = ({
 
   const downloadMutation = useMutation({
     mutationFn: async (photo: Photo) => {
-      const response = await fetch(photo.path);
+      const response = await fetch(buildImageUrl(photo.path));
       const blob = await response.blob();
 
       const isMobile = /Mobi|Android|iPhone|iPad|iPod/i.test(
