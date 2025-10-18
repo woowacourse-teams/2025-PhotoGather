@@ -65,11 +65,19 @@ const GuestbookCardPage = () => {
   }, [guestbookCard.photos]);
 
   const handlePreviousCardMove = () => {
+    const { prevId: prevGuestbookId } = calculatePrevNextId(
+      guestbookCardIdList,
+      guestbookCard.id,
+    );
     if (prevGuestbookId === null) return;
     navigate(createGuestbookCardRoute(spaceCode, prevGuestbookId));
   };
 
   const handleNextCardMove = () => {
+    const { nextId: nextGuestbookId } = calculatePrevNextId(
+      guestbookCardIdList,
+      guestbookCard.id,
+    );
     if (nextGuestbookId === null) return;
     navigate(createGuestbookCardRoute(spaceCode, nextGuestbookId));
   };
@@ -97,6 +105,10 @@ const GuestbookCardPage = () => {
   };
 
   const handleDelete = async () => {
+    const { prevId: prevGuestbookId } = calculatePrevNextId(
+      guestbookCardIdList,
+      guestbookCard.id,
+    );
     await mutateAsync();
     setIsDeleteModalOpen(false);
     if (prevGuestbookId === null) navigate(createGuestbookRoute(spaceCode));
