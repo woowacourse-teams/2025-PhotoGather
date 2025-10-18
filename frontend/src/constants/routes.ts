@@ -1,5 +1,8 @@
 export const ROUTES = {
   MAIN: '/',
+  AUTH: {
+    KAKAO: '/auth/login/kakao',
+  },
   HOST: {
     MY_PAGE: '/host/my-page',
     CREATE_SPACE: '/host/create-space',
@@ -49,3 +52,13 @@ export const createGuestbookCardRoute = (
 ) => {
   return `/host/${spaceCode}/guestbook/${guestbookCardId}`;
 };
+
+export const createGetKakaoCodeUrl = (clientId: string, redirectUri: string) =>
+  `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${clientId}&redirect_uri=${redirectUri}`;
+
+export const createGetKakaoTokenRequestUrl = (
+  clientId: string,
+  redirectUri: string,
+  code: string,
+) =>
+  `https://kauth.kakao.com/oauth/token?grant_type=authorization_code&client_id=${clientId}&redirect_uri=${redirectUri}&code=${code}`;
