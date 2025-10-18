@@ -54,7 +54,6 @@ const usePostGuestbook = ({
   };
 
   const submitForm = async (photos: LocalFile[]) => {
-    console.log(photos);
     try {
       const form = await createGuestbookForm(photos);
       const result = await guestbookService.createGuestbook(
