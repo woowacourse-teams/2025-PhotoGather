@@ -94,7 +94,9 @@ const EditForm = () => {
   return (
     <S.Form onSubmit={handleSubmit(onSubmit)}>
       <PhotoPreviewButton
-        originalSrc={watch('isDeletePhoto') ? undefined : spaceInfo?.spacePhoto.path}
+        originalSrc={
+          watch('isDeletePhoto') ? undefined : spaceInfo?.spacePhoto.path
+        }
         previewFile={previewFile}
         uploadImage={handleFilesUploadClick}
         clearFiles={() => clearFiles(localFiles)}

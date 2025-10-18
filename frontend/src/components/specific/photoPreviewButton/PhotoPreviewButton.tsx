@@ -4,6 +4,7 @@ import defaultImage from '../../../@assets/images/default-image.png';
 import { Thumbnail } from '../../../pages/MainPage.common.styles';
 import * as C from '../../../styles/@common/PhotoInput.styles';
 import type { PreviewFile } from '../../../types/file.type';
+import { buildImageUrl } from '../../../utils/buildImageUrl';
 import { createImageErrorHandler } from '../../../utils/createImageErrorHandler';
 import { handleKeyboardClick } from '../../../utils/keyboard';
 import * as S from './PhotoPreviewButton.styles';
@@ -27,7 +28,7 @@ const PhotoPreviewButton = ({
   const fileInputId = useId();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const originalImagePath = `${import.meta.env.VITE_IMAGE_BASE_URL}${originalSrc}`;
+  const originalImagePath = buildImageUrl(originalSrc || '');
 
   const matchThumbnailImage = () =>
     previewFile[0]?.previewUrl || originalImagePath || defaultImage;
