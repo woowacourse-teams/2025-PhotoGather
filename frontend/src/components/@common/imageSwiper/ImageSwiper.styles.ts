@@ -31,7 +31,7 @@ export const ImageSwiperContainer = styled.div<{
     position: relative;
   }
   & .swiper-slide {
-   max-width: 80%;
+    max-width: 80%;
     height: auto;
     display: flex;
     justify-content: center;

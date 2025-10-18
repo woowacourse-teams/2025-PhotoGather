@@ -3,7 +3,6 @@ import {
   MdArrowBack,
   MdArrowBackIosNew,
   MdArrowForwardIos,
-  MdOutlinePhoto,
 } from 'react-icons/md';
 import { useNavigate, useParams } from 'react-router-dom';
 import Button from '../../../../components/@common/buttons/button/Button';
@@ -11,7 +10,6 @@ import IconButton from '../../../../components/@common/buttons/iconButton/IconBu
 import Line from '../../../../components/@common/line/Line';
 import DeleteModal from '../../../../components/@common/modal/deleteModal/DeleteModal';
 import PhotoModal from '../../../../components/specific/modal/photoModal/PhotoModal';
-import PhotoGrid from '../../../../components/specific/photoGrid/PhotoGrid';
 import {
   createGuestbookCardRoute,
   createGuestbookRoute,
@@ -24,6 +22,9 @@ import type { Photo } from '../../../../types/photo.type';
 import { calculatePrevNextId } from '../../../../utils/calculatePrevNextIndex';
 import { parseTimestamp } from '../../../../utils/parseTimestamp';
 import * as S from './GuestbookCardPage.styles';
+import GuestbookCardInfoSection from './sections/GuestbookCardInfoSection';
+import GuestbookCardMessageSection from './sections/GuestbookCardMessageSection';
+import GuestbookCardPhotoSection from './sections/GuestbookCardPhotoSection';
 
 const GuestbookCardPage = () => {
   const navigate = useNavigate();
@@ -32,7 +33,8 @@ const GuestbookCardPage = () => {
   const [selectedPhotoIndex, setSelectedPhotoIndex] = useState(0);
   const [localPhotoList, setLocalPhotoList] = useState<Photo[]>([]);
   const { spaceCode = '', guestbookCardId = '' } = useParams();
-  const { guestbookCard } = useGuestbookCard({ spaceCode, guestbookCardId });
+  const { guestbookCard, isFetching: isGuestbookCardFetching } =
+    useGuestbookCard({ spaceCode, guestbookCardId });
   const { guestbookList, fetchNextPage } = useGuestbookList(spaceCode);
   const { mutateAsync, isPending } = useGuestbookDelete(
     spaceCode,
@@ -154,18 +156,12 @@ const GuestbookCardPage = () => {
             }}
           />
         </S.DeleteButtonContainer>
-        <S.InfoSection>
-          <S.InfoTitle>"{guestbookCard.nickname}"의 방명록</S.InfoTitle>
-          <S.InfoDescription>{createdTimeDescription}</S.InfoDescription>
-          <S.IconInfoContainer>
-            {photoListLength > 0 && (
-              <>
-                <MdOutlinePhoto />
-                <p>{photoListLength}</p>
-              </>
-            )}
-          </S.IconInfoContainer>
-        </S.InfoSection>
+        <GuestbookCardInfoSection
+          guestbookCard={guestbookCard}
+          photoListLength={photoListLength}
+          createdTimeDescription={createdTimeDescription}
+          isGuestbookCardFetching={isGuestbookCardFetching}
+        />
         <Line
           leftElement={
             prevGuestbookId && (
@@ -188,23 +184,15 @@ const GuestbookCardPage = () => {
             )
           }
         />
-        <S.MessageSection>
-          <S.Message>{guestbookCard.message}</S.Message>
-        </S.MessageSection>
-        {photoListLength > 0 && (
-          <S.PhotoSection>
-            <PhotoGrid
-              photoList={localPhotoList}
-              onPhotoClick={handlePhotoClick}
-            />
-            <Button
-              type="button"
-              variant="secondary"
-              text="사진 전체 다운로드"
-              style={{ border: 'none' }}
-            />
-          </S.PhotoSection>
-        )}
+        <GuestbookCardMessageSection
+          guestbookCard={guestbookCard}
+          isGuestbookCardFetching={isGuestbookCardFetching}
+        />
+        <GuestbookCardPhotoSection
+          photoList={localPhotoList}
+          onPhotoClick={handlePhotoClick}
+          isGuestbookCardFetching={isGuestbookCardFetching}
+        />
         <Line width={192} />
       </S.Wrapper>
     </>

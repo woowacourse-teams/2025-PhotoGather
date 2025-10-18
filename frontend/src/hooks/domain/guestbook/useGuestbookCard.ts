@@ -20,7 +20,7 @@ const useGuestbookCard = ({
 
   const initialData: GuestbookCard = {
     id: 0,
-    nickname: '     ',
+    nickname: '',
     message: '',
     createdAt: '2000-00-00T00:00:00.000Z',
     photos: [],
@@ -28,7 +28,7 @@ const useGuestbookCard = ({
 
   const {
     data: guestbookCard,
-    isLoading,
+    isFetching,
     isError,
   } = useQuery({
     initialData,
@@ -53,7 +53,7 @@ const useGuestbookCard = ({
     }
   }, [isError]);
 
-  return { guestbookCard, isLoading, isError };
+  return { guestbookCard, isFetching, isError };
 };
 
 export default useGuestbookCard;
