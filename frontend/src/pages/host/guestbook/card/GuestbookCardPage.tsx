@@ -210,9 +210,8 @@ const GuestbookCardPage = () => {
             />
             <Button
               type="button"
-              variant="secondary"
+              variant="tertiary"
               text="사진 전체 다운로드"
-              style={{ border: 'none' }}
             />
           </S.PhotoSection>
         )}
