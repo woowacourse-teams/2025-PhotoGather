@@ -4,22 +4,18 @@ import {
   MdArrowBackIosNew,
   MdArrowForwardIos,
   MdOutlinePhoto,
-  MdSwipe,
 } from 'react-icons/md';
 import { useNavigate, useParams } from 'react-router-dom';
 import Button from '../../../../components/@common/buttons/button/Button';
 import IconButton from '../../../../components/@common/buttons/iconButton/IconButton';
 import Line from '../../../../components/@common/line/Line';
 import DeleteModal from '../../../../components/@common/modal/deleteModal/DeleteModal';
-import OnBoardingModal from '../../../../components/specific/modal/onBoardingModal/OnBoardingModal';
 import PhotoModal from '../../../../components/specific/modal/photoModal/PhotoModal';
 import PhotoGrid from '../../../../components/specific/photoGrid/PhotoGrid';
-import { CONSTRAINTS } from '../../../../constants/constraints';
 import {
   createGuestbookCardRoute,
   createGuestbookRoute,
 } from '../../../../constants/routes';
-import useSwipeElement from '../../../../hooks/@common/useSwipeElement';
 import useGuestbookCard from '../../../../hooks/domain/guestbook/useGuestbookCard';
 import useGuestbookDelete from '../../../../hooks/domain/guestbook/useGuestbookDelete';
 import useGuestbookList from '../../../../hooks/domain/guestbook/useGuestbookList';
@@ -32,7 +28,6 @@ import * as S from './GuestbookCardPage.styles';
 const GuestbookCardPage = () => {
   const navigate = useNavigate();
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [isOnboardingOpen, setIsOnboardingOpen] = useState(true);
   const [isPhotoModalOpen, setIsPhotoModalOpen] = useState(false);
   const [selectedPhotoIndex, setSelectedPhotoIndex] = useState(0);
   const [localPhotoList, setLocalPhotoList] = useState<Photo[]>([]);
@@ -82,10 +77,6 @@ const GuestbookCardPage = () => {
     navigate(createGuestbookCardRoute(spaceCode, nextGuestbookId));
   };
 
-  const handleModalClose = () => {
-    setIsOnboardingOpen((prev) => !prev);
-  };
-
   const handlePhotoModalClose = () => {
     setIsPhotoModalOpen(false);
   };
@@ -115,13 +106,6 @@ const GuestbookCardPage = () => {
     else navigate(createGuestbookCardRoute(spaceCode, prevGuestbookId));
   };
 
-  const { handleTouchStart, handleTouchEnd, handleTouchCancel } =
-    useSwipeElement({
-      onLeftToRight: handlePreviousCardMove,
-      onRightToLeft: handleNextCardMove,
-      swipeDistance: CONSTRAINTS.GUEST_BOOK_CARD_SWIPE_DISTANCE,
-    });
-
   // biome-ignore lint/correctness/useExhaustiveDependencies: currentIdIndex에만 의존
   useEffect(() => {
     if (guestbookList.length - currentIdIndex <= 3) fetchNextPage();
@@ -137,17 +121,7 @@ const GuestbookCardPage = () => {
         onDelete={handleDelete}
         buttonDisabled={isPending}
       />
-      <OnBoardingModal
-        text={'스와이프하여 다음 방명록으로 이동'}
-        icon={<MdSwipe />}
-        isOpen={isOnboardingOpen}
-        onClose={handleModalClose}
-      />
-      <S.Wrapper
-        onTouchStart={handleTouchStart}
-        onTouchEnd={handleTouchEnd}
-        onTouchCancel={handleTouchCancel}
-      >
+      <S.Wrapper>
         <Activity mode={isPhotoModalOpen ? 'visible' : 'hidden'}>
           <PhotoModal
             isOpen={isPhotoModalOpen}
