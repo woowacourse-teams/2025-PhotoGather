@@ -76,15 +76,15 @@ export const http = {
     token?: string | undefined,
   ) => request<T>(endpoint, { method: 'GET', params, token }),
 
-  post: <T>(endpoint: string, body?: unknown, token?: string | undefined) =>
+  post: <T>(endpoint: string, body?: unknown, token?: string) =>
     request<T>(endpoint, { method: 'POST', body, token }),
 
-  put: <T>(endpoint: string, body?: unknown, token?: string | undefined) =>
+  put: <T>(endpoint: string, body?: unknown, token?: string) =>
     request<T>(endpoint, { method: 'PUT', body, token }),
 
-  patch: <T>(endpoint: string, body?: unknown, token?: string | undefined) =>
+  patch: <T>(endpoint: string, body?: unknown, token?: string) =>
     request<T>(endpoint, { method: 'PATCH', body, token }),
 
-  delete: <T>(endpoint: string, body?: unknown, token?: string | undefined) =>
+  delete: <T>(endpoint: string, body?: unknown, token?: string) =>
     request<T>(endpoint, { method: 'DELETE', body, token }),
 };
