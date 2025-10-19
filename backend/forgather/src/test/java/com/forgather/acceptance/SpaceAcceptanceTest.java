@@ -35,6 +35,7 @@ import com.forgather.domain.space.repository.SpaceRepository;
 import com.forgather.domain.upload.domain.ContentsStorage;
 import com.forgather.fixture.GuestBookCardFixture;
 import com.forgather.fixture.GuestFixture;
+import com.forgather.fixture.HostFixture;
 import com.forgather.fixture.SpaceFixture;
 import com.forgather.fixture.SpacePhotoFixture;
 import com.forgather.global.auth.model.Host;
@@ -92,7 +93,7 @@ class SpaceAcceptanceTest extends AcceptanceTest {
         token = jwtTokenProvider.generateAccessToken(host.getId());
     }
 
-    @DisplayName("Space를 생성한다.")
+    @DisplayName("스페이스를 생성한다.")
     @Test
     void createSpace() throws Exception {
         // given
@@ -125,7 +126,7 @@ class SpaceAcceptanceTest extends AcceptanceTest {
         assertThat(response.spaceCode()).isNotEmpty();
     }
 
-    @DisplayName("스페이스 사진이 없는 Space를 생성한다.")
+    @DisplayName("스페이스 사진이 없는 스페이스를 생성한다.")
     @Test
     void createSpaceWithoutFile() throws Exception {
         // given
@@ -149,6 +150,28 @@ class SpaceAcceptanceTest extends AcceptanceTest {
 
         // then
         assertThat(response.spaceCode()).isNotEmpty();
+    }
+
+    @DisplayName("스페이스를 생성하려면 로그인이 필요하다.")
+    @Test
+    void createSpaceWithoutLogin() throws Exception {
+        // given
+        String request = objectMapper.writeValueAsString(
+            new CreateSpaceRequest("test-space", "description", false, "forgather_official",
+                "forgather@forgather.me")
+        );
+
+        // when
+        var response = RestAssuredMockMvc.given()
+            .multiPart("request", request, "application/json")
+            .sessionAttr("host_id", host.getId())
+            .when()
+            .post("/spaces")
+            .then()
+            .extract();
+
+        // then
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.UNAUTHORIZED.value());
     }
 
     @DisplayName("스페이스를 상세 조회한다.")
@@ -204,6 +227,47 @@ class SpaceAcceptanceTest extends AcceptanceTest {
             () -> assertThat(spaceRepository.findByCode(space.getCode())).isEmpty(),
             () -> assertThat(spacePhotoRepository.findBySpace(space)).isEmpty()
         );
+    }
+
+    @DisplayName("로그인 없이 스페이스를 삭제할 수 없다.")
+    @Test
+    void deleteSpaceWithoutLogin() {
+        // given
+        Space space = spaceRepository.save(SpaceFixture.createSpace());
+        spacePhotoRepository.save(SpacePhotoFixture.createSpacePhotoWithSpace(space));
+        spaceHostMapRepository.save(new SpaceHostMap(space, host));
+
+        // when
+        var response = RestAssuredMockMvc.given()
+            .when()
+            .delete("/spaces/{spaceCode}", space.getCode())
+            .then()
+            .extract();
+
+        // then
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.UNAUTHORIZED.value());
+    }
+
+    @DisplayName("스페이스의 호스트가 아니면 삭제할 수 없다.")
+    @Test
+    void deleteSpaceWithOtherHost() {
+        // given
+        Space space = spaceRepository.save(SpaceFixture.createSpace());
+        spacePhotoRepository.save(SpacePhotoFixture.createSpacePhotoWithSpace(space));
+        spaceHostMapRepository.save(new SpaceHostMap(space, host));
+        Host otherHost = hostRepository.save(createHost());
+        String otherToken = jwtTokenProvider.generateAccessToken(otherHost.getId());
+
+        // when
+        var response = RestAssuredMockMvc.given()
+            .header("Authorization", "Bearer " + otherToken)
+            .when()
+            .delete("/spaces/{spaceCode}", space.getCode())
+            .then()
+            .extract();
+
+        // then
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.FORBIDDEN.value());
     }
 
     @DisplayName("스페이스를 수정한다.")
@@ -282,6 +346,57 @@ class SpaceAcceptanceTest extends AcceptanceTest {
             () -> assertThat(response.email()).isEqualTo("email@forgather.me"),
             () -> assertThat(response.spacePhoto().path()).isEqualTo("path")
         );
+    }
+
+    @DisplayName("로그인 없이 스페이스를 수정할 수 없다.")
+    @Test
+    void updateWithoutLogin() throws Exception {
+        // given
+        Space space = spaceRepository.save(SpaceFixture.createSpace());
+        spacePhotoRepository.save(SpacePhotoFixture.createSpacePhotoWithSpace(space));
+        spaceHostMapRepository.save(new SpaceHostMap(space, host));
+
+        String request = objectMapper.writeValueAsString(new UpdateSpaceRequest(
+            "새로운 스페이스", null, null, null, null, false)
+        );
+
+        // when
+        var response = RestAssuredMockMvc.given()
+            .multiPart("request", request, "application/json")
+            .when()
+            .patch("/spaces/{spaceCode}", space.getCode())
+            .then()
+            .extract();
+
+        // then
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.UNAUTHORIZED.value());
+    }
+
+    @DisplayName("스페이스의 호스트가 아니면 수정할 수 없다.")
+    @Test
+    void updateWithOtherHost() throws Exception {
+        // given
+        Space space = spaceRepository.save(SpaceFixture.createSpace());
+        spacePhotoRepository.save(SpacePhotoFixture.createSpacePhotoWithSpace(space));
+        spaceHostMapRepository.save(new SpaceHostMap(space, host));
+        Host otherHost = hostRepository.save(createHost());
+        String otherToken = jwtTokenProvider.generateAccessToken(otherHost.getId());
+
+        String request = objectMapper.writeValueAsString(new UpdateSpaceRequest(
+            "새로운 스페이스", null, null, null, null, false)
+        );
+
+        // when
+        var response = RestAssuredMockMvc.given()
+            .header("Authorization", "Bearer " + otherToken)
+            .multiPart("request", request, "application/json")
+            .when()
+            .patch("/spaces/{spaceCode}", space.getCode())
+            .then()
+            .extract();
+
+        // then
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.FORBIDDEN.value());
     }
 
     @DisplayName("나의 스페이스 목록을 조회한다.")
