@@ -30,6 +30,7 @@ public class AsyncConfig {
         taskExecutor.setTaskDecorator(new LoggingTaskDecorator());
         taskExecutor.setThreadNamePrefix("async-task-");
         taskExecutor.setThreadGroupName("async-group");
+        taskExecutor.initialize();
 
         return taskExecutor;
     }
