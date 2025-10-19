@@ -364,6 +364,40 @@ public class GuestBookCardAcceptanceTest extends AcceptanceTest {
                 .then()
                 .statusCode(200);
         }
+
+        @DisplayName("호스트가 방명록 카드를 조회하면 읽음 처리된다")
+        @Test
+        void markCardAsReadWhenHostRead() {
+            // given
+            WriteGuestBookCardResponse writeResponse = writeGuestBookCard(publicSpace);
+
+            // when
+            RestAssuredMockMvc.given()
+                .header("Authorization", "Bearer " + accessToken)
+                .accept(ContentType.JSON)
+                .when()
+                .get("/spaces/%s/guestbook/%d".formatted(publicSpace.getCode(), writeResponse.id()))
+                .then()
+                .statusCode(200);
+
+            // then
+            GuestBookResponse result = RestAssuredMockMvc.given()
+                .header("Authorization", "Bearer " + accessToken)
+                .accept(ContentType.JSON)
+                .queryParam("page", 1)
+                .queryParam("size", 15)
+                .queryParam("sort", "createdAt,desc")
+                .queryParam("sort", "id,desc")
+                .when()
+                .get("/spaces/%s/guestbook".formatted(publicSpace.getCode()))
+                .then()
+                .statusCode(200)
+                .extract()
+                .body()
+                .as(GuestBookResponse.class);
+
+            assertThat(result.guestBookCards().getFirst().isRead()).isTrue();
+        }
     }
 
     @DisplayName("방명록 카드 작성")
