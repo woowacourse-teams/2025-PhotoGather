@@ -24,6 +24,8 @@ import com.forgather.global.auth.model.SpaceHostMap;
 import com.forgather.global.auth.repository.SpaceHostMapRepository;
 import com.forgather.global.exception.BaseException;
 import com.forgather.global.exception.FileUploadException;
+import com.forgather.global.exception.UnauthenticatedException;
+import com.forgather.global.exception.UnauthorizedException;
 import com.forgather.global.util.RandomCodeGenerator;
 
 import lombok.RequiredArgsConstructor;
@@ -84,7 +86,8 @@ public class SpaceService {
     @Transactional
     public SpaceResponse update(String spaceCode, UpdateSpaceRequest request, MultipartFile file, Host host) {
         Space space = spaceRepository.getByCodeOrThrow(spaceCode);
-        // TODO: host 검증
+        validateSpaceHost(space, host);
+
         space.update(request.name(), request.description(), request.isPublic(), request.instagramUsername(),
             request.email());
 
@@ -142,7 +145,8 @@ public class SpaceService {
     @Transactional
     public void delete(String spaceCode, Host host) {
         Space space = spaceRepository.getByCodeOrThrow(spaceCode);
-        // TODO: host 검증
+        validateSpaceHost(space, host);
+
         spaceHostMapRepository.deleteBySpace(space);
         spacePhotoRepository.findBySpace(space)
             .ifPresent(spacePhoto -> {
@@ -168,5 +172,19 @@ public class SpaceService {
             })
             .toList();
         return new HostSpaceResponse(spaceResponses);
+    }
+
+    private void validateSpaceHost(Space space, Host host) {
+        if (space.isPublic()) {
+            return;
+        }
+        if (spaceHostMapRepository.findBySpaceAndHost(space, host)
+            .isPresent()) {
+            return;
+        }
+        if (host == null) {
+            throw new UnauthorizedException("로그인이 필요합니다.");
+        }
+        throw new UnauthenticatedException();
     }
 }
