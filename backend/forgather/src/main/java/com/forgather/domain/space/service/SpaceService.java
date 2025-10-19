@@ -24,7 +24,7 @@ import com.forgather.global.auth.model.SpaceHostMap;
 import com.forgather.global.auth.repository.SpaceHostMapRepository;
 import com.forgather.global.exception.BaseException;
 import com.forgather.global.exception.FileUploadException;
-import com.forgather.global.exception.UnauthenticatedException;
+import com.forgather.global.exception.ForbiddenException;
 import com.forgather.global.exception.UnauthorizedException;
 import com.forgather.global.util.RandomCodeGenerator;
 
@@ -178,6 +178,6 @@ public class SpaceService {
         if (host == null) {
             throw new UnauthorizedException("로그인이 필요합니다.");
         }
-        throw new UnauthenticatedException();
+        throw new ForbiddenException("권한이 존재하지 않습니다.");
     }
 }
