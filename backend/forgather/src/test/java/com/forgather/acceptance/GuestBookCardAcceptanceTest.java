@@ -351,7 +351,7 @@ public class GuestBookCardAcceptanceTest extends AcceptanceTest {
 
         @DisplayName("호스트는 비공개 스페이스의 방명록 카드를 조회할 수 있다")
         @Test
-        void hostCanReadCardInPublicSpace() {
+        void hostCanReadCardInPrivateSpace() {
             // given
             WriteGuestBookCardResponse writeResponse = writeGuestBookCard(privateSpace);
 
