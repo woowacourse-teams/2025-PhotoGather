@@ -16,6 +16,8 @@ import com.forgather.domain.product.dto.ProductResponse;
 import com.forgather.domain.product.dto.RegisterProductRequest;
 import com.forgather.domain.product.dto.UpdateProductRequest;
 import com.forgather.domain.product.service.ProductService;
+import com.forgather.global.auth.annotation.LoginHost;
+import com.forgather.global.auth.model.Host;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -40,17 +42,16 @@ public class ProductController {
 
     /**
      * TODO
-     * 스페이스-호스트 검증
      *  검증 걸릴 시 업로드 사진 삭제
-     * dto단 검증
      */
     @Operation(summary = "작품 등록")
     @PostMapping
     public ResponseEntity<ProductResponse> register(
         @PathVariable(value = "spaceCode") String spaceCode,
-        @RequestBody RegisterProductRequest request
+        @RequestBody RegisterProductRequest request,
+        @LoginHost(required = true) Host host
     ) {
-        var response = productService.register(spaceCode, request);
+        var response = productService.register(host, spaceCode, request);
         return ResponseEntity.status(CREATED).body(response);
     }
 

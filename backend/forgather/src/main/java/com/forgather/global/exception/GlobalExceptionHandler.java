@@ -132,7 +132,7 @@ public class GlobalExceptionHandler {
         logClientWarning(e);
         return ResponseEntity.status(UNAUTHORIZED)
             .contentType(APPLICATION_JSON)
-            .body(ErrorResponse.from("인증에 실패했습니다."));
+            .body(ErrorResponse.from(e.getMessage()));
     }
 
     @ExceptionHandler(ForbiddenException.class)
@@ -148,7 +148,7 @@ public class GlobalExceptionHandler {
         logClientWarning(e);
         return ResponseEntity.status(e.getStatusCode())
             .contentType(APPLICATION_JSON)
-            .body(ErrorResponse.from("인증 토큰이 유효하지 않습니다."));
+            .body(ErrorResponse.from(e.getMessage()));
     }
 
     /**
