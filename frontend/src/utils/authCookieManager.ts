@@ -19,9 +19,8 @@ export const clearAuthTokens = () => {
 export const refreshAccessToken = async (): Promise<AuthTokenResponse> => {
   if (refreshPromise) return refreshPromise;
 
-  const accessToken = CookieUtils.get(AUTH_COOKIES.ACCESS);
   const refreshToken = CookieUtils.get(AUTH_COOKIES.REFRESH);
-  if (!accessToken || !refreshToken) {
+  if (!refreshToken) {
     clearAuthTokens();
     throw new Error('로그인 후 이용해주세요.');
   }

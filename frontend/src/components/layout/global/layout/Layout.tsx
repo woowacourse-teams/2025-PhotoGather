@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { IoSettingsSharp, IoShareOutline } from 'react-icons/io5';
 import { Outlet, useMatches, useNavigate, useParams } from 'react-router-dom';
 import { createSpaceInfoRoute, ROUTES } from '../../../../constants/routes';
-import { UserProvider } from '../../../../contexts/UserContext';
 import type { AppRouteObject } from '../../../../types/route.type';
 import Footer from '../../../@common/footer/Footer';
 import Header from '../../../@common/header/Header';
@@ -43,7 +42,7 @@ const Layout = () => {
   const isNoFooter = current?.handle?.noFooter;
 
   return (
-    <UserProvider>
+    <>
       <ScrollToTop />
       {!isNoHeader && (
         <Header
@@ -57,7 +56,7 @@ const Layout = () => {
         <Outlet />
       </S.Container>
       {!isNoFooter && <Footer />}
-    </UserProvider>
+    </>
   );
 };
 

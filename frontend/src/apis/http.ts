@@ -1,3 +1,4 @@
+import { ROUTES } from '../constants/routes';
 import type { ApiResponse, RequestOptions } from '../types/api.type';
 import { HttpError } from '../types/error.type';
 import { createQueryString } from '../utils/createQueryString';
@@ -26,6 +27,7 @@ const request = async <T>(
     if (response.status === 401) {
       try {
         response = await retryAuth(doFetch);
+        console.log(response);
       } catch (error) {
         if (error instanceof HttpError) {
           return {
@@ -73,18 +75,18 @@ export const http = {
   get: <T>(
     endpoint: string,
     params?: Record<string, unknown>,
-    token?: string,
+    token?: string | undefined,
   ) => request<T>(endpoint, { method: 'GET', params, token }),
 
-  post: <T>(endpoint: string, body?: unknown, token?: string) =>
+  post: <T>(endpoint: string, body?: unknown, token?: string | undefined) =>
     request<T>(endpoint, { method: 'POST', body, token }),
 
-  put: <T>(endpoint: string, body?: unknown, token?: string) =>
+  put: <T>(endpoint: string, body?: unknown, token?: string | undefined) =>
     request<T>(endpoint, { method: 'PUT', body, token }),
 
-  patch: <T>(endpoint: string, body?: unknown, token?: string) =>
+  patch: <T>(endpoint: string, body?: unknown, token?: string | undefined) =>
     request<T>(endpoint, { method: 'PATCH', body, token }),
 
-  delete: <T>(endpoint: string, body?: unknown, token?: string) =>
+  delete: <T>(endpoint: string, body?: unknown, token?: string | undefined) =>
     request<T>(endpoint, { method: 'DELETE', body, token }),
 };
