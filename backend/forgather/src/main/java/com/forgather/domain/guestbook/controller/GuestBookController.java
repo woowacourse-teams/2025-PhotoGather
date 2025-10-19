@@ -99,7 +99,7 @@ public class GuestBookController {
     public ResponseEntity<Void> deleteCard(
         @PathVariable(value = "spaceCode") String spaceCode,
         @PathVariable(value = "guestBookCardId") Long guestBookCardId,
-        @LoginHost(required = false) Host host // TODO true로 전환
+        @LoginHost(required = true) Host host
     ) {
         guestBookService.deleteCard(host, spaceCode, guestBookCardId);
         return ResponseEntity.noContent().build();

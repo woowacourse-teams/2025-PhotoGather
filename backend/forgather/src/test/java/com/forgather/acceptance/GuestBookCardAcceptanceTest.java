@@ -23,9 +23,15 @@ import com.forgather.domain.guestbook.dto.WriteGuestBookCardPhotoRequest;
 import com.forgather.domain.guestbook.dto.WriteGuestBookCardRequest;
 import com.forgather.domain.guestbook.dto.WriteGuestBookCardResponse;
 import com.forgather.domain.space.model.Space;
+import com.forgather.domain.space.repository.HostRepository;
 import com.forgather.domain.space.repository.SpaceRepository;
 import com.forgather.domain.upload.AwsS3Cloud;
+import com.forgather.fixture.HostFixture;
 import com.forgather.fixture.SpaceFixture;
+import com.forgather.global.auth.model.Host;
+import com.forgather.global.auth.model.SpaceHostMap;
+import com.forgather.global.auth.repository.SpaceHostMapRepository;
+import com.forgather.global.auth.util.JwtTokenProvider;
 
 import io.restassured.http.ContentType;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
@@ -36,7 +42,6 @@ import io.restassured.module.mockmvc.RestAssuredMockMvc;
  * 비공개 스페이스 & 호스트 -> 방명록 조회 시 읽음 여부 포함
  * 비공개 스페이스 & 호스트 -> 방명록 카드 조회 가능
  * 미읽음 호스트 조회 -> 읽음 처리
- * 호스트가 아니면 방명록 카드 삭제 불가
  * 호스트가 아니면 방명록 카드 사진 삭제 불가
  */
 @AutoConfigureMockMvc
@@ -48,11 +53,22 @@ public class GuestBookCardAcceptanceTest extends AcceptanceTest {
     @Autowired
     private SpaceRepository spaceRepository;
 
+    @Autowired
+    private HostRepository hostRepository;
+
+    @Autowired
+    private SpaceHostMapRepository spaceHostMapRepository;
+
     @MockitoBean
     private AwsS3Cloud awsS3Cloud;
 
+    @Autowired
+    private JwtTokenProvider jwtTokenProvider;
+
     private Space publicSpace;
     private Space privateSpace;
+    private Host host;
+    private Host anotherHost;
     private WriteGuestBookCardRequest writeRequest = new WriteGuestBookCardRequest(
         "nickname",
         "message",
@@ -69,6 +85,15 @@ public class GuestBookCardAcceptanceTest extends AcceptanceTest {
         privateSpace = SpaceFixture.createPrivateSpace();
         spaceRepository.save(publicSpace);
         spaceRepository.save(privateSpace);
+
+        host = HostFixture.createHost();
+        anotherHost = HostFixture.createHost();
+        hostRepository.save(host);
+        hostRepository.save(anotherHost);
+
+        spaceHostMapRepository.save(new SpaceHostMap(publicSpace, host));
+        spaceHostMapRepository.save(new SpaceHostMap(privateSpace, host));
+
         RestAssuredMockMvc.mockMvc(mockMvc);
     }
 
@@ -320,10 +345,12 @@ public class GuestBookCardAcceptanceTest extends AcceptanceTest {
     @Test
     void deleteCard() {
         // given
+        String accessToken = jwtTokenProvider.generateAccessToken(host.getId());
         WriteGuestBookCardResponse writeResponse = writeGuestBookCard(publicSpace);
 
         // when
         RestAssuredMockMvc.given()
+            .header("Authorization", "Bearer " + accessToken)
             .when()
             .delete("/spaces/%s/guestbook/%d".formatted(publicSpace.getCode(), writeResponse.id()))
             .then()
@@ -336,6 +363,55 @@ public class GuestBookCardAcceptanceTest extends AcceptanceTest {
             .get("/spaces/%s/guestbook/%d".formatted(publicSpace.getCode(), writeResponse.id()))
             .then()
             .statusCode(404);
+    }
+
+    @DisplayName("방문자는 방명록 카드를 삭제하지 못한다")
+    @Test
+    void throwExceptionWhenGuestDeleteCard() {
+        // given
+        WriteGuestBookCardResponse writeResponse = writeGuestBookCard(publicSpace);
+
+        // when, then
+        RestAssuredMockMvc.given()
+            .when()
+            .delete("/spaces/%s/guestbook/%d".formatted(publicSpace.getCode(), writeResponse.id()))
+            .then()
+            .statusCode(401)
+            .body("message", containsString("로그인이 필요합니다."));
+    }
+
+    @DisplayName("다른 호스트의 스페이스에 속한 방명록 카드를 삭제하지 못한다")
+    @Test
+    void throwExceptionWhenAnotherHostDeleteCard() {
+        // given
+        String accessToken = jwtTokenProvider.generateAccessToken(anotherHost.getId());
+        WriteGuestBookCardResponse writeResponse = writeGuestBookCard(publicSpace);
+
+        // when, then
+        RestAssuredMockMvc.given()
+            .header("Authorization", "Bearer " + accessToken)
+            .when()
+            .delete("/spaces/%s/guestbook/%d".formatted(publicSpace.getCode(), writeResponse.id()))
+            .then()
+            .statusCode(403)
+            .body("message", containsString("해당 스페이스에 대한 접근 권한이 없습니다."));
+    }
+
+    @DisplayName("다른 스페이스에 속한 방명록 카드를 삭제하지 못한다")
+    @Test
+    void throwExceptionWhenDeleteCardOnAnotherSpace() {
+        // given
+        String accessToken = jwtTokenProvider.generateAccessToken(host.getId());
+        WriteGuestBookCardResponse writeResponse = writeGuestBookCard(publicSpace);
+
+        // when, then
+        RestAssuredMockMvc.given()
+            .header("Authorization", "Bearer " + accessToken)
+            .when()
+            .delete("/spaces/%s/guestbook/%d".formatted(privateSpace.getCode(), writeResponse.id()))
+            .then()
+            .statusCode(404)
+            .body("message", containsString("해당 스페이스에 존재하지 않는 방명록 카드입니다."));
     }
 
     @DisplayName("방명록 카드 사진을 일부 삭제한다")
