@@ -37,13 +37,6 @@ import com.forgather.global.auth.util.JwtTokenProvider;
 import io.restassured.http.ContentType;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
 
-/**
- * TODO
- * 비공개 스페이스 & 호스트 -> 방명록 조회 시 읽음 여부 포함
- * 비공개 스페이스 & 호스트 -> 방명록 카드 조회 가능
- * 미읽음 호스트 조회 -> 읽음 처리
- * 호스트가 아니면 방명록 카드 사진 삭제 불가
- */
 @AutoConfigureMockMvc
 public class GuestBookCardAcceptanceTest extends AcceptanceTest {
 
