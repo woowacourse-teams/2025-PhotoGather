@@ -610,6 +610,29 @@ public class GuestBookCardAcceptanceTest extends AcceptanceTest {
                 .statusCode(403)
                 .body("message", containsString("해당 스페이스에 대한 접근 권한이 없습니다."));
         }
+
+        @DisplayName("다른 방명록 카드의 사진을 삭제하면 예외를 던진다")
+        @Test
+        void throwExceptionWhenDeletePhotosInAnotherCard() {
+            // given
+            WriteGuestBookCardResponse writeResponse = writeGuestBookCard(publicSpace);
+            DeleteGuestBookCardPhotosRequest request = new DeleteGuestBookCardPhotosRequest(
+                List.of(
+                    writeResponse.photos().get(2).id() + 1
+                )
+            );
+
+            // when
+            RestAssuredMockMvc.given()
+                .header("Authorization", "Bearer " + accessToken)
+                .contentType(ContentType.JSON)
+                .body(request)
+                .when()
+                .delete("/spaces/%s/guestbook/%d/photos".formatted(publicSpace.getCode(), writeResponse.id()))
+                .then()
+                .statusCode(400)
+                .body("message", containsString("해당 방명록 카드에 존재하지 않는 사진입니다."));
+        }
     }
 
     private WriteGuestBookCardResponse writeGuestBookCard(Space space) {

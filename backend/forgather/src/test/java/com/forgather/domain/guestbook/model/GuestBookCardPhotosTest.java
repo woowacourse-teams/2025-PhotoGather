@@ -64,6 +64,6 @@ class GuestBookCardPhotosTest {
         // when, then
         assertThatThrownBy(() -> guestBookCardPhotos.deleteByIds(List.of(1L, 4L)))
             .isInstanceOf(BaseException.class)
-            .hasMessageContaining("방명록 카드에 존재하지 않는 사진입니다.");
+            .hasMessageContaining("해당 방명록 카드에 존재하지 않는 사진입니다.");
     }
 }
