@@ -80,7 +80,7 @@ class SpaceAcceptanceTest extends AcceptanceTest {
             .thenReturn("forgather/temp.png");
     }
 
-    @DisplayName("RestAssuredMockMvc를 사용하여 Space를 생성한다.")
+    @DisplayName("Space를 생성한다.")
     @Test
     void createSpaceWithRestAssuredMockMvc() throws Exception {
         // given
@@ -113,7 +113,7 @@ class SpaceAcceptanceTest extends AcceptanceTest {
         assertThat(response.body().jsonPath().getString("spaceCode")).isNotNull();
     }
 
-    @DisplayName("RestAssuredMockMvc를 사용하여 스페이스 사진이 없는 Space를 생성한다.")
+    @DisplayName("스페이스 사진이 없는 Space를 생성한다.")
     @Test
     void createSpaceWithoutFileWithRestAssuredMockMvc() throws Exception {
         // given
@@ -139,13 +139,12 @@ class SpaceAcceptanceTest extends AcceptanceTest {
         assertThat(response.body().jsonPath().getString("spaceCode")).isNotNull();
     }
 
-    @DisplayName("RestAssuredMockMvc를 사용하여 스페이스를 상세 조회한다.")
+    @DisplayName("스페이스를 상세 조회한다.")
     @Test
     void getSpaceInformationWithRestAssuredMockMvc() {
         // given
         var host = hostRepository.save(new Host("모코", "pictureUrl"));
         var token = jwtTokenProvider.generateAccessToken(host.getId());
-        // TODO: host 추가
         var space = spaceRepository.save(new Space("1111111111", "테스트", "테스트 스페이스", true,
             "forgather_official", "forgather@forgather.me"));
         var spacePhoto = spacePhotoRepository.save(
@@ -158,7 +157,7 @@ class SpaceAcceptanceTest extends AcceptanceTest {
 
         // when
         var result = RestAssuredMockMvc.given()
-            // .header("Authorization", "Bearer " + token)
+            .header("Authorization", "Bearer " + token)
             .when()
             .get("/spaces/{spaceCode}", space.getCode())
             .then()
@@ -175,13 +174,12 @@ class SpaceAcceptanceTest extends AcceptanceTest {
         );
     }
 
-    @DisplayName("RestAssuredMockMvc를 사용하여 스페이스를 삭제한다.")
+    @DisplayName("스페이스를 삭제한다.")
     @Test
     void deleteSpaceWithRestAssuredMockMvc() {
         // given
         var host = hostRepository.save(new Host("모코", "pictureUrl"));
         var token = jwtTokenProvider.generateAccessToken(host.getId());
-        // TODO: host 추가
         var space = spaceRepository.save(new Space("2222222222", "테스트", "테스트 스페이스", true,
             "forgather_official", "forgather@forgather.me"));
         spacePhotoRepository.save(new SpacePhoto(space, "original.png", "forgather/uuid.png", 1024L));
@@ -189,7 +187,7 @@ class SpaceAcceptanceTest extends AcceptanceTest {
 
         // when
         var response = RestAssuredMockMvc.given()
-            // .header("Authorization", "Bearer " + token)
+            .header("Authorization", "Bearer " + token)
             .when()
             .delete("/spaces/{spaceCode}", space.getCode())
             .then()
@@ -201,7 +199,7 @@ class SpaceAcceptanceTest extends AcceptanceTest {
         assertThat(spacePhotoRepository.findBySpace(space)).isEmpty();
     }
 
-    @DisplayName("RestAssuredMockMvc를 사용하여 스페이스를 수정한다.")
+    @DisplayName("스페이스를 수정한다.")
     @Test
     void updateSpaceWithRestAssuredMockMvc() throws Exception {
         // given
@@ -224,7 +222,7 @@ class SpaceAcceptanceTest extends AcceptanceTest {
 
         // when
         var result = RestAssuredMockMvc.given()
-            // .header("Authorization", "Bearer " + token)
+            .header("Authorization", "Bearer " + token)
             .multiPart("request", request, "application/json")
             .multiPart("file", newFile.getOriginalFilename(), newFile.getBytes(), newFile.getContentType())
             .when()
@@ -247,7 +245,7 @@ class SpaceAcceptanceTest extends AcceptanceTest {
         );
     }
 
-    @DisplayName("RestAssuredMockMvc를 사용하여 스페이스 이름만 수정한다.")
+    @DisplayName("스페이스 이름만 수정한다.")
     @Test
     void updateOnlySpaceNameWithRestAssuredMockMvc() throws Exception {
         // given
@@ -264,7 +262,7 @@ class SpaceAcceptanceTest extends AcceptanceTest {
 
         // when
         var response = RestAssuredMockMvc.given()
-            // .header("Authorization", "Bearer " + token)
+            .header("Authorization", "Bearer " + token)
             .multiPart("request", request, "application/json")
             .when()
             .patch("/spaces/{spaceCode}", space.getCode())
@@ -285,7 +283,7 @@ class SpaceAcceptanceTest extends AcceptanceTest {
         );
     }
 
-    @DisplayName("RestAssuredMockMvc를 사용하여 나의 스페이스 목록을 조회한다.")
+    @DisplayName("나의 스페이스 목록을 조회한다.")
     @Test
     void getSpacesWithRestAssuredMockMvc() {
         // given
