@@ -23,7 +23,6 @@ const request = async <T>(
 
   try {
     let response = await doFetch();
-
     if (response.status === 401) {
       try {
         response = await retryAuth(doFetch);

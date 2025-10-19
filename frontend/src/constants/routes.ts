@@ -1,6 +1,7 @@
 export const ROUTES = {
   MAIN: '/',
   AUTH: {
+    LOGIN: '/login',
     KAKAO: '/auth/login/kakao',
   },
   HOST: {

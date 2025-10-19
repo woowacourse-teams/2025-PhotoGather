@@ -8,7 +8,9 @@ export const retryAuth = async (fetchFunction: () => Promise<Response>) => {
 
   while (retryCount < maxRetryCount) {
     try {
+      console.log('작동');
       const newTokens = await refreshAccessToken();
+      console.log(newTokens);
 
       setAuthTokens(newTokens.accessToken, newTokens.refreshToken);
 

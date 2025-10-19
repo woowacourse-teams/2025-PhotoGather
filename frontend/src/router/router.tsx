@@ -1,5 +1,6 @@
 import { createBrowserRouter } from 'react-router-dom';
 import Layout from '../components/layout/global/layout/Layout';
+import { PrivateRoute } from '../components/layout/privateRoute/PrivateRoute';
 import KakaoAuthPage from '../pages/auth/KakaoAuthPage';
 import CompletePage from '../pages/guest/completePage/CompletePage';
 import GuestBookFunnel from '../pages/guest/guestbookPage/funnel/GuestbookFunnel';
@@ -40,68 +41,74 @@ const routes: AppRouteObject[] = [
         path: 'host',
         children: [
           {
-            path: ':spaceCode/main',
-            element: <HostMainPage />,
-            handle: {
-              headerIcons: ['share', 'settings'],
-            },
-          },
-          {
-            path: ':spaceCode/space-info',
-            element: <SpaceInfoPage />,
-            handle: {
-              headerIcons: ['settings'],
-            },
-          },
-          {
-            path: 'my-page',
-            element: <MyPage />,
-            handle: {
-              highlight: true,
-              headerIcons: ['settings'],
-              noFooter: true,
-            },
-          },
-          {
-            path: ':spaceCode/space-info/edit',
-            element: <SpaceEditPage />,
-            handle: {
-              headerIcons: ['settings'],
-            },
-          },
-          {
-            path: 'create-space',
-            element: <SpaceCreateFunnel />,
-            handle: {
-              noHeader: true,
-              noFooter: true,
-            },
-          },
-          {
-            path: ':spaceCode/work-detail',
-            element: <HostWorkDetail />,
-          },
-          {
-            path: ':spaceCode/work-detail/edit',
-            element: <WorkForm />,
-          },
-          {
-            path: 'share',
-            element: <SharePage />,
-            handle: {
-              noFooter: true,
-            },
-          },
-          {
-            path: ':spaceCode/guestbook',
-            element: <GuestbookListPage />,
-            handle: {
-              headerIcons: ['share', 'settings'],
-            },
-          },
-          {
-            path: ':spaceCode/guestbook/:guestbookCardId',
-            element: <GuestbookCardPage />,
+            path: '',
+            element: <PrivateRoute />,
+            children: [
+              {
+                path: ':spaceCode/main',
+                element: <HostMainPage />,
+                handle: {
+                  headerIcons: ['share', 'settings'],
+                },
+              },
+              {
+                path: ':spaceCode/space-info',
+                element: <SpaceInfoPage />,
+                handle: {
+                  headerIcons: ['settings'],
+                },
+              },
+              {
+                path: 'my-page',
+                element: <MyPage />,
+                handle: {
+                  highlight: true,
+                  headerIcons: ['settings'],
+                  noFooter: true,
+                },
+              },
+              {
+                path: ':spaceCode/space-info/edit',
+                element: <SpaceEditPage />,
+                handle: {
+                  headerIcons: ['settings'],
+                },
+              },
+              {
+                path: 'create-space',
+                element: <SpaceCreateFunnel />,
+                handle: {
+                  noHeader: true,
+                  noFooter: true,
+                },
+              },
+              {
+                path: ':spaceCode/work-detail',
+                element: <HostWorkDetail />,
+              },
+              {
+                path: ':spaceCode/work-detail/edit',
+                element: <WorkForm />,
+              },
+              {
+                path: 'share',
+                element: <SharePage />,
+                handle: {
+                  noFooter: true,
+                },
+              },
+              {
+                path: ':spaceCode/guestbook',
+                element: <GuestbookListPage />,
+                handle: {
+                  headerIcons: ['share', 'settings'],
+                },
+              },
+              {
+                path: ':spaceCode/guestbook/:guestbookCardId',
+                element: <GuestbookCardPage />,
+              },
+            ],
           },
         ],
       },
