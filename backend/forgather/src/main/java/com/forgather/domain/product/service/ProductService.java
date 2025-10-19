@@ -78,6 +78,10 @@ public class ProductService {
         }
     }
 
+    /**
+     * TODO
+     * 검증 걸릴 시 업로드된 사진 삭제
+     */
     @Transactional
     public ProductResponse update(Host host, String spaceCode, UpdateProductRequest request) {
         // Product 정보 수정

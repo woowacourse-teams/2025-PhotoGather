@@ -20,6 +20,7 @@ import com.forgather.global.auth.annotation.LoginHost;
 import com.forgather.global.auth.model.Host;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -44,6 +45,7 @@ public class ProductController {
      * TODO
      * 검증 걸릴 시 업로드 사진 삭제
      */
+    @SecurityRequirement(name = "bearerAuth")
     @Operation(summary = "작품 등록")
     @PostMapping
     public ResponseEntity<ProductResponse> register(
@@ -55,10 +57,7 @@ public class ProductController {
         return ResponseEntity.status(CREATED).body(response);
     }
 
-    /**
-     * TODO
-     * 검증 걸릴 시 업로드 사진 삭제
-     */
+    @SecurityRequirement(name = "bearerAuth")
     @Operation(summary = "작품 수정", description = "변경 사항이 없는 데이터는 json에 포함하지 않거나 null로 요청한다.")
     @PatchMapping
     public ResponseEntity<ProductResponse> update(
@@ -70,6 +69,7 @@ public class ProductController {
         return ResponseEntity.ok().body(response);
     }
 
+    @SecurityRequirement(name = "bearerAuth")
     @Operation(summary = "작품 삭제")
     @DeleteMapping
     public ResponseEntity<Void> delete(
