@@ -13,7 +13,4 @@ export interface Photo {
   path: string;
 }
 
-export interface DownloadInfo {
-  originalName: string;
-  path: string;
-}
+export type DownloadInfo = Pick<Photo, 'originalName' | 'path'>;
