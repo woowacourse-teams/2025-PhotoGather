@@ -67,10 +67,8 @@ public class GuestBookCardAcceptanceTest extends AcceptanceTest {
 
     private Space publicSpace;
     private Space privateSpace;
-    private Host host;
     private String accessToken;
     private String anotherAccessToken;
-    private Host anotherHost;
     private WriteGuestBookCardRequest writeRequest = new WriteGuestBookCardRequest(
         "nickname",
         "message",
@@ -88,8 +86,8 @@ public class GuestBookCardAcceptanceTest extends AcceptanceTest {
         spaceRepository.save(publicSpace);
         spaceRepository.save(privateSpace);
 
-        host = HostFixture.createHost();
-        anotherHost = HostFixture.createHost();
+        Host host = HostFixture.createHost();
+        Host anotherHost = HostFixture.createHost();
         hostRepository.save(host);
         hostRepository.save(anotherHost);
         accessToken = jwtTokenProvider.generateAccessToken(host.getId());
@@ -269,7 +267,6 @@ public class GuestBookCardAcceptanceTest extends AcceptanceTest {
                 .when()
                 .get("/spaces/%s/guestbook".formatted(publicSpace.getCode()))
                 .then()
-                .log().all()
                 .statusCode(200)
                 .extract()
                 .body()
