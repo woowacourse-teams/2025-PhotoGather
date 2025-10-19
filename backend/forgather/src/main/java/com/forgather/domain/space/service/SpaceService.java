@@ -47,10 +47,7 @@ public class SpaceService {
     public CreateSpaceResponse create(CreateSpaceRequest request, MultipartFile file, Host host) {
         String spaceCode = codeGenerator.generate(10);
         Space space = spaceRepository.save(request.toEntity(spaceCode));
-        // TODO: 호스트 검증 추가 & SpaceHostMap 등록 추가
-        if (host != null) {
-            spaceHostMapRepository.save(new SpaceHostMap(space, host));
-        }
+        spaceHostMapRepository.save(new SpaceHostMap(space, host));
         if (file == null || file.isEmpty()) {
             return CreateSpaceResponse.from(space);
         }
@@ -175,11 +172,7 @@ public class SpaceService {
     }
 
     private void validateSpaceHost(Space space, Host host) {
-        if (space.isPublic()) {
-            return;
-        }
-        if (spaceHostMapRepository.findBySpaceAndHost(space, host)
-            .isPresent()) {
+        if (spaceHostMapRepository.findBySpaceAndHost(space, host).isPresent()) {
             return;
         }
         if (host == null) {
