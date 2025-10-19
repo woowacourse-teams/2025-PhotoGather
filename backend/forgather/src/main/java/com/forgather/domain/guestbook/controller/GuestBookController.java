@@ -111,7 +111,7 @@ public class GuestBookController {
         @PathVariable(value = "spaceCode") String spaceCode,
         @PathVariable(value = "guestBookCardId") Long guestBookCardId,
         @RequestBody DeleteGuestBookCardPhotosRequest request,
-        @LoginHost(required = false) Host host // TODO true로 전환
+        @LoginHost(required = true) Host host
     ) {
         guestBookService.deleteCardPhotos(host, spaceCode, guestBookCardId, request);
         return ResponseEntity.noContent().build();

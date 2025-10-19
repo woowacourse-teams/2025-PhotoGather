@@ -136,6 +136,7 @@ public class GuestBookService {
         deleteGuestBookCardPhotos(photos);
     }
 
+    @Transactional
     public void deleteCardPhotos(
         Host host,
         String spaceCode,
@@ -143,7 +144,7 @@ public class GuestBookService {
         DeleteGuestBookCardPhotosRequest request
     ) {
         Space space = spaceRepository.getByCodeOrThrow(spaceCode);
-        // validateSpaceHost(host, space); // TODO 검증 활성화
+        validateSpaceHost(host, space);
         GuestBookCardPhotos guestBookCardPhotos = getGuestBookCardPhotos(space, guestBookCardId);
         List<GuestBookCardPhoto> deletedPhotos = guestBookCardPhotos.deleteByIds(request.deletePhotoIds());
         deleteGuestBookCardPhotos(deletedPhotos);

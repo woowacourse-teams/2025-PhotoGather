@@ -543,6 +543,7 @@ public class GuestBookCardAcceptanceTest extends AcceptanceTest {
 
             // when
             RestAssuredMockMvc.given()
+                .header("Authorization", "Bearer " + accessToken)
                 .contentType(ContentType.JSON)
                 .body(request)
                 .when()
@@ -564,6 +565,53 @@ public class GuestBookCardAcceptanceTest extends AcceptanceTest {
                 () -> assertThat(response.photos()).size().isEqualTo(1),
                 () -> assertThat(response.photos().getFirst().id()).isEqualTo(writeResponse.photos().get(1).id())
             );
+        }
+
+        @DisplayName("방문자가 방명록 카드 사진을 삭제하면 예외를 던진다")
+        @Test
+        void throwExceptionWhenGuestDeleteCardPhotos() {
+            // given
+            WriteGuestBookCardResponse writeResponse = writeGuestBookCard(publicSpace);
+            DeleteGuestBookCardPhotosRequest request = new DeleteGuestBookCardPhotosRequest(
+                List.of(
+                    writeResponse.photos().get(0).id(),
+                    writeResponse.photos().get(2).id()
+                )
+            );
+
+            // when
+            RestAssuredMockMvc.given()
+                .contentType(ContentType.JSON)
+                .body(request)
+                .when()
+                .delete("/spaces/%s/guestbook/%d/photos".formatted(publicSpace.getCode(), writeResponse.id()))
+                .then()
+                .statusCode(401)
+                .body("message", containsString("로그인이 필요합니다."));
+        }
+
+        @DisplayName("다른 호스트의 방명록 카드 사진을 삭제하면 예외를 던진다")
+        @Test
+        void throwExceptionWhenAnotherHostDeleteCardPhotos() {
+            // given
+            WriteGuestBookCardResponse writeResponse = writeGuestBookCard(publicSpace);
+            DeleteGuestBookCardPhotosRequest request = new DeleteGuestBookCardPhotosRequest(
+                List.of(
+                    writeResponse.photos().get(0).id(),
+                    writeResponse.photos().get(2).id()
+                )
+            );
+
+            // when
+            RestAssuredMockMvc.given()
+                .header("Authorization", "Bearer " + anotherAccessToken)
+                .contentType(ContentType.JSON)
+                .body(request)
+                .when()
+                .delete("/spaces/%s/guestbook/%d/photos".formatted(publicSpace.getCode(), writeResponse.id()))
+                .then()
+                .statusCode(403)
+                .body("message", containsString("해당 스페이스에 대한 접근 권한이 없습니다."));
         }
     }
 
