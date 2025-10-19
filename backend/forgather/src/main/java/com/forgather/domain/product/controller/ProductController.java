@@ -42,7 +42,7 @@ public class ProductController {
 
     /**
      * TODO
-     *  검증 걸릴 시 업로드 사진 삭제
+     * 검증 걸릴 시 업로드 사진 삭제
      */
     @Operation(summary = "작품 등록")
     @PostMapping
@@ -57,17 +57,16 @@ public class ProductController {
 
     /**
      * TODO
-     * 스페이스-호스트 검증
-     *  검증 걸릴 시 업로드 사진 삭제
-     * dto단 검증
+     * 검증 걸릴 시 업로드 사진 삭제
      */
     @Operation(summary = "작품 수정", description = "변경 사항이 없는 데이터는 json에 포함하지 않거나 null로 요청한다.")
     @PatchMapping
     public ResponseEntity<ProductResponse> update(
         @PathVariable(value = "spaceCode") String spaceCode,
-        @RequestBody UpdateProductRequest request
+        @RequestBody UpdateProductRequest request,
+        @LoginHost(required = true) Host host
     ) {
-        var response = productService.update(spaceCode, request);
+        var response = productService.update(host, spaceCode, request);
         return ResponseEntity.ok().body(response);
     }
 

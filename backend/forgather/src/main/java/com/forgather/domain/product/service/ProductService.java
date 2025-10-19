@@ -79,9 +79,10 @@ public class ProductService {
     }
 
     @Transactional
-    public ProductResponse update(String spaceCode, UpdateProductRequest request) {
+    public ProductResponse update(Host host, String spaceCode, UpdateProductRequest request) {
         // Product 정보 수정
         Space space = spaceRepository.getByCodeOrThrow(spaceCode);
+        validateSpaceHost(host, space);
         Product product = productRepository.getBySpaceOrThrow(space);
         product.update(request.title(), request.category(), request.authorName(), request.description());
 
