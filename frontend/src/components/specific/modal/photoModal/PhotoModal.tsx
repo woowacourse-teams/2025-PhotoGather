@@ -5,7 +5,7 @@ import { guestbookService } from '../../../../apis/services/guestbook/guestbook.
 import { useToast } from '../../../../hooks/@common/useToast';
 import { theme } from '../../../../styles/theme';
 import type { Photo } from '../../../../types/photo.type';
-import { buildThumbnailUrl } from '../../../../utils/buildThumbnailUrl';
+import { buildThumbnailUrl } from '../../../../utils/buildImageUrl';
 import { downloadByAnchor, saveImage } from '../../../../utils/saveImage';
 import Modal from '../../../@common/modal/Modal';
 import ImageSwiperActions from '../../imageSwiperActions/ImageSwiperActions';

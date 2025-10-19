@@ -12,3 +12,8 @@ export interface Photo {
   originalName: string;
   path: string;
 }
+
+export interface DownloadInfo {
+  originalName: string;
+  path: string;
+}

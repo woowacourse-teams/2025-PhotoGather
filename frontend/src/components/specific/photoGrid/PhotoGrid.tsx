@@ -1,5 +1,5 @@
 import type { Photo } from '../../../types/photo.type';
-import { buildThumbnailUrl } from '../../../utils/buildThumbnailUrl';
+import { buildThumbnailUrl } from '../../../utils/buildImageUrl';
 import * as S from './PhotoGrid.styles';
 
 interface PhotoGridProps {

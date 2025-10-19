@@ -7,6 +7,8 @@ interface BuildThumbnailUrlProps {
   preset?: Preset;
 }
 
+const baseUrl = import.meta.env.VITE_IMAGE_BASE_URL || '';
+
 export const buildThumbnailUrl = ({
   path,
   replacePath = 'product',
@@ -21,6 +23,9 @@ export const buildThumbnailUrl = ({
     `/${replacePath}/thumbnails/`,
   );
 
-  const baseUrl = import.meta.env.VITE_IMAGE_BASE_URL || '';
   return `${baseUrl}${thumbnailPath}_x${preset}.webp`;
+};
+
+export const buildOriginalImageUrl = (imagePath: string) => {
+  return `${baseUrl}/${imagePath}`;
 };

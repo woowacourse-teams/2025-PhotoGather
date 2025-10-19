@@ -15,7 +15,7 @@ import {
   useWorkForm,
   type WorkFormData,
 } from '../../../hooks/domain/useWorkForm';
-import { buildThumbnailUrl } from '../../../utils/buildThumbnailUrl';
+import { buildThumbnailUrl } from '../../../utils/buildImageUrl';
 import { calculateValidLength } from '../../../utils/grapheme';
 import * as S from './WorkForm.styles';
 import { workFormValidators } from './workForm.validators';
