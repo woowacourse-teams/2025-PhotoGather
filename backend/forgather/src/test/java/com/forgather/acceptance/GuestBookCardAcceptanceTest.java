@@ -38,7 +38,6 @@ import io.restassured.module.mockmvc.RestAssuredMockMvc;
 
 /**
  * TODO
- * 비공개 스페이스 & 호스트 -> 방명록 조회 가능
  * 비공개 스페이스 & 호스트 -> 방명록 조회 시 읽음 여부 포함
  * 비공개 스페이스 & 호스트 -> 방명록 카드 조회 가능
  * 미읽음 호스트 조회 -> 읽음 처리
@@ -68,6 +67,8 @@ public class GuestBookCardAcceptanceTest extends AcceptanceTest {
     private Space publicSpace;
     private Space privateSpace;
     private Host host;
+    private String accessToken;
+    private String anotherAccessToken;
     private Host anotherHost;
     private WriteGuestBookCardRequest writeRequest = new WriteGuestBookCardRequest(
         "nickname",
@@ -90,6 +91,8 @@ public class GuestBookCardAcceptanceTest extends AcceptanceTest {
         anotherHost = HostFixture.createHost();
         hostRepository.save(host);
         hostRepository.save(anotherHost);
+        accessToken = jwtTokenProvider.generateAccessToken(host.getId());
+        anotherAccessToken = jwtTokenProvider.generateAccessToken(anotherHost.getId());
 
         spaceHostMapRepository.save(new SpaceHostMap(publicSpace, host));
         spaceHostMapRepository.save(new SpaceHostMap(privateSpace, host));
@@ -97,7 +100,7 @@ public class GuestBookCardAcceptanceTest extends AcceptanceTest {
         RestAssuredMockMvc.mockMvc(mockMvc);
     }
 
-    @DisplayName("공개 스페이스인 경우 방문자도 방명록 카드를 조회할 수 있다")
+    @DisplayName("공개 스페이스인 경우 방문자도 방명록을 조회할 수 있다")
     @Test
     void guestCanReadGuestBookInPublicSpace() {
         // given
@@ -155,7 +158,7 @@ public class GuestBookCardAcceptanceTest extends AcceptanceTest {
         assertThat(result).isFalse();
     }
 
-    @DisplayName("방명록은 각 방명록 카드의 방문자 닉네임과 사진 여부를 포함한다")
+    @DisplayName("방문자 조회 시 방명록은 각 방명록 카드의 방문자 닉네임과 사진 여부를 포함한다")
     @Test
     void guestBookContainsNicknameAndPhoto() {
         // given
@@ -203,12 +206,56 @@ public class GuestBookCardAcceptanceTest extends AcceptanceTest {
             .queryParam("size", 15)
             .queryParam("sort", "createdAt,desc")
             .queryParam("sort", "id,desc")
-            .log().all()
             .when()
             .get("/spaces/%s/guestbook".formatted(privateSpace.getCode()))
             .then()
             .statusCode(403)
             .body("message", containsString("방문자는 비공개 스페이스의 방명록을 조회할 수 없습니다."));
+    }
+
+    @DisplayName("호스트는 자신의 비공개 스페이스 방명록을 조회할 수 있다")
+    @Test
+    void hostCanReadGuestBookInPrivateSpace() {
+        // when, then
+        RestAssuredMockMvc.given()
+            .header("Authorization", "Bearer " + accessToken)
+            .accept(ContentType.JSON)
+            .queryParam("page", 1)
+            .queryParam("size", 15)
+            .queryParam("sort", "createdAt,desc")
+            .queryParam("sort", "id,desc")
+            .when()
+            .get("/spaces/%s/guestbook".formatted(privateSpace.getCode()))
+            .then()
+            .statusCode(200);
+    }
+
+    @DisplayName("호스트가 방명록을 조회할 경우 방명록 카드 읽음 여부를 알 수 있다")
+    @Test
+    void hostCanKnowIsCardRead() {
+        // given
+        writeGuestBookCard(publicSpace);
+
+        // when
+        boolean result = RestAssuredMockMvc.given()
+            .header("Authorization", "Bearer " + accessToken)
+            .accept(ContentType.JSON)
+            .queryParam("page", 1)
+            .queryParam("size", 15)
+            .queryParam("sort", "createdAt,desc")
+            .queryParam("sort", "id,desc")
+            .when()
+            .get("/spaces/%s/guestbook".formatted(publicSpace.getCode()))
+            .then()
+            .log().all()
+            .statusCode(200)
+            .extract()
+            .body()
+            .asString()
+            .contains("\"isRead\"");
+
+        // then
+        assertThat(result).isTrue();
     }
 
     @DisplayName("공개 스페이스인 경우 방문자도 방명록 카드를 조회할 수 있다")
@@ -345,7 +392,6 @@ public class GuestBookCardAcceptanceTest extends AcceptanceTest {
     @Test
     void deleteCard() {
         // given
-        String accessToken = jwtTokenProvider.generateAccessToken(host.getId());
         WriteGuestBookCardResponse writeResponse = writeGuestBookCard(publicSpace);
 
         // when
@@ -384,12 +430,11 @@ public class GuestBookCardAcceptanceTest extends AcceptanceTest {
     @Test
     void throwExceptionWhenAnotherHostDeleteCard() {
         // given
-        String accessToken = jwtTokenProvider.generateAccessToken(anotherHost.getId());
         WriteGuestBookCardResponse writeResponse = writeGuestBookCard(publicSpace);
 
         // when, then
         RestAssuredMockMvc.given()
-            .header("Authorization", "Bearer " + accessToken)
+            .header("Authorization", "Bearer " + anotherAccessToken)
             .when()
             .delete("/spaces/%s/guestbook/%d".formatted(publicSpace.getCode(), writeResponse.id()))
             .then()
@@ -401,7 +446,6 @@ public class GuestBookCardAcceptanceTest extends AcceptanceTest {
     @Test
     void throwExceptionWhenDeleteCardOnAnotherSpace() {
         // given
-        String accessToken = jwtTokenProvider.generateAccessToken(host.getId());
         WriteGuestBookCardResponse writeResponse = writeGuestBookCard(publicSpace);
 
         // when, then
