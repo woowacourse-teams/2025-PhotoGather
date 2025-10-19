@@ -1,8 +1,13 @@
 package com.forgather.acceptance;
 
+import static java.time.Duration.ofSeconds;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.awaitility.Awaitility.await;
 import static org.hamcrest.Matchers.containsString;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.Mockito.atLeast;
+import static org.mockito.Mockito.verify;
 
 import java.util.List;
 
@@ -311,7 +316,13 @@ class ProductAcceptanceTest extends AcceptanceTest {
                 () -> assertThat(result.photos().get(2).order()).isEqualTo(3),
                 () -> assertThat(result.photos().get(3).originalName()).isEqualTo("photo5"),
                 () -> assertThat(result.photos().get(3).path()).endsWith("/spaces/1234567890/product/file5.png"),
-                () -> assertThat(result.photos().get(3).order()).isEqualTo(4)
+                () -> assertThat(result.photos().get(3).order()).isEqualTo(4),
+
+                () -> {
+                    await()
+                        .atMost(ofSeconds(6))
+                        .untilAsserted(() -> verify(awsS3Cloud, atLeast(1)).deletePhotos(anyList()));
+                }
             );
         }
 
@@ -421,7 +432,14 @@ class ProductAcceptanceTest extends AcceptanceTest {
                 .then()
                 .statusCode(204);
 
-            assertThat(productRepository.findBySpace(space)).isEmpty();
+            assertAll(
+                () -> assertThat(productRepository.findBySpace(space)).isEmpty(),
+                () -> {
+                    await()
+                        .atMost(ofSeconds(6))
+                        .untilAsserted(() -> verify(awsS3Cloud, atLeast(1)).deletePhotos(anyList()));
+                }
+            );
         }
 
         @DisplayName("방문자가 작품을 삭제하면 예외를 던진다")
