@@ -403,19 +403,60 @@ class ProductAcceptanceTest extends AcceptanceTest {
     }
 
     @DisplayName("작품 삭제")
-    @Test
-    void delete() {
-        // given
-        registerProduct();
-        Mockito.doNothing().when(awsS3Cloud).deleteContents(Mockito.anyList());
+    @Nested
+    class deleteProduct {
+        @DisplayName("작품 삭제")
+        @Test
+        void delete() {
+            // given
+            registerProduct();
+            Mockito.doNothing().when(awsS3Cloud).deleteContents(Mockito.anyList());
 
-        // when, then
-        RestAssuredMockMvc
-            .when()
-            .delete("/spaces/%s/products".formatted(space.getCode()))
-            .then()
-            .statusCode(204);
-        assertThat(productRepository.findBySpace(space)).isEmpty();
+            // when, then
+            RestAssuredMockMvc
+                .given()
+                .header("Authorization", "Bearer " + accessToken)
+                .when()
+                .delete("/spaces/%s/products".formatted(space.getCode()))
+                .then()
+                .statusCode(204);
+
+            assertThat(productRepository.findBySpace(space)).isEmpty();
+        }
+
+        @DisplayName("방문자가 작품을 삭제하면 예외를 던진다")
+        @Test
+        void throwExceptionWhenGuestDelete() {
+            // given
+            registerProduct();
+            Mockito.doNothing().when(awsS3Cloud).deleteContents(Mockito.anyList());
+
+            // when, then
+            RestAssuredMockMvc
+                .when()
+                .delete("/spaces/%s/products".formatted(space.getCode()))
+                .then()
+                .statusCode(401)
+                .body("message", containsString("로그인이 필요합니다."));
+        }
+
+        @DisplayName("다른 호스트가 작품을 삭제하면 예외를 던진다")
+        @Test
+        void throwExceptionWhenAnotherHostDelete() {
+            // given
+            registerProduct();
+            Mockito.doNothing().when(awsS3Cloud).deleteContents(Mockito.anyList());
+
+            // when, then
+            RestAssuredMockMvc
+                .given()
+                .header("Authorization", "Bearer " + anotherAccessToken)
+                .when()
+                .delete("/spaces/%s/products".formatted(space.getCode()))
+                .then()
+                .statusCode(403)
+                .body("message", containsString("해당 스페이스에 대한 접근 권한이 없습니다."));
+        }
     }
 
     private ProductResponse registerProduct() {

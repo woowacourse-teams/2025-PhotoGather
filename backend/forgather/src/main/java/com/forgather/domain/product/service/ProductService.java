@@ -109,8 +109,9 @@ public class ProductService {
     }
 
     @Transactional
-    public void delete(String spaceCode) {
+    public void delete(Host host, String spaceCode) {
         Space space = spaceRepository.getByCodeOrThrow(spaceCode);
+        validateSpaceHost(host, space);
         Product product = productRepository.getBySpaceOrThrow(space);
         deleteAllProductPhotos(product);
         productRepository.delete(product);

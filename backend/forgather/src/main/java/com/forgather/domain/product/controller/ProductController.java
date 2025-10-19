@@ -70,14 +70,13 @@ public class ProductController {
         return ResponseEntity.ok().body(response);
     }
 
-    /**
-     * TODO
-     * 스페이스-호스트 검증
-     */
     @Operation(summary = "작품 삭제")
     @DeleteMapping
-    public ResponseEntity<Void> delete(@PathVariable(value = "spaceCode") String spaceCode) {
-        productService.delete(spaceCode);
+    public ResponseEntity<Void> delete(
+        @PathVariable(value = "spaceCode") String spaceCode,
+        @LoginHost(required = true) Host host
+    ) {
+        productService.delete(host, spaceCode);
         return ResponseEntity.noContent().build();
     }
 }
