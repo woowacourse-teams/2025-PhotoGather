@@ -370,189 +370,201 @@ public class GuestBookCardAcceptanceTest extends AcceptanceTest {
     }
 
     @DisplayName("방명록 카드 작성")
-    @Test
-    void write() {
-        // when
-        WriteGuestBookCardResponse result = writeGuestBookCard(publicSpace);
+    @Nested
+    class writeGuestBookCard {
+        @DisplayName("방명록 카드 작성")
+        @Test
+        void write() {
+            // when
+            WriteGuestBookCardResponse result = writeGuestBookCard(publicSpace);
 
-        // then
-        assertAll(
-            () -> assertThat(result.id()).isNotNull(),
-            () -> assertThat(result.nickname()).isEqualTo(writeRequest.nickname()),
-            () -> assertThat(result.message()).isEqualTo(writeRequest.message()),
-            () -> assertThat(result.isRead()).isFalse(),
-            () -> assertThat(result.createdAt()).isBetween(LocalDateTime.now().minusMinutes(1), LocalDateTime.now()),
+            // then
+            assertAll(
+                () -> assertThat(result.id()).isNotNull(),
+                () -> assertThat(result.nickname()).isEqualTo(writeRequest.nickname()),
+                () -> assertThat(result.message()).isEqualTo(writeRequest.message()),
+                () -> assertThat(result.isRead()).isFalse(),
+                () -> assertThat(result.createdAt()).isBetween(LocalDateTime.now().minusMinutes(1), LocalDateTime.now()),
 
-            () -> assertThat(result.photos().get(0).originalName()).isEqualTo("photo1.jpg"),
-            () -> assertThat(result.photos().get(0).path()).endsWith(
-                "/spaces/%s/guestbook/abc.jpg".formatted(publicSpace.getCode())),
+                () -> assertThat(result.photos().get(0).originalName()).isEqualTo("photo1.jpg"),
+                () -> assertThat(result.photos().get(0).path()).endsWith(
+                    "/spaces/%s/guestbook/abc.jpg".formatted(publicSpace.getCode())),
 
-            () -> assertThat(result.photos().get(1).originalName()).isEqualTo("photo2.jpg"),
-            () -> assertThat(result.photos().get(1).path()).endsWith(
-                "/spaces/%s/guestbook/def.jpg".formatted(publicSpace.getCode())),
+                () -> assertThat(result.photos().get(1).originalName()).isEqualTo("photo2.jpg"),
+                () -> assertThat(result.photos().get(1).path()).endsWith(
+                    "/spaces/%s/guestbook/def.jpg".formatted(publicSpace.getCode())),
 
-            () -> assertThat(result.photos().get(2).originalName()).isEqualTo("photo3.jpg"),
-            () -> assertThat(result.photos().get(2).path()).endsWith(
-                "/spaces/%s/guestbook/ghi.jpg".formatted(publicSpace.getCode()))
-        );
+                () -> assertThat(result.photos().get(2).originalName()).isEqualTo("photo3.jpg"),
+                () -> assertThat(result.photos().get(2).path()).endsWith(
+                    "/spaces/%s/guestbook/ghi.jpg".formatted(publicSpace.getCode()))
+            );
+        }
+
+        @DisplayName("방문자 닉네임이 10자를 초과하면 예외를 던진다")
+        @Test
+        void throwExceptionWhenNicknameExceedMaxLength() {
+            // given
+            WriteGuestBookCardRequest request = new WriteGuestBookCardRequest(
+                "12345678901",
+                "message",
+                List.of(
+                    new WriteGuestBookCardPhotoRequest("photo1.jpg", "abc.jpg", 1024L),
+                    new WriteGuestBookCardPhotoRequest("photo2.jpg", "def.jpg", 2048L),
+                    new WriteGuestBookCardPhotoRequest("photo3.jpg", "ghi.jpg", 4096L)
+                )
+            );
+
+            // when, then
+            RestAssuredMockMvc.given()
+                .body(request)
+                .contentType(ContentType.JSON)
+                .accept(ContentType.JSON)
+                .when()
+                .post("/spaces/%s/guestbook".formatted(publicSpace.getCode()))
+                .then()
+                .statusCode(400)
+                .body("message", containsString("방문자 닉네임은 최대 10자까지 입력 가능합니다."));
+        }
+
+        @DisplayName("방명록 카드 사진이 20개를 초과하면 예외를 던진다")
+        @Test
+        void throwExceptionWhenPhotoExceedMaxSize() {
+            // given
+            List<WriteGuestBookCardPhotoRequest> photos = IntStream.range(0, 21)
+                .mapToObj(i -> new WriteGuestBookCardPhotoRequest("photo.jpg", "abc.jpg", 1024L))
+                .toList();
+            WriteGuestBookCardRequest request = new WriteGuestBookCardRequest(
+                "nickname",
+                "message",
+                photos
+            );
+
+            // when, then
+            RestAssuredMockMvc.given()
+                .body(request)
+                .contentType(ContentType.JSON)
+                .accept(ContentType.JSON)
+                .when()
+                .post("/spaces/%s/guestbook".formatted(publicSpace.getCode()))
+                .then()
+                .statusCode(400)
+                .body("message", containsString("방명록 카드 사진은 최대"));
+        }
     }
 
-    @DisplayName("방문자 닉네임이 10자를 초과하면 예외를 던진다")
-    @Test
-    void throwExceptionWhenNicknameExceedMaxLength() {
-        // given
-        WriteGuestBookCardRequest request = new WriteGuestBookCardRequest(
-            "12345678901",
-            "message",
-            List.of(
-                new WriteGuestBookCardPhotoRequest("photo1.jpg", "abc.jpg", 1024L),
-                new WriteGuestBookCardPhotoRequest("photo2.jpg", "def.jpg", 2048L),
-                new WriteGuestBookCardPhotoRequest("photo3.jpg", "ghi.jpg", 4096L)
-            )
-        );
+    @DisplayName("방명록 카드 삭제")
+    @Nested
+    class deleteGuestBookCard {
+        @DisplayName("방명록 카드를 삭제한다")
+        @Test
+        void deleteCard() {
+            // given
+            WriteGuestBookCardResponse writeResponse = writeGuestBookCard(publicSpace);
 
-        // when, then
-        RestAssuredMockMvc.given()
-            .body(request)
-            .contentType(ContentType.JSON)
-            .accept(ContentType.JSON)
-            .when()
-            .post("/spaces/%s/guestbook".formatted(publicSpace.getCode()))
-            .then()
-            .statusCode(400)
-            .body("message", containsString("방문자 닉네임은 최대 10자까지 입력 가능합니다."));
+            // when
+            RestAssuredMockMvc.given()
+                .header("Authorization", "Bearer " + accessToken)
+                .when()
+                .delete("/spaces/%s/guestbook/%d".formatted(publicSpace.getCode(), writeResponse.id()))
+                .then()
+                .statusCode(204);
+
+            // then
+            RestAssuredMockMvc.given()
+                .accept(ContentType.JSON)
+                .when()
+                .get("/spaces/%s/guestbook/%d".formatted(publicSpace.getCode(), writeResponse.id()))
+                .then()
+                .statusCode(404);
+        }
+
+        @DisplayName("방문자는 방명록 카드를 삭제하지 못한다")
+        @Test
+        void throwExceptionWhenGuestDeleteCard() {
+            // given
+            WriteGuestBookCardResponse writeResponse = writeGuestBookCard(publicSpace);
+
+            // when, then
+            RestAssuredMockMvc.given()
+                .when()
+                .delete("/spaces/%s/guestbook/%d".formatted(publicSpace.getCode(), writeResponse.id()))
+                .then()
+                .statusCode(401)
+                .body("message", containsString("로그인이 필요합니다."));
+        }
+
+        @DisplayName("다른 호스트의 스페이스에 속한 방명록 카드를 삭제하지 못한다")
+        @Test
+        void throwExceptionWhenAnotherHostDeleteCard() {
+            // given
+            WriteGuestBookCardResponse writeResponse = writeGuestBookCard(publicSpace);
+
+            // when, then
+            RestAssuredMockMvc.given()
+                .header("Authorization", "Bearer " + anotherAccessToken)
+                .when()
+                .delete("/spaces/%s/guestbook/%d".formatted(publicSpace.getCode(), writeResponse.id()))
+                .then()
+                .statusCode(403)
+                .body("message", containsString("해당 스페이스에 대한 접근 권한이 없습니다."));
+        }
+
+        @DisplayName("다른 스페이스에 속한 방명록 카드를 삭제하지 못한다")
+        @Test
+        void throwExceptionWhenDeleteCardOnAnotherSpace() {
+            // given
+            WriteGuestBookCardResponse writeResponse = writeGuestBookCard(publicSpace);
+
+            // when, then
+            RestAssuredMockMvc.given()
+                .header("Authorization", "Bearer " + accessToken)
+                .when()
+                .delete("/spaces/%s/guestbook/%d".formatted(privateSpace.getCode(), writeResponse.id()))
+                .then()
+                .statusCode(404)
+                .body("message", containsString("해당 스페이스에 존재하지 않는 방명록 카드입니다."));
+        }
     }
 
-    @DisplayName("방명록 카드 사진이 20개를 초과하면 예외를 던진다")
-    @Test
-    void throwExceptionWhenPhotoExceedMaxSize() {
-        // given
-        List<WriteGuestBookCardPhotoRequest> photos = IntStream.range(0, 21)
-            .mapToObj(i -> new WriteGuestBookCardPhotoRequest("photo.jpg", "abc.jpg", 1024L))
-            .toList();
-        WriteGuestBookCardRequest request = new WriteGuestBookCardRequest(
-            "nickname",
-            "message",
-            photos
-        );
+    @DisplayName("방명록 카드 사진 삭제")
+    @Nested
+    class deleteGuestBookCardPhotos {
+        @DisplayName("방명록 카드 사진을 일부 삭제한다")
+        @Test
+        void deleteCardPhotos() {
+            // given
+            WriteGuestBookCardResponse writeResponse = writeGuestBookCard(publicSpace);
+            DeleteGuestBookCardPhotosRequest request = new DeleteGuestBookCardPhotosRequest(
+                List.of(
+                    writeResponse.photos().get(0).id(),
+                    writeResponse.photos().get(2).id()
+                )
+            );
 
-        // when, then
-        RestAssuredMockMvc.given()
-            .body(request)
-            .contentType(ContentType.JSON)
-            .accept(ContentType.JSON)
-            .when()
-            .post("/spaces/%s/guestbook".formatted(publicSpace.getCode()))
-            .then()
-            .statusCode(400)
-            .body("message", containsString("방명록 카드 사진은 최대"));
-    }
+            // when
+            RestAssuredMockMvc.given()
+                .contentType(ContentType.JSON)
+                .body(request)
+                .when()
+                .delete("/spaces/%s/guestbook/%d/photos".formatted(publicSpace.getCode(), writeResponse.id()))
+                .then()
+                .statusCode(204);
 
-    @DisplayName("방명록 카드를 삭제한다")
-    @Test
-    void deleteCard() {
-        // given
-        WriteGuestBookCardResponse writeResponse = writeGuestBookCard(publicSpace);
-
-        // when
-        RestAssuredMockMvc.given()
-            .header("Authorization", "Bearer " + accessToken)
-            .when()
-            .delete("/spaces/%s/guestbook/%d".formatted(publicSpace.getCode(), writeResponse.id()))
-            .then()
-            .statusCode(204);
-
-        // then
-        RestAssuredMockMvc.given()
-            .accept(ContentType.JSON)
-            .when()
-            .get("/spaces/%s/guestbook/%d".formatted(publicSpace.getCode(), writeResponse.id()))
-            .then()
-            .statusCode(404);
-    }
-
-    @DisplayName("방문자는 방명록 카드를 삭제하지 못한다")
-    @Test
-    void throwExceptionWhenGuestDeleteCard() {
-        // given
-        WriteGuestBookCardResponse writeResponse = writeGuestBookCard(publicSpace);
-
-        // when, then
-        RestAssuredMockMvc.given()
-            .when()
-            .delete("/spaces/%s/guestbook/%d".formatted(publicSpace.getCode(), writeResponse.id()))
-            .then()
-            .statusCode(401)
-            .body("message", containsString("로그인이 필요합니다."));
-    }
-
-    @DisplayName("다른 호스트의 스페이스에 속한 방명록 카드를 삭제하지 못한다")
-    @Test
-    void throwExceptionWhenAnotherHostDeleteCard() {
-        // given
-        WriteGuestBookCardResponse writeResponse = writeGuestBookCard(publicSpace);
-
-        // when, then
-        RestAssuredMockMvc.given()
-            .header("Authorization", "Bearer " + anotherAccessToken)
-            .when()
-            .delete("/spaces/%s/guestbook/%d".formatted(publicSpace.getCode(), writeResponse.id()))
-            .then()
-            .statusCode(403)
-            .body("message", containsString("해당 스페이스에 대한 접근 권한이 없습니다."));
-    }
-
-    @DisplayName("다른 스페이스에 속한 방명록 카드를 삭제하지 못한다")
-    @Test
-    void throwExceptionWhenDeleteCardOnAnotherSpace() {
-        // given
-        WriteGuestBookCardResponse writeResponse = writeGuestBookCard(publicSpace);
-
-        // when, then
-        RestAssuredMockMvc.given()
-            .header("Authorization", "Bearer " + accessToken)
-            .when()
-            .delete("/spaces/%s/guestbook/%d".formatted(privateSpace.getCode(), writeResponse.id()))
-            .then()
-            .statusCode(404)
-            .body("message", containsString("해당 스페이스에 존재하지 않는 방명록 카드입니다."));
-    }
-
-    @DisplayName("방명록 카드 사진을 일부 삭제한다")
-    @Test
-    void deleteCardPhotos() {
-        // given
-        WriteGuestBookCardResponse writeResponse = writeGuestBookCard(publicSpace);
-        DeleteGuestBookCardPhotosRequest request = new DeleteGuestBookCardPhotosRequest(
-            List.of(
-                writeResponse.photos().get(0).id(),
-                writeResponse.photos().get(2).id()
-            )
-        );
-
-        // when
-        RestAssuredMockMvc.given()
-            .contentType(ContentType.JSON)
-            .body(request)
-            .when()
-            .delete("/spaces/%s/guestbook/%d/photos".formatted(publicSpace.getCode(), writeResponse.id()))
-            .then()
-            .statusCode(204);
-
-        // then
-        GuestBookCardResponse response = RestAssuredMockMvc.given()
-            .accept(ContentType.JSON)
-            .when()
-            .get("/spaces/%s/guestbook/%d".formatted(publicSpace.getCode(), writeResponse.id()))
-            .then()
-            .statusCode(200)
-            .extract()
-            .body()
-            .as(GuestBookCardResponse.class);
-        assertAll(
-            () -> assertThat(response.photos()).size().isEqualTo(1),
-            () -> assertThat(response.photos().getFirst().id()).isEqualTo(writeResponse.photos().get(1).id())
-        );
+            // then
+            GuestBookCardResponse response = RestAssuredMockMvc.given()
+                .accept(ContentType.JSON)
+                .when()
+                .get("/spaces/%s/guestbook/%d".formatted(publicSpace.getCode(), writeResponse.id()))
+                .then()
+                .statusCode(200)
+                .extract()
+                .body()
+                .as(GuestBookCardResponse.class);
+            assertAll(
+                () -> assertThat(response.photos()).size().isEqualTo(1),
+                () -> assertThat(response.photos().getFirst().id()).isEqualTo(writeResponse.photos().get(1).id())
+            );
+        }
     }
 
     private WriteGuestBookCardResponse writeGuestBookCard(Space space) {
