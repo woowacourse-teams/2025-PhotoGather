@@ -1,4 +1,3 @@
-import { ROUTES } from '../constants/routes';
 import type { ApiResponse, RequestOptions } from '../types/api.type';
 import { HttpError } from '../types/error.type';
 import { createQueryString } from '../utils/createQueryString';
@@ -13,10 +12,10 @@ const request = async <T>(
   const { method, body, params, headers, token } = options;
   const url = `${BASE_URL}${endpoint}${createQueryString(params)}`;
 
-  const doFetch = async () => {
+  const doFetch = async (newToken?: string) => {
     const response = await fetch(url, {
       method,
-      headers: matchHeaders(body, headers ?? {}, token),
+      headers: matchHeaders(body, headers ?? {}, newToken ?? token),
       body: matchBody(body),
     });
     return response;
@@ -27,7 +26,6 @@ const request = async <T>(
     if (response.status === 401) {
       try {
         response = await retryAuth(doFetch);
-        console.log(response);
       } catch (error) {
         if (error instanceof HttpError) {
           return {

@@ -3,28 +3,18 @@ import { HttpError } from '../types/error.type';
 import { refreshAccessToken, setAuthTokens } from '../utils/authCookieManager';
 
 export const retryAuth = async (
-  fetchFunction: (
-    accessToken: string,
-    refreshToken: string,
-  ) => Promise<Response>,
+  fetchFunction: (newAccessToken: string) => Promise<Response>,
 ) => {
   let retryCount = 0;
   const maxRetryCount = CONSTRAINTS.MAX_COUNT_FOR_REFRESH;
-  console.log(maxRetryCount);
 
   while (retryCount < maxRetryCount) {
     try {
-      console.log('작동');
       const newTokens = await refreshAccessToken();
-      console.log(newTokens);
 
       setAuthTokens(newTokens.accessToken, newTokens.refreshToken);
 
-      const retriedResponse = await fetchFunction(
-        newTokens.accessToken,
-        newTokens.refreshToken,
-      );
-      console.log(retriedResponse);
+      const retriedResponse = await fetchFunction(newTokens.accessToken);
 
       if (retriedResponse.ok) return retriedResponse;
 

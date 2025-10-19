@@ -15,7 +15,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
         const token = CookieUtils.get(AUTH_COOKIES.ACCESS) ?? undefined;
 
         const response = await authService.getUserInfo(token);
-        console.log(response);
+
         if (!response.success || !response.data) {
           throw new Error('사용자 정보 조회 실패');
         }
