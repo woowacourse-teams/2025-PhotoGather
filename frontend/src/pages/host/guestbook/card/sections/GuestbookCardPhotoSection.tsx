@@ -29,9 +29,13 @@ const GuestbookCardPhotoSection = ({
     }));
     try {
       await downloadAsZip(photoDownloadInfo, guestbookTitle);
-    } catch {
+    } catch (error) {
+      const errorMessage =
+        error instanceof Error
+          ? error.message
+          : '방명록 사진 다운로드 중 오류가 발생했습니다.';
       showToast({
-        text: '방명록 사진 전체 다운로드 중 오류가 발생했습니다.',
+        text: errorMessage,
         type: 'error',
       });
     }
