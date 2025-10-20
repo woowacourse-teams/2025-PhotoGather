@@ -192,8 +192,8 @@ const SpaceHomePage = () => {
         prevPhotoId={prevId}
         nextPhotoId={nextId}
         getNavigationIds={getNavigationIds}
-        onDownload={async () => await downloadPhotoWithTracking(photoId)}
-        onDelete={async () => await deletePhotoWithTracking(photoId)}
+        onDownload={downloadPhotoWithTracking}
+        onDelete={deletePhotoWithTracking}
       />,
       {
         clickOverlayClose: true,

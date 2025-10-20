@@ -37,7 +37,7 @@ interface ManagerPhotoModalProps extends BasePhotoModalProps {
     nextId: number | null;
   };
   /** 다운로드 핸들러 */
-  onDownload?: () => void;
+  onDownload?: (id: number) => void;
 }
 
 const ManagerPhotoModal = (props: ManagerPhotoModalProps) => {
@@ -60,9 +60,6 @@ const ManagerPhotoModal = (props: ManagerPhotoModalProps) => {
 
   const handleImageError = createImageErrorHandler(defaultImage);
 
-  const managerPhotoId = props.photoId;
-  const managerSpaceCode = props.spaceCode;
-
   const navigationIds =
     props.getNavigationIds && currentPhotoId
       ? props.getNavigationIds(currentPhotoId)
@@ -81,13 +78,13 @@ const ManagerPhotoModal = (props: ManagerPhotoModalProps) => {
 
   const fetchPhoto = useCallback(
     async (photoId?: number) => {
-      const targetPhotoId = photoId || managerPhotoId;
+      const targetPhotoId = photoId || props.photoId;
 
       await tryFetch({
         task: async () => {
-          if (!managerSpaceCode || !targetPhotoId) return;
+          if (!props.spaceCode || !targetPhotoId) return;
           const response = await photoService.getById(
-            managerSpaceCode,
+            props.spaceCode,
             targetPhotoId,
           );
 
@@ -106,7 +103,7 @@ const ManagerPhotoModal = (props: ManagerPhotoModalProps) => {
         },
       });
     },
-    [managerPhotoId, managerSpaceCode, tryFetch],
+    [props.photoId, props.spaceCode, tryFetch],
   );
 
   const handleDelete = async () => {
@@ -125,15 +122,16 @@ const ManagerPhotoModal = (props: ManagerPhotoModalProps) => {
       },
     );
     if (!confirmResult) return;
+    if (!currentPhotoId) return;
 
-    props.onDelete(props.photoId);
+    props.onDelete(currentPhotoId);
     onClose?.();
   };
 
   const handleDownload = () => {
-    if (!props.onDownload) return;
+    if (!props.onDownload || !currentPhotoId) return;
 
-    props.onDownload();
+    props.onDownload(currentPhotoId);
     onSubmit?.(true);
   };
 

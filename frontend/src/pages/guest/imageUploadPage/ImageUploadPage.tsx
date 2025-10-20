@@ -108,7 +108,7 @@ const ImageUploadPage = () => {
       <GuestPhotoModal
         previewFiles={previewFile}
         currentId={selectedPhoto.id}
-        onDelete={async () => await deletePhotoWithTracking(photoId)}
+        onDelete={deletePhotoWithTracking}
       />,
       {
         clickOverlayClose: true,
