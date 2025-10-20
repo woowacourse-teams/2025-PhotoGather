@@ -281,7 +281,7 @@ class ProductAcceptanceTest extends AcceptanceTest {
             .delete("/spaces/%s/products".formatted(space.getCode()))
             .then()
             .statusCode(204);
-        assertThat(productRepository.findBySpaceCode(space.getCode())).isEmpty();
+        assertThat(productRepository.findBySpace(space)).isEmpty();
     }
 
     private ProductResponse registerProduct() {

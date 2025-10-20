@@ -97,6 +97,7 @@ public class GuestBookService {
         return new GuestBookResponse(simpleResponses);
     }
 
+    @Transactional
     public GuestBookCardResponse readCard(Host host, String spaceCode, Long guestBookCardId) {
         Space space = spaceRepository.getByCodeOrThrow(spaceCode);
         validateCanRead(space, host);

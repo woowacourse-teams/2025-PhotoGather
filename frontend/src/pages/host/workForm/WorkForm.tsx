@@ -15,7 +15,7 @@ import {
   useWorkForm,
   type WorkFormData,
 } from '../../../hooks/domain/useWorkForm';
-import { buildThumbnailUrl } from '../../../utils/buildThumbnailUrl';
+import { buildThumbnailUrl } from '../../../utils/buildImageUrl';
 import { calculateValidLength } from '../../../utils/grapheme';
 import * as S from './WorkForm.styles';
 import { workFormValidators } from './workForm.validators';
@@ -132,6 +132,7 @@ const WorkForm = () => {
               maxCount={CONSTRAINTS.MAX_LENGTH.WORK.CATEGORY}
               placeholder="카테고리를 입력하세요"
               validLength={calculateValidLength(watch('category'))}
+              errorMessage={errors.category?.message}
             />
           </S.FormLabelContainer>
 
@@ -144,6 +145,7 @@ const WorkForm = () => {
               maxCount={CONSTRAINTS.MAX_LENGTH.WORK.DESIGNER}
               validLength={calculateValidLength(watch('designer'))}
               placeholder="작가명을 입력하세요"
+              errorMessage={errors.designer?.message}
             />
           </S.FormLabelContainer>
 
@@ -158,6 +160,7 @@ const WorkForm = () => {
               placeholder="작품 설명을 입력하세요"
               rows={6}
               validLength={calculateValidLength(watch('description'))}
+              errorMessage={errors.description?.message}
             />
           </S.FormLabelContainer>
 
@@ -215,8 +218,8 @@ const WorkForm = () => {
           <S.ButtonContainer>
             <Button
               type="submit"
-              text={isEditMode ? '작품 소개 수정하기' : '작품 소개 등록하기'}
-              variant="tertiary"
+              text={isEditMode ? '수정하기' : '등록하기'}
+              variant="fixed"
               disabled={!isAllValid}
             />
           </S.ButtonContainer>

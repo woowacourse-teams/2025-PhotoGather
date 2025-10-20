@@ -29,6 +29,7 @@ const EditForm = () => {
     isPublic: false,
     email: '',
     instagramUsername: '',
+    isDeletePhoto: false,
   };
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: isSpaceInfoLoading, spaceInfo 변경 시에만 리셋
@@ -40,6 +41,7 @@ const EditForm = () => {
         isPublic: spaceInfo.isPublic,
         email: spaceInfo.email,
         instagramUsername: spaceInfo.instagramUsername,
+        isDeletePhoto: false,
       });
     }
   }, [isSpaceInfoLoading, spaceInfo]);
@@ -75,6 +77,10 @@ const EditForm = () => {
     patchSpaceInfo(data);
   };
 
+  const handleDeleteImage = () => {
+    setValue('isDeletePhoto', true, { shouldDirty: true });
+  };
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue('email', e.target.value, {
       shouldValidate: false,
@@ -88,13 +94,13 @@ const EditForm = () => {
   return (
     <S.Form onSubmit={handleSubmit(onSubmit)}>
       <PhotoPreviewButton
-        originalSrc={spaceInfo?.spacePhoto.path}
+        originalSrc={
+          watch('isDeletePhoto') ? undefined : spaceInfo?.spacePhoto.path
+        }
         previewFile={previewFile}
         uploadImage={handleFilesUploadClick}
         clearFiles={() => clearFiles(localFiles)}
-        deleteImage={() => {
-          console.log('사진 삭제 로직');
-        }}
+        deleteImage={handleDeleteImage}
       />
       <TextInput
         {...register('name', {

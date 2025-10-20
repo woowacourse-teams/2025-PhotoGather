@@ -18,7 +18,7 @@ public record HostSpaceResponse(
                "email": "forgather1@forgather.me",
                "spacePhoto": {
                  "isExists": true,
-                 "path": "forgather/1234567890/profile1.png"
+                 "path": "photogather/v2/spaces/1234567890/space/profile.png"
                },
                "guestBookCardCount": 15
             },

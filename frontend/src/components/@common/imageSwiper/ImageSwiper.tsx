@@ -15,15 +15,15 @@ interface ImageSwiperProps {
   imageInfo: LocalFile[];
   /** 현재 인덱스 업데이트 */
   updateCurrentIndex: (index: number) => void;
-  /** 슬라이드 크기 */
-  size?: 'default' | 'large';
+  /** 슬라이드 간격 (px) */
+  spaceBetween?: number;
 }
 
 const ImageSwiper = ({
   initialIndex,
   imageInfo,
   updateCurrentIndex,
-  size = 'default',
+  spaceBetween = 20,
 }: ImageSwiperProps) => {
   const swiperRef = useRef<SwiperRef>(null);
 
@@ -43,10 +43,11 @@ const ImageSwiper = ({
       </S.NoImageContainer>
     );
   return (
-    <S.ImageSwiperContainer $size={size}>
+    <S.ImageSwiperContainer>
       <Swiper
         /** swiper 스타일 설정 */
         slidesPerView="auto"
+        spaceBetween={spaceBetween}
         pagination={{ clickable: true, type: 'fraction' }}
         modules={[Navigation, Pagination, EffectCoverflow]}
         centeredSlides={true}

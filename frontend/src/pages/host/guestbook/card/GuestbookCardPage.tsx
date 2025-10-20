@@ -3,23 +3,17 @@ import {
   MdArrowBack,
   MdArrowBackIosNew,
   MdArrowForwardIos,
-  MdOutlinePhoto,
-  MdSwipe,
 } from 'react-icons/md';
 import { useNavigate, useParams } from 'react-router-dom';
 import Button from '../../../../components/@common/buttons/button/Button';
 import IconButton from '../../../../components/@common/buttons/iconButton/IconButton';
 import Line from '../../../../components/@common/line/Line';
 import DeleteModal from '../../../../components/@common/modal/deleteModal/DeleteModal';
-import OnBoardingModal from '../../../../components/specific/modal/onBoardingModal/OnBoardingModal';
 import PhotoModal from '../../../../components/specific/modal/photoModal/PhotoModal';
-import PhotoGrid from '../../../../components/specific/photoGrid/PhotoGrid';
-import { CONSTRAINTS } from '../../../../constants/constraints';
 import {
   createGuestbookCardRoute,
   createGuestbookRoute,
 } from '../../../../constants/routes';
-import useSwipeElement from '../../../../hooks/@common/useSwipeElement';
 import useGuestbookCard from '../../../../hooks/domain/guestbook/useGuestbookCard';
 import useGuestbookDelete from '../../../../hooks/domain/guestbook/useGuestbookDelete';
 import useGuestbookList from '../../../../hooks/domain/guestbook/useGuestbookList';
@@ -28,16 +22,19 @@ import type { Photo } from '../../../../types/photo.type';
 import { calculatePrevNextId } from '../../../../utils/calculatePrevNextIndex';
 import { parseTimestamp } from '../../../../utils/parseTimestamp';
 import * as S from './GuestbookCardPage.styles';
+import GuestbookCardInfoSection from './sections/GuestbookCardInfoSection';
+import GuestbookCardMessageSection from './sections/GuestbookCardMessageSection';
+import GuestbookCardPhotoSection from './sections/GuestbookCardPhotoSection';
 
 const GuestbookCardPage = () => {
   const navigate = useNavigate();
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [isOnboardingOpen, setIsOnboardingOpen] = useState(true);
   const [isPhotoModalOpen, setIsPhotoModalOpen] = useState(false);
   const [selectedPhotoIndex, setSelectedPhotoIndex] = useState(0);
   const [localPhotoList, setLocalPhotoList] = useState<Photo[]>([]);
   const { spaceCode = '', guestbookCardId = '' } = useParams();
-  const { guestbookCard } = useGuestbookCard({ spaceCode, guestbookCardId });
+  const { guestbookCard, isFetching: isGuestbookCardFetching } =
+    useGuestbookCard({ spaceCode, guestbookCardId });
   const { guestbookList, fetchNextPage } = useGuestbookList(spaceCode);
   const { mutateAsync, isPending } = useGuestbookDelete(
     spaceCode,
@@ -59,23 +56,26 @@ const GuestbookCardPage = () => {
     navigate(createGuestbookRoute(spaceCode));
   };
 
-  // guestbookCard.photos가 변경되면 localPhotoList를 업데이트
   useEffect(() => {
     setLocalPhotoList(guestbookCard.photos);
   }, [guestbookCard.photos]);
 
   const handlePreviousCardMove = () => {
+    const { prevId: prevGuestbookId } = calculatePrevNextId(
+      guestbookCardIdList,
+      guestbookCard.id,
+    );
     if (prevGuestbookId === null) return;
     navigate(createGuestbookCardRoute(spaceCode, prevGuestbookId));
   };
 
   const handleNextCardMove = () => {
+    const { nextId: nextGuestbookId } = calculatePrevNextId(
+      guestbookCardIdList,
+      guestbookCard.id,
+    );
     if (nextGuestbookId === null) return;
     navigate(createGuestbookCardRoute(spaceCode, nextGuestbookId));
-  };
-
-  const handleModalClose = () => {
-    setIsOnboardingOpen((prev) => !prev);
   };
 
   const handlePhotoModalClose = () => {
@@ -97,18 +97,15 @@ const GuestbookCardPage = () => {
   };
 
   const handleDelete = async () => {
+    const { prevId: prevGuestbookId } = calculatePrevNextId(
+      guestbookCardIdList,
+      guestbookCard.id,
+    );
     await mutateAsync();
     setIsDeleteModalOpen(false);
     if (prevGuestbookId === null) navigate(createGuestbookRoute(spaceCode));
     else navigate(createGuestbookCardRoute(spaceCode, prevGuestbookId));
   };
-
-  const { handleTouchStart, handleTouchEnd, handleTouchCancel } =
-    useSwipeElement({
-      onLeftToRight: handlePreviousCardMove,
-      onRightToLeft: handleNextCardMove,
-      swipeDistance: CONSTRAINTS.GUEST_BOOK_CARD_SWIPE_DISTANCE,
-    });
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: currentIdIndex에만 의존
   useEffect(() => {
@@ -125,17 +122,7 @@ const GuestbookCardPage = () => {
         onDelete={handleDelete}
         buttonDisabled={isPending}
       />
-      <OnBoardingModal
-        text={'스와이프하여 다음 방명록으로 이동'}
-        icon={<MdSwipe />}
-        isOpen={isOnboardingOpen}
-        onClose={handleModalClose}
-      />
-      <S.Wrapper
-        onTouchStart={handleTouchStart}
-        onTouchEnd={handleTouchEnd}
-        onTouchCancel={handleTouchCancel}
-      >
+      <S.Wrapper>
         <Activity mode={isPhotoModalOpen ? 'visible' : 'hidden'}>
           <PhotoModal
             isOpen={isPhotoModalOpen}
@@ -168,18 +155,12 @@ const GuestbookCardPage = () => {
             }}
           />
         </S.DeleteButtonContainer>
-        <S.InfoSection>
-          <S.InfoTitle>"{guestbookCard.nickname}"의 방명록</S.InfoTitle>
-          <S.InfoDescription>{createdTimeDescription}</S.InfoDescription>
-          <S.IconInfoContainer>
-            {photoListLength > 0 && (
-              <>
-                <MdOutlinePhoto />
-                <p>{photoListLength}</p>
-              </>
-            )}
-          </S.IconInfoContainer>
-        </S.InfoSection>
+        <GuestbookCardInfoSection
+          guestbookCard={guestbookCard}
+          photoListLength={photoListLength}
+          createdTimeDescription={createdTimeDescription}
+          isGuestbookCardFetching={isGuestbookCardFetching}
+        />
         <Line
           leftElement={
             prevGuestbookId && (
@@ -202,23 +183,16 @@ const GuestbookCardPage = () => {
             )
           }
         />
-        <S.MessageSection>
-          <S.Message>{guestbookCard.message}</S.Message>
-        </S.MessageSection>
-        {photoListLength > 0 && (
-          <S.PhotoSection>
-            <PhotoGrid
-              photoList={localPhotoList}
-              onPhotoClick={handlePhotoClick}
-            />
-            <Button
-              type="button"
-              variant="secondary"
-              text="사진 전체 다운로드"
-              style={{ border: 'none' }}
-            />
-          </S.PhotoSection>
-        )}
+        <GuestbookCardMessageSection
+          guestbookCard={guestbookCard}
+          isGuestbookCardFetching={isGuestbookCardFetching}
+        />
+        <GuestbookCardPhotoSection
+          photoList={localPhotoList}
+          onPhotoClick={handlePhotoClick}
+          isGuestbookCardFetching={isGuestbookCardFetching}
+          guestbookTitle={`${guestbookCard.nickname}의 방명록 사진`}
+        />
         <Line width={192} />
       </S.Wrapper>
     </>

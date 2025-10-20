@@ -1,6 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
 import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { guestbookService } from '../../../apis/services/guestbook/guestbook.service';
+import { createGuestbookRoute } from '../../../constants/routes';
 import type { GuestbookCard } from '../../../types/domain/guestbook.type';
 import { useToast } from '../../@common/useToast';
 
@@ -14,10 +16,11 @@ const useGuestbookCard = ({
   guestbookCardId,
 }: UseGuestbookCardProps) => {
   const { showToast } = useToast();
+  const navigate = useNavigate();
 
   const initialData: GuestbookCard = {
     id: 0,
-    nickname: '     ',
+    nickname: '',
     message: '',
     createdAt: '2000-00-00T00:00:00.000Z',
     photos: [],
@@ -25,7 +28,7 @@ const useGuestbookCard = ({
 
   const {
     data: guestbookCard,
-    isLoading,
+    isFetching,
     isError,
   } = useQuery({
     initialData,
@@ -46,10 +49,11 @@ const useGuestbookCard = ({
         text: '방명록 상세 조회에 실패했습니다',
         type: 'error',
       });
+      navigate(createGuestbookRoute(spaceCode));
     }
   }, [isError]);
 
-  return { guestbookCard, isLoading, isError };
+  return { guestbookCard, isFetching, isError };
 };
 
 export default useGuestbookCard;

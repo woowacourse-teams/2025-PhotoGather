@@ -9,6 +9,7 @@ export const global = css`
   body {
     font-family: 'SUIT', 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;
     background-color: #f5f5f5;
+    word-break: break-all;
   }
   html {
     scroll-behavior: smooth;

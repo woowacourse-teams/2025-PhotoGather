@@ -26,7 +26,7 @@ public class SpacePhoto extends Photo {
         this.capacity = capacity;
     }
 
-    public static SpacePhoto empty() {
-        return new SpacePhoto(null, "", "", 0L);
+    public static SpacePhoto empty(Space space) {
+        return new SpacePhoto(space, "", "", 0L);
     }
 }

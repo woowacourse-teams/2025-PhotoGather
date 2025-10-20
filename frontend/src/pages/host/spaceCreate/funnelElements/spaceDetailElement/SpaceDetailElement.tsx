@@ -1,12 +1,14 @@
 import { useState } from 'react';
 import TextInput from '../../../../../components/@common/inputs/textInput/TextInput';
 import PhotoPreviewButton from '../../../../../components/specific/photoPreviewButton/PhotoPreviewButton';
+import { CONSTRAINTS } from '../../../../../constants/constraints';
 import { INFORMATION } from '../../../../../constants/messages';
 import useLocalFile from '../../../../../hooks/@common/useLocalFile';
 import type {
   FunnelElementProps,
   SpaceDetailElementInfos,
 } from '../../../../../types/funnel.type';
+import { clearFiles } from '../../../../../utils/clearFiles';
 import { createErrorMessageWithValidators } from '../../../../../validators/createErrorMessageWithValidators';
 import { funnelValidators } from '../../funnel/funnel.validators';
 import FunnelBasePage from '../../funnel/funnelBasePage/FunnelBasePage';
@@ -45,6 +47,8 @@ const SpaceDetailElement = ({
               type="button"
               previewFile={previewFile}
               uploadImage={handleFilesUploadClick}
+              clearFiles={() => clearFiles(localFiles)}
+              deleteImage={() => {}}
             />
           </S.ImageUploadContainer>
           <S.InputContainer>
@@ -55,6 +59,7 @@ const SpaceDetailElement = ({
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               errorMessage={emailErrorMessage}
+              maxLength={CONSTRAINTS.MAX_LENGTH.SPACE.EMAIL}
             />
             <TextInput
               label="Instagram ID"
@@ -63,6 +68,7 @@ const SpaceDetailElement = ({
               value={instagram}
               onChange={(e) => setInstagram(e.target.value)}
               errorMessage={instagramErrorMessage}
+              maxLength={CONSTRAINTS.MAX_LENGTH.SPACE.INSTAGRAM_USERNAME}
             />
           </S.InputContainer>
         </S.Wrapper>

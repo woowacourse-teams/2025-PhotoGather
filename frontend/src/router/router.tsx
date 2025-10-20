@@ -123,7 +123,7 @@ const routes: AppRouteObject[] = [
             path: ':spaceCode/create-guestbook',
             element: <GuestBookFunnel />,
             handle: {
-              noHeader: true,
+              noFooter: true,
             },
           },
           {

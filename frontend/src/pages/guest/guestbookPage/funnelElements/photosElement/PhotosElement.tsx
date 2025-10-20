@@ -74,6 +74,7 @@ const PhotosElement = ({
             initialIndex={0}
             updateCurrentIndex={updateCurrentIndex}
             actions={swiperActions}
+            spaceBetween={-30}
           />
         )
       }

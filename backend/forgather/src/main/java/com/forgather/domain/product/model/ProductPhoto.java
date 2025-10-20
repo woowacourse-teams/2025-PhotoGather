@@ -30,14 +30,6 @@ public class ProductPhoto extends Photo implements Comparable<ProductPhoto> {
     @Column(name = "sort_order", nullable = false)
     private int sortOrder;
 
-    public ProductPhoto(Long id, Product product, String originalName, String path, Long capacity, int order) {
-        super(id, originalName, path, capacity);
-        validateRequiredFields(product);
-        validateOrder(order);
-        this.product = product;
-        this.sortOrder = order;
-    }
-
     public ProductPhoto(Product product, String originalName, String path, Long capacity, int order) {
         super(originalName, path, capacity);
         validateRequiredFields(product);

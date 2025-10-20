@@ -19,14 +19,14 @@ export const LeftContainer = styled.div`
   user-select: none;
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 8px;
 `;
 
 export const RightContainer = styled.div``;
 
 export const Text = styled.p`
   ${({ theme }) => theme.typography.header03}
-  max-width: 230px;
+  max-width: 200px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;

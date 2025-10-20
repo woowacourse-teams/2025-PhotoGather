@@ -1,9 +1,6 @@
 import { css, type Theme } from '@emotion/react';
 import styled from '@emotion/styled';
-import type {
-  IconButtonSize,
-  IconButtonVariant,
-} from '../../../../types/button.type';
+import type { IconButtonSize, IconButtonVariant } from '../../../../types/button.type';
 
 export const IconButtonSizes = {
   small: 20,

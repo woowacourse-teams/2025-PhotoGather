@@ -24,7 +24,7 @@ const MessageElement = ({
   };
   const { isError, errorMessage } = createErrorMessageWithValidators({
     value: message,
-    validators: [funnelValidators.message.maxLength],
+    validators: [funnelValidators.message.validator],
   });
 
   const isDisabled = isError || calculateValidLength(message) === 0;
