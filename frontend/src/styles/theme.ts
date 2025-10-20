@@ -57,7 +57,7 @@ export const theme = {
     },
   },
   zIndex: {
-    fixedButton: 600,
+    fixedButton: 620,
     modalBackdrop: 650,
     modal: 700,
     toast: 800,

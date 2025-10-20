@@ -1,6 +1,9 @@
 import { css, type Theme } from '@emotion/react';
 import styled from '@emotion/styled';
-import type { IconButtonSize, IconButtonVariant } from '../../../../types/button.type';
+import type {
+  IconButtonSize,
+  IconButtonVariant,
+} from '../../../../types/button.type';
 
 export const IconButtonSizes = {
   small: 20,
@@ -84,6 +87,7 @@ export const IconContainer = styled.button<{
   align-items: center;
   gap: 10px;
   border-radius: 12px;
+  z-index: ${({ theme }) => theme.zIndex.fixedButton};
 
   svg {
     width: ${({ $size }) => IconButtonSizes[$size]}px;
