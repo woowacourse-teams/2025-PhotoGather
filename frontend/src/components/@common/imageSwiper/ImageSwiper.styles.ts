@@ -18,7 +18,12 @@ export const NoImageComment = styled.h2`
 
 export const ImageSwiperContainer = styled.div`
   width: 100%;
+  max-width: ${({ theme }) => theme.layout.width};
   margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
 
   & .swiper {
     width: 100%;
@@ -52,7 +57,7 @@ export const ImageSwiperContainer = styled.div`
   }
   & .swiper-button-prev, .swiper-button-next {
     color: ${({ theme }) => theme.colors.white};
-    background-color: ${({ theme }) => hexToRgba(theme.colors.gray06, 0.5)};
+    background-color: ${({ theme }) => hexToRgba(theme.colors.gray06, 0.7)};
     backdrop-filter: blur(10px);
     width: 24px;
     height: 24px;
