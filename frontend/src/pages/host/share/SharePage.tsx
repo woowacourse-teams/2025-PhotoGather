@@ -6,6 +6,7 @@ import Button from '../../../components/@common/buttons/button/Button';
 import IconButton from '../../../components/@common/buttons/iconButton/IconButton';
 import QRCode from '../../../components/@common/qrCode/QRCode';
 import { createSpaceMainRoute, ROUTES } from '../../../constants/routes';
+import useConfetti from '../../../hooks/@common/useConfetti';
 import { useToast } from '../../../hooks/@common/useToast';
 import { copyLinkToClipboard } from '../../../utils/copyLinkToClipboard';
 import { saveImage } from '../../../utils/saveImage';
@@ -14,6 +15,7 @@ import * as S from './SharePage.styles';
 const SharePage = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const { canvasRef, canvasStyles } = useConfetti();
   const { spaceCode } = location.state || {};
 
   const { showToast } = useToast();
@@ -53,6 +55,7 @@ const SharePage = () => {
 
   return (
     <S.Wrapper>
+      <canvas ref={canvasRef} style={canvasStyles} />
       <S.TopContainer>
         <S.Image src={CompleteImage} alt="링크 이미지" />
         <S.TextContainer>
