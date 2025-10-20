@@ -12,5 +12,6 @@ export const Line = styled.div<{ $width: number }>`
 `;
 
 export const ButtonContainer = styled.div`
+  min-width: 20px;
   max-width: 64px;
 `;
