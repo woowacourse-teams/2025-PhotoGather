@@ -18,7 +18,7 @@ const SpaceNameElement = ({
     value: name,
     validators: [funnelValidators.name],
   });
-  const isDisabled = isError;
+  const isDisabled = isError || calculateValidLength(name) === 0;
 
   return (
     <FunnelBasePage
