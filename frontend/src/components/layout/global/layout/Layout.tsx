@@ -33,7 +33,7 @@ const Layout = () => {
     },
     user: {
       icon: <MdPerson />,
-      onClick: () => console.log('작동'),
+      onClick: () => navigate(ROUTES.HOST.MY_INFO),
     },
   };
 

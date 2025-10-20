@@ -55,7 +55,7 @@ const useKakaoAuth = () => {
     }
   };
 
-  const getAuth = async (code: string) => {
+  const getServerToken = async (code: string) => {
     try {
       const clientId = await requestKakaoClientId();
       const kakaoToken = await requestKakaoToken(clientId, code);
@@ -74,7 +74,7 @@ const useKakaoAuth = () => {
     }
   };
 
-  return { handleKakaoLogin, getAuth };
+  return { handleKakaoLogin, getServerToken };
 };
 
 export default useKakaoAuth;

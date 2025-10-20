@@ -5,7 +5,7 @@ import { useToast } from '../../hooks/@common/useToast';
 import useKakaoAuth from '../../hooks/domain/auth/useKakaoAuth';
 
 const KakaoAuthPage = () => {
-  const { getAuth } = useKakaoAuth();
+  const { getServerToken } = useKakaoAuth();
   const { showToast } = useToast();
   const navigate = useNavigate();
 
@@ -25,7 +25,7 @@ const KakaoAuthPage = () => {
     const fetchKakaoCode = async () => {
       try {
         const kakaoCode = getKakaoCode();
-        await getAuth(kakaoCode);
+        await getServerToken(kakaoCode);
       } catch (error) {
         console.error(error);
         showToast({
