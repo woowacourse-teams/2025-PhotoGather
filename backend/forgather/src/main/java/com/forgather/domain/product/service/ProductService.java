@@ -39,7 +39,8 @@ public class ProductService {
 
     @Transactional(readOnly = true)
     public ProductResponse get(String spaceCode) {
-        Product product = productRepository.getBySpaceCodeOrThrow(spaceCode);
+        Space space = spaceRepository.getByCodeOrThrow(spaceCode);
+        Product product = productRepository.getBySpaceOrThrow(space);
         ProductPhotos productPhotos = new ProductPhotos(productPhotoRepository.findAllByProduct(product));
         return new ProductResponse(product, productPhotos.getAll());
     }
@@ -47,7 +48,7 @@ public class ProductService {
     @Transactional
     public ProductResponse register(String spaceCode, RegisterProductRequest request) {
         Space space = spaceRepository.getByCodeOrThrow(spaceCode);
-        validateProductAlreadyExists(spaceCode);
+        validateProductAlreadyExists(space);
         Product product = productRepository.save(request.toEntity(space));
 
         ProductPhotos productPhotos = new ProductPhotos();
@@ -64,17 +65,18 @@ public class ProductService {
         return new ProductResponse(product, productPhotos.getAll());
     }
 
-    private void validateProductAlreadyExists(String spaceCode) {
-        Optional<Product> optionalProduct = productRepository.findBySpaceCode(spaceCode);
+    private void validateProductAlreadyExists(Space space) {
+        Optional<Product> optionalProduct = productRepository.findBySpace(space);
         if (optionalProduct.isPresent()) {
-            throw new BaseException("이미 등록된 작품이 존재합니다. spaceCode: " + spaceCode);
+            throw new BaseException("이미 등록된 작품이 존재합니다. spaceCode: " + space.getCode());
         }
     }
 
     @Transactional
     public ProductResponse update(String spaceCode, UpdateProductRequest request) {
         // Product 정보 수정
-        Product product = productRepository.getBySpaceCodeOrThrow(spaceCode);
+        Space space = spaceRepository.getByCodeOrThrow(spaceCode);
+        Product product = productRepository.getBySpaceOrThrow(space);
         product.update(request.title(), request.category(), request.authorName(), request.description());
 
         // 삭제 사진 db 및 클라우드 삭제
@@ -101,7 +103,8 @@ public class ProductService {
 
     @Transactional
     public void delete(String spaceCode) {
-        Product product = productRepository.getBySpaceCodeOrThrow(spaceCode);
+        Space space = spaceRepository.getByCodeOrThrow(spaceCode);
+        Product product = productRepository.getBySpaceOrThrow(space);
         deleteAllProductPhotos(product);
         productRepository.delete(product);
     }

@@ -28,10 +28,10 @@ const NicknameElement = ({
   };
   const { isError, errorMessage } = createErrorMessageWithValidators({
     value: nickname,
-    validators: [funnelValidators.nickname.maxLength],
+    validators: [funnelValidators.nickname.validator],
   });
   const validLength = calculateValidLength(nickname);
-  const isDisabled = isError || validLength === 0;
+  const isDisabled = isError || calculateValidLength(nickname) === 0;
 
   return (
     <FunnelBasePage

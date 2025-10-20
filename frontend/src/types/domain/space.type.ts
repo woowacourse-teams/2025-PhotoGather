@@ -25,4 +25,5 @@ export interface SpaceInfoFormData {
   isPublic: boolean;
   email: string;
   instagramUsername: string;
+  isDeletePhoto?: boolean;
 }

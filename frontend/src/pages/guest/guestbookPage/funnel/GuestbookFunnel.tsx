@@ -1,4 +1,5 @@
 import { useParams } from 'react-router-dom';
+import LoadingModal from '../../../../components/specific/modal/loadingModal/LoadingModal';
 import useConfirmBeforeRefresh from '../../../../hooks/@common/useConfirmBeforeRefresh';
 import useFormFunnel from '../../../../hooks/domain/funnel/useFormFunnel';
 import usePostGuestbook from '../../../../hooks/domain/guestbook/usePostGuestbook';
@@ -29,7 +30,7 @@ const GuestBookFunnel = () => {
 
   const { spaceCode } = useParams<{ spaceCode: string }>();
 
-  const { submitForm } = usePostGuestbook({
+  const { submitForm, isLoading } = usePostGuestbook({
     spaceCode: spaceCode ?? '',
     receiver: MOCK_RECEIVER,
     formData: {
@@ -40,34 +41,37 @@ const GuestBookFunnel = () => {
   });
 
   return (
-    <S.Wrapper>
-      <S.DisplayInfoContainer>
-        <S.DisplayImage src={mockData.thumbnail} alt="전시 썸네일 이미지" />
-        <S.DisplayName>{mockData.title}</S.DisplayName>
-      </S.DisplayInfoContainer>
-      <DividerLine width="15%" />
-      <Funnel.Step name="nickname">
-        <NicknameElement
-          receiver={MOCK_RECEIVER}
-          initialValue={Funnel.form.nickname}
-          onNext={(nickname) => Funnel.goNextWithData('message', { nickname })}
-        />
-      </Funnel.Step>
-      <Funnel.Step name="message">
-        <MessageElement
-          receiver={MOCK_RECEIVER}
-          initialValue={Funnel.form.message}
-          onNext={(message) => Funnel.goNextWithData('photos', { message })}
-        />
-      </Funnel.Step>
-      <Funnel.Step name="photos">
-        <PhotosElement
-          receiver={MOCK_RECEIVER}
-          onNextButtonClick={(photos) => submitForm(photos)}
-          initialLocalFiles={Funnel.form.photos}
-        />
-      </Funnel.Step>
-    </S.Wrapper>
+    <>
+      <LoadingModal isOpen={isLoading} text="전송 중..." />
+      <S.Wrapper>
+        <S.DisplayInfoContainer>
+          <S.DisplayImage src={mockData.thumbnail} alt="전시 썸네일 이미지" />
+          <S.DisplayName>{mockData.title}</S.DisplayName>
+        </S.DisplayInfoContainer>
+        <DividerLine width="15%" />
+        <Funnel.Step name="nickname">
+          <NicknameElement
+            receiver={MOCK_RECEIVER}
+            initialValue={Funnel.form.nickname}
+            onNext={(nickname) => Funnel.goNextWithData('message', { nickname })}
+          />
+        </Funnel.Step>
+        <Funnel.Step name="message">
+          <MessageElement
+            receiver={MOCK_RECEIVER}
+            initialValue={Funnel.form.message}
+            onNext={(message) => Funnel.goNextWithData('photos', { message })}
+          />
+        </Funnel.Step>
+        <Funnel.Step name="photos">
+          <PhotosElement
+            receiver={MOCK_RECEIVER}
+            onNextButtonClick={(photos) => submitForm(photos)}
+            initialLocalFiles={Funnel.form.photos}
+          />
+        </Funnel.Step>
+      </S.Wrapper>
+    </>
   );
 };
 

@@ -14,18 +14,21 @@ export const buildThumbnailUrl = ({
   replacePath = 'product',
   preset = '800',
 }: BuildThumbnailUrlProps): string => {
-  const lastDotIndex = path.lastIndexOf('.');
+  const parsedPath = path.replace(/^photogather\//, '');
+  const lastDotIndex = parsedPath.lastIndexOf('.');
   const pathWithoutExt =
-    lastDotIndex !== -1 ? path.substring(0, lastDotIndex) : path;
+    lastDotIndex !== -1 ? parsedPath.substring(0, lastDotIndex) : parsedPath;
 
   const thumbnailPath = pathWithoutExt.replace(
     `/${replacePath}/`,
     `/${replacePath}/thumbnails/`,
   );
 
-  return `${baseUrl}${thumbnailPath}_x${preset}.webp`;
+  return `${baseUrl}/${thumbnailPath}_x${preset}.webp`;
 };
 
-export const buildOriginalImageUrl = (imagePath: string) => {
-  return `${baseUrl}/${imagePath}`;
+export const buildOriginalImageUrl = (path: string): string => {
+  const parsedPath = path.replace(/^photogather\//, '');
+
+  return `${baseUrl}/${parsedPath}`;
 };

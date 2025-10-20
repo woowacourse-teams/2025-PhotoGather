@@ -63,7 +63,6 @@ const routes: AppRouteObject[] = [
             path: 'create-space',
             element: <SpaceCreateFunnel />,
             handle: {
-              noHeader: true,
               noFooter: true,
             },
           },
@@ -106,7 +105,7 @@ const routes: AppRouteObject[] = [
             path: ':spaceCode/create-guestbook',
             element: <GuestBookFunnel />,
             handle: {
-              noHeader: true,
+              noFooter: true,
             },
           },
           {

@@ -15,9 +15,7 @@ export const NoImageComment = styled.h2`
   text-align: center;
 `;
 
-export const ImageSwiperContainer = styled.div<{
-  $size?: 'default' | 'large';
-}>`
+export const ImageSwiperContainer = styled.div`
   width: 100%;
   margin: 0 auto;
 

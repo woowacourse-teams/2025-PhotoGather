@@ -56,7 +56,6 @@ const GuestbookCardPage = () => {
     navigate(createGuestbookRoute(spaceCode));
   };
 
-  // guestbookCard.photos가 변경되면 localPhotoList를 업데이트
   useEffect(() => {
     setLocalPhotoList(guestbookCard.photos);
   }, [guestbookCard.photos]);

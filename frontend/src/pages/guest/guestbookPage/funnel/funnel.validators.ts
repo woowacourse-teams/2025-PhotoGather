@@ -1,13 +1,20 @@
 import { CONSTRAINTS } from '../../../../constants/constraints';
-import { checkMaxLength } from '../../../../validators/form.validators';
+import {
+  checkMaxLength,
+  checkNoWhitespaceOnly,
+} from '../../../../validators/form.validators';
 
 export const funnelValidators = {
   message: {
-    maxLength: (value: string) =>
-      checkMaxLength(value, CONSTRAINTS.MAX_LENGTH.GUESTBOOK.MESSAGE),
+    validator: (value: string) => {
+      checkNoWhitespaceOnly(value);
+      checkMaxLength(value, CONSTRAINTS.MAX_LENGTH.GUESTBOOK.MESSAGE);
+    },
   },
   nickname: {
-    maxLength: (value: string) =>
-      checkMaxLength(value, CONSTRAINTS.MAX_LENGTH.GUESTBOOK.NICKNAME),
+    validator: (value: string) => {
+      checkNoWhitespaceOnly(value);
+      checkMaxLength(value, CONSTRAINTS.MAX_LENGTH.GUESTBOOK.NICKNAME);
+    },
   },
 };
