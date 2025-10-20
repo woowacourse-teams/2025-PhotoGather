@@ -31,8 +31,6 @@ const SpaceInfoPage = () => {
     spaceCode: spaceCode ?? '',
   });
 
-  console.log(spaceInfo);
-
   return (
     <S.Wrapper>
       <DeleteModal

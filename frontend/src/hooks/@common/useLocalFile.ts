@@ -14,7 +14,6 @@ interface UseLocalFileProps {
   fileType: string;
   maxFileCount?: number;
 }
-
 const useLocalFile = ({
   initialLocalFiles,
   fileType,

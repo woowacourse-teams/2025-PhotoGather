@@ -63,6 +63,7 @@ const EditForm = () => {
     fileType: 'image',
     maxFileCount: 1,
   });
+
   const { patchSpaceInfo } = usePatchSpaceInfo({
     spaceCode: spaceCode ?? '',
     dirtyFields,
