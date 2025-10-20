@@ -47,6 +47,7 @@ public class SpaceService {
     @Transactional
     public CreateSpaceResponse create(CreateSpaceRequest request, MultipartFile file, Host host) {
         String spaceCode = codeGenerator.generate(10);
+        validateHostNull(host);
         Space space = spaceRepository.save(request.toEntity(spaceCode));
         spaceHostMapRepository.save(new SpaceHostMap(space, host));
         if (file == null || file.isEmpty()) {
@@ -173,9 +174,7 @@ public class SpaceService {
     }
 
     private void validateSpaceHost(Space space, Host host) {
-        if (host == null) {
-            throw new UnauthorizedException("로그인이 필요합니다.");
-        }
+        validateHostNull(host);
         if (space == null) {
             throw new BaseNullPointerException("스페이스는 null일 수 없습니다.");
         }
@@ -183,5 +182,11 @@ public class SpaceService {
             return;
         }
         throw new ForbiddenException("권한이 존재하지 않습니다.");
+    }
+
+    private void validateHostNull(Host host) {
+        if (host == null) {
+            throw new UnauthorizedException("로그인이 필요합니다.");
+        }
     }
 }
