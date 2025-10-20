@@ -1,6 +1,7 @@
 import { IoGlobeOutline, IoLockClosedOutline } from 'react-icons/io5';
 import { MdCelebration } from 'react-icons/md';
 import type { MySpace } from '../../../types/domain/space.type';
+import { buildOriginalImageUrl } from '../../../utils/buildImageUrl';
 import * as S from './SpaceCard.styles';
 
 interface SpaceCardProps {
@@ -9,7 +10,9 @@ interface SpaceCardProps {
 }
 
 const SpaceCard = ({ space, onClick }: SpaceCardProps) => {
-  const thumbnailUrl = space.spacePhoto.isExists ? space.spacePhoto.path : '';
+  const thumbnailUrl = space.spacePhoto.isExists
+    ? buildOriginalImageUrl(space.spacePhoto.path)
+    : '';
 
   return (
     <S.Wrapper onClick={onClick}>
