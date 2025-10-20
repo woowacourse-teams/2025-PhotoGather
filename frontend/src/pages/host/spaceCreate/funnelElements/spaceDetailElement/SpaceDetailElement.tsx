@@ -18,10 +18,11 @@ const SpaceDetailElement = ({
   onNext,
   initialValue = { profileImage: [], email: '', instagram: '' },
 }: FunnelElementProps<SpaceDetailElementInfos>) => {
-  const { localFiles, previewFile, handleFilesUploadClick } = useLocalFile({
-    fileType: 'image',
-    maxFileCount: 1,
-  });
+  const { localFiles, previewFile, handleFilesUploadClick, clearLocalFiles } =
+    useLocalFile({
+      fileType: 'image',
+      maxFileCount: 1,
+    });
   const [email, setEmail] = useState(initialValue.email);
   const [instagram, setInstagram] = useState(initialValue.instagram);
   const { isError: isEmailError, errorMessage: emailErrorMessage } =
@@ -47,7 +48,10 @@ const SpaceDetailElement = ({
               type="button"
               previewFile={previewFile}
               uploadImage={handleFilesUploadClick}
-              clearFiles={() => clearFiles(localFiles)}
+              clearFiles={() => {
+                clearFiles(localFiles);
+                clearLocalFiles();
+              }}
               deleteImage={() => {}}
             />
           </S.ImageUploadContainer>

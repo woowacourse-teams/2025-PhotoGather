@@ -166,12 +166,17 @@ const useLocalFile = ({
     updateFiles(files);
   };
 
+  const clearLocalFiles = () => {
+    setLocalFiles([]);
+  };
+
   return {
     localFiles,
     previewFile,
     deleteFile,
     handleFilesUploadClick,
     handleFilesDrop,
+    clearLocalFiles,
   };
 };
 
