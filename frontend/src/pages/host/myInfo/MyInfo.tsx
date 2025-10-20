@@ -1,13 +1,13 @@
 import { useContext } from 'react';
 import Button from '../../../components/@common/buttons/button/Button';
 import { UserContext } from '../../../contexts/UserContext';
-import useLogout from '../../../hooks/domain/auth/useLogout';
+import useCommonAuthActions from '../../../hooks/domain/auth/useCommonAuthActions';
 import { Thumbnail } from '../../MainPage.common.styles';
 import * as S from './MyInfo.styles';
 
 const MyInfo = () => {
   const userInfo = useContext(UserContext);
-  const { handleLogout } = useLogout();
+  const { handleLogout } = useCommonAuthActions();
 
   return (
     <S.Wrapper>
