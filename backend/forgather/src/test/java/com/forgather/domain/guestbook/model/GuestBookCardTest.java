@@ -45,24 +45,24 @@ class GuestBookCardTest {
             .hasMessageContaining("방명록 카드 메세지는 null일 수 없습니다.");
     }
 
-    @DisplayName("메세지의 길이가 300자를 초과하면 예외를 던진다")
+    @DisplayName("메세지의 길이가 400자를 초과하면 예외를 던진다")
     @Test
     void throwExceptionWhenMessageExceedMaxLength() {
         // given
-        String message = "1234567890".repeat(30) + "c";
+        String message = "1234567890".repeat(40) + "c";
 
         // when, then
         assertThatThrownBy(() -> createGuestBookCardWithMessage(message))
             .isInstanceOf(BaseException.class)
-            .hasMessageContaining("방명록 카드 메세지는 최대 300까지 입력 가능합니다.");
+            .hasMessageContaining("방명록 카드 메세지는 최대 400까지 입력 가능합니다.");
     }
 
-    @DisplayName("메세지는 이모지를 한 글자로 간주해 300자까지 입력 가능하다")
+    @DisplayName("메세지는 이모지를 한 글자로 간주해 400자까지 입력 가능하다")
     @ValueSource(strings = {"😀", "👦", "👨", "‍👩‍", "‍👦", "‍👩‍👧‍", "👨‍👩‍👧", "👨‍👩‍👧‍👦"})
     @ParameterizedTest
     void countEmojiAsOneCharAtMessage(String emoji) {
         // given
-        String message = emoji.repeat(299) + "c";
+        String message = emoji.repeat(399) + "c";
 
         // when, then
         assertThatCode(() -> createGuestBookCardWithMessage(message)).doesNotThrowAnyException();

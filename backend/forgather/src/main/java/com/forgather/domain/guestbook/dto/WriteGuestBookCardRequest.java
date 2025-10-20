@@ -13,7 +13,7 @@ public record WriteGuestBookCardRequest(
     @Schema(description = "방문자 닉네임", example = "밍퐁루블", maxLength = 10)
     String nickname,
 
-    @Schema(description = "메세지", example = "전시 잘봤다~~ 너가 최고야 🤙", maxLength = 300)
+    @Schema(description = "메세지", example = "전시 잘봤다~~ 너가 최고야 🤙", maxLength = 400)
     String message,
 
     @Schema(description = "방명록 카드 사진 목록", example = """

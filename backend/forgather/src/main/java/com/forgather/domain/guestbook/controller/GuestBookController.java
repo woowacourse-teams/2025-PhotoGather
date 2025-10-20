@@ -87,7 +87,7 @@ public class GuestBookController {
         return ResponseEntity.ok(response);
     }
 
-    @Operation(summary = "방명록 카드 작성", description = "방문자 닉네임(10자), 메세지(300자)")
+    @Operation(summary = "방명록 카드 작성", description = "방문자 닉네임(10자), 메세지(400자)")
     @PostMapping
     public ResponseEntity<WriteGuestBookCardResponse> writeCard(
         @PathVariable(value = "spaceCode") String spaceCode,
