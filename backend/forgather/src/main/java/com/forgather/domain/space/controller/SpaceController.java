@@ -76,7 +76,7 @@ public class SpaceController {
     @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<SpaceResponse> update(
         @PathVariable(name = "spaceCode") String spaceCode,
-        @Parameter(description = "스페이스 생성 정보 (JSON, text/plain)", required = true,
+        @Parameter(description = "스페이스 수정 정보 (JSON, text/plain)", required = true,
             content = @Content(schema = @Schema(implementation = UpdateSpaceRequest.class)))
         @RequestPart("request") @Validated UpdateSpaceRequest request,
         @RequestPart(value = "file", required = false) MultipartFile file,
@@ -87,7 +87,7 @@ public class SpaceController {
     }
 
     @GetMapping("/me")
-    @Operation(summary = "호스트의 스페이스 목록 조회", description = "호스트 ID를 통해 해당 호스트의 스페이스 목록을 조회합니다.")
+    @Operation(summary = "호스트의 스페이스 목록 조회", description = "로그인한 호스트의 스페이스 목록을 조회합니다.")
     @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<HostSpaceResponse> getSpacesInformation(@LoginHost Host host) {
         var response = spaceService.getSpacesInformation(host);
