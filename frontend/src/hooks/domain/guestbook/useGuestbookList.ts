@@ -28,6 +28,8 @@ const useGuestbookList = (spaceCode: string) => {
 
       return isLastPage ? undefined : lastGuestbookList.currentPage + 1;
     },
+    refetchOnMount: 'always',
+    staleTime: 0,
   });
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: isError 변경 시에만 토스트 띄우기
