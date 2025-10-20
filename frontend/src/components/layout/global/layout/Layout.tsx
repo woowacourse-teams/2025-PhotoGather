@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { IoSettingsSharp, IoShareOutline } from 'react-icons/io5';
+import { MdPerson } from 'react-icons/md';
 import { Outlet, useMatches, useNavigate, useParams } from 'react-router-dom';
 import { createSpaceInfoRoute, ROUTES } from '../../../../constants/routes';
 import type { AppRouteObject } from '../../../../types/route.type';
@@ -29,6 +30,10 @@ const Layout = () => {
     settings: {
       icon: <IoSettingsSharp />,
       onClick: () => navigate(createSpaceInfoRoute(spaceCode ?? '')),
+    },
+    user: {
+      icon: <MdPerson />,
+      onClick: () => console.log('작동'),
     },
   };
 

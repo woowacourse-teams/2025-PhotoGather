@@ -11,6 +11,7 @@ import GuestWorkDetail from '../pages/guest/workDetail/GuestWorkDetail';
 import GuestbookCardPage from '../pages/host/guestbook/card/GuestbookCardPage';
 import GuestbookListPage from '../pages/host/guestbook/list/GuestbookListPage';
 import HostMainPage from '../pages/host/mainPage/HostMainPage';
+import MyInfo from '../pages/host/myInfo/MyInfo';
 import MyPage from '../pages/host/mypage/MyPage';
 import SharePage from '../pages/host/share/SharePage';
 import SpaceCreateFunnel from '../pages/host/spaceCreate/funnel/SpaceCreateFunnel';
@@ -65,9 +66,13 @@ const routes: AppRouteObject[] = [
                 element: <MyPage />,
                 handle: {
                   highlight: true,
-                  headerIcons: ['settings'],
+                  headerIcons: ['user'],
                   noFooter: true,
                 },
+              },
+              {
+                path: 'my-info',
+                element: <MyInfo />,
               },
               {
                 path: ':spaceCode/space-info/edit',
