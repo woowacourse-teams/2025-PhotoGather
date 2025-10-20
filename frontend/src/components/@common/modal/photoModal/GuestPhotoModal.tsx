@@ -44,13 +44,13 @@ const GuestPhotoModal = (props: GuestPhotoModalProps) => {
     currentIndex > 0 ? props.previewFiles[currentIndex - 1].id : null;
 
   const handlePrevPhoto = () => {
-    if (prevPhotoId) {
+    if (prevPhotoId !== null) {
       setCurrentPhotoId(prevPhotoId);
     }
   };
 
   const handleNextPhoto = () => {
-    if (nextPhotoId) {
+    if (nextPhotoId !== null) {
       setCurrentPhotoId(nextPhotoId);
     }
   };
@@ -157,7 +157,7 @@ const GuestPhotoModal = (props: GuestPhotoModalProps) => {
             type="button"
             $position="left"
             aria-label="다음 사진"
-            disabled={!nextPhotoId}
+            disabled={nextPhotoId === null}
             onPointerDown={handleNextPhoto}
           >
             <LeftwardArrowIcon />
@@ -166,7 +166,7 @@ const GuestPhotoModal = (props: GuestPhotoModalProps) => {
             type="button"
             $position="right"
             aria-label="이전 사진"
-            disabled={!prevPhotoId}
+            disabled={prevPhotoId === null}
             onPointerDown={handlePrevPhoto}
           >
             <RightwardArrowIcon />
