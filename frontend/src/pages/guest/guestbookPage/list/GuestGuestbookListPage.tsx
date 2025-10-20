@@ -3,10 +3,10 @@ import { useNavigate, useParams } from 'react-router-dom';
 import useIntersectionObserver from '../../../../hooks/@common/useIntersectionObserver';
 import useGuestbookList from '../../../../hooks/domain/guestbook/useGuestbookList';
 import useSpaceInfo from '../../../../hooks/domain/space/useSpaceInfo';
-import GuestbookElement from './element/GuestbookElement';
-import * as S from './GuestbookListPage.styles';
+import GuestGuestbookElement from './element/GuestGuestbookElement';
+import * as S from './GuestGuestbookListPage.styles';
 
-const GuestbookListPage = () => {
+const GuestGuestbookListPage = () => {
   const navigate = useNavigate();
   const { spaceCode = '' } = useParams();
   const { spaceInfo } = useSpaceInfo({ spaceCode });
@@ -28,7 +28,7 @@ const GuestbookListPage = () => {
 
       <S.ListContainer>
         {guestbookList.map((card) => (
-          <GuestbookElement
+          <GuestGuestbookElement
             key={card.id}
             guestName={card.nickname}
             hasPhoto={card.containsPhoto}
@@ -42,4 +42,4 @@ const GuestbookListPage = () => {
   );
 };
 
-export default GuestbookListPage;
+export default GuestGuestbookListPage;

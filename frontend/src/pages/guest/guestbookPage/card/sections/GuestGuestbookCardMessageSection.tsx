@@ -1,5 +1,5 @@
 import type { GuestbookCard } from '../../../../../types/domain/guestbook.type';
-import * as S from '../GuestbookCardPage.styles';
+import * as S from '../GuestGuestbookCardPage.styles';
 
 interface GuestbookCardMessageSectionProps {
   guestbookCard: GuestbookCard;

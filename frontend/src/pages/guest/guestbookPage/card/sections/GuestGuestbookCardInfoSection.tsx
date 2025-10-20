@@ -1,7 +1,7 @@
 import { MdOutlinePhoto } from 'react-icons/md';
 import * as C from '../../../../../styles/@common/SkeletonBox.styles';
 import type { GuestbookCard } from '../../../../../types/domain/guestbook.type';
-import * as S from '../GuestbookCardPage.styles';
+import * as S from '../GuestGuestbookCardPage.styles';
 
 interface GuestbookCardInfoSectionProps {
   guestbookCard: GuestbookCard;

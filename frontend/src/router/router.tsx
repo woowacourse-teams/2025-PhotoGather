@@ -3,7 +3,9 @@ import Layout from '../components/layout/global/layout/Layout';
 import { PrivateRoute } from '../components/layout/privateRoute/PrivateRoute';
 import KakaoAuthPage from '../pages/auth/KakaoAuthPage';
 import CompletePage from '../pages/guest/completePage/CompletePage';
+import GuestGuestbookCardPage from '../pages/guest/guestbookPage/card/GuestGuestbookCardPage';
 import GuestBookFunnel from '../pages/guest/guestbookPage/funnel/GuestbookFunnel';
+import GuestGuestbookListPage from '../pages/guest/guestbookPage/list/GuestGuestbookListPage';
 import GuestMainPage from '../pages/guest/mainpage/GuestMainPage';
 import GuestWorkDetail from '../pages/guest/workDetail/GuestWorkDetail';
 import GuestbookCardPage from '../pages/host/guestbook/card/GuestbookCardPage';
@@ -132,6 +134,14 @@ const routes: AppRouteObject[] = [
           {
             path: ':spaceCode/work-detail',
             element: <GuestWorkDetail />,
+          },
+          {
+            path: ':spaceCode/guestbook',
+            element: <GuestGuestbookListPage />,
+          },
+          {
+            path: ':spaceCode/guestbook/:guestbookCardId',
+            element: <GuestGuestbookCardPage />,
           },
         ],
       },

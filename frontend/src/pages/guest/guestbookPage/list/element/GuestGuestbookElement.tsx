@@ -1,6 +1,6 @@
 import { MdArrowForward, MdOutlinePhoto } from 'react-icons/md';
 import { theme } from '../../../../../styles/theme';
-import * as S from './GuestbookElement.styles';
+import * as S from './GuestGuestbookElement.styles';
 
 interface GuestbookElementProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -9,7 +9,7 @@ interface GuestbookElementProps
   isRead: boolean;
 }
 
-const GuestbookElement = ({
+const GuestGuestbookElement = ({
   guestName,
   hasPhoto,
   isRead,
@@ -31,4 +31,4 @@ const GuestbookElement = ({
   );
 };
 
-export default GuestbookElement;
+export default GuestGuestbookElement;

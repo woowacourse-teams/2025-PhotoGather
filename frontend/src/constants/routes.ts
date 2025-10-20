@@ -43,6 +43,10 @@ export const createGuestbookRoute = (spaceCode: string) => {
   return `/host/${spaceCode}/guestbook`;
 };
 
+export const createGuestGuestbookRoute = (spaceCode: string) => {
+  return `/guest/${spaceCode}/guestbook`;
+};
+
 export const createGuestbookCompleteRoute = (spaceCode: string) => {
   return `/guest/${spaceCode}/create-guestbook-complete`;
 };
@@ -60,6 +64,13 @@ export const createGuestbookCardRoute = (
   guestbookCardId: number | string,
 ) => {
   return `/host/${spaceCode}/guestbook/${guestbookCardId}`;
+};
+
+export const createGuestGuestbookCardRoute = (
+  spaceCode: string,
+  guestbookCardId: number | string,
+) => {
+  return `/guest/${spaceCode}/guestbook/${guestbookCardId}`;
 };
 
 export const createGetKakaoCodeUrl = (clientId: string, redirectUri: string) =>
