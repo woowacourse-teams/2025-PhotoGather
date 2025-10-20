@@ -15,7 +15,12 @@ const request = async <T>(
   const doFetch = async (newToken?: string) => {
     const response = await fetch(url, {
       method,
-      headers: matchHeaders(body, headers ?? {}, newToken ?? token),
+      headers: matchHeaders({
+        body,
+        headers: headers ?? {},
+        method,
+        token: newToken ?? token,
+      }),
       body: matchBody(body),
     });
     return response;
