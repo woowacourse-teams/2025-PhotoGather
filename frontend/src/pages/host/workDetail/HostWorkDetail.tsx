@@ -125,12 +125,6 @@ const HostWorkDetail = () => {
           ))}
           <DividerLine width="100%" />
         </C.WorkContainer>
-        <S.BottomSectionContainer>
-          <Button
-            text="수정하기"
-            onClick={() => navigate(createWorkEditRoute(spaceCode))}
-          />
-        </S.BottomSectionContainer>
       </S.Wrapper>
     </>
   );
