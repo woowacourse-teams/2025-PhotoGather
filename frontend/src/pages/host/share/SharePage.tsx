@@ -20,7 +20,7 @@ const SharePage = () => {
   const qrCodeRef = useRef<HTMLCanvasElement>(null);
 
   // TODO: 스페이스 코드 별 guest main 구현 후 대체 필요
-  const copyAddress = `${import.meta.env.VITE_DOMAIN}/guest/main`;
+  const copyAddress = `${import.meta.env.VITE_DOMAIN}/guest/${spaceCode}/main`;
 
   const handleSpaceMainButton = () => {
     const spaceMainRoute = createSpaceMainRoute(spaceCode);

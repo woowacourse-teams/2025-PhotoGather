@@ -1,5 +1,6 @@
 import { useRef } from 'react';
 import { MdDownload, MdLink } from 'react-icons/md';
+import { useParams } from 'react-router-dom';
 import { useToast } from '../../../../hooks/@common/useToast';
 import { copyLinkToClipboard } from '../../../../utils/copyLinkToClipboard';
 import { saveImage } from '../../../../utils/saveImage';
@@ -16,7 +17,9 @@ interface ShareModalProps {
 const SpaceShareModal = ({ isOpen, onClose }: ShareModalProps) => {
   const { showToast } = useToast();
   const qrCodeRef = useRef<HTMLCanvasElement>(null);
-  const copyAddress = `${import.meta.env.VITE_DOMAIN}/guest/main`;
+  const { spaceCode } = useParams();
+
+  const copyAddress = `${import.meta.env.VITE_DOMAIN}/guest/${spaceCode}/main`;
 
   const saveQRCodeImage = async () => {
     const canvas = qrCodeRef.current;

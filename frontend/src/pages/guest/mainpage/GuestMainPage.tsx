@@ -4,7 +4,6 @@ import Button from '../../../components/@common/buttons/button/Button';
 import IconButton from '../../../components/@common/buttons/iconButton/IconButton';
 import {
   createCreateGuestbookRoute,
-  createGuestbookRoute,
   createGuestWorkDetailRoute,
 } from '../../../constants/routes';
 import { DividerLine } from '../../../styles/@common/DividerLine.styles';
