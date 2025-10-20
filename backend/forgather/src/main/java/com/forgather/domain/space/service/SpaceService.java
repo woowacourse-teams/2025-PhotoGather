@@ -23,6 +23,7 @@ import com.forgather.global.auth.model.Host;
 import com.forgather.global.auth.model.SpaceHostMap;
 import com.forgather.global.auth.repository.SpaceHostMapRepository;
 import com.forgather.global.exception.BaseException;
+import com.forgather.global.exception.BaseNullPointerException;
 import com.forgather.global.exception.FileUploadException;
 import com.forgather.global.exception.ForbiddenException;
 import com.forgather.global.exception.UnauthorizedException;
@@ -172,11 +173,14 @@ public class SpaceService {
     }
 
     private void validateSpaceHost(Space space, Host host) {
-        if (spaceHostMapRepository.findBySpaceAndHost(space, host).isPresent()) {
-            return;
-        }
         if (host == null) {
             throw new UnauthorizedException("로그인이 필요합니다.");
+        }
+        if (space == null) {
+            throw new BaseNullPointerException("스페이스는 null일 수 없습니다.");
+        }
+        if (spaceHostMapRepository.findBySpaceAndHost(space, host).isPresent()) {
+            return;
         }
         throw new ForbiddenException("권한이 존재하지 않습니다.");
     }
