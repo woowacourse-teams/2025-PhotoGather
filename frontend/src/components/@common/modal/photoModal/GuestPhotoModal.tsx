@@ -28,13 +28,13 @@ interface GuestPhotoModalProps extends BasePhotoModalProps {
 const GuestPhotoModal = (props: GuestPhotoModalProps) => {
   const { onClose, onSubmit } = props;
   const [currentPhotoId, setCurrentPhotoId] = useState<number>(props.currentId);
-  const [displayPath, setDisplayPath] = useState<string>('');
   const overlay = useOverlay();
 
   const currentIndex = props.previewFiles.findIndex(
     (file) => file.id === currentPhotoId,
   );
   const currentFile = props.previewFiles[currentIndex];
+  const displayPath = currentFile?.previewUrl || '';
 
   const prevPhotoId =
     currentIndex < props.previewFiles.length - 1
@@ -63,23 +63,6 @@ const GuestPhotoModal = (props: GuestPhotoModalProps) => {
   });
 
   const handleImageError = createImageErrorHandler(defaultImage);
-
-  // biome-ignore lint/correctness/useExhaustiveDependencies: 초기 fetch
-  useEffect(() => {
-    const initialFile = props.previewFiles.find(
-      (file) => file.id === props.currentId,
-    );
-    if (initialFile) {
-      setDisplayPath(initialFile.previewUrl);
-    }
-  }, []);
-
-  // biome-ignore lint/correctness/useExhaustiveDependencies: currentPhotoId 변경 시 displayPath 업데이트
-  useEffect(() => {
-    if (currentFile) {
-      setDisplayPath(currentFile.previewUrl);
-    }
-  }, [currentPhotoId]);
 
   const handleDelete = async () => {
     if (!props.onDelete) return;
