@@ -9,7 +9,7 @@ import FloatingActionButton from '../../../components/@common/buttons/floatingAc
 import FloatingIconButton from '../../../components/@common/buttons/floatingIconButton/FloatingIconButton';
 import HighlightText from '../../../components/@common/highlightText/HighlightText';
 import GuestImageGrid from '../../../components/@common/imageLayout/imageGrid/guestImageGrid/GuestImageGrid';
-import PhotoModal from '../../../components/@common/modal/photoModal/PhotoModal';
+import GuestPhotoModal from '../../../components/@common/modal/photoModal/GuestPhotoModal';
 import UserBadge from '../../../components/@common/userBadge/UserBadge';
 import GuestSpaceHeader from '../../../components/layout/header/spaceHeader/guestSpaceHeader/GuestSpaceHeader';
 import LoadingLayout from '../../../components/layout/loadingLayout/LoadingLayout';
@@ -105,8 +105,7 @@ const ImageUploadPage = () => {
     if (!selectedPhoto) return;
 
     await overlay(
-      <PhotoModal
-        mode="guest"
+      <GuestPhotoModal
         previewFile={selectedPhoto}
         onDelete={async () => await deletePhotoWithTracking(photoId)}
       />,

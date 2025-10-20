@@ -70,12 +70,19 @@ export const LoadingPhoto = styled.img`
   background-color: ${({ theme }) => theme.colors.gray01};
 `;
 
-export const ButtonContainer = styled.div<{ $isManagerMode: boolean }>`
+export const ButtonContainer = styled.div`
   display: flex;
   align-items: center;
   width: 106px;
   height: auto;
-  justify-content: ${({ $isManagerMode }) => ($isManagerMode ? 'space-between' : 'center')};
+`;
+
+export const ManagerButtonContainer = styled(ButtonContainer)`
+  justify-content: space-between;
+`;
+
+export const GuestButtonContainer = styled(ButtonContainer)`
+  justify-content: center;
 `;
 
 export const DeleteIcon = styled(TrashCanIcon)`
