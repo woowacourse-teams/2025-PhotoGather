@@ -1,4 +1,4 @@
-import { EffectCoverflow, Navigation, Pagination } from 'swiper/modules';
+import { Navigation, Pagination } from 'swiper/modules';
 import { Swiper, type SwiperRef, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import * as S from './ImageSwiper.styles';
@@ -23,7 +23,6 @@ const ImageSwiper = ({
   initialIndex,
   imageInfo,
   updateCurrentIndex,
-  spaceBetween = 20,
 }: ImageSwiperProps) => {
   const swiperRef = useRef<SwiperRef>(null);
 
@@ -46,19 +45,11 @@ const ImageSwiper = ({
     <S.ImageSwiperContainer>
       <Swiper
         /** swiper 스타일 설정 */
-        slidesPerView="auto"
-        spaceBetween={spaceBetween}
+        slidesPerView={1}
         pagination={{ clickable: true, type: 'fraction' }}
-        modules={[Navigation, Pagination, EffectCoverflow]}
-        centeredSlides={true}
+        modules={[Navigation, Pagination]}
         grabCursor
-        effect="coverflow"
-        coverflowEffect={{
-          rotate: 0,
-          stretch: -40,
-          depth: 200,
-          slideShadows: false,
-        }}
+        navigation={true}
         onInit={(swiper) => {
           initIndex(swiper);
         }}
