@@ -1,15 +1,16 @@
 import confetti from 'canvas-confetti';
 import { useEffect, useRef } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import Button from '../../../components/@common/buttons/button/Button';
 import { INFORMATION } from '../../../constants/messages';
-import { ROUTES } from '../../../constants/routes';
+import { createGuestMainRoute, ROUTES } from '../../../constants/routes';
 import { theme } from '../../../styles/theme';
 import * as S from './CompletePage.styles';
 
 const CompletePage = () => {
   const { state } = useLocation();
   const navigate = useNavigate();
+  const { spaceCode } = useParams();
 
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
@@ -33,13 +34,12 @@ const CompletePage = () => {
       });
     };
 
-    firework(); // 페이지 로드 시 폭죽
+    firework();
   }, []);
 
   useEffect(() => {
     if (!state || !state.guestNickName || !state.receiver) {
-      // TODO : 랜딩 페이지 구현 후 대체 필요
-      navigate(ROUTES.GUEST.MAIN);
+      navigate(ROUTES.MAIN);
     }
   }, [state, navigate]);
 
@@ -69,7 +69,7 @@ const CompletePage = () => {
         </S.Message>
         <Button
           text="스페이스로 돌아가기"
-          onClick={() => navigate(ROUTES.GUEST.MAIN)}
+          onClick={() => navigate(createGuestMainRoute(spaceCode ?? ''))}
         />
       </S.Wrapper>
     </>

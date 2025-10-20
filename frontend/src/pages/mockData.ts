@@ -1,8 +1,10 @@
 import img1 from '../@assets/workDetail_mock_1.png';
 import img2 from '../@assets/workDetail_mock_2.png';
 import img3 from '../@assets/workDetail_mock_3.png';
-import type { GuestbookCard } from '../types/domain/guestbook.type';
-import type { GuestbookList } from '../types/domain/guestbook.type';
+import type {
+  GuestbookCard,
+  GuestbookList,
+} from '../types/domain/guestbook.type';
 
 export const mockSpaceCode = 'fb216ef6b1';
 
@@ -26,7 +28,7 @@ export const mockDashboardData = {
 export const mockAccess = {
   introduce: true,
   writeGuestbook: true,
-  viewGuestbook: false,
+  viewGuestbook: true,
 };
 
 export const MyPageMockData = {

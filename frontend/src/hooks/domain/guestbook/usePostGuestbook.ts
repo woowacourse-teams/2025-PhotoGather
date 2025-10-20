@@ -1,7 +1,7 @@
 import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { guestbookService } from '../../../apis/services/guestbook/guestbook.service';
-import { ROUTES } from '../../../constants/routes';
+import { createGuestbookCompleteRoute } from '../../../constants/routes';
 import type { GuestbookForm } from '../../../types/domain/guestbook.type';
 import type { LocalFile } from '../../../types/file.type';
 import { clearFiles } from '../../../utils/clearFiles';
@@ -56,7 +56,6 @@ const usePostGuestbook = ({
 
   const mutation = useMutation({
     mutationFn: async (photos: LocalFile[]) => {
-      console.log(photos);
       const form = await createGuestbookForm(photos);
       const result = await guestbookService.createGuestbook(
         spaceCode ?? '',
@@ -70,7 +69,7 @@ const usePostGuestbook = ({
       return { photos };
     },
     onSuccess: (data) => {
-      navigate(ROUTES.GUEST.CREATE_GUESTBOOK_COMPLETE, {
+      navigate(createGuestbookCompleteRoute(spaceCode), {
         state: {
           receiver: receiver,
           guestNickName: formData.nickname,

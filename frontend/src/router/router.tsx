@@ -115,7 +115,7 @@ const routes: AppRouteObject[] = [
         path: 'guest',
         children: [
           {
-            path: 'main',
+            path: ':spaceCode/main',
             element: <GuestMainPage />,
           },
           {
@@ -126,7 +126,7 @@ const routes: AppRouteObject[] = [
             },
           },
           {
-            path: 'create-guestbook-complete',
+            path: ':spaceCode/create-guestbook-complete',
             element: <CompletePage />,
           },
           {

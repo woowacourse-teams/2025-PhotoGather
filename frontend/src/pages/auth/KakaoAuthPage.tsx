@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { ROUTES } from '../../constants/routes';
 import { useToast } from '../../hooks/@common/useToast';
 import useKakaoAuth from '../../hooks/domain/auth/useKakaoAuth';
 
@@ -31,7 +32,7 @@ const KakaoAuthPage = () => {
           text: '로그인에 실패했습니다. 다시 시도해주세요.',
           type: 'error',
         });
-        navigate('/');
+        navigate(ROUTES.MAIN);
       }
     };
     fetchKakaoCode();

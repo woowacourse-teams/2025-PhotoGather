@@ -43,6 +43,14 @@ export const createGuestbookRoute = (spaceCode: string) => {
   return `/host/${spaceCode}/guestbook`;
 };
 
+export const createGuestbookCompleteRoute = (spaceCode: string) => {
+  return `/guest/${spaceCode}/create-guestbook-complete`;
+};
+
+export const createGuestMainRoute = (spaceCode: string) => {
+  return `/guest/${spaceCode}/main`;
+};
+
 export const createCreateGuestbookRoute = (spaceCode: string) => {
   return `/guest/${spaceCode}/create-guestbook`;
 };

@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { workService } from '../../../apis/services/work/work.service';
 import Button from '../../../components/@common/buttons/button/Button';
+import { createCreateGuestbookRoute } from '../../../constants/routes';
 import { useToast } from '../../../hooks/@common/useToast';
 import { DividerLine } from '../../../styles/@common/DividerLine.styles';
 import type { WorkDetail } from '../../../types/domain/work.type';
@@ -14,6 +15,7 @@ const GuestWorkDetail = () => {
   const [workDetail, setWorkDetail] = useState<WorkDetail | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const { showToast } = useToast();
+  const navigate = useNavigate();
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: showToast is stable
   useEffect(() => {
@@ -79,7 +81,10 @@ const GuestWorkDetail = () => {
         <DividerLine width="100%" />
       </C.WorkContainer>
       <S.TextContainer>축하와 응원의 한 마디를 적어주세요</S.TextContainer>
-      <Button text="방명록 작성하기" onClick={() => {}} />
+      <Button
+        text="방명록 작성하기"
+        onClick={() => navigate(createCreateGuestbookRoute(spaceCode))}
+      />
     </S.Wrapper>
   );
 };
