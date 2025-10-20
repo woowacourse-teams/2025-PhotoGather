@@ -60,9 +60,6 @@ const CompletePage = () => {
       <S.Wrapper>
         <S.Message>
           <S.NameHighlightContainer>
-            <S.NameHighlight>{state.receiver}</S.NameHighlight>에게
-          </S.NameHighlightContainer>
-          <S.NameHighlightContainer>
             <S.NameHighlight>{state.guestNickName}</S.NameHighlight>님의{'\n'}
           </S.NameHighlightContainer>
           {INFORMATION.GUESTBOOK.MESSAGE.COMPLETE}

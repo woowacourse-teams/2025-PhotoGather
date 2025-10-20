@@ -49,6 +49,9 @@ const GuestMainPage = () => {
               'noopener,noreferrer',
             )
           }
+          disabled={
+            !spaceInfo.instagramUsername || spaceInfo.instagramUsername === ''
+          }
         />
         <IconButton
           aria-label="이메일"
@@ -61,6 +64,7 @@ const GuestMainPage = () => {
               'noopener,noreferrer',
             )
           }
+          disabled={!spaceInfo.email || spaceInfo.email === ''}
         />
       </MainPageStyles.IconButtonContainer>
       <DividerLine width="10%" />
@@ -75,14 +79,14 @@ const GuestMainPage = () => {
           variant="elevated"
           text="방명록 작성하기"
           onClick={() => navigate(createCreateGuestbookRoute(spaceCode ?? ''))}
-          disabled={!mockAccess.writeGuestbook}
+          disabled={!spaceInfo}
         />
         <Button
           variant="elevated"
           text="방명록 구경하기"
           // TODO : 게스트용 방명록 페이지 구현 후 연동
           onClick={() => {}}
-          disabled={!mockAccess.viewGuestbook}
+          disabled={!spaceInfo.isPublic}
         />
       </MainPageStyles.ButtonContainer>
       <MainPageStyles.Footer></MainPageStyles.Footer>

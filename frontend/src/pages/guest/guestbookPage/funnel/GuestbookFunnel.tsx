@@ -3,9 +3,10 @@ import LoadingModal from '../../../../components/specific/modal/loadingModal/Loa
 import useConfirmBeforeRefresh from '../../../../hooks/@common/useConfirmBeforeRefresh';
 import useFormFunnel from '../../../../hooks/domain/funnel/useFormFunnel';
 import usePostGuestbook from '../../../../hooks/domain/guestbook/usePostGuestbook';
+import useSpaceInfo from '../../../../hooks/domain/space/useSpaceInfo';
 import { DividerLine } from '../../../../styles/@common/DividerLine.styles';
 import type { GuestbookFunnelInfo } from '../../../../types/domain/guestbook.type';
-import { mockData } from '../../../mockData';
+import { buildOriginalImageUrl } from '../../../../utils/buildImageUrl';
 import MessageElement from '../funnelElements/messageElement/MessageElement';
 import NicknameElement from '../funnelElements/nicknameElement/NicknameElement';
 import PhotosElement from '../funnelElements/photosElement/PhotosElement';
@@ -21,7 +22,6 @@ const initialFunnelValue: GuestbookFunnelInfo = {
 
 const GuestBookFunnel = () => {
   useConfirmBeforeRefresh();
-  const MOCK_RECEIVER = '방명록 주인장';
 
   const Funnel = useFormFunnel<STEP, GuestbookFunnelInfo>(
     'nickname',
@@ -29,10 +29,18 @@ const GuestBookFunnel = () => {
   );
 
   const { spaceCode } = useParams<{ spaceCode: string }>();
+  const { spaceInfo, isLoading: isLoadingSpaceInfo } = useSpaceInfo({
+    spaceCode: spaceCode ?? '',
+  });
+
+  const receiver = spaceInfo.name || '방명록 주인장';
+  const thumbnailUrl = spaceInfo.spacePhoto.isExists
+    ? buildOriginalImageUrl(spaceInfo.spacePhoto.path)
+    : '';
 
   const { submitForm, isLoading } = usePostGuestbook({
     spaceCode: spaceCode ?? '',
-    receiver: MOCK_RECEIVER,
+    receiver: receiver,
     formData: {
       nickname: Funnel.form.nickname,
       message: Funnel.form.message,
@@ -40,32 +48,36 @@ const GuestBookFunnel = () => {
     },
   });
 
+  if (isLoadingSpaceInfo) {
+    return <LoadingModal isOpen={true} text="로딩 중..." />;
+  }
+
   return (
     <>
       <LoadingModal isOpen={isLoading} text="전송 중..." />
       <S.Wrapper>
         <S.DisplayInfoContainer>
-          <S.DisplayImage src={mockData.thumbnail} alt="전시 썸네일 이미지" />
-          <S.DisplayName>{mockData.title}</S.DisplayName>
+          <S.DisplayImage src={thumbnailUrl} alt="전시 썸네일 이미지" />
+          <S.DisplayName>{spaceInfo.name}</S.DisplayName>
         </S.DisplayInfoContainer>
         <DividerLine width="15%" />
         <Funnel.Step name="nickname">
           <NicknameElement
-            receiver={MOCK_RECEIVER}
+            receiver={receiver}
             initialValue={Funnel.form.nickname}
             onNext={(nickname) => Funnel.goNextWithData('message', { nickname })}
           />
         </Funnel.Step>
         <Funnel.Step name="message">
           <MessageElement
-            receiver={MOCK_RECEIVER}
+            receiver={receiver}
             initialValue={Funnel.form.message}
             onNext={(message) => Funnel.goNextWithData('photos', { message })}
           />
         </Funnel.Step>
         <Funnel.Step name="photos">
           <PhotosElement
-            receiver={MOCK_RECEIVER}
+            receiver={receiver}
             onNextButtonClick={(photos) => submitForm(photos)}
             initialLocalFiles={Funnel.form.photos}
           />
