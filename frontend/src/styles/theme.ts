@@ -57,8 +57,10 @@ export const theme = {
     },
   },
   zIndex: {
-    toast: 500,
     fixedButton: 600,
+    modalBackdrop: 650,
+    modal: 700,
+    toast: 800,
   },
   layout: {
     width: '400px',

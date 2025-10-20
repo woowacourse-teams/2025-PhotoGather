@@ -1,6 +1,6 @@
+import { keyframes } from '@emotion/react';
 import styled from '@emotion/styled';
 import { fadeIn } from '../../../../animations/animations';
-import { keyframes } from '@emotion/react';
 
 const spin = keyframes`
   0% {

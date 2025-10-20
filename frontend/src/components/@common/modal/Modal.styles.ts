@@ -25,6 +25,7 @@ export const ModalContent = styled.div<{
   transform: translate(-50%, -50%);
   background-color: ${({ theme }) => theme.colors.white};
   color: ${({ theme }) => theme.colors.gray06};
+  z-index: ${({ theme }) => theme.zIndex.modal};
 `;
 
 export const ModalBackdrop = styled.div`
@@ -34,6 +35,7 @@ export const ModalBackdrop = styled.div`
   right: 0;
   bottom: 0;
   background-color: ${({ theme }) => hexToRgba(theme.colors.black, 0.8)};
+  z-index: ${({ theme }) => theme.zIndex.modalBackdrop};
 `;
 
 export const CloseButton = styled(MdClose)`
