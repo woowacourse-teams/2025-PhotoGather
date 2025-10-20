@@ -10,6 +10,7 @@ import {
 } from '../../../constants/routes';
 import useSpaceInfo from '../../../hooks/domain/space/useSpaceInfo';
 import { DividerLine } from '../../../styles/@common/DividerLine.styles';
+import { buildOriginalImageUrl } from '../../../utils/buildImageUrl';
 import { createInstagramUrl } from '../../../utils/createExternalLinks';
 import * as MainPageStyles from '../../MainPage.common.styles';
 
@@ -23,9 +24,7 @@ const HostMainPage = () => {
   return (
     <MainPageStyles.Wrapper>
       <MainPageStyles.ProfileContainer>
-        <Thumbnail
-          src={`${import.meta.env.VITE_IMAGE_BASE_URL}${spaceInfo.spacePhoto.path}`}
-        />
+        <Thumbnail src={buildOriginalImageUrl(spaceInfo.spacePhoto.path)} />
         <MainPageStyles.InfoContainer>
           <MainPageStyles.Name>{spaceInfo.name}</MainPageStyles.Name>
           <MainPageStyles.Introduction>
