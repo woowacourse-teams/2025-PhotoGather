@@ -9,12 +9,14 @@ interface SpaceCardProps {
 }
 
 const SpaceCard = ({ space, onClick }: SpaceCardProps) => {
+  const thumbnailUrl = space.spacePhoto.isExists ? space.spacePhoto.path : '';
+
   return (
     <S.Wrapper onClick={onClick}>
-      <S.SpaceThumbnail src={space.thumbnail} alt={space.title} />
+      <S.SpaceThumbnail src={thumbnailUrl} alt={space.name} />
       <S.SpaceInfoContainer>
         <S.SpaceHeaderContainer>
-          <S.SpaceTitle>{space.title}</S.SpaceTitle>
+          <S.SpaceTitle>{space.name}</S.SpaceTitle>
           <S.PublicIcon>
             {space.isPublic ? (
               <IoGlobeOutline size={16} />
@@ -25,7 +27,7 @@ const SpaceCard = ({ space, onClick }: SpaceCardProps) => {
         </S.SpaceHeaderContainer>
         <S.SpaceGuestCountContainer>
           <MdCelebration size={14} />
-          방명록 {space.guestCount}개
+          방명록 {space.guestBookCardCount}개
         </S.SpaceGuestCountContainer>
       </S.SpaceInfoContainer>
     </S.Wrapper>
