@@ -189,13 +189,13 @@ const SpaceHomePage = () => {
             <a href="#download-fab" className="skip-link">
               모두 저장하기 바로가기
             </a>
-            <Button
+            {/* <Button
               text="수신함 📩"
               variant="darkRounded"
               onClick={() => {
                 navigate(ROUTES.MANAGER.INBOX(spaceInfo?.spaceCode ?? ''));
               }}
-            />
+            /> */}
             <SpaceHomeTopActionBar
               isSelectMode={isSelectMode}
               isAllSelected={isAllSelected}
