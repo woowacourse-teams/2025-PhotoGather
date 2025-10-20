@@ -112,7 +112,6 @@ class SpaceAcceptanceTest extends AcceptanceTest {
             .header("Authorization", "Bearer " + token)
             .multiPart("request", request, "application/json")
             .multiPart("file", file.getOriginalFilename(), file.getBytes(), file.getContentType())
-            .sessionAttr("host_id", host.getId())
             .when()
             .post("/spaces")
             .then()
@@ -138,7 +137,6 @@ class SpaceAcceptanceTest extends AcceptanceTest {
         CreateSpaceResponse response = RestAssuredMockMvc.given()
             .header("Authorization", "Bearer " + token)
             .multiPart("request", request, "application/json")
-            .sessionAttr("host_id", host.getId())
             .when()
             .post("/spaces")
             .then()
@@ -163,7 +161,6 @@ class SpaceAcceptanceTest extends AcceptanceTest {
         // when
         var response = RestAssuredMockMvc.given()
             .multiPart("request", request, "application/json")
-            .sessionAttr("host_id", host.getId())
             .when()
             .post("/spaces")
             .then()
