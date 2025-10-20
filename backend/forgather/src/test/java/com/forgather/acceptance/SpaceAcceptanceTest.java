@@ -1,9 +1,15 @@
 package com.forgather.acceptance;
 
 import static com.forgather.fixture.HostFixture.createHost;
+import static java.time.Duration.ofSeconds;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.awaitility.Awaitility.await;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.Mockito.atLeast;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 
 import java.io.IOException;
 
@@ -72,11 +78,11 @@ class SpaceAcceptanceTest extends AcceptanceTest {
     @Autowired
     private JwtTokenProvider jwtTokenProvider;
 
-    @MockitoBean
-    private ContentsStorage contentsStorage;
-
     @Autowired
     private ObjectMapper objectMapper;
+
+    @MockitoBean
+    private ContentsStorage contentsStorage;
 
     private Host host;
     private String token;
@@ -221,7 +227,10 @@ class SpaceAcceptanceTest extends AcceptanceTest {
         assertAll(
             () -> assertThat(response.statusCode()).isEqualTo(204),
             () -> assertThat(spaceRepository.findByCode(space.getCode())).isEmpty(),
-            () -> assertThat(spacePhotoRepository.findBySpace(space)).isEmpty()
+            () -> assertThat(spacePhotoRepository.findBySpace(space)).isEmpty(),
+
+            () -> await().atMost(ofSeconds(6))
+                .untilAsserted(() -> verify(contentsStorage, atLeast(1)).deletePhotos(anyList()))
         );
     }
 
@@ -305,7 +314,10 @@ class SpaceAcceptanceTest extends AcceptanceTest {
             () -> assertThat(result.instagramUsername()).isEqualTo("forgather_official_new"),
             () -> assertThat(result.email()).isEqualTo("forgather_new@forgather.me"),
             () -> assertThat(spacePhotoRepository.getBySpaceOrEmpty(space).getOriginalName()).isEqualTo("new.jpg"),
-            () -> assertThat(result.guestBookCardCount()).isZero()
+            () -> assertThat(result.guestBookCardCount()).isZero(),
+
+            () -> await().atMost(ofSeconds(6))
+                .untilAsserted(() -> verify(contentsStorage, atLeast(1)).deletePhotos(anyList()))
         );
     }
 
@@ -340,7 +352,9 @@ class SpaceAcceptanceTest extends AcceptanceTest {
             () -> assertThat(response.isPublic()).isTrue(),
             () -> assertThat(response.instagramUsername()).isEqualTo("instagramUsername"),
             () -> assertThat(response.email()).isEqualTo("email@forgather.me"),
-            () -> assertThat(response.spacePhoto().path()).isEqualTo("path")
+            () -> assertThat(response.spacePhoto().path()).isEqualTo("path"),
+
+            () -> verify(contentsStorage, never()).deletePhotos(anyList())
         );
     }
 

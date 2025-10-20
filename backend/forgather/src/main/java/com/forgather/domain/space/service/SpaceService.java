@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Comparator;
 import java.util.List;
 
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -20,6 +21,7 @@ import com.forgather.domain.space.model.SpacePhoto;
 import com.forgather.domain.space.repository.SpacePhotoRepository;
 import com.forgather.domain.space.repository.SpaceRepository;
 import com.forgather.domain.upload.domain.ContentsStorage;
+import com.forgather.domain.upload.event.DeletePhotoEvent;
 import com.forgather.global.auth.model.Host;
 import com.forgather.global.auth.model.SpaceHostMap;
 import com.forgather.global.auth.repository.SpaceHostMapRepository;
@@ -44,6 +46,7 @@ public class SpaceService {
     private final GuestBookCardRepository guestBookCardRepository;
     private final RandomCodeGenerator codeGenerator;
     private final ContentsStorage contentsStorage;
+    private final ApplicationEventPublisher eventPublisher;
 
     @Transactional
     public CreateSpaceResponse create(CreateSpaceRequest request, MultipartFile file, Host host) {
@@ -137,9 +140,7 @@ public class SpaceService {
         SpacePhoto existingPhoto = spacePhotoRepository.findBySpace(space)
             .orElseThrow(() -> new BaseException("삭제할 스페이스 사진이 존재하지 않습니다."));
 
-        String path = existingPhoto.getPath();
-        spacePhotoRepository.delete(existingPhoto);
-        contentsStorage.deleteContent(path);
+        deleteSpacePhoto(existingPhoto);
     }
 
     @Transactional
@@ -149,11 +150,13 @@ public class SpaceService {
 
         spaceHostMapRepository.deleteBySpace(space);
         spacePhotoRepository.findBySpace(space)
-            .ifPresent(spacePhoto -> {
-                spacePhotoRepository.delete(spacePhoto);
-                contentsStorage.deleteContent(spacePhoto.getPath());
-            });
+            .ifPresent(this::deleteSpacePhoto);
         spaceRepository.delete(space);
+    }
+
+    private void deleteSpacePhoto(SpacePhoto spacePhoto) {
+        spacePhotoRepository.delete(spacePhoto);
+        eventPublisher.publishEvent(new DeletePhotoEvent(this, spacePhoto));
     }
 
     @Transactional(readOnly = true)
