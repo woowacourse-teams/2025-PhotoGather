@@ -34,6 +34,7 @@ export const Name = styled.h1`
 export const Introduction = styled.p`
   ${({ theme }) => theme.typography.bodyRegular}
   color: ${({ theme }) => theme.colors.gray04};
+  white-space: pre-line;
 `;
 
 export const IconButtonContainer = styled.div`
