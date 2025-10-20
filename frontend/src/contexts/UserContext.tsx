@@ -5,6 +5,7 @@ import { AUTH_COOKIES } from '../constants/cookie';
 import { ROUTES } from '../constants/routes';
 import { useToast } from '../hooks/@common/useToast';
 import type { UserInfo } from '../types/domain/auth.type';
+import { clearAuthTokens } from '../utils/authCookieManager';
 import { CookieUtils } from '../utils/cookie';
 
 export const UserContext = createContext<UserInfo | null>(null);
@@ -32,6 +33,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
           type: 'error',
         });
         navigate(ROUTES.MAIN);
+        clearAuthTokens();
       }
     };
     fetchUserInfo();
