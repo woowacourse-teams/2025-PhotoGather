@@ -41,7 +41,7 @@ public class GuestBookCardPhotos {
         Set<Long> photosIdSet = new HashSet<>(photos.stream().map(Photo::getId).toList());
         for (Long deleteId : deleteIds) {
             if (!photosIdSet.contains(deleteId)) {
-                throw new BaseException("방명록 카드에 존재하지 않는 사진입니다. deletePhotoId: " + deleteId);
+                throw new BaseException("해당 방명록 카드에 존재하지 않는 사진입니다. deletePhotoId: " + deleteId);
             }
         }
     }

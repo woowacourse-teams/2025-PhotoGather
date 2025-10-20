@@ -1,3 +1,6 @@
+import { AUTH_COOKIES } from '../constants/cookie';
+import { CookieUtils } from '../utils/cookie';
+
 export const matchBody = (body: unknown) => {
   if (!body) {
     return undefined;
@@ -21,8 +24,10 @@ export const matchHeaders = (
     mergedHeaders['Content-Type'] =
       mergedHeaders['Content-Type'] ?? 'application/json';
   }
-  if (token) {
-    mergedHeaders['Authorization'] = `Bearer ${token}`;
+
+  const authToken = token ?? CookieUtils.get(AUTH_COOKIES.ACCESS);
+  if (authToken) {
+    mergedHeaders['Authorization'] = `Bearer ${authToken}`;
   }
 
   return mergedHeaders;

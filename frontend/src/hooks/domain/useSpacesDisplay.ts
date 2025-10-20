@@ -17,11 +17,9 @@ const useSpacesDisplay = ({ mySpaces }: UseSpacesDisplayProps) => {
   const sortSpaces = () => {
     return [...mySpaces].sort((a: MySpace, b: MySpace) => {
       if (sortType === 'latest') {
-        const aCreatedAt = new Date(a.createdAt);
-        const bCreatedAt = new Date(b.createdAt);
-        return bCreatedAt.getTime() - aCreatedAt.getTime();
+        return b.id - a.id; // ID가 높을수록 최신
       } else {
-        return b.guestCount - a.guestCount;
+        return b.guestBookCardCount - a.guestBookCardCount;
       }
     });
   };

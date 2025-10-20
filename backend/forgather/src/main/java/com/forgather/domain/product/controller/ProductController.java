@@ -16,8 +16,11 @@ import com.forgather.domain.product.dto.ProductResponse;
 import com.forgather.domain.product.dto.RegisterProductRequest;
 import com.forgather.domain.product.dto.UpdateProductRequest;
 import com.forgather.domain.product.service.ProductService;
+import com.forgather.global.auth.annotation.LoginHost;
+import com.forgather.global.auth.model.Host;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -40,44 +43,40 @@ public class ProductController {
 
     /**
      * TODO
-     * 스페이스-호스트 검증
-     *  검증 걸릴 시 업로드 사진 삭제
-     * dto단 검증
+     * 검증 걸릴 시 업로드 사진 삭제
      */
+    @SecurityRequirement(name = "bearerAuth")
     @Operation(summary = "작품 등록")
     @PostMapping
     public ResponseEntity<ProductResponse> register(
         @PathVariable(value = "spaceCode") String spaceCode,
-        @RequestBody RegisterProductRequest request
+        @RequestBody RegisterProductRequest request,
+        @LoginHost(required = true) Host host
     ) {
-        var response = productService.register(spaceCode, request);
+        var response = productService.register(host, spaceCode, request);
         return ResponseEntity.status(CREATED).body(response);
     }
 
-    /**
-     * TODO
-     * 스페이스-호스트 검증
-     *  검증 걸릴 시 업로드 사진 삭제
-     * dto단 검증
-     */
+    @SecurityRequirement(name = "bearerAuth")
     @Operation(summary = "작품 수정", description = "변경 사항이 없는 데이터는 json에 포함하지 않거나 null로 요청한다.")
     @PatchMapping
     public ResponseEntity<ProductResponse> update(
         @PathVariable(value = "spaceCode") String spaceCode,
-        @RequestBody UpdateProductRequest request
+        @RequestBody UpdateProductRequest request,
+        @LoginHost(required = true) Host host
     ) {
-        var response = productService.update(spaceCode, request);
+        var response = productService.update(host, spaceCode, request);
         return ResponseEntity.ok().body(response);
     }
 
-    /**
-     * TODO
-     * 스페이스-호스트 검증
-     */
+    @SecurityRequirement(name = "bearerAuth")
     @Operation(summary = "작품 삭제")
     @DeleteMapping
-    public ResponseEntity<Void> delete(@PathVariable(value = "spaceCode") String spaceCode) {
-        productService.delete(spaceCode);
+    public ResponseEntity<Void> delete(
+        @PathVariable(value = "spaceCode") String spaceCode,
+        @LoginHost(required = true) Host host
+    ) {
+        productService.delete(host, spaceCode);
         return ResponseEntity.noContent().build();
     }
 }

@@ -29,7 +29,7 @@ const TextInput = ({
         $isError={!!errorMessage}
       />
       <C.InputFooterContainer>
-        <C.ErrorMessage>{errorMessage ? errorMessage : ''}</C.ErrorMessage>
+        <C.ErrorMessage>{errorMessage ? errorMessage : ' '}</C.ErrorMessage>
         <C.InputCount>
           {maxCount && `${validLength} / ${maxCount}`}
         </C.InputCount>

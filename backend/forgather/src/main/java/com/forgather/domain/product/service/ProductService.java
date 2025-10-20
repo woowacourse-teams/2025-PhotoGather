@@ -23,7 +23,11 @@ import com.forgather.domain.space.model.Space;
 import com.forgather.domain.space.repository.SpaceRepository;
 import com.forgather.domain.upload.domain.ContentsStorage;
 import com.forgather.domain.upload.event.DeletePhotoEvent;
+import com.forgather.global.auth.model.Host;
+import com.forgather.global.auth.repository.SpaceHostMapRepository;
 import com.forgather.global.exception.BaseException;
+import com.forgather.global.exception.BaseNullPointerException;
+import com.forgather.global.exception.ForbiddenException;
 
 import lombok.RequiredArgsConstructor;
 
@@ -35,6 +39,7 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final ProductPhotoRepository productPhotoRepository;
     private final SpaceRepository spaceRepository;
+    private final SpaceHostMapRepository spaceHostMapRepository;
     private final ContentsStorage contentsStorage;
 
     @Transactional(readOnly = true)
@@ -46,8 +51,9 @@ public class ProductService {
     }
 
     @Transactional
-    public ProductResponse register(String spaceCode, RegisterProductRequest request) {
+    public ProductResponse register(Host host, String spaceCode, RegisterProductRequest request) {
         Space space = spaceRepository.getByCodeOrThrow(spaceCode);
+        validateSpaceHost(host, space);
         validateProductAlreadyExists(space);
         Product product = productRepository.save(request.toEntity(space));
 
@@ -72,10 +78,15 @@ public class ProductService {
         }
     }
 
+    /**
+     * TODO
+     * 검증 걸릴 시 업로드된 사진 삭제
+     */
     @Transactional
-    public ProductResponse update(String spaceCode, UpdateProductRequest request) {
+    public ProductResponse update(Host host, String spaceCode, UpdateProductRequest request) {
         // Product 정보 수정
         Space space = spaceRepository.getByCodeOrThrow(spaceCode);
+        validateSpaceHost(host, space);
         Product product = productRepository.getBySpaceOrThrow(space);
         product.update(request.title(), request.category(), request.authorName(), request.description());
 
@@ -102,8 +113,9 @@ public class ProductService {
     }
 
     @Transactional
-    public void delete(String spaceCode) {
+    public void delete(Host host, String spaceCode) {
         Space space = spaceRepository.getByCodeOrThrow(spaceCode);
+        validateSpaceHost(host, space);
         Product product = productRepository.getBySpaceOrThrow(space);
         deleteAllProductPhotos(product);
         productRepository.delete(product);
@@ -123,5 +135,21 @@ public class ProductService {
     private void deleteProductPhotos(List<ProductPhoto> productPhotos) {
         productPhotoRepository.deleteAll(productPhotos);
         eventPublisher.publishEvent(new DeletePhotoEvent(this, productPhotos)); // 클라우드 삭제 이벤트 발행
+    }
+
+    private void validateSpaceHost(Host host, Space space) {
+        if (isSpaceHost(space, host)) {
+            return;
+        }
+        throw new ForbiddenException(
+            "해당 스페이스에 대한 접근 권한이 없습니다. spaceCode: %s, hostId: %d".formatted(space.getCode(), host.getId())
+        );
+    }
+
+    private boolean isSpaceHost(Space space, Host host) {
+        if (space == null || host == null) {
+            throw new BaseNullPointerException("스페이스와 호스트는 null일 수 없습니다.");
+        }
+        return spaceHostMapRepository.findBySpaceAndHost(space, host).isPresent();
     }
 }

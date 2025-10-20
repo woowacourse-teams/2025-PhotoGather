@@ -27,6 +27,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -40,6 +41,7 @@ public class GuestBookController {
 
     private final GuestBookService guestBookService;
 
+    @SecurityRequirement(name = "bearerAuth")
     @Operation(summary = "방명록 조회",
         description = "공개 스페이스가 아닌 경우 호스트만 조회 가능, 방문자는 isRead 필드 누락",
         parameters = {
@@ -73,6 +75,7 @@ public class GuestBookController {
         return ResponseEntity.ok(response);
     }
 
+    @SecurityRequirement(name = "bearerAuth")
     @Operation(summary = "방명록 카드 조회", description = "공개 스페이스가 아닌 경우 호스트만 조회 가능")
     @GetMapping("/{guestBookCardId}")
     public ResponseEntity<GuestBookCardResponse> readCard(
@@ -94,24 +97,26 @@ public class GuestBookController {
         return ResponseEntity.status(CREATED).body(response);
     }
 
-    @Operation(summary = "방명록 카드 삭제 (호스트)")
+    @SecurityRequirement(name = "bearerAuth")
+    @Operation(summary = "방명록 카드 삭제")
     @DeleteMapping("/{guestBookCardId}")
     public ResponseEntity<Void> deleteCard(
         @PathVariable(value = "spaceCode") String spaceCode,
         @PathVariable(value = "guestBookCardId") Long guestBookCardId,
-        @LoginHost(required = false) Host host // TODO true로 전환
+        @LoginHost(required = true) Host host
     ) {
         guestBookService.deleteCard(host, spaceCode, guestBookCardId);
         return ResponseEntity.noContent().build();
     }
 
-    @Operation(summary = "방명록 카드 사진 선택 삭제 (호스트)")
+    @SecurityRequirement(name = "bearerAuth")
+    @Operation(summary = "방명록 카드 사진 선택 삭제")
     @DeleteMapping("/{guestBookCardId}/photos")
     public ResponseEntity<Void> deleteCardPhotos(
         @PathVariable(value = "spaceCode") String spaceCode,
         @PathVariable(value = "guestBookCardId") Long guestBookCardId,
         @RequestBody DeleteGuestBookCardPhotosRequest request,
-        @LoginHost(required = false) Host host // TODO true로 전환
+        @LoginHost(required = true) Host host
     ) {
         guestBookService.deleteCardPhotos(host, spaceCode, guestBookCardId, request);
         return ResponseEntity.noContent().build();

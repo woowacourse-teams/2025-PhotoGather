@@ -22,6 +22,7 @@ export const InputFooterContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+  min-height: 24px;
 `;
 
 export const InputCount = styled.p`

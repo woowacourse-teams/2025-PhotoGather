@@ -2,6 +2,7 @@ package com.forgather.domain.guestbook.service;
 
 import static com.forgather.domain.upload.domain.FilePathGenerator.generateContentsFilePath;
 import static com.forgather.domain.upload.domain.UploadCategory.GUESTBOOK;
+import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -124,7 +125,7 @@ public class GuestBookService {
     @Transactional
     public void deleteCard(Host host, String spaceCode, Long guestBookCardId) {
         Space space = spaceRepository.getByCodeOrThrow(spaceCode);
-        // validateSpaceHost(host, space); // TODO 검증 활성화
+        validateSpaceHost(host, space);
         GuestBookCard guestBookCard = getGuestBookCard(guestBookCardId, space);
         deleteGuestBookCardPhotos(guestBookCard);
         guestBookCardRepository.delete(guestBookCard);
@@ -135,6 +136,7 @@ public class GuestBookService {
         deleteGuestBookCardPhotos(photos);
     }
 
+    @Transactional
     public void deleteCardPhotos(
         Host host,
         String spaceCode,
@@ -142,7 +144,7 @@ public class GuestBookService {
         DeleteGuestBookCardPhotosRequest request
     ) {
         Space space = spaceRepository.getByCodeOrThrow(spaceCode);
-        // validateSpaceHost(host, space); // TODO 검증 활성화
+        validateSpaceHost(host, space);
         GuestBookCardPhotos guestBookCardPhotos = getGuestBookCardPhotos(space, guestBookCardId);
         List<GuestBookCardPhoto> deletedPhotos = guestBookCardPhotos.deleteByIds(request.deletePhotoIds());
         deleteGuestBookCardPhotos(deletedPhotos);
@@ -175,7 +177,7 @@ public class GuestBookService {
 
     private boolean isSpaceHost(Space space, Host host) {
         if (space == null || host == null) {
-            throw new BaseNullPointerException("스페이스와 호스트는 null일 수 없습니다.");
+            throw new BaseNullPointerException("스페이스와 호스트는 null일 수 없습니다.", INTERNAL_SERVER_ERROR);
         }
         return spaceHostMapRepository.findBySpaceAndHost(space, host).isPresent();
     }

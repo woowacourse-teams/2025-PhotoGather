@@ -6,17 +6,18 @@ import Dropdown, {
 } from '../../../components/@common/dropdown/Dropdown';
 import Thumbnail from '../../../components/@common/thumbnail/Thumbnail';
 import SpaceCard from '../../../components/specific/spaceCard/SpaceCard';
-import { ROUTES } from '../../../constants/routes';
+import { createSpaceMainRoute, ROUTES } from '../../../constants/routes';
 import { UserContext } from '../../../contexts/UserContext';
+import useMySpaces from '../../../hooks/domain/space/useMySpaces';
 import useSpacesDisplay from '../../../hooks/domain/useSpacesDisplay';
-import { SpaceMockData } from '../../mockData';
 import * as S from './MyPage.styles';
 
 const MyPage = () => {
   const navigate = useNavigate();
   const userInfo = useContext(UserContext);
+  const { mySpaces } = useMySpaces();
   const { displaySpaces, changeSortType, sortType } = useSpacesDisplay({
-    mySpaces: SpaceMockData.spaces,
+    mySpaces,
   });
 
   const isSpacesEmpty = displaySpaces.length === 0;
@@ -64,9 +65,9 @@ const MyPage = () => {
 
           {displaySpaces.map((space) => (
             <SpaceCard
-              key={space.createdAt}
+              key={space.id}
               space={space}
-              onClick={() => navigate('')}
+              onClick={() => navigate(createSpaceMainRoute(space.spaceCode))}
             />
           ))}
         </S.SpaceList>

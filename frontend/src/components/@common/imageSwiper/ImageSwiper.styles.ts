@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import { hexToRgba } from '../../../utils/hexToRgba';
 
 export const NoImageContainer = styled.div`
   width: 100%;
@@ -17,7 +18,12 @@ export const NoImageComment = styled.h2`
 
 export const ImageSwiperContainer = styled.div`
   width: 100%;
+  max-width: ${({ theme }) => theme.layout.width};
   margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
 
   & .swiper {
     width: 100%;
@@ -29,7 +35,7 @@ export const ImageSwiperContainer = styled.div`
     position: relative;
   }
   & .swiper-slide {
-    max-width: 80%;
+    max-width: 100%;
     height: auto;
     display: flex;
     justify-content: center;
@@ -48,6 +54,15 @@ export const ImageSwiperContainer = styled.div`
     color: ${({ theme }) => theme.colors.gray04};
     position: absolute;
     bottom: 0;
+  }
+  & .swiper-button-prev, .swiper-button-next {
+    color: ${({ theme }) => theme.colors.white};
+    background-color: ${({ theme }) => hexToRgba(theme.colors.gray06, 0.7)};
+    backdrop-filter: blur(10px);
+    width: 24px;
+    height: 24px;
+    padding: 8px;
+    border-radius: 50%;
   }
 `;
 

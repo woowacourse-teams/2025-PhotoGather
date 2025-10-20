@@ -59,15 +59,19 @@ const EditForm = () => {
     defaultValues: initialData,
   });
 
-  const { localFiles, previewFile, handleFilesUploadClick } = useLocalFile({
-    fileType: 'image',
-    maxFileCount: 1,
-  });
+  const { localFiles, previewFile, handleFilesUploadClick, clearLocalFiles } =
+    useLocalFile({
+      fileType: 'im age',
+      maxFileCount: 1,
+    });
 
   const { patchSpaceInfo } = usePatchSpaceInfo({
     spaceCode: spaceCode ?? '',
     dirtyFields,
-    afterPatch: () => clearFiles(localFiles),
+    afterPatch: () => {
+      clearFiles(localFiles);
+      clearLocalFiles();
+    },
   });
 
   const onSubmit = (data: SpaceInfoFormData) => {
@@ -100,7 +104,10 @@ const EditForm = () => {
         }
         previewFile={previewFile}
         uploadImage={handleFilesUploadClick}
-        clearFiles={() => clearFiles(localFiles)}
+        clearFiles={() => {
+          clearFiles(localFiles);
+          clearLocalFiles();
+        }}
         deleteImage={handleDeleteImage}
       />
       <TextInput
