@@ -27,12 +27,8 @@ interface ManagerPhotoModalProps extends BasePhotoModalProps {
   photoId: number;
   /** 스페이스 코드 */
   spaceCode: string;
-  /** 이전 사진 ID */
-  prevPhotoId?: number | null;
-  /** 다음 사진 ID */
-  nextPhotoId?: number | null;
   /** 이전/다음 ID 가져오기 함수 */
-  getNavigationIds?: (currentId: number) => {
+  getNavigationIds: (currentId: number) => {
     prevId: number | null;
     nextId: number | null;
   };
@@ -60,13 +56,7 @@ const ManagerPhotoModal = (props: ManagerPhotoModalProps) => {
 
   const handleImageError = createImageErrorHandler(defaultImage);
 
-  const navigationIds =
-    props.getNavigationIds && currentPhotoId
-      ? props.getNavigationIds(currentPhotoId)
-      : {
-          prevId: props.prevPhotoId || null,
-          nextId: props.nextPhotoId || null,
-        };
+  const navigationIds = props.getNavigationIds(currentPhotoId ?? props.photoId);
 
   const prevPhotoId = navigationIds.prevId;
   const nextPhotoId = navigationIds.nextId;
@@ -216,7 +206,7 @@ const ManagerPhotoModal = (props: ManagerPhotoModalProps) => {
             type="button"
             $position="left"
             aria-label="다음 사진"
-            disabled={!nextPhotoId || isNavigating}
+            disabled={nextPhotoId === null || isNavigating}
             onPointerDown={handleNextPhoto}
           >
             <LeftwardArrowIcon />
@@ -225,7 +215,7 @@ const ManagerPhotoModal = (props: ManagerPhotoModalProps) => {
             type="button"
             $position="right"
             aria-label="이전 사진"
-            disabled={!prevPhotoId || isNavigating}
+            disabled={prevPhotoId === null || isNavigating}
             onPointerDown={handlePrevPhoto}
           >
             <RightwardArrowIcon />

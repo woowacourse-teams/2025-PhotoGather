@@ -183,14 +183,10 @@ const SpaceHomePage = () => {
   };
 
   const openPhotoModal = async (photoId: number) => {
-    const { prevId, nextId } = getNavigationIds(photoId);
-
     await overlay(
       <ManagerPhotoModal
         photoId={photoId}
         spaceCode={spaceCode ?? ''}
-        prevPhotoId={prevId}
-        nextPhotoId={nextId}
         getNavigationIds={getNavigationIds}
         onDownload={downloadPhotoWithTracking}
         onDelete={deletePhotoWithTracking}
