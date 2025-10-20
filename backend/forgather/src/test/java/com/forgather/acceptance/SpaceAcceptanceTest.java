@@ -35,7 +35,6 @@ import com.forgather.domain.space.repository.SpaceRepository;
 import com.forgather.domain.upload.domain.ContentsStorage;
 import com.forgather.fixture.GuestBookCardFixture;
 import com.forgather.fixture.GuestFixture;
-import com.forgather.fixture.HostFixture;
 import com.forgather.fixture.SpaceFixture;
 import com.forgather.fixture.SpacePhotoFixture;
 import com.forgather.global.auth.model.Host;
@@ -425,11 +424,11 @@ class SpaceAcceptanceTest extends AcceptanceTest {
 
         // then
         assertAll(
-            () -> assertThat(result.spaces().getFirst().spaceCode()).isEqualTo(space1.getCode()),
-            () -> assertThat(result.spaces().getFirst().guestBookCardCount()).isEqualTo(1),
+            () -> assertThat(result.spaces().getFirst().spaceCode()).isEqualTo(space2.getCode()),
+            () -> assertThat(result.spaces().getFirst().guestBookCardCount()).isZero(),
 
-            () -> assertThat(result.spaces().getLast().spaceCode()).isEqualTo(space2.getCode()),
-            () -> assertThat(result.spaces().getLast().guestBookCardCount()).isZero()
+            () -> assertThat(result.spaces().getLast().spaceCode()).isEqualTo(space1.getCode()),
+            () -> assertThat(result.spaces().getLast().guestBookCardCount()).isEqualTo(1)
         );
     }
 }

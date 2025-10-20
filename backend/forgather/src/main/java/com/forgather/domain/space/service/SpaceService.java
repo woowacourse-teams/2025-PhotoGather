@@ -1,6 +1,7 @@
 package com.forgather.domain.space.service;
 
 import java.io.IOException;
+import java.util.Comparator;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -166,9 +167,9 @@ public class SpaceService {
                 return spacePhotoRepository.findBySpace(space)
                     .map(photo -> SpaceResponse.from(space, SpacePhotoResponse.exists(photo.getPath()),
                         guestBookCardCount))
-                    .orElseGet(() -> SpaceResponse.from(space, SpacePhotoResponse.notExists(),
-                        guestBookCardCount));
+                    .orElseGet(() -> SpaceResponse.from(space, SpacePhotoResponse.notExists(), guestBookCardCount));
             })
+            .sorted(Comparator.comparingLong(SpaceResponse::id).reversed())
             .toList();
         return new HostSpaceResponse(spaceResponses);
     }
