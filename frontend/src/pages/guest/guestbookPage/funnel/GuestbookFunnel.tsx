@@ -1,5 +1,6 @@
 import { Activity } from 'react';
 import { useParams } from 'react-router-dom';
+import DisplayProfile from '../../../../components/@common/displayProfile/DisplayProfile';
 import LoadingModal from '../../../../components/specific/modal/loadingModal/LoadingModal';
 import useConfirmBeforeRefresh from '../../../../hooks/@common/useConfirmBeforeRefresh';
 import useFormFunnel from '../../../../hooks/domain/funnel/useFormFunnel';
@@ -58,7 +59,7 @@ const GuestBookFunnel = () => {
       <LoadingModal isOpen={isLoading} text="전송 중..." />
       <S.Wrapper>
         <S.DisplayInfoContainer>
-          <S.DisplayImage src={thumbnailUrl} alt="전시 썸네일 이미지" />
+          <DisplayProfile src={thumbnailUrl} alt="전시 썸네일 이미지" />
           <S.DisplayName>{spaceInfo.name}</S.DisplayName>
         </S.DisplayInfoContainer>
         <DividerLine width="15%" />
