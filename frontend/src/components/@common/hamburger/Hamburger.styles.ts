@@ -1,6 +1,7 @@
 import styled from '@emotion/styled';
 import { motion } from 'framer-motion';
 import { Backdrop } from '../../../styles/@common/Backdrop.styles';
+import { hexToRgba } from '../../../utils/hexToRgba';
 
 export const Wrapper = styled.nav`
   display: flex;
@@ -15,13 +16,15 @@ export const Wrapper = styled.nav`
   transform: translate(-50%, -50%);
 `;
 
-export const HamburgerBackdrop = styled(Backdrop)`
+export const HamburgerBackdrop = styled(motion.div)`
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   width: 100%;
   height: 100%;
+  background-color: ${({ theme }) => hexToRgba(theme.colors.black, 0.8)};
+  z-index: ${({ theme }) => theme.zIndex.modalBackdrop};
 `;
 
 export const HamburgerBackground = styled(motion.div)`
