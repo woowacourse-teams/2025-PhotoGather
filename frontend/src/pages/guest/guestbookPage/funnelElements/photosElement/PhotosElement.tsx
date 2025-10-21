@@ -24,11 +24,16 @@ const PhotosElement = ({
     initialIndex: 0,
   });
 
-  const { localFiles, handleFilesUploadClick, handleFilesDrop, deleteFile } =
-    useLocalFile({
-      fileType: 'image',
-      initialLocalFiles: initialLocalFiles,
-    });
+  const {
+    localFiles,
+    previewFiles,
+    handleFilesUploadClick,
+    handleFilesDrop,
+    deleteFile,
+  } = useLocalFile({
+    fileType: 'image',
+    initialLocalFiles: initialLocalFiles,
+  });
 
   const swiperActions = [
     {
@@ -61,7 +66,7 @@ const PhotosElement = ({
       prompt={INFORMATION.GUESTBOOK.PHOTOS.PROMPT}
       receiver={receiver}
       element={
-        localFiles.length === 0 ? (
+        previewFiles.length === 0 ? (
           <PhotoUploadButton
             mainText={INFORMATION.GUESTBOOK.PHOTOS.PROMPT}
             onChange={handleFilesUploadClick}
@@ -70,7 +75,7 @@ const PhotosElement = ({
           />
         ) : (
           <ImageSwiperActions
-            imageInfo={localFiles}
+            imageInfo={previewFiles}
             initialIndex={0}
             updateCurrentIndex={updateCurrentIndex}
             actions={swiperActions}
