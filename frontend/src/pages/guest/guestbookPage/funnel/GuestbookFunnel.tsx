@@ -1,3 +1,4 @@
+import { Activity } from 'react';
 import { useParams } from 'react-router-dom';
 import LoadingModal from '../../../../components/specific/modal/loadingModal/LoadingModal';
 import useConfirmBeforeRefresh from '../../../../hooks/@common/useConfirmBeforeRefresh';
@@ -61,27 +62,31 @@ const GuestBookFunnel = () => {
           <S.DisplayName>{spaceInfo.name}</S.DisplayName>
         </S.DisplayInfoContainer>
         <DividerLine width="15%" />
-        <Funnel.Step name="nickname">
+        <Activity
+          mode={Funnel.funnelStep === 'nickname' ? 'visible' : 'hidden'}
+        >
           <NicknameElement
             receiver={receiver}
             initialValue={Funnel.form.nickname}
-            onNext={(nickname) => Funnel.goNextWithData('message', { nickname })}
+            onNext={(nickname) =>
+              Funnel.goNextWithData('message', { nickname })
+            }
           />
-        </Funnel.Step>
-        <Funnel.Step name="message">
+        </Activity>
+        <Activity mode={Funnel.funnelStep === 'message' ? 'visible' : 'hidden'}>
           <MessageElement
             receiver={receiver}
             initialValue={Funnel.form.message}
             onNext={(message) => Funnel.goNextWithData('photos', { message })}
           />
-        </Funnel.Step>
-        <Funnel.Step name="photos">
+        </Activity>
+        <Activity mode={Funnel.funnelStep === 'photos' ? 'visible' : 'hidden'}>
           <PhotosElement
             receiver={receiver}
             onNextButtonClick={(photos) => submitForm(photos)}
             initialLocalFiles={Funnel.form.photos}
           />
-        </Funnel.Step>
+        </Activity>
       </S.Wrapper>
     </>
   );
