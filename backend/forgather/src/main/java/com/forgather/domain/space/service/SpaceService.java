@@ -10,6 +10,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.forgather.domain.guestbook.repository.GuestBookCardRepository;
+import com.forgather.domain.guestbook.service.GuestBookService;
+import com.forgather.domain.product.service.ProductService;
 import com.forgather.domain.space.dto.CreateSpaceRequest;
 import com.forgather.domain.space.dto.CreateSpaceResponse;
 import com.forgather.domain.space.dto.HostSpaceResponse;
@@ -40,6 +42,8 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class SpaceService {
 
+    private final ProductService productService;
+    private final GuestBookService guestBookService;
     private final SpaceRepository spaceRepository;
     private final SpacePhotoRepository spacePhotoRepository;
     private final SpaceHostMapRepository spaceHostMapRepository;
@@ -148,10 +152,16 @@ public class SpaceService {
         Space space = spaceRepository.getByCodeOrThrow(spaceCode);
         validateSpaceHost(space, host);
 
+        deleteGuestBookAndProduct(host, space);
         spaceHostMapRepository.deleteBySpace(space);
         spacePhotoRepository.findBySpace(space)
             .ifPresent(this::deleteSpacePhoto);
         spaceRepository.delete(space);
+    }
+
+    private void deleteGuestBookAndProduct(Host host, Space space) {
+        guestBookService.deleteAllCardsBySpace(host, space);
+        productService.deleteIfExists(host, space);
     }
 
     private void deleteSpacePhoto(SpacePhoto spacePhoto) {

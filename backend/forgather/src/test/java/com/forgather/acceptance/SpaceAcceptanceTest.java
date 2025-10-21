@@ -12,6 +12,7 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -26,8 +27,13 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.forgather.domain.guestbook.model.Guest;
+import com.forgather.domain.guestbook.model.GuestBookCard;
+import com.forgather.domain.guestbook.repository.GuestBookCardPhotoRepository;
 import com.forgather.domain.guestbook.repository.GuestBookCardRepository;
 import com.forgather.domain.guestbook.repository.GuestRepository;
+import com.forgather.domain.product.model.Product;
+import com.forgather.domain.product.repository.ProductPhotoRepository;
+import com.forgather.domain.product.repository.ProductRepository;
 import com.forgather.domain.space.dto.CreateSpaceRequest;
 import com.forgather.domain.space.dto.CreateSpaceResponse;
 import com.forgather.domain.space.dto.HostSpaceResponse;
@@ -40,7 +46,10 @@ import com.forgather.domain.space.repository.SpacePhotoRepository;
 import com.forgather.domain.space.repository.SpaceRepository;
 import com.forgather.domain.upload.domain.ContentsStorage;
 import com.forgather.fixture.GuestBookCardFixture;
+import com.forgather.fixture.GuestBookCardPhotoFixture;
 import com.forgather.fixture.GuestFixture;
+import com.forgather.fixture.ProductFixture;
+import com.forgather.fixture.ProductPhotoFixture;
 import com.forgather.fixture.SpaceFixture;
 import com.forgather.fixture.SpacePhotoFixture;
 import com.forgather.global.auth.model.Host;
@@ -74,6 +83,15 @@ class SpaceAcceptanceTest extends AcceptanceTest {
 
     @Autowired
     private GuestBookCardRepository guestBookCardRepository;
+
+    @Autowired
+    private GuestBookCardPhotoRepository guestBookCardPhotoRepository;
+
+    @Autowired
+    private ProductRepository productRepository;
+
+    @Autowired
+    private ProductPhotoRepository productPhotoRepository;
 
     @Autowired
     private JwtTokenProvider jwtTokenProvider;
@@ -228,6 +246,44 @@ class SpaceAcceptanceTest extends AcceptanceTest {
             () -> assertThat(response.statusCode()).isEqualTo(204),
             () -> assertThat(spaceRepository.findByCode(space.getCode())).isEmpty(),
             () -> assertThat(spacePhotoRepository.findBySpace(space)).isEmpty(),
+
+            () -> await().atMost(ofSeconds(6))
+                .untilAsserted(() -> verify(contentsStorage, atLeast(1)).deletePhotos(anyList()))
+        );
+    }
+
+    @DisplayName("스페이스, 작품, 방명록 모두 삭제한다.")
+    @Test
+    void deleteSpaceWithRelatedThings() {
+        // given
+        Space space = spaceRepository.save(SpaceFixture.createSpace());
+        spacePhotoRepository.save(SpacePhotoFixture.createSpacePhotoWithSpace(space));
+        spaceHostMapRepository.save(new SpaceHostMap(space, host));
+        Product product = productRepository.save(ProductFixture.createProductWithSpace(space));
+        productPhotoRepository.save(ProductPhotoFixture.createProductPhotoWithProduct(product));
+        Guest guest = guestRepository.save(GuestFixture.createGuest());
+        GuestBookCard guestBookCard = guestBookCardRepository.save(
+            GuestBookCardFixture.createGuestBookCard(space, guest, "message"));
+        guestBookCardPhotoRepository.saveAll(List.of(
+            GuestBookCardPhotoFixture.createGuestBookCardPhotoWithGuestBookCard(guestBookCard)));
+
+        // when
+        var response = RestAssuredMockMvc.given()
+            .header("Authorization", "Bearer " + token)
+            .when()
+            .delete("/spaces/{spaceCode}", space.getCode())
+            .then()
+            .extract();
+
+        // then
+        assertAll(
+            () -> assertThat(response.statusCode()).isEqualTo(204),
+            () -> assertThat(spaceRepository.findByCode(space.getCode())).isEmpty(),
+            () -> assertThat(spacePhotoRepository.findBySpace(space)).isEmpty(),
+            () -> assertThat(productRepository.findBySpace(space)).isEmpty(),
+            () -> assertThat(productPhotoRepository.findAllByProduct(product)).isEmpty(),
+            () -> assertThat(guestBookCardRepository.findAllBySpace(space)).isEmpty(),
+            () -> assertThat(guestBookCardPhotoRepository.findAllByGuestBookCard(guestBookCard)).isEmpty(),
 
             () -> await().atMost(ofSeconds(6))
                 .untilAsserted(() -> verify(contentsStorage, atLeast(1)).deletePhotos(anyList()))
