@@ -11,6 +11,11 @@ export interface IconAction {
   onClick?: () => void;
 }
 
+export interface NavigateInfo {
+  path: string;
+  name: string;
+}
+
 export type AppRouteObject = RouteObject & {
   handle?: RouteHandle;
 };
