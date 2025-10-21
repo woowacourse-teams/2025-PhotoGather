@@ -38,7 +38,7 @@ const GuestBookFunnel = () => {
   const receiver = spaceInfo.name || '방명록 주인장';
   const thumbnailUrl = spaceInfo.spacePhoto.isExists
     ? buildOriginalImageUrl(spaceInfo.spacePhoto.path)
-    : '';
+    : 'invalid-url';
 
   const { submitForm, isLoading } = usePostGuestbook({
     spaceCode: spaceCode ?? '',
@@ -59,7 +59,7 @@ const GuestBookFunnel = () => {
       <LoadingModal isOpen={isLoading} text="전송 중..." />
       <S.Wrapper>
         <S.DisplayInfoContainer>
-          <DisplayProfile src={thumbnailUrl} alt="전시 썸네일 이미지" />
+          <DisplayProfile src={thumbnailUrl} alt={spaceInfo.name} />
           <S.DisplayName>{spaceInfo.name}</S.DisplayName>
         </S.DisplayInfoContainer>
         <DividerLine width="15%" />
