@@ -61,7 +61,7 @@ const EditForm = () => {
 
   const { localFiles, previewFile, handleFilesUploadClick, clearLocalFiles } =
     useLocalFile({
-      fileType: 'im age',
+      fileType: 'image',
       maxFileCount: 1,
     });
 
