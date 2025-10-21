@@ -18,7 +18,7 @@ const SpaceDetailElement = ({
   onNext,
   initialValue = { profileImage: [], email: '', instagram: '' },
 }: FunnelElementProps<SpaceDetailElementInfos>) => {
-  const { localFiles, previewFile, handleFilesUploadClick, clearLocalFiles } =
+  const { localFiles, previewFiles, handleFilesUploadClick, clearLocalFiles } =
     useLocalFile({
       fileType: 'image',
       maxFileCount: 1,
@@ -46,7 +46,7 @@ const SpaceDetailElement = ({
           <S.ImageUploadContainer>
             <PhotoPreviewButton
               type="button"
-              previewFile={previewFile}
+              previewFile={previewFiles}
               uploadImage={handleFilesUploadClick}
               clearFiles={() => {
                 clearFiles(localFiles);
