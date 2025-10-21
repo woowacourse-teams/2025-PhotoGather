@@ -67,7 +67,7 @@ const Layout = () => {
         <SpaceShareModal isOpen={isShareModalOpen} onClose={closeShareModal} />
         <Outlet />
       </S.Container>
-      {!isNoFooter && <Footer />}
+      {!isNoFooter && <Footer mode={isDarkPage ? 'dark' : 'light'} />}
     </>
   );
 };
