@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { IoLogoInstagram, IoShareOutline } from 'react-icons/io5';
-import { MdEdit, MdEmail } from 'react-icons/md';
+import { MdEmail, MdSettings } from 'react-icons/md';
 import { useNavigate, useParams } from 'react-router-dom';
 import Button from '../../../components/@common/buttons/button/Button';
 import IconButton from '../../../components/@common/buttons/iconButton/IconButton';
@@ -8,7 +8,7 @@ import Thumbnail from '../../../components/@common/thumbnail/Thumbnail';
 import SpaceShareModal from '../../../components/specific/modal/spaceShareModal/SpaceShareModal';
 import {
   createGuestbookRoute,
-  createSpaceInfoEditRoute,
+  createSpaceInfoRoute,
   createWorkDetailRoute,
 } from '../../../constants/routes';
 import useSpaceInfo from '../../../hooks/domain/space/useSpaceInfo';
@@ -40,11 +40,11 @@ const HostMainPage = () => {
         <S.ActionButtonContainer>
           <IconButton
             aria-label="스페이스 정보 수정"
-            icon={<MdEdit size={12} />}
+            icon={<MdSettings size={12} />}
             variant="default"
             size="small"
             onClick={() => {
-              navigate(createSpaceInfoEditRoute(spaceCode));
+              navigate(createSpaceInfoRoute(spaceCode));
             }}
           />
           <IconButton
