@@ -99,18 +99,20 @@ const HostWorkDetail = () => {
         onDelete={handleDeleteWork}
         buttonDisabled={isDeleting}
       />
-      <S.TopButtonContainer>
-        <S.EditButton onClick={() => navigate(createWorkEditRoute(spaceCode))}>
-          수정
-        </S.EditButton>
-      </S.TopButtonContainer>
       <S.Wrapper>
         <C.WorkContainer>
-          <C.TitleRowContainer>
-            <C.TitleContainer>{title}</C.TitleContainer>
+          <S.TitleRowContainer>
+            <S.TopButtonContainer>
+              <C.TitleContainer>{title}</C.TitleContainer>
+              <S.EditButton
+                onClick={() => navigate(createWorkEditRoute(spaceCode))}
+              >
+                수정
+              </S.EditButton>
+            </S.TopButtonContainer>
             <C.CategoryContainer>{category}</C.CategoryContainer>
-          </C.TitleRowContainer>
-          <C.DesignerContainer>{authorName}</C.DesignerContainer>
+            <C.DesignerContainer>{authorName}</C.DesignerContainer>
+          </S.TitleRowContainer>
           <C.DescriptionContainer>{description}</C.DescriptionContainer>
           {photos.map((photo, index) => (
             <C.ImageContainer
@@ -123,7 +125,6 @@ const HostWorkDetail = () => {
               alt={`work-detail-${index}`}
             />
           ))}
-          <DividerLine width="100%" />
         </C.WorkContainer>
       </S.Wrapper>
     </>

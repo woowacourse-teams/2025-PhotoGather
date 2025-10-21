@@ -29,6 +29,7 @@ export const TitleContainer = styled.h1`
 
 export const CategoryContainer = styled.p`
   ${({ theme }) => theme.typography.bodyRegular}
+  color: ${({ theme }) => theme.colors.gray04};
 `;
 
 export const DesignerContainer = styled.p`
