@@ -19,24 +19,26 @@ import type { AppRouteObject, IconAction } from '../../../../types/route.type';
 import { buildOriginalImageUrl } from '../../../../utils/buildImageUrl';
 import DisplayProfile from '../../../@common/displayProfile/DisplayProfile';
 import Footer from '../../../@common/footer/Footer';
+import Hamburger from '../../../@common/hamburger/Hamburger';
 import Header from '../../../@common/header/Header';
 import ScrollToTop from '../../../@common/scrollToTop/ScrollToTop';
-import SpaceShareModal from '../../../specific/modal/spaceShareModal/SpaceShareModal';
 import * as S from './Layout.styles';
+import { guestNavigateInfo, hostNavigateInfo } from './navigateInfo';
 
 const Layout = () => {
-  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
+  const [isHamburgerOpen, setIsHamburgerOpen] = useState(false);
+
   const navigate = useNavigate();
   const { spaceCode } = useParams();
   const { spaceInfo } = useSpaceInfo({ spaceCode: spaceCode ?? '' });
   const { redirectToExternalBrowser } = useInAppRedirect();
   const path = useLocation().pathname;
 
-  const openShareModal = () => {
-    setIsShareModalOpen(true);
+  const openHamburger = () => {
+    setIsHamburgerOpen(true);
   };
-  const closeShareModal = () => {
-    setIsShareModalOpen(false);
+  const closeHamburger = () => {
+    setIsHamburgerOpen(false);
   };
 
   const matches = useMatches() as AppRouteObject[];
@@ -45,15 +47,14 @@ const Layout = () => {
   const isNoHeader = current?.handle?.noHeader;
   const isNoFooter = current?.handle?.noFooter;
 
-  const headerIcons: Record<string, IconAction> = {
+  const isHost = path.includes('/host/');
+  const isGuest = path.includes('/guest/');
+
+  const leftHeaderIcons: Record<string, IconAction> = {
     logo: {
       icon: <LogoSvg />,
       // TODO : 랜딩페이지로 변경 필요
       onClick: () => navigate(ROUTES.MAIN),
-    },
-    hamburger: {
-      icon: <MdMenu />,
-      onClick: () => console.log('hamburger clicked'),
     },
     profile: {
       icon: (
@@ -63,18 +64,20 @@ const Layout = () => {
         />
       ),
       onClick: () => {
-        if (path.includes('/host/')) {
+        if (isHost) {
           navigate(createSpaceMainRoute(spaceCode ?? ''));
-        } else if (path.includes('/guest/')) {
-          navigate(createGuestMainRoute(spaceCode ?? ''));
-        } else {
-          navigate(createGuestMainRoute(spaceCode ?? ''));
+          return;
         }
+        if (isGuest) {
+          navigate(createGuestMainRoute(spaceCode ?? ''));
+          return;
+        }
+        navigate(ROUTES.MAIN);
       },
     },
   };
 
-  const leftIcon = headerIcons[current?.handle?.headerIcon?.leftIcon];
+  const leftIcon = leftHeaderIcons[current?.handle?.headerIcon?.leftIcon];
 
   //biome-ignore lint/correctness/useExhaustiveDependencies: 페이지 접속 시 처음 한 번만 실행
   useEffect(() => {
@@ -83,16 +86,24 @@ const Layout = () => {
 
   return (
     <>
+      <Hamburger
+        isOpen={isHamburgerOpen}
+        onClose={closeHamburger}
+        navigateInfo={
+          isHost
+            ? hostNavigateInfo(spaceCode ?? '')
+            : guestNavigateInfo(spaceCode ?? '')
+        }
+      />
       <ScrollToTop />
       {!isNoHeader && (
         <Header
           mode={isDarkPage ? 'dark' : 'light'}
           leftIcon={{ icon: leftIcon?.icon, onClick: leftIcon?.onClick }}
-          rightIcon={{ icon: <MdMenu />, onClick: openShareModal }}
+          rightIcon={{ icon: <MdMenu />, onClick: openHamburger }}
         />
       )}
       <S.Container $isDarkPage={isDarkPage}>
-        <SpaceShareModal isOpen={isShareModalOpen} onClose={closeShareModal} />
         <Outlet />
       </S.Container>
       {!isNoFooter && <Footer />}

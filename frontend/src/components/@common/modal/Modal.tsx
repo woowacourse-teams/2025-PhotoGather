@@ -2,6 +2,8 @@ import { Activity, useContext } from 'react';
 import ModalContext from '../../../contexts/ModalContext';
 import useScrollLock from '../../../hooks/@common/useScrollLock';
 import useEscapeKeyClose from '../../../hooks/domain/modal/useEscapeKeyClose';
+import { Backdrop } from '../../../styles/@common/Backdrop.styles';
+import { CloseButton } from '../../../styles/@common/Closebutton.styles';
 import type {
   BackdropProps,
   ModalContentProps,
@@ -28,7 +30,7 @@ const Modal = ({
   );
 };
 
-const Backdrop = ({ closeOnClick = true }: BackdropProps) => {
+const ModalBackdrop = ({ closeOnClick = true }: BackdropProps) => {
   const { onClose } = useContext(ModalContext);
 
   const handleClick = () => {
@@ -36,7 +38,7 @@ const Backdrop = ({ closeOnClick = true }: BackdropProps) => {
     onClose();
   };
 
-  return <S.ModalBackdrop onClick={handleClick} />;
+  return <Backdrop onClick={handleClick} />;
 };
 
 const Content = ({
@@ -49,15 +51,13 @@ const Content = ({
 
   return (
     <S.ModalContent $size={size} {...props}>
-      {hasTopCloseButton && (
-        <S.CloseButton size={20} onClick={() => onClose()} />
-      )}
+      {hasTopCloseButton && <CloseButton size={20} onClick={() => onClose()} />}
       {children}
     </S.ModalContent>
   );
 };
 
-Modal.Backdrop = Backdrop;
+Modal.Backdrop = ModalBackdrop;
 Modal.Content = Content;
 
 export default Modal;
