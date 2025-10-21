@@ -1,3 +1,4 @@
+import * as Sentry from '@sentry/react';
 import type { ApiResponse, RequestOptions } from '../types/api.type';
 import { HttpError } from '../types/error.type';
 import { createQueryString } from '../utils/createQueryString';
@@ -12,15 +13,20 @@ const request = async <T>(
   const { method, body, params, headers, token } = options;
   const url = `${BASE_URL}${endpoint}${createQueryString(params)}`;
 
+  let traceId = '';
+
   const doFetch = async (newToken?: string) => {
+    const requestHeaders = matchHeaders({
+      body,
+      headers: headers ?? {},
+      method,
+      token: newToken ?? token,
+    });
+    traceId = requestHeaders['trace-id'];
+
     const response = await fetch(url, {
       method,
-      headers: matchHeaders({
-        body,
-        headers: headers ?? {},
-        method,
-        token: newToken ?? token,
-      }),
+      headers: requestHeaders,
       body: matchBody(body),
     });
     return response;
@@ -33,6 +39,20 @@ const request = async <T>(
         response = await retryAuth(doFetch);
       } catch (error) {
         if (error instanceof HttpError) {
+          Sentry.captureException(error, {
+            tags: {
+              error_type: 'auth_retry_failed',
+              status_code: error.status,
+              trace_id: traceId,
+            },
+            extra: {
+              url,
+              method,
+              traceId,
+              body,
+            },
+          });
+
           return {
             success: false,
             error: {
@@ -48,7 +68,26 @@ const request = async <T>(
     const text = await response.text();
     const data = text ? JSON.parse(text) : null;
 
-    if (!response.ok)
+    if (!response.ok) {
+      const httpError = new Error(
+        data?.message || `HTTP Error: ${response.status}`,
+      );
+
+      Sentry.captureException(httpError, {
+        tags: {
+          error_type: 'http_error',
+          status_code: response.status,
+          trace_id: traceId,
+        },
+        extra: {
+          method,
+          url,
+          traceId,
+          body,
+        },
+        level: response.status >= 500 ? 'error' : 'warning',
+      });
+
       return {
         success: false,
         error: {
@@ -58,12 +97,30 @@ const request = async <T>(
             data?.message || `Error: response status is ${response.status}`,
         },
       };
+    }
 
     return {
       success: true,
       data: data as T,
     };
   } catch (error) {
+    const networkError =
+      error instanceof Error ? error : new Error('Network error');
+
+    Sentry.captureException(networkError, {
+      tags: {
+        error_type: 'network_error',
+        endpoint,
+        trace_id: traceId,
+      },
+      extra: {
+        method,
+        url,
+        traceId,
+        body,
+      },
+    });
+
     return {
       success: false,
       error: {
