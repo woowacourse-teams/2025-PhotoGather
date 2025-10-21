@@ -6,6 +6,11 @@ export type RouteHandle = {
   highlight?: boolean;
 };
 
+export interface IconAction {
+  icon: React.ReactNode;
+  onClick?: () => void;
+}
+
 export type AppRouteObject = RouteObject & {
   handle?: RouteHandle;
 };
