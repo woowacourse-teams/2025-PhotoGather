@@ -3,6 +3,7 @@ import { IoSettingsSharp, IoShareOutline } from 'react-icons/io5';
 import { MdPerson } from 'react-icons/md';
 import { Outlet, useMatches, useNavigate, useParams } from 'react-router-dom';
 import { createSpaceInfoRoute, ROUTES } from '../../../../constants/routes';
+import useGoogleAnalytics from '../../../../hooks/@common/useGoogleAnalytics';
 import useInAppRedirect from '../../../../hooks/@common/useInAppRedirect';
 import type { AppRouteObject } from '../../../../types/route.type';
 import Footer from '../../../@common/footer/Footer';
@@ -12,6 +13,7 @@ import SpaceShareModal from '../../../specific/modal/spaceShareModal/SpaceShareM
 import * as S from './Layout.styles';
 
 const Layout = () => {
+  useGoogleAnalytics();
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const navigate = useNavigate();
   const { spaceCode } = useParams();
