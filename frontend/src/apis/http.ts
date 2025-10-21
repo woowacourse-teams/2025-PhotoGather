@@ -1,6 +1,6 @@
-import * as Sentry from '@sentry/react';
 import type { ApiResponse, RequestOptions } from '../types/api.type';
 import { HttpError } from '../types/error.type';
+import { captureSentryError } from '../utils/captureSentryError';
 import { createQueryString } from '../utils/createQueryString';
 import { BASE_URL } from './config';
 import { matchBody, matchHeaders } from './helper';
@@ -39,18 +39,14 @@ const request = async <T>(
         response = await retryAuth(doFetch);
       } catch (error) {
         if (error instanceof HttpError) {
-          Sentry.captureException(error, {
-            tags: {
-              error_type: 'auth_retry_failed',
-              status_code: error.status,
-              trace_id: traceId,
-            },
-            extra: {
-              url,
-              method,
-              traceId,
-              body,
-            },
+          captureSentryError({
+            error,
+            errorType: 'auth_retry_failed',
+            statusCode: error.status,
+            traceId,
+            url,
+            method,
+            body,
           });
 
           return {
@@ -73,18 +69,14 @@ const request = async <T>(
         data?.message || `HTTP Error: ${response.status}`,
       );
 
-      Sentry.captureException(httpError, {
-        tags: {
-          error_type: 'http_error',
-          status_code: response.status,
-          trace_id: traceId,
-        },
-        extra: {
-          method,
-          url,
-          traceId,
-          body,
-        },
+      captureSentryError({
+        error: httpError,
+        errorType: 'http_error',
+        statusCode: response.status,
+        traceId,
+        url,
+        method,
+        body,
         level: response.status >= 500 ? 'error' : 'warning',
       });
 
@@ -107,18 +99,14 @@ const request = async <T>(
     const networkError =
       error instanceof Error ? error : new Error('Network error');
 
-    Sentry.captureException(networkError, {
-      tags: {
-        error_type: 'network_error',
-        endpoint,
-        trace_id: traceId,
-      },
-      extra: {
-        method,
-        url,
-        traceId,
-        body,
-      },
+    captureSentryError({
+      error: networkError,
+      errorType: 'network_error',
+      statusCode: 'N/A',
+      traceId,
+      url,
+      method,
+      body,
     });
 
     return {
