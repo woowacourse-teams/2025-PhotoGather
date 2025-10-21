@@ -15,6 +15,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
   const { showToast } = useToast();
   const navigate = useNavigate();
 
+  //biome-ignore lint/correctness/useExhaustiveDependencies: 페이지 접속 시 처음 한 번만 실행
   useEffect(() => {
     const fetchUserInfo = async () => {
       try {
