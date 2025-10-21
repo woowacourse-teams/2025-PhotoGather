@@ -27,6 +27,7 @@ export const InfoContainer = styled.div`
 export const NameContainer = styled.p`
   ${({ theme }) => theme.typography.bodyLarge}
   color: ${({ theme }) => theme.colors.white};
+  height: 20px;
 `;
 
 export const CreateSpaceButton = styled.button`
