@@ -1,4 +1,4 @@
-import type { LocalFile } from '../../../types/file.type';
+import type { PreviewFile } from '../../../types/file.type';
 import IconButton from '../../@common/buttons/iconButton/IconButton';
 import ImageSwiper from '../../@common/imageSwiper/ImageSwiper';
 import * as S from './ImageSwiperActions.styles';
@@ -10,7 +10,7 @@ interface ImageSwiperActionsType {
 
 interface ImageSwiperActionsProps {
   /** 이미지 정보 */
-  imageInfo: LocalFile[];
+  imageInfo: PreviewFile[];
   /** 초기 인덱스 */
   initialIndex: number;
   /** 현재 인덱스 업데이트 */
