@@ -49,7 +49,7 @@ const WorkForm = () => {
     deleteFile,
     handleFilesUploadClick,
     handleFilesDrop,
-  } = useLocalFile({ fileType: 'image' });
+  } = useLocalFile({ fileType: 'image', maxFileCount: 10 });
 
   const { isEditMode, existingPhotos, handleDeleteExistingPhoto, submitWork } =
     useWorkForm({ spaceCode, reset });
