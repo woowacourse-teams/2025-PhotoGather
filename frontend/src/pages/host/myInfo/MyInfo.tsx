@@ -9,6 +9,14 @@ const MyInfo = () => {
   const userInfo = useContext(UserContext);
   const { handleLogout } = useCommonAuthActions();
 
+  if (!userInfo) {
+    return (
+      <S.Wrapper>
+        <S.Name>사용자 정보를 찾을 수 없습니다</S.Name>
+      </S.Wrapper>
+    );
+  }
+
   return (
     <S.Wrapper>
       <S.ProfileContainer>
