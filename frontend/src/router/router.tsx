@@ -18,6 +18,7 @@ import SpaceEditPage from '../pages/host/spaceEditPage/SpaceEditPage';
 import SpaceInfoPage from '../pages/host/spaceInfoPage/SpaceInfoPage';
 import HostWorkDetail from '../pages/host/workDetail/HostWorkDetail';
 import WorkForm from '../pages/host/workForm/WorkForm';
+import InAppRedirectPage from '../pages/inapp/InAppRedirectPage';
 import LoginPage from '../pages/login/LoginPage';
 import MainPage from '../pages/MainPage';
 import type { AppRouteObject } from '../types/route.type';
@@ -34,6 +35,10 @@ const routes: AppRouteObject[] = [
       {
         path: '/login',
         element: <LoginPage />,
+      },
+      {
+        path: '/inapp',
+        element: <InAppRedirectPage />,
       },
       {
         path: '/auth/login/kakao',
