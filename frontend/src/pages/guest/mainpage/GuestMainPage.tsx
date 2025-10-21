@@ -1,5 +1,6 @@
 import { IoLogoInstagram, IoMailOutline } from 'react-icons/io5';
 import { useNavigate, useParams } from 'react-router-dom';
+import defaultImage from '../../../@assets/images/default-image.png';
 import Button from '../../../components/@common/buttons/button/Button';
 import IconButton from '../../../components/@common/buttons/iconButton/IconButton';
 import {
@@ -11,6 +12,7 @@ import useSpaceInfo from '../../../hooks/domain/space/useSpaceInfo';
 import { DividerLine } from '../../../styles/@common/DividerLine.styles';
 import { buildOriginalImageUrl } from '../../../utils/buildImageUrl';
 import { createInstagramUrl } from '../../../utils/createExternalLinks';
+import { createImageErrorHandler } from '../../../utils/createImageErrorHandler';
 import * as MainPageStyles from '../../MainPage.common.styles';
 import { mockAccess } from '../../mockData';
 
@@ -25,12 +27,16 @@ const GuestMainPage = () => {
 
   const thumbnailUrl = spaceInfo.spacePhoto.isExists
     ? buildOriginalImageUrl(spaceInfo.spacePhoto.path)
-    : '';
+    : 'invalid-url';
 
   return (
     <MainPageStyles.Wrapper>
       <MainPageStyles.ProfileContainer>
-        <MainPageStyles.Thumbnail src={thumbnailUrl} />
+        <MainPageStyles.Thumbnail
+          src={thumbnailUrl}
+          alt={spaceInfo.name}
+          onError={createImageErrorHandler(defaultImage)}
+        />
         <MainPageStyles.InfoContainer>
           <MainPageStyles.Name>{spaceInfo.name}</MainPageStyles.Name>
           <MainPageStyles.Introduction>
