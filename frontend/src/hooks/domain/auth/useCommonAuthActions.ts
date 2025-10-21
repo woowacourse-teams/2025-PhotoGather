@@ -8,9 +8,6 @@ const useCommonAuthActions = () => {
   const handleLogout = async () => {
     clearAuthTokens();
     navigate(ROUTES.MAIN);
-    setTimeout(() => {
-      location.reload();
-    }, 0);
   };
 
   return { handleLogout };

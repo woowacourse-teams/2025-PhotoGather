@@ -104,7 +104,6 @@ const useLocalFile = ({
   };
 
   const splitValidFilesByType = (files: File[], type: string) => {
-    console.log(type);
     return files.reduce(
       (acc, file) => {
         if (isValidFileType(file, type)) {

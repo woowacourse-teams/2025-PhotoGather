@@ -62,9 +62,6 @@ const useKakaoAuth = () => {
       const serverToken = await requestServerToken(kakaoToken);
       setAuthTokens(serverToken.accessToken, serverToken.refreshToken);
       navigate(ROUTES.MAIN);
-      setTimeout(() => {
-        location.reload();
-      }, 0);
     } catch (error) {
       console.error(error);
       showToast({
