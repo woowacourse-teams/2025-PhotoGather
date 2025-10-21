@@ -45,7 +45,7 @@ const WorkForm = () => {
 
   const {
     localFiles,
-    previewFile,
+    previewFiles,
     deleteFile,
     handleFilesUploadClick,
     handleFilesDrop,
@@ -86,7 +86,7 @@ const WorkForm = () => {
     return null;
   }
 
-  const totalPhotos = existingPhotos.length + previewFile.length;
+  const totalPhotos = existingPhotos.length + previewFiles.length;
   const remainingSlots = 10 - totalPhotos;
 
   return (
@@ -192,7 +192,7 @@ const WorkForm = () => {
                   </S.ImageDeleteButton>
                 </S.ImageGridItem>
               ))}
-              {previewFile.map((imageData, index) => (
+              {previewFiles.map((imageData, index) => (
                 <S.ImageGridItem key={`new-${imageData.id}`}>
                   <S.GridImage
                     src={imageData.previewUrl}
