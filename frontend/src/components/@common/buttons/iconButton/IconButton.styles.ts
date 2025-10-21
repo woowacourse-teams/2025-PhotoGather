@@ -1,9 +1,6 @@
 import { css, type Theme } from '@emotion/react';
 import styled from '@emotion/styled';
-import type {
-  IconButtonSize,
-  IconButtonVariant,
-} from '../../../../types/button.type';
+import type { IconButtonSize, IconButtonVariant } from '../../../../types/button.type';
 
 export const IconButtonSizes = {
   small: 20,
@@ -51,25 +48,25 @@ export const IconButtonStyles = {
   `,
 
   kakao: () => css`
-  border-radius: 50%;
-  background-color: #fee500;
-  color: #000000;
+    border-radius: 50%;
+    background-color: #fee500;
+    color: #000000;
 
-  &:hover {
-    filter: brightness(0.97);
-  }
+    &:hover {
+      filter: brightness(0.97);
+    }
 
-  &:active {
-    filter: brightness(0.93);
-    scale: 0.95;
-  }
+    &:active {
+      filter: brightness(0.93);
+      scale: 0.95;
+    }
 
-  &:disabled {
-    pointer-events: none;
-    background-color: #f6f6f6;
-    color: rgba(0, 0, 0, 0.4);
-  }
-`,
+    &:disabled {
+      pointer-events: none;
+      background-color: #f6f6f6;
+      color: rgba(0, 0, 0, 0.4);
+    }
+  `,
 };
 
 export const IconContainer = styled.button<{

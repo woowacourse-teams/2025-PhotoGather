@@ -26,3 +26,10 @@ export const EmptyMessage = styled.p`
   ${({ theme }) => theme.typography.bodyRegular}
   color: ${({ theme }) => theme.colors.gray04};
 `;
+
+export const DividerLineContainer = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;

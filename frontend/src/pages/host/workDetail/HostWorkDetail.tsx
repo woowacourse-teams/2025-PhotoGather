@@ -100,7 +100,7 @@ const HostWorkDetail = () => {
       />
       <S.Wrapper>
         <C.WorkContainer>
-          <S.TitleRowContainer>
+          <C.TitleRowContainer>
             <S.TopButtonContainer>
               <C.TitleContainer>{title}</C.TitleContainer>
               <S.EditButton
@@ -111,7 +111,7 @@ const HostWorkDetail = () => {
             </S.TopButtonContainer>
             <C.CategoryContainer>{category}</C.CategoryContainer>
             <C.DesignerContainer>{authorName}</C.DesignerContainer>
-          </S.TitleRowContainer>
+          </C.TitleRowContainer>
           <C.DescriptionContainer>{description}</C.DescriptionContainer>
           {photos.map((photo, index) => (
             <C.ImageContainer

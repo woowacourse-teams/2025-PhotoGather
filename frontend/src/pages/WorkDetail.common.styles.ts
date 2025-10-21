@@ -18,8 +18,8 @@ export const WorkContainer = styled.div`
 
 export const TitleRowContainer = styled.div`
   display: flex;
-  gap: 10px;
-  align-items: center;
+  flex-direction: column;
+  gap: 4px;
 `;
 
 export const TitleContainer = styled.h1`

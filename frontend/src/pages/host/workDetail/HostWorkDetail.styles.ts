@@ -8,12 +8,6 @@ export const Wrapper = styled.div`
     `calc(100dvh - 2 * ${theme.layout.padding.topBottom} - ${theme.layout.headerHeight} - ${theme.layout.footerHeight})`};
 `;
 
-export const TitleRowContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-`;
-
 export const TopButtonContainer = styled.div`
   display: flex;
   gap: 12px;
