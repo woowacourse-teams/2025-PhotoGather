@@ -5,7 +5,6 @@ import Button from '../../../components/@common/buttons/button/Button';
 import DeleteModal from '../../../components/@common/modal/deleteModal/DeleteModal';
 import { createWorkEditRoute } from '../../../constants/routes';
 import { useToast } from '../../../hooks/@common/useToast';
-import { DividerLine } from '../../../styles/@common/DividerLine.styles';
 import type { WorkDetail } from '../../../types/domain/work.type';
 import { buildThumbnailUrl } from '../../../utils/buildImageUrl';
 import * as C from '../../WorkDetail.common.styles';
