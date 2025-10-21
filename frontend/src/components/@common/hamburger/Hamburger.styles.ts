@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import { motion } from 'framer-motion';
 import { Backdrop } from '../../../styles/@common/Backdrop.styles';
 
 export const Wrapper = styled.nav`
@@ -23,7 +24,7 @@ export const HamburgerBackdrop = styled(Backdrop)`
   height: 100%;
 `;
 
-export const HamburgerBackground = styled.div<{ $isOpen: boolean }>`
+export const HamburgerBackground = styled(motion.div)`
   position: absolute;
   top: 0;
   left: 0;
@@ -38,8 +39,6 @@ export const HamburgerBackground = styled.div<{ $isOpen: boolean }>`
   align-items: center;
   justify-content: center;
   gap: 16px;
-  opacity: ${({ $isOpen }) => ($isOpen ? 1 : 0)};
-  transform: ${({ $isOpen }) => ($isOpen ? 'translateX(0)' : 'translateX(100%)')};
   margin-left: auto;
 `;
 export const ItemContainer = styled.ul`

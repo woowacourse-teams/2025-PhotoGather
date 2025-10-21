@@ -14,8 +14,7 @@ const Hamburger = ({ isOpen, onClose, navigateInfo }: HamburgerProps) => {
       {isOpen && (
         <S.Wrapper>
           <S.HamburgerBackdrop onClick={onClose} />
-
-          <S.HamburgerBackground $isOpen={isOpen}>
+          <S.HamburgerBackground>
             {navigateInfo.map((info) => (
               <S.ItemContainer key={info.name}>
                 <S.Item>

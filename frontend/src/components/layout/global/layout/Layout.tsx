@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { IoMdHome } from 'react-icons/io';
 import { MdMenu } from 'react-icons/md';
 import {
   Outlet,
@@ -14,10 +15,7 @@ import {
   ROUTES,
 } from '../../../../constants/routes';
 import useInAppRedirect from '../../../../hooks/@common/useInAppRedirect';
-import useSpaceInfo from '../../../../hooks/domain/space/useSpaceInfo';
 import type { AppRouteObject, IconAction } from '../../../../types/route.type';
-import { buildOriginalImageUrl } from '../../../../utils/buildImageUrl';
-import DisplayProfile from '../../../@common/displayProfile/DisplayProfile';
 import Footer from '../../../@common/footer/Footer';
 import Hamburger from '../../../@common/hamburger/Hamburger';
 import Header from '../../../@common/header/Header';
@@ -30,7 +28,7 @@ const Layout = () => {
 
   const navigate = useNavigate();
   const { spaceCode } = useParams();
-  const { spaceInfo } = useSpaceInfo({ spaceCode: spaceCode ?? '' });
+
   const { redirectToExternalBrowser } = useInAppRedirect();
   const path = useLocation().pathname;
 
@@ -57,12 +55,7 @@ const Layout = () => {
       onClick: () => navigate(ROUTES.MAIN),
     },
     profile: {
-      icon: (
-        <DisplayProfile
-          src={buildOriginalImageUrl(spaceInfo.spacePhoto.path)}
-          alt={spaceInfo.name}
-        />
-      ),
+      icon: <IoMdHome size={24} />,
       onClick: () => {
         if (isHost) {
           navigate(createSpaceMainRoute(spaceCode ?? ''));
