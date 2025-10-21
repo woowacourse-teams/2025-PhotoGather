@@ -1,6 +1,9 @@
 import { css, type Theme } from '@emotion/react';
 import styled from '@emotion/styled';
-import type { IconButtonSize, IconButtonVariant } from '../../../../types/button.type';
+import type {
+  IconButtonSize,
+  IconButtonVariant,
+} from '../../../../types/button.type';
 
 export const IconButtonSizes = {
   small: 20,
@@ -13,6 +16,7 @@ export const IconButtonStyles = {
     color: ${theme.colors.gray06};
     padding: 0;
     border-radius: 0;
+    width: fit-content;
     &:active {
       scale: 0.95;
     }
