@@ -87,6 +87,11 @@ const routes: AppRouteObject[] = [
               {
                 path: '',
                 element: <HostPageAccessGuard />,
+                handle: {
+                  headerIcon: {
+                    leftIcon: 'logo',
+                  },
+                },
                 children: [
                   {
                     path: '',
@@ -242,6 +247,11 @@ const routes: AppRouteObject[] = [
               {
                 path: '',
                 element: <GuestbookAccessGuard />,
+                handle: {
+                  headerIcon: {
+                    leftIcon: 'profile',
+                  },
+                },
                 children: [
                   {
                     path: ':spaceCode/guestbook',

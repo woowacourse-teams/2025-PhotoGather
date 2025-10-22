@@ -4,11 +4,13 @@ import useSpaceInfoContext from '../../../hooks/context/useSpaceInfoContext';
 import CompletePageLayout from '../completePageLayout/CompletePageLayout';
 
 const GuestbookAccessGuard = () => {
-  const { spaceInfo } = useSpaceInfoContext();
+  const { spaceInfo, isLoading } = useSpaceInfoContext();
   const { spaceCode } = useParams();
   const navigate = useNavigate();
 
-  if (!spaceInfo.isPublic) {
+  if (isLoading) return null;
+
+  if (!isLoading && !spaceInfo.isPublic) {
     return (
       <CompletePageLayout
         message="비공개 방명록입니다"
