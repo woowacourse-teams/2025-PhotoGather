@@ -5,7 +5,6 @@ import useSpaceInfo from '../hooks/domain/space/useSpaceInfo';
 import type { SpaceInfoContextType } from '../types/context.type';
 
 interface SpaceInfoProviderProps {
-  spaceCode: string;
   children: React.ReactNode;
 }
 
