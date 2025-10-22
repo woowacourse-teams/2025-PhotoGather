@@ -11,7 +11,7 @@ import {
   createSpaceInfoRoute,
   createWorkDetailRoute,
 } from '../../../constants/routes';
-import useSpaceInfo from '../../../hooks/domain/space/useSpaceInfo';
+import useSpaceInfoContext from '../../../hooks/context/useSpaceInfoContext';
 import { DividerLine } from '../../../styles/@common/DividerLine.styles';
 import { buildOriginalImageUrl } from '../../../utils/buildImageUrl';
 import { createInstagramUrl } from '../../../utils/createExternalLinks';
@@ -21,9 +21,7 @@ import * as S from './SpaceHomePage.styles';
 const SpaceHomePage = () => {
   const navigate = useNavigate();
   const { spaceCode = '' } = useParams();
-  const { spaceInfo } = useSpaceInfo({
-    spaceCode,
-  });
+  const { spaceInfo } = useSpaceInfoContext();
 
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const openShareModal = () => {

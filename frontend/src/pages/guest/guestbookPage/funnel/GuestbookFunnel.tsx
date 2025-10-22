@@ -3,9 +3,9 @@ import { useParams } from 'react-router-dom';
 import DisplayProfile from '../../../../components/@common/displayProfile/DisplayProfile';
 import LoadingModal from '../../../../components/specific/modal/loadingModal/LoadingModal';
 import useConfirmBeforeRefresh from '../../../../hooks/@common/useConfirmBeforeRefresh';
+import useSpaceInfoContext from '../../../../hooks/context/useSpaceInfoContext';
 import useFormFunnel from '../../../../hooks/domain/funnel/useFormFunnel';
 import usePostGuestbook from '../../../../hooks/domain/guestbook/usePostGuestbook';
-import useSpaceInfo from '../../../../hooks/domain/space/useSpaceInfo';
 import { DividerLine } from '../../../../styles/@common/DividerLine.styles';
 import type { GuestbookFunnelInfo } from '../../../../types/domain/guestbook.type';
 import { buildOriginalImageUrl } from '../../../../utils/buildImageUrl';
@@ -31,9 +31,7 @@ const GuestBookFunnel = () => {
   );
 
   const { spaceCode } = useParams<{ spaceCode: string }>();
-  const { spaceInfo, isLoading: isLoadingSpaceInfo } = useSpaceInfo({
-    spaceCode: spaceCode ?? '',
-  });
+  const { spaceInfo, isLoading: isLoadingSpaceInfo } = useSpaceInfoContext();
 
   const receiver = spaceInfo.name || '방명록 주인장';
   const thumbnailUrl = spaceInfo.spacePhoto.isExists

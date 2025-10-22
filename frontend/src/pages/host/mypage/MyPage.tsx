@@ -1,12 +1,11 @@
-import { useContext } from 'react';
 import Button from '../../../components/@common/buttons/button/Button';
 import Thumbnail from '../../../components/@common/thumbnail/Thumbnail';
-import { UserContext } from '../../../contexts/UserContext';
+import useUserInfoContext from '../../../hooks/context/userInfoContext';
 import useCommonAuthActions from '../../../hooks/domain/auth/useCommonAuthActions';
 import * as S from './MyPage.styles';
 
 const MyPage = () => {
-  const userInfo = useContext(UserContext);
+  const userInfo = useUserInfoContext();
   const { handleLogout } = useCommonAuthActions();
 
   if (!userInfo) {
