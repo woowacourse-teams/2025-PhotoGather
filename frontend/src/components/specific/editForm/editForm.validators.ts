@@ -3,6 +3,7 @@ import { createSafeValidator } from '../../../utils/validateForm';
 import {
   checkEmailForm,
   checkInputEmpty,
+  checkInstagramUsernameForm,
   checkMaxLength,
 } from '../../../validators/form.validators';
 
@@ -17,9 +18,13 @@ export const editFormValidators = {
     maxLength: createSafeValidator((value: string) =>
       checkMaxLength(value, CONSTRAINTS.MAX_LENGTH.SPACE.DESCRIPTION),
     ),
-    inputEmpty: createSafeValidator((value: string) => checkInputEmpty(value)),
   },
   email: {
     email: createSafeValidator((value: string) => checkEmailForm(value)),
+  },
+  instagramUsername: {
+    instagramUsername: createSafeValidator((value: string) =>
+      checkInstagramUsernameForm(value),
+    ),
   },
 };

@@ -23,3 +23,9 @@ export const checkEmailForm = (value: string) => {
     throw new Error('올바른 이메일 형식을 입력해 주세요.');
   }
 };
+
+export const checkInstagramUsernameForm = (value: string) => {
+  if (value.length !== 0 && !/^[a-zA-Z0-9_.]+$/.test(value)) {
+    throw new Error('영어, 숫자, _, . 만 입력할 수 있습니다.');
+  }
+};

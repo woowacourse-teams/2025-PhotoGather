@@ -86,7 +86,7 @@ const EditForm = () => {
     setValue('isDeletePhoto', true, { shouldDirty: true });
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue('email', e.target.value, {
       shouldValidate: false,
       shouldDirty: true,
@@ -142,7 +142,6 @@ const EditForm = () => {
         {...register('description', {
           validate: editFormValidators.description,
         })}
-        isRequired
         validLength={calculateValidLength(watch('description'))}
         label="스페이스 설명"
         placeholder="매일 1시부터 6시까지 상주합니다."
@@ -157,11 +156,14 @@ const EditForm = () => {
         placeholder="forgather@forgather.me"
         errorMessage={errors.email?.message}
         maxLength={CONSTRAINTS.MAX_LENGTH.SPACE.EMAIL}
-        onChange={handleChange}
+        onChange={handleEmailChange}
         onBlur={() => trigger('email')}
+        inputMode="email"
       />
       <TextInput
-        {...register('instagramUsername')}
+        {...register('instagramUsername', {
+          validate: editFormValidators.instagramUsername,
+        })}
         label="Instagram ID"
         placeholder="forgather_official"
         errorMessage={errors.instagramUsername?.message}
