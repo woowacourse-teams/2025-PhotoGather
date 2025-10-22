@@ -20,8 +20,8 @@ import SpaceInfoPage from '../pages/host/spaceInfoPage/SpaceInfoPage';
 import HostWorkDetail from '../pages/host/workDetail/HostWorkDetail';
 import WorkForm from '../pages/host/workForm/WorkForm';
 import InAppRedirectPage from '../pages/inapp/InAppRedirectPage';
+import LandingPage from '../pages/landing/LandingPage';
 import LoginPage from '../pages/login/LoginPage';
-import MainPage from '../pages/MainPage';
 import type { AppRouteObject } from '../types/route.type';
 
 const routes: AppRouteObject[] = [
@@ -31,8 +31,9 @@ const routes: AppRouteObject[] = [
     children: [
       {
         path: '/',
-        element: <MainPage />,
+        element: <LandingPage />,
         handle: {
+          highlight: true,
           headerIcon: {
             leftIcon: 'logo',
           },
@@ -42,8 +43,9 @@ const routes: AppRouteObject[] = [
         path: '/login',
         element: <LoginPage />,
         handle: {
+          noHeader: true,
           headerIcon: {
-            noHeader: true,
+            leftIcon: 'logo',
           },
         },
       },

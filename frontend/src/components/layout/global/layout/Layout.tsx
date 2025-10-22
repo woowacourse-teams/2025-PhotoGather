@@ -16,6 +16,7 @@ import {
 } from '../../../../constants/routes';
 import useInAppRedirect from '../../../../hooks/@common/useInAppRedirect';
 import type { AppRouteObject, IconAction } from '../../../../types/route.type';
+import usePageTracking from '../../../../hooks/@common/usePageTracking';
 import Footer from '../../../@common/footer/Footer';
 import Hamburger from '../../../@common/hamburger/Hamburger';
 import Header from '../../../@common/header/Header';
@@ -25,6 +26,8 @@ import { guestNavigateInfo, hostNavigateInfo } from './navigateInfo';
 
 const Layout = () => {
   const [isHamburgerOpen, setIsHamburgerOpen] = useState(false);
+
+  usePageTracking();
 
   const navigate = useNavigate();
   const { spaceCode } = useParams();
@@ -99,7 +102,7 @@ const Layout = () => {
       <S.Container $isDarkPage={isDarkPage}>
         <Outlet />
       </S.Container>
-      {!isNoFooter && <Footer />}
+      {!isNoFooter && <Footer mode={isDarkPage ? 'dark' : 'light'} />}
     </>
   );
 };

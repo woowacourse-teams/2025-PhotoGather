@@ -29,7 +29,7 @@ const SpaceDescriptionElement = ({
           isRequired={false}
           validLength={validLength}
           label=""
-          placeholder="매일 1시부터 6시까지 상주합니다."
+          placeholder={INFORMATION.SPACE_CREATE.DESCRIPTION.PLACEHOLDER}
           name="description"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
