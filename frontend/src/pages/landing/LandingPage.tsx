@@ -1,5 +1,10 @@
 import { useNavigate } from 'react-router-dom';
-import mockImage1 from '../../@assets/images/screenshots/mock-phone.png';
+import completeImage from '../../@assets/images/screenshots/complete.png';
+import guestbookImage from '../../@assets/images/screenshots/guestbook.png';
+import hostMainImage from '../../@assets/images/screenshots/host-main.png';
+import introduceImage from '../../@assets/images/screenshots/introduce.png';
+import spaceImage from '../../@assets/images/screenshots/space.png';
+import visibilityImage from '../../@assets/images/screenshots/visibility.png';
 import titleImage from '../../@assets/logo/main-logo.png';
 import Button from '../../components/@common/buttons/button/Button';
 import { AUTH_COOKIES } from '../../constants/cookie';
@@ -59,32 +64,32 @@ const LandingPage = () => {
           <S.ScreenshotBoxContainer>
             <S.ScreenshotBox>
               <S.DescriptionTitle>{`20초면 완성되는 나만의 스페이스`}</S.DescriptionTitle>
-              <S.Screenshot src={mockImage1} alt="휴대폰 사진 이미지" />
+              <S.Screenshot src={hostMainImage} alt="휴대폰 사진 이미지" />
               <S.Description>{`손쉽고 빠르게\n개인 전시 공간을 만들 수 있어요.`}</S.Description>
             </S.ScreenshotBox>
             <S.ScreenshotBox>
               <S.DescriptionTitle>{`QR 코드 하나로 공유`}</S.DescriptionTitle>
-              <S.Screenshot src={mockImage1} alt="휴대폰 사진 이미지" />
+              <S.Screenshot src={completeImage} alt="휴대폰 사진 이미지" />
               <S.Description>{`링크 또는 QR 코드만으로\n방문객에게 스페이스를 공유해요.`}</S.Description>
             </S.ScreenshotBox>
             <S.ScreenshotBox>
               <S.DescriptionTitle>{`작품 소개 작성`}</S.DescriptionTitle>
-              <S.Screenshot src={mockImage1} alt="휴대폰 사진 이미지" />
+              <S.Screenshot src={introduceImage} alt="휴대폰 사진 이미지" />
               <S.Description>{`열심히 만든 전시작품에 대한 소개를\n상세히 작성할 수 있어요.`}</S.Description>
             </S.ScreenshotBox>
             <S.ScreenshotBox>
               <S.DescriptionTitle>{`작가 메시지 전달`}</S.DescriptionTitle>
-              <S.Screenshot src={mockImage1} alt="휴대폰 사진 이미지" />
+              <S.Screenshot src={spaceImage} alt="휴대폰 사진 이미지" />
               <S.Description>{`상주 시간, 인스타그램 등\n방문객에게 전하고 싶은 정보를 남겨요.`}</S.Description>
             </S.ScreenshotBox>
             <S.ScreenshotBox>
               <S.DescriptionTitle>{`실시간 방명록`}</S.DescriptionTitle>
-              <S.Screenshot src={mockImage1} alt="휴대폰 사진 이미지" />
+              <S.Screenshot src={guestbookImage} alt="휴대폰 사진 이미지" />
               <S.Description>{`방문객들이 남긴 축하를\n한 곳에서 실시간으로 확인해요.`}</S.Description>
             </S.ScreenshotBox>
             <S.ScreenshotBox>
               <S.DescriptionTitle>{`비공개 설정`}</S.DescriptionTitle>
-              <S.Screenshot src={mockImage1} alt="휴대폰 사진 이미지" />
+              <S.Screenshot src={visibilityImage} alt="휴대폰 사진 이미지" />
               <S.Description>{`나만 볼 수 있는\n프라이빗한 방명록으로 운영할 수 있어요.`}</S.Description>
             </S.ScreenshotBox>
           </S.ScreenshotBoxContainer>
