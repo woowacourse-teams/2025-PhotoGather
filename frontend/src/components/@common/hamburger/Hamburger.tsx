@@ -1,5 +1,6 @@
 import { AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
+import useButtonTracking from '../../../hooks/@common/useButtonTracking';
 import { CloseButton } from '../../../styles/@common/Closebutton.styles';
 import type { NavigateInfo } from '../../../types/route.type';
 import * as S from './Hamburger.styles';
@@ -35,6 +36,19 @@ const itemVariants = {
 };
 
 const Hamburger = ({ isOpen, onClose, navigateInfo }: HamburgerProps) => {
+  const { trackClick } = useButtonTracking({
+    //TODO: context 머지 후 재연동
+    userType: undefined,
+    spaceCode: undefined,
+  });
+
+  const handleNavigateInfoClock = () => {
+    trackClick('hamburger_menu_navigate', {
+      page: window.location.pathname,
+    });
+    onClose();
+  };
+
   return (
     <AnimatePresence>
       {isOpen && (
@@ -48,7 +62,7 @@ const Hamburger = ({ isOpen, onClose, navigateInfo }: HamburgerProps) => {
             {navigateInfo.map((info) => (
               <S.ItemContainer key={info.name} variants={itemVariants}>
                 <S.Item>
-                  <Link to={info.path} onClick={onClose}>
+                  <Link to={info.path} onClick={handleNavigateInfoClock}>
                     {info.name}
                   </Link>
                 </S.Item>
