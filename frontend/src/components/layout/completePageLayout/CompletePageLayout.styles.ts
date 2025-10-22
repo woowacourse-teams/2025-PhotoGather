@@ -30,13 +30,6 @@ export const InfoContainer = styled.div`
   gap: 16px;
 `;
 
-export const MessageContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-`;
-
 export const IconContainer = styled.div`
   aspect-ratio: 1/1;
   display: flex;
