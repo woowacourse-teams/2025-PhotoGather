@@ -157,7 +157,6 @@ const GuestGuestbookCardPage = () => {
         onPhotoClick={handlePhotoClick}
         isGuestbookCardFetching={isGuestbookCardFetching}
       />
-      <Line width={192} />
     </S.Wrapper>
   );
 };
