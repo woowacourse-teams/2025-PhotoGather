@@ -181,27 +181,6 @@
             </filter>
         </appender>
 
-        <!-- REQUEST BODY 파일 Appender -->
-<!--        <appender name="BODY_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">-->
-<!--            <file>${BODY_FILE_PATH}/${BODY_FILE_NAME}.log</file>-->
-<!--            <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">-->
-<!--                <fileNamePattern>${BODY_FILE_PATH}/${BODY_FILE_NAME}.%d{yyyy-MM-dd}.log</fileNamePattern>-->
-<!--                <maxHistory>30</maxHistory>-->
-<!--            </rollingPolicy>-->
-<!--            <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">-->
-<!--                <pattern>${FILE_PATTERN}</pattern>-->
-<!--                <charset>UTF-8</charset>-->
-<!--            </encoder>-->
-<!--            &lt;!&ndash; BODY 마커가 달린 로그에 대해서만 적용&ndash;&gt;-->
-<!--            <filter class="ch.qos.logback.core.filter.EvaluatorFilter">-->
-<!--                <evaluator class="ch.qos.logback.classic.boolex.OnMarkerEvaluator">-->
-<!--                    <marker>BODY</marker>-->
-<!--                </evaluator>-->
-<!--                <OnMatch>ACCEPT</OnMatch>-->
-<!--                <OnMismatch>DENY</OnMismatch>-->
-<!--            </filter>-->
-<!--        </appender>-->
-
         <appender name="ERROR_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
             <file>${ERROR_FILE_PATH}/${ERROR_FILE_NAME}.log</file>
             <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
@@ -238,7 +217,6 @@
         <root>
             <appender-ref ref="CONSOLE"/>
             <appender-ref ref="FILE"/>
-<!--            <appender-ref ref="BODY_FILE"/>-->
             <appender-ref ref="ERROR_FILE"/>
         </root>
     </springProfile>
