@@ -1,6 +1,7 @@
 import { useRef } from 'react';
 import { MdDownload, MdLink } from 'react-icons/md';
 import { useParams } from 'react-router-dom';
+import useButtonTracking from '../../../../hooks/@common/useButtonTracking';
 import { useToast } from '../../../../hooks/@common/useToast';
 import { copyLinkToClipboard } from '../../../../utils/copyLinkToClipboard';
 import { saveImage } from '../../../../utils/saveImage';
@@ -18,10 +19,15 @@ const SpaceShareModal = ({ isOpen, onClose }: ShareModalProps) => {
   const { showToast } = useToast();
   const qrCodeRef = useRef<HTMLCanvasElement>(null);
   const { spaceCode } = useParams();
+  const { trackClick } = useButtonTracking();
 
   const copyAddress = `${import.meta.env.VITE_DOMAIN}/guest/${spaceCode}/main`;
 
   const saveQRCodeImage = async () => {
+    trackClick('space_qr_code_download_button', {
+      userType: 'host',
+      spaceCode,
+    });
     const canvas = qrCodeRef.current;
     if (!canvas) return;
 
@@ -33,6 +39,10 @@ const SpaceShareModal = ({ isOpen, onClose }: ShareModalProps) => {
   };
 
   const copyShareLink = () => {
+    trackClick('space_link_copy_button', {
+      userType: 'host',
+      spaceCode,
+    });
     copyLinkToClipboard(copyAddress);
     showToast({
       text: '링크가 복사되었습니다.',
@@ -40,8 +50,16 @@ const SpaceShareModal = ({ isOpen, onClose }: ShareModalProps) => {
     });
   };
 
+  const handleOnClose = () => {
+    trackClick('space_share_modal_close_button', {
+      userType: 'host',
+      spaceCode,
+    });
+    onClose();
+  };
+
   return (
-    <Modal isOpen={isOpen} onClose={onClose}>
+    <Modal isOpen={isOpen} onClose={handleOnClose}>
       <Modal.Backdrop />
       <Modal.Content>
         <S.Container>
