@@ -1,13 +1,13 @@
 export const ROUTES = {
-  MAIN: '/',
+  LANDING: '/',
   IN_APP_BROWSER: '/inapp',
   AUTH: {
     LOGIN: '/login',
     KAKAO: '/auth/login/kakao',
   },
   HOST: {
+    MAIN: '/host/main',
     MY_PAGE: '/host/my-page',
-    MY_INFO: '/host/my-info',
     CREATE_SPACE: '/host/create-space',
     SHARE: '/host/share',
   },
@@ -18,7 +18,7 @@ export const ROUTES = {
 };
 
 export const createSpaceMainRoute = (spaceCode: string) => {
-  return `/host/${spaceCode}/main`;
+  return `/host/${spaceCode}/home`;
 };
 
 export const createSpaceInfoRoute = (spaceCode: string) => {

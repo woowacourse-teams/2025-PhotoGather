@@ -10,12 +10,12 @@ import GuestMainPage from '../pages/guest/mainpage/GuestMainPage';
 import GuestWorkDetail from '../pages/guest/workDetail/GuestWorkDetail';
 import GuestbookCardPage from '../pages/host/guestbook/card/GuestbookCardPage';
 import GuestbookListPage from '../pages/host/guestbook/list/GuestbookListPage';
-import HostMainPage from '../pages/host/mainPage/HostMainPage';
-import MyInfo from '../pages/host/myInfo/MyInfo';
-import MyPage from '../pages/host/mypage/MyPage';
+import MainPage from '../pages/host/mainPage/MainPage';
+import MyPage from '../pages/host/myPage/MyPage';
 import SharePage from '../pages/host/share/SharePage';
 import SpaceCreateFunnel from '../pages/host/spaceCreate/funnel/SpaceCreateFunnel';
 import SpaceEditPage from '../pages/host/spaceEditPage/SpaceEditPage';
+import SpaceHomePage from '../pages/host/spaceHomePage/SpaceHomePage';
 import SpaceInfoPage from '../pages/host/spaceInfoPage/SpaceInfoPage';
 import HostWorkDetail from '../pages/host/workDetail/HostWorkDetail';
 import WorkForm from '../pages/host/workForm/WorkForm';
@@ -33,6 +33,7 @@ const routes: AppRouteObject[] = [
         path: '/',
         element: <LandingPage />,
         handle: {
+          noHamburger: true,
           highlight: true,
           headerIcon: {
             leftIcon: 'logo',
@@ -43,7 +44,7 @@ const routes: AppRouteObject[] = [
         path: '/login',
         element: <LoginPage />,
         handle: {
-          noHeader: true,
+          noHamburger: true,
           headerIcon: {
             leftIcon: 'logo',
           },
@@ -70,8 +71,8 @@ const routes: AppRouteObject[] = [
             element: <PrivateRoute />,
             children: [
               {
-                path: ':spaceCode/main',
-                element: <HostMainPage />,
+                path: ':spaceCode/home',
+                element: <SpaceHomePage />,
                 handle: {
                   // TODO : default를 logo와 hamburger로 변경 필요
                   headerIcon: {
@@ -89,8 +90,8 @@ const routes: AppRouteObject[] = [
                 },
               },
               {
-                path: 'my-page',
-                element: <MyPage />,
+                path: 'main',
+                element: <MainPage />,
                 handle: {
                   highlight: true,
                   headerIcon: {
@@ -100,8 +101,8 @@ const routes: AppRouteObject[] = [
                 },
               },
               {
-                path: 'my-info',
-                element: <MyInfo />,
+                path: 'my-page',
+                element: <MyPage />,
                 handle: {
                   headerIcon: {
                     leftIcon: 'logo',

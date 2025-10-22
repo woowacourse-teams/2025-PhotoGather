@@ -15,8 +15,8 @@ import {
   ROUTES,
 } from '../../../../constants/routes';
 import useInAppRedirect from '../../../../hooks/@common/useInAppRedirect';
-import type { AppRouteObject, IconAction } from '../../../../types/route.type';
 import usePageTracking from '../../../../hooks/@common/usePageTracking';
+import type { AppRouteObject, IconAction } from '../../../../types/route.type';
 import Footer from '../../../@common/footer/Footer';
 import Hamburger from '../../../@common/hamburger/Hamburger';
 import Header from '../../../@common/header/Header';
@@ -47,6 +47,7 @@ const Layout = () => {
   const isDarkPage = current?.handle?.highlight;
   const isNoHeader = current?.handle?.noHeader;
   const isNoFooter = current?.handle?.noFooter;
+  const isNoHamburger = current?.handle?.noHamburger;
 
   const isHost = path.includes('/host/');
   const isGuest = path.includes('/guest/');
@@ -54,8 +55,7 @@ const Layout = () => {
   const leftHeaderIcons: Record<string, IconAction> = {
     logo: {
       icon: <LogoSvg />,
-      // TODO : 랜딩페이지로 변경 필요
-      onClick: () => navigate(ROUTES.MAIN),
+      onClick: () => navigate(ROUTES.LANDING),
     },
     profile: {
       icon: <IoMdHome size={24} />,
@@ -68,7 +68,7 @@ const Layout = () => {
           navigate(createGuestMainRoute(spaceCode ?? ''));
           return;
         }
-        navigate(ROUTES.MAIN);
+        navigate(ROUTES.LANDING);
       },
     },
   };
@@ -82,21 +82,25 @@ const Layout = () => {
 
   return (
     <>
-      <Hamburger
-        isOpen={isHamburgerOpen}
-        onClose={closeHamburger}
-        navigateInfo={
-          isHost
-            ? hostNavigateInfo(spaceCode ?? '')
-            : guestNavigateInfo(spaceCode ?? '')
-        }
-      />
+      {!isNoHamburger && (
+        <Hamburger
+          isOpen={isHamburgerOpen}
+          onClose={closeHamburger}
+          navigateInfo={
+            isHost ? hostNavigateInfo() : guestNavigateInfo(spaceCode ?? '')
+          }
+        />
+      )}
       <ScrollToTop />
       {!isNoHeader && (
         <Header
           mode={isDarkPage ? 'dark' : 'light'}
           leftIcon={{ icon: leftIcon?.icon, onClick: leftIcon?.onClick }}
-          rightIcon={{ icon: <MdMenu />, onClick: openHamburger }}
+          rightIcon={{
+            icon: <MdMenu />,
+            onClick: openHamburger,
+            disabled: isNoHamburger,
+          }}
         />
       )}
       <S.Container $isDarkPage={isDarkPage}>

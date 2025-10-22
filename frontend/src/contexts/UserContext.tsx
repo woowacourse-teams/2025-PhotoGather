@@ -33,7 +33,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
           text: '사용자 정보 조회에 실패했습니다. 다시 시도해 주세요.',
           type: 'error',
         });
-        navigate(ROUTES.MAIN);
+        navigate(ROUTES.LANDING);
         clearAuthTokens();
       }
     };

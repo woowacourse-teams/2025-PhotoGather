@@ -8,7 +8,7 @@ interface HeaderProps {
   /** 왼쪽 아이콘 및 동작 */
   leftIcon: IconAction;
   /** 오른쪽 아이콘 및 동작 */
-  rightIcon: IconAction;
+  rightIcon: IconAction & { disabled?: boolean };
 }
 
 const Header = ({ mode = 'light', leftIcon, rightIcon }: HeaderProps) => {
@@ -21,7 +21,7 @@ const Header = ({ mode = 'light', leftIcon, rightIcon }: HeaderProps) => {
           </S.Logo>
         </S.IconsContainer>
       )}
-      {rightIcon.icon && (
+      {rightIcon.icon && !rightIcon.disabled && (
         <S.IconsContainer>
           <S.IconButton $mode={mode} type="button" onClick={rightIcon.onClick}>
             {rightIcon.icon}

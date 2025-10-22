@@ -44,7 +44,6 @@ const Hamburger = ({ isOpen, onClose, navigateInfo }: HamburgerProps) => {
             initial="hidden"
             animate="visible"
             variants={hamburgerVariants}
-            onClick={onClose}
           >
             {navigateInfo.map((info) => (
               <S.ItemContainer key={info.name} variants={itemVariants}>

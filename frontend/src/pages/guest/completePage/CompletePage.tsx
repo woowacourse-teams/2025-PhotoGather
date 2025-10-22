@@ -14,7 +14,7 @@ const CompletePage = () => {
 
   useEffect(() => {
     if (!state || !state.guestNickName || !state.receiver) {
-      navigate(ROUTES.MAIN);
+      navigate(ROUTES.LANDING);
     }
   }, [state, navigate]);
 
