@@ -13,4 +13,7 @@ export const spaceService = {
     http.patch(`/spaces/${spaceCode}`, data),
 
   getMySpaces: () => http.get<{ spaces: MySpace[] }>('/spaces/me'),
+
+  getIsSpaceOwner: (spaceCode: string) =>
+    http.get<{ isSpaceHost: boolean }>(`/spaces/${spaceCode}/host-check`),
 };
