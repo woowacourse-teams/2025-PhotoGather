@@ -30,7 +30,10 @@ const MainPage = () => {
   return (
     <S.Wrapper>
       <S.ProfileContainer>
-        <Thumbnail src={userInfo?.pictureUrl ?? ''} alt={userInfo?.name} />
+        <Thumbnail
+          src={userInfo?.pictureUrl ?? 'invalid-url'}
+          alt={userInfo?.name}
+        />
         <S.InfoContainer>
           <S.NameContainer>{userInfo?.name}</S.NameContainer>
         </S.InfoContainer>

@@ -1,6 +1,6 @@
 import { IoLogoInstagram, IoMailOutline } from 'react-icons/io5';
 import { useNavigate, useParams } from 'react-router-dom';
-import defaultImage from '../../../@assets/images/default-image.png';
+import defaultImage from '../../../@assets/images/default-forgather-image.png';
 import Button from '../../../components/@common/buttons/button/Button';
 import IconButton from '../../../components/@common/buttons/iconButton/IconButton';
 import {
@@ -99,8 +99,7 @@ const GuestMainPage = () => {
       <Button
         variant="tertiary"
         text="Forgather 둘러보기"
-        // TODO : 랜딩으로 이동되도록 설정
-        onClick={() => navigate(ROUTES.MAIN)}
+        onClick={() => navigate(ROUTES.LANDING)}
       />
       <MainPageStyles.Footer></MainPageStyles.Footer>
     </MainPageStyles.Wrapper>

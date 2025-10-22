@@ -1,8 +1,8 @@
 import { useContext } from 'react';
 import Button from '../../../components/@common/buttons/button/Button';
+import Thumbnail from '../../../components/@common/thumbnail/Thumbnail';
 import { UserContext } from '../../../contexts/UserContext';
 import useCommonAuthActions from '../../../hooks/domain/auth/useCommonAuthActions';
-import { Thumbnail } from '../../MainPage.common.styles';
 import * as S from './MyPage.styles';
 
 const MyPage = () => {
@@ -20,7 +20,10 @@ const MyPage = () => {
   return (
     <S.Wrapper>
       <S.ProfileContainer>
-        <Thumbnail src={userInfo?.pictureUrl ?? ''} alt={userInfo?.name} />
+        <Thumbnail
+          src={userInfo?.pictureUrl ?? 'invalid-url'}
+          alt={userInfo?.name}
+        />
         <S.Name>{userInfo?.name}</S.Name>
       </S.ProfileContainer>
       <Button variant="tertiary" text="로그아웃" onClick={handleLogout} />
