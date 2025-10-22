@@ -121,6 +121,16 @@ public class ProductService {
         productRepository.delete(product);
     }
 
+    @Transactional
+    public void deleteIfExists(Host host, Space space) {
+        validateSpaceHost(host, space);
+        Optional<Product> product = productRepository.findBySpace(space);
+        if (product.isPresent()) {
+            deleteAllProductPhotos(product.get());
+            productRepository.delete(product.get());
+        }
+    }
+
     /**
      * product와 연관된 모든 ProductPhoto 삭제
      */

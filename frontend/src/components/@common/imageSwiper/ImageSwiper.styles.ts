@@ -24,7 +24,6 @@ export const ImageSwiperContainer = styled.div`
   justify-content: center;
   align-items: center;
 
-
   & .swiper {
     width: 100%;
     min-height: ${({ theme }) => theme.layout.swiper.minHeight};
@@ -55,7 +54,8 @@ export const ImageSwiperContainer = styled.div`
     position: absolute;
     bottom: 0;
   }
-  & .swiper-button-prev, .swiper-button-next {
+  & .swiper-button-prev,
+  .swiper-button-next {
     color: ${({ theme }) => theme.colors.white};
     background-color: ${({ theme }) => hexToRgba(theme.colors.gray06, 0.7)};
     backdrop-filter: blur(10px);

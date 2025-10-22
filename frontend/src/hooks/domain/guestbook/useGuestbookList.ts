@@ -20,9 +20,16 @@ const useGuestbookList = (spaceCode: string) => {
 
   const { data, fetchNextPage, isLoading, isError } = useInfiniteQuery({
     queryKey: ['guestbookList', spaceCode],
-    queryFn: ({ pageParam }) => fetchGuestbookListByPage(pageParam),
+    queryFn: ({ pageParam = 1 }) => fetchGuestbookListByPage(pageParam),
     initialPageParam: 1,
-    getNextPageParam: (lastGuestbookList) => lastGuestbookList.currentPage + 1,
+    getNextPageParam: (lastGuestbookList) => {
+      const isLastPage =
+        lastGuestbookList.currentPage >= lastGuestbookList.totalPages;
+
+      return isLastPage ? undefined : lastGuestbookList.currentPage + 1;
+    },
+    refetchOnMount: 'always',
+    staleTime: 0,
   });
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: isError 변경 시에만 토스트 띄우기

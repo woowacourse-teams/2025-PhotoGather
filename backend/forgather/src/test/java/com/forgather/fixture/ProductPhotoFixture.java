@@ -4,6 +4,7 @@ import static com.forgather.fixture.ProductFixture.createProduct;
 
 import org.springframework.test.util.ReflectionTestUtils;
 
+import com.forgather.domain.product.model.Product;
 import com.forgather.domain.product.model.ProductPhoto;
 
 public class ProductPhotoFixture {
@@ -26,5 +27,9 @@ public class ProductPhotoFixture {
         ProductPhoto productPhoto = new ProductPhoto(createProduct(), "originalName", path, 1024L, 1);
         ReflectionTestUtils.setField(productPhoto, "id", id);
         return productPhoto;
+    }
+
+    public static ProductPhoto createProductPhotoWithProduct(Product product) {
+        return new ProductPhoto(product, "originalName", "path", 1024L, 1);
     }
 }

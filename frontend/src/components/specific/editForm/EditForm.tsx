@@ -59,9 +59,9 @@ const EditForm = () => {
     defaultValues: initialData,
   });
 
-  const { localFiles, previewFile, handleFilesUploadClick, clearLocalFiles } =
+  const { localFiles, previewFiles, handleFilesUploadClick, clearLocalFiles } =
     useLocalFile({
-      fileType: 'im age',
+      fileType: 'image',
       maxFileCount: 1,
     });
 
@@ -102,7 +102,7 @@ const EditForm = () => {
         originalSrc={
           watch('isDeletePhoto') ? undefined : spaceInfo?.spacePhoto.path
         }
-        previewFile={previewFile}
+        previewFile={previewFiles}
         uploadImage={handleFilesUploadClick}
         clearFiles={() => {
           clearFiles(localFiles);

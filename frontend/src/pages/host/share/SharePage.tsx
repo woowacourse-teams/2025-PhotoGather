@@ -54,38 +54,44 @@ const SharePage = () => {
   };
 
   return (
-    <S.Wrapper>
+    <>
       <canvas ref={canvasRef} style={canvasStyles} />
-      <S.TopContainer>
-        <S.Image src={CompleteImage} alt="링크 이미지" />
-        <S.TextContainer>
-          <S.Title>스페이스 생성이 완료됐어요</S.Title>
-        </S.TextContainer>
-      </S.TopContainer>
-      {spaceCode ? (
-        <S.BottomContainer>
-          <S.ShareContainer>
-            <QRCode address={copyAddress} ref={qrCodeRef} />
-            <S.ShareLabel>스페이스 링크를 공유해 보세요.</S.ShareLabel>
-            <S.IconLabelButtonContainer>
-              <IconButton
-                icon={<MdDownload size={24} />}
-                variant="dark"
-                onClick={saveQRCodeImage}
-              />
-              <IconButton
-                icon={<MdLink style={{ rotate: '-45deg' }} size={24} />}
-                variant="dark"
-                onClick={copyShareLink}
-              />
-            </S.IconLabelButtonContainer>
-          </S.ShareContainer>
-          <Button text="나의 스페이스로 이동" onClick={handleSpaceMainButton} />
-        </S.BottomContainer>
-      ) : (
-        <Button text="메인 페이지로 이동" onClick={handleMainButton} />
-      )}
-    </S.Wrapper>
+
+      <S.Wrapper>
+        <S.TopContainer>
+          <S.Image src={CompleteImage} alt="링크 이미지" />
+          <S.TextContainer>
+            <S.Title>스페이스 생성이 완료됐어요</S.Title>
+          </S.TextContainer>
+        </S.TopContainer>
+        {spaceCode ? (
+          <S.BottomContainer>
+            <S.ShareContainer>
+              <QRCode address={copyAddress} ref={qrCodeRef} />
+              <S.ShareLabel>스페이스 링크를 공유해 보세요.</S.ShareLabel>
+              <S.IconLabelButtonContainer>
+                <IconButton
+                  icon={<MdDownload size={24} />}
+                  variant="dark"
+                  onClick={saveQRCodeImage}
+                />
+                <IconButton
+                  icon={<MdLink style={{ rotate: '-45deg' }} size={24} />}
+                  variant="dark"
+                  onClick={copyShareLink}
+                />
+              </S.IconLabelButtonContainer>
+            </S.ShareContainer>
+            <Button
+              text="나의 스페이스로 이동"
+              onClick={handleSpaceMainButton}
+            />
+          </S.BottomContainer>
+        ) : (
+          <Button text="메인 페이지로 이동" onClick={handleMainButton} />
+        )}
+      </S.Wrapper>
+    </>
   );
 };
 

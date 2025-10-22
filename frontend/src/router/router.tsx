@@ -11,6 +11,7 @@ import GuestWorkDetail from '../pages/guest/workDetail/GuestWorkDetail';
 import GuestbookCardPage from '../pages/host/guestbook/card/GuestbookCardPage';
 import GuestbookListPage from '../pages/host/guestbook/list/GuestbookListPage';
 import HostMainPage from '../pages/host/mainPage/HostMainPage';
+import MyInfo from '../pages/host/myInfo/MyInfo';
 import MyPage from '../pages/host/mypage/MyPage';
 import SharePage from '../pages/host/share/SharePage';
 import SpaceCreateFunnel from '../pages/host/spaceCreate/funnel/SpaceCreateFunnel';
@@ -18,8 +19,9 @@ import SpaceEditPage from '../pages/host/spaceEditPage/SpaceEditPage';
 import SpaceInfoPage from '../pages/host/spaceInfoPage/SpaceInfoPage';
 import HostWorkDetail from '../pages/host/workDetail/HostWorkDetail';
 import WorkForm from '../pages/host/workForm/WorkForm';
+import InAppRedirectPage from '../pages/inapp/InAppRedirectPage';
+import LandingPage from '../pages/landing/LandingPage';
 import LoginPage from '../pages/login/LoginPage';
-import MainPage from '../pages/MainPage';
 import type { AppRouteObject } from '../types/route.type';
 
 const routes: AppRouteObject[] = [
@@ -29,15 +31,36 @@ const routes: AppRouteObject[] = [
     children: [
       {
         path: '/',
-        element: <MainPage />,
+        element: <LandingPage />,
+        handle: {
+          highlight: true,
+          headerIcon: {
+            leftIcon: 'logo',
+          },
+        },
       },
       {
         path: '/login',
         element: <LoginPage />,
+        handle: {
+          noHeader: true,
+          headerIcon: {
+            leftIcon: 'logo',
+          },
+        },
+      },
+      {
+        path: '/inapp',
+        element: <InAppRedirectPage />,
       },
       {
         path: '/auth/login/kakao',
         element: <KakaoAuthPage />,
+        handle: {
+          headerIcon: {
+            leftIcon: 'logo',
+          },
+        },
       },
       {
         path: 'host',
@@ -50,14 +73,19 @@ const routes: AppRouteObject[] = [
                 path: ':spaceCode/main',
                 element: <HostMainPage />,
                 handle: {
-                  headerIcons: ['share', 'settings'],
+                  // TODO : default를 logo와 hamburger로 변경 필요
+                  headerIcon: {
+                    leftIcon: 'logo',
+                  },
                 },
               },
               {
                 path: ':spaceCode/space-info',
                 element: <SpaceInfoPage />,
                 handle: {
-                  headerIcons: ['settings'],
+                  headerIcon: {
+                    leftIcon: 'profile',
+                  },
                 },
               },
               {
@@ -65,15 +93,28 @@ const routes: AppRouteObject[] = [
                 element: <MyPage />,
                 handle: {
                   highlight: true,
-                  headerIcons: ['settings'],
+                  headerIcon: {
+                    leftIcon: 'logo',
+                  },
                   noFooter: true,
+                },
+              },
+              {
+                path: 'my-info',
+                element: <MyInfo />,
+                handle: {
+                  headerIcon: {
+                    leftIcon: 'logo',
+                  },
                 },
               },
               {
                 path: ':spaceCode/space-info/edit',
                 element: <SpaceEditPage />,
                 handle: {
-                  headerIcons: ['settings'],
+                  headerIcon: {
+                    leftIcon: 'profile',
+                  },
                 },
               },
               {
@@ -81,33 +122,56 @@ const routes: AppRouteObject[] = [
                 element: <SpaceCreateFunnel />,
                 handle: {
                   noFooter: true,
+                  headerIcon: {
+                    leftIcon: 'logo',
+                  },
                 },
               },
               {
                 path: ':spaceCode/work-detail',
                 element: <HostWorkDetail />,
+                handle: {
+                  headerIcon: {
+                    leftIcon: 'profile',
+                  },
+                },
               },
               {
                 path: ':spaceCode/work-detail/edit',
                 element: <WorkForm />,
+                handle: {
+                  headerIcon: {
+                    leftIcon: 'profile',
+                  },
+                },
               },
               {
                 path: 'share',
                 element: <SharePage />,
                 handle: {
                   noFooter: true,
+                  headerIcon: {
+                    leftIcon: 'logo',
+                  },
                 },
               },
               {
                 path: ':spaceCode/guestbook',
                 element: <GuestbookListPage />,
                 handle: {
-                  headerIcons: ['share', 'settings'],
+                  headerIcon: {
+                    leftIcon: 'profile',
+                  },
                 },
               },
               {
                 path: ':spaceCode/guestbook/:guestbookCardId',
                 element: <GuestbookCardPage />,
+                handle: {
+                  headerIcon: {
+                    leftIcon: 'profile',
+                  },
+                },
               },
             ],
           },
@@ -119,29 +183,57 @@ const routes: AppRouteObject[] = [
           {
             path: ':spaceCode/main',
             element: <GuestMainPage />,
+            handle: {
+              headerIcon: {
+                leftIcon: 'profile',
+              },
+            },
           },
           {
             path: ':spaceCode/create-guestbook',
             element: <GuestBookFunnel />,
             handle: {
               noFooter: true,
+              headerIcon: {
+                leftIcon: 'profile',
+              },
             },
           },
           {
             path: ':spaceCode/create-guestbook-complete',
             element: <CompletePage />,
+            handle: {
+              headerIcon: {
+                leftIcon: 'profile',
+              },
+            },
           },
           {
             path: ':spaceCode/work-detail',
             element: <GuestWorkDetail />,
+            handle: {
+              headerIcon: {
+                leftIcon: 'profile',
+              },
+            },
           },
           {
             path: ':spaceCode/guestbook',
             element: <GuestGuestbookListPage />,
+            handle: {
+              headerIcon: {
+                leftIcon: 'profile',
+              },
+            },
           },
           {
             path: ':spaceCode/guestbook/:guestbookCardId',
             element: <GuestGuestbookCardPage />,
+            handle: {
+              headerIcon: {
+                leftIcon: 'profile',
+              },
+            },
           },
         ],
       },

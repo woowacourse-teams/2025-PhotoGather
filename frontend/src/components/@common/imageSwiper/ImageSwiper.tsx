@@ -6,13 +6,13 @@ import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import { useRef } from 'react';
 import type { Swiper as SwiperType } from 'swiper';
-import type { LocalFile } from '../../../types/file.type';
+import type { PreviewFile } from '../../../types/file.type';
 
 interface ImageSwiperProps {
   /** 초기 인덱스 */
   initialIndex: number;
   /** 이미지 정보 */
-  imageInfo: LocalFile[];
+  imageInfo: PreviewFile[];
   /** 현재 인덱스 업데이트 */
   updateCurrentIndex: (index: number) => void;
   /** 슬라이드 간격 (px) */
@@ -58,14 +58,14 @@ const ImageSwiper = ({
         }}
         ref={swiperRef}
       >
-        {imageInfo.map((imageInfo: LocalFile, index) => (
+        {imageInfo.map((imageInfo: PreviewFile, index) => (
           <SwiperSlide
-            key={`${imageInfo.originFile.name}-${index}`}
+            key={`${imageInfo.id}-${index}`}
             style={{ display: 'flex' }}
           >
             <S.Image
               src={imageInfo.previewUrl}
-              alt={imageInfo.originFile.name}
+              alt={`${imageInfo.id} 이미지`}
             />
           </SwiperSlide>
         ))}

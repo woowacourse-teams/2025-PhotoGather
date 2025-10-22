@@ -29,11 +29,13 @@ export const InfoContainer = styled.div`
 
 export const Name = styled.h1`
   ${({ theme }) => theme.typography.header02}
+  height: 30px;
 `;
 
 export const Introduction = styled.p`
   ${({ theme }) => theme.typography.bodyRegular}
   color: ${({ theme }) => theme.colors.gray04};
+  white-space: pre-line;
 `;
 
 export const IconButtonContainer = styled.div`

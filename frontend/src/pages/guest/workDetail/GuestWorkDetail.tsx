@@ -64,8 +64,8 @@ const GuestWorkDetail = () => {
         <C.TitleRowContainer>
           <C.TitleContainer>{title}</C.TitleContainer>
           <C.CategoryContainer>{category}</C.CategoryContainer>
+          <C.DesignerContainer>{authorName}</C.DesignerContainer>
         </C.TitleRowContainer>
-        <C.DesignerContainer>{authorName}</C.DesignerContainer>
         <C.DescriptionContainer>{description}</C.DescriptionContainer>
         {photos.map((photo, index) => (
           <C.ImageContainer
@@ -78,7 +78,9 @@ const GuestWorkDetail = () => {
             alt={`work-detail-${index}`}
           />
         ))}
-        <DividerLine width="100%" />
+        <S.DividerLineContainer>
+          <DividerLine width="60%" />
+        </S.DividerLineContainer>
       </C.WorkContainer>
       <S.TextContainer>축하와 응원의 한 마디를 적어주세요</S.TextContainer>
       <Button

@@ -9,6 +9,8 @@ export const Overlay = styled.div<{ $isPhotoExist: boolean }>`
   background: ${({ theme, $isPhotoExist }) =>
     $isPhotoExist ? 'none' : hexToRgba(theme.colors.gray06, 0.3)};
   width: 100%;
+  max-width: 60px;
+  max-height: 60px;
   height: 100%;
   border-radius: 16px;
   display: flex;

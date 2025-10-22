@@ -1,11 +1,13 @@
 export const ROUTES = {
   MAIN: '/',
+  IN_APP_BROWSER: '/inapp',
   AUTH: {
     LOGIN: '/login',
     KAKAO: '/auth/login/kakao',
   },
   HOST: {
     MY_PAGE: '/host/my-page',
+    MY_INFO: '/host/my-info',
     CREATE_SPACE: '/host/create-space',
     SHARE: '/host/share',
   },

@@ -11,6 +11,11 @@ export const global = css`
     background-color: #f5f5f5;
     word-break: break-all;
   }
+  a {
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+  }
   html {
     scroll-behavior: smooth;
   }

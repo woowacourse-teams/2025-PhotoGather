@@ -10,6 +10,10 @@ import {
 import { DividerLine } from '../styles/@common/DividerLine.styles';
 
 const MainPage = () => {
+  const throwSentryError = () => {
+    throw new Error('This is a test error for Sentry.');
+  };
+
   const navigate = useNavigate();
   return (
     <div
@@ -49,6 +53,11 @@ const MainPage = () => {
         text="[GUEST] 방명록 작성 이동"
         onClick={() => navigate(createCreateGuestbookRoute('f205850861'))}
         variant="secondary"
+      />
+      <Button
+        text="Sentry 에러 발생시키기"
+        onClick={throwSentryError}
+        variant="danger"
       />
     </div>
   );

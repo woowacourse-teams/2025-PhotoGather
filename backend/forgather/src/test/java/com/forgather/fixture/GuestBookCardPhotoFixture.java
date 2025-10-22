@@ -18,4 +18,8 @@ public class GuestBookCardPhotoFixture {
         ReflectionTestUtils.setField(guestBookCardPhoto, "id", id);
         return guestBookCardPhoto;
     }
+
+    public static GuestBookCardPhoto createGuestBookCardPhotoWithGuestBookCard(GuestBookCard guestBookCard) {
+        return new GuestBookCardPhoto("originalName", "path", 1024L, guestBookCard);
+    }
 }

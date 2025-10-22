@@ -18,6 +18,7 @@ const useFunnel = <Step extends string>(initialStep: Step) => {
 
   const Step = ({ name, children }: FunnelStepProps<Step>) => {
     const isStepVisible = funnelStep === name ? 'visible' : 'hidden';
+    // return name === funnelStep && children;
     return <Activity mode={isStepVisible}>{children}</Activity>;
   };
 

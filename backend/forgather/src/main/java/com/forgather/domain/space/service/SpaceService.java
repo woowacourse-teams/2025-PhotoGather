@@ -4,11 +4,14 @@ import java.io.IOException;
 import java.util.Comparator;
 import java.util.List;
 
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.forgather.domain.guestbook.repository.GuestBookCardRepository;
+import com.forgather.domain.guestbook.service.GuestBookService;
+import com.forgather.domain.product.service.ProductService;
 import com.forgather.domain.space.dto.CreateSpaceRequest;
 import com.forgather.domain.space.dto.CreateSpaceResponse;
 import com.forgather.domain.space.dto.HostSpaceResponse;
@@ -20,6 +23,7 @@ import com.forgather.domain.space.model.SpacePhoto;
 import com.forgather.domain.space.repository.SpacePhotoRepository;
 import com.forgather.domain.space.repository.SpaceRepository;
 import com.forgather.domain.upload.domain.ContentsStorage;
+import com.forgather.domain.upload.event.DeletePhotoEvent;
 import com.forgather.global.auth.model.Host;
 import com.forgather.global.auth.model.SpaceHostMap;
 import com.forgather.global.auth.repository.SpaceHostMapRepository;
@@ -38,12 +42,15 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class SpaceService {
 
+    private final ProductService productService;
+    private final GuestBookService guestBookService;
     private final SpaceRepository spaceRepository;
     private final SpacePhotoRepository spacePhotoRepository;
     private final SpaceHostMapRepository spaceHostMapRepository;
     private final GuestBookCardRepository guestBookCardRepository;
     private final RandomCodeGenerator codeGenerator;
     private final ContentsStorage contentsStorage;
+    private final ApplicationEventPublisher eventPublisher;
 
     @Transactional
     public CreateSpaceResponse create(CreateSpaceRequest request, MultipartFile file, Host host) {
@@ -137,9 +144,7 @@ public class SpaceService {
         SpacePhoto existingPhoto = spacePhotoRepository.findBySpace(space)
             .orElseThrow(() -> new BaseException("삭제할 스페이스 사진이 존재하지 않습니다."));
 
-        String path = existingPhoto.getPath();
-        spacePhotoRepository.delete(existingPhoto);
-        contentsStorage.deleteContent(path);
+        deleteSpacePhoto(existingPhoto);
     }
 
     @Transactional
@@ -147,13 +152,21 @@ public class SpaceService {
         Space space = spaceRepository.getByCodeOrThrow(spaceCode);
         validateSpaceHost(space, host);
 
+        deleteGuestBookAndProduct(host, space);
         spaceHostMapRepository.deleteBySpace(space);
         spacePhotoRepository.findBySpace(space)
-            .ifPresent(spacePhoto -> {
-                spacePhotoRepository.delete(spacePhoto);
-                contentsStorage.deleteContent(spacePhoto.getPath());
-            });
+            .ifPresent(this::deleteSpacePhoto);
         spaceRepository.delete(space);
+    }
+
+    private void deleteGuestBookAndProduct(Host host, Space space) {
+        guestBookService.deleteAllCardsBySpace(host, space);
+        productService.deleteIfExists(host, space);
+    }
+
+    private void deleteSpacePhoto(SpacePhoto spacePhoto) {
+        spacePhotoRepository.delete(spacePhoto);
+        eventPublisher.publishEvent(new DeletePhotoEvent(this, spacePhoto));
     }
 
     @Transactional(readOnly = true)

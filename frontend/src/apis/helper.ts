@@ -1,5 +1,17 @@
 import { AUTH_COOKIES } from '../constants/cookie';
+import type { Method } from '../types/api.type';
 import { CookieUtils } from '../utils/cookie';
+
+interface MatchHeadersProps {
+  body: unknown;
+  headers: Record<string, string>;
+  method: Method;
+  token?: string;
+}
+
+const generateTraceId = () => {
+  return crypto.randomUUID().slice(0, 8);
+};
 
 export const matchBody = (body: unknown) => {
   if (!body) {
@@ -11,13 +23,14 @@ export const matchBody = (body: unknown) => {
   return JSON.stringify(body);
 };
 
-export const matchHeaders = (
-  body: unknown,
-  headers: Record<string, string>,
-  token?: string,
-) => {
+export const matchHeaders = ({
+  body,
+  headers,
+  method,
+  token = undefined,
+}: MatchHeadersProps) => {
   const mergedHeaders = { ...headers };
-  if (body instanceof FormData) {
+  if (body instanceof FormData || method === 'GET') {
     delete mergedHeaders['Content-Type'];
     delete mergedHeaders['content-type'];
   } else {
@@ -29,6 +42,8 @@ export const matchHeaders = (
   if (authToken) {
     mergedHeaders['Authorization'] = `Bearer ${authToken}`;
   }
+
+  mergedHeaders['trace-id'] = generateTraceId();
 
   return mergedHeaders;
 };

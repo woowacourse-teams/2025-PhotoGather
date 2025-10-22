@@ -1,49 +1,13 @@
 import styled from '@emotion/styled';
+import { hexToRgba } from '../../../utils/hexToRgba';
 
-export const Wrapper = styled.div`
-  width: 100%;
+export const ActionButtonContainer = styled.div`
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 32px;
-  min-height: ${({ theme }) =>
-    `calc(100dvh - 2 * ${theme.layout.padding.topBottom} - ${theme.layout.headerHeight} - ${theme.layout.footerHeight})`};
-`;
-
-export const ProfileContainer = styled.section`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  width: fit-content;
   gap: 16px;
-`;
-
-export const InfoContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  text-align: center;
-`;
-
-export const Name = styled.h1`
-  ${({ theme }) => theme.typography.header02}
-`;
-
-export const Introduction = styled.p`
-  ${({ theme }) => theme.typography.bodyRegular}
-  color: ${({ theme }) => theme.colors.gray04};
-  white-space: pre-wrap;
-`;
-
-export const IconButtonContainer = styled.div`
-  display: flex;
-  gap: 16px;
-`;
-
-export const ButtonContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-  width: 100%;
+  padding: 8px 12px;
+  justify-content: flex-end;
+  background: ${({ theme }) => hexToRgba(theme.colors.gray03, 0.2)};
+  border-radius: 40px;
+  margin-left: auto;
 `;

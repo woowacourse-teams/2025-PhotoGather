@@ -1,11 +1,18 @@
 package com.forgather.acceptance;
 
 import static com.forgather.fixture.HostFixture.createHost;
+import static java.time.Duration.ofSeconds;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.awaitility.Awaitility.await;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.Mockito.atLeast;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -20,8 +27,13 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.forgather.domain.guestbook.model.Guest;
+import com.forgather.domain.guestbook.model.GuestBookCard;
+import com.forgather.domain.guestbook.repository.GuestBookCardPhotoRepository;
 import com.forgather.domain.guestbook.repository.GuestBookCardRepository;
 import com.forgather.domain.guestbook.repository.GuestRepository;
+import com.forgather.domain.product.model.Product;
+import com.forgather.domain.product.repository.ProductPhotoRepository;
+import com.forgather.domain.product.repository.ProductRepository;
 import com.forgather.domain.space.dto.CreateSpaceRequest;
 import com.forgather.domain.space.dto.CreateSpaceResponse;
 import com.forgather.domain.space.dto.HostSpaceResponse;
@@ -34,7 +46,10 @@ import com.forgather.domain.space.repository.SpacePhotoRepository;
 import com.forgather.domain.space.repository.SpaceRepository;
 import com.forgather.domain.upload.domain.ContentsStorage;
 import com.forgather.fixture.GuestBookCardFixture;
+import com.forgather.fixture.GuestBookCardPhotoFixture;
 import com.forgather.fixture.GuestFixture;
+import com.forgather.fixture.ProductFixture;
+import com.forgather.fixture.ProductPhotoFixture;
 import com.forgather.fixture.SpaceFixture;
 import com.forgather.fixture.SpacePhotoFixture;
 import com.forgather.global.auth.model.Host;
@@ -70,13 +85,22 @@ class SpaceAcceptanceTest extends AcceptanceTest {
     private GuestBookCardRepository guestBookCardRepository;
 
     @Autowired
-    private JwtTokenProvider jwtTokenProvider;
+    private GuestBookCardPhotoRepository guestBookCardPhotoRepository;
 
-    @MockitoBean
-    private ContentsStorage contentsStorage;
+    @Autowired
+    private ProductRepository productRepository;
+
+    @Autowired
+    private ProductPhotoRepository productPhotoRepository;
+
+    @Autowired
+    private JwtTokenProvider jwtTokenProvider;
 
     @Autowired
     private ObjectMapper objectMapper;
+
+    @MockitoBean
+    private ContentsStorage contentsStorage;
 
     private Host host;
     private String token;
@@ -112,7 +136,6 @@ class SpaceAcceptanceTest extends AcceptanceTest {
             .header("Authorization", "Bearer " + token)
             .multiPart("request", request, "application/json")
             .multiPart("file", file.getOriginalFilename(), file.getBytes(), file.getContentType())
-            .sessionAttr("host_id", host.getId())
             .when()
             .post("/spaces")
             .then()
@@ -138,7 +161,6 @@ class SpaceAcceptanceTest extends AcceptanceTest {
         CreateSpaceResponse response = RestAssuredMockMvc.given()
             .header("Authorization", "Bearer " + token)
             .multiPart("request", request, "application/json")
-            .sessionAttr("host_id", host.getId())
             .when()
             .post("/spaces")
             .then()
@@ -163,7 +185,6 @@ class SpaceAcceptanceTest extends AcceptanceTest {
         // when
         var response = RestAssuredMockMvc.given()
             .multiPart("request", request, "application/json")
-            .sessionAttr("host_id", host.getId())
             .when()
             .post("/spaces")
             .then()
@@ -224,7 +245,48 @@ class SpaceAcceptanceTest extends AcceptanceTest {
         assertAll(
             () -> assertThat(response.statusCode()).isEqualTo(204),
             () -> assertThat(spaceRepository.findByCode(space.getCode())).isEmpty(),
-            () -> assertThat(spacePhotoRepository.findBySpace(space)).isEmpty()
+            () -> assertThat(spacePhotoRepository.findBySpace(space)).isEmpty(),
+
+            () -> await().atMost(ofSeconds(6))
+                .untilAsserted(() -> verify(contentsStorage, atLeast(1)).deletePhotos(anyList()))
+        );
+    }
+
+    @DisplayName("스페이스, 작품, 방명록 모두 삭제한다.")
+    @Test
+    void deleteSpaceWithRelatedThings() {
+        // given
+        Space space = spaceRepository.save(SpaceFixture.createSpace());
+        spacePhotoRepository.save(SpacePhotoFixture.createSpacePhotoWithSpace(space));
+        spaceHostMapRepository.save(new SpaceHostMap(space, host));
+        Product product = productRepository.save(ProductFixture.createProductWithSpace(space));
+        productPhotoRepository.save(ProductPhotoFixture.createProductPhotoWithProduct(product));
+        Guest guest = guestRepository.save(GuestFixture.createGuest());
+        GuestBookCard guestBookCard = guestBookCardRepository.save(
+            GuestBookCardFixture.createGuestBookCard(space, guest, "message"));
+        guestBookCardPhotoRepository.saveAll(List.of(
+            GuestBookCardPhotoFixture.createGuestBookCardPhotoWithGuestBookCard(guestBookCard)));
+
+        // when
+        var response = RestAssuredMockMvc.given()
+            .header("Authorization", "Bearer " + token)
+            .when()
+            .delete("/spaces/{spaceCode}", space.getCode())
+            .then()
+            .extract();
+
+        // then
+        assertAll(
+            () -> assertThat(response.statusCode()).isEqualTo(204),
+            () -> assertThat(spaceRepository.findByCode(space.getCode())).isEmpty(),
+            () -> assertThat(spacePhotoRepository.findBySpace(space)).isEmpty(),
+            () -> assertThat(productRepository.findBySpace(space)).isEmpty(),
+            () -> assertThat(productPhotoRepository.findAllByProduct(product)).isEmpty(),
+            () -> assertThat(guestBookCardRepository.findAllBySpace(space)).isEmpty(),
+            () -> assertThat(guestBookCardPhotoRepository.findAllByGuestBookCard(guestBookCard)).isEmpty(),
+
+            () -> await().atMost(ofSeconds(6))
+                .untilAsserted(() -> verify(contentsStorage, atLeast(1)).deletePhotos(anyList()))
         );
     }
 
@@ -308,7 +370,10 @@ class SpaceAcceptanceTest extends AcceptanceTest {
             () -> assertThat(result.instagramUsername()).isEqualTo("forgather_official_new"),
             () -> assertThat(result.email()).isEqualTo("forgather_new@forgather.me"),
             () -> assertThat(spacePhotoRepository.getBySpaceOrEmpty(space).getOriginalName()).isEqualTo("new.jpg"),
-            () -> assertThat(result.guestBookCardCount()).isZero()
+            () -> assertThat(result.guestBookCardCount()).isZero(),
+
+            () -> await().atMost(ofSeconds(6))
+                .untilAsserted(() -> verify(contentsStorage, atLeast(1)).deletePhotos(anyList()))
         );
     }
 
@@ -343,7 +408,9 @@ class SpaceAcceptanceTest extends AcceptanceTest {
             () -> assertThat(response.isPublic()).isTrue(),
             () -> assertThat(response.instagramUsername()).isEqualTo("instagramUsername"),
             () -> assertThat(response.email()).isEqualTo("email@forgather.me"),
-            () -> assertThat(response.spacePhoto().path()).isEqualTo("path")
+            () -> assertThat(response.spacePhoto().path()).isEqualTo("path"),
+
+            () -> verify(contentsStorage, never()).deletePhotos(anyList())
         );
     }
 

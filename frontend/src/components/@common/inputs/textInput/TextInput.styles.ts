@@ -12,7 +12,7 @@ export const InputField = styled.input<{ $isError: boolean }>`
       ${({ $isError, theme }) => ($isError ? theme.colors.error : theme.colors.gray06)};
   }
   &::placeholder {
-    color: ${({ theme }) => theme.colors.gray04};
+    color: ${({ theme }) => theme.colors.gray03};
   }
   font-size: ${({ theme }) => theme.typography.bodyRegular};
 `;

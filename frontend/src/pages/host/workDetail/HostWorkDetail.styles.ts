@@ -11,12 +11,15 @@ export const Wrapper = styled.div`
 export const TopButtonContainer = styled.div`
   display: flex;
   gap: 12px;
-  justify-content: flex-end;
+  justify-content: space-between;
+  align-items: flex-start;
+  width: 100%;
 `;
 
 export const EditButton = styled.button`
   ${({ theme }) => theme.typography.captionSmall}
   color: ${({ theme }) => theme.colors.gray04};
+  white-space: nowrap;
 `;
 
 export const EmptyStateContainer = styled.div`

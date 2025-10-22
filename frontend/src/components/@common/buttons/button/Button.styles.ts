@@ -43,6 +43,11 @@ export const buttonStyles = {
   tertiary: (theme: Theme) => css`
     color: ${theme.colors.gray04};
     ${theme.typography.captionSmall};
+  `,
+
+  outline: (theme: Theme) => css`
+    color: ${theme.colors.gray04};
+    ${theme.typography.button};
     border-radius: 4px;
     border: solid 1px ${theme.colors.gray02};
   `,
@@ -50,6 +55,7 @@ export const buttonStyles = {
   danger: (theme: Theme) => css`
     background-color: ${theme.colors.error};
     color: ${theme.colors.white};
+    border-radius: 4px;
   `,
 
   error: (theme: Theme) => css`

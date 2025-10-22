@@ -18,7 +18,7 @@ const SpaceVisibilityElement = ({
       heading: {
         text: INFORMATION.SPACE_CREATE.VISIBILITY.ACCESS_TYPE.OPTIONS.PUBLIC
           .TITLE,
-        icon: <IoGlobeOutline size={24} />,
+        icon: <IoGlobeOutline size={16} />,
       },
       description:
         INFORMATION.SPACE_CREATE.VISIBILITY.ACCESS_TYPE.OPTIONS.PUBLIC
@@ -30,7 +30,7 @@ const SpaceVisibilityElement = ({
       heading: {
         text: INFORMATION.SPACE_CREATE.VISIBILITY.ACCESS_TYPE.OPTIONS.PRIVATE
           .TITLE,
-        icon: <IoLockClosedOutline size={24} />,
+        icon: <IoLockClosedOutline size={16} />,
       },
       description:
         INFORMATION.SPACE_CREATE.VISIBILITY.ACCESS_TYPE.OPTIONS.PRIVATE
