@@ -43,7 +43,7 @@ const SpaceCreateFunnel = () => {
         currentStep={currentStepIndex}
         maxStep={PROGRESS_STEP_LIST.length}
       />
-      <S.TopContainer></S.TopContainer>
+      <S.TopContainer />
       <S.ContentContainer>
         <Funnel.Step name="name">
           <SpaceNameElement
