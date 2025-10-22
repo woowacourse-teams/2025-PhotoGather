@@ -18,8 +18,8 @@ export const SpaceInfoProvider = ({ children }: SpaceInfoProviderProps) => {
     spaceCode: spaceCode ?? '',
   });
 
-  if (!spaceInfo) {
-    return <Navigate to={ROUTES.HOST.MAIN} />;
+  if (!spaceInfo && !isLoading) {
+    return <Navigate to={ROUTES.HOST.MAIN} replace />;
   }
 
   return (
