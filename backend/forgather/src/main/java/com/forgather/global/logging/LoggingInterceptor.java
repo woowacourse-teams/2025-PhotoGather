@@ -38,6 +38,7 @@ public class LoggingInterceptor implements HandlerInterceptor {
             .addKeyValue("event", "REQUEST")
             .addKeyValue("httpMethod", request.getMethod())
             .addKeyValue("requestUri", request.getRequestURI())
+            .addKeyValue("queryString", request.getQueryString())
             .addKeyValue("ip", getClientIp(request))
             .addKeyValue("userAgent", getUserAgent(request))
             .log();
