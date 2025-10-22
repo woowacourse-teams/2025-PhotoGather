@@ -1,6 +1,7 @@
 import Clarity from '@microsoft/clarity';
 import * as Sentry from '@sentry/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import mixpanel from 'mixpanel-browser';
 import { createRoot } from 'react-dom/client';
 import App from './App.tsx';
 
@@ -13,6 +14,11 @@ if (import.meta.env.VITE_ENVIRONMENT === 'production') {
     sendDefaultPii: true,
   });
   Clarity.init(import.meta.env.VITE_CLARITY_PROJECT_ID);
+
+  mixpanel.init(import.meta.env.VITE_MIXPANEL_TOKEN, {
+    debug: false,
+    ignore_dnt: true,
+  });
 }
 
 // biome-ignore lint/style/noNonNullAssertion : 루트에서 non-null 무시
