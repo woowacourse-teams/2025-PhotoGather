@@ -48,9 +48,7 @@ const GuestGuestbookCardPage = () => {
   const currentIdIndex = guestbookCardIdList.indexOf(guestbookCard.id);
 
   const handleBackMove = () => {
-    trackClick('guest_guestbook_card_back_button', {
-      hasPhoto: guestbookCard.photos.length > 0,
-    });
+    trackClick('guest_guestbook_card_back_button');
     navigate(createGuestGuestbookRoute(spaceCode));
   };
 
