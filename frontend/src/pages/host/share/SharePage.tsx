@@ -5,7 +5,11 @@ import CompleteImage from '../../../@assets/images/space-create.png';
 import Button from '../../../components/@common/buttons/button/Button';
 import IconButton from '../../../components/@common/buttons/iconButton/IconButton';
 import QRCode from '../../../components/@common/qrCode/QRCode';
-import { createSpaceMainRoute, ROUTES } from '../../../constants/routes';
+import {
+  createGuestHomeRoute,
+  createSpaceMainRoute,
+  ROUTES,
+} from '../../../constants/routes';
 import useButtonTracking from '../../../hooks/@common/useButtonTracking';
 import useConfetti from '../../../hooks/@common/useConfetti';
 import { useToast } from '../../../hooks/@common/useToast';
@@ -28,7 +32,7 @@ const SharePage = () => {
     }
   }, [location, navigate]);
 
-  const copyAddress = `${import.meta.env.VITE_DOMAIN}/guest/${spaceCode}/main`;
+  const copyAddress = `${import.meta.env.VITE_DOMAIN}${createGuestHomeRoute(spaceCode)}`;
 
   const handleSpaceMainButton = () => {
     trackClick('space_create_share_move_to_space_main', {
