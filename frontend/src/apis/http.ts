@@ -69,18 +69,16 @@ const request = async <T>(
         data?.message || `HTTP Error: ${response.status}`,
       );
 
-      if (response.status !== 401 && response.status !== 403) {
-        captureSentryError({
-          error: httpError,
-          errorType: 'http_error',
-          statusCode: response.status,
-          traceId,
-          url,
-          method,
-          body,
-          level: response.status >= 500 ? 'error' : 'warning',
-        });
-      }
+      captureSentryError({
+        error: httpError,
+        errorType: 'http_error',
+        statusCode: response.status,
+        traceId,
+        url,
+        method,
+        body,
+        level: response.status >= 500 ? 'error' : 'warning',
+      });
 
       return {
         success: false,
