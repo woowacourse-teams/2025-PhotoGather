@@ -32,6 +32,13 @@ export const Title = styled.h1`
     white-space: pre-wrap;
 `;
 
+export const SmallTitle = styled.p`
+    ${({ theme }) => theme.typography.header03}
+    color: ${({ theme }) => theme.colors.white};
+    white-space: pre-wrap;
+    margin: 64px 0px;
+`;
+
 export const SubTitle = styled.h2`
     ${({ theme }) => theme.typography.header02}
     color: ${({ theme }) => theme.colors.white};

@@ -12,8 +12,9 @@ const LandingPage = () => {
     <S.Wrapper>
       <S.ContentContainer>
         <S.Section>
-          <S.Title>작가와 방문객이 연결되는 공간</S.Title>
+          <S.Title>당신을 위한 순간, 흩어지지 않게</S.Title>
           <S.TitleImage src={titleImage} alt="포게더 로고 이미지" />
+          <S.SmallTitle>작가와 방문객이 연결되는 공간</S.SmallTitle>
         </S.Section>
         <S.Section>
           <S.SubTitle>
@@ -22,7 +23,7 @@ const LandingPage = () => {
             }
           </S.SubTitle>
           <Button
-            text="로그인 버튼임"
+            text="시작하기"
             variant="secondary"
             onClick={() => {
               navigate(ROUTES.AUTH.LOGIN);
