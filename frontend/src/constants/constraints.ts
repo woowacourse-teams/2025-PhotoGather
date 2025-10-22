@@ -19,6 +19,7 @@ export const CONSTRAINTS = {
   },
   MAX_FILE_COUNT: 20,
   NOT_ALLOWED_FILE_TYPES: ['image/gif', 'image/svg', 'image/svg+xml'],
+  INSTAGRAM_USERNAME_REGEX: /^[a-zA-Z0-9_.]+$/,
   GUESTBOOK_PAGINATION_UNIT: 15,
   GUEST_BOOK_CARD_SWIPE_DISTANCE: 80,
   MAX_COUNT_FOR_REFRESH: 3,

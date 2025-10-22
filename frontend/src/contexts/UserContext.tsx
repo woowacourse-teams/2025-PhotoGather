@@ -8,10 +8,21 @@ import type { UserInfo } from '../types/domain/auth.type';
 import { clearAuthTokens } from '../utils/authCookieManager';
 import { CookieUtils } from '../utils/cookie';
 
-export const UserContext = createContext<UserInfo | null>(null);
+export const UserContext = createContext<UserInfo>({
+  id: 0,
+  name: '',
+  pictureUrl: '',
+  agreedTerms: false,
+});
 
 export const UserProvider = ({ children }: { children: React.ReactNode }) => {
-  const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
+  const initialUserInfo: UserInfo = {
+    id: 0,
+    name: '',
+    pictureUrl: '',
+    agreedTerms: false,
+  };
+  const [userInfo, setUserInfo] = useState<UserInfo>(initialUserInfo);
   const { showToast } = useToast();
   const navigate = useNavigate();
 

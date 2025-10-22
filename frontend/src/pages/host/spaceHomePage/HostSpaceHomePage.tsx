@@ -12,7 +12,7 @@ import {
   createWorkDetailRoute,
 } from '../../../constants/routes';
 import useButtonTracking from '../../../hooks/@common/useButtonTracking';
-import useSpaceInfo from '../../../hooks/domain/space/useSpaceInfo';
+import useSpaceInfoContext from '../../../hooks/context/useSpaceInfoContext';
 import { DividerLine } from '../../../styles/@common/DividerLine.styles';
 import { buildOriginalImageUrl } from '../../../utils/buildImageUrl';
 import { createInstagramUrl } from '../../../utils/createExternalLinks';
@@ -22,9 +22,8 @@ import * as S from './HostSpaceHomePage.styles';
 const HostSpaceHomePage = () => {
   const navigate = useNavigate();
   const { spaceCode = '' } = useParams();
-  const { spaceInfo } = useSpaceInfo({
-    spaceCode,
-  });
+  const { spaceInfo } = useSpaceInfoContext();
+
   const { trackClick } = useButtonTracking({
     userType: 'host',
     spaceCode,

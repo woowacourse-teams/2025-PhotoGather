@@ -4,9 +4,9 @@ import DisplayProfile from '../../../../components/@common/displayProfile/Displa
 import LoadingModal from '../../../../components/specific/modal/loadingModal/LoadingModal';
 import useButtonTracking from '../../../../hooks/@common/useButtonTracking';
 import useConfirmBeforeRefresh from '../../../../hooks/@common/useConfirmBeforeRefresh';
+import useSpaceInfoContext from '../../../../hooks/context/useSpaceInfoContext';
 import useFormFunnel from '../../../../hooks/domain/funnel/useFormFunnel';
 import usePostGuestbook from '../../../../hooks/domain/guestbook/usePostGuestbook';
-import useSpaceInfo from '../../../../hooks/domain/space/useSpaceInfo';
 import { DividerLine } from '../../../../styles/@common/DividerLine.styles';
 import type { GuestbookFunnelInfo } from '../../../../types/domain/guestbook.type';
 import { buildOriginalImageUrl } from '../../../../utils/buildImageUrl';
@@ -36,9 +36,7 @@ const GuestBookFunnel = () => {
     userType: 'guest',
     spaceCode,
   });
-  const { spaceInfo, isLoading: isLoadingSpaceInfo } = useSpaceInfo({
-    spaceCode: spaceCode ?? '',
-  });
+  const { spaceInfo, isLoading: isLoadingSpaceInfo } = useSpaceInfoContext();
 
   const receiver = spaceInfo.name || '방명록 주인장';
   const thumbnailUrl = spaceInfo.spacePhoto.isExists

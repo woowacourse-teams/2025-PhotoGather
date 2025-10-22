@@ -2,8 +2,8 @@ import { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import useButtonTracking from '../../../../hooks/@common/useButtonTracking';
 import useIntersectionObserver from '../../../../hooks/@common/useIntersectionObserver';
+import useSpaceInfoContext from '../../../../hooks/context/useSpaceInfoContext';
 import useGuestbookList from '../../../../hooks/domain/guestbook/useGuestbookList';
-import useSpaceInfo from '../../../../hooks/domain/space/useSpaceInfo';
 import type { GuestbookElement as GuestbookElementType } from '../../../../types/domain/guestbook.type';
 import GuestbookElement from './element/GuestbookElement';
 import * as S from './GuestbookListPage.styles';
@@ -11,7 +11,7 @@ import * as S from './GuestbookListPage.styles';
 const GuestbookListPage = () => {
   const navigate = useNavigate();
   const { spaceCode = '' } = useParams();
-  const { spaceInfo } = useSpaceInfo({ spaceCode });
+  const { spaceInfo } = useSpaceInfoContext();
   const { guestbookList, totalCount, fetchNextPage } =
     useGuestbookList(spaceCode);
   const { targetRef, isIntersecting } = useIntersectionObserver({});

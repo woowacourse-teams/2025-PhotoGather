@@ -6,8 +6,8 @@ import Thumbnail from '../../../components/@common/thumbnail/Thumbnail';
 import InfoRow from '../../../components/specific/infoRow/InfoRow';
 import { createSpaceInfoEditRoute } from '../../../constants/routes';
 import useButtonTracking from '../../../hooks/@common/useButtonTracking';
+import useSpaceInfoContext from '../../../hooks/context/useSpaceInfoContext';
 import useSpaceDelete from '../../../hooks/domain/space/useSpaceDelete';
-import useSpaceInfo from '../../../hooks/domain/space/useSpaceInfo';
 import { buildOriginalImageUrl } from '../../../utils/buildImageUrl';
 import * as S from './SpaceInfoPage.styles';
 
@@ -52,9 +52,7 @@ const SpaceInfoPage = () => {
     closeDeleteModal,
     spaceCode: spaceCode ?? '',
   });
-  const { spaceInfo } = useSpaceInfo({
-    spaceCode: spaceCode ?? '',
-  });
+  const { spaceInfo } = useSpaceInfoContext();
 
   return (
     <S.Wrapper>

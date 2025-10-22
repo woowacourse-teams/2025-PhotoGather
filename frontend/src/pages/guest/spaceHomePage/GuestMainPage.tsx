@@ -10,7 +10,7 @@ import {
   ROUTES,
 } from '../../../constants/routes';
 import useButtonTracking from '../../../hooks/@common/useButtonTracking';
-import useSpaceInfo from '../../../hooks/domain/space/useSpaceInfo';
+import useSpaceInfoContext from '../../../hooks/context/useSpaceInfoContext';
 import { DividerLine } from '../../../styles/@common/DividerLine.styles';
 import { buildOriginalImageUrl } from '../../../utils/buildImageUrl';
 import { createInstagramUrl } from '../../../utils/createExternalLinks';
@@ -21,7 +21,7 @@ import { mockAccess } from '../../mockData';
 const GuestSpaceHomePage = () => {
   const navigate = useNavigate();
   const { spaceCode } = useParams();
-  const { spaceInfo, isLoading } = useSpaceInfo({ spaceCode: spaceCode ?? '' });
+  const { spaceInfo, isLoading } = useSpaceInfoContext();
   const { trackClick } = useButtonTracking({
     userType: 'guest',
     spaceCode,

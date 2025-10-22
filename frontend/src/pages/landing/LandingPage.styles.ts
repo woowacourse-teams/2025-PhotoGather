@@ -26,6 +26,14 @@ export const Section = styled.section`
   align-items: center;
 `;
 
+export const TitleContainer = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+`;
+
 export const Title = styled.h1`
   ${({ theme }) => theme.typography.header02}
   color: ${({ theme }) => theme.colors.white};
@@ -36,7 +44,6 @@ export const SmallTitle = styled.p`
   ${({ theme }) => theme.typography.header03}
   color: ${({ theme }) => theme.colors.white};
   white-space: pre-wrap;
-  margin: 64px 0px;
 `;
 
 export const SubTitle = styled.h2`
@@ -78,7 +85,7 @@ export const TitleImage = styled.img`
 export const ScreenshotBoxContainer = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 128px;
+  gap: 172px;
   align-items: center;
   width: 80%;
 `;
@@ -98,7 +105,10 @@ export const Bubble = styled.div<{
   ${({ theme }) => theme.typography.bodyLarge}
   color: ${({ $color, theme }) => ($color === 'light' ? theme.colors.gray06 : theme.colors.white)};
   background-color: ${({ $color, theme }) =>
-    hexToRgba($color === 'light' ? theme.colors.gray01 : theme.colors.gray06, 0.8)};
+    hexToRgba(
+      $color === 'light' ? theme.colors.gray01 : theme.colors.gray06,
+      0.8,
+    )};
   width: 100%;
   padding: 12px 8px;
   line-height: 36px;
@@ -117,4 +127,7 @@ export const ScreenshotDescription = styled.div`
 
 export const Screenshot = styled.img`
   width: 100%;
+   filter:
+    drop-shadow(0 0 5px ${({ theme }) => theme.colors.white})
+    drop-shadow(0 0 10px ${({ theme }) => hexToRgba(theme.colors.gray02, 0.5)});
 `;
