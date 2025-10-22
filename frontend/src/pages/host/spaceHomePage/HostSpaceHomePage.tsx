@@ -11,26 +11,40 @@ import {
   createSpaceInfoRoute,
   createWorkDetailRoute,
 } from '../../../constants/routes';
+import useButtonTracking from '../../../hooks/@common/useButtonTracking';
 import useSpaceInfo from '../../../hooks/domain/space/useSpaceInfo';
 import { DividerLine } from '../../../styles/@common/DividerLine.styles';
 import { buildOriginalImageUrl } from '../../../utils/buildImageUrl';
 import { createInstagramUrl } from '../../../utils/createExternalLinks';
 import * as MainPageStyles from '../../MainPage.common.styles';
-import * as S from './SpaceHomePage.styles';
+import * as S from './HostSpaceHomePage.styles';
 
-const SpaceHomePage = () => {
+const HostSpaceHomePage = () => {
   const navigate = useNavigate();
   const { spaceCode = '' } = useParams();
   const { spaceInfo } = useSpaceInfo({
     spaceCode,
   });
+  const { trackClick } = useButtonTracking();
 
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const openShareModal = () => {
+    trackClick('open_space_share_modal', {
+      userType: 'host',
+      spaceCode,
+    });
     setIsShareModalOpen(true);
   };
   const closeShareModal = () => {
     setIsShareModalOpen(false);
+  };
+
+  const handleSpaceInfoClick = () => {
+    trackClick('host_space_info_button', {
+      userType: 'host',
+      spaceCode,
+    });
+    navigate(createSpaceInfoRoute(spaceCode));
   };
 
   return (
@@ -39,13 +53,11 @@ const SpaceHomePage = () => {
       <MainPageStyles.Wrapper>
         <S.ActionButtonContainer>
           <IconButton
-            aria-label="스페이스 정보 수정"
+            aria-label="스페이스 정보"
             icon={<MdSettings size={12} />}
             variant="default"
             size="small"
-            onClick={() => {
-              navigate(createSpaceInfoRoute(spaceCode));
-            }}
+            onClick={handleSpaceInfoClick}
           />
           <IconButton
             aria-label="스페이스 공유"
@@ -110,4 +122,4 @@ const SpaceHomePage = () => {
   );
 };
 
-export default SpaceHomePage;
+export default HostSpaceHomePage;

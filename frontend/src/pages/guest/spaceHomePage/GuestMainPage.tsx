@@ -17,7 +17,7 @@ import { createImageErrorHandler } from '../../../utils/createImageErrorHandler'
 import * as MainPageStyles from '../../MainPage.common.styles';
 import { mockAccess } from '../../mockData';
 
-const GuestMainPage = () => {
+const GuestSpaceHomePage = () => {
   const navigate = useNavigate();
   const { spaceCode } = useParams();
   const { spaceInfo, isLoading } = useSpaceInfo({ spaceCode: spaceCode ?? '' });
@@ -106,4 +106,4 @@ const GuestMainPage = () => {
   );
 };
 
-export default GuestMainPage;
+export default GuestSpaceHomePage;

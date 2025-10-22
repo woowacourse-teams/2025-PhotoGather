@@ -6,16 +6,16 @@ import CompletePage from '../pages/guest/completePage/CompletePage';
 import GuestGuestbookCardPage from '../pages/guest/guestbookPage/card/GuestGuestbookCardPage';
 import GuestBookFunnel from '../pages/guest/guestbookPage/funnel/GuestbookFunnel';
 import GuestGuestbookListPage from '../pages/guest/guestbookPage/list/GuestGuestbookListPage';
-import GuestMainPage from '../pages/guest/mainpage/GuestMainPage';
+import GuestSpaceHomePage from '../pages/guest/spaceHomePage/GuestMainPage';
 import GuestWorkDetail from '../pages/guest/workDetail/GuestWorkDetail';
 import GuestbookCardPage from '../pages/host/guestbook/card/GuestbookCardPage';
 import GuestbookListPage from '../pages/host/guestbook/list/GuestbookListPage';
 import MainPage from '../pages/host/mainPage/MainPage';
-import MyPage from '../pages/host/myPage/MyPage';
+import MyPage from '../pages/host/mypage/MyPage';
 import SharePage from '../pages/host/share/SharePage';
 import SpaceCreateFunnel from '../pages/host/spaceCreate/funnel/SpaceCreateFunnel';
 import SpaceEditPage from '../pages/host/spaceEditPage/SpaceEditPage';
-import SpaceHomePage from '../pages/host/spaceHomePage/SpaceHomePage';
+import HostSpaceHomePage from '../pages/host/spaceHomePage/HostSpaceHomePage';
 import SpaceInfoPage from '../pages/host/spaceInfoPage/SpaceInfoPage';
 import HostWorkDetail from '../pages/host/workDetail/HostWorkDetail';
 import WorkForm from '../pages/host/workForm/WorkForm';
@@ -72,7 +72,7 @@ const routes: AppRouteObject[] = [
             children: [
               {
                 path: ':spaceCode/home',
-                element: <SpaceHomePage />,
+                element: <HostSpaceHomePage />,
                 handle: {
                   // TODO : default를 logo와 hamburger로 변경 필요
                   headerIcon: {
@@ -182,8 +182,8 @@ const routes: AppRouteObject[] = [
         path: 'guest',
         children: [
           {
-            path: ':spaceCode/main',
-            element: <GuestMainPage />,
+            path: ':spaceCode/home',
+            element: <GuestSpaceHomePage />,
             handle: {
               headerIcon: {
                 leftIcon: 'profile',
