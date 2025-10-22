@@ -85,7 +85,7 @@ export const TitleImage = styled.img`
 export const ScreenshotBoxContainer = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 160px;
+  gap: 172px;
   align-items: center;
   width: 80%;
 `;
