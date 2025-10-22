@@ -47,6 +47,38 @@ const HostSpaceHomePage = () => {
     navigate(createSpaceInfoRoute(spaceCode));
   };
 
+  const onInstagramClick = () => {
+    trackClick('host_space_instagram_button', {
+      userType: 'host',
+      spaceCode,
+    });
+    window.open(createInstagramUrl(spaceInfo.instagramUsername), '_blank');
+  };
+
+  const onEmailClick = () => {
+    trackClick('host_space_email_button', {
+      userType: 'host',
+      spaceCode,
+    });
+    window.open(`mailto:${spaceInfo.email}`, '_blank');
+  };
+
+  const handleWorkDetailClick = () => {
+    trackClick('host_space_work_detail_button', {
+      userType: 'host',
+      spaceCode,
+    });
+    navigate(createWorkDetailRoute(spaceCode));
+  };
+
+  const handleGuestbookClick = () => {
+    trackClick('host_space_guestbook_button', {
+      userType: 'host',
+      spaceCode,
+    });
+    navigate(createGuestbookRoute(spaceCode));
+  };
+
   return (
     <>
       <SpaceShareModal isOpen={isShareModalOpen} onClose={closeShareModal} />
@@ -81,12 +113,7 @@ const HostSpaceHomePage = () => {
             aria-label="인스타그램"
             icon={<IoLogoInstagram size={24} />}
             variant="default"
-            onClick={() =>
-              window.open(
-                createInstagramUrl(spaceInfo.instagramUsername),
-                '_blank',
-              )
-            }
+            onClick={onInstagramClick}
             disabled={
               !spaceInfo.instagramUsername || spaceInfo.instagramUsername === ''
             }
@@ -95,7 +122,7 @@ const HostSpaceHomePage = () => {
             aria-label="이메일"
             icon={<MdEmail size={24} />}
             variant="default"
-            onClick={() => window.open(`mailto:${spaceInfo.email}`, '_blank')}
+            onClick={onEmailClick}
             disabled={!spaceInfo.email || spaceInfo.email === ''}
           />
         </MainPageStyles.IconButtonContainer>
@@ -104,16 +131,12 @@ const HostSpaceHomePage = () => {
           <Button
             variant="elevated"
             text="작품 소개 관리"
-            onClick={() => {
-              navigate(createWorkDetailRoute(spaceCode));
-            }}
+            onClick={handleWorkDetailClick}
           />
           <Button
             variant="elevated"
             text="방명록 관리"
-            onClick={() => {
-              navigate(createGuestbookRoute(spaceCode));
-            }}
+            onClick={handleGuestbookClick}
           />
         </MainPageStyles.ButtonContainer>
         <MainPageStyles.Footer />
