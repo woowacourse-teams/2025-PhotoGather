@@ -10,7 +10,7 @@ import {
 } from 'react-router-dom';
 import LogoSvg from '../../../../@assets/logo/logo.svg?react';
 import {
-  createGuestMainRoute,
+  createGuestHomeRoute,
   createSpaceMainRoute,
   ROUTES,
 } from '../../../../constants/routes';
@@ -65,7 +65,7 @@ const Layout = () => {
           return;
         }
         if (isGuest) {
-          navigate(createGuestMainRoute(spaceCode ?? ''));
+          navigate(createGuestHomeRoute(spaceCode ?? ''));
           return;
         }
         navigate(ROUTES.LANDING);

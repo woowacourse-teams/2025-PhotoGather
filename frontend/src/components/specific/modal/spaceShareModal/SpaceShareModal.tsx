@@ -24,7 +24,7 @@ const SpaceShareModal = ({ isOpen, onClose }: ShareModalProps) => {
     spaceCode,
   });
 
-  const copyAddress = `${import.meta.env.VITE_DOMAIN}/guest/${spaceCode}/main`;
+  const copyAddress = `${import.meta.env.VITE_DOMAIN}/guest/${spaceCode}/home`;
 
   const saveQRCodeImage = async () => {
     trackClick('space_qr_code_download_button');
