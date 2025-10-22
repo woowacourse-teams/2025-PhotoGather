@@ -105,10 +105,7 @@ export const Bubble = styled.div<{
   ${({ theme }) => theme.typography.bodyLarge}
   color: ${({ $color, theme }) => ($color === 'light' ? theme.colors.gray06 : theme.colors.white)};
   background-color: ${({ $color, theme }) =>
-    hexToRgba(
-      $color === 'light' ? theme.colors.gray01 : theme.colors.gray06,
-      0.8,
-    )};
+    hexToRgba($color === 'light' ? theme.colors.gray01 : theme.colors.gray06, 0.8)};
   width: 100%;
   padding: 12px 8px;
   line-height: 36px;
@@ -127,7 +124,6 @@ export const ScreenshotDescription = styled.div`
 
 export const Screenshot = styled.img`
   width: 100%;
-   filter:
-    drop-shadow(0 0 5px ${({ theme }) => theme.colors.white})
+  filter: drop-shadow(0 0 5px ${({ theme }) => theme.colors.white})
     drop-shadow(0 0 10px ${({ theme }) => hexToRgba(theme.colors.gray02, 0.5)});
 `;

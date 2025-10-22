@@ -55,8 +55,8 @@ export const Message = styled.h1<{ $isAnimationRequired: boolean }>`
   align-items: center;
   justify-content: center;
   padding-bottom: 15vh;
-  animation: ${({ $isAnimationRequired }) =>
-    $isAnimationRequired ? fadeUp : 'none'} 0.6s ease-out forwards;
+  animation: ${({ $isAnimationRequired }) => ($isAnimationRequired ? fadeUp : 'none')} 0.6s ease-out
+    forwards;
 `;
 
 export const NameHighlight = styled.span`
