@@ -58,7 +58,6 @@ export const DescriptionTitle = styled.p`
     border-radius: 4px;
     padding: 12px 8px;
     width: 100%;
-    width: 100%;
     text-align: center;
     line-height: 30px;
     white-space: pre-wrap;
