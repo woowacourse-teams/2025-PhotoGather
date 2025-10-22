@@ -2,11 +2,14 @@ import { useNavigate } from 'react-router-dom';
 import mockImage1 from '../../@assets/images/screenshots/mock-phone.png';
 import titleImage from '../../@assets/logo/main-logo.png';
 import Button from '../../components/@common/buttons/button/Button';
+import { AUTH_COOKIES } from '../../constants/cookie';
 import { ROUTES } from '../../constants/routes';
+import { CookieUtils } from '../../utils/cookie';
 import * as S from './LandingPage.styles';
 
 const LandingPage = () => {
   const navigate = useNavigate();
+  const isLoggedIn = CookieUtils.get(AUTH_COOKIES.ACCESS);
 
   return (
     <S.Wrapper>
@@ -26,6 +29,10 @@ const LandingPage = () => {
             text="시작하기"
             variant="secondary"
             onClick={() => {
+              if (isLoggedIn) {
+                navigate(ROUTES.HOST.MAIN);
+                return;
+              }
               navigate(ROUTES.AUTH.LOGIN);
             }}
           />
