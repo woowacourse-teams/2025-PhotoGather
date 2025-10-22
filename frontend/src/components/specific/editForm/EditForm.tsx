@@ -121,6 +121,15 @@ const EditForm = () => {
     setValue('isPublic', isPublic, { shouldDirty: true });
   };
 
+  const handlePhotoUploadClick = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    trackClick('edit_form_photo_upload', {
+      page: `/host/${spaceCode}/space-info/edit`,
+    });
+    handleFilesUploadClick(event);
+  };
+
   return (
     <S.Form onSubmit={handleSubmit(onSubmit)}>
       <PhotoPreviewButton
@@ -128,7 +137,7 @@ const EditForm = () => {
           watch('isDeletePhoto') ? undefined : spaceInfo?.spacePhoto.path
         }
         previewFile={previewFiles}
-        uploadImage={handleFilesUploadClick}
+        uploadImage={handlePhotoUploadClick}
         clearFiles={() => {
           clearFiles(localFiles);
           clearLocalFiles();
