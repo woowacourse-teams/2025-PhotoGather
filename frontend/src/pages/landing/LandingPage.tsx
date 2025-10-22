@@ -19,10 +19,25 @@ const LandingPage = () => {
   return (
     <S.Wrapper>
       <S.ContentContainer>
-        <S.Section>
-          <S.Title>당신을 위한 순간, 흩어지지 않게</S.Title>
-          <S.TitleImage src={titleImage} alt="포게더 로고 이미지" />
-          <S.SmallTitle>작가와 방문객이 연결되는 공간</S.SmallTitle>
+        <S.Section style={{ gap: '156px' }}>
+          <S.TitleContainer>
+            <S.Title>당신을 위한 순간, 흩어지지 않게</S.Title>
+            <S.TitleImage src={titleImage} alt="포게더 로고 이미지" />
+          </S.TitleContainer>
+          <S.TitleContainer>
+            <S.SmallTitle>작가와 방문객이 연결되는 공간</S.SmallTitle>
+            <Button
+              text="시작하기"
+              variant="secondary"
+              onClick={() => {
+                if (isLoggedIn) {
+                  navigate(ROUTES.HOST.MAIN);
+                  return;
+                }
+                navigate(ROUTES.AUTH.LOGIN);
+              }}
+            />
+          </S.TitleContainer>
         </S.Section>
         <S.Section>
           <S.SubTitle>
@@ -30,17 +45,6 @@ const LandingPage = () => {
               '스페이스를 통해 작품을 소개하고,\n방문객의 진심 어린 축하를 간직하세요.'
             }
           </S.SubTitle>
-          <Button
-            text="시작하기"
-            variant="secondary"
-            onClick={() => {
-              if (isLoggedIn) {
-                navigate(ROUTES.HOST.MAIN);
-                return;
-              }
-              navigate(ROUTES.AUTH.LOGIN);
-            }}
-          />
         </S.Section>
         <S.Section>
           <S.SubTitle>
