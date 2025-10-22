@@ -1,5 +1,5 @@
 import { Outlet, useNavigate, useParams } from 'react-router-dom';
-import { createGuestMainRoute } from '../../../constants/routes';
+import { createGuestHomeRoute } from '../../../constants/routes';
 import useSpaceInfoContext from '../../../hooks/context/useSpaceInfoContext';
 import CompletePageLayout from '../completePageLayout/CompletePageLayout';
 
@@ -16,7 +16,7 @@ const GuestbookAccessGuard = () => {
         message="비공개 방명록입니다"
         buttonText="스페이스 홈으로 이동"
         onButtonClick={() => {
-          navigate(createGuestMainRoute(spaceCode ?? ''));
+          navigate(createGuestHomeRoute(spaceCode ?? ''));
         }}
       />
     );

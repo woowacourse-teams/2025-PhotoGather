@@ -9,11 +9,12 @@ import CompletePage from '../pages/guest/completePage/CompletePage';
 import GuestGuestbookCardPage from '../pages/guest/guestbookPage/card/GuestGuestbookCardPage';
 import GuestBookFunnel from '../pages/guest/guestbookPage/funnel/GuestbookFunnel';
 import GuestGuestbookListPage from '../pages/guest/guestbookPage/list/GuestGuestbookListPage';
+import GuestSpaceHomePage from '../pages/guest/spaceHomePage/GuestMainPage';
 import GuestWorkDetail from '../pages/guest/workDetail/GuestWorkDetail';
 import GuestbookCardPage from '../pages/host/guestbook/card/GuestbookCardPage';
 import GuestbookListPage from '../pages/host/guestbook/list/GuestbookListPage';
 import MainPage from '../pages/host/mainPage/MainPage';
-import MyPage from '../pages/host/myPage/MyPage';
+import MyPage from '../pages/host/mypage/MyPage';
 import SharePage from '../pages/host/share/SharePage';
 import SpaceCreateFunnel from '../pages/host/spaceCreate/funnel/SpaceCreateFunnel';
 import SpaceEditPage from '../pages/host/spaceEditPage/SpaceEditPage';
@@ -208,8 +209,8 @@ const routes: AppRouteObject[] = [
             element: <SpaceInfoLayout />,
             children: [
               {
-                path: ':spaceCode/main',
-                element: <GuestMainPage />,
+                path: ':spaceCode/home',
+                element: <GuestSpaceHomePage />,
                 handle: {
                   headerIcon: {
                     leftIcon: 'profile',
