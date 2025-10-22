@@ -2,6 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { MdDeleteOutline, MdDownload } from 'react-icons/md';
 import { guestbookService } from '../../../../apis/services/guestbook/guestbook.service';
+import useButtonTracking from '../../../../hooks/@common/useButtonTracking';
 import { useToast } from '../../../../hooks/@common/useToast';
 import { theme } from '../../../../styles/theme';
 import type { Photo } from '../../../../types/photo.type';
@@ -36,12 +37,25 @@ const PhotoModal = ({
   const [currentIndex, setCurrentIndex] = useState(initialPhotoIndex);
   const queryClient = useQueryClient();
   const { showToast } = useToast();
+  const { trackClick } = useButtonTracking({ userType: 'host', spaceCode });
 
   useEffect(() => {
     if (isOpen) {
       setCurrentIndex(initialPhotoIndex);
     }
   }, [isOpen, initialPhotoIndex]);
+
+  const handleSlideChange = (newIndex: number) => {
+    if (newIndex !== currentIndex) {
+      trackClick('guestbook_photo_modal_navigate', {
+        direction: newIndex > currentIndex ? 'next' : 'previous',
+        fromIndex: currentIndex + 1,
+        toIndex: newIndex + 1,
+        totalPhotoCount: photoList.length,
+      });
+    }
+    setCurrentIndex(newIndex);
+  };
 
   const imageInfo = photoList.map((photo) => ({
     id: photo.id,
@@ -106,14 +120,20 @@ const PhotoModal = ({
   const handleDelete = () => {
     const photo = photoList[currentIndex];
     if (!photo) return;
-
+    trackClick('guestbook_photo_modal_delete', {
+      photoIndex: currentIndex + 1,
+      totalPhotoCount: photoList.length,
+    });
     deleteMutation.mutate(photo.id);
   };
 
   const handleDownload = () => {
     const photo = photoList[currentIndex];
     if (!photo) return;
-
+    trackClick('guestbook_photo_modal_download', {
+      photoIndex: currentIndex + 1,
+      totalPhotoCount: photoList.length,
+    });
     downloadMutation.mutate(photo);
   };
 
@@ -135,7 +155,7 @@ const PhotoModal = ({
         <ImageSwiperActions
           initialIndex={initialPhotoIndex}
           imageInfo={imageInfo}
-          updateCurrentIndex={setCurrentIndex}
+          updateCurrentIndex={handleSlideChange}
           actions={actions}
         />
       </S.Wrapper>
