@@ -1,19 +1,20 @@
-import { Outlet, useNavigate } from 'react-router-dom';
-import { ROUTES } from '../../../constants/routes';
+import { Outlet, useNavigate, useParams } from 'react-router-dom';
+import { createGuestMainRoute } from '../../../constants/routes';
 import useSpaceInfoContext from '../../../hooks/context/useSpaceInfoContext';
 import CompletePageLayout from '../completePageLayout/CompletePageLayout';
 
 const GuestbookAccessGuard = () => {
   const { spaceInfo } = useSpaceInfoContext();
+  const { spaceCode } = useParams();
   const navigate = useNavigate();
 
   if (!spaceInfo.isPublic) {
     return (
       <CompletePageLayout
         message="비공개 방명록입니다"
-        buttonText="호스트 페이지로 이동"
+        buttonText="스페이스 홈으로 이동"
         onButtonClick={() => {
-          navigate(ROUTES.HOST.MAIN);
+          navigate(createGuestMainRoute(spaceCode ?? ''));
         }}
       />
     );
