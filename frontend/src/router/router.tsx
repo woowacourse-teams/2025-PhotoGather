@@ -22,6 +22,7 @@ import WorkForm from '../pages/host/workForm/WorkForm';
 import InAppRedirectPage from '../pages/inapp/InAppRedirectPage';
 import LandingPage from '../pages/landing/LandingPage';
 import LoginPage from '../pages/login/LoginPage';
+import NotFound from '../pages/notFound/NotFound';
 import type { AppRouteObject } from '../types/route.type';
 
 const routes: AppRouteObject[] = [
@@ -237,6 +238,17 @@ const routes: AppRouteObject[] = [
             },
           },
         ],
+      },
+      {
+        path: '*',
+        element: <NotFound />,
+        handle: {
+          noHamburger: true,
+          noFooter: true,
+          headerIcon: {
+            leftIcon: 'logo',
+          },
+        },
       },
     ],
   },

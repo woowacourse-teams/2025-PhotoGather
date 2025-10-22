@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.forgather.domain.space.dto.CheckSpaceHostResponse;
 import com.forgather.domain.space.dto.CreateSpaceRequest;
 import com.forgather.domain.space.dto.CreateSpaceResponse;
 import com.forgather.domain.space.dto.HostSpaceResponse;
@@ -91,6 +92,17 @@ public class SpaceController {
     @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<HostSpaceResponse> getSpacesInformation(@LoginHost Host host) {
         var response = spaceService.getSpacesInformation(host);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/{spaceCode}/host-check")
+    @Operation(summary = "스페이스의 호스트 여부 조회", description = "로그인한 호스트의 스페이스 호스트 여부를 조회합니다.")
+    @SecurityRequirement(name = "bearerAuth")
+    public ResponseEntity<CheckSpaceHostResponse> checkHost(
+        @PathVariable(name = "spaceCode") String spaceCode,
+        @LoginHost Host host
+    ) {
+        var response = spaceService.checkSpaceHost(spaceCode, host);
         return ResponseEntity.ok(response);
     }
 }
