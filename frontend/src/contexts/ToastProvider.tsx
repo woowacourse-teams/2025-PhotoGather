@@ -14,16 +14,22 @@ export const ToastProvider = ({ children }: { children: React.ReactNode }) => {
     setToasts((prev) => prev.filter((toast) => toast.id !== id));
   }, []);
 
-  const showToast = useCallback(
-    ({ text, type = 'error', duration = 1500 }: ToastBase) => {
-      const id = toastId++;
-      setToasts((prev) => [...prev, { id, text, type, duration }]);
+  const showToast = ({ text, type = 'error', duration = 1500 }: ToastBase) => {
+    if (isExistsToast(text)) return;
 
-      setTimeout(() => {
-        removeToast(id);
-      }, duration + TOAST_EXIT_DELAY);
+    const id = toastId++;
+    setToasts((prev) => [...prev, { id, text, type, duration }]);
+
+    setTimeout(() => {
+      removeToast(id);
+    }, duration + TOAST_EXIT_DELAY);
+  };
+
+  const isExistsToast = useCallback(
+    (text: string) => {
+      return toasts.some((toast) => toast.text === text);
     },
-    [removeToast],
+    [toasts],
   );
 
   return (
