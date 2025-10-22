@@ -1,7 +1,7 @@
 import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { spaceService } from '../../../apis/services/space/space.service';
-import { createSpaceMainRoute, ROUTES } from '../../../constants/routes';
+import { ROUTES } from '../../../constants/routes';
 import { useToast } from '../../@common/useToast';
 
 interface UseSpaceDeleteProps {
