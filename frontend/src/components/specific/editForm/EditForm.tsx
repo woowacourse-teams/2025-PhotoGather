@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
 import * as C from '../../../components/@common/inputs/input.common.styles';
 import { CONSTRAINTS } from '../../../constants/constraints';
+import useButtonTracking from '../../../hooks/@common/useButtonTracking';
 import useLocalFile from '../../../hooks/@common/useLocalFile';
 import usePatchSpaceInfo from '../../../hooks/domain/space/usePatchSpaceInfo';
 import useSpaceInfo from '../../../hooks/domain/space/useSpaceInfo';
@@ -22,6 +23,7 @@ const EditForm = () => {
   const { isLoading: isSpaceInfoLoading, spaceInfo } = useSpaceInfo({
     spaceCode: spaceCode ?? '',
   });
+  const { trackClick } = useButtonTracking();
 
   const initialData: SpaceInfoFormData = {
     name: '',
@@ -75,6 +77,15 @@ const EditForm = () => {
   });
 
   const onSubmit = (data: SpaceInfoFormData) => {
+    trackClick('edit_form_submit_button', {
+      page: '/space/edit',
+      spaceCode,
+      hasPhoto: localFiles.length !== 0,
+      isPublic: data.isPublic,
+      hasEmail: !!data.email,
+      hasInstagram: !!data.instagramUsername,
+    });
+
     if (localFiles.length !== 0 && localFiles[0].originFile) {
       patchSpaceInfo(data, localFiles[0].originFile);
       return;
@@ -94,6 +105,19 @@ const EditForm = () => {
     if (errors.email) {
       trigger('email');
     }
+  };
+
+  const handleVisibilityButtonClick = (isPublic: boolean) => {
+    trackClick(
+      isPublic ? 'edit_form_public_button' : 'edit_form_private_button',
+      {
+        page: '/space/edit',
+        spaceCode,
+        action: isPublic ? 'set_public' : 'set_private',
+      },
+    );
+
+    setValue('isPublic', isPublic, { shouldDirty: true });
   };
 
   return (
@@ -128,13 +152,13 @@ const EditForm = () => {
             text="공개"
             type="button"
             variant={watch('isPublic') === true ? 'primary' : 'secondary'}
-            onClick={() => setValue('isPublic', true, { shouldDirty: true })}
+            onClick={() => handleVisibilityButtonClick(true)}
           />
           <Button
             text="비공개"
             type="button"
             variant={watch('isPublic') === false ? 'primary' : 'secondary'}
-            onClick={() => setValue('isPublic', false, { shouldDirty: true })}
+            onClick={() => handleVisibilityButtonClick(false)}
           />
         </S.PublicButtonContainer>
       </S.ContentContainer>
