@@ -2,6 +2,7 @@ import { Activity } from 'react';
 import { useParams } from 'react-router-dom';
 import DisplayProfile from '../../../../components/@common/displayProfile/DisplayProfile';
 import LoadingModal from '../../../../components/specific/modal/loadingModal/LoadingModal';
+import useButtonTracking from '../../../../hooks/@common/useButtonTracking';
 import useConfirmBeforeRefresh from '../../../../hooks/@common/useConfirmBeforeRefresh';
 import useFormFunnel from '../../../../hooks/domain/funnel/useFormFunnel';
 import usePostGuestbook from '../../../../hooks/domain/guestbook/usePostGuestbook';
@@ -31,6 +32,10 @@ const GuestBookFunnel = () => {
   );
 
   const { spaceCode } = useParams<{ spaceCode: string }>();
+  const { trackClick } = useButtonTracking({
+    userType: 'guest',
+    spaceCode,
+  });
   const { spaceInfo, isLoading: isLoadingSpaceInfo } = useSpaceInfo({
     spaceCode: spaceCode ?? '',
   });
@@ -49,6 +54,14 @@ const GuestBookFunnel = () => {
       photos: Funnel.form.photos,
     },
   });
+
+  const handleStepComplete = (fromStep: STEP, toStep: STEP) => {
+    trackClick('guestbook_funnel_step_complete', {
+      page: '/guestbook/create',
+      fromStep,
+      toStep,
+    });
+  };
 
   if (isLoadingSpaceInfo) {
     return <LoadingModal isOpen={true} text="로딩 중..." />;
@@ -69,22 +82,32 @@ const GuestBookFunnel = () => {
           <NicknameElement
             receiver={receiver}
             initialValue={Funnel.form.nickname}
-            onNext={(nickname) =>
-              Funnel.goNextWithData('message', { nickname })
-            }
+            onNext={(nickname) => {
+              handleStepComplete('nickname', 'message');
+              Funnel.goNextWithData('message', { nickname });
+            }}
           />
         </Activity>
         <Activity mode={Funnel.funnelStep === 'message' ? 'visible' : 'hidden'}>
           <MessageElement
             receiver={receiver}
             initialValue={Funnel.form.message}
-            onNext={(message) => Funnel.goNextWithData('photos', { message })}
+            onNext={(message) => {
+              handleStepComplete('message', 'photos');
+              Funnel.goNextWithData('photos', { message });
+            }}
           />
         </Activity>
         <Activity mode={Funnel.funnelStep === 'photos' ? 'visible' : 'hidden'}>
           <PhotosElement
             receiver={receiver}
-            onNextButtonClick={(photos) => submitForm(photos)}
+            onNextButtonClick={(photos) => {
+              trackClick('guestbook_funnel_submit', {
+                page: '/guestbook/create',
+                photoCount: photos.length,
+              });
+              submitForm(photos);
+            }}
             initialLocalFiles={Funnel.form.photos}
           />
         </Activity>
