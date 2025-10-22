@@ -82,6 +82,9 @@ public class LoggingInterceptor implements HandlerInterceptor {
 
         log.atTrace()
             .addKeyValue("event", "RESPONSE")
+            .addKeyValue("httpMethod", request.getMethod())
+            .addKeyValue("requestUri", request.getRequestURI())
+            .addKeyValue("queryString", request.getQueryString())
             .addKeyValue("duration", durationMillis + "ms")
             .log();
 
