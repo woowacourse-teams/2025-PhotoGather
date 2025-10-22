@@ -7,6 +7,7 @@ import {
   createCreateGuestbookRoute,
   createGuestGuestbookRoute,
   createGuestWorkDetailRoute,
+  ROUTES,
 } from '../../../constants/routes';
 import useSpaceInfo from '../../../hooks/domain/space/useSpaceInfo';
 import { DividerLine } from '../../../styles/@common/DividerLine.styles';
@@ -95,6 +96,12 @@ const GuestMainPage = () => {
           disabled={!spaceInfo.isPublic}
         />
       </MainPageStyles.ButtonContainer>
+      <Button
+        variant="tertiary"
+        text="Forgather 둘러보기"
+        // TODO : 랜딩으로 이동되도록 설정
+        onClick={() => navigate(ROUTES.MAIN)}
+      />
       <MainPageStyles.Footer></MainPageStyles.Footer>
     </MainPageStyles.Wrapper>
   );

@@ -29,6 +29,7 @@ export const InfoContainer = styled.div`
 
 export const Name = styled.h1`
   ${({ theme }) => theme.typography.header02}
+  height: 30px;
 `;
 
 export const Introduction = styled.p`
