@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__jetbrains__list_directory_tree"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
