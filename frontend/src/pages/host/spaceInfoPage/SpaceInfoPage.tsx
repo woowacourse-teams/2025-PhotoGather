@@ -5,6 +5,7 @@ import DeleteModal from '../../../components/@common/modal/deleteModal/DeleteMod
 import Thumbnail from '../../../components/@common/thumbnail/Thumbnail';
 import InfoRow from '../../../components/specific/infoRow/InfoRow';
 import { createSpaceInfoEditRoute } from '../../../constants/routes';
+import useButtonTracking from '../../../hooks/@common/useButtonTracking';
 import useSpaceDelete from '../../../hooks/domain/space/useSpaceDelete';
 import useSpaceInfo from '../../../hooks/domain/space/useSpaceInfo';
 import { buildOriginalImageUrl } from '../../../utils/buildImageUrl';
@@ -12,14 +13,40 @@ import * as S from './SpaceInfoPage.styles';
 
 const SpaceInfoPage = () => {
   const navigate = useNavigate();
+  const { trackClick } = useButtonTracking();
 
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   const openDeleteModal = () => {
+    trackClick('open_space_delete_modal', {
+      page: 'space_info_page',
+      userType: 'host',
+    });
     setIsDeleteModalOpen(true);
   };
+
   const closeDeleteModal = () => {
+    trackClick('close_space_delete_modal', {
+      page: 'space_info_page',
+      userType: 'host',
+    });
     setIsDeleteModalOpen(false);
+  };
+
+  const handleDeleteSpace = () => {
+    trackClick('confirm_space_delete', {
+      page: 'space_info_page',
+      userType: 'host',
+    });
+    deleteSpace();
+  };
+
+  const handleSpaceEdit = () => {
+    trackClick('space_edit_button', {
+      page: 'space_info_page',
+      userType: 'host',
+    });
+    navigate(createSpaceInfoEditRoute(spaceCode ?? ''));
   };
 
   const { spaceCode } = useParams();
@@ -36,7 +63,7 @@ const SpaceInfoPage = () => {
       <DeleteModal
         isOpen={isDeleteModalOpen}
         onCloseModal={closeDeleteModal}
-        onDelete={deleteSpace}
+        onDelete={handleDeleteSpace}
         buttonDisabled={isPending}
       />
       <S.Title>스페이스 정보</S.Title>
@@ -59,11 +86,7 @@ const SpaceInfoPage = () => {
           onClick={openDeleteModal}
         />
       </S.DeleteButtonContainer>
-      <Button
-        variant="fixed"
-        text="수정하기"
-        onClick={() => navigate(createSpaceInfoEditRoute(spaceCode ?? ''))}
-      />
+      <Button variant="fixed" text="수정하기" onClick={handleSpaceEdit} />
     </S.Wrapper>
   );
 };
