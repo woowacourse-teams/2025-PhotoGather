@@ -87,9 +87,7 @@ const Layout = () => {
           isOpen={isHamburgerOpen}
           onClose={closeHamburger}
           navigateInfo={
-            isHost
-              ? hostNavigateInfo(spaceCode ?? '')
-              : guestNavigateInfo(spaceCode ?? '')
+            isHost ? hostNavigateInfo() : guestNavigateInfo(spaceCode ?? '')
           }
         />
       )}

@@ -1,20 +1,19 @@
 import {
   createCreateGuestbookRoute,
-  createGuestbookRoute,
   createGuestGuestbookRoute,
   createGuestWorkDetailRoute,
-  createWorkDetailRoute,
+  ROUTES,
 } from '../../../../constants/routes';
 import type { NavigateInfo } from '../../../../types/route.type';
 
-export const hostNavigateInfo = (spaceCode: string): NavigateInfo[] => [
+export const hostNavigateInfo = (): NavigateInfo[] => [
   {
-    path: createWorkDetailRoute(spaceCode),
-    name: '작품 소개 관리',
+    path: ROUTES.HOST.MAIN,
+    name: '메인 페이지',
   },
   {
-    path: createGuestbookRoute(spaceCode),
-    name: '방명록 관리',
+    path: ROUTES.HOST.MY_PAGE,
+    name: '마이 페이지',
   },
 ];
 
