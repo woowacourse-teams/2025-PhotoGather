@@ -1,3 +1,4 @@
+import { CONSTRAINTS } from '../constants/constraints';
 import { calculateValidLength } from '../utils/grapheme';
 
 export const checkInputEmpty = (value: string) => {
@@ -25,7 +26,7 @@ export const checkEmailForm = (value: string) => {
 };
 
 export const checkInstagramUsernameForm = (value: string) => {
-  if (value.length !== 0 && !/^[a-zA-Z0-9_.]+$/.test(value)) {
+  if (value.length !== 0 && !CONSTRAINTS.INSTAGRAM_USERNAME_REGEX.test(value)) {
     throw new Error('영어, 숫자, _, . 만 입력할 수 있습니다.');
   }
 };
