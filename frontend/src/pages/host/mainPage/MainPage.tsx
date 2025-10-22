@@ -1,4 +1,3 @@
-import { useContext } from 'react';
 import { IoAddOutline } from 'react-icons/io5';
 import { useNavigate } from 'react-router-dom';
 import Dropdown, {
@@ -7,14 +6,14 @@ import Dropdown, {
 import Thumbnail from '../../../components/@common/thumbnail/Thumbnail';
 import SpaceCard from '../../../components/specific/spaceCard/SpaceCard';
 import { createSpaceMainRoute, ROUTES } from '../../../constants/routes';
-import { UserContext } from '../../../contexts/UserContext';
+import useUserInfoContext from '../../../hooks/context/userInfoContext';
 import useMySpaces from '../../../hooks/domain/space/useMySpaces';
 import useSpacesDisplay from '../../../hooks/domain/useSpacesDisplay';
 import * as S from './MainPage.styles';
 
 const MainPage = () => {
   const navigate = useNavigate();
-  const userInfo = useContext(UserContext);
+  const userInfo = useUserInfoContext();
   const { mySpaces } = useMySpaces();
   const { displaySpaces, changeSortType, sortType } = useSpacesDisplay({
     mySpaces,

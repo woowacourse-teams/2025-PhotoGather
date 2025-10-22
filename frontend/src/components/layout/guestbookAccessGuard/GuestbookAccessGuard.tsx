@@ -4,7 +4,7 @@ import useSpaceInfoContext from '../../../hooks/context/useSpaceInfoContext';
 import CompletePageLayout from '../completePageLayout/CompletePageLayout';
 
 const GuestbookAccessGuard = () => {
-  const spaceInfo = useSpaceInfoContext();
+  const { spaceInfo } = useSpaceInfoContext();
   const navigate = useNavigate();
 
   if (!spaceInfo.isPublic) {

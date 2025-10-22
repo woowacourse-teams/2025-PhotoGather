@@ -4,8 +4,8 @@ import { useParams } from 'react-router-dom';
 import * as C from '../../../components/@common/inputs/input.common.styles';
 import { CONSTRAINTS } from '../../../constants/constraints';
 import useLocalFile from '../../../hooks/@common/useLocalFile';
+import useSpaceInfoContext from '../../../hooks/context/useSpaceInfoContext';
 import usePatchSpaceInfo from '../../../hooks/domain/space/usePatchSpaceInfo';
-import useSpaceInfo from '../../../hooks/domain/space/useSpaceInfo';
 import type { SpaceInfoFormData } from '../../../types/domain/space.type';
 import { clearFiles } from '../../../utils/clearFiles';
 import { calculateValidLength } from '../../../utils/grapheme';
@@ -19,9 +19,7 @@ import { editFormValidators } from './editForm.validators';
 const EditForm = () => {
   // TODO : 변경사항이 없을 경우 막기
   const { spaceCode } = useParams();
-  const { isLoading: isSpaceInfoLoading, spaceInfo } = useSpaceInfo({
-    spaceCode: spaceCode ?? '',
-  });
+  const { spaceInfo, isLoading: isSpaceInfoLoading } = useSpaceInfoContext();
 
   const initialData: SpaceInfoFormData = {
     name: '',

@@ -9,7 +9,7 @@ import {
   createGuestWorkDetailRoute,
   ROUTES,
 } from '../../../constants/routes';
-import useSpaceInfo from '../../../hooks/domain/space/useSpaceInfo';
+import useSpaceInfoContext from '../../../hooks/context/useSpaceInfoContext';
 import { DividerLine } from '../../../styles/@common/DividerLine.styles';
 import { buildOriginalImageUrl } from '../../../utils/buildImageUrl';
 import { createInstagramUrl } from '../../../utils/createExternalLinks';
@@ -20,7 +20,7 @@ import { mockAccess } from '../../mockData';
 const GuestMainPage = () => {
   const navigate = useNavigate();
   const { spaceCode } = useParams();
-  const { spaceInfo, isLoading } = useSpaceInfo({ spaceCode: spaceCode ?? '' });
+  const { spaceInfo, isLoading } = useSpaceInfoContext();
 
   if (isLoading) {
     return <MainPageStyles.Wrapper>로딩 중...</MainPageStyles.Wrapper>;
