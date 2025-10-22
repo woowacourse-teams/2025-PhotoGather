@@ -1,6 +1,5 @@
 import styled from '@emotion/styled';
 import { motion } from 'framer-motion';
-import { Backdrop } from '../../../styles/@common/Backdrop.styles';
 import { hexToRgba } from '../../../utils/hexToRgba';
 
 export const Wrapper = styled.nav`
@@ -16,7 +15,7 @@ export const Wrapper = styled.nav`
   transform: translate(-50%, -50%);
 `;
 
-export const HamburgerBackdrop = styled(motion.div)`
+export const HamburgerBackdrop = styled.div`
   position: absolute;
   top: 50%;
   left: 50%;
@@ -44,7 +43,8 @@ export const HamburgerBackground = styled(motion.div)`
   gap: 16px;
   margin-left: auto;
 `;
-export const ItemContainer = styled.ul`
+
+export const ItemContainer = styled(motion.ul)`
   border-bottom: 1px solid ${({ theme }) => theme.colors.gray02};
   padding: 16px;
   display: flex;
@@ -54,7 +54,7 @@ export const ItemContainer = styled.ul`
   gap: 16px;
 `;
 
-export const Item = styled.li`
+export const Item = styled(motion.li)`
   ${({ theme }) => ({
     ...theme.typography.bodyLarge,
   })}

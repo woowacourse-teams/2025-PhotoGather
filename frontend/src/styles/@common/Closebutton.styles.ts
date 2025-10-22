@@ -11,6 +11,7 @@ export const CloseButton = styled(MdClose)`
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: ${({ theme }) => theme.zIndex.modal};
 
   &:hover {
     background-color: ${({ theme }) => theme.colors.gray03};
