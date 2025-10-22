@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.forgather.domain.guestbook.repository.GuestBookCardRepository;
 import com.forgather.domain.guestbook.service.GuestBookService;
 import com.forgather.domain.product.service.ProductService;
+import com.forgather.domain.space.dto.CheckSpaceHostResponse;
 import com.forgather.domain.space.dto.CreateSpaceRequest;
 import com.forgather.domain.space.dto.CreateSpaceResponse;
 import com.forgather.domain.space.dto.HostSpaceResponse;
@@ -185,6 +186,13 @@ public class SpaceService {
             .sorted(Comparator.comparingLong(SpaceResponse::id).reversed())
             .toList();
         return new HostSpaceResponse(spaceResponses);
+    }
+
+    @Transactional(readOnly = true)
+    public CheckSpaceHostResponse checkSpaceHost(String spaceCode, Host host) {
+        Space space = spaceRepository.getByCodeOrThrow(spaceCode);
+        validateHostNull(host);
+        return new CheckSpaceHostResponse(spaceHostMapRepository.findBySpaceAndHost(space, host).isPresent());
     }
 
     private void validateSpaceHost(Space space, Host host) {
