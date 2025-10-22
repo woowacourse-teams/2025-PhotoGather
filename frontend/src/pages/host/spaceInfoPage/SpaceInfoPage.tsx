@@ -13,14 +13,17 @@ import * as S from './SpaceInfoPage.styles';
 
 const SpaceInfoPage = () => {
   const navigate = useNavigate();
-  const { trackClick } = useButtonTracking();
+  const { spaceCode } = useParams();
+  const { trackClick } = useButtonTracking({
+    userType: 'host',
+    spaceCode,
+  });
 
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   const openDeleteModal = () => {
     trackClick('open_space_delete_modal', {
       page: 'space_info_page',
-      userType: 'host',
     });
     setIsDeleteModalOpen(true);
   };
@@ -28,7 +31,6 @@ const SpaceInfoPage = () => {
   const closeDeleteModal = () => {
     trackClick('close_space_delete_modal', {
       page: 'space_info_page',
-      userType: 'host',
     });
     setIsDeleteModalOpen(false);
   };
@@ -36,7 +38,6 @@ const SpaceInfoPage = () => {
   const handleDeleteSpace = () => {
     trackClick('confirm_space_delete', {
       page: 'space_info_page',
-      userType: 'host',
     });
     deleteSpace();
   };
@@ -44,12 +45,9 @@ const SpaceInfoPage = () => {
   const handleSpaceEdit = () => {
     trackClick('space_edit_button', {
       page: 'space_info_page',
-      userType: 'host',
     });
     navigate(createSpaceInfoEditRoute(spaceCode ?? ''));
   };
-
-  const { spaceCode } = useParams();
   const { deleteSpace, isPending } = useSpaceDelete({
     closeDeleteModal,
     spaceCode: spaceCode ?? '',

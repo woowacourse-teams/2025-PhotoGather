@@ -25,14 +25,14 @@ const HostSpaceHomePage = () => {
   const { spaceInfo } = useSpaceInfo({
     spaceCode,
   });
-  const { trackClick } = useButtonTracking();
+  const { trackClick } = useButtonTracking({
+    userType: 'host',
+    spaceCode,
+  });
 
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const openShareModal = () => {
-    trackClick('open_space_share_modal', {
-      userType: 'host',
-      spaceCode,
-    });
+    trackClick('open_space_share_modal');
     setIsShareModalOpen(true);
   };
   const closeShareModal = () => {
@@ -40,42 +40,27 @@ const HostSpaceHomePage = () => {
   };
 
   const handleSpaceInfoClick = () => {
-    trackClick('host_space_info_button', {
-      userType: 'host',
-      spaceCode,
-    });
+    trackClick('host_space_info_button');
     navigate(createSpaceInfoRoute(spaceCode));
   };
 
   const onInstagramClick = () => {
-    trackClick('host_space_instagram_button', {
-      userType: 'host',
-      spaceCode,
-    });
+    trackClick('host_space_instagram_button');
     window.open(createInstagramUrl(spaceInfo.instagramUsername), '_blank');
   };
 
   const onEmailClick = () => {
-    trackClick('host_space_email_button', {
-      userType: 'host',
-      spaceCode,
-    });
+    trackClick('host_space_email_button');
     window.open(`mailto:${spaceInfo.email}`, '_blank');
   };
 
   const handleWorkDetailClick = () => {
-    trackClick('host_space_work_detail_button', {
-      userType: 'host',
-      spaceCode,
-    });
+    trackClick('host_space_work_detail_button');
     navigate(createWorkDetailRoute(spaceCode));
   };
 
   const handleGuestbookClick = () => {
-    trackClick('host_space_guestbook_button', {
-      userType: 'host',
-      spaceCode,
-    });
+    trackClick('host_space_guestbook_button');
     navigate(createGuestbookRoute(spaceCode));
   };
 

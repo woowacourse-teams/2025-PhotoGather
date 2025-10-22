@@ -11,7 +11,9 @@ import * as S from './LandingPage.styles';
 const LandingPage = () => {
   const navigate = useNavigate();
   const isLoggedIn = CookieUtils.get(AUTH_COOKIES.ACCESS);
-  const { trackClick } = useButtonTracking();
+  const { trackClick } = useButtonTracking({
+    userType: isLoggedIn ? 'host' : 'guest',
+  });
 
   const handleStartButton = () => {
     if (isLoggedIn) {

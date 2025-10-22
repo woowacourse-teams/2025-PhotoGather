@@ -20,7 +20,9 @@ const MainPage = () => {
   const { displaySpaces, changeSortType, sortType } = useSpacesDisplay({
     mySpaces,
   });
-  const { trackClick } = useButtonTracking();
+  const { trackClick } = useButtonTracking({
+    userType: 'host',
+  });
 
   const isSpacesEmpty = displaySpaces.length === 0;
 

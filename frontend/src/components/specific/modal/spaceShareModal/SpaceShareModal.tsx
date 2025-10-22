@@ -19,15 +19,15 @@ const SpaceShareModal = ({ isOpen, onClose }: ShareModalProps) => {
   const { showToast } = useToast();
   const qrCodeRef = useRef<HTMLCanvasElement>(null);
   const { spaceCode } = useParams();
-  const { trackClick } = useButtonTracking();
+  const { trackClick } = useButtonTracking({
+    userType: 'host',
+    spaceCode,
+  });
 
   const copyAddress = `${import.meta.env.VITE_DOMAIN}/guest/${spaceCode}/main`;
 
   const saveQRCodeImage = async () => {
-    trackClick('space_qr_code_download_button', {
-      userType: 'host',
-      spaceCode,
-    });
+    trackClick('space_qr_code_download_button');
     const canvas = qrCodeRef.current;
     if (!canvas) return;
 
@@ -39,10 +39,7 @@ const SpaceShareModal = ({ isOpen, onClose }: ShareModalProps) => {
   };
 
   const copyShareLink = () => {
-    trackClick('space_link_copy_button', {
-      userType: 'host',
-      spaceCode,
-    });
+    trackClick('space_link_copy_button');
     copyLinkToClipboard(copyAddress);
     showToast({
       text: '링크가 복사되었습니다.',
@@ -51,10 +48,7 @@ const SpaceShareModal = ({ isOpen, onClose }: ShareModalProps) => {
   };
 
   const handleOnClose = () => {
-    trackClick('space_share_modal_close_button', {
-      userType: 'host',
-      spaceCode,
-    });
+    trackClick('space_share_modal_close_button');
     onClose();
   };
 

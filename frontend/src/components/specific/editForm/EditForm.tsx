@@ -23,7 +23,10 @@ const EditForm = () => {
   const { isLoading: isSpaceInfoLoading, spaceInfo } = useSpaceInfo({
     spaceCode: spaceCode ?? '',
   });
-  const { trackClick } = useButtonTracking();
+  const { trackClick } = useButtonTracking({
+    userType: 'host',
+    spaceCode,
+  });
 
   const initialData: SpaceInfoFormData = {
     name: '',
@@ -79,7 +82,6 @@ const EditForm = () => {
   const onSubmit = (data: SpaceInfoFormData) => {
     trackClick('edit_form_submit_button', {
       page: '/space/edit',
-      spaceCode,
       hasPhoto: localFiles.length !== 0,
       isPublic: data.isPublic,
       hasEmail: !!data.email,
@@ -112,7 +114,6 @@ const EditForm = () => {
       isPublic ? 'edit_form_public_button' : 'edit_form_private_button',
       {
         page: '/space/edit',
-        spaceCode,
         action: isPublic ? 'set_public' : 'set_private',
       },
     );
