@@ -16,9 +16,9 @@ import { DividerLine } from '../../../styles/@common/DividerLine.styles';
 import { buildOriginalImageUrl } from '../../../utils/buildImageUrl';
 import { createInstagramUrl } from '../../../utils/createExternalLinks';
 import * as MainPageStyles from '../../MainPage.common.styles';
-import * as S from './HostMainPage.styles';
+import * as S from './SpaceHomePage.styles';
 
-const HostMainPage = () => {
+const SpaceHomePage = () => {
   const navigate = useNavigate();
   const { spaceCode = '' } = useParams();
   const { spaceInfo } = useSpaceInfo({
@@ -110,4 +110,4 @@ const HostMainPage = () => {
   );
 };
 
-export default HostMainPage;
+export default SpaceHomePage;
