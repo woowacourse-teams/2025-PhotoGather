@@ -9,6 +9,7 @@ import TextInput from '../../../components/@common/inputs/textInput/TextInput';
 import DeleteModal from '../../../components/@common/modal/deleteModal/DeleteModal';
 import PhotoUploadButton from '../../../components/specific/photoUploadButton/PhotoUploadButton';
 import { CONSTRAINTS } from '../../../constants/constraints';
+import useButtonTracking from '../../../hooks/@common/useButtonTracking';
 import useLocalFile from '../../../hooks/@common/useLocalFile';
 import { useToast } from '../../../hooks/@common/useToast';
 import {
@@ -26,6 +27,10 @@ const WorkForm = () => {
   const { showToast } = useToast();
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const { trackClick } = useButtonTracking({
+    userType: 'host',
+    spaceCode,
+  });
 
   const {
     register,
@@ -51,16 +56,29 @@ const WorkForm = () => {
     handleFilesDrop,
   } = useLocalFile({ fileType: 'image', maxFileCount: 10 });
 
-  const { isEditMode, existingPhotos, handleDeleteExistingPhoto, submitWork } =
+  const { isEditMode, existingPhotos, deleteExistingPhoto, submitWork } =
     useWorkForm({ spaceCode, reset });
 
   const onValid = async (data: WorkFormData) => {
+    trackClick(
+      isEditMode ? 'work_form_edit_submit' : 'work_form_create_submit',
+      {
+        page: '/work/form',
+        photoCount: existingPhotos.length + localFiles.length,
+        hasCategory: data.category,
+        hasDesigner: data.designer,
+      },
+    );
     const files = localFiles.map((file) => file.originFile);
     await submitWork(data, files);
   };
 
   const handleDeleteWork = async () => {
     if (!spaceCode) return;
+
+    trackClick('work_form_confirm_delete', {
+      page: '/work/form',
+    });
 
     try {
       setIsDeleting(true);
@@ -86,6 +104,44 @@ const WorkForm = () => {
     return null;
   }
 
+  const onDeleteButtonClick = () => {
+    trackClick('host_work_delete_button');
+    setIsDeleteModalOpen(true);
+  };
+
+  const handlePhotoUploadClick = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    trackClick('work_form_photo_upload', {
+      page: '/work/form',
+      currentPhotoCount: totalPhotos,
+    });
+    handleFilesUploadClick(event);
+  };
+
+  const handlePhotoUploadDrop = (event: React.DragEvent<HTMLLabelElement>) => {
+    trackClick('work_form_photo_drop', {
+      page: '/work/form',
+      currentPhotoCount: totalPhotos,
+    });
+    handleFilesDrop(event);
+  };
+
+  const handleDeleteExistingPhoto = (photoId: number) => {
+    trackClick('work_form_delete_existing_photo', {
+      page: '/work/form',
+      photoId,
+    });
+    deleteExistingPhoto(photoId);
+  };
+
+  const handleDeleteNewPhoto = (fileId: number) => {
+    trackClick('work_form_delete_new_photo', {
+      page: '/work/form',
+    });
+    deleteFile(fileId);
+  };
+
   const totalPhotos = existingPhotos.length + previewFiles.length;
   const remainingSlots = 10 - totalPhotos;
 
@@ -93,7 +149,12 @@ const WorkForm = () => {
     <>
       <DeleteModal
         isOpen={isDeleteModalOpen}
-        onCloseModal={() => setIsDeleteModalOpen(false)}
+        onCloseModal={() => {
+          trackClick('work_form_cancel_delete', {
+            page: '/work/form',
+          });
+          setIsDeleteModalOpen(false);
+        }}
         onDelete={handleDeleteWork}
         buttonDisabled={isDeleting}
       />
@@ -103,9 +164,7 @@ const WorkForm = () => {
             {isEditMode ? '작품 소개 수정' : '작품 소개 등록'}
           </S.TitleContainer>
           {isEditMode && (
-            <S.DeleteButton onClick={() => setIsDeleteModalOpen(true)}>
-              삭제
-            </S.DeleteButton>
+            <S.DeleteButton onClick={onDeleteButtonClick}>삭제</S.DeleteButton>
           )}
         </S.TopContainer>
         <S.FormContainer onSubmit={handleSubmit(onValid)}>
@@ -169,8 +228,8 @@ const WorkForm = () => {
             <PhotoUploadButton
               mainText="사진을 선택해주세요"
               disabled={false}
-              onChange={handleFilesUploadClick}
-              onDrop={handleFilesDrop}
+              onChange={handlePhotoUploadClick}
+              onDrop={handlePhotoUploadDrop}
             />
             <S.ImageGridContainer>
               {existingPhotos.map((photo, index) => (
@@ -200,7 +259,7 @@ const WorkForm = () => {
                   />
                   <S.ImageDeleteButton
                     type="button"
-                    onClick={() => deleteFile(imageData.id)}
+                    onClick={() => handleDeleteNewPhoto(imageData.id)}
                     aria-label="사진 삭제"
                   >
                     <IoClose size={20} />
