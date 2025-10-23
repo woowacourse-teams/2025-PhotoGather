@@ -71,6 +71,7 @@ const EditForm = () => {
 
   const { patchSpaceInfo } = usePatchSpaceInfo({
     spaceCode: spaceCode ?? '',
+    isImageExisted: spaceInfo?.spacePhoto.isExists,
     dirtyFields,
     afterPatch: () => {
       clearFiles(localFiles);
