@@ -30,7 +30,7 @@ const usePatchSpaceInfo = ({
       ),
     );
 
-    if (!patchImage && isImageExisted) {
+    if (!patchImage && isImageExisted && dirtyFields.isDeletePhoto) {
       updatedFormData.isDeletePhoto = true;
     }
     if (patchImage && isImageExisted) {
