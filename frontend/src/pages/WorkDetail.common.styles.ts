@@ -1,5 +1,6 @@
 import { keyframes } from '@emotion/react';
 import styled from '@emotion/styled';
+import AutoReloadImage from '../components/@common/autoReloadImage/AutoReloadImage';
 
 const glow = keyframes`
   0% {
@@ -41,7 +42,7 @@ export const DescriptionContainer = styled.p`
   white-space: pre-line;
 `;
 
-export const ImageContainer = styled.img`
+export const ImageContainer = styled(AutoReloadImage)`
   width: 100%;
   height: auto;
   min-height: 200px;
