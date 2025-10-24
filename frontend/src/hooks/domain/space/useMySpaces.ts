@@ -20,7 +20,6 @@ const useMySpaces = () => {
       throw new Error('스페이스 목록 조회에 실패했습니다');
     },
   });
-  console.log(dirtyFields);
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: isError 변경 시에만 토스트 띄우기
   useEffect(() => {
