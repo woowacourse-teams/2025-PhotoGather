@@ -15,3 +15,30 @@ export const Footer = styled.footer<{ $mode: FooterMode }>`
   background-color: ${({ theme, $mode }) =>
     $mode === 'dark' ? theme.colors.black : theme.colors.background};
 `;
+
+export const FooterContent = styled.div<{ $mode: FooterMode }>`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  margin-top: 8px;
+`;
+
+export const Copyright = styled.p<{ $mode: FooterMode }>`
+  font-size: 12px;
+  color: ${({ theme, $mode }) =>
+    $mode === 'dark' ? theme.colors.gray04 : theme.colors.gray04};
+  margin: 0;
+`;
+
+export const ContactLink = styled.a<{ $mode: FooterMode }>`
+  font-size: 14px;
+  color: ${({ theme, $mode }) =>
+    $mode === 'dark' ? theme.colors.gray04 : theme.colors.gray04};
+  text-decoration: none;
+  cursor: pointer;
+
+  &:hover {
+    text-decoration: underline;
+  }
+`;

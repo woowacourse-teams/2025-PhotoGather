@@ -16,6 +16,19 @@ const Footer = ({ mode = 'light' }: FooterProps) => {
       <FooterLogo
         color={mode === 'dark' ? theme.colors.white : theme.colors.gray06}
       />
+      <S.FooterContent $mode={mode}>
+        <S.Copyright $mode={mode}>
+          © 2025 Forgather. All rights reserved.
+        </S.Copyright>
+        <S.ContactLink
+          href="https://pf.kakao.com/_rHNtn"
+          target="_blank"
+          rel="noopener noreferrer"
+          $mode={mode}
+        >
+          문의하기
+        </S.ContactLink>
+      </S.FooterContent>
     </S.Footer>
   );
 };
