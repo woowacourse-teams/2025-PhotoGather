@@ -1,3 +1,4 @@
+import { useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { spaceService } from '../../../apis/services/space/space.service';
 import { createSpaceInfoRoute } from '../../../constants/routes';
@@ -19,6 +20,7 @@ const usePatchSpaceInfo = ({
 }: UsePatchSpaceInfoProps) => {
   const { showToast } = useToast();
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   const findUpdatedData = (
     data: Partial<SpaceInfoFormData>,
@@ -67,6 +69,7 @@ const usePatchSpaceInfo = ({
         type: 'info',
       });
       afterPatch?.();
+      queryClient.invalidateQueries({ queryKey: ['spaceInfo', spaceCode] });
       navigate(createSpaceInfoRoute(spaceCode));
       return;
     }
