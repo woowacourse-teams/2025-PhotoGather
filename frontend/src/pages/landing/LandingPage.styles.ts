@@ -135,8 +135,11 @@ export const ScrollIconContainer = styled.div`
   position: fixed;
   left: 50%;
   bottom: 16px;
-  transform: translateX(-50%);
   color: ${({ theme }) => theme.colors.white};
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
 `;
 
 export const ScrollTopContainer = styled.div`

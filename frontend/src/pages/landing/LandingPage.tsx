@@ -6,7 +6,7 @@ import {
   type Variants,
 } from 'framer-motion';
 import { useState } from 'react';
-import { MdArrowDownward, MdArrowUpward } from 'react-icons/md';
+import { MdArrowDownward, MdArrowUpward, MdOutlineMouse } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
 import completeImage from '../../@assets/images/screenshots/complete.png';
 import guestbookImage from '../../@assets/images/screenshots/guestbook.png';
@@ -120,8 +120,9 @@ const LandingPage = () => {
         initial="visible"
         animate={hideScrollIcon ? 'hidden' : 'visible'}
         variants={scrollIconVariants}
-        style={{ pointerEvents: hideScrollIcon ? 'none' : 'auto' }}
+        style={{ pointerEvents: hideScrollIcon ? 'none' : 'auto', x: '-50%' }}
       >
+        <MdOutlineMouse size={24} />
         <MdArrowDownward size={24} />
       </MotionScrollIconContainer>
       <MotionScrollTopContainer
