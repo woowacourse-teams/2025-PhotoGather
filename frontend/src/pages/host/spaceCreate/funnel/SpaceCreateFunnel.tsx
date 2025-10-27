@@ -1,3 +1,5 @@
+import { MdArrowBack } from 'react-icons/md';
+import Button from '../../../../components/@common/buttons/button/Button';
 import StepProgressBar from '../../../../components/@common/progressBar/step/StepProgressBar';
 import useButtonTracking from '../../../../hooks/@common/useButtonTracking';
 import useConfirmBeforeRefresh from '../../../../hooks/@common/useConfirmBeforeRefresh';
@@ -58,6 +60,17 @@ const SpaceCreateFunnel = () => {
 
   return (
     <S.Wrapper>
+      <Button
+        type="button"
+        variant="fit"
+        text={
+          <>
+            <MdArrowBack />
+            <p>이전 단계</p>
+          </>
+        }
+        onClick={() => history.back()}
+      />
       <StepProgressBar
         currentStep={currentStepIndex}
         maxStep={PROGRESS_STEP_LIST.length}
