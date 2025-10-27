@@ -27,3 +27,15 @@ export const DeleteButtonContainer = styled.div`
   display: flex;
   justify-content: right;
 `;
+
+export const EditButton = styled.button`
+  ${({ theme }) => theme.typography.captionSmall}
+  color: ${({ theme }) => theme.colors.gray04};
+  white-space: nowrap;
+`;
+
+export const TitleSection = styled.div`
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  `;
