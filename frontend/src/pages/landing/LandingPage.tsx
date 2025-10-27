@@ -1,4 +1,12 @@
-import { type MotionProps, motion, type Variants } from 'framer-motion';
+import {
+  type MotionProps,
+  motion,
+  useMotionValueEvent,
+  useScroll,
+  type Variants,
+} from 'framer-motion';
+import { useState } from 'react';
+import { MdArrowDownward } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
 import completeImage from '../../@assets/images/screenshots/complete.png';
 import guestbookImage from '../../@assets/images/screenshots/guestbook.png';
@@ -18,6 +26,16 @@ const MotionSection = motion(S.Section);
 const MotionTitleContainer = motion(S.TitleContainer);
 const MotionScreenshotBox = motion(S.ScreenshotBox);
 const MotionSubTitle = motion(S.SubTitle);
+const MotionScrollIconContainer = motion(S.ScrollIconContainer);
+
+const scrollIconVariants: Variants = {
+  visible: { opacity: 1, scale: 1 },
+  hidden: {
+    opacity: 0,
+    scale: 0.9,
+    transition: { duration: 0.25, ease: 'easeOut' },
+  },
+};
 
 const fadeVariants: Variants = {
   hidden: { opacity: 0, y: 40 },
@@ -54,6 +72,13 @@ const LandingPage = () => {
   const { trackClick } = useButtonTracking({
     userType: isLoggedIn ? 'host' : 'guest',
   });
+  const { scrollYProgress } = useScroll();
+  const [hideScrollIcon, setHideScrollIcon] = useState(false);
+
+  useMotionValueEvent(scrollYProgress, 'change', (latest) => {
+    if (latest > 0 && !hideScrollIcon) setHideScrollIcon(true);
+    if (latest <= 0) setHideScrollIcon(false);
+  });
 
   const handleStartButton = () => {
     if (isLoggedIn) {
@@ -75,6 +100,14 @@ const LandingPage = () => {
 
   return (
     <S.Wrapper>
+      <MotionScrollIconContainer
+        initial="visible"
+        animate={hideScrollIcon ? 'hidden' : 'visible'}
+        variants={scrollIconVariants}
+        style={{ pointerEvents: hideScrollIcon ? 'none' : 'auto' }}
+      >
+        <MdArrowDownward size={24} />
+      </MotionScrollIconContainer>
       <S.ContentContainer>
         <MotionSection
           style={{ gap: '156px' }}
