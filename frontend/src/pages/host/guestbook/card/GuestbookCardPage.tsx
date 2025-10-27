@@ -222,7 +222,6 @@ const GuestbookCardPage = () => {
           isGuestbookCardFetching={isGuestbookCardFetching}
           guestbookTitle={`${guestbookCard.nickname}의 방명록 사진`}
         />
-        {/* <Line width={192} /> */}
       </S.Wrapper>
     </>
   );
