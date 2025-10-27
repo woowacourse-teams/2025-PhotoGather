@@ -10,7 +10,7 @@ export const DropdownButton = styled.button<{ isOpen: boolean }>`
   align-items: center;
   justify-content: space-between;
   gap: 8px;
-  min-width: 100px;
+  min-width: 130px;
   padding: 6px 12px;
   border: none;
   border-bottom: 1px solid ${({ theme }) => theme.colors.gray05};
@@ -44,8 +44,8 @@ export const DropdownMenu = styled.ul`
   z-index: 10;
   min-width: 100%;
   background-color: ${({ theme }) => theme.colors.white};
-  border: 1px solid ${({ theme }) => theme.colors.gray02};
-  border-radius: 8px;
+  border: 1px solid ${({ theme }) => theme.colors.gray05};
+  border-radius: 4px;
   overflow: hidden;
 `;
 
@@ -63,6 +63,6 @@ export const DropdownItem = styled.li<{ isSelected: boolean }>`
   }
 
   &:not(:last-child) {
-    border-bottom: 1px solid ${({ theme }) => theme.colors.gray01};
+    border-bottom: 1px solid ${({ theme }) => theme.colors.gray02};
   }
 `;
