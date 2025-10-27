@@ -144,6 +144,8 @@ export const ScrollIconContainer = styled.div`
 
 export const ScrollTopContainer = styled.div`
   position: fixed;
-  left: 24px;
-  bottom: 16px;
+  right: calc(
+    (100vw - ${({ theme }) => theme.layout.width}) / 2 + ${({ theme }) => theme.layout.padding.leftRight} * 2);
+  bottom: ${({ theme }) => theme.layout.padding.topBottom};
+  z-index: ${({ theme }) => theme.zIndex.fixedButton};
 `;
