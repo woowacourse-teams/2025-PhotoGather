@@ -138,3 +138,9 @@ export const ScrollIconContainer = styled.div`
   transform: translateX(-50%);
   color: ${({ theme }) => theme.colors.white};
 `;
+
+export const ScrollTopContainer = styled.div`
+  position: fixed;
+  left: 24px;
+  bottom: 16px;
+`;

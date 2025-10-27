@@ -6,7 +6,7 @@ import {
   type Variants,
 } from 'framer-motion';
 import { useState } from 'react';
-import { MdArrowDownward } from 'react-icons/md';
+import { MdArrowDownward, MdArrowUpward } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
 import completeImage from '../../@assets/images/screenshots/complete.png';
 import guestbookImage from '../../@assets/images/screenshots/guestbook.png';
@@ -16,19 +16,30 @@ import spaceImage from '../../@assets/images/screenshots/space.png';
 import visibilityImage from '../../@assets/images/screenshots/visibility.png';
 import titleImage from '../../@assets/logo/main-logo.png';
 import Button from '../../components/@common/buttons/button/Button';
+import IconButton from '../../components/@common/buttons/iconButton/IconButton';
 import { AUTH_COOKIES } from '../../constants/cookie';
 import { ROUTES } from '../../constants/routes';
 import useButtonTracking from '../../hooks/@common/useButtonTracking';
 import { CookieUtils } from '../../utils/cookie';
+import { goToTop } from '../../utils/goToTop';
 import * as S from './LandingPage.styles';
 
-const MotionSection = motion(S.Section);
-const MotionTitleContainer = motion(S.TitleContainer);
-const MotionScreenshotBox = motion(S.ScreenshotBox);
-const MotionSubTitle = motion(S.SubTitle);
-const MotionScrollIconContainer = motion(S.ScrollIconContainer);
+const MotionSection = motion.create(S.Section);
+const MotionTitleContainer = motion.create(S.TitleContainer);
+const MotionScreenshotBox = motion.create(S.ScreenshotBox);
+const MotionSubTitle = motion.create(S.SubTitle);
+const MotionScrollIconContainer = motion.create(S.ScrollIconContainer);
+const MotionScrollTopContainer = motion.create(S.ScrollTopContainer);
 
 const scrollIconVariants: Variants = {
+  visible: { opacity: 1, scale: 1 },
+  hidden: {
+    opacity: 0,
+    scale: 0.9,
+    transition: { duration: 0.25, ease: 'easeOut' },
+  },
+};
+const scrollTopVariants: Variants = {
   visible: { opacity: 1, scale: 1 },
   hidden: {
     opacity: 0,
@@ -74,10 +85,15 @@ const LandingPage = () => {
   });
   const { scrollYProgress } = useScroll();
   const [hideScrollIcon, setHideScrollIcon] = useState(false);
+  const [hideScrollTop, setHideScrollTop] = useState(true);
 
   useMotionValueEvent(scrollYProgress, 'change', (latest) => {
     if (latest > 0 && !hideScrollIcon) setHideScrollIcon(true);
     if (latest <= 0) setHideScrollIcon(false);
+  });
+  useMotionValueEvent(scrollYProgress, 'change', (latest) => {
+    if (latest <= 0.1 && !hideScrollTop) setHideScrollTop(true);
+    if (latest > 0.1) setHideScrollTop(false);
   });
 
   const handleStartButton = () => {
@@ -108,6 +124,17 @@ const LandingPage = () => {
       >
         <MdArrowDownward size={24} />
       </MotionScrollIconContainer>
+      <MotionScrollTopContainer
+        initial="hidden"
+        animate={hideScrollTop ? 'hidden' : 'visible'}
+        variants={scrollTopVariants}
+      >
+        <IconButton
+          icon={<MdArrowUpward />}
+          variant="dark"
+          onClick={() => goToTop()}
+        />
+      </MotionScrollTopContainer>
       <S.ContentContainer>
         <MotionSection
           style={{ gap: '156px' }}
