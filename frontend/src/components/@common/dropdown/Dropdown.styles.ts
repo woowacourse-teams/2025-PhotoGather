@@ -59,7 +59,7 @@ export const DropdownItem = styled.li<{ isSelected: boolean }>`
   transition: all 0.2s ease;
 
   &:hover {
-    background-color: ${({ theme }) => theme.colors.gray03};
+    filter: brightness(0.8);
   }
 
   &:not(:last-child) {
