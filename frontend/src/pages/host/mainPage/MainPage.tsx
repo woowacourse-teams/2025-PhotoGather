@@ -62,12 +62,12 @@ const MainPage = () => {
         />
         <S.InfoContainer>
           <S.NameContainer>{userInfo?.name}</S.NameContainer>
+          <S.CreateSpaceButton onClick={handleCreateSpaceButton}>
+            <IoAddOutline size={16} />
+            스페이스 생성
+          </S.CreateSpaceButton>
         </S.InfoContainer>
       </S.ProfileContainer>
-      <S.CreateSpaceButton onClick={handleCreateSpaceButton}>
-        <IoAddOutline size={16} />
-        스페이스 생성
-      </S.CreateSpaceButton>
       <S.SpaceContainer>
         <S.SpaceList>
           {isSpacesEmpty && <S.FilterBlur />}

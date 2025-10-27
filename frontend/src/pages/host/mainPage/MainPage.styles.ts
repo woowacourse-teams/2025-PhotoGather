@@ -7,11 +7,11 @@ export const Wrapper = styled.div`
   align-items: center;
   min-height: ${({ theme }) =>
     `calc(100dvh - 2 * ${theme.layout.padding.topBottom} - ${theme.layout.headerHeight})`};
+  gap: 16px;
 `;
 
 export const ProfileContainer = styled.section`
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 16px;
