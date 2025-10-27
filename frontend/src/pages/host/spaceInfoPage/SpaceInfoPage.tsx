@@ -77,7 +77,6 @@ const SpaceInfoPage = () => {
         <InfoRow label="E-mail" value={spaceInfo.email} />
         <InfoRow label="Instagram" value={spaceInfo.instagramUsername} />
       </S.InfoRowContainer>
-
       <S.DeleteButtonContainer>
         <Button
           variant="error"

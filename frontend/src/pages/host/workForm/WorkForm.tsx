@@ -274,15 +274,15 @@ const WorkForm = () => {
               ))}
             </S.ImageGridContainer>
           </S.FormLabelContainer>
-          <S.ButtonContainer>
-            <Button
-              type="submit"
-              text={isEditMode ? '수정하기' : '등록하기'}
-              variant="fixed"
-              disabled={!isAllValid}
-            />
-          </S.ButtonContainer>
         </S.FormContainer>
+        <S.ButtonContainer>
+          <Button
+            type="submit"
+            text={isEditMode ? '수정하기' : '등록하기'}
+            variant="fixed"
+            disabled={!isAllValid}
+          />
+        </S.ButtonContainer>
       </S.Wrapper>
     </>
   );

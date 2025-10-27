@@ -139,6 +139,7 @@ const routes: AppRouteObject[] = [
                         path: ':spaceCode/work-detail/edit',
                         element: <WorkForm />,
                         handle: {
+                          noFooter: true,
                           headerIcon: {
                             leftIcon: 'profile',
                           },
