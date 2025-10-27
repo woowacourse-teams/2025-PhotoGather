@@ -5,7 +5,7 @@ import {
   useScroll,
   type Variants,
 } from 'framer-motion';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { MdArrowDownward, MdArrowUpward, MdOutlineMouse } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
 import completeImage from '../../@assets/images/screenshots/complete.png';
@@ -32,7 +32,11 @@ const MotionScrollIconContainer = motion.create(S.ScrollIconContainer);
 const MotionScrollTopContainer = motion.create(S.ScrollTopContainer);
 
 const scrollIconVariants: Variants = {
-  visible: { opacity: 1, scale: 1 },
+  visible: {
+    opacity: 1,
+    scale: 1,
+    transition: { duration: 1, ease: 'easeOut' },
+  },
   hidden: {
     opacity: 0,
     scale: 0.9,
@@ -86,6 +90,15 @@ const LandingPage = () => {
   const { scrollYProgress } = useScroll();
   const [hideScrollIcon, setHideScrollIcon] = useState(false);
   const [hideScrollTop, setHideScrollTop] = useState(true);
+  const [canShowScrollIcon, setCanShowScrollIcon] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setCanShowScrollIcon(true);
+    }, 2000);
+
+    return () => clearTimeout(timer);
+  }, []);
 
   useMotionValueEvent(scrollYProgress, 'change', (latest) => {
     if (latest > 0 && !hideScrollIcon) setHideScrollIcon(true);
@@ -117,8 +130,8 @@ const LandingPage = () => {
   return (
     <S.Wrapper>
       <MotionScrollIconContainer
-        initial="visible"
-        animate={hideScrollIcon ? 'hidden' : 'visible'}
+        initial="hidden"
+        animate={canShowScrollIcon && !hideScrollIcon ? 'visible' : 'hidden'}
         variants={scrollIconVariants}
         style={{ pointerEvents: hideScrollIcon ? 'none' : 'auto', x: '-50%' }}
       >
