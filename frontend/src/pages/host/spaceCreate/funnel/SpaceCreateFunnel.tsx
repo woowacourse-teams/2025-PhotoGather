@@ -63,12 +63,7 @@ const SpaceCreateFunnel = () => {
       <Button
         type="button"
         variant="fit"
-        text={
-          <>
-            <MdArrowBack />
-            <p>이전 단계</p>
-          </>
-        }
+        text={<MdArrowBack size={28} />}
         onClick={() => history.back()}
       />
       <StepProgressBar
