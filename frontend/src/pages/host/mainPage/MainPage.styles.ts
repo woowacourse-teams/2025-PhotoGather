@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import Button from '../../../components/@common/buttons/button/Button';
 import { hexToRgba } from '../../../utils/hexToRgba';
 
 export const Wrapper = styled.div`
@@ -119,4 +120,8 @@ export const DividerContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+`;
+
+export const EditInfoButton = styled(Button)`
+  color: ${({ theme }) => theme.colors.gray03};
 `;

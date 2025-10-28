@@ -1,6 +1,5 @@
 import { IoAddOutline } from 'react-icons/io5';
 import { useNavigate } from 'react-router-dom';
-import Button from '../../../components/@common/buttons/button/Button';
 import Dropdown, {
   type DropdownOption,
 } from '../../../components/@common/dropdown/Dropdown';
@@ -66,11 +65,10 @@ const MainPage = () => {
         <S.InfoContainer>
           <S.NameContainer>
             {userInfo?.name}
-            <Button
+            <S.EditInfoButton
               onClick={() => navigate(ROUTES.HOST.MY_PAGE)}
               text="내 정보 수정 >"
               variant="fit"
-              style={{ color: theme.colors.gray03 }}
             />
           </S.NameContainer>
         </S.InfoContainer>
