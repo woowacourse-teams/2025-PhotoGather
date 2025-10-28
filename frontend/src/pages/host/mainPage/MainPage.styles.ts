@@ -108,3 +108,11 @@ export const EmptyDescriptionContainer = styled.p`
   ${({ theme }) => theme.typography.bodyRegular};
   color: ${({ theme }) => theme.colors.gray03};
 `;
+
+export const DividerContainer = styled.div`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+`;

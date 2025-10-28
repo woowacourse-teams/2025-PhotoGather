@@ -10,6 +10,8 @@ import useButtonTracking from '../../../hooks/@common/useButtonTracking';
 import useUserInfoContext from '../../../hooks/context/userInfoContext';
 import useMySpaces from '../../../hooks/domain/space/useMySpaces';
 import useSpacesDisplay from '../../../hooks/domain/useSpacesDisplay';
+import { DividerLine } from '../../../styles/@common/DividerLine.styles';
+import { theme } from '../../../styles/theme';
 import * as S from './MainPage.styles';
 
 const MainPage = () => {
@@ -62,12 +64,16 @@ const MainPage = () => {
         />
         <S.InfoContainer>
           <S.NameContainer>{userInfo?.name}</S.NameContainer>
-          <S.CreateSpaceButton onClick={handleCreateSpaceButton}>
-            <IoAddOutline size={16} />
-            스페이스 생성
-          </S.CreateSpaceButton>
         </S.InfoContainer>
       </S.ProfileContainer>
+      <S.DividerContainer>
+        <DividerLine width="25%" color={theme.colors.gray04} />
+        <S.CreateSpaceButton onClick={handleCreateSpaceButton}>
+          <IoAddOutline size={16} />
+          스페이스 생성
+        </S.CreateSpaceButton>
+        <DividerLine width="25%" color={theme.colors.gray04} />
+      </S.DividerContainer>
       <S.SpaceContainer>
         <S.SpaceList>
           {isSpacesEmpty && <S.FilterBlur />}
