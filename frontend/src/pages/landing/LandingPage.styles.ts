@@ -134,12 +134,15 @@ export const Screenshot = styled.img`
 export const ScrollIconContainer = styled.div`
   position: fixed;
   left: 50%;
-  bottom: 16px;
+  bottom: 0px;
   color: ${({ theme }) => theme.colors.white};
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 4px;
+  width: 100%;
+  background: linear-gradient(to top, ${({ theme }) => hexToRgba(theme.colors.gray05, 0.8)}, ${({ theme }) => hexToRgba(theme.colors.gray05, 0.5)}, transparent);
+  width: ${({ theme }) => theme.layout.width};
+  height: 48px;
 `;
 
 export const ScrollTopContainer = styled.div`
