@@ -14,7 +14,8 @@ export const ProfileContainer = styled.section`
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 16px;
+  gap: 20px;
+  margin: 32px 0px;
 `;
 
 export const InfoContainer = styled.div`
@@ -22,12 +23,16 @@ export const InfoContainer = styled.div`
   flex-direction: column;
   gap: 4px;
   text-align: center;
+  align-items: center;
 `;
 
 export const NameContainer = styled.p`
-  ${({ theme }) => theme.typography.bodyLarge}
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  gap: 4px;
+  ${({ theme }) => theme.typography.header03}
   color: ${({ theme }) => theme.colors.white};
-  height: 20px;
 `;
 
 export const CreateSpaceButton = styled.button`
