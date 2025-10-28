@@ -41,7 +41,6 @@ export const CreateSpaceButton = styled.button`
   justify-content: center;
   align-items: center;
   gap: 4px;
-  margin-top: 12px;
   width: 132px;
   height: 28px;
   padding: 2px 12px;
