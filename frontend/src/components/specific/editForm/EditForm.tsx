@@ -69,7 +69,7 @@ const EditForm = () => {
       maxFileCount: 1,
     });
 
-  const { patchSpaceInfo } = usePatchSpaceInfo({
+  const { patchSpaceInfo, isPatching } = usePatchSpaceInfo({
     spaceCode: spaceCode ?? '',
     isImageExisted: spaceInfo?.spacePhoto.isExists,
     dirtyFields,
@@ -206,8 +206,8 @@ const EditForm = () => {
       <Button
         variant="primary"
         type="submit"
-        text="완료"
-        disabled={!isAllValid}
+        text={isPatching ? '수정 중...' : '완료'}
+        disabled={!isAllValid || isPatching}
       />
     </S.Form>
   );

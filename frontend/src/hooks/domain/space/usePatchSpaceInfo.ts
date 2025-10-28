@@ -93,7 +93,7 @@ const usePatchSpaceInfo = ({
     patchMutation.mutate({ data, image });
   };
 
-  return { patchSpaceInfo };
+  return { patchSpaceInfo, isPatching: patchMutation.isPending };
 };
 
 export default usePatchSpaceInfo;
