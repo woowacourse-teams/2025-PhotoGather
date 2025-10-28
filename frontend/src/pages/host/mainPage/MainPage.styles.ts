@@ -119,5 +119,4 @@ export const DividerContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 16px;
 `;
