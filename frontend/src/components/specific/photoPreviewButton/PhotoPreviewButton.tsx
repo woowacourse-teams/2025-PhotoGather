@@ -1,6 +1,6 @@
 import { useId, useRef } from 'react';
 import { IoCamera, IoClose } from 'react-icons/io5';
-import defaultImage from '../../../@assets/images/default-image.png';
+import defaultImage from '../../../@assets/images/default-forgather-image.png';
 import { Thumbnail } from '../../../pages/MainPage.common.styles';
 import * as C from '../../../styles/@common/PhotoInput.styles';
 import type { PreviewFile } from '../../../types/file.type';
