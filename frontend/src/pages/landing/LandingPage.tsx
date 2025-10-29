@@ -1,11 +1,12 @@
 import {
   type MotionProps,
   motion,
+  useInView,
   useMotionValueEvent,
   useScroll,
   type Variants,
 } from 'framer-motion';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { MdArrowUpward, MdKeyboardDoubleArrowDown } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
 import completeImage from '../../@assets/images/screenshots/complete.png';
@@ -20,6 +21,7 @@ import IconButton from '../../components/@common/buttons/iconButton/IconButton';
 import { AUTH_COOKIES } from '../../constants/cookie';
 import { ROUTES } from '../../constants/routes';
 import useButtonTracking from '../../hooks/@common/useButtonTracking';
+import useCountUp from '../../hooks/@common/useCountUp';
 import { CookieUtils } from '../../utils/cookie';
 import { goToTop } from '../../utils/goToTop';
 import * as S from './LandingPage.styles';
@@ -88,6 +90,19 @@ const LandingPage = () => {
   const { scrollYProgress } = useScroll();
   const [hideScrollIcon, setHideScrollIcon] = useState(false);
   const [hideScrollTop, setHideScrollTop] = useState(true);
+  const countUpHeadingRef = useRef<HTMLHeadingElement | null>(null);
+  const isCountUpInView = useInView(countUpHeadingRef, {
+    once: true,
+    amount: 0.3,
+  });
+  const { number: spaceCount } = useCountUp({
+    targetNumber: 60,
+    isActive: isCountUpInView,
+  });
+  const { number: guestbookCount } = useCountUp({
+    targetNumber: 100,
+    isActive: isCountUpInView,
+  });
 
   useMotionValueEvent(scrollYProgress, 'change', (latest) => {
     if (latest > 0 && !hideScrollIcon) setHideScrollIcon(true);
@@ -161,6 +176,11 @@ const LandingPage = () => {
             {
               '스페이스를 통해 작품을 소개하고,\n방문객의 진심 어린 축하를 간직하세요.'
             }
+          </S.SubTitle>
+          <S.SubTitle ref={countUpHeadingRef}>
+            {isCountUpInView
+              ? `현재 ${spaceCount}개의 스페이스에\n${guestbookCount}개의 방명록이 모였어요.`
+              : null}
           </S.SubTitle>
         </MotionSection>
         <MotionSection {...sectionMotionProps}>

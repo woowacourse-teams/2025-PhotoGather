@@ -4,16 +4,23 @@ interface CountUpProps {
   initialNumber?: number;
   targetNumber: number;
   time?: number;
+  isActive?: boolean;
 }
 
 const useCountUp = ({
   initialNumber = 0,
   targetNumber,
   time = 1000,
+  isActive = true,
 }: CountUpProps) => {
   const [number, setNumber] = useState(initialNumber);
 
   useEffect(() => {
+    if (!isActive) {
+      setNumber(initialNumber);
+      return;
+    }
+
     let startTime: number | null = null;
     let animationFrameId: number;
 
@@ -35,7 +42,7 @@ const useCountUp = ({
     animationFrameId = requestAnimationFrame(animate);
 
     return () => cancelAnimationFrame(animationFrameId);
-  }, [initialNumber, targetNumber, time]);
+  }, [initialNumber, targetNumber, time, isActive]);
 
   return { number };
 };
