@@ -139,8 +139,7 @@ export const ScrollIconContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 100%;
-  background: linear-gradient(to top, ${({ theme }) => hexToRgba(theme.colors.gray05, 0.8)}, ${({ theme }) => hexToRgba(theme.colors.gray05, 0.5)}, transparent);
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.5), transparent);
   width: ${({ theme }) => theme.layout.width};
   height: 48px;
 `;
