@@ -26,15 +26,13 @@ export const FooterContent = styled.div<{ $mode: FooterMode }>`
 
 export const Copyright = styled.p<{ $mode: FooterMode }>`
   font-size: 12px;
-  color: ${({ theme, $mode }) =>
-    $mode === 'dark' ? theme.colors.gray04 : theme.colors.gray04};
+  color: ${({ theme, $mode }) => ($mode === 'dark' ? theme.colors.gray04 : theme.colors.gray04)};
   margin: 0;
 `;
 
 export const ContactLink = styled.a<{ $mode: FooterMode }>`
   font-size: 14px;
-  color: ${({ theme, $mode }) =>
-    $mode === 'dark' ? theme.colors.gray04 : theme.colors.gray04};
+  color: ${({ theme, $mode }) => ($mode === 'dark' ? theme.colors.gray04 : theme.colors.gray04)};
   text-decoration: none;
   cursor: pointer;
 
