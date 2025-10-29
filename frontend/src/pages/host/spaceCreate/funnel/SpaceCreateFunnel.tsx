@@ -1,4 +1,4 @@
-import { MdArrowBack } from 'react-icons/md';
+import { MdChevronLeft } from 'react-icons/md';
 import Button from '../../../../components/@common/buttons/button/Button';
 import StepProgressBar from '../../../../components/@common/progressBar/step/StepProgressBar';
 import useButtonTracking from '../../../../hooks/@common/useButtonTracking';
@@ -63,7 +63,7 @@ const SpaceCreateFunnel = () => {
       <Button
         type="button"
         variant="fit"
-        text={<MdArrowBack size={28} />}
+        text={<MdChevronLeft size={28} />}
         onClick={() => history.back()}
       />
       <StepProgressBar
