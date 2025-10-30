@@ -1,40 +1,31 @@
-import LogoSvg from '../../../@assets/logo/logo.svg?react';
+import type { IconAction } from '../../../types/route.type';
 import type { HeaderMode } from '../../../types/uiMode.type';
 import * as S from './Header.styles';
-
-interface IconItem {
-  icon: React.ReactNode;
-  onClick?: () => void;
-}
 
 interface HeaderProps {
   /** 헤더 모드 (light/dark) */
   mode?: HeaderMode;
-  /** 오른쪽에 표시할 아이콘 버튼들 */
-  icons?: IconItem[];
-  /** 로고 클릭 핸들러 */
-  onLogoClick?: () => void;
+  /** 왼쪽 아이콘 및 동작 */
+  leftIcon: IconAction;
+  /** 오른쪽 아이콘 및 동작 */
+  rightIcon: IconAction & { disabled?: boolean };
 }
 
-const Header = ({ mode = 'light', icons = [], onLogoClick }: HeaderProps) => {
+const Header = ({ mode = 'light', leftIcon, rightIcon }: HeaderProps) => {
   return (
     <S.HeaderContainer $mode={mode}>
-      <S.Logo $mode={mode} onClick={onLogoClick}>
-        <LogoSvg />
-      </S.Logo>
-      {icons.length > 0 && (
+      {leftIcon.icon && (
         <S.IconsContainer>
-          {icons.map((item, index) => (
-            <S.IconButton
-              // biome-ignore lint/suspicious/noArrayIndexKey: index is used as a key
-              key={`header-icon-${index}`}
-              $mode={mode}
-              type="button"
-              onClick={item.onClick}
-            >
-              {item.icon}
-            </S.IconButton>
-          ))}
+          <S.Logo $mode={mode} onClick={leftIcon.onClick}>
+            {leftIcon.icon}
+          </S.Logo>
+        </S.IconsContainer>
+      )}
+      {rightIcon.icon && !rightIcon.disabled && (
+        <S.IconsContainer>
+          <S.IconButton $mode={mode} type="button" onClick={rightIcon.onClick}>
+            {rightIcon.icon}
+          </S.IconButton>
         </S.IconsContainer>
       )}
     </S.HeaderContainer>

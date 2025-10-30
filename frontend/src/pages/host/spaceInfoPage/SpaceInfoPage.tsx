@@ -5,41 +5,67 @@ import DeleteModal from '../../../components/@common/modal/deleteModal/DeleteMod
 import Thumbnail from '../../../components/@common/thumbnail/Thumbnail';
 import InfoRow from '../../../components/specific/infoRow/InfoRow';
 import { createSpaceInfoEditRoute } from '../../../constants/routes';
+import useButtonTracking from '../../../hooks/@common/useButtonTracking';
+import useSpaceInfoContext from '../../../hooks/context/useSpaceInfoContext';
 import useSpaceDelete from '../../../hooks/domain/space/useSpaceDelete';
-import useSpaceInfo from '../../../hooks/domain/space/useSpaceInfo';
 import { buildOriginalImageUrl } from '../../../utils/buildImageUrl';
 import * as S from './SpaceInfoPage.styles';
 
 const SpaceInfoPage = () => {
   const navigate = useNavigate();
+  const { spaceCode } = useParams();
+  const { trackClick } = useButtonTracking({
+    userType: 'host',
+    spaceCode,
+  });
 
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   const openDeleteModal = () => {
+    trackClick('open_space_delete_modal', {
+      page: 'space_info_page',
+    });
     setIsDeleteModalOpen(true);
   };
+
   const closeDeleteModal = () => {
+    trackClick('close_space_delete_modal', {
+      page: 'space_info_page',
+    });
     setIsDeleteModalOpen(false);
   };
 
-  const { spaceCode } = useParams();
+  const handleDeleteSpace = () => {
+    trackClick('confirm_space_delete', {
+      page: 'space_info_page',
+    });
+    deleteSpace();
+  };
+
+  const handleSpaceEdit = () => {
+    trackClick('space_edit_button', {
+      page: 'space_info_page',
+    });
+    navigate(createSpaceInfoEditRoute(spaceCode ?? ''));
+  };
   const { deleteSpace, isPending } = useSpaceDelete({
     closeDeleteModal,
     spaceCode: spaceCode ?? '',
   });
-  const { spaceInfo } = useSpaceInfo({
-    spaceCode: spaceCode ?? '',
-  });
+  const { spaceInfo } = useSpaceInfoContext();
 
   return (
     <S.Wrapper>
       <DeleteModal
         isOpen={isDeleteModalOpen}
         onCloseModal={closeDeleteModal}
-        onDelete={deleteSpace}
+        onDelete={handleDeleteSpace}
         buttonDisabled={isPending}
       />
-      <S.Title>스페이스 정보</S.Title>
+      <S.TitleSection>
+        <S.Title>스페이스 정보</S.Title>
+        <S.EditButton onClick={handleSpaceEdit}>수정</S.EditButton>
+      </S.TitleSection>
       <Thumbnail src={buildOriginalImageUrl(spaceInfo.spacePhoto.path)} />
       <S.InfoRowContainer>
         <InfoRow label="스페이스 이름" value={spaceInfo.name} />
@@ -51,7 +77,6 @@ const SpaceInfoPage = () => {
         <InfoRow label="E-mail" value={spaceInfo.email} />
         <InfoRow label="Instagram" value={spaceInfo.instagramUsername} />
       </S.InfoRowContainer>
-
       <S.DeleteButtonContainer>
         <Button
           variant="error"
@@ -59,11 +84,6 @@ const SpaceInfoPage = () => {
           onClick={openDeleteModal}
         />
       </S.DeleteButtonContainer>
-      <Button
-        variant="fixed"
-        text="수정하기"
-        onClick={() => navigate(createSpaceInfoEditRoute(spaceCode ?? ''))}
-      />
     </S.Wrapper>
   );
 };

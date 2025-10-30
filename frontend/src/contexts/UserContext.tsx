@@ -8,13 +8,25 @@ import type { UserInfo } from '../types/domain/auth.type';
 import { clearAuthTokens } from '../utils/authCookieManager';
 import { CookieUtils } from '../utils/cookie';
 
-export const UserContext = createContext<UserInfo | null>(null);
+export const UserContext = createContext<UserInfo>({
+  id: 0,
+  name: '',
+  pictureUrl: '',
+  agreedTerms: false,
+});
 
 export const UserProvider = ({ children }: { children: React.ReactNode }) => {
-  const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
+  const initialUserInfo: UserInfo = {
+    id: 0,
+    name: '',
+    pictureUrl: '',
+    agreedTerms: false,
+  };
+  const [userInfo, setUserInfo] = useState<UserInfo>(initialUserInfo);
   const { showToast } = useToast();
   const navigate = useNavigate();
 
+  //biome-ignore lint/correctness/useExhaustiveDependencies: 페이지 접속 시 처음 한 번만 실행
   useEffect(() => {
     const fetchUserInfo = async () => {
       try {
@@ -32,7 +44,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
           text: '사용자 정보 조회에 실패했습니다. 다시 시도해 주세요.',
           type: 'error',
         });
-        navigate(ROUTES.MAIN);
+        navigate(ROUTES.LANDING);
         clearAuthTokens();
       }
     };

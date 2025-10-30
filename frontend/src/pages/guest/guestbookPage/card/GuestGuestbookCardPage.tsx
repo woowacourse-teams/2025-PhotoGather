@@ -13,6 +13,7 @@ import {
   createGuestGuestbookCardRoute,
   createGuestGuestbookRoute,
 } from '../../../../constants/routes';
+import useButtonTracking from '../../../../hooks/@common/useButtonTracking';
 import useGuestbookCard from '../../../../hooks/domain/guestbook/useGuestbookCard';
 import useGuestbookList from '../../../../hooks/domain/guestbook/useGuestbookList';
 import { theme } from '../../../../styles/theme';
@@ -33,6 +34,7 @@ const GuestGuestbookCardPage = () => {
   const { guestbookCard, isFetching: isGuestbookCardFetching } =
     useGuestbookCard({ spaceCode, guestbookCardId });
   const { guestbookList, fetchNextPage } = useGuestbookList(spaceCode);
+  const { trackClick } = useButtonTracking({ userType: 'guest', spaceCode });
   const guestbookCardIdList = guestbookList.map(
     (guestbookCard) => guestbookCard.id,
   );
@@ -46,6 +48,7 @@ const GuestGuestbookCardPage = () => {
   const currentIdIndex = guestbookCardIdList.indexOf(guestbookCard.id);
 
   const handleBackMove = () => {
+    trackClick('guest_guestbook_card_back_button');
     navigate(createGuestGuestbookRoute(spaceCode));
   };
 
@@ -59,6 +62,9 @@ const GuestGuestbookCardPage = () => {
       guestbookCard.id,
     );
     if (prevGuestbookId === null) return;
+    trackClick('guest_guestbook_card_previous_button', {
+      hasPhoto: guestbookCard.photos.length > 0,
+    });
     navigate(createGuestGuestbookCardRoute(spaceCode, prevGuestbookId));
   };
 
@@ -68,14 +74,24 @@ const GuestGuestbookCardPage = () => {
       guestbookCard.id,
     );
     if (nextGuestbookId === null) return;
+    trackClick('guest_guestbook_card_next_button', {
+      hasPhoto: guestbookCard.photos.length > 0,
+    });
     navigate(createGuestGuestbookCardRoute(spaceCode, nextGuestbookId));
   };
 
   const handlePhotoModalClose = () => {
+    trackClick('guest_guestbook_card_photo_modal_close', {
+      photoLength: guestbookCard.photos.length,
+    });
     setIsPhotoModalOpen(false);
   };
 
   const handlePhotoClick = (photo: Photo) => {
+    trackClick('guest_guestbook_card_photo_click', {
+      photoLength: guestbookCard.photos.length,
+      currentPhotoId: guestbookCard.photos.indexOf(photo) + 1,
+    });
     const photoIndex = localPhotoList.findIndex((p) => p.id === photo.id);
     setSelectedPhotoIndex(photoIndex);
     setIsPhotoModalOpen(true);
@@ -157,7 +173,6 @@ const GuestGuestbookCardPage = () => {
         onPhotoClick={handlePhotoClick}
         isGuestbookCardFetching={isGuestbookCardFetching}
       />
-      <Line width={192} />
     </S.Wrapper>
   );
 };

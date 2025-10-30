@@ -31,7 +31,7 @@ export interface GuestbookForm {
   nickname: string;
   message: string;
   photos: GuestbookImageType[];
-
+}
 export interface GuestbookCard {
   id: number;
   nickname: string;

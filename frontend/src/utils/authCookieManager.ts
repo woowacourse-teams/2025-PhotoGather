@@ -7,13 +7,13 @@ import { CookieUtils } from './cookie';
 let refreshPromise: Promise<AuthTokenResponse> | null = null;
 
 export const setAuthTokens = (accessToken: string, refreshToken: string) => {
-  CookieUtils.set(AUTH_COOKIES.ACCESS, accessToken, { path: ROUTES.MAIN });
-  CookieUtils.set(AUTH_COOKIES.REFRESH, refreshToken, { path: ROUTES.MAIN });
+  CookieUtils.set(AUTH_COOKIES.ACCESS, accessToken, { path: ROUTES.LANDING });
+  CookieUtils.set(AUTH_COOKIES.REFRESH, refreshToken, { path: ROUTES.LANDING });
 };
 
 export const clearAuthTokens = () => {
-  CookieUtils.delete(AUTH_COOKIES.ACCESS, { path: ROUTES.MAIN });
-  CookieUtils.delete(AUTH_COOKIES.REFRESH, { path: ROUTES.MAIN });
+  CookieUtils.delete(AUTH_COOKIES.ACCESS, { path: ROUTES.LANDING });
+  CookieUtils.delete(AUTH_COOKIES.REFRESH, { path: ROUTES.LANDING });
 };
 
 export const refreshAccessToken = async (): Promise<AuthTokenResponse> => {

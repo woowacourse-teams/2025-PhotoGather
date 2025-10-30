@@ -13,6 +13,7 @@ export const IconButtonStyles = {
     color: ${theme.colors.gray06};
     padding: 0;
     border-radius: 0;
+    width: fit-content;
     &:active {
       scale: 0.95;
     }

@@ -31,4 +31,8 @@ public class GuestBookCardFixture {
     public static GuestBookCard createGuestBookCardWithMessage(String message) {
         return createGuestBookCard(space, guest, message);
     }
+
+    public static GuestBookCard createGuestBookCardWithSpaceAndGuest(Space space, Guest guest) {
+        return createGuestBookCard(space, guest, "message");
+    }
 }

@@ -22,6 +22,12 @@ public interface GuestBookCardRepository {
 
     Long countBySpace(Space space);
 
+    Page<GuestBookCard> findAllBySpace(Space space, Pageable pageable);
+
+    List<GuestBookCard> findAllBySpace(Space space);
+
+    long count();
+
     default GuestBookCard getByIdOrThrow(Long id) {
         if (id == null) {
             throw new BaseNullPointerException("방명록 카드의 id는 null일 수 없습니다.", HttpStatus.BAD_REQUEST);
@@ -29,8 +35,4 @@ public interface GuestBookCardRepository {
         return findById(id)
             .orElseThrow(() -> new NotFoundException("존재하지 않는 방명록 카드입니다. id: " + id));
     }
-
-    Page<GuestBookCard> findAllBySpace(Space space, Pageable pageable);
-
-    List<GuestBookCard> findAllBySpace(Space space);
 }

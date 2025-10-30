@@ -7,7 +7,7 @@ const useCommonAuthActions = () => {
 
   const handleLogout = async () => {
     clearAuthTokens();
-    navigate(ROUTES.MAIN);
+    navigate(ROUTES.LANDING);
   };
 
   return { handleLogout };

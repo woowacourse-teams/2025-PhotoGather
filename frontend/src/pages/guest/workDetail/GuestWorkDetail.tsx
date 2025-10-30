@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { workService } from '../../../apis/services/work/work.service';
 import Button from '../../../components/@common/buttons/button/Button';
 import { createCreateGuestbookRoute } from '../../../constants/routes';
+import useButtonTracking from '../../../hooks/@common/useButtonTracking';
 import { useToast } from '../../../hooks/@common/useToast';
 import { DividerLine } from '../../../styles/@common/DividerLine.styles';
 import type { WorkDetail } from '../../../types/domain/work.type';
@@ -16,6 +17,10 @@ const GuestWorkDetail = () => {
   const [isLoading, setIsLoading] = useState(true);
   const { showToast } = useToast();
   const navigate = useNavigate();
+  const { trackClick } = useButtonTracking({
+    userType: 'guest',
+    spaceCode,
+  });
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: showToast is stable
   useEffect(() => {
@@ -85,7 +90,12 @@ const GuestWorkDetail = () => {
       <S.TextContainer>축하와 응원의 한 마디를 적어주세요</S.TextContainer>
       <Button
         text="방명록 작성하기"
-        onClick={() => navigate(createCreateGuestbookRoute(spaceCode))}
+        onClick={() => {
+          trackClick('guest_work_detail_guestbook_create_button', {
+            page: '/work/detail',
+          });
+          navigate(createCreateGuestbookRoute(spaceCode));
+        }}
       />
     </S.Wrapper>
   );

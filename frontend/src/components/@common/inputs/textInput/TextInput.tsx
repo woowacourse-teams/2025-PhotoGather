@@ -20,7 +20,8 @@ const TextInput = ({
   return (
     <C.Wrapper>
       <C.Label htmlFor={inputProps.id}>
-        {label} {isRequired && '*'}
+        {label}
+        <C.requiredDot>{isRequired && '*'}</C.requiredDot>
       </C.Label>
       <S.InputField
         {...inputProps}

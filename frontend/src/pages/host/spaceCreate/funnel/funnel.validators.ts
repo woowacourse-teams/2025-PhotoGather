@@ -1,6 +1,7 @@
 import { CONSTRAINTS } from '../../../../constants/constraints';
 import {
   checkEmailForm,
+  checkInstagramUsernameForm,
   checkMaxLength,
   checkNoWhitespaceOnly,
 } from '../../../../validators/form.validators';
@@ -22,5 +23,6 @@ export const funnelValidators = {
   },
   instagram: (value: string) => {
     checkNoWhitespaceOnly(value);
+    checkInstagramUsernameForm(value);
   },
 };

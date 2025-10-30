@@ -22,7 +22,7 @@ const TextareaInput = ({
     <C.Wrapper>
       <C.Label htmlFor={textareaProps.id}>
         {label && label}
-        {isRequired && '*'}
+        <C.requiredDot>{isRequired && '*'}</C.requiredDot>
       </C.Label>
       <S.TextareaField {...textareaProps} $isError={!!errorMessage} />
       <C.InputFooterContainer>

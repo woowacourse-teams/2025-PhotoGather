@@ -31,6 +31,7 @@ const ImageSwiperActions = ({
   return (
     <S.Wrapper>
       <ImageSwiper
+        key={`swiper-${initialIndex}`}
         initialIndex={initialIndex}
         imageInfo={imageInfo}
         updateCurrentIndex={updateCurrentIndex}

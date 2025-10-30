@@ -1,7 +1,11 @@
 {
   "permissions": {
     "allow": [
-      "mcp__jetbrains__list_directory_tree"
+      "mcp__jetbrains__list_directory_tree",
+      "Bash(./gradlew test:*)",
+      "Bash(cat:*)",
+      "Bash(./gradlew clean build:*)",
+      "Bash(tree:*)"
     ],
     "deny": [],
     "ask": []

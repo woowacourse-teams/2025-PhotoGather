@@ -1,24 +1,23 @@
 export const ROUTES = {
-  MAIN: '/',
+  LANDING: '/',
   IN_APP_BROWSER: '/inapp',
   AUTH: {
     LOGIN: '/login',
     KAKAO: '/auth/login/kakao',
   },
   HOST: {
+    MAIN: '/host/main',
     MY_PAGE: '/host/my-page',
-    MY_INFO: '/host/my-info',
     CREATE_SPACE: '/host/create-space',
     SHARE: '/host/share',
   },
   GUEST: {
-    MAIN: '/guest/main',
     CREATE_GUESTBOOK_COMPLETE: '/guest/create-guestbook-complete',
   },
 };
 
 export const createSpaceMainRoute = (spaceCode: string) => {
-  return `/host/${spaceCode}/main`;
+  return `/host/${spaceCode}/home`;
 };
 
 export const createSpaceInfoRoute = (spaceCode: string) => {
@@ -53,8 +52,8 @@ export const createGuestbookCompleteRoute = (spaceCode: string) => {
   return `/guest/${spaceCode}/create-guestbook-complete`;
 };
 
-export const createGuestMainRoute = (spaceCode: string) => {
-  return `/guest/${spaceCode}/main`;
+export const createGuestHomeRoute = (spaceCode: string) => {
+  return `/guest/${spaceCode}/home`;
 };
 
 export const createCreateGuestbookRoute = (spaceCode: string) => {

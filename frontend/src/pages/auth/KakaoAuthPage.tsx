@@ -26,13 +26,14 @@ const KakaoAuthPage = () => {
       try {
         const kakaoCode = getKakaoCode();
         await getServerToken(kakaoCode);
+        navigate(ROUTES.HOST.MAIN);
       } catch (error) {
         console.error(error);
         showToast({
           text: '로그인에 실패했습니다. 다시 시도해주세요.',
           type: 'error',
         });
-        navigate(ROUTES.MAIN);
+        navigate(ROUTES.LANDING);
       }
     };
     fetchKakaoCode();

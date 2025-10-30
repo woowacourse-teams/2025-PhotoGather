@@ -3,6 +3,7 @@ import TextInput from '../../../../../components/@common/inputs/textInput/TextIn
 import PhotoPreviewButton from '../../../../../components/specific/photoPreviewButton/PhotoPreviewButton';
 import { CONSTRAINTS } from '../../../../../constants/constraints';
 import { INFORMATION } from '../../../../../constants/messages';
+import useButtonTracking from '../../../../../hooks/@common/useButtonTracking';
 import useLocalFile from '../../../../../hooks/@common/useLocalFile';
 import type {
   FunnelElementProps,
@@ -18,7 +19,7 @@ const SpaceDetailElement = ({
   onNext,
   initialValue = { profileImage: [], email: '', instagram: '' },
 }: FunnelElementProps<SpaceDetailElementInfos>) => {
-  const { localFiles, previewFile, handleFilesUploadClick, clearLocalFiles } =
+  const { localFiles, previewFiles, handleFilesUploadClick, clearLocalFiles } =
     useLocalFile({
       fileType: 'image',
       maxFileCount: 1,
@@ -35,7 +36,17 @@ const SpaceDetailElement = ({
       value: instagram,
       validators: [funnelValidators.instagram],
     });
+  const { trackClick } = useButtonTracking({ userType: 'host' });
   const isDisabled = isEmailError || isInstagramError;
+
+  const handlePhotoUploadClick = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    trackClick('crate_space_photo_upload', {
+      page: '/host/create-space',
+    });
+    handleFilesUploadClick(event);
+  };
 
   return (
     <FunnelBasePage
@@ -46,9 +57,12 @@ const SpaceDetailElement = ({
           <S.ImageUploadContainer>
             <PhotoPreviewButton
               type="button"
-              previewFile={previewFile}
-              uploadImage={handleFilesUploadClick}
+              previewFile={previewFiles}
+              uploadImage={handlePhotoUploadClick}
               clearFiles={() => {
+                trackClick('create_space_photo_delete', {
+                  page: '/host/create-space',
+                });
                 clearFiles(localFiles);
                 clearLocalFiles();
               }}

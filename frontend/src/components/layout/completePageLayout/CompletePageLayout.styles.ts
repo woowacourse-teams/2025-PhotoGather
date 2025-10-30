@@ -15,7 +15,34 @@ export const Wrapper = styled.div`
   align-items: center;
 `;
 
-export const Message = styled.h1`
+export const ContentContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  flex-grow: 1;
+`;
+
+export const InfoContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+`;
+
+export const IconContainer = styled.div`
+  aspect-ratio: 1/1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  svg {
+    width: 24px;
+    height: 24px;
+  }
+`;
+
+export const Message = styled.h1<{ $isAnimationRequired: boolean }>`
   ${({ theme }) => ({ ...theme.typography.header02 })}
   color: ${({ theme }) => theme.colors.gray05};
   text-align: center;
@@ -28,7 +55,8 @@ export const Message = styled.h1`
   align-items: center;
   justify-content: center;
   padding-bottom: 15vh;
-  animation: ${fadeUp} 0.6s ease-out forwards;
+  animation: ${({ $isAnimationRequired }) => ($isAnimationRequired ? fadeUp : 'none')} 0.6s ease-out
+    forwards;
 `;
 
 export const NameHighlight = styled.span`

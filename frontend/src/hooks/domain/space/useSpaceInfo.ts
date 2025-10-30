@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import { spaceService } from '../../../apis/services/space/space.service';
+import type { SpaceInfoContextType } from '../../../types/context.type';
 import type { SpaceInfo } from '../../../types/domain/space.type';
 import { useToast } from '../../@common/useToast';
 
@@ -8,7 +9,9 @@ interface UseSpaceInfoProps {
   spaceCode: string;
 }
 
-const useSpaceInfo = ({ spaceCode }: UseSpaceInfoProps) => {
+const useSpaceInfo = ({
+  spaceCode,
+}: UseSpaceInfoProps): SpaceInfoContextType => {
   const { showToast } = useToast();
 
   const initialData: SpaceInfo = {

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { IoGlobeOutline, IoLockClosedOutline } from 'react-icons/io5';
 import BorderButton from '../../../../../components/@common/buttons/borderButton/BorderButton';
 import { INFORMATION } from '../../../../../constants/messages';
+import useButtonTracking from '../../../../../hooks/@common/useButtonTracking';
 import type { FunnelElementProps } from '../../../../../types/funnel.type';
 import type { SpaceVisibility } from '../../../../../types/space.type';
 import FunnelBasePage from '../../funnel/funnelBasePage/FunnelBasePage';
@@ -12,31 +13,40 @@ const SpaceVisibilityElement = ({
   initialValue = 'PUBLIC',
 }: FunnelElementProps<SpaceVisibility>) => {
   const [accessType, setAccessType] = useState<SpaceVisibility>(initialValue);
+  const { trackClick } = useButtonTracking({
+    userType: 'host',
+  });
 
   const BorderButtons = [
     {
       heading: {
         text: INFORMATION.SPACE_CREATE.VISIBILITY.ACCESS_TYPE.OPTIONS.PUBLIC
           .TITLE,
-        icon: <IoGlobeOutline size={24} />,
+        icon: <IoGlobeOutline size={16} />,
       },
       description:
         INFORMATION.SPACE_CREATE.VISIBILITY.ACCESS_TYPE.OPTIONS.PUBLIC
           .DESCRIPTION,
       variant: accessType === 'PUBLIC' ? 'selected' : 'unselected',
-      onClick: () => setAccessType('PUBLIC'),
+      onClick: () => {
+        trackClick('create_space_public_access_button');
+        setAccessType('PUBLIC');
+      },
     },
     {
       heading: {
         text: INFORMATION.SPACE_CREATE.VISIBILITY.ACCESS_TYPE.OPTIONS.PRIVATE
           .TITLE,
-        icon: <IoLockClosedOutline size={24} />,
+        icon: <IoLockClosedOutline size={16} />,
       },
       description:
         INFORMATION.SPACE_CREATE.VISIBILITY.ACCESS_TYPE.OPTIONS.PRIVATE
           .DESCRIPTION,
       variant: accessType === 'PRIVATE' ? 'selected' : 'unselected',
-      onClick: () => setAccessType('PRIVATE'),
+      onClick: () => {
+        trackClick('create_space_private_access_button');
+        setAccessType('PRIVATE');
+      },
     },
   ] as const;
 

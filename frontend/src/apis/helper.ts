@@ -9,6 +9,10 @@ interface MatchHeadersProps {
   token?: string;
 }
 
+const generateTraceId = () => {
+  return crypto.randomUUID().slice(0, 8);
+};
+
 export const matchBody = (body: unknown) => {
   if (!body) {
     return undefined;
@@ -38,6 +42,8 @@ export const matchHeaders = ({
   if (authToken) {
     mergedHeaders['Authorization'] = `Bearer ${authToken}`;
   }
+
+  mergedHeaders['trace-id'] = generateTraceId();
 
   return mergedHeaders;
 };

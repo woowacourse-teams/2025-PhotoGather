@@ -74,6 +74,6 @@ export const theme = {
       imageMaxWidth: '280px',
     },
     headerHeight: '60px',
-    footerHeight: '60px',
+    footerHeight: '124px',
   },
 };

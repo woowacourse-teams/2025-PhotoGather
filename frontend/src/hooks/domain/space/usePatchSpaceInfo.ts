@@ -1,3 +1,4 @@
+import { useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { spaceService } from '../../../apis/services/space/space.service';
 import { createSpaceInfoRoute } from '../../../constants/routes';
@@ -8,37 +9,51 @@ interface UsePatchSpaceInfoProps {
   spaceCode: string;
   dirtyFields: Partial<Record<keyof SpaceInfoFormData, boolean>>;
   afterPatch?: () => void;
+  isImageExisted: boolean;
 }
 
 const usePatchSpaceInfo = ({
   spaceCode,
   dirtyFields,
   afterPatch,
+  isImageExisted,
 }: UsePatchSpaceInfoProps) => {
   const { showToast } = useToast();
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
-  const findUpdatedData = (data: Partial<SpaceInfoFormData>) => {
-    return Object.fromEntries(
+  const findUpdatedData = (
+    data: Partial<SpaceInfoFormData>,
+    patchImage?: File,
+  ) => {
+    const updatedFormData = Object.fromEntries(
       Object.entries(data).filter(
         ([key, _]) => dirtyFields[key as keyof SpaceInfoFormData],
       ),
     );
+
+    if (!patchImage && isImageExisted && dirtyFields.isDeletePhoto) {
+      updatedFormData.isDeletePhoto = true;
+    }
+    if (patchImage && isImageExisted) {
+      updatedFormData.isDeletePhoto = true;
+    }
+
+    return updatedFormData;
   };
 
-  const createFormData = (data: Partial<SpaceInfoFormData>, image?: File) => {
-    const updatedData = findUpdatedData(data);
-    const formData = new FormData();
-    formData.append(
-      'request',
-      new Blob([JSON.stringify(updatedData)], {
-        type: 'application/json',
-      }),
-    );
+  const createFormData = (
+    data: Partial<SpaceInfoFormData>,
+    patchImage?: File,
+  ) => {
+    const updatedData = findUpdatedData(data, patchImage);
 
-    if (image) {
-      formData.append('file', image);
+    const formData = new FormData();
+    formData.append('request', JSON.stringify(updatedData));
+    if (patchImage) {
+      formData.append('file', patchImage);
     }
+
     return formData;
   };
 
@@ -47,7 +62,6 @@ const usePatchSpaceInfo = ({
     image?: File,
   ) => {
     const formData = createFormData(data, image);
-
     const res = await spaceService.patchSpaceInfo(spaceCode, formData);
     if (res.success) {
       showToast({
@@ -55,6 +69,7 @@ const usePatchSpaceInfo = ({
         type: 'info',
       });
       afterPatch?.();
+      queryClient.invalidateQueries({ queryKey: ['spaceInfo', spaceCode] });
       navigate(createSpaceInfoRoute(spaceCode));
       return;
     }

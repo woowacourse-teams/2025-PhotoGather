@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import Button from '../../../components/@common/buttons/button/Button';
 import { INFORMATION } from '../../../constants/messages';
-import { createGuestMainRoute, ROUTES } from '../../../constants/routes';
+import { createGuestHomeRoute, ROUTES } from '../../../constants/routes';
 import useConfetti from '../../../hooks/@common/useConfetti';
 import * as S from './CompletePage.styles';
 
@@ -14,7 +14,7 @@ const CompletePage = () => {
 
   useEffect(() => {
     if (!state || !state.guestNickName || !state.receiver) {
-      navigate(ROUTES.MAIN);
+      navigate(ROUTES.LANDING);
     }
   }, [state, navigate]);
 
@@ -32,7 +32,7 @@ const CompletePage = () => {
         </S.Message>
         <Button
           text="스페이스로 돌아가기"
-          onClick={() => navigate(createGuestMainRoute(spaceCode ?? ''))}
+          onClick={() => navigate(createGuestHomeRoute(spaceCode ?? ''))}
         />
       </S.Wrapper>
     </>

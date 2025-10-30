@@ -1,10 +1,12 @@
 import { Activity } from 'react';
 import { useParams } from 'react-router-dom';
+import DisplayProfile from '../../../../components/@common/displayProfile/DisplayProfile';
 import LoadingModal from '../../../../components/specific/modal/loadingModal/LoadingModal';
+import useButtonTracking from '../../../../hooks/@common/useButtonTracking';
 import useConfirmBeforeRefresh from '../../../../hooks/@common/useConfirmBeforeRefresh';
+import useSpaceInfoContext from '../../../../hooks/context/useSpaceInfoContext';
 import useFormFunnel from '../../../../hooks/domain/funnel/useFormFunnel';
 import usePostGuestbook from '../../../../hooks/domain/guestbook/usePostGuestbook';
-import useSpaceInfo from '../../../../hooks/domain/space/useSpaceInfo';
 import { DividerLine } from '../../../../styles/@common/DividerLine.styles';
 import type { GuestbookFunnelInfo } from '../../../../types/domain/guestbook.type';
 import { buildOriginalImageUrl } from '../../../../utils/buildImageUrl';
@@ -30,14 +32,16 @@ const GuestBookFunnel = () => {
   );
 
   const { spaceCode } = useParams<{ spaceCode: string }>();
-  const { spaceInfo, isLoading: isLoadingSpaceInfo } = useSpaceInfo({
-    spaceCode: spaceCode ?? '',
+  const { trackClick } = useButtonTracking({
+    userType: 'guest',
+    spaceCode,
   });
+  const { spaceInfo, isLoading: isLoadingSpaceInfo } = useSpaceInfoContext();
 
   const receiver = spaceInfo.name || '방명록 주인장';
   const thumbnailUrl = spaceInfo.spacePhoto.isExists
     ? buildOriginalImageUrl(spaceInfo.spacePhoto.path)
-    : '';
+    : 'invalid-url';
 
   const { submitForm, isLoading } = usePostGuestbook({
     spaceCode: spaceCode ?? '',
@@ -49,6 +53,14 @@ const GuestBookFunnel = () => {
     },
   });
 
+  const handleStepComplete = (fromStep: STEP, toStep: STEP) => {
+    trackClick('guestbook_funnel_step_complete', {
+      page: '/guestbook/create',
+      fromStep,
+      toStep,
+    });
+  };
+
   if (isLoadingSpaceInfo) {
     return <LoadingModal isOpen={true} text="로딩 중..." />;
   }
@@ -58,7 +70,7 @@ const GuestBookFunnel = () => {
       <LoadingModal isOpen={isLoading} text="전송 중..." />
       <S.Wrapper>
         <S.DisplayInfoContainer>
-          <S.DisplayImage src={thumbnailUrl} alt="전시 썸네일 이미지" />
+          <DisplayProfile src={thumbnailUrl} alt={spaceInfo.name} />
           <S.DisplayName>{spaceInfo.name}</S.DisplayName>
         </S.DisplayInfoContainer>
         <DividerLine width="15%" />
@@ -68,22 +80,32 @@ const GuestBookFunnel = () => {
           <NicknameElement
             receiver={receiver}
             initialValue={Funnel.form.nickname}
-            onNext={(nickname) =>
-              Funnel.goNextWithData('message', { nickname })
-            }
+            onNext={(nickname) => {
+              handleStepComplete('nickname', 'message');
+              Funnel.goNextWithData('message', { nickname });
+            }}
           />
         </Activity>
         <Activity mode={Funnel.funnelStep === 'message' ? 'visible' : 'hidden'}>
           <MessageElement
             receiver={receiver}
             initialValue={Funnel.form.message}
-            onNext={(message) => Funnel.goNextWithData('photos', { message })}
+            onNext={(message) => {
+              handleStepComplete('message', 'photos');
+              Funnel.goNextWithData('photos', { message });
+            }}
           />
         </Activity>
         <Activity mode={Funnel.funnelStep === 'photos' ? 'visible' : 'hidden'}>
           <PhotosElement
             receiver={receiver}
-            onNextButtonClick={(photos) => submitForm(photos)}
+            onNextButtonClick={(photos) => {
+              trackClick('guestbook_funnel_submit', {
+                page: '/guestbook/create',
+                photoCount: photos.length,
+              });
+              submitForm(photos);
+            }}
             initialLocalFiles={Funnel.form.photos}
           />
         </Activity>
