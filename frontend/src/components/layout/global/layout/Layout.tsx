@@ -89,7 +89,7 @@ const Layout = () => {
     },
     back: {
       icon: <MdChevronLeft size={32} />,
-      onClick: () => history.back(),
+      onClick: () => navigate(-1),
     },
   };
 
