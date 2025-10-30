@@ -73,15 +73,15 @@ const MainPage = () => {
           </S.NameContainer>
         </S.InfoContainer>
       </S.ProfileContainer>
-      <S.DividerContainer>
-        <DividerLine width="25%" color={theme.colors.gray04} />
-        <S.CreateSpaceButton onClick={handleCreateSpaceButton}>
-          <IoAddOutline size={16} />
-          스페이스 생성
-        </S.CreateSpaceButton>
-        <DividerLine width="25%" color={theme.colors.gray04} />
-      </S.DividerContainer>
       <S.SpaceContainer>
+        <S.DividerContainer>
+          <DividerLine width="25%" color={theme.colors.gray04} />
+          <S.CreateSpaceButton onClick={handleCreateSpaceButton}>
+            <IoAddOutline size={16} />
+            스페이스 생성
+          </S.CreateSpaceButton>
+          <DividerLine width="25%" color={theme.colors.gray04} />
+        </S.DividerContainer>
         <S.SpaceList>
           {isSpacesEmpty && <S.FilterBlur />}
           {isSpacesEmpty && (
