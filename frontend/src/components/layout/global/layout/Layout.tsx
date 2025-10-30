@@ -88,7 +88,7 @@ const Layout = () => {
       },
     },
     back: {
-      icon: <MdChevronLeft size={28} />,
+      icon: <MdChevronLeft size={32} />,
       onClick: () => history.back(),
     },
   };
