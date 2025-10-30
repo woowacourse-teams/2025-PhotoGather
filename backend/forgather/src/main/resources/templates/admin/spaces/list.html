@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spaces Management - PhotoGather Admin</title>
+
+    <!-- Common CSS -->
+    <link rel="stylesheet" th:href="@{/css/admin/common.css}">
+    <!-- Spaces CSS -->
+    <link rel="stylesheet" th:href="@{/css/admin/spaces.css}">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-container">
+            <div class="header-left">
+                <h1 class="logo">
+                    <a th:href="@{/admin/spaces}">PhotoGather Admin</a>
+                </h1>
+            </div>
+            <nav class="header-nav">
+                <ul class="nav-list">
+                    <li class="nav-item">
+                        <a th:href="@{/admin/spaces}" class="nav-link active">Spaces</a>
+                    </li>
+                    <li class="nav-item">
+                        <button id="logoutBtn" class="btn btn-secondary">Logout</button>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Page Header -->
+            <div class="page-header">
+                <h2>Spaces Management</h2>
+                <p>Manage all photo gathering spaces</p>
+            </div>
+
+            <!-- Controls -->
+            <div class="controls">
+                <div class="page-size-selector">
+                    <label for="pageSize">Items per page:</label>
+                    <select id="pageSize" class="form-select">
+                        <option value="15" selected>15</option>
+                        <option value="30">30</option>
+                        <option value="50">50</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Loading Spinner -->
+            <div id="loadingSpinner" class="loading-spinner" style="display: none;">
+                <div class="spinner"></div>
+                <p>Loading...</p>
+            </div>
+
+            <!-- Error Message -->
+            <div id="errorMessage" class="error-message" style="display: none;"></div>
+
+            <!-- Spaces Table -->
+            <div class="table-container">
+                <table class="data-table" id="spacesTable">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Code</th>
+                            <th>Name</th>
+                            <th>Public</th>
+                        </tr>
+                    </thead>
+                    <tbody id="spacesTableBody">
+                        <!-- Data will be populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination -->
+            <div class="pagination" id="pagination" style="display: none;">
+                <button class="pagination-btn" id="prevBtn" onclick="goToPreviousPage()">
+                    Previous
+                </button>
+
+                <span class="pagination-info">
+                    Page <span id="currentPage">1</span> of <span id="totalPages">1</span>
+                    (Total: <span id="totalCount">0</span> items)
+                </span>
+
+                <button class="pagination-btn" id="nextBtn" onclick="goToNextPage()">
+                    Next
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <p>&copy; 2025 PhotoGather. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast"></div>
+
+    <!-- Scripts -->
+    <script th:src="@{/js/admin/auth.js}"></script>
+    <script th:src="@{/js/admin/api.js}"></script>
+    <script th:src="@{/js/admin/spaces.js}"></script>
+</body>
+</html>
