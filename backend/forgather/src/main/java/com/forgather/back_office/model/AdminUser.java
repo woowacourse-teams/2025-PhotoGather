@@ -1,5 +1,6 @@
 package com.forgather.back_office.model;
 
+import com.forgather.domain.model.BaseTimeEntity;
 import com.forgather.global.exception.BaseNullPointerException;
 
 import jakarta.persistence.Column;
@@ -14,7 +15,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class AdminUser {
+public class AdminUser extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
