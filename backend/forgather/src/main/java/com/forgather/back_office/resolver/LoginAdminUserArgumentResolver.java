@@ -11,6 +11,7 @@ import com.forgather.back_office.annotation.Admin;
 import com.forgather.back_office.model.AdminUser;
 import com.forgather.back_office.repository.AdminUserRepository;
 import com.forgather.global.auth.util.JwtTokenProvider;
+import com.forgather.global.exception.ForbiddenException;
 import com.forgather.global.exception.UnauthorizedException;
 
 import io.jsonwebtoken.JwtException;
@@ -23,6 +24,7 @@ public class LoginAdminUserArgumentResolver implements HandlerMethodArgumentReso
 
     private static final String BEARER = "Bearer ";
     private static final String AUTHORIZATION_HEADER_NAME = "Authorization";
+    private static final String ADMIN = "ADMIN";
 
     private final JwtTokenProvider jwtTokenProvider;
     private final AdminUserRepository adminUserRepository;
@@ -52,7 +54,12 @@ public class LoginAdminUserArgumentResolver implements HandlerMethodArgumentReso
         jwtToken = jwtToken.substring(BEARER.length());
         jwtTokenProvider.validateToken(jwtToken);
 
-        Long adminUserId = jwtTokenProvider.getHostId(jwtToken);
+        String role = jwtTokenProvider.getRole(jwtToken);
+        if (!ADMIN.equals(role)) {
+            throw new ForbiddenException("관리자 권한이 필요합니다.");
+        }
+
+        Long adminUserId = jwtTokenProvider.getId(jwtToken);
         return adminUserRepository.getByIdOrThrow(adminUserId);
     }
 }

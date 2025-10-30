@@ -20,7 +20,7 @@ import com.forgather.global.auth.util.JwtTokenProvider;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
 
 @AutoConfigureMockMvc
-public class AdminLoginAcceptanceTest extends AcceptanceTest {
+class AdminLoginAcceptanceTest extends AcceptanceTest {
 
     @Autowired
     private MockMvc mockMvc;

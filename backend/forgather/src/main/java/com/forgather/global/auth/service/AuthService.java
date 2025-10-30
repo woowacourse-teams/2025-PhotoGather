@@ -52,7 +52,7 @@ public class AuthService {
 
     public LoginResponse refresh(String refreshToken) {
         jwtTokenProvider.validateToken(refreshToken);
-        Long hostId = jwtTokenProvider.getHostId(refreshToken);
+        Long hostId = jwtTokenProvider.getId(refreshToken);
         Host host = hostRepository.getByIdOrThrow(hostId);
         String accessToken = jwtTokenProvider.generateAccessToken(host.getId());
         return LoginResponse.of(accessToken, refreshToken);

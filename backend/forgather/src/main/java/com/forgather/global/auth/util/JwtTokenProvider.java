@@ -22,25 +22,25 @@ public class JwtTokenProvider {
 
     private final JwtProperties jwtProperties;
 
-    public String generateAccessToken(Long hostId) {
+    public String generateAccessToken(Long id) {
         Date now = new Date();
         Date expiry = new Date(now.getTime() + (jwtProperties.getAccessTokenExpiration() * 1000));
 
         return Jwts.builder()
-            .subject(String.valueOf(hostId))
-            .claim("hostId", hostId)
+            .subject(String.valueOf(id))
+            .claim("id", id)
             .issuedAt(now)
             .expiration(expiry)
             .signWith(getSigningKey())
             .compact();
     }
 
-    public String generateRefreshToken(Long hostId) {
+    public String generateRefreshToken(Long id) {
         Date now = new Date();
         Date expiry = new Date(now.getTime() + (jwtProperties.getRefreshTokenExpiration() * 1000L));
 
         return Jwts.builder()
-            .subject(String.valueOf(hostId))
+            .subject(String.valueOf(id))
             .issuedAt(now)
             .expiration(expiry)
             .signWith(getSigningKey())
@@ -59,9 +59,41 @@ public class JwtTokenProvider {
         }
     }
 
-    public Long getHostId(String token) {
+    public String generateAdminAccessToken(Long adminUserId) {
+        Date now = new Date();
+        Date expiry = new Date(now.getTime() + (jwtProperties.getAccessTokenExpiration() * 1000));
+
+        return Jwts.builder()
+            .subject(String.valueOf(adminUserId))
+            .claim("id", adminUserId)
+            .claim("role", "ADMIN")
+            .issuedAt(now)
+            .expiration(expiry)
+            .signWith(getSigningKey())
+            .compact();
+    }
+
+    public String generateAdminRefreshToken(Long adminUserId) {
+        Date now = new Date();
+        Date expiry = new Date(now.getTime() + (jwtProperties.getRefreshTokenExpiration() * 1000L));
+
+        return Jwts.builder()
+            .subject(String.valueOf(adminUserId))
+            .claim("role", "ADMIN")
+            .issuedAt(now)
+            .expiration(expiry)
+            .signWith(getSigningKey())
+            .compact();
+    }
+
+    public Long getId(String token) {
         Claims claims = getClaims(token);
         return Long.parseLong(claims.getSubject());
+    }
+
+    public String getRole(String token) {
+        Claims claims = getClaims(token);
+        return claims.get("role", String.class);
     }
 
     private Claims getClaims(String token) {

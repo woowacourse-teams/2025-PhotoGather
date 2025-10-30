@@ -12,6 +12,7 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.forgather.back_office.resolver.LoginAdminUserArgumentResolver;
 import com.forgather.global.auth.resolver.LoginHostArgumentResolver;
 import com.forgather.global.converter.MultipartJsonConverter;
 import com.forgather.global.logging.LoggingInterceptor;
@@ -25,6 +26,7 @@ public class WebConfig implements WebMvcConfigurer {
     private final CorsProperties corsProperties;
     private final LoggingInterceptor loggingInterceptor;
     private final LoginHostArgumentResolver loginHostArgumentResolver;
+    private final LoginAdminUserArgumentResolver loginAdminUserArgumentResolver;
     private final ObjectMapper objectMapper;
 
     @Override
@@ -43,6 +45,7 @@ public class WebConfig implements WebMvcConfigurer {
         pageableResolver.setOneIndexedParameters(true); // 1부터 시작
         resolvers.add(pageableResolver);
         resolvers.add(loginHostArgumentResolver);
+        resolvers.add(loginAdminUserArgumentResolver);
     }
 
     @Override

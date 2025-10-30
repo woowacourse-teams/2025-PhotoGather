@@ -29,8 +29,8 @@ public class AdminLoginService {
             throw new BaseException("아이디나 패스워드가 일치하지 않습니다.", HttpStatus.BAD_REQUEST);
         }
 
-        String accessToken = jwtTokenProvider.generateAccessToken(adminUser.getId());
-        String refreshToken = jwtTokenProvider.generateRefreshToken(adminUser.getId());
+        String accessToken = jwtTokenProvider.generateAdminAccessToken(adminUser.getId());
+        String refreshToken = jwtTokenProvider.generateAdminRefreshToken(adminUser.getId());
 
         return AdminLoginResponse.of(accessToken, refreshToken);
     }

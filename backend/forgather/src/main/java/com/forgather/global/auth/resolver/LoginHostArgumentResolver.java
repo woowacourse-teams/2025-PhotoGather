@@ -53,7 +53,7 @@ public class LoginHostArgumentResolver implements HandlerMethodArgumentResolver 
         jwtToken = jwtToken.substring(BEARER.length());
         jwtTokenProvider.validateToken(jwtToken);
 
-        Long hostId = jwtTokenProvider.getHostId(jwtToken);
+        Long hostId = jwtTokenProvider.getId(jwtToken);
         return hostRepository.getByIdOrThrow(hostId);
     }
 
