@@ -58,10 +58,12 @@ const SpaceCreateFunnel = () => {
 
   return (
     <S.Wrapper>
-      <StepProgressBar
-        currentStep={currentStepIndex}
-        maxStep={PROGRESS_STEP_LIST.length}
-      />
+      <S.ProgressBarContainer>
+        <StepProgressBar
+          currentStep={currentStepIndex}
+          maxStep={PROGRESS_STEP_LIST.length}
+        />
+      </S.ProgressBarContainer>
       <S.TopContainer />
       <S.ContentContainer>
         <Funnel.Step name="name">
