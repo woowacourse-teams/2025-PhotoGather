@@ -182,7 +182,7 @@ const routes: AppRouteObject[] = [
                 handle: {
                   noFooter: true,
                   headerIcon: {
-                    leftIcon: 'logo',
+                    leftIcon: 'back',
                   },
                 },
               },
