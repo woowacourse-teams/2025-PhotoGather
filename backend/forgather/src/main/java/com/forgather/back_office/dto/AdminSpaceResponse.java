@@ -18,7 +18,8 @@ public record AdminSpaceResponse(
             spaces.map(SimpleSpaceResponse::from).toList(),
             spaces.getNumber() + 1,
             spaces.getSize(),
-            spaces.getTotalElements(), spaces.getTotalPages()
+            spaces.getTotalElements(),
+            spaces.getTotalPages()
         );
     }
 }
