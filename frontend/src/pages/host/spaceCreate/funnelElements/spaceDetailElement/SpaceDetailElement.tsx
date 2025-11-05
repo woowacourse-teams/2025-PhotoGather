@@ -3,6 +3,7 @@ import TextInput from '../../../../../components/@common/inputs/textInput/TextIn
 import PhotoPreviewButton from '../../../../../components/specific/photoPreviewButton/PhotoPreviewButton';
 import { CONSTRAINTS } from '../../../../../constants/constraints';
 import { INFORMATION } from '../../../../../constants/messages';
+import useButtonTracking from '../../../../../hooks/@common/useButtonTracking';
 import useLocalFile from '../../../../../hooks/@common/useLocalFile';
 import type {
   FunnelElementProps,
@@ -35,7 +36,17 @@ const SpaceDetailElement = ({
       value: instagram,
       validators: [funnelValidators.instagram],
     });
+  const { trackClick } = useButtonTracking({ userType: 'host' });
   const isDisabled = isEmailError || isInstagramError;
+
+  const handlePhotoUploadClick = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    trackClick('crate_space_photo_upload', {
+      page: '/host/create-space',
+    });
+    handleFilesUploadClick(event);
+  };
 
   return (
     <FunnelBasePage
@@ -47,8 +58,11 @@ const SpaceDetailElement = ({
             <PhotoPreviewButton
               type="button"
               previewFile={previewFiles}
-              uploadImage={handleFilesUploadClick}
+              uploadImage={handlePhotoUploadClick}
               clearFiles={() => {
+                trackClick('create_space_photo_delete', {
+                  page: '/host/create-space',
+                });
                 clearFiles(localFiles);
                 clearLocalFiles();
               }}

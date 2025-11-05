@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import Button from '../../../components/@common/buttons/button/Button';
 import { hexToRgba } from '../../../utils/hexToRgba';
 
 export const Wrapper = styled.div`
@@ -7,14 +8,15 @@ export const Wrapper = styled.div`
   align-items: center;
   min-height: ${({ theme }) =>
     `calc(100dvh - 2 * ${theme.layout.padding.topBottom} - ${theme.layout.headerHeight})`};
+  gap: 16px;
 `;
 
 export const ProfileContainer = styled.section`
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 16px;
+  gap: 20px;
+  margin: 32px 0px;
 `;
 
 export const InfoContainer = styled.div`
@@ -22,12 +24,16 @@ export const InfoContainer = styled.div`
   flex-direction: column;
   gap: 4px;
   text-align: center;
+  align-items: center;
 `;
 
 export const NameContainer = styled.p`
-  ${({ theme }) => theme.typography.bodyLarge}
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  gap: 4px;
+  ${({ theme }) => theme.typography.header03}
   color: ${({ theme }) => theme.colors.white};
-  height: 20px;
 `;
 
 export const CreateSpaceButton = styled.button`
@@ -35,7 +41,6 @@ export const CreateSpaceButton = styled.button`
   justify-content: center;
   align-items: center;
   gap: 4px;
-  margin-top: 12px;
   width: 132px;
   height: 28px;
   padding: 2px 12px;
@@ -106,5 +111,16 @@ export const EmptyTitleContainer = styled.p`
 
 export const EmptyDescriptionContainer = styled.p`
   ${({ theme }) => theme.typography.bodyRegular};
+  color: ${({ theme }) => theme.colors.gray03};
+`;
+
+export const DividerContainer = styled.div`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+`;
+
+export const EditInfoButton = styled(Button)`
   color: ${({ theme }) => theme.colors.gray03};
 `;

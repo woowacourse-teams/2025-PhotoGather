@@ -1,7 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import { spaceService } from '../../../apis/services/space/space.service';
-import type { MySpace } from '../../../types/domain/space.type';
 import { useToast } from '../../@common/useToast';
 
 const useMySpaces = () => {

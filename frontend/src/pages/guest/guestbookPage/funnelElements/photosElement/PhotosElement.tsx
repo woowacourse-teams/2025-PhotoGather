@@ -2,6 +2,7 @@ import { MdAddAPhoto, MdDeleteOutline } from 'react-icons/md';
 import ImageSwiperActions from '../../../../../components/specific/imageSwiperActions/ImageSwiperActions';
 import PhotoUploadButton from '../../../../../components/specific/photoUploadButton/PhotoUploadButton';
 import { INFORMATION } from '../../../../../constants/messages';
+import useButtonTracking from '../../../../../hooks/@common/useButtonTracking';
 import useLocalFile from '../../../../../hooks/@common/useLocalFile';
 import useSwiperActions from '../../../../../hooks/domain/image/useSwiperActions';
 import * as C from '../../../../../styles/@common/PhotoInput.styles';
@@ -20,6 +21,9 @@ const PhotosElement = ({
   onNextButtonClick,
   initialLocalFiles,
 }: PhotosElementProps) => {
+  const { trackClick } = useButtonTracking({
+    userType: 'guest',
+  });
   const { currentIndex, updateCurrentIndex } = useSwiperActions({
     initialIndex: 0,
   });
@@ -35,12 +39,35 @@ const PhotosElement = ({
     initialLocalFiles: initialLocalFiles,
   });
 
+  const handlePhotoUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    trackClick('guestbook_create_photo_upload', {
+      page: '/guestbook/create/photos',
+      currentPhotoCount: localFiles.length,
+    });
+    handleFilesUploadClick(event);
+  };
+
+  const handlePhotoDrop = (event: React.DragEvent<HTMLLabelElement>) => {
+    trackClick('guestbook_create_photo_drop', {
+      page: '/guestbook/create/photos',
+      currentPhotoCount: localFiles.length,
+    });
+    handleFilesDrop(event);
+  };
+
+  const handlePhotoDelete = () => {
+    trackClick('guestbook_create_photo_delete', {
+      page: '/guestbook/create/photos',
+      currentPhotoCount: localFiles.length,
+      deletedPhotoIndex: currentIndex + 1,
+    });
+    deleteFile(localFiles[currentIndex].id);
+  };
+
   const swiperActions = [
     {
       icon: <MdDeleteOutline fill={theme.colors.error} size={24} />,
-      onClick: () => {
-        deleteFile(localFiles[currentIndex].id);
-      },
+      onClick: handlePhotoDelete,
     },
     {
       icon: (
@@ -51,7 +78,7 @@ const PhotosElement = ({
               type="file"
               multiple
               accept="image/*"
-              onChange={handleFilesUploadClick}
+              onChange={handlePhotoUpload}
             />
           </C.Label>
         </C.Wrapper>
@@ -69,8 +96,8 @@ const PhotosElement = ({
         previewFiles.length === 0 ? (
           <PhotoUploadButton
             mainText={INFORMATION.GUESTBOOK.PHOTOS.PROMPT}
-            onChange={handleFilesUploadClick}
-            onDrop={handleFilesDrop}
+            onChange={handlePhotoUpload}
+            onDrop={handlePhotoDrop}
             disabled={false}
           />
         ) : (

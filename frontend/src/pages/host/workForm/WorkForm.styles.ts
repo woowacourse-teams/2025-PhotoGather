@@ -16,6 +16,7 @@ export const FormContainer = styled.form`
   display: flex;
   flex-direction: column;
   gap: 6px;
+  margin-bottom: 80px;
 `;
 
 export const LabelContainer = styled.label`

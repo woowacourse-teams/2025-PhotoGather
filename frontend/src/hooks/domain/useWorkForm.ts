@@ -62,7 +62,7 @@ export const useWorkForm = ({ spaceCode, reset }: UseWorkFormParams) => {
     fetchWorkData();
   }, [spaceCode, reset]);
 
-  const handleDeleteExistingPhoto = (photoId: number) => {
+  const deleteExistingPhoto = (photoId: number) => {
     setDeletedPhotoIds((prev) => [...prev, photoId]);
     setExistingPhotos((prev) => prev.filter((photo) => photo.id !== photoId));
   };
@@ -164,7 +164,7 @@ export const useWorkForm = ({ spaceCode, reset }: UseWorkFormParams) => {
   return {
     isEditMode,
     existingPhotos,
-    handleDeleteExistingPhoto,
+    deleteExistingPhoto,
     submitWork,
   };
 };

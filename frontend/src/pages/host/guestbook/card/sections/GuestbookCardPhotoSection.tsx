@@ -1,5 +1,6 @@
 import Button from '../../../../../components/@common/buttons/button/Button';
 import PhotoGrid from '../../../../../components/specific/photoGrid/PhotoGrid';
+import useButtonTracking from '../../../../../hooks/@common/useButtonTracking';
 import { useToast } from '../../../../../hooks/@common/useToast';
 import useDownloadAsZip from '../../../../../hooks/domain/image/useDownloadAsZip';
 import type { Photo } from '../../../../../types/photo.type';
@@ -21,12 +22,16 @@ const GuestbookCardPhotoSection = ({
 }: GuestbookCardPhotoSectionProps) => {
   const { showToast } = useToast();
   const { downloadAsZip, isLoading } = useDownloadAsZip();
+  const { trackClick } = useButtonTracking({ userType: 'host' });
 
   const handleDownload = async () => {
     const photoDownloadInfo = photoList.map(({ originalName, path }) => ({
       originalName,
       path: buildOriginalImageUrl(path),
     }));
+    trackClick('host_guestbook_photo_download_all_click', {
+      photoCount: photoList.length,
+    });
     try {
       await downloadAsZip(photoDownloadInfo, guestbookTitle);
     } catch (error) {

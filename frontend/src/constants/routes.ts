@@ -12,7 +12,6 @@ export const ROUTES = {
     SHARE: '/host/share',
   },
   GUEST: {
-    MAIN: '/guest/main',
     CREATE_GUESTBOOK_COMPLETE: '/guest/create-guestbook-complete',
   },
 };
@@ -53,8 +52,8 @@ export const createGuestbookCompleteRoute = (spaceCode: string) => {
   return `/guest/${spaceCode}/create-guestbook-complete`;
 };
 
-export const createGuestMainRoute = (spaceCode: string) => {
-  return `/guest/${spaceCode}/main`;
+export const createGuestHomeRoute = (spaceCode: string) => {
+  return `/guest/${spaceCode}/home`;
 };
 
 export const createCreateGuestbookRoute = (spaceCode: string) => {

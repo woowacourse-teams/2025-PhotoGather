@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
-import { IoMdHome } from 'react-icons/io';
-import { MdMenu } from 'react-icons/md';
+import { MdChevronLeft, MdHome, MdMenu } from 'react-icons/md';
 import {
   Outlet,
   useLocation,
@@ -10,10 +9,11 @@ import {
 } from 'react-router-dom';
 import LogoSvg from '../../../../@assets/logo/logo.svg?react';
 import {
-  createGuestMainRoute,
+  createGuestHomeRoute,
   createSpaceMainRoute,
   ROUTES,
 } from '../../../../constants/routes';
+import useButtonTracking from '../../../../hooks/@common/useButtonTracking';
 import useInAppRedirect from '../../../../hooks/@common/useInAppRedirect';
 import usePageTracking from '../../../../hooks/@common/usePageTracking';
 import type { AppRouteObject, IconAction } from '../../../../types/route.type';
@@ -35,7 +35,18 @@ const Layout = () => {
   const { redirectToExternalBrowser } = useInAppRedirect();
   const path = useLocation().pathname;
 
+  const isHost = path.includes('/host/');
+  const isGuest = path.includes('/guest/');
+
+  const { trackClick } = useButtonTracking({
+    userType: isHost ? 'host' : isGuest ? 'guest' : undefined,
+    spaceCode,
+  });
+
   const openHamburger = () => {
+    trackClick('header_hamburger_menu_open', {
+      page: path,
+    });
     setIsHamburgerOpen(true);
   };
   const closeHamburger = () => {
@@ -49,27 +60,36 @@ const Layout = () => {
   const isNoFooter = current?.handle?.noFooter;
   const isNoHamburger = current?.handle?.noHamburger;
 
-  const isHost = path.includes('/host/');
-  const isGuest = path.includes('/guest/');
-
   const leftHeaderIcons: Record<string, IconAction> = {
     logo: {
       icon: <LogoSvg />,
-      onClick: () => navigate(ROUTES.LANDING),
+      onClick: () => {
+        trackClick('header_logo_click', {
+          page: path,
+        });
+        navigate(ROUTES.LANDING);
+      },
     },
     profile: {
-      icon: <IoMdHome size={24} />,
+      icon: <MdHome size={24} />,
       onClick: () => {
+        trackClick('header_home_icon_click', {
+          page: path,
+        });
         if (isHost) {
           navigate(createSpaceMainRoute(spaceCode ?? ''));
           return;
         }
         if (isGuest) {
-          navigate(createGuestMainRoute(spaceCode ?? ''));
+          navigate(createGuestHomeRoute(spaceCode ?? ''));
           return;
         }
         navigate(ROUTES.LANDING);
       },
+    },
+    back: {
+      icon: <MdChevronLeft size={32} />,
+      onClick: () => navigate(-1),
     },
   };
 

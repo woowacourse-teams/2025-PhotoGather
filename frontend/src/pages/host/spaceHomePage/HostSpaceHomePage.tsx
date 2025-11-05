@@ -11,26 +11,56 @@ import {
   createSpaceInfoRoute,
   createWorkDetailRoute,
 } from '../../../constants/routes';
-import useSpaceInfo from '../../../hooks/domain/space/useSpaceInfo';
+import useButtonTracking from '../../../hooks/@common/useButtonTracking';
+import useSpaceInfoContext from '../../../hooks/context/useSpaceInfoContext';
 import { DividerLine } from '../../../styles/@common/DividerLine.styles';
 import { buildOriginalImageUrl } from '../../../utils/buildImageUrl';
 import { createInstagramUrl } from '../../../utils/createExternalLinks';
 import * as MainPageStyles from '../../MainPage.common.styles';
-import * as S from './SpaceHomePage.styles';
+import * as S from './HostSpaceHomePage.styles';
 
-const SpaceHomePage = () => {
+const HostSpaceHomePage = () => {
   const navigate = useNavigate();
   const { spaceCode = '' } = useParams();
-  const { spaceInfo } = useSpaceInfo({
+  const { spaceInfo } = useSpaceInfoContext();
+
+  const { trackClick } = useButtonTracking({
+    userType: 'host',
     spaceCode,
   });
 
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const openShareModal = () => {
+    trackClick('open_space_share_modal');
     setIsShareModalOpen(true);
   };
   const closeShareModal = () => {
     setIsShareModalOpen(false);
+  };
+
+  const handleSpaceInfoClick = () => {
+    trackClick('host_space_info_button');
+    navigate(createSpaceInfoRoute(spaceCode));
+  };
+
+  const onInstagramClick = () => {
+    trackClick('host_space_instagram_button');
+    window.open(createInstagramUrl(spaceInfo.instagramUsername), '_blank');
+  };
+
+  const onEmailClick = () => {
+    trackClick('host_space_email_button');
+    window.open(`mailto:${spaceInfo.email}`, '_blank');
+  };
+
+  const handleWorkDetailClick = () => {
+    trackClick('host_space_work_detail_button');
+    navigate(createWorkDetailRoute(spaceCode));
+  };
+
+  const handleGuestbookClick = () => {
+    trackClick('host_space_guestbook_button');
+    navigate(createGuestbookRoute(spaceCode));
   };
 
   return (
@@ -39,13 +69,11 @@ const SpaceHomePage = () => {
       <MainPageStyles.Wrapper>
         <S.ActionButtonContainer>
           <IconButton
-            aria-label="스페이스 정보 수정"
+            aria-label="스페이스 정보"
             icon={<MdSettings size={12} />}
             variant="default"
             size="small"
-            onClick={() => {
-              navigate(createSpaceInfoRoute(spaceCode));
-            }}
+            onClick={handleSpaceInfoClick}
           />
           <IconButton
             aria-label="스페이스 공유"
@@ -69,12 +97,7 @@ const SpaceHomePage = () => {
             aria-label="인스타그램"
             icon={<IoLogoInstagram size={24} />}
             variant="default"
-            onClick={() =>
-              window.open(
-                createInstagramUrl(spaceInfo.instagramUsername),
-                '_blank',
-              )
-            }
+            onClick={onInstagramClick}
             disabled={
               !spaceInfo.instagramUsername || spaceInfo.instagramUsername === ''
             }
@@ -83,7 +106,7 @@ const SpaceHomePage = () => {
             aria-label="이메일"
             icon={<MdEmail size={24} />}
             variant="default"
-            onClick={() => window.open(`mailto:${spaceInfo.email}`, '_blank')}
+            onClick={onEmailClick}
             disabled={!spaceInfo.email || spaceInfo.email === ''}
           />
         </MainPageStyles.IconButtonContainer>
@@ -92,16 +115,12 @@ const SpaceHomePage = () => {
           <Button
             variant="elevated"
             text="작품 소개 관리"
-            onClick={() => {
-              navigate(createWorkDetailRoute(spaceCode));
-            }}
+            onClick={handleWorkDetailClick}
           />
           <Button
             variant="elevated"
             text="방명록 관리"
-            onClick={() => {
-              navigate(createGuestbookRoute(spaceCode));
-            }}
+            onClick={handleGuestbookClick}
           />
         </MainPageStyles.ButtonContainer>
         <MainPageStyles.Footer />
@@ -110,4 +129,4 @@ const SpaceHomePage = () => {
   );
 };
 
-export default SpaceHomePage;
+export default HostSpaceHomePage;

@@ -29,3 +29,8 @@ export const InputCount = styled.p`
   color: ${({ theme }) => theme.colors.gray03};
   ${({ theme }) => ({ ...theme.typography.captionSmall })};
 `;
+
+export const requiredDot = styled.span`
+  color: ${({ theme }) => theme.colors.error};
+  margin-left: 4px;
+`;

@@ -3,9 +3,10 @@ import { useForm } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
 import * as C from '../../../components/@common/inputs/input.common.styles';
 import { CONSTRAINTS } from '../../../constants/constraints';
+import useButtonTracking from '../../../hooks/@common/useButtonTracking';
 import useLocalFile from '../../../hooks/@common/useLocalFile';
+import useSpaceInfoContext from '../../../hooks/context/useSpaceInfoContext';
 import usePatchSpaceInfo from '../../../hooks/domain/space/usePatchSpaceInfo';
-import useSpaceInfo from '../../../hooks/domain/space/useSpaceInfo';
 import type { SpaceInfoFormData } from '../../../types/domain/space.type';
 import { clearFiles } from '../../../utils/clearFiles';
 import { calculateValidLength } from '../../../utils/grapheme';
@@ -19,8 +20,11 @@ import { editFormValidators } from './editForm.validators';
 const EditForm = () => {
   // TODO : 변경사항이 없을 경우 막기
   const { spaceCode } = useParams();
-  const { isLoading: isSpaceInfoLoading, spaceInfo } = useSpaceInfo({
-    spaceCode: spaceCode ?? '',
+
+  const { spaceInfo, isLoading: isSpaceInfoLoading } = useSpaceInfoContext();
+  const { trackClick } = useButtonTracking({
+    userType: 'host',
+    spaceCode,
   });
 
   const initialData: SpaceInfoFormData = {
@@ -65,8 +69,9 @@ const EditForm = () => {
       maxFileCount: 1,
     });
 
-  const { patchSpaceInfo } = usePatchSpaceInfo({
+  const { patchSpaceInfo, isPatching } = usePatchSpaceInfo({
     spaceCode: spaceCode ?? '',
+    isImageExisted: spaceInfo?.spacePhoto.isExists,
     dirtyFields,
     afterPatch: () => {
       clearFiles(localFiles);
@@ -75,6 +80,14 @@ const EditForm = () => {
   });
 
   const onSubmit = (data: SpaceInfoFormData) => {
+    trackClick('edit_form_submit_button', {
+      page: '/space/edit',
+      hasPhoto: localFiles.length !== 0,
+      isPublic: data.isPublic,
+      hasEmail: !!data.email,
+      hasInstagram: !!data.instagramUsername,
+    });
+
     if (localFiles.length !== 0 && localFiles[0].originFile) {
       patchSpaceInfo(data, localFiles[0].originFile);
       return;
@@ -86,7 +99,7 @@ const EditForm = () => {
     setValue('isDeletePhoto', true, { shouldDirty: true });
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue('email', e.target.value, {
       shouldValidate: false,
       shouldDirty: true,
@@ -96,6 +109,27 @@ const EditForm = () => {
     }
   };
 
+  const handleVisibilityButtonClick = (isPublic: boolean) => {
+    trackClick(
+      isPublic ? 'edit_form_public_button' : 'edit_form_private_button',
+      {
+        page: '/space/edit',
+        action: isPublic ? 'set_public' : 'set_private',
+      },
+    );
+
+    setValue('isPublic', isPublic, { shouldDirty: true });
+  };
+
+  const handlePhotoUploadClick = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    trackClick('edit_form_photo_upload', {
+      page: `/host/${spaceCode}/space-info/edit`,
+    });
+    handleFilesUploadClick(event);
+  };
+
   return (
     <S.Form onSubmit={handleSubmit(onSubmit)}>
       <PhotoPreviewButton
@@ -103,7 +137,7 @@ const EditForm = () => {
           watch('isDeletePhoto') ? undefined : spaceInfo?.spacePhoto.path
         }
         previewFile={previewFiles}
-        uploadImage={handleFilesUploadClick}
+        uploadImage={handlePhotoUploadClick}
         clearFiles={() => {
           clearFiles(localFiles);
           clearLocalFiles();
@@ -128,13 +162,13 @@ const EditForm = () => {
             text="공개"
             type="button"
             variant={watch('isPublic') === true ? 'primary' : 'secondary'}
-            onClick={() => setValue('isPublic', true, { shouldDirty: true })}
+            onClick={() => handleVisibilityButtonClick(true)}
           />
           <Button
             text="비공개"
             type="button"
             variant={watch('isPublic') === false ? 'primary' : 'secondary'}
-            onClick={() => setValue('isPublic', false, { shouldDirty: true })}
+            onClick={() => handleVisibilityButtonClick(false)}
           />
         </S.PublicButtonContainer>
       </S.ContentContainer>
@@ -142,7 +176,6 @@ const EditForm = () => {
         {...register('description', {
           validate: editFormValidators.description,
         })}
-        isRequired
         validLength={calculateValidLength(watch('description'))}
         label="스페이스 설명"
         placeholder="매일 1시부터 6시까지 상주합니다."
@@ -157,11 +190,14 @@ const EditForm = () => {
         placeholder="forgather@forgather.me"
         errorMessage={errors.email?.message}
         maxLength={CONSTRAINTS.MAX_LENGTH.SPACE.EMAIL}
-        onChange={handleChange}
+        onChange={handleEmailChange}
         onBlur={() => trigger('email')}
+        inputMode="email"
       />
       <TextInput
-        {...register('instagramUsername')}
+        {...register('instagramUsername', {
+          validate: editFormValidators.instagramUsername,
+        })}
         label="Instagram ID"
         placeholder="forgather_official"
         errorMessage={errors.instagramUsername?.message}
@@ -170,8 +206,8 @@ const EditForm = () => {
       <Button
         variant="primary"
         type="submit"
-        text="완료"
-        disabled={!isAllValid}
+        text={isPatching ? '수정 중...' : '완료'}
+        disabled={!isAllValid || isPatching}
       />
     </S.Form>
   );

@@ -1,5 +1,6 @@
 import { keyframes } from '@emotion/react';
 import styled from '@emotion/styled';
+import AutoReloadImage from '../components/@common/autoReloadImage/AutoReloadImage';
 
 const glow = keyframes`
   0% {
@@ -11,6 +12,7 @@ const glow = keyframes`
 `;
 
 export const WorkContainer = styled.div`
+  width: 100%;
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -41,7 +43,7 @@ export const DescriptionContainer = styled.p`
   white-space: pre-line;
 `;
 
-export const ImageContainer = styled.img`
+export const ImageContainer = styled(AutoReloadImage)`
   width: 100%;
   height: auto;
   min-height: 200px;

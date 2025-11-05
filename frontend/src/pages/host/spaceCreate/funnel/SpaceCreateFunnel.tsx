@@ -1,4 +1,5 @@
 import StepProgressBar from '../../../../components/@common/progressBar/step/StepProgressBar';
+import useButtonTracking from '../../../../hooks/@common/useButtonTracking';
 import useConfirmBeforeRefresh from '../../../../hooks/@common/useConfirmBeforeRefresh';
 import useFormFunnel from '../../../../hooks/domain/funnel/useFormFunnel';
 import type {
@@ -30,6 +31,9 @@ const initialCreateFunnelForm: CreateFunnelForm = {
 
 const SpaceCreateFunnel = () => {
   useConfirmBeforeRefresh();
+  const { trackClick } = useButtonTracking({
+    userType: 'host',
+  });
 
   const Funnel = useFormFunnel<CreateFunnelStep, CreateFunnelForm>(
     'name',
@@ -37,39 +41,64 @@ const SpaceCreateFunnel = () => {
   );
   const currentStepIndex = PROGRESS_STEP_LIST.indexOf(Funnel.funnelStep) + 1;
 
+  const handleStepComplete = (
+    fromStep: CreateFunnelStep,
+    toStep: CreateFunnelStep,
+    data?: Partial<CreateFunnelForm>,
+  ) => {
+    trackClick('space_create_funnel_step_complete', {
+      page: '/space/create',
+      fromStep,
+      toStep,
+      currentStepIndex,
+      totalSteps: PROGRESS_STEP_LIST.length,
+      hasData: !!data,
+    });
+  };
+
   return (
     <S.Wrapper>
-      <StepProgressBar
-        currentStep={currentStepIndex}
-        maxStep={PROGRESS_STEP_LIST.length}
-      />
-      <S.TopContainer></S.TopContainer>
+      <S.ProgressBarContainer>
+        <StepProgressBar
+          currentStep={currentStepIndex}
+          maxStep={PROGRESS_STEP_LIST.length}
+        />
+      </S.ProgressBarContainer>
+      <S.TopContainer />
       <S.ContentContainer>
         <Funnel.Step name="name">
           <SpaceNameElement
-            onNext={(name) => Funnel.goNextWithData('accessType', { name })}
+            onNext={(name) => {
+              handleStepComplete('name', 'accessType', { name });
+              Funnel.goNextWithData('accessType', { name });
+            }}
             initialValue={Funnel.form.name}
           />
         </Funnel.Step>
         <Funnel.Step name="accessType">
           <SpaceVisibilityElement
-            onNext={(visibility) =>
-              Funnel.goNextWithData('description', { visibility })
-            }
+            onNext={(visibility) => {
+              handleStepComplete('accessType', 'description', { visibility });
+              Funnel.goNextWithData('description', { visibility });
+            }}
             initialValue={Funnel.form.visibility}
           />
         </Funnel.Step>
         <Funnel.Step name="description">
           <SpaceDescriptionElement
-            onNext={(description) =>
-              Funnel.goNextWithData('detail', { description })
-            }
+            onNext={(description) => {
+              handleStepComplete('description', 'detail', { description });
+              Funnel.goNextWithData('detail', { description });
+            }}
             initialValue={Funnel.form.description}
           />
         </Funnel.Step>
         <Funnel.Step name="detail">
           <SpaceDetailElement
-            onNext={(detail) => Funnel.goNextWithData('check', { ...detail })}
+            onNext={(detail) => {
+              handleStepComplete('detail', 'check', { ...detail });
+              Funnel.goNextWithData('check', { ...detail });
+            }}
             initialValue={{
               profileImage: Funnel.form.profileImage,
               email: Funnel.form.email,

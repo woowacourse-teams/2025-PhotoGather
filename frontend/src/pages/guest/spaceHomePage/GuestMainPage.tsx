@@ -9,7 +9,8 @@ import {
   createGuestWorkDetailRoute,
   ROUTES,
 } from '../../../constants/routes';
-import useSpaceInfo from '../../../hooks/domain/space/useSpaceInfo';
+import useButtonTracking from '../../../hooks/@common/useButtonTracking';
+import useSpaceInfoContext from '../../../hooks/context/useSpaceInfoContext';
 import { DividerLine } from '../../../styles/@common/DividerLine.styles';
 import { buildOriginalImageUrl } from '../../../utils/buildImageUrl';
 import { createInstagramUrl } from '../../../utils/createExternalLinks';
@@ -17,10 +18,14 @@ import { createImageErrorHandler } from '../../../utils/createImageErrorHandler'
 import * as MainPageStyles from '../../MainPage.common.styles';
 import { mockAccess } from '../../mockData';
 
-const GuestMainPage = () => {
+const GuestSpaceHomePage = () => {
   const navigate = useNavigate();
   const { spaceCode } = useParams();
-  const { spaceInfo, isLoading } = useSpaceInfo({ spaceCode: spaceCode ?? '' });
+  const { spaceInfo, isLoading } = useSpaceInfoContext();
+  const { trackClick } = useButtonTracking({
+    userType: 'guest',
+    spaceCode,
+  });
 
   if (isLoading) {
     return <MainPageStyles.Wrapper>로딩 중...</MainPageStyles.Wrapper>;
@@ -29,6 +34,20 @@ const GuestMainPage = () => {
   const thumbnailUrl = spaceInfo.spacePhoto.isExists
     ? buildOriginalImageUrl(spaceInfo.spacePhoto.path)
     : 'invalid-url';
+
+  const handleInstagramClick = () => {
+    trackClick('guest_space_instagram_button');
+    window.open(
+      createInstagramUrl(spaceInfo.instagramUsername),
+      '_blank',
+      'noopener,noreferrer',
+    );
+  };
+
+  const handleEmailClick = () => {
+    trackClick('guest_space_email_button');
+    window.open(`mailto:${spaceInfo.email}`, '_blank', 'noopener,noreferrer');
+  };
 
   return (
     <MainPageStyles.Wrapper>
@@ -50,13 +69,7 @@ const GuestMainPage = () => {
           aria-label="인스타그램"
           icon={<IoLogoInstagram size={24} />}
           variant="default"
-          onClick={() =>
-            window.open(
-              createInstagramUrl(spaceInfo.instagramUsername),
-              '_blank',
-              'noopener,noreferrer',
-            )
-          }
+          onClick={handleInstagramClick}
           disabled={
             !spaceInfo.instagramUsername || spaceInfo.instagramUsername === ''
           }
@@ -65,13 +78,7 @@ const GuestMainPage = () => {
           aria-label="이메일"
           icon={<IoMailOutline size={24} />}
           variant="default"
-          onClick={() =>
-            window.open(
-              `mailto:${spaceInfo.email}`,
-              '_blank',
-              'noopener,noreferrer',
-            )
-          }
+          onClick={handleEmailClick}
           disabled={!spaceInfo.email || spaceInfo.email === ''}
         />
       </MainPageStyles.IconButtonContainer>
@@ -80,30 +87,42 @@ const GuestMainPage = () => {
         <Button
           variant="elevated"
           text="작품 소개"
-          onClick={() => navigate(createGuestWorkDetailRoute(spaceCode ?? ''))}
+          onClick={() => {
+            trackClick('guest_space_work_intro_button');
+            navigate(createGuestWorkDetailRoute(spaceCode ?? ''));
+          }}
           disabled={!mockAccess.introduce}
         />
         <Button
           variant="elevated"
           text="방명록 작성하기"
-          onClick={() => navigate(createCreateGuestbookRoute(spaceCode ?? ''))}
+          onClick={() => {
+            trackClick('guest_space_guestbook_create_button');
+            navigate(createCreateGuestbookRoute(spaceCode ?? ''));
+          }}
           disabled={!spaceInfo}
         />
         <Button
           variant="elevated"
           text="방명록 구경하기"
-          onClick={() => navigate(createGuestGuestbookRoute(spaceCode ?? ''))}
+          onClick={() => {
+            trackClick('guest_space_guestbook_view_button');
+            navigate(createGuestGuestbookRoute(spaceCode ?? ''));
+          }}
           disabled={!spaceInfo.isPublic}
         />
       </MainPageStyles.ButtonContainer>
       <Button
         variant="tertiary"
         text="Forgather 둘러보기"
-        onClick={() => navigate(ROUTES.LANDING)}
+        onClick={() => {
+          trackClick('guest_space_forgather_explore_button');
+          navigate(ROUTES.LANDING);
+        }}
       />
       <MainPageStyles.Footer></MainPageStyles.Footer>
     </MainPageStyles.Wrapper>
   );
 };
 
-export default GuestMainPage;
+export default GuestSpaceHomePage;

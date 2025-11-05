@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { workService } from '../../../apis/services/work/work.service';
 import Button from '../../../components/@common/buttons/button/Button';
-import DeleteModal from '../../../components/@common/modal/deleteModal/DeleteModal';
 import { createWorkEditRoute } from '../../../constants/routes';
+import useButtonTracking from '../../../hooks/@common/useButtonTracking';
 import { useToast } from '../../../hooks/@common/useToast';
 import type { WorkDetail } from '../../../types/domain/work.type';
 import { buildThumbnailUrl } from '../../../utils/buildImageUrl';
@@ -15,9 +15,8 @@ const HostWorkDetail = () => {
   const navigate = useNavigate();
   const [workDetail, setWorkDetail] = useState<WorkDetail | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [isDeleting, setIsDeleting] = useState(false);
   const { showToast } = useToast();
+  const { trackClick } = useButtonTracking({ userType: 'host', spaceCode });
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: showToast is stable
   useEffect(() => {
@@ -44,31 +43,21 @@ const HostWorkDetail = () => {
     fetchWorkDetail();
   }, [spaceCode]);
 
-  const handleDeleteWork = async () => {
-    if (!spaceCode) return;
-
-    try {
-      setIsDeleting(true);
-      const response = await workService.deleteWork(spaceCode);
-
-      if (response.success) {
-        setIsDeleteModalOpen(false);
-        setWorkDetail(null);
-      } else {
-        console.error(response.error);
-        showToast({ text: '작품 삭제에 실패했습니다.' });
-      }
-    } catch (error) {
-      console.error(error);
-      showToast({ text: '작품 삭제에 실패했습니다.' });
-    } finally {
-      setIsDeleting(false);
-    }
-  };
-
   if (isLoading) {
     return null;
   }
+
+  const handleCreateWorkButtonClick = () => {
+    trackClick('host_work_detail_create_click');
+    if (!spaceCode) return;
+    navigate(createWorkEditRoute(spaceCode));
+  };
+
+  const handleEditWorkButtonClick = () => {
+    trackClick('host_work_detail_edit_click');
+    if (!spaceCode) return;
+    navigate(createWorkEditRoute(spaceCode));
+  };
 
   if (!workDetail || !spaceCode) {
     return (
@@ -78,10 +67,7 @@ const HostWorkDetail = () => {
         </S.EmptyStateContainer>
         {spaceCode && (
           <S.BottomSectionContainer>
-            <Button
-              text="등록하기"
-              onClick={() => navigate(createWorkEditRoute(spaceCode))}
-            />
+            <Button text="등록하기" onClick={handleCreateWorkButtonClick} />
           </S.BottomSectionContainer>
         )}
       </S.Wrapper>
@@ -91,42 +77,32 @@ const HostWorkDetail = () => {
   const { title, category, authorName, description, photos } = workDetail;
 
   return (
-    <>
-      <DeleteModal
-        isOpen={isDeleteModalOpen}
-        onCloseModal={() => setIsDeleteModalOpen(false)}
-        onDelete={handleDeleteWork}
-        buttonDisabled={isDeleting}
-      />
-      <S.Wrapper>
-        <C.WorkContainer>
-          <C.TitleRowContainer>
-            <S.TopButtonContainer>
-              <C.TitleContainer>{title}</C.TitleContainer>
-              <S.EditButton
-                onClick={() => navigate(createWorkEditRoute(spaceCode))}
-              >
-                수정
-              </S.EditButton>
-            </S.TopButtonContainer>
-            <C.CategoryContainer>{category}</C.CategoryContainer>
-            <C.DesignerContainer>{authorName}</C.DesignerContainer>
-          </C.TitleRowContainer>
-          <C.DescriptionContainer>{description}</C.DescriptionContainer>
-          {photos.map((photo, index) => (
-            <C.ImageContainer
-              key={photo.id}
-              src={buildThumbnailUrl({
-                path: photo.path,
-                replacePath: 'product',
-                preset: '800',
-              })}
-              alt={`work-detail-${index}`}
-            />
-          ))}
-        </C.WorkContainer>
-      </S.Wrapper>
-    </>
+    <S.Wrapper>
+      <C.WorkContainer>
+        <C.TitleRowContainer>
+          <S.TopButtonContainer>
+            <C.TitleContainer>{title}</C.TitleContainer>
+            <S.EditButton onClick={handleEditWorkButtonClick}>
+              수정
+            </S.EditButton>
+          </S.TopButtonContainer>
+          <C.CategoryContainer>{category}</C.CategoryContainer>
+          <C.DesignerContainer>{authorName}</C.DesignerContainer>
+        </C.TitleRowContainer>
+        <C.DescriptionContainer>{description}</C.DescriptionContainer>
+        {photos.map((photo, index) => (
+          <C.ImageContainer
+            key={photo.id}
+            src={buildThumbnailUrl({
+              path: photo.path,
+              replacePath: 'product',
+              preset: '800',
+            })}
+            alt={`work-detail-${index}`}
+          />
+        ))}
+      </C.WorkContainer>
+    </S.Wrapper>
   );
 };
 

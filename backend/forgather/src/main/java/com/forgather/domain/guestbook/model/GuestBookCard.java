@@ -16,7 +16,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -34,7 +33,7 @@ public class GuestBookCard extends BaseTimeEntity {
     @JoinColumn(name = "space_id", nullable = false)
     private Space space;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "guest_id", nullable = false)
     private Guest guest;
 

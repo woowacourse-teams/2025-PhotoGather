@@ -21,7 +21,7 @@ export const Logo = styled.div<{ $mode: HeaderMode }>`
 
   svg {
     path {
-      fill: ${({ theme, $mode }) => ($mode === 'dark' ? theme.colors.white : theme.colors.black)};
+      color: ${({ theme, $mode }) => ($mode === 'dark' ? theme.colors.white : theme.colors.black)};
     }
   }
 `;

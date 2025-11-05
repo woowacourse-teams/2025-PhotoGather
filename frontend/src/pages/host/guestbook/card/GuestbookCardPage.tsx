@@ -14,6 +14,7 @@ import {
   createGuestbookCardRoute,
   createGuestbookRoute,
 } from '../../../../constants/routes';
+import useButtonTracking from '../../../../hooks/@common/useButtonTracking';
 import useGuestbookCard from '../../../../hooks/domain/guestbook/useGuestbookCard';
 import useGuestbookDelete from '../../../../hooks/domain/guestbook/useGuestbookDelete';
 import useGuestbookList from '../../../../hooks/domain/guestbook/useGuestbookList';
@@ -40,6 +41,7 @@ const GuestbookCardPage = () => {
     spaceCode,
     guestbookCardId,
   );
+  const { trackClick } = useButtonTracking({ userType: 'host', spaceCode });
   const guestbookCardIdList = guestbookList.map(
     (guestbookCard) => guestbookCard.id,
   );
@@ -53,6 +55,9 @@ const GuestbookCardPage = () => {
   const currentIdIndex = guestbookCardIdList.indexOf(guestbookCard.id);
 
   const handleBackMove = () => {
+    trackClick('guestbook_card_back_button', {
+      hasPhoto: guestbookCard.photos.length > 0,
+    });
     navigate(createGuestbookRoute(spaceCode));
   };
 
@@ -66,6 +71,9 @@ const GuestbookCardPage = () => {
       guestbookCard.id,
     );
     if (prevGuestbookId === null) return;
+    trackClick('guestbook_card_previous_button', {
+      hasPhoto: guestbookCard.photos.length > 0,
+    });
     navigate(createGuestbookCardRoute(spaceCode, prevGuestbookId));
   };
 
@@ -75,14 +83,24 @@ const GuestbookCardPage = () => {
       guestbookCard.id,
     );
     if (nextGuestbookId === null) return;
+    trackClick('guestbook_card_next_button', {
+      hasPhoto: guestbookCard.photos.length > 0,
+    });
     navigate(createGuestbookCardRoute(spaceCode, nextGuestbookId));
   };
 
   const handlePhotoModalClose = () => {
+    trackClick('guestbook_card_photo_modal_close', {
+      photoLength: guestbookCard.photos.length,
+    });
     setIsPhotoModalOpen(false);
   };
 
   const handlePhotoClick = (photo: Photo) => {
+    trackClick('guestbook_card_photo_click', {
+      photoLength: guestbookCard.photos.length,
+      currentPhotoId: guestbookCard.photos.indexOf(photo) + 1,
+    });
     const photoIndex = localPhotoList.findIndex((p) => p.id === photo.id);
     setSelectedPhotoIndex(photoIndex);
     setIsPhotoModalOpen(true);
@@ -101,6 +119,9 @@ const GuestbookCardPage = () => {
       guestbookCardIdList,
       guestbookCard.id,
     );
+    trackClick('confirm_guestbook_card_delete_modal', {
+      hasPhoto: guestbookCard.photos.length > 0,
+    });
     await mutateAsync();
     setIsDeleteModalOpen(false);
     if (prevGuestbookId === null) navigate(createGuestbookRoute(spaceCode));
@@ -112,11 +133,21 @@ const GuestbookCardPage = () => {
     if (guestbookList.length - currentIdIndex <= 3) fetchNextPage();
   }, [currentIdIndex]);
 
+  const handleDeleteButton = () => {
+    trackClick('open_guestbook_card_delete_modal', {
+      hasPhoto: guestbookCard.photos.length > 0,
+    });
+    setIsDeleteModalOpen(true);
+  };
+
   return (
     <>
       <DeleteModal
         isOpen={isDeleteModalOpen}
         onCloseModal={() => {
+          trackClick('close_guestbook_card_delete', {
+            hasPhoto: guestbookCard.photos.length > 0,
+          });
           setIsDeleteModalOpen(false);
         }}
         onDelete={handleDelete}
@@ -150,9 +181,7 @@ const GuestbookCardPage = () => {
             type="button"
             variant="error"
             text="삭제"
-            onClick={() => {
-              setIsDeleteModalOpen(true);
-            }}
+            onClick={handleDeleteButton}
           />
         </S.DeleteButtonContainer>
         <GuestbookCardInfoSection
@@ -193,7 +222,6 @@ const GuestbookCardPage = () => {
           isGuestbookCardFetching={isGuestbookCardFetching}
           guestbookTitle={`${guestbookCard.nickname}의 방명록 사진`}
         />
-        <Line width={192} />
       </S.Wrapper>
     </>
   );

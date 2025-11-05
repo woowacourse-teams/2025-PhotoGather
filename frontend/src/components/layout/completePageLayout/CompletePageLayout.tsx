@@ -5,16 +5,27 @@ interface CompletePageProps {
   message: string | React.ReactNode;
   buttonText: string;
   onButtonClick: () => void;
+  icon?: React.ReactNode;
+  isAnimationRequired?: boolean;
 }
 
 const CompletePageLayout = ({
   message,
   buttonText,
   onButtonClick,
+  icon,
+  isAnimationRequired = true,
 }: CompletePageProps) => {
   return (
     <S.Wrapper>
-      <S.Message>{message}</S.Message>
+      <S.ContentContainer>
+        <S.InfoContainer>
+          {icon && <S.IconContainer>{icon}</S.IconContainer>}
+          <S.Message $isAnimationRequired={isAnimationRequired}>
+            {message}
+          </S.Message>
+        </S.InfoContainer>
+      </S.ContentContainer>
       <Button text={buttonText} onClick={onButtonClick} />
     </S.Wrapper>
   );

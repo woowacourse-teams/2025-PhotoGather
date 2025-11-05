@@ -110,6 +110,7 @@ export const buttonStyles = {
     margin: 0 auto;
     background-color: ${theme.colors.gray06};
     color: ${theme.colors.white};
+    padding: 20px 20px;
 
     &:active {
       background-color: ${theme.colors.gray06};
