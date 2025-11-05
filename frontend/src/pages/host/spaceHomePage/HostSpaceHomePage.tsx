@@ -77,7 +77,11 @@ const HostSpaceHomePage = () => {
 
   return (
     <>
-      <EventModal isOpen={isEventModalOpen} onClose={handleCloseEventModal} />
+      <EventModal
+        isOpen={isEventModalOpen}
+        onClose={handleCloseEventModal}
+        spaceCode={spaceCode}
+      />
       <SpaceShareModal isOpen={isShareModalOpen} onClose={closeShareModal} />
       <MainPageStyles.Wrapper>
         <S.ActionButtonContainer>
