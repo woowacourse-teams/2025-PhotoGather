@@ -57,3 +57,5 @@ export const NICKNAME = {
     '잠',
   ],
 };
+
+export const EVENT_FORM_URL = 'https://forms.gle/WbpuZxrdshT4Lgtf8';
