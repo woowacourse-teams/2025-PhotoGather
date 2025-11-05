@@ -1,5 +1,8 @@
 import { useId, useState } from 'react';
-import { EVENT_FORM_URL } from '../../../../constants/constants';
+import {
+  EVENT_FORM_URL,
+  EVENT_MODAL_HIDE_KEY,
+} from '../../../../constants/constants';
 import useButtonTracking from '../../../../hooks/@common/useButtonTracking';
 import Button from '../../../@common/buttons/button/Button';
 import Modal from '../../../@common/modal/Modal';
@@ -24,10 +27,7 @@ const EventModal = ({ isOpen, onClose, spaceCode }: EventModalProps) => {
       const tomorrow = new Date();
       tomorrow.setDate(tomorrow.getDate() + 1);
       tomorrow.setHours(0, 0, 0, 0);
-      localStorage.setItem(
-        'eventModalHideUntil',
-        tomorrow.getTime().toString(),
-      );
+      localStorage.setItem(EVENT_MODAL_HIDE_KEY, tomorrow.getTime().toString());
     }
     onClose();
   };
