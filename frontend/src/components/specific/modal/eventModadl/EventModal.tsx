@@ -1,7 +1,6 @@
-import { useState } from 'react';
+import { useId, useState } from 'react';
 import { EVENT_FORM_URL } from '../../../../constants/constants';
 import useButtonTracking from '../../../../hooks/@common/useButtonTracking';
-import useSpaceInfoContext from '../../../../hooks/context/useSpaceInfoContext';
 import Button from '../../../@common/buttons/button/Button';
 import Modal from '../../../@common/modal/Modal';
 import * as S from './EventModal.styles';
@@ -9,15 +8,16 @@ import * as S from './EventModal.styles';
 interface EventModalProps {
   isOpen: boolean;
   onClose: () => void;
+  spaceCode?: string;
 }
 
-const EventModal = ({ isOpen, onClose }: EventModalProps) => {
+const EventModal = ({ isOpen, onClose, spaceCode }: EventModalProps) => {
   const [notShowToday, setNotShowToday] = useState(false);
-  const { spaceInfo } = useSpaceInfoContext();
   const { trackClick } = useButtonTracking({
     userType: 'host',
-    spaceCode: spaceInfo.spaceCode,
+    spaceCode: spaceCode,
   });
+  const checkboxId = useId();
 
   const handleClose = () => {
     if (notShowToday) {
@@ -52,8 +52,9 @@ const EventModal = ({ isOpen, onClose }: EventModalProps) => {
             onClick={handleButtonClick}
           />
           <S.CheckboxWrapper>
-            <S.CheckboxContainer>
+            <S.CheckboxContainer htmlFor={checkboxId}>
               <S.Checkbox
+                id={checkboxId}
                 type="checkbox"
                 checked={notShowToday}
                 onChange={(e) => setNotShowToday(e.target.checked)}
