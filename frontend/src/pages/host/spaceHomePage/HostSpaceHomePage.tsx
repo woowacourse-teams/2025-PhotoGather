@@ -16,6 +16,7 @@ import useButtonTracking from '../../../hooks/@common/useButtonTracking';
 import useSpaceInfoContext from '../../../hooks/context/useSpaceInfoContext';
 import { DividerLine } from '../../../styles/@common/DividerLine.styles';
 import { buildOriginalImageUrl } from '../../../utils/buildImageUrl';
+import { canOpenEventModal } from '../../../utils/canOpenEventModal';
 import { createInstagramUrl } from '../../../utils/createExternalLinks';
 import * as MainPageStyles from '../../MainPage.common.styles';
 import * as S from './HostSpaceHomePage.styles';
@@ -24,18 +25,13 @@ const HostSpaceHomePage = () => {
   const navigate = useNavigate();
   const { spaceCode = '' } = useParams();
   const { spaceInfo } = useSpaceInfoContext();
-  const [isEventModalOpen, setIsEventModalOpen] = useState(() => {
-    const hideUntil = localStorage.getItem('eventModalHideUntil');
-    if (!hideUntil) return true;
-    return Number(hideUntil) < Date.now();
-  });
+  const [isEventModalOpen, setIsEventModalOpen] = useState(canOpenEventModal);
+  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
 
   const { trackClick } = useButtonTracking({
     userType: 'host',
     spaceCode,
   });
-
-  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
 
   const openShareModal = () => {
     trackClick('open_space_share_modal');
