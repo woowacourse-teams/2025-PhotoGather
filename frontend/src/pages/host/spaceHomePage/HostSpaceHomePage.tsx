@@ -5,6 +5,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import Button from '../../../components/@common/buttons/button/Button';
 import IconButton from '../../../components/@common/buttons/iconButton/IconButton';
 import Thumbnail from '../../../components/@common/thumbnail/Thumbnail';
+import EventModal from '../../../components/specific/modal/eventModadl/EventModal';
 import SpaceShareModal from '../../../components/specific/modal/spaceShareModal/SpaceShareModal';
 import {
   createGuestbookRoute,
@@ -23,6 +24,11 @@ const HostSpaceHomePage = () => {
   const navigate = useNavigate();
   const { spaceCode = '' } = useParams();
   const { spaceInfo } = useSpaceInfoContext();
+  const [isEventModalOpen, setIsEventModalOpen] = useState(() => {
+    const hideUntil = localStorage.getItem('eventModalHideUntil');
+    if (!hideUntil) return true;
+    return Number(hideUntil) < Date.now();
+  });
 
   const { trackClick } = useButtonTracking({
     userType: 'host',
@@ -30,6 +36,7 @@ const HostSpaceHomePage = () => {
   });
 
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
+
   const openShareModal = () => {
     trackClick('open_space_share_modal');
     setIsShareModalOpen(true);
@@ -63,8 +70,14 @@ const HostSpaceHomePage = () => {
     navigate(createGuestbookRoute(spaceCode));
   };
 
+  const handleCloseEventModal = () => {
+    trackClick('close_event_modal');
+    setIsEventModalOpen(false);
+  };
+
   return (
     <>
+      <EventModal isOpen={isEventModalOpen} onClose={handleCloseEventModal} />
       <SpaceShareModal isOpen={isShareModalOpen} onClose={closeShareModal} />
       <MainPageStyles.Wrapper>
         <S.ActionButtonContainer>
