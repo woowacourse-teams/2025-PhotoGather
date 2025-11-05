@@ -16,6 +16,7 @@ class AdminSpaceServiceTest {
     @Autowired
     private SpaceService spaceService;
 
+    @Autowired
     private SpaceRepository spaceRepository;
 
 }
