@@ -65,7 +65,7 @@ const WorkForm = () => {
     handleFilesDrop,
   } = useLocalFile({
     fileType: 'image',
-    maxFileCount: 10 - existingPhotos.length,
+    maxFileCount: Math.max(0, 10 - existingPhotos.length),
   });
 
   const onValid = async (data: WorkFormData) => {
@@ -158,7 +158,7 @@ const WorkForm = () => {
     <>
       <LoadingModal
         isOpen={isSubmitting}
-        text={isEditMode ? '수정중 ...' : '등록중...'}
+        text={isEditMode ? '수정중 ...' : '등록중 ...'}
       />
       <DeleteModal
         isOpen={isDeleteModalOpen}
