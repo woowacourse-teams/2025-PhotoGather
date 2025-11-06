@@ -11,7 +11,7 @@ export const useSpaceStats = () => {
       }
       throw new Error('스페이스 통계 조회에 실패했습니다');
     },
-    staleTime: 0,
+    staleTime: 30 * 60 * 1000,
   });
 
   return { stats: data, isLoading, isError };
