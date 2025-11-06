@@ -166,7 +166,7 @@ const LandingPage = () => {
       </MotionScrollTopContainer>
       <S.ContentContainer>
         <MotionSection
-          style={{ gap: '120px' }}
+          style={{ gap: '90px' }}
           {...sectionMotionProps}
           variants={delaySectionVariants}
         >
