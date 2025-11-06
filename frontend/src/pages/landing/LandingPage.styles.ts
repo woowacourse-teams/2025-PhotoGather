@@ -44,6 +44,7 @@ export const SmallTitle = styled.p`
   ${({ theme }) => theme.typography.header03}
   color: ${({ theme }) => theme.colors.white};
   white-space: pre-wrap;
+  text-align: center;
 `;
 
 export const SubTitle = styled.h2`
