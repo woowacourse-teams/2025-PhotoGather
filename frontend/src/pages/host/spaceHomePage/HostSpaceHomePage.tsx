@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { IoLogoInstagram, IoShareOutline } from 'react-icons/io5';
 import { MdEmail, MdSettings } from 'react-icons/md';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -25,8 +25,12 @@ const HostSpaceHomePage = () => {
   const navigate = useNavigate();
   const { spaceCode = '' } = useParams();
   const { spaceInfo } = useSpaceInfoContext();
-  const [isEventModalOpen, setIsEventModalOpen] = useState(canOpenEventModal);
+  const [isEventModalOpen, setIsEventModalOpen] = useState(false);
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
+
+  useEffect(() => {
+    setIsEventModalOpen(canOpenEventModal());
+  }, []);
 
   const { trackClick } = useButtonTracking({
     userType: 'host',
