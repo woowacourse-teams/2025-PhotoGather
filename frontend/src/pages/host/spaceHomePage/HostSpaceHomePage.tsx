@@ -13,6 +13,7 @@ import {
   createWorkDetailRoute,
 } from '../../../constants/routes';
 import useButtonTracking from '../../../hooks/@common/useButtonTracking';
+import useUserInfoContext from '../../../hooks/context/userInfoContext';
 import useSpaceInfoContext from '../../../hooks/context/useSpaceInfoContext';
 import { DividerLine } from '../../../styles/@common/DividerLine.styles';
 import { buildOriginalImageUrl } from '../../../utils/buildImageUrl';
@@ -27,6 +28,7 @@ const HostSpaceHomePage = () => {
   const { spaceInfo } = useSpaceInfoContext();
   const [isEventModalOpen, setIsEventModalOpen] = useState(false);
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
+  const userInfo = useUserInfoContext();
 
   useEffect(() => {
     setIsEventModalOpen(canOpenEventModal());
@@ -82,7 +84,12 @@ const HostSpaceHomePage = () => {
         onClose={handleCloseEventModal}
         spaceCode={spaceCode}
       />
-      <SpaceShareModal isOpen={isShareModalOpen} onClose={closeShareModal} />
+      <SpaceShareModal
+        isOpen={isShareModalOpen}
+        onClose={closeShareModal}
+        userName={userInfo.name}
+        spaceName={spaceInfo.name}
+      />
       <MainPageStyles.Wrapper>
         <S.ActionButtonContainer>
           <IconButton
