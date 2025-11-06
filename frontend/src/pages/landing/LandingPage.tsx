@@ -22,6 +22,7 @@ import { AUTH_COOKIES } from '../../constants/cookie';
 import { ROUTES } from '../../constants/routes';
 import useButtonTracking from '../../hooks/@common/useButtonTracking';
 import useCountUp from '../../hooks/@common/useCountUp';
+import { useSpaceStats } from '../../hooks/domain/landing/useSpaceStats';
 import { CookieUtils } from '../../utils/cookie';
 import { goToTop } from '../../utils/goToTop';
 import * as S from './LandingPage.styles';
@@ -95,13 +96,24 @@ const LandingPage = () => {
     once: true,
     amount: 0.3,
   });
+  const { stats, isLoading } = useSpaceStats();
+
+  const spaceTargetNumber =
+    isCountUpInView && !isLoading
+      ? (stats?.spaceStats.spaceCount ?? 60) - 10
+      : 0;
+  const guestbookTargetNumber =
+    isCountUpInView && !isLoading
+      ? (stats?.guestBookStats.cardCount ?? 100)
+      : 0;
+
   const { number: spaceCount } = useCountUp({
-    targetNumber: 60,
-    isActive: isCountUpInView,
+    targetNumber: spaceTargetNumber,
+    isActive: isCountUpInView && !isLoading,
   });
   const { number: guestbookCount } = useCountUp({
-    targetNumber: 100,
-    isActive: isCountUpInView,
+    targetNumber: guestbookTargetNumber,
+    isActive: isCountUpInView && !isLoading,
   });
 
   useMotionValueEvent(scrollYProgress, 'change', (latest) => {
@@ -154,13 +166,20 @@ const LandingPage = () => {
       </MotionScrollTopContainer>
       <S.ContentContainer>
         <MotionSection
-          style={{ gap: '156px' }}
+          style={{ gap: '120px' }}
           {...sectionMotionProps}
           variants={delaySectionVariants}
         >
           <MotionTitleContainer variants={fadeVariants}>
             <S.Title>당신을 위한 순간, 흩어지지 않게</S.Title>
             <S.TitleImage src={titleImage} alt="포게더 로고 이미지" />
+          </MotionTitleContainer>
+          <MotionTitleContainer variants={fadeVariants}>
+            <S.SubTitle ref={countUpHeadingRef}>
+              {isCountUpInView
+                ? `현재 ${spaceCount}개의 스페이스에\n${guestbookCount}개의 방명록이 모였어요.`
+                : null}
+            </S.SubTitle>
           </MotionTitleContainer>
           <MotionTitleContainer variants={fadeVariants}>
             <S.SmallTitle>작가와 방문객이 연결되는 공간</S.SmallTitle>
@@ -176,11 +195,6 @@ const LandingPage = () => {
             {
               '스페이스를 통해 작품을 소개하고,\n방문객의 진심 어린 축하를 간직하세요.'
             }
-          </S.SubTitle>
-          <S.SubTitle ref={countUpHeadingRef}>
-            {isCountUpInView
-              ? `현재 ${spaceCount}개의 스페이스에\n${guestbookCount}개의 방명록이 모였어요.`
-              : null}
           </S.SubTitle>
         </MotionSection>
         <MotionSection {...sectionMotionProps}>

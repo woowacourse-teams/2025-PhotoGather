@@ -10,7 +10,7 @@ interface CountUpProps {
 const useCountUp = ({
   initialNumber = 0,
   targetNumber,
-  time = 1000,
+  time = 1500,
   isActive = true,
 }: CountUpProps) => {
   const [number, setNumber] = useState(initialNumber);
