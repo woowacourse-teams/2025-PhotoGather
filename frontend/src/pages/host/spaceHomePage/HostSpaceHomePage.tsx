@@ -110,22 +110,27 @@ const HostSpaceHomePage = () => {
           </MainPageStyles.InfoContainer>
         </MainPageStyles.ProfileContainer>
         <MainPageStyles.IconButtonContainer>
-          <IconButton
-            aria-label="인스타그램"
-            icon={<IoLogoInstagram size={24} />}
-            variant="default"
-            onClick={onInstagramClick}
-            disabled={
-              !spaceInfo.instagramUsername || spaceInfo.instagramUsername === ''
-            }
-          />
-          <IconButton
-            aria-label="이메일"
-            icon={<MdEmail size={24} />}
-            variant="default"
-            onClick={onEmailClick}
-            disabled={!spaceInfo.email || spaceInfo.email === ''}
-          />
+          {spaceInfo.instagramUsername && (
+            <IconButton
+              aria-label="인스타그램"
+              icon={<IoLogoInstagram size={24} />}
+              variant="default"
+              onClick={onInstagramClick}
+              disabled={
+                !spaceInfo.instagramUsername ||
+                spaceInfo.instagramUsername === ''
+              }
+            />
+          )}
+          {spaceInfo.email && (
+            <IconButton
+              aria-label="이메일"
+              icon={<MdEmail size={24} />}
+              variant="default"
+              onClick={onEmailClick}
+              disabled={!spaceInfo.email || spaceInfo.email === ''}
+            />
+          )}
         </MainPageStyles.IconButtonContainer>
         <DividerLine width="10%" />
         <MainPageStyles.ButtonContainer>
