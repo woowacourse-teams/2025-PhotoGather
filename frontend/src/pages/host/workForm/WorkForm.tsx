@@ -7,6 +7,7 @@ import Button from '../../../components/@common/buttons/button/Button';
 import TextareaInput from '../../../components/@common/inputs/textareaInput/TextareaInput';
 import TextInput from '../../../components/@common/inputs/textInput/TextInput';
 import DeleteModal from '../../../components/@common/modal/deleteModal/DeleteModal';
+import LoadingModal from '../../../components/specific/modal/loadingModal/LoadingModal';
 import PhotoUploadButton from '../../../components/specific/photoUploadButton/PhotoUploadButton';
 import { CONSTRAINTS } from '../../../constants/constraints';
 import useButtonTracking from '../../../hooks/@common/useButtonTracking';
@@ -49,15 +50,23 @@ const WorkForm = () => {
   });
 
   const {
+    isEditMode,
+    existingPhotos,
+    deleteExistingPhoto,
+    submitWork,
+    isSubmitting,
+  } = useWorkForm({ spaceCode, reset });
+
+  const {
     localFiles,
     previewFiles,
     deleteFile,
     handleFilesUploadClick,
     handleFilesDrop,
-  } = useLocalFile({ fileType: 'image', maxFileCount: 10 });
-
-  const { isEditMode, existingPhotos, deleteExistingPhoto, submitWork } =
-    useWorkForm({ spaceCode, reset });
+  } = useLocalFile({
+    fileType: 'image',
+    maxFileCount: 10 - existingPhotos.length,
+  });
 
   const onValid = async (data: WorkFormData) => {
     trackClick(
@@ -147,6 +156,10 @@ const WorkForm = () => {
 
   return (
     <>
+      <LoadingModal
+        isOpen={isSubmitting}
+        text={isEditMode ? '수정중 ...' : '등록중...'}
+      />
       <DeleteModal
         isOpen={isDeleteModalOpen}
         onCloseModal={() => {
@@ -279,7 +292,7 @@ const WorkForm = () => {
               type="submit"
               text={isEditMode ? '수정하기' : '등록하기'}
               variant="fixed"
-              disabled={!isAllValid}
+              disabled={!isAllValid || isSubmitting}
             />
           </S.ButtonContainer>
         </S.FormContainer>
