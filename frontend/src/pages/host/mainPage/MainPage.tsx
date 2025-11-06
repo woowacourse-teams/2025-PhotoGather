@@ -9,7 +9,9 @@ import { createSpaceMainRoute, ROUTES } from '../../../constants/routes';
 import useButtonTracking from '../../../hooks/@common/useButtonTracking';
 import useUserInfoContext from '../../../hooks/context/userInfoContext';
 import useMySpaces from '../../../hooks/domain/space/useMySpaces';
-import useSpacesDisplay from '../../../hooks/domain/useSpacesDisplay';
+import useSpacesDisplay, {
+  type SortType,
+} from '../../../hooks/domain/useSpacesDisplay';
 import { DividerLine } from '../../../styles/@common/DividerLine.styles';
 import { theme } from '../../../styles/theme';
 import * as S from './MainPage.styles';
@@ -30,6 +32,7 @@ const MainPage = () => {
   const sortOptions: DropdownOption[] = [
     { value: 'latest', label: '등록순' },
     { value: 'guestCount', label: '방명록순' },
+    { value: 'name', label: '이름순' },
   ];
 
   const handleCreateSpaceButton = () => {
@@ -44,7 +47,7 @@ const MainPage = () => {
       page: '/host/main',
       sortType: value,
     });
-    changeSortType(value as 'latest' | 'guestCount');
+    changeSortType(value as SortType);
   };
 
   const handleSpaceCardClick = (spaceCode: string) => {
