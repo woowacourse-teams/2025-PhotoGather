@@ -29,3 +29,12 @@ export interface SpaceInfoFormData {
   instagramUsername: string;
   isDeletePhoto?: boolean;
 }
+
+export interface SpaceStats {
+  spaceStats: {
+    spaceCount: number;
+  };
+  guestBookStats: {
+    cardCount: number;
+  };
+}
