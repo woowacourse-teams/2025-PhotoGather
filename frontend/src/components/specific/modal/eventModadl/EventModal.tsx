@@ -37,6 +37,16 @@ const EventModal = ({ isOpen, onClose, spaceCode }: EventModalProps) => {
     window.open(EVENT_FORM_URL, '_blank', 'noopener,noreferrer');
   };
 
+  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const checked = e.target.checked;
+    setNotShowToday(checked);
+    trackClick(
+      checked
+        ? 'event_modal_hide_today_checked'
+        : 'event_modal_hide_today_unchecked',
+    );
+  };
+
   return (
     <Modal isOpen={isOpen} onClose={handleClose}>
       <Modal.Backdrop />
@@ -57,7 +67,7 @@ const EventModal = ({ isOpen, onClose, spaceCode }: EventModalProps) => {
                 id={checkboxId}
                 type="checkbox"
                 checked={notShowToday}
-                onChange={(e) => setNotShowToday(e.target.checked)}
+                onChange={handleCheckboxChange}
               />
               <S.CheckboxLabel>오늘 하루동안 보지 않기</S.CheckboxLabel>
             </S.CheckboxContainer>
