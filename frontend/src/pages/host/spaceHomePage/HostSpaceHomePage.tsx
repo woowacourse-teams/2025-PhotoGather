@@ -1,6 +1,10 @@
 import { useEffect, useState } from 'react';
-import { IoLogoInstagram, IoShareOutline } from 'react-icons/io5';
-import { MdEmail, MdSettings } from 'react-icons/md';
+import {
+  IoLogoInstagram,
+  IoMailOutline,
+  IoShareOutline,
+} from 'react-icons/io5';
+import { MdSettings } from 'react-icons/md';
 import { useNavigate, useParams } from 'react-router-dom';
 import Button from '../../../components/@common/buttons/button/Button';
 import IconButton from '../../../components/@common/buttons/iconButton/IconButton';
@@ -132,7 +136,7 @@ const HostSpaceHomePage = () => {
           {spaceInfo.email && (
             <IconButton
               aria-label="이메일"
-              icon={<MdEmail size={24} />}
+              icon={<IoMailOutline size={24} />}
               variant="default"
               onClick={onEmailClick}
               disabled={!spaceInfo.email || spaceInfo.email === ''}
