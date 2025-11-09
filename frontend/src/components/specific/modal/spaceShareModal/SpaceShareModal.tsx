@@ -2,6 +2,7 @@ import { useRef } from 'react';
 import { MdDownload, MdLink } from 'react-icons/md';
 import { useParams } from 'react-router-dom';
 import Kakao from '../../../../@assets/icons/kakaotalk.svg?react';
+import { KAKAO_TEMPLATE_ID } from '../../../../constants/constants';
 import useButtonTracking from '../../../../hooks/@common/useButtonTracking';
 import { useToast } from '../../../../hooks/@common/useToast';
 import { theme } from '../../../../styles/theme';
@@ -77,11 +78,11 @@ const SpaceShareModal = ({
 
     try {
       window.Kakao.Share.sendCustom({
-        templateId: isDev ? 125656 : 125655,
+        templateId: isDev ? KAKAO_TEMPLATE_ID.DEV : KAKAO_TEMPLATE_ID.PROD,
         templateArgs: {
           userName: userName || '사용자',
           spaceName: spaceName || '스페이스',
-          link: `${link}`,
+          link: link,
         },
       });
     } catch (error) {

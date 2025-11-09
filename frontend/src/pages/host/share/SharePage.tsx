@@ -6,6 +6,7 @@ import CompleteImage from '../../../@assets/images/space-create.png';
 import Button from '../../../components/@common/buttons/button/Button';
 import IconButton from '../../../components/@common/buttons/iconButton/IconButton';
 import QRCode from '../../../components/@common/qrCode/QRCode';
+import { KAKAO_TEMPLATE_ID } from '../../../constants/constants';
 import {
   createGuestHomeRoute,
   createSpaceMainRoute,
@@ -90,11 +91,11 @@ const SharePage = () => {
 
     try {
       window.Kakao.Share.sendCustom({
-        templateId: isDev ? 125656 : 125655,
+        templateId: isDev ? KAKAO_TEMPLATE_ID.DEV : KAKAO_TEMPLATE_ID.PROD,
         templateArgs: {
           userName: userInfo.name || '사용자',
           spaceName: spaceName || '스페이스',
-          link: `${link}`,
+          link: link,
         },
       });
     } catch (error) {
