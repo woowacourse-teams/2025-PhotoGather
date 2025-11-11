@@ -1,11 +1,12 @@
 import {
   type MotionProps,
   motion,
+  useInView,
   useMotionValueEvent,
   useScroll,
   type Variants,
 } from 'framer-motion';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { MdArrowUpward, MdKeyboardDoubleArrowDown } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
 import completeImage from '../../@assets/images/screenshots/complete.png';
@@ -20,6 +21,8 @@ import IconButton from '../../components/@common/buttons/iconButton/IconButton';
 import { AUTH_COOKIES } from '../../constants/cookie';
 import { ROUTES } from '../../constants/routes';
 import useButtonTracking from '../../hooks/@common/useButtonTracking';
+import useCountUp from '../../hooks/@common/useCountUp';
+import { useSpaceStats } from '../../hooks/domain/landing/useSpaceStats';
 import { CookieUtils } from '../../utils/cookie';
 import { goToTop } from '../../utils/goToTop';
 import * as S from './LandingPage.styles';
@@ -88,6 +91,30 @@ const LandingPage = () => {
   const { scrollYProgress } = useScroll();
   const [hideScrollIcon, setHideScrollIcon] = useState(false);
   const [hideScrollTop, setHideScrollTop] = useState(true);
+  const countUpHeadingRef = useRef<HTMLHeadingElement | null>(null);
+  const isCountUpInView = useInView(countUpHeadingRef, {
+    once: true,
+    amount: 0.3,
+  });
+  const { stats, isLoading } = useSpaceStats();
+
+  const spaceTargetNumber =
+    isCountUpInView && !isLoading
+      ? (stats?.spaceStats.spaceCount ?? 60) - 10
+      : 0;
+  const guestbookTargetNumber =
+    isCountUpInView && !isLoading
+      ? (stats?.guestBookStats.cardCount ?? 100)
+      : 0;
+
+  const { number: spaceCount } = useCountUp({
+    targetNumber: spaceTargetNumber,
+    isActive: isCountUpInView && !isLoading,
+  });
+  const { number: guestbookCount } = useCountUp({
+    targetNumber: guestbookTargetNumber,
+    isActive: isCountUpInView && !isLoading,
+  });
 
   useMotionValueEvent(scrollYProgress, 'change', (latest) => {
     if (latest > 0 && !hideScrollIcon) setHideScrollIcon(true);
@@ -139,13 +166,20 @@ const LandingPage = () => {
       </MotionScrollTopContainer>
       <S.ContentContainer>
         <MotionSection
-          style={{ gap: '156px' }}
+          style={{ gap: '95px' }}
           {...sectionMotionProps}
           variants={delaySectionVariants}
         >
           <MotionTitleContainer variants={fadeVariants}>
-            <S.Title>당신을 위한 순간, 흩어지지 않게</S.Title>
+            <S.SmallTitle>당신을 위한 순간, 흩어지지 않게</S.SmallTitle>
             <S.TitleImage src={titleImage} alt="포게더 로고 이미지" />
+          </MotionTitleContainer>
+          <MotionTitleContainer variants={fadeVariants}>
+            <S.SubTitle ref={countUpHeadingRef}>
+              {isCountUpInView
+                ? `현재 ${spaceCount}개의 스페이스에\n${guestbookCount}개의 방명록이 모였어요.`
+                : null}
+            </S.SubTitle>
           </MotionTitleContainer>
           <MotionTitleContainer variants={fadeVariants}>
             <S.SmallTitle>작가와 방문객이 연결되는 공간</S.SmallTitle>

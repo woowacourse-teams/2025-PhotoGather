@@ -2,6 +2,7 @@ import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { guestbookService } from '../../../apis/services/guestbook/guestbook.service';
 import { createGuestbookCompleteRoute } from '../../../constants/routes';
+import { queryClient } from '../../../main';
 import type { GuestbookForm } from '../../../types/domain/guestbook.type';
 import type { LocalFile } from '../../../types/file.type';
 import { clearFiles } from '../../../utils/clearFiles';
@@ -76,6 +77,7 @@ const usePostGuestbook = ({
         },
       });
       clearFiles(data.photos);
+      queryClient.invalidateQueries({ queryKey: ['guestbookList', spaceCode] });
     },
     onError: (error) => {
       console.error(error);

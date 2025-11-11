@@ -9,7 +9,11 @@ import { createSpaceMainRoute, ROUTES } from '../../../constants/routes';
 import useButtonTracking from '../../../hooks/@common/useButtonTracking';
 import useUserInfoContext from '../../../hooks/context/userInfoContext';
 import useMySpaces from '../../../hooks/domain/space/useMySpaces';
-import useSpacesDisplay from '../../../hooks/domain/useSpacesDisplay';
+import useSpacesDisplay, {
+  type SortType,
+} from '../../../hooks/domain/useSpacesDisplay';
+import { DividerLine } from '../../../styles/@common/DividerLine.styles';
+import { theme } from '../../../styles/theme';
 import * as S from './MainPage.styles';
 
 const MainPage = () => {
@@ -28,6 +32,7 @@ const MainPage = () => {
   const sortOptions: DropdownOption[] = [
     { value: 'latest', label: '등록순' },
     { value: 'guestCount', label: '방명록순' },
+    { value: 'name', label: '이름순' },
   ];
 
   const handleCreateSpaceButton = () => {
@@ -42,7 +47,7 @@ const MainPage = () => {
       page: '/host/main',
       sortType: value,
     });
-    changeSortType(value as 'latest' | 'guestCount');
+    changeSortType(value as SortType);
   };
 
   const handleSpaceCardClick = (spaceCode: string) => {
@@ -61,14 +66,25 @@ const MainPage = () => {
           alt={userInfo?.name}
         />
         <S.InfoContainer>
-          <S.NameContainer>{userInfo?.name}</S.NameContainer>
+          <S.NameContainer>
+            {userInfo?.name}
+            <S.EditInfoButton
+              onClick={() => navigate(ROUTES.HOST.MY_PAGE)}
+              text="내 정보 수정 >"
+              variant="fit"
+            />
+          </S.NameContainer>
         </S.InfoContainer>
       </S.ProfileContainer>
-      <S.CreateSpaceButton onClick={handleCreateSpaceButton}>
-        <IoAddOutline size={16} />
-        스페이스 생성
-      </S.CreateSpaceButton>
       <S.SpaceContainer>
+        <S.DividerContainer>
+          <DividerLine width="25%" color={theme.colors.gray04} />
+          <S.CreateSpaceButton onClick={handleCreateSpaceButton}>
+            <IoAddOutline size={16} />
+            스페이스 생성
+          </S.CreateSpaceButton>
+          <DividerLine width="25%" color={theme.colors.gray04} />
+        </S.DividerContainer>
         <S.SpaceList>
           {isSpacesEmpty && <S.FilterBlur />}
           {isSpacesEmpty && (

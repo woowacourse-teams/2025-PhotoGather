@@ -1,7 +1,13 @@
-import type { MySpace, SpaceInfo } from '../../../types/domain/space.type';
+import type {
+  MySpace,
+  SpaceInfo,
+  SpaceStats,
+} from '../../../types/domain/space.type';
 import { http } from '../../http';
 
 export const spaceService = {
+  getSpaceStats: () => http.get<SpaceStats>('/stats/landing'),
+
   create: (data: FormData) => http.post<{ spaceCode: string }>('/spaces', data),
 
   getSpaceInfo: (spaceCode: string) =>

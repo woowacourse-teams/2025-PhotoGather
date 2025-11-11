@@ -1,4 +1,4 @@
-import { useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { spaceService } from '../../../apis/services/space/space.service';
 import { createSpaceInfoRoute } from '../../../constants/routes';
@@ -12,6 +12,11 @@ interface UsePatchSpaceInfoProps {
   isImageExisted: boolean;
 }
 
+interface PatchMutationVariables {
+  data: Partial<SpaceInfoFormData>;
+  image?: File;
+}
+
 const usePatchSpaceInfo = ({
   spaceCode,
   dirtyFields,
@@ -21,6 +26,30 @@ const usePatchSpaceInfo = ({
   const { showToast } = useToast();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+
+  const patchMutation = useMutation({
+    mutationFn: async (patchMutationVariable: PatchMutationVariables) => {
+      const { data, image } = patchMutationVariable;
+      const formData = createFormData(data, image);
+      await spaceService.patchSpaceInfo(spaceCode, formData);
+    },
+    onSuccess: () => {
+      showToast({
+        text: '스페이스 정보가 수정되었습니다.',
+        type: 'info',
+      });
+      afterPatch?.();
+      queryClient.invalidateQueries({ queryKey: ['spaceInfo', spaceCode] });
+      navigate(createSpaceInfoRoute(spaceCode));
+      return;
+    },
+    onError: () => {
+      showToast({
+        text: '스페이스 정보 수정에 실패했습니다.',
+        type: 'error',
+      });
+    },
+  });
 
   const findUpdatedData = (
     data: Partial<SpaceInfoFormData>,
@@ -61,25 +90,10 @@ const usePatchSpaceInfo = ({
     data: Partial<SpaceInfoFormData>,
     image?: File,
   ) => {
-    const formData = createFormData(data, image);
-    const res = await spaceService.patchSpaceInfo(spaceCode, formData);
-    if (res.success) {
-      showToast({
-        text: '스페이스 정보가 수정되었습니다.',
-        type: 'info',
-      });
-      afterPatch?.();
-      queryClient.invalidateQueries({ queryKey: ['spaceInfo', spaceCode] });
-      navigate(createSpaceInfoRoute(spaceCode));
-      return;
-    }
-    showToast({
-      text: '스페이스 정보 수정에 실패했습니다.',
-      type: 'error',
-    });
+    patchMutation.mutate({ data, image });
   };
 
-  return { patchSpaceInfo };
+  return { patchSpaceInfo, isPatching: patchMutation.isPending };
 };
 
 export default usePatchSpaceInfo;

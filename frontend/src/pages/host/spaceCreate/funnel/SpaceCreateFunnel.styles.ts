@@ -19,3 +19,8 @@ export const ContentContainer = styled.div`
   display: flex;
   flex-direction: column;
 `;
+
+export const ProgressBarContainer = styled.div`
+  position: relative;
+  top: -16px;
+`;

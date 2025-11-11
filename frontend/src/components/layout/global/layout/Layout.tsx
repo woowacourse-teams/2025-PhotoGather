@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
-import { IoMdHome } from 'react-icons/io';
-import { MdMenu } from 'react-icons/md';
+import { MdChevronLeft, MdHome, MdMenu } from 'react-icons/md';
 import {
   Outlet,
   useLocation,
@@ -72,7 +71,7 @@ const Layout = () => {
       },
     },
     profile: {
-      icon: <IoMdHome size={24} />,
+      icon: <MdHome size={24} />,
       onClick: () => {
         trackClick('header_home_icon_click', {
           page: path,
@@ -87,6 +86,10 @@ const Layout = () => {
         }
         navigate(ROUTES.LANDING);
       },
+    },
+    back: {
+      icon: <MdChevronLeft size={32} />,
+      onClick: () => navigate(-1),
     },
   };
 

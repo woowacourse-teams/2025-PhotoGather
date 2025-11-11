@@ -32,6 +32,7 @@ export const useWorkForm = ({ spaceCode, reset }: UseWorkFormParams) => {
   const [initialWorkData, setInitialWorkData] = useState<WorkFormData | null>(
     null,
   );
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: showToast is stable
   useEffect(() => {
@@ -148,6 +149,7 @@ export const useWorkForm = ({ spaceCode, reset }: UseWorkFormParams) => {
     }
 
     try {
+      setIsSubmitting(true);
       const newPhotos = await uploadNewPhotos(files);
 
       if (isEditMode) {
@@ -158,6 +160,8 @@ export const useWorkForm = ({ spaceCode, reset }: UseWorkFormParams) => {
     } catch (error) {
       console.error(error);
       showToast({ text: '작품 저장에 실패했습니다.' });
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -166,5 +170,6 @@ export const useWorkForm = ({ spaceCode, reset }: UseWorkFormParams) => {
     existingPhotos,
     deleteExistingPhoto,
     submitWork,
+    isSubmitting,
   };
 };

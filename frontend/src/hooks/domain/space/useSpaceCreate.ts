@@ -60,7 +60,9 @@ export const useSpaceCreate = () => {
     try {
       const spaceCode = await fetchCreateSpace(formData);
       if (!spaceCode) return;
-      navigate(ROUTES.HOST.SHARE, { state: { spaceCode } });
+      navigate(ROUTES.HOST.SHARE, {
+        state: { spaceCode, spaceName: rest.name },
+      });
     } catch (error) {
       showToast({
         text: '스페이스 생성에 실패했습니다',

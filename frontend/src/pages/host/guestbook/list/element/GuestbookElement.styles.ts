@@ -6,7 +6,7 @@ export const Wrapper = styled.button`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 24px 30px;
+  padding: 16px 30px;
   border-radius: 4px;
   transition: background-color 0.2s;
 
@@ -25,7 +25,7 @@ export const LeftContainer = styled.div`
 export const RightContainer = styled.div``;
 
 export const Text = styled.p`
-  ${({ theme }) => theme.typography.header03}
+  ${({ theme }) => theme.typography.bodyLarge}
   max-width: 200px;
   white-space: nowrap;
   overflow: hidden;

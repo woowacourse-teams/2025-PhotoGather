@@ -3,7 +3,7 @@ import styled from '@emotion/styled';
 export const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 45px;
+  gap: 44px;
   min-height: ${({ theme }) =>
     `calc(100dvh - 2 * ${theme.layout.padding.topBottom} - ${theme.layout.headerHeight})`};
 `;
@@ -27,7 +27,7 @@ export const Description = styled.p`
 export const ListContainer = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 16px;
 `;
 
 export const IntersectionArea = styled.div`
