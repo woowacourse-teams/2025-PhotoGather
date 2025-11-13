@@ -16,6 +16,8 @@ public interface ProductRepository {
 
     Optional<Product> findBySpace(Space space);
 
+    boolean existsBySpace(Space space);
+
     default Product getBySpaceOrThrow(Space space) {
         if (space == null) {
             throw new BaseNullPointerException("스페이스는 null일 수 없습니다.", HttpStatus.INTERNAL_SERVER_ERROR);
