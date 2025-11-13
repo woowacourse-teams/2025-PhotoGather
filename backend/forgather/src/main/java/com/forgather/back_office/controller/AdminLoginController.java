@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.forgather.back_office.dto.AdminLoginRequest;
 import com.forgather.back_office.dto.AdminLoginResponse;
+import com.forgather.back_office.dto.AdminRefreshRequest;
 import com.forgather.back_office.service.AdminLoginService;
 
 import lombok.RequiredArgsConstructor;
@@ -22,6 +23,12 @@ public class AdminLoginController {
     @PostMapping("/login")
     public ResponseEntity<AdminLoginResponse> login(@RequestBody AdminLoginRequest request) {
         var response = adminLoginService.login(request);
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/refresh")
+    public ResponseEntity<AdminLoginResponse> refresh(@RequestBody AdminRefreshRequest request) {
+        var response = adminLoginService.refresh(request);
         return ResponseEntity.ok(response);
     }
 }

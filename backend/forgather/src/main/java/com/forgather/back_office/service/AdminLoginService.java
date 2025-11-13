@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.forgather.back_office.dto.AdminLoginRequest;
 import com.forgather.back_office.dto.AdminLoginResponse;
+import com.forgather.back_office.dto.AdminRefreshRequest;
 import com.forgather.back_office.model.AdminUser;
 import com.forgather.back_office.repository.AdminUserRepository;
 import com.forgather.global.auth.util.JwtTokenProvider;
@@ -33,5 +34,16 @@ public class AdminLoginService {
         String refreshToken = jwtTokenProvider.generateAdminRefreshToken(adminUser.getId());
 
         return AdminLoginResponse.of(accessToken, refreshToken);
+    }
+
+    @Transactional(readOnly = true)
+    public AdminLoginResponse refresh(AdminRefreshRequest request) {
+        jwtTokenProvider.validateToken(request.refreshToken());
+
+        Long adminUserId = jwtTokenProvider.getId(request.refreshToken());
+        AdminUser adminUser = adminUserRepository.getByIdOrThrow(adminUserId);
+        String newAccessToken = jwtTokenProvider.generateAdminAccessToken(adminUser.getId());
+
+        return AdminLoginResponse.of(newAccessToken, request.refreshToken());
     }
 }
