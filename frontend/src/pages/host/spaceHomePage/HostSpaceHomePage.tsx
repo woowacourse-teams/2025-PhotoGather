@@ -20,7 +20,7 @@ import useButtonTracking from '../../../hooks/@common/useButtonTracking';
 import useUserInfoContext from '../../../hooks/context/userInfoContext';
 import useSpaceInfoContext from '../../../hooks/context/useSpaceInfoContext';
 import { DividerLine } from '../../../styles/@common/DividerLine.styles';
-import { buildOriginalImageUrl } from '../../../utils/buildImageUrl';
+import { buildThumbnailUrl } from '../../../utils/buildImageUrl';
 import { canOpenEventModal } from '../../../utils/canOpenEventModal';
 import { createInstagramUrl } from '../../../utils/createExternalLinks';
 import * as MainPageStyles from '../../MainPage.common.styles';
@@ -112,7 +112,12 @@ const HostSpaceHomePage = () => {
           />
         </S.ActionButtonContainer>
         <MainPageStyles.ProfileContainer>
-          <Thumbnail src={buildOriginalImageUrl(spaceInfo.spacePhoto.path)} />
+          <Thumbnail
+            src={buildThumbnailUrl({
+              path: spaceInfo.spacePhoto.path,
+              replacePath: 'space',
+            })}
+          />
           <MainPageStyles.InfoContainer>
             <MainPageStyles.Name>{spaceInfo.name}</MainPageStyles.Name>
             <MainPageStyles.Introduction>

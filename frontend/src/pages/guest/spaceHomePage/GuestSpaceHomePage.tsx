@@ -1,8 +1,8 @@
 import { IoLogoInstagram, IoMailOutline } from 'react-icons/io5';
 import { useNavigate, useParams } from 'react-router-dom';
-import defaultImage from '../../../@assets/images/default-forgather-image.png';
 import Button from '../../../components/@common/buttons/button/Button';
 import IconButton from '../../../components/@common/buttons/iconButton/IconButton';
+import Thumbnail from '../../../components/@common/thumbnail/Thumbnail';
 import {
   createCreateGuestbookRoute,
   createGuestGuestbookRoute,
@@ -12,9 +12,8 @@ import {
 import useButtonTracking from '../../../hooks/@common/useButtonTracking';
 import useSpaceInfoContext from '../../../hooks/context/useSpaceInfoContext';
 import { DividerLine } from '../../../styles/@common/DividerLine.styles';
-import { buildOriginalImageUrl } from '../../../utils/buildImageUrl';
+import { buildThumbnailUrl } from '../../../utils/buildImageUrl';
 import { createInstagramUrl } from '../../../utils/createExternalLinks';
-import { createImageErrorHandler } from '../../../utils/createImageErrorHandler';
 import * as MainPageStyles from '../../MainPage.common.styles';
 import { mockAccess } from '../../mockData';
 
@@ -30,10 +29,6 @@ const GuestSpaceHomePage = () => {
   if (isLoading) {
     return <MainPageStyles.Wrapper>로딩 중...</MainPageStyles.Wrapper>;
   }
-
-  const thumbnailUrl = spaceInfo.spacePhoto.isExists
-    ? buildOriginalImageUrl(spaceInfo.spacePhoto.path)
-    : 'invalid-url';
 
   const handleInstagramClick = () => {
     trackClick('guest_space_instagram_button');
@@ -52,10 +47,11 @@ const GuestSpaceHomePage = () => {
   return (
     <MainPageStyles.Wrapper>
       <MainPageStyles.ProfileContainer>
-        <MainPageStyles.Thumbnail
-          src={thumbnailUrl}
-          alt={spaceInfo.name}
-          onError={createImageErrorHandler(defaultImage)}
+        <Thumbnail
+          src={buildThumbnailUrl({
+            path: spaceInfo.spacePhoto.path,
+            replacePath: 'space',
+          })}
         />
         <MainPageStyles.InfoContainer>
           <MainPageStyles.Name>{spaceInfo.name}</MainPageStyles.Name>
