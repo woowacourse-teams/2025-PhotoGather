@@ -9,7 +9,7 @@ import CompletePage from '../pages/guest/completePage/CompletePage';
 import GuestGuestbookCardPage from '../pages/guest/guestbookPage/card/GuestGuestbookCardPage';
 import GuestBookFunnel from '../pages/guest/guestbookPage/funnel/GuestbookFunnel';
 import GuestGuestbookListPage from '../pages/guest/guestbookPage/list/GuestGuestbookListPage';
-import GuestSpaceHomePage from '../pages/guest/spaceHomePage/GuestMainPage';
+import GuestSpaceHomePage from '../pages/guest/spaceHomePage/GuestSpaceHomePage';
 import GuestWorkDetail from '../pages/guest/workDetail/GuestWorkDetail';
 import GuestbookCardPage from '../pages/host/guestbook/card/GuestbookCardPage';
 import GuestbookListPage from '../pages/host/guestbook/list/GuestbookListPage';
