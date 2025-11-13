@@ -1,7 +1,29 @@
 /**
  * API Utility Module
  * Fetch API를 사용한 HTTP 요청 유틸리티
+ * 401 에러 발생 시 자동으로 Refresh Token을 사용해 Access Token을 갱신하고 재시도
  */
+
+/**
+ * Token Refresh Promise 캐시
+ *
+ * 목적: 동시에 여러 API 요청이 401 에러를 받을 때 Refresh Token 요청이 중복되는 것을 방지
+ *
+ * 동시 다중 401 시나리오:
+ * - 사용자가 페이지를 열었을 때 여러 API 요청이 동시에 발생 (예: 스페이스 목록, 사용자 정보, 통계 등)
+ * - Access Token이 만료되어 모든 요청이 동시에 401 에러를 받음
+ * - 각 요청마다 Auth.refreshToken()을 호출하면 동일한 Refresh Token으로 여러 번 갱신 요청
+ * - 서버에 불필요한 부하 + 경합 조건(race condition) 발생 가능
+ *
+ * 해결 방법:
+ * - 첫 번째 401 에러가 Auth.refreshToken()을 호출하면 그 Promise를 캐싱
+ * - 이후 401 에러들은 새로 Auth.refreshToken()을 호출하지 않고 캐시된 Promise를 재사용
+ * - Token 갱신이 완료되면 캐시를 null로 리셋
+ * - 모든 대기 중인 요청들이 동일한 새 Access Token을 받아 재시도
+ *
+ * @type {Promise<string>|null}
+ */
+let tokenRefreshPromise = null;
 
 const API = {
     /**
@@ -39,21 +61,80 @@ const API = {
     },
 
     /**
-     * Fetch 요청 래퍼
+     * Fetch 요청 래퍼 (401 에러 자동 처리 포함)
+     *
      * @param {string} url - 요청 URL
      * @param {object} options - Fetch 옵션
+     * @param {boolean} isRetry - 재시도 여부 (내부 플래그, 외부에서 사용 금지)
      * @returns {Promise<object>} 응답 데이터
+     *
+     * 자동 처리 기능:
+     * 1. Access Token을 Authorization 헤더에 자동 추가 (includeAuth 옵션에 따라)
+     * 2. 401 에러 시 Refresh Token으로 토큰 갱신
+     * 3. 갱신 성공 시 원래 요청 자동 재시도 (새 Access Token 사용)
+     * 4. 갱신 실패 시 로그인 페이지로 리다이렉트
+     *
+     * 무한 루프 방지:
+     * - isRetry 플래그를 사용해 재시도는 최대 1회만 허용
+     * - 재시도한 요청이 다시 401을 받으면 더 이상 재시도하지 않고 로그인 페이지로 이동
+     * - Auth.refreshToken()은 직접 fetch를 사용하므로 이 함수를 거치지 않음 (무한 루프 방지)
+     *
+     * 동시성 제어:
+     * - 여러 요청이 동시에 401을 받아도 Refresh Token 요청은 한 번만 발생
+     * - tokenRefreshPromise 캐싱으로 동일한 갱신 Promise를 공유
+     *
+     * @throws {Error} 네트워크 에러, 인증 실패, 권한 없음, 리소스 없음, 서버 에러 등
      */
-    async request(url, options = {}) {
+    async request(url, options = {}, isRetry = false) {
         try {
             const response = await fetch(url, options);
 
-            // 401 Unauthorized - 인증 실패
+            // 401 Unauthorized - Access Token 만료 또는 유효하지 않음
             if (response.status === 401) {
-                console.error('Unauthorized: Token expired or invalid');
-                Auth.clearTokens();
-                Auth.redirectToLogin();
-                throw new Error('인증이 필요합니다. 다시 로그인해주세요.');
+                console.warn('[API] 401 Unauthorized 감지:', url);
+
+                // 재시도 중에 다시 401이 발생하면 더 이상 재시도하지 않음
+                // 이는 Refresh Token도 만료되었거나 유효하지 않음을 의미
+                if (isRetry) {
+                    console.error('[API] 재시도 후에도 401 에러 발생. 로그인이 필요합니다.');
+                    Auth.clearTokens();
+                    Auth.redirectToLogin();
+                    throw new Error('인증이 필요합니다. 다시 로그인해주세요.');
+                }
+
+                // Token Refresh 시도
+                try {
+                    console.log('[API] Access Token 갱신 시도...');
+
+                    // 동시 다중 401 에러 처리: tokenRefreshPromise 캐싱
+                    // 이미 갱신 중이면 기존 Promise 재사용, 아니면 새로 시작
+                    if (!tokenRefreshPromise) {
+                        tokenRefreshPromise = Auth.refreshToken();
+                    }
+
+                    // Token 갱신 대기 (여러 요청이 동시에 여기서 대기할 수 있음)
+                    const newAccessToken = await tokenRefreshPromise;
+
+                    // 갱신 완료 후 캐시 리셋 (다음 401 에러를 위해)
+                    tokenRefreshPromise = null;
+
+                    console.log('[API] Access Token 갱신 완료. 원래 요청 재시도:', url);
+
+                    // 새 Access Token으로 Authorization 헤더 업데이트
+                    if (options.headers && options.headers['Authorization']) {
+                        options.headers['Authorization'] = `Bearer ${newAccessToken}`;
+                    }
+
+                    // 원래 요청 재시도 (isRetry=true로 무한 루프 방지)
+                    return await this.request(url, options, true);
+
+                } catch (refreshError) {
+                    // Token 갱신 실패 (Refresh Token 만료, 네트워크 에러 등)
+                    console.error('[API] Token 갱신 실패:', refreshError.message);
+                    tokenRefreshPromise = null; // 캐시 리셋
+                    // Auth.refreshToken()에서 이미 로그인 페이지로 리다이렉트했을 수 있음
+                    throw new Error('세션이 만료되었습니다. 다시 로그인해주세요.');
+                }
             }
 
             // 403 Forbidden - 권한 없음
@@ -85,7 +166,8 @@ const API = {
 
             return await response.json();
         } catch (error) {
-            console.error('API Request Error:', error);
+            // fetch 자체 에러 (네트워크 에러 등) 또는 위에서 던진 에러
+            console.error('[API] Request Error:', error.message);
             throw error;
         }
     },
