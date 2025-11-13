@@ -180,6 +180,36 @@ const API = {
      */
     async getSpaces(page = 1, size = 15) {
         return this.get('/spaces', { page, size }, true);
+    },
+
+    /**
+     * Space 상세 정보 조회 API
+     *
+     * @param {string} spaceCode - 조회할 스페이스 코드 (예: "e3f6b97f19")
+     * @returns {Promise<object>} 스페이스 상세 정보 응답
+     * @returns {object} response.space - 스페이스 기본 정보 (id, code, name, isPublic)
+     * @returns {boolean} response.hasProduct - 작품 소개 등록 여부
+     * @returns {number} response.guestBookCount - 방명록 개수
+     * @throws {Error} API 호출 실패 시 에러 (404: 존재하지 않는 스페이스, 401: 인증 실패 등)
+     *
+     * 사용 예시:
+     * ```javascript
+     * try {
+     *     const detail = await API.getSpaceDetail('e3f6b97f19');
+     *     console.log(detail.space.name); // "졸업 전시"
+     *     console.log(detail.guestBookCount); // 42
+     * } catch (error) {
+     *     console.error('Failed to load space detail:', error);
+     * }
+     * ```
+     *
+     * 주의:
+     * - 이 함수는 비동기(async)이므로 반드시 await 또는 .then() 사용 필요
+     * - Authorization 헤더가 자동으로 포함되므로 로그인 상태여야 함
+     * - spaceCode는 URL 경로에 포함되므로 특수문자가 있는 경우 인코딩 필요 없음
+     */
+    async getSpaceDetail(spaceCode) {
+        return this.get(`/spaces/${spaceCode}`, {}, true);
     }
 };
 

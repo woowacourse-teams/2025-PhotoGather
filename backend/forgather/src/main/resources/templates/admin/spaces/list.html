@@ -37,8 +37,8 @@
         <div class="container">
             <!-- Page Header -->
             <div class="page-header">
-                <h2>Spaces Management</h2>
-                <p>Manage all photo gathering spaces</p>
+                <h2>스페이스 관리 페이지</h2>
+                <p>전체 스페이스 조회 및 관리 페이지</p>
             </div>
 
             <!-- Controls -->
@@ -106,6 +106,77 @@
 
     <!-- Toast Notification -->
     <div id="toast" class="toast"></div>
+
+    <!--
+        스페이스 상세 정보 모달
+        - 기본적으로 숨김 상태 (display: none)
+        - JavaScript에서 spaceCode 클릭 시 표시
+        - ESC 키 또는 오버레이 클릭 시 닫힘
+        - 모달이 열렸을 때 body의 스크롤 방지
+    -->
+    <div id="spaceDetailModal" class="modal-overlay" style="display: none;" role="dialog" aria-labelledby="modalTitle" aria-modal="true">
+        <div class="modal-container">
+            <!-- 모달 헤더 -->
+            <div class="modal-header">
+                <h3 id="modalTitle" class="modal-title">Space Details</h3>
+                <button id="closeModalBtn" class="modal-close-btn" aria-label="Close modal">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <!-- 모달 내용 -->
+            <div class="modal-body">
+                <!-- 로딩 상태 표시 -->
+                <div id="modalLoading" class="modal-loading" style="display: none;">
+                    <div class="spinner-small"></div>
+                    <p>Loading space details...</p>
+                </div>
+
+                <!-- 에러 상태 표시 -->
+                <div id="modalError" class="modal-error" style="display: none;"></div>
+
+                <!-- 스페이스 상세 정보 (데이터가 로드되면 JavaScript로 채워짐) -->
+                <div id="modalContent" class="modal-content" style="display: none;">
+                    <div class="modal-info-group">
+                        <label class="modal-info-label">스페이스 ID</label>
+                        <div id="modalSpaceId" class="modal-info-value"></div>
+                    </div>
+
+                    <div class="modal-info-group">
+                        <label class="modal-info-label">스페이스 코드</label>
+                        <div id="modalSpaceCode" class="modal-info-value modal-code"></div>
+                    </div>
+
+                    <div class="modal-info-group">
+                        <label class="modal-info-label">스페이스 이름</label>
+                        <div id="modalSpaceName" class="modal-info-value"></div>
+                    </div>
+
+                    <div class="modal-info-group">
+                        <label class="modal-info-label">스페이스 공개 여부</label>
+                        <div id="modalSpacePublic" class="modal-info-value"></div>
+                    </div>
+
+                    <div class="modal-info-group">
+                        <label class="modal-info-label">작품 소개 등록 여부</label>
+                        <div id="modalHasProduct" class="modal-info-value"></div>
+                    </div>
+
+                    <div class="modal-info-group">
+                        <label class="modal-info-label">방명록 개수</label>
+                        <div id="modalGuestBookCount" class="modal-info-value"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 모달 푸터 (스페이스 페이지 이동 버튼) -->
+            <div class="modal-footer">
+                <button id="visitSpaceBtn" class="btn btn-primary" style="display: none;">
+                    호스트 스페이스 이동
+                </button>
+            </div>
+        </div>
+    </div>
 
     <!-- Scripts -->
     <script th:src="@{/js/admin/auth.js}"></script>
