@@ -7,7 +7,7 @@ const API = {
     /**
      * API 기본 URL
      */
-    BASE_URL: '/api/back-office',
+    BASE_URL: '/api/admin',
 
     /**
      * HTTP 메서드

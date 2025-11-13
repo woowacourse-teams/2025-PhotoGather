@@ -47,7 +47,7 @@ class AdminLoginAcceptanceTest extends AcceptanceTest {
         AdminLoginResponse result = RestAssuredMockMvc.given()
             .body(request)
             .when()
-            .post("/api/back-office/login")
+            .post("/api/admin/login")
             .then()
             .statusCode(HttpStatus.OK.value())
             .extract()

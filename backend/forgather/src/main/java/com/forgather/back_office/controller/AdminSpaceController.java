@@ -18,7 +18,7 @@ import com.forgather.back_office.service.AdminSpaceService;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/api/back-office/spaces")
+@RequestMapping("/api/admin/spaces")
 @RequiredArgsConstructor
 public class AdminSpaceController {
 

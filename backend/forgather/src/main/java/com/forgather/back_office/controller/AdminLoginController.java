@@ -13,7 +13,7 @@ import com.forgather.back_office.service.AdminLoginService;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/api/back-office")
+@RequestMapping("/api/admin")
 @RequiredArgsConstructor
 public class AdminLoginController {
 
