@@ -10,6 +10,7 @@ import Button from '../../../components/@common/buttons/button/Button';
 import IconButton from '../../../components/@common/buttons/iconButton/IconButton';
 import Thumbnail from '../../../components/@common/thumbnail/Thumbnail';
 import EventModal from '../../../components/specific/modal/eventModadl/EventModal';
+import SinglePhotoModal from '../../../components/specific/modal/singlePhotoModal/SinglePhotoModal';
 import SpaceShareModal from '../../../components/specific/modal/spaceShareModal/SpaceShareModal';
 import {
   createGuestbookRoute,
@@ -32,6 +33,7 @@ const HostSpaceHomePage = () => {
   const { spaceInfo } = useSpaceInfoContext();
   const [isEventModalOpen, setIsEventModalOpen] = useState(false);
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
+  const [isSpaceImageModalOpen, setIsSpaceImageModalOpen] = useState(false);
   const userInfo = useUserInfoContext();
 
   useEffect(() => {
@@ -48,6 +50,7 @@ const HostSpaceHomePage = () => {
     setIsShareModalOpen(true);
   };
   const closeShareModal = () => {
+    trackClick('close_space_share_modal');
     setIsShareModalOpen(false);
   };
 
@@ -94,6 +97,14 @@ const HostSpaceHomePage = () => {
         userName={userInfo.name}
         spaceName={spaceInfo.name}
       />
+      <SinglePhotoModal
+        isOpen={isSpaceImageModalOpen}
+        onClose={() => setIsSpaceImageModalOpen(false)}
+        imgSrc={buildThumbnailUrl({
+          path: spaceInfo.spacePhoto.path,
+          replacePath: 'space',
+        })}
+      />
       <MainPageStyles.Wrapper>
         <S.ActionButtonContainer>
           <IconButton
@@ -117,6 +128,7 @@ const HostSpaceHomePage = () => {
               path: spaceInfo.spacePhoto.path,
               replacePath: 'space',
             })}
+            onClick={() => setIsSpaceImageModalOpen(true)}
           />
           <MainPageStyles.InfoContainer>
             <MainPageStyles.Name>{spaceInfo.name}</MainPageStyles.Name>
