@@ -152,7 +152,6 @@ const WorkForm = () => {
   };
 
   const totalPhotos = existingPhotos.length + previewFiles.length;
-  const remainingSlots = 10 - totalPhotos;
 
   return (
     <>
@@ -244,6 +243,7 @@ const WorkForm = () => {
               onChange={handlePhotoUploadClick}
               onDrop={handlePhotoUploadDrop}
             />
+            <S.ImageCount>{`${totalPhotos}/10`}</S.ImageCount>
             <S.ImageGridContainer>
               {existingPhotos.map((photo, index) => (
                 <S.ImageGridItem key={`existing-${photo.id}`}>
@@ -277,12 +277,6 @@ const WorkForm = () => {
                   >
                     <IoClose size={20} />
                   </S.ImageDeleteButton>
-                </S.ImageGridItem>
-              ))}
-              {Array.from({ length: remainingSlots }).map((_, index) => (
-                // biome-ignore lint/suspicious/noArrayIndexKey: index is used as a key
-                <S.ImageGridItem key={`empty-${index}`}>
-                  <S.EmptyGridItem>{totalPhotos + index + 1}</S.EmptyGridItem>
                 </S.ImageGridItem>
               ))}
             </S.ImageGridContainer>
