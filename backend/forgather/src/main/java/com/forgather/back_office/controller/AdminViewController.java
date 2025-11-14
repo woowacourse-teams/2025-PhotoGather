@@ -32,4 +32,15 @@ public class AdminViewController {
     public String spacesPage() {
         return "admin/spaces/list";
     }
+
+    /**
+     * Host 목록 관리 페이지를 반환합니다.
+     * JWT 토큰 검증은 클라이언트 측에서 수행됩니다.
+     *
+     * @return Host 목록 페이지 템플릿 경로
+     */
+    @GetMapping("/hosts")
+    public String hostsPage() {
+        return "admin/hosts/list";
+    }
 }

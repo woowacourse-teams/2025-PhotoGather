@@ -292,6 +292,45 @@ const API = {
      */
     async getSpaceDetail(spaceCode) {
         return this.get(`/spaces/${spaceCode}`, {}, true);
+    },
+
+    /**
+     * Host 목록 조회 API
+     *
+     * @param {number} page - 페이지 번호 (1부터 시작)
+     * @param {number} size - 페이지 크기 (기본값: 15)
+     * @returns {Promise<object>} Host 목록 응답
+     * @returns {Array} response.hosts - Host 목록 배열
+     * @returns {number} response.currentPage - 현재 페이지 번호 (1부터 시작)
+     * @returns {number} response.pageSize - 페이지 크기
+     * @returns {number} response.totalCount - 전체 Host 개수
+     * @returns {number} response.totalPages - 전체 페이지 수
+     * @throws {Error} API 호출 실패 시 에러 (401: 인증 실패, 500: 서버 에러 등)
+     *
+     * Host 객체 구조:
+     * - id: Host ID (숫자)
+     * - name: Host 이름 (문자열)
+     * - createdAt: 생성 일시 (ISO 8601 문자열)
+     * - spaceIds: 소유한 Space ID 배열 (숫자 배열)
+     *
+     * 사용 예시:
+     * ```javascript
+     * try {
+     *     const response = await API.getHosts(1, 15);
+     *     console.log(response.hosts); // [{ id: 1, name: "홍길동", ... }, ...]
+     *     console.log(response.totalCount); // 100
+     * } catch (error) {
+     *     console.error('Failed to load hosts:', error);
+     * }
+     * ```
+     *
+     * 주의:
+     * - 이 함수는 비동기(async)이므로 반드시 await 또는 .then() 사용 필요
+     * - Authorization 헤더가 자동으로 포함되므로 로그인 상태여야 함
+     * - 페이지 번호는 1부터 시작 (서버에서 0-based를 1-based로 변환하여 반환)
+     */
+    async getHosts(page = 1, size = 15) {
+        return this.get('/hosts', { page, size }, true);
     }
 };
 
