@@ -32,7 +32,6 @@ public class AdminSpaceService {
 
     @Transactional(readOnly = true)
     public SpaceDetailResponse getSpaceDetail(String spaceCode, AdminUser adminUser) {
-        // 필요한 정보: 해당 스페이스의 회원, 해당 스페이스 작품 소개 존재 여부, 해당 해당 스페이스의 방명록 개수,
         Space space = spaceRepository.getByCodeOrThrow(spaceCode);
         boolean hasProduct = productRepository.findBySpace(space)
             .isPresent();
