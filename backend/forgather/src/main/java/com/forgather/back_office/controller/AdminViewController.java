@@ -24,7 +24,7 @@ public class AdminViewController {
 
     /**
      * Space 목록 관리 페이지를 반환합니다.
-     * JWT 토큰 검증은 클라이언트 측에서 수행됩니다.
+     * JWT 토큰 검증은 AdminAuthInterceptor에서 서버 사이드에서 수행됩니다.
      *
      * @return Space 목록 페이지 템플릿 경로
      */
@@ -35,7 +35,7 @@ public class AdminViewController {
 
     /**
      * Host 목록 관리 페이지를 반환합니다.
-     * JWT 토큰 검증은 클라이언트 측에서 수행됩니다.
+     * JWT 토큰 검증은 AdminAuthInterceptor에서 서버 사이드에서 수행됩니다.
      *
      * @return Host 목록 페이지 템플릿 경로
      */
