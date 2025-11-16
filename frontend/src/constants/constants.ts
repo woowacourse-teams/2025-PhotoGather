@@ -64,3 +64,7 @@ export const KAKAO_TEMPLATE_ID = {
   DEV: 125656,
   PROD: 125655,
 };
+export const TRY_IT_NOW_SPACE_CODE = {
+  DEV: '05993e02d3',
+  PROD: '1d4cc97597',
+};
