@@ -124,6 +124,28 @@ export const buttonStyles = {
       color: ${theme.colors.white};
     }
   `,
+
+  floating: (theme: Theme) => css`
+    position: fixed;
+    bottom: 20px;
+    width: fit-content;
+    padding: 14px 28px;
+    border-radius: 999px;
+    background-color: ${theme.colors.gray06};
+    color: ${theme.colors.white};
+    box-shadow: 0px 12px 20px rgba(0, 0, 0, 0.15);
+
+    &:active {
+      background-color: ${theme.colors.gray05};
+    }
+
+    &:disabled {
+      pointer-events: none;
+      background-color: ${theme.colors.gray02};
+      color: ${theme.colors.white};
+      box-shadow: none;
+    }
+  `,
 };
 
 export const StyledButton = styled.button<{

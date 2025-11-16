@@ -5,6 +5,7 @@ import Button from '../../../components/@common/buttons/button/Button';
 import IconButton from '../../../components/@common/buttons/iconButton/IconButton';
 import Thumbnail from '../../../components/@common/thumbnail/Thumbnail';
 import SinglePhotoModal from '../../../components/specific/modal/singlePhotoModal/SinglePhotoModal';
+import { TRY_IT_NOW_SPACE_CODE } from '../../../constants/constants';
 import {
   createCreateGuestbookRoute,
   createGuestGuestbookRoute,
@@ -13,6 +14,7 @@ import {
 } from '../../../constants/routes';
 import useButtonTracking from '../../../hooks/@common/useButtonTracking';
 import useSpaceInfoContext from '../../../hooks/context/useSpaceInfoContext';
+import useKakaoAuth from '../../../hooks/domain/auth/useKakaoAuth';
 import { DividerLine } from '../../../styles/@common/DividerLine.styles';
 import { buildThumbnailUrl } from '../../../utils/buildImageUrl';
 import { createInstagramUrl } from '../../../utils/createExternalLinks';
@@ -28,6 +30,10 @@ const GuestSpaceHomePage = () => {
     spaceCode,
   });
   const [isSpaceImageModalOpen, setIsSpaceImageModalOpen] = useState(false);
+  const { handleKakaoLogin } = useKakaoAuth();
+  const isTryItNowPage =
+    spaceCode === TRY_IT_NOW_SPACE_CODE.DEV ||
+    spaceCode === TRY_IT_NOW_SPACE_CODE.PROD;
 
   if (isLoading) {
     return <MainPageStyles.Wrapper>로딩 중...</MainPageStyles.Wrapper>;
@@ -45,6 +51,11 @@ const GuestSpaceHomePage = () => {
   const handleEmailClick = () => {
     trackClick('guest_space_email_button');
     window.open(`mailto:${spaceInfo.email}`, '_blank', 'noopener,noreferrer');
+  };
+
+  const handleExploreForgatherClick = () => {
+    trackClick('guest_space_forgather_explore_button');
+    navigate(ROUTES.LANDING);
   };
 
   return (
@@ -126,14 +137,22 @@ const GuestSpaceHomePage = () => {
             disabled={!spaceInfo.isPublic}
           />
         </MainPageStyles.ButtonContainer>
+        {isTryItNowPage && (
+          <Button
+            variant="floating"
+            text="나의 스페이스 만들기"
+            onClick={() => {
+              trackClick('try_it_now_guest_kakao_login_button');
+              handleKakaoLogin();
+            }}
+          />
+        )}
         <Button
           variant="tertiary"
           text="Forgather 둘러보기"
-          onClick={() => {
-            trackClick('guest_space_forgather_explore_button');
-            navigate(ROUTES.LANDING);
-          }}
+          onClick={handleExploreForgatherClick}
         />
+
         <MainPageStyles.Footer></MainPageStyles.Footer>
       </MainPageStyles.Wrapper>
     </>
