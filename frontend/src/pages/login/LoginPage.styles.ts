@@ -50,6 +50,12 @@ export const DividerLineContainer = styled.div`
 export const DividerLineText = styled.p`
   ${({ theme }) => theme.typography.bodyRegular}
   flex-grow: 1;
-  color: ${({ theme }) => theme.colors.gray03};
+  color: ${({ theme }) => theme.colors.gray05};
   text-align: center;
+`;
+
+export const TryItNowButton = styled.button`
+  color: ${({ theme }) => theme.colors.gray04};
+  ${({ theme }) => theme.typography.captionSmall}
+  text-decoration : underline;
 `;
