@@ -4,6 +4,7 @@ import LogoSvg from '../../@assets/logo/logo.svg?react';
 import IconButton from '../../components/@common/buttons/iconButton/IconButton';
 import { TRY_IT_NOW_SPACE_CODE } from '../../constants/constants';
 import { createGuestHomeRoute } from '../../constants/routes';
+import useButtonTracking from '../../hooks/@common/useButtonTracking';
 import useKakaoAuth from '../../hooks/domain/auth/useKakaoAuth';
 import { theme } from '../../styles/theme';
 import * as S from './LoginPage.styles';
@@ -11,11 +12,23 @@ import * as S from './LoginPage.styles';
 const LoginPage = () => {
   const navigate = useNavigate();
   const { handleKakaoLogin } = useKakaoAuth();
+  const { trackClick } = useButtonTracking();
 
   const handleTryItNowButton = () => {
-    const isDev = import.meta.env.VITE_ENVIRONMENT === 'development' || 'local';
-    if (isDev) navigate(createGuestHomeRoute(TRY_IT_NOW_SPACE_CODE.DEV));
-    else navigate(createGuestHomeRoute(TRY_IT_NOW_SPACE_CODE.PROD));
+    const isDevEnvironment =
+      import.meta.env.VITE_ENVIRONMENT === 'development' ||
+      import.meta.env.VITE_ENVIRONMENT === 'local';
+
+    const tryItNowSpaceCode = isDevEnvironment
+      ? TRY_IT_NOW_SPACE_CODE.DEV
+      : TRY_IT_NOW_SPACE_CODE.PROD;
+
+    trackClick('login_try_it_now_button', {
+      spaceCode: tryItNowSpaceCode,
+      isTryItNowSpace: true,
+    });
+
+    navigate(createGuestHomeRoute(tryItNowSpaceCode));
   };
 
   return (
