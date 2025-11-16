@@ -8,7 +8,7 @@ const useButtonTracking = (context?: {
 }) => {
   const trackClick = useCallback(
     (buttonName: string, additionalData?: Record<string, unknown>) => {
-      const isTryItNowSpace = context?.spaceCode !== TRY_IT_NOW_SPACE_CODE.PROD;
+      const isTryItNowSpace = context?.spaceCode === TRY_IT_NOW_SPACE_CODE.PROD;
 
       trackButtonClick(buttonName, {
         ...context,
