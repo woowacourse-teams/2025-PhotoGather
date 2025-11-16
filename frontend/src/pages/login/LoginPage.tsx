@@ -13,11 +13,11 @@ const LoginPage = () => {
   const navigate = useNavigate();
   const { handleKakaoLogin } = useKakaoAuth();
   const { trackClick } = useButtonTracking();
+  const environment = import.meta.env.VITE_ENVIRONMENT;
 
   const handleTryItNowButton = () => {
     const isDevEnvironment =
-      import.meta.env.VITE_ENVIRONMENT === 'development' ||
-      import.meta.env.VITE_ENVIRONMENT === 'local';
+      environment === 'development' || environment === 'local';
 
     const tryItNowSpaceCode = isDevEnvironment
       ? TRY_IT_NOW_SPACE_CODE.DEV
@@ -52,7 +52,7 @@ const LoginPage = () => {
         />
       </S.LoginBox>
       <S.TryItNowButton onClick={handleTryItNowButton}>
-        로그인없이 포게더 체험하기
+        로그인 없이 포게더 체험하기
       </S.TryItNowButton>
     </S.Wrapper>
   );
