@@ -25,7 +25,6 @@ const LoginPage = () => {
 
     trackClick('login_try_it_now_button', {
       spaceCode: tryItNowSpaceCode,
-      isTryItNowSpace: true,
     });
 
     navigate(createGuestHomeRoute(tryItNowSpaceCode));
