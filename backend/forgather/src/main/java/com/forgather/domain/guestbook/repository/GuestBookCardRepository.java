@@ -24,8 +24,6 @@ public interface GuestBookCardRepository {
 
     Long countBySpace(Space space);
 
-    Page<GuestBookCard> findAllBySpace(Space space, Pageable pageable);
-
     @Query("""
         SELECT new com.forgather.domain.guestbook.repository.dto.GuestBookCardListDto(
             g.id,
