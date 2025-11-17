@@ -86,7 +86,11 @@ public class JwtTokenProvider {
 
     public String getRole(String token) {
         Claims claims = getClaims(token);
-        return claims.get("role", String.class);
+        String role = claims.get("role", String.class);
+        if (role != null) {
+            return role;
+        }
+        return HOST;
     }
 
     private Claims getClaims(String token) {
