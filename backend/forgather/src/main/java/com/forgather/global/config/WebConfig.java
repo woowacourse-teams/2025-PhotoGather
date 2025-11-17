@@ -9,6 +9,7 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -66,6 +67,16 @@ public class WebConfig implements WebMvcConfigurer {
                 "/api/admin/login",
                 "/api/admin/refresh"
             );
+    }
+
+    @Override
+    public void addViewControllers(ViewControllerRegistry registry) {
+        registry.addViewController("/admin/login")
+            .setViewName("admin/login");
+        registry.addViewController("/admin/spaces")
+            .setViewName("admin/spaces/list");
+        registry.addViewController("/admin/hosts")
+            .setViewName("admin/hosts/list");
     }
 
     @Override
