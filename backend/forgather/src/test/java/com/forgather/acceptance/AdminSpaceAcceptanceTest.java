@@ -89,7 +89,7 @@ class AdminSpaceAcceptanceTest extends AcceptanceTest {
         AdminSpaceResponse result = RestAssuredMockMvc.given()
             .headers("Authorization", "Bearer " + accessToken)
             .when()
-            .get("/api/admin/spaces")
+            .get("/admin/spaces")
             .then()
             .statusCode(HttpStatus.OK.value())
             .extract()
@@ -117,7 +117,7 @@ class AdminSpaceAcceptanceTest extends AcceptanceTest {
         var result = RestAssuredMockMvc.given()
             .headers("Authorization", "Bearer " + hostAccessToken)
             .when()
-            .get("/api/admin/spaces")
+            .get("/admin/spaces")
             .then()
             .extract();
 
@@ -141,7 +141,7 @@ class AdminSpaceAcceptanceTest extends AcceptanceTest {
         SpaceDetailResponse result = RestAssuredMockMvc.given()
             .headers("Authorization", "Bearer " + accessToken)
             .when()
-            .get("/api/admin/spaces/{spaceCode}", space.getCode())
+            .get("/admin/spaces/{spaceCode}", space.getCode())
             .then()
             .statusCode(HttpStatus.OK.value())
             .extract()
@@ -171,7 +171,7 @@ class AdminSpaceAcceptanceTest extends AcceptanceTest {
         SpaceDetailResponse result = RestAssuredMockMvc.given()
             .headers("Authorization", "Bearer " + accessToken)
             .when()
-            .get("/api/admin/spaces/{spaceCode}", space.getCode())
+            .get("/admin/spaces/{spaceCode}", space.getCode())
             .then()
             .statusCode(HttpStatus.OK.value())
             .extract()
@@ -197,7 +197,7 @@ class AdminSpaceAcceptanceTest extends AcceptanceTest {
         SpaceDetailResponse result = RestAssuredMockMvc.given()
             .headers("Authorization", "Bearer " + accessToken)
             .when()
-            .get("/api/admin/spaces/{spaceCode}", space.getCode())
+            .get("/admin/spaces/{spaceCode}", space.getCode())
             .then()
             .statusCode(HttpStatus.OK.value())
             .extract()
@@ -224,7 +224,7 @@ class AdminSpaceAcceptanceTest extends AcceptanceTest {
         var result = RestAssuredMockMvc.given()
             .headers("Authorization", "Bearer " + hostAccessToken)
             .when()
-            .get("/api/admin/spaces/{spaceCode}", space.getCode())
+            .get("/admin/spaces/{spaceCode}", space.getCode())
             .then()
             .extract();
 

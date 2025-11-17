@@ -58,7 +58,7 @@ class AdminHostAcceptanceTest extends AcceptanceTest {
         AdminHostResponse result = RestAssuredMockMvc.given()
             .headers("Authorization", "Bearer " + accessToken)
             .when()
-            .get("/api/admin/hosts")
+            .get("/admin/hosts")
             .then()
             .statusCode(HttpStatus.OK.value())
             .extract()
@@ -86,7 +86,7 @@ class AdminHostAcceptanceTest extends AcceptanceTest {
         var result = RestAssuredMockMvc.given()
             .headers("Authorization", "Bearer " + hostAccessToken)
             .when()
-            .get("/api/admin/hosts")
+            .get("/admin/hosts")
             .then()
             .extract();
 

@@ -1,10 +1,13 @@
 package com.forgather.back_office.interceptor;
 
-import org.springframework.http.HttpStatus;
+import java.io.IOException;
+
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import com.forgather.global.auth.util.JwtTokenProvider;
+import com.forgather.global.exception.ForbiddenException;
+import com.forgather.global.exception.UnauthorizedException;
 
 import io.jsonwebtoken.JwtException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -61,28 +64,30 @@ public class AdminAuthInterceptor implements HandlerInterceptor {
     }
 
     private void handleUnauthorized(HttpServletRequest request, HttpServletResponse response) {
-        response.setStatus(HttpStatus.UNAUTHORIZED.value());
-        if (!isApiRequest(request)) {
+        if (isViewRequest(request)) {
             redirectToLogin(response);
+            return;
         }
+        throw new UnauthorizedException("인증이 필요합니다.");
     }
 
     private void handleForbidden(HttpServletRequest request, HttpServletResponse response) {
-        response.setStatus(HttpStatus.FORBIDDEN.value());
-        if (!isApiRequest(request)) {
+        if (isViewRequest(request)) {
             redirectToLogin(response);
+            return;
         }
+        throw new ForbiddenException("접근 권한이 없습니다.");
     }
 
-    private boolean isApiRequest(HttpServletRequest request) {
+    private boolean isViewRequest(HttpServletRequest request) {
         return request.getRequestURI()
-            .startsWith("/api/");
+            .startsWith("/view");
     }
 
     private void redirectToLogin(HttpServletResponse response) {
         try {
-            response.sendRedirect("/admin/login");
-        } catch (Exception e) {
+            response.sendRedirect("/view/admin/login");
+        } catch (IOException e) {
             log.error("로그인 페이지 리다이렉트 실패", e);
         }
     }

@@ -59,23 +59,23 @@ public class WebConfig implements WebMvcConfigurer {
 
         registry.addInterceptor(adminAuthInterceptor)
             .order(2)
-            .addPathPatterns("/admin/**", "/api/admin/**")
+            .addPathPatterns("/view/admin/**", "/admin/**")
             .excludePathPatterns(
+                "/view/admin/login",
+                "/view/admin/spaces",
+                "/view/admin/hosts",
                 "/admin/login",
-                "/admin/spaces",
-                "/admin/hosts",
-                "/api/admin/login",
-                "/api/admin/refresh"
+                "/admin/refresh"
             );
     }
 
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
-        registry.addViewController("/admin/login")
+        registry.addViewController("/view/admin/login")
             .setViewName("admin/login");
-        registry.addViewController("/admin/spaces")
+        registry.addViewController("/view/admin/spaces")
             .setViewName("admin/spaces/list");
-        registry.addViewController("/admin/hosts")
+        registry.addViewController("/view/admin/hosts")
             .setViewName("admin/hosts/list");
     }
 
