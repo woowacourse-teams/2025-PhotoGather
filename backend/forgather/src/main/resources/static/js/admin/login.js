@@ -6,7 +6,7 @@
 document.addEventListener('DOMContentLoaded', function() {
     // 이미 로그인된 경우 spaces 페이지로 리다이렉트
     if (Auth.isAuthenticated() && !Auth.isAccessTokenExpired()) {
-        window.location.href = '/admin/spaces';
+        window.location.href = '/view/admin/spaces';
         return;
     }
 
@@ -119,7 +119,7 @@ document.addEventListener('DOMContentLoaded', function() {
             console.log('Login successful');
 
             // Spaces 페이지로 리다이렉트
-            window.location.href = '/admin/spaces';
+            window.location.href = '/view/admin/spaces';
 
         } catch (error) {
             console.error('Login failed:', error);

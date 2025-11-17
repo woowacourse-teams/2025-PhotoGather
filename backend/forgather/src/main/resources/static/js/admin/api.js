@@ -29,7 +29,7 @@ const API = {
     /**
      * API 기본 URL
      */
-    BASE_URL: '/api/admin',
+    BASE_URL: '/admin',
 
     /**
      * HTTP 메서드

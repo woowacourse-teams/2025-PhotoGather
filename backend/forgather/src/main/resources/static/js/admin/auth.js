@@ -114,7 +114,7 @@ const Auth = {
      * 로그인 페이지로 리다이렉트
      */
     redirectToLogin() {
-        window.location.href = '/admin/login';
+        window.location.href = '/view/admin/login';
     },
 
     /**
@@ -146,7 +146,7 @@ const Auth = {
      *
      * 동작 과정:
      * 1. localStorage에서 Refresh Token 조회
-     * 2. POST /api/admin/refresh API 호출
+     * 2. POST /admin/refresh API 호출
      * 3. 응답으로 받은 새 Access Token과 Refresh Token을 localStorage에 저장
      * 4. 새 Access Token 반환
      *
@@ -179,7 +179,7 @@ const Auth = {
 
             // 주의: 여기서는 API.request()를 사용하면 안 됨 (무한 루프)
             // 직접 fetch를 사용하여 Refresh Token API 호출
-            const response = await fetch('/api/admin/refresh', {
+            const response = await fetch('/admin/refresh', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
