@@ -1,0 +1,16 @@
+version: 0.2
+
+phases:
+  install:
+    commands:
+      - cd frontend
+      - npm ci  # npm i (npm ci는 쓰기 권한이 없다 -> package-lock.json을 변경하지 않는다)
+
+  build:
+    commands:
+      - npm run build:dev  # 또는 npm run build
+
+artifacts:
+  base-directory: frontend/dist
+  files:
+    - '**/*'
