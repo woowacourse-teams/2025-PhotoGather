@@ -11,6 +11,6 @@ phases:
       - npm run build:dev  # 또는 npm run build
 
 artifacts:
-  base-directory: dist
+  base-directory: frontend/dist
   files:
     - '**/*'
