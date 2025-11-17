@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 
 import com.forgather.domain.guestbook.model.GuestBookCard;
@@ -37,7 +38,7 @@ public interface GuestBookCardRepository {
         JOIN g.guest guest
         WHERE g.space = :space
     """)
-    Page<GuestBookCardListDto> findAllDtoBySpace(Space space, Pageable pageable);
+    Page<GuestBookCardListDto> findAllDtoBySpace(@Param("space") Space space, Pageable pageable);
 
     List<GuestBookCard> findAllBySpace(Space space);
 
