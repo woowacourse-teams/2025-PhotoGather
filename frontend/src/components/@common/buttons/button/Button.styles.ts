@@ -134,6 +134,7 @@ export const buttonStyles = {
     background-color: ${theme.colors.gray06};
     color: ${theme.colors.white};
     box-shadow: 0px 12px 20px rgba(0, 0, 0, 0.15);
+    z-index: ${theme.zIndex.fixedButton + 1};
 
     &:active {
       background-color: ${theme.colors.gray05};
