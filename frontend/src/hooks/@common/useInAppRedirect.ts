@@ -30,7 +30,7 @@ const useInAppRedirect = () => {
       if (!isAlreadyInAppRedirected(targetUrl)) {
         const noSchemeTargetUrl = targetUrl.replace(/^https?:\/\//, '');
         window.location.href = `intent://${noSchemeTargetUrl}#Intent;scheme=https;S.browser_fallback_url=${encodeURIComponent(
-          targetUrl + '?__inapp_redirected=1',
+          `${targetUrl}?__inapp_redirected=1`,
         )};end`;
       }
     }

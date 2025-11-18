@@ -2,8 +2,8 @@ import { useEffect } from 'react';
 import { CheckIcon, TrashCanIcon } from '../../../@assets/icons';
 import { photoService } from '../../../apis/services/photo.service';
 import SpaceManagerImageGrid from '../../../components/@common/imageLayout/imageGrid/spaceManagerImageGrid/SpaceManagerImageGrid';
-import PhotoModal from '../../../components/@common/modal/photoModal/PhotoModal';
 import EmptySpaceBox from '../../../components/specific/emptySpaceBox/EmptySpaceBox';
+import ManagerPhotoModal from '../../../components/specific/photoModal/ManagerPhotoModal';
 import SpaceFooter from '../../../components/specific/space/spaceFooter/SpaceFooter';
 import InboxHeader from '../../../components/specific/space/spaceHeader/inboxHeader/InboxHeader';
 import SpaceHomeTopActionBar from '../../../components/specific/spaceHomeTopActionBar/SpaceHomeTopActionBar';
@@ -82,12 +82,26 @@ const InboxPage = () => {
   const isEarlyTime = checkIsEarlyDate(spaceInfo?.openedAt ?? '');
   const isSpaceExpired = spaceInfo?.isExpired;
 
+  const getNavigationIds = (currentId: number) => {
+    const currentIndex = photosList.findIndex(
+      (photo) => photo.id === currentId,
+    );
+
+    return {
+      prevId:
+        currentIndex < photosList.length - 1
+          ? photosList[currentIndex + 1].id
+          : null,
+      nextId: currentIndex > 0 ? photosList[currentIndex - 1].id : null,
+    };
+  };
+
   const openPhotoModal = async (photoId: number) => {
     await overlay(
-      <PhotoModal
-        mode="manager"
+      <ManagerPhotoModal
         photoId={photoId}
         spaceCode={spaceInfo?.spaceCode ?? ''}
+        getNavigationIds={getNavigationIds}
         onDownload={() => {}}
         onDelete={() => {
           tryDeleteSinglePhoto(photoId);
