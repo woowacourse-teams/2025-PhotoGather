@@ -128,6 +128,9 @@ const ManagerPhotoModal = (props: ManagerPhotoModalProps) => {
 
       setIsNavigating(true);
 
+      setCurrentPhotoId(targetPhotoId);
+      setDisplayPath('');
+
       await fetchPhoto(targetPhotoId);
       setIsNavigating(false);
     },
