@@ -1,20 +1,17 @@
 import { useCallback, useEffect, useState } from 'react';
-import {
-  LeftwardArrowIcon,
-  RightwardArrowIcon,
-} from '../../../../@assets/icons';
-import { DefaultImageImg as defaultImage } from '../../../../@assets/images';
-import { photoService } from '../../../../apis/services/photo.service';
-import { useOverlay } from '../../../../contexts/OverlayProvider';
-import useSwipe from '../../../../hooks/@common/useSwipe';
-import useTaskHandler from '../../../../hooks/@common/useTaskHandler';
-import type { BaseModalProps } from '../../../../types/modal.type';
-import type { Photo } from '../../../../types/photo.type';
-import { buildOriginalImageUrl } from '../../../../utils/buildImageUrl';
-import { createImageErrorHandler } from '../../../../utils/createImageErrorHandler';
-import { parseImagePath } from '../../../../utils/parsedImagePath';
-import IconLabelButton from '../../buttons/iconLabelButton/IconLabelButton';
-import ConfirmModal from '../confirmModal/ConfirmModal';
+import { LeftwardArrowIcon, RightwardArrowIcon } from '../../../@assets/icons';
+import { DefaultImageImg as defaultImage } from '../../../@assets/images';
+import { photoService } from '../../../apis/services/photo.service';
+import { useOverlay } from '../../../contexts/OverlayProvider';
+import useSwipe from '../../../hooks/@common/useSwipe';
+import useTaskHandler from '../../../hooks/@common/useTaskHandler';
+import type { BaseModalProps } from '../../../types/modal.type';
+import type { Photo } from '../../../types/photo.type';
+import { buildOriginalImageUrl } from '../../../utils/buildImageUrl';
+import { createImageErrorHandler } from '../../../utils/createImageErrorHandler';
+import { parseImagePath } from '../../../utils/parsedImagePath';
+import IconLabelButton from '../../@common/buttons/iconLabelButton/IconLabelButton';
+import ConfirmModal from '../../@common/modal/confirmModal/ConfirmModal';
 import * as S from './PhotoModal.styles';
 
 interface BasePhotoModalProps extends BaseModalProps {

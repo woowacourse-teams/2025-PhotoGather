@@ -1,16 +1,13 @@
 import { useEffect, useState } from 'react';
-import {
-  LeftwardArrowIcon,
-  RightwardArrowIcon,
-} from '../../../../@assets/icons';
-import { DefaultImageImg as defaultImage } from '../../../../@assets/images';
-import { useOverlay } from '../../../../contexts/OverlayProvider';
-import useSwipe from '../../../../hooks/@common/useSwipe';
-import type { PreviewFile } from '../../../../types/file.type';
-import type { BaseModalProps } from '../../../../types/modal.type';
-import { createImageErrorHandler } from '../../../../utils/createImageErrorHandler';
-import IconLabelButton from '../../buttons/iconLabelButton/IconLabelButton';
-import ConfirmModal from '../confirmModal/ConfirmModal';
+import { LeftwardArrowIcon, RightwardArrowIcon } from '../../../@assets/icons';
+import { DefaultImageImg as defaultImage } from '../../../@assets/images';
+import { useOverlay } from '../../../contexts/OverlayProvider';
+import useSwipe from '../../../hooks/@common/useSwipe';
+import type { PreviewFile } from '../../../types/file.type';
+import type { BaseModalProps } from '../../../types/modal.type';
+import { createImageErrorHandler } from '../../../utils/createImageErrorHandler';
+import IconLabelButton from '../../@common/buttons/iconLabelButton/IconLabelButton';
+import ConfirmModal from '../../@common/modal/confirmModal/ConfirmModal';
 import * as S from './PhotoModal.styles';
 
 interface BasePhotoModalProps extends BaseModalProps {

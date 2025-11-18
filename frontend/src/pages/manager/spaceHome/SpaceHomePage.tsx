@@ -17,10 +17,9 @@ import FloatingIconButton from '../../../components/@common/buttons/floatingIcon
 import IconLabelButton from '../../../components/@common/buttons/iconLabelButton/IconLabelButton';
 import SpaceManagerImageGrid from '../../../components/@common/imageLayout/imageGrid/spaceManagerImageGrid/SpaceManagerImageGrid';
 import * as C from '../../../components/@common/modal/Modal.common.styles';
-import GuestPhotoModal from '../../../components/@common/modal/photoModal/GuestPhotoModal';
-import ManagerPhotoModal from '../../../components/@common/modal/photoModal/ManagerPhotoModal';
 import ManagerHeader from '../../../components/layout/header/spaceHeader/managerSpaceHeader/ManagerHeader';
 import LoadingLayout from '../../../components/layout/loadingLayout/LoadingLayout';
+import ManagerPhotoModal from '../../../components/specific/photoModal/ManagerPhotoModal';
 import PhotoSelectionToolBar from '../../../components/specific/photoSelectionToolBar/PhotoSelectionToolBar';
 import SpaceHomeTopActionBar from '../../../components/specific/spaceHomeTopActionBar/SpaceHomeTopActionBar';
 import { INFORMATION } from '../../../constants/messages';
