@@ -3,9 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import { DiamondImg as diamondImage } from '../../../@assets/images';
 import StepProgressBar from '../../../components/@common/progressBar/step/StepProgressBar';
 import { ROUTES } from '../../../constants/routes';
-import useAuthConditionTasks from '../../../hooks/@common/useAuthConditionTasks';
 import useConfirmBeforeRefresh from '../../../hooks/@common/useConfirmBeforeRefresh';
-import useAgreements from '../../../hooks/domain/useAgreements';
+import useAgreements from '../../../hooks/domain/auth/useAgreements';
+import useAuthConditionTasks from '../../../hooks/domain/auth/useAuthConditionTasks';
 import useFunnelHistory from '../../../hooks/useFunnelHistory';
 import type { SpaceFunnelInfo } from '../../../types/space.type';
 import AccessTypeElement from '../funnelElements/accessTypeElement/AccessTypeElement';
@@ -36,7 +36,7 @@ const SpaceCreateFunnel = () => {
     'name',
     'date',
     'accessType',
-    'inbox',
+    // 'inbox',
     'check',
   ];
   const [step, setStep] = useState<STEP>('name');
@@ -118,7 +118,7 @@ const SpaceCreateFunnel = () => {
         {step === 'accessType' && (
           <AccessTypeElement
             onNext={(accessType) => {
-              goNextStep('inbox');
+              goNextStep('check');
               setSpaceInfo((prev) => ({
                 ...prev,
                 accessType: accessType,
@@ -127,7 +127,7 @@ const SpaceCreateFunnel = () => {
             initialValue={spaceInfo.accessType}
           />
         )}
-        {step === 'inbox' && (
+        {/* {step === 'inbox' && (
           <InboxElement
             onNext={(isInboxEnabled) => {
               goNextStep('check');
@@ -138,7 +138,7 @@ const SpaceCreateFunnel = () => {
             }}
             initialValue={spaceInfo.isInboxEnabled}
           />
-        )}
+        )} */}
         {step === 'check' && (
           <CheckSpaceInfoElement
             spaceInfo={spaceInfo}

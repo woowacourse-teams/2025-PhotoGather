@@ -4,7 +4,7 @@ const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const DotenvPlugin = require('dotenv-webpack');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const ImageMinimizerPlugin = require('image-minimizer-webpack-plugin');
-
+const TerserPlugin = require('terser-webpack-plugin');
 const SpeedMeasurePlugin = require('speed-measure-webpack-plugin');
 const smp = new SpeedMeasurePlugin();
 
@@ -117,6 +117,7 @@ module.exports = (_, argv) => {
           { from: 'public/favicon-32x32.png', to: 'favicon-32x32.png' },
           { from: 'public/favicon-16x16.png', to: 'favicon-16x16.png' },
           { from: 'public/apple-touch-icon.png', to: 'apple-touch-icon.png' },
+          { from: 'public/streaming-download.js', to: 'streaming-download.js' },
         ],
       }),
     ],
@@ -131,6 +132,7 @@ module.exports = (_, argv) => {
         },
       ],
       port: 3000,
+      allowedHosts: 'all',
       hot: true,
       open: true,
       historyApiFallback: true,
@@ -166,6 +168,20 @@ module.exports = (_, argv) => {
                     filename: 'static/images/[name][ext]',
                   },
                 ],
+              }),
+              new TerserPlugin({
+                parallel: true,
+                terserOptions: {
+                  compress: {
+                    drop_console: true,
+                    pure_funcs: ['console.log'],
+                  },
+                  format: {
+                    comments: false,
+                  },
+                  mangle: true,
+                },
+                extractComments: false,
               }),
             ]
           : []),

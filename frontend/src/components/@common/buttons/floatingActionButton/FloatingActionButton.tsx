@@ -22,9 +22,9 @@ const FloatingActionButton = ({
   return (
     <S.Wrapper
       {...buttonProps}
+      tabIndex={0}
       $variant={disabled ? 'disabled' : 'default'}
       onClick={onClick}
-      aria-disabled={disabled}
       disabled={disabled}
     >
       {label}

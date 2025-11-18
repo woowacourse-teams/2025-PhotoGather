@@ -46,6 +46,10 @@ const useTaskHandler = () => {
     console: (error: Error) => {
       console.error(error);
     },
+    //TODO: 개발자를 위한 에러 핸들러 추가 고려
+    throw: (error: Error) => {
+      throw error;
+    },
   };
 
   type ErrorType = keyof typeof errorHandler;
@@ -89,6 +93,7 @@ const useTaskHandler = () => {
     errorActions: ErrorType[];
     context?: ErrorRequiredProps;
     onFinally?: () => void;
+    onSuccess?: () => void;
     useCommonCodeErrorHandler?: boolean;
   }
 
@@ -121,6 +126,9 @@ const useTaskHandler = () => {
         return { success: false, data: null };
       }
 
+      if (error.name === 'AbortError') {
+        return { success: true, data: undefined as T };
+      }
       matchingErrorHandler(errorActions, context, error);
       return { success: false, data: null };
     } finally {
@@ -154,6 +162,9 @@ const useTaskHandler = () => {
     }
     if (errorActions.includes('console')) {
       errorHandler.console(error);
+    }
+    if (errorActions.includes('throw')) {
+      errorHandler.throw(error);
     }
   };
 

@@ -31,19 +31,24 @@ const SpaceManagerImageElement = ({
   thumbnailUrl,
   isSelectMode,
 }: SpaceManagerImageElementProps) => {
+  const selectedLabel = isSelectMode
+    ? isSelected
+      ? '선택됨'
+      : '선택 안됨'
+    : '사진 크게 보기';
   return (
     // biome-ignore lint/a11y/useSemanticElements: button 시맨틱 태그 내부에 button이 존재할 수 없음
     <C.Wrapper
       role="button"
       tabIndex={0}
-      aria-label={isSelected ? '선택된 이미지' : '선택되지 않은 이미지'}
+      aria-label={`${alt} ${selectedLabel}`}
       $ratio={ratio}
       $width={width}
       onClick={() => onImageClick(data.id)}
     >
       <C.Image
         src={thumbnailUrl}
-        alt={alt}
+        alt=""
         className="clarity-mask-photo"
         loading="lazy"
       />

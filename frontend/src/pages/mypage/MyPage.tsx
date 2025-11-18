@@ -8,8 +8,8 @@ import HighlightText from '../../components/@common/highlightText/HighlightText'
 import Profile from '../../components/@common/profile/Profile';
 import SpaceCard from '../../components/specific/spaceCard/SpaceCard';
 import { ROUTES } from '../../constants/routes';
-import useAuthConditionTasks from '../../hooks/@common/useAuthConditionTasks';
-import useSpacesDisplay from '../../hooks/domain/useSpacesDisplay';
+import useAuthConditionTasks from '../../hooks/domain/auth/useAuthConditionTasks';
+import useSpacesDisplay from '../../hooks/domain/space/useSpacesDisplay';
 import type { MyInfo } from '../../types/api.type';
 import type { MySpace, SpaceFilterType } from '../../types/space.type';
 import { buildThumbnailUrl } from '../../utils/buildImageUrl';

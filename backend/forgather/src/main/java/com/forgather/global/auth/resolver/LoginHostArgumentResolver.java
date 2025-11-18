@@ -54,7 +54,7 @@ public class LoginHostArgumentResolver implements HandlerMethodArgumentResolver 
         jwtTokenProvider.validateToken(jwtToken);
 
         Long hostId = jwtTokenProvider.getHostId(jwtToken);
-        return hostRepository.getById(hostId);
+        return hostRepository.getByIdOrThrow(hostId);
     }
 
     private void throwExceptionIfRequired(boolean required) {

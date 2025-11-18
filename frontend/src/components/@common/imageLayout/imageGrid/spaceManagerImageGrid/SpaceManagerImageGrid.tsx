@@ -26,7 +26,7 @@ const SpaceManagerImageGrid = ({
 }: SpaceManagerImageGridProps) => {
   return (
     <S.Wrapper $rowImageAmount={rowImageAmount}>
-      {photoData.map((photo) => (
+      {photoData.map((photo, index) => (
         <SpaceManagerImageElement
           key={photo.id}
           data={photo}
@@ -34,6 +34,8 @@ const SpaceManagerImageGrid = ({
           isSelected={selectedPhotoMap.get(photo.id) ?? false}
           isSelectMode={isSelectMode}
           onImageClick={() => onImageClick(photo.id)}
+          // TODO : 사진 메타데이터로 수정
+          alt={`2025년 9월 28일  사진 ${100 - index}`}
         />
       ))}
     </S.Wrapper>

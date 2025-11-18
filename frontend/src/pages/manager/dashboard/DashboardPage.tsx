@@ -4,9 +4,9 @@ import DonutGraph from '../../../components/@common/donutGraph/DonutGraph';
 import ComingSoonBox from '../../../components/specific/comingSoonBox/ComingSoonBox';
 import DashboardBox from '../../../components/specific/dashboardBox/DashboardBox';
 import { ROUTES } from '../../../constants/routes';
-import useSpaceCapacity from '../../../hooks/useSpaceCapacity';
-import useSpaceCodeFromPath from '../../../hooks/useSpaceCodeFromPath';
-import useSpaceInfo from '../../../hooks/useSpaceInfo';
+import useSpaceCapacity from '../../../hooks/domain/space/useSpaceCapacity';
+import useSpaceCodeFromPath from '../../../hooks/domain/space/useSpaceCodeFromPath';
+import useSpaceInfo from '../../../hooks/domain/space/useSpaceInfo';
 import { theme } from '../../../styles/theme';
 import * as S from './DashboardPage.styles';
 
