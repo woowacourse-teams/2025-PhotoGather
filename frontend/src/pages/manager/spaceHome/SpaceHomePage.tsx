@@ -6,8 +6,9 @@ import FloatingActionButton from '../../../components/@common/buttons/floatingAc
 import SpaceManagerImageGrid from '../../../components/@common/imageLayout/imageGrid/spaceManagerImageGrid/SpaceManagerImageGrid';
 import LoadingLayout from '../../../components/layout/loadingLayout/LoadingLayout';
 import EmptySpaceBox from '../../../components/specific/emptySpaceBox/EmptySpaceBox';
-import SpaceFooter from '../../../components/specific/space/spaceFooter/SpaceFooter';
 import ManagerPhotoModal from '../../../components/specific/photoModal/ManagerPhotoModal';
+import SpaceFooter from '../../../components/specific/space/spaceFooter/SpaceFooter';
+import ManagerHeader from '../../../components/specific/space/spaceHeader/managerSpaceHeader/ManagerHeader';
 import SpaceHomeTopActionBar from '../../../components/specific/spaceHomeTopActionBar/SpaceHomeTopActionBar';
 import { loadingContents } from '../../../constants/loadingContents';
 import { ROUTES } from '../../../constants/routes';
@@ -28,7 +29,6 @@ import EarlyPage from '../../status/earlyPage/EarlyPage';
 import ExpiredPage from '../../status/expiredPage/ExpiredPage';
 import * as C from '../Manager.common.styles';
 import * as S from './SpaceHomePage.styles';
-import ManagerHeader from '../../../components/specific/space/spaceHeader/managerSpaceHeader/ManagerHeader';
 
 const SpaceHomePage = () => {
   const overlay = useOverlay();
@@ -150,7 +150,6 @@ const SpaceHomePage = () => {
         getNavigationIds={getNavigationIds}
         onDownload={async () => await downloadPhotoWithTracking(photoId)}
         onDelete={async () => await deletePhotoWithTracking(photoId)}
-
       />,
       {
         clickOverlayClose: true,
