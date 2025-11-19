@@ -35,6 +35,9 @@ export const isValidFileType = (
   expectedType: string,
   allowedTypes: readonly string[] = [],
 ): boolean => {
+  if (allowedTypes.length === 0) {
+    return file.type.startsWith(`${expectedType}/`);
+  }
   return (
     file.type.startsWith(`${expectedType}/`) && allowedTypes.includes(file.type)
   );
