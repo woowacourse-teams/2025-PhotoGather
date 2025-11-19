@@ -5,6 +5,8 @@ export const buildYoutubeEmbedLink = (youtubeUrl: string) => {
   if (youtubeUrl.includes('embed')) {
     return youtubeUrl;
   }
-  const parsedUrl = youtubeUrl.replace('youtu.be/', 'www.youtube.com/embed/');
+  const parsedUrl = youtubeUrl
+    .replace('youtu.be/', 'www.youtube.com/embed/')
+    .replace('watch?v=', 'embed/');
   return parsedUrl;
 };
