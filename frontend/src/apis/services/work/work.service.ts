@@ -18,31 +18,14 @@ export const workService = {
 
   createWork: (spaceCode: string, data: CreateWorkRequest) => {
     return http.post(`/spaces/${spaceCode}/products`, {
-      body: {
-        title: data.title,
-        category: data.category,
-        authorName: data.authorName,
-        description: data.description,
-        photos: data.photos,
-        videoUrl: data.videoUrl,
-        isVideoAfterPhoto: data.isVideoAfterPhoto,
-      },
+      body: data,
       headers: API_VERSION_HEADERS,
     });
   },
 
   updateWork: (spaceCode: string, data: UpdateWorkRequest) => {
     return http.patch(`/spaces/${spaceCode}/products`, {
-      body: {
-        title: data.title,
-        category: data.category,
-        authorName: data.authorName,
-        description: data.description,
-        deletePhotoIds: data.deletePhotoIds,
-        newPhotos: data.newPhotos,
-        videoUrl: data.videoUrl,
-        isVideoAfterPhoto: data.isVideoAfterPhoto,
-      },
+      body: data,
       headers: API_VERSION_HEADERS,
     });
   },
