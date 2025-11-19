@@ -81,10 +81,3 @@ export const ImageContainer = styled(AutoReloadImage)`
     opacity: 0.9;
   }
 `;
-
-export const MediaContainer = styled.div<{ isVideoAfterPhoto: boolean }>`
-  display: flex;
-  flex-direction: ${({ isVideoAfterPhoto }) =>
-    isVideoAfterPhoto ? 'column' : 'column-reverse'};
-  gap: 16px;
-`;
