@@ -3,6 +3,9 @@ package com.forgather.domain.space.repository;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 import com.forgather.domain.space.model.Space;
 import com.forgather.global.exception.BaseException;
 import com.forgather.global.exception.NotFoundException;
@@ -16,6 +19,8 @@ public interface SpaceRepository {
     Optional<Space> findByCode(String spaceCode);
 
     List<Space> findAll();
+
+    Page<Space> findAll(Pageable pageable);
 
     long count();
 

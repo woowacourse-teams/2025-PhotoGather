@@ -9,9 +9,12 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.forgather.back_office.interceptor.AdminAuthInterceptor;
+import com.forgather.back_office.resolver.LoginAdminUserArgumentResolver;
 import com.forgather.global.auth.resolver.LoginHostArgumentResolver;
 import com.forgather.global.converter.MultipartJsonConverter;
 import com.forgather.global.logging.LoggingInterceptor;
@@ -24,7 +27,9 @@ public class WebConfig implements WebMvcConfigurer {
 
     private final CorsProperties corsProperties;
     private final LoggingInterceptor loggingInterceptor;
+    private final AdminAuthInterceptor adminAuthInterceptor;
     private final LoginHostArgumentResolver loginHostArgumentResolver;
+    private final LoginAdminUserArgumentResolver loginAdminUserArgumentResolver;
     private final ObjectMapper objectMapper;
 
     @Override
@@ -43,12 +48,35 @@ public class WebConfig implements WebMvcConfigurer {
         pageableResolver.setOneIndexedParameters(true); // 1부터 시작
         resolvers.add(pageableResolver);
         resolvers.add(loginHostArgumentResolver);
+        resolvers.add(loginAdminUserArgumentResolver);
     }
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(loggingInterceptor)
+            .order(1)
             .excludePathPatterns("/swagger-ui/**", "/v3/api-docs/**");
+
+        registry.addInterceptor(adminAuthInterceptor)
+            .order(2)
+            .addPathPatterns("/view/admin/**", "/admin/**")
+            .excludePathPatterns(
+                "/view/admin/login",
+                "/view/admin/spaces",
+                "/view/admin/hosts",
+                "/admin/login",
+                "/admin/refresh"
+            );
+    }
+
+    @Override
+    public void addViewControllers(ViewControllerRegistry registry) {
+        registry.addViewController("/view/admin/login")
+            .setViewName("admin/login");
+        registry.addViewController("/view/admin/spaces")
+            .setViewName("admin/spaces/list");
+        registry.addViewController("/view/admin/hosts")
+            .setViewName("admin/hosts/list");
     }
 
     @Override

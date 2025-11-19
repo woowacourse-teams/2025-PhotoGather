@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login - Forgather</title>
+
+    <!-- Common CSS -->
+    <link rel="stylesheet" th:href="@{/css/admin/common.css}">
+    <!-- Login CSS -->
+    <link rel="stylesheet" th:href="@{/css/admin/login.css}">
+</head>
+<body class="login-page">
+    <div class="login-container">
+        <div class="login-box">
+            <div class="login-header">
+                <h1>Forgather Admin</h1>
+                <p>Please sign in to continue</p>
+            </div>
+
+            <form id="loginForm" class="login-form">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" class="form-control"
+                           placeholder="Enter your username" required autofocus>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" class="form-control"
+                           placeholder="Enter your password" required>
+                </div>
+
+                <div id="errorMessage" class="error-message" style="display: none;"></div>
+
+                <button type="submit" class="btn btn-primary btn-block" id="loginBtn">
+                    Sign In
+                </button>
+            </form>
+
+            <div class="login-footer">
+                <p>&copy; 2025 Forgather. All rights reserved.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Spinner -->
+    <div id="loadingSpinner" class="loading-spinner" style="display: none;">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- Scripts -->
+    <script th:src="@{/js/admin/auth.js}"></script>
+    <script th:src="@{/js/admin/api.js}"></script>
+    <script th:src="@{/js/admin/login.js}"></script>
+</body>
+</html>

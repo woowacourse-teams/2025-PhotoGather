@@ -25,6 +25,7 @@ public class LoginHostArgumentResolver implements HandlerMethodArgumentResolver 
 
     private static final String BEARER = "Bearer ";
     private static final String AUTHORIZATION_HEADER_NAME = "Authorization";
+    private static final String HOST = "HOST";
 
     private final JwtTokenProvider jwtTokenProvider;
     private final HostRepository hostRepository;
@@ -39,7 +40,7 @@ public class LoginHostArgumentResolver implements HandlerMethodArgumentResolver 
         NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
         LoginHost annotation = parameter.getParameterAnnotation(LoginHost.class);
         boolean required = Objects.requireNonNull(annotation).required();
-        HttpServletRequest request = (HttpServletRequest) webRequest.getNativeRequest();
+        HttpServletRequest request = (HttpServletRequest)webRequest.getNativeRequest();
 
         String jwtToken = request.getHeader(AUTHORIZATION_HEADER_NAME);
         if (jwtToken == null) {
@@ -52,8 +53,11 @@ public class LoginHostArgumentResolver implements HandlerMethodArgumentResolver 
 
         jwtToken = jwtToken.substring(BEARER.length());
         jwtTokenProvider.validateToken(jwtToken);
+        if (!jwtTokenProvider.getRole(jwtToken).equals(HOST)) {
+            throw new UnauthorizedException("호스트 로그인이 필요합니다.");
+        }
 
-        Long hostId = jwtTokenProvider.getHostId(jwtToken);
+        Long hostId = jwtTokenProvider.getId(jwtToken);
         return hostRepository.getByIdOrThrow(hostId);
     }
 

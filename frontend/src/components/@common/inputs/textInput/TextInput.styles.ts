@@ -16,3 +16,8 @@ export const InputField = styled.input<{ $isError: boolean }>`
   }
   font-size: ${({ theme }) => theme.typography.bodyRegular};
 `;
+
+export const SubLabel = styled.span`
+  font-size: ${({ theme }) => theme.typography.captionSmall};
+  color: ${({ theme }) => theme.colors.gray04};
+`;

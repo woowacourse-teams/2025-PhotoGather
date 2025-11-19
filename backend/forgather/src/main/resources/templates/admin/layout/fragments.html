@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+
+<!-- Header Fragment -->
+<header th:fragment="header" class="header">
+    <div class="header-container">
+        <div class="header-left">
+            <h1 class="logo">
+                <a th:href="@{/view/admin/spaces}">Forgather Admin</a>
+            </h1>
+        </div>
+        <nav class="header-nav">
+            <ul class="nav-list">
+                <li class="nav-item">
+                    <a th:href="@{/view/admin/spaces}" class="nav-link" th:classappend="${currentPage == 'spaces'} ? 'active' : ''">
+                        Spaces
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <button id="logoutBtn" class="btn btn-secondary">Logout</button>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<!-- Footer Fragment -->
+<footer th:fragment="footer" class="footer">
+    <div class="footer-container">
+        <p>&copy; 2025 Forgather. All rights reserved.</p>
+    </div>
+</footer>
+
+<!-- Pagination Fragment -->
+<div th:fragment="pagination(page)" class="pagination">
+    <button class="pagination-btn" th:disabled="${page.currentPage <= 1}"
+            th:onclick="|goToPage(${page.currentPage - 1})|">
+        Previous
+    </button>
+
+    <span class="pagination-info">
+        Page <span th:text="${page.currentPage}">1</span> of <span th:text="${page.totalPages}">1</span>
+        (Total: <span th:text="${page.totalCount}">0</span> items)
+    </span>
+
+    <button class="pagination-btn" th:disabled="${page.currentPage >= page.totalPages}"
+            th:onclick="|goToPage(${page.currentPage + 1})|">
+        Next
+    </button>
+</div>
+
+<!-- Loading Spinner Fragment -->
+<div th:fragment="loading" id="loadingSpinner" class="loading-spinner" style="display: none;">
+    <div class="spinner"></div>
+    <p>Loading...</p>
+</div>
+
+<!-- Toast Notification Fragment -->
+<div th:fragment="toast" id="toast" class="toast"></div>
+
+</body>
+</html>

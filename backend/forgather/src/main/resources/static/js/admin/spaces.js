@@ -1,0 +1,505 @@
+/**
+ * Spaces Management Page Script
+ * Space 목록 조회 및 페이지네이션 처리
+ */
+
+// 전역 상태
+let currentPage = 1;
+let currentPageSize = 15;
+let totalPages = 1;
+let totalCount = 0;
+
+document.addEventListener('DOMContentLoaded', function() {
+    // 인증 확인
+    if (!Auth.requireAuth()) {
+        return;
+    }
+
+    // DOM 요소 참조
+    const spacesTableBody = document.getElementById('spacesTableBody');
+    const loadingSpinner = document.getElementById('loadingSpinner');
+    const errorMessage = document.getElementById('errorMessage');
+    const pageSizeSelect = document.getElementById('pageSize');
+    const paginationContainer = document.getElementById('pagination');
+    const currentPageSpan = document.getElementById('currentPage');
+    const totalPagesSpan = document.getElementById('totalPages');
+    const totalCountSpan = document.getElementById('totalCount');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const logoutBtn = document.getElementById('logoutBtn');
+
+    /**
+     * 로딩 상태 표시
+     */
+    function showLoading() {
+        loadingSpinner.style.display = 'flex';
+        spacesTableBody.innerHTML = '';
+        paginationContainer.style.display = 'none';
+    }
+
+    /**
+     * 로딩 상태 해제
+     */
+    function hideLoading() {
+        loadingSpinner.style.display = 'none';
+    }
+
+    /**
+     * 에러 메시지 표시
+     * @param {string} message - 에러 메시지
+     */
+    function showError(message) {
+        errorMessage.textContent = message;
+        errorMessage.style.display = 'block';
+        spacesTableBody.innerHTML = '';
+        paginationContainer.style.display = 'none';
+    }
+
+    /**
+     * 에러 메시지 숨김
+     */
+    function hideError() {
+        errorMessage.textContent = '';
+        errorMessage.style.display = 'none';
+    }
+
+    /**
+     * Toast 알림 표시
+     * @param {string} message - 알림 메시지
+     * @param {string} type - 알림 타입 (success, error, warning)
+     */
+    function showToast(message, type = 'info') {
+        const toast = document.getElementById('toast');
+        toast.textContent = message;
+        toast.className = `toast ${type}`;
+        toast.classList.add('show');
+
+        setTimeout(() => {
+            toast.classList.remove('show');
+        }, 3000);
+    }
+
+    /**
+     * Space 테이블 렌더링
+     * @param {Array} spaces - Space 목록
+     */
+    function renderSpacesTable(spaces) {
+        if (!spaces || spaces.length === 0) {
+            spacesTableBody.innerHTML = `
+                <tr>
+                    <td colspan="4" style="text-align: center; padding: 3rem; color: var(--text-secondary);">
+                        <div class="empty-state">
+                            <div class="empty-state-icon">📭</div>
+                            <h3>No Spaces Found</h3>
+                            <p>There are no spaces to display.</p>
+                        </div>
+                    </td>
+                </tr>
+            `;
+            return;
+        }
+
+        const rows = spaces.map(space => {
+            const publicBadge = space.isPublic
+                ? '<span class="badge badge-success">Public</span>'
+                : '<span class="badge badge-danger">Private</span>';
+
+            /**
+             * data-space-code 속성 추가
+             * - 클릭 시 이벤트 위임 패턴으로 spaceCode를 읽어옴
+             * - HTML 속성으로 저장하므로 XSS 방지를 위해 escapeHtml 적용
+             */
+            return `
+                <tr>
+                    <td>${space.id}</td>
+                    <td data-space-code="${escapeHtml(space.code)}">${escapeHtml(space.code)}</td>
+                    <td>${escapeHtml(space.name)}</td>
+                    <td style="text-align: center;">${publicBadge}</td>
+                </tr>
+            `;
+        }).join('');
+
+        spacesTableBody.innerHTML = rows;
+    }
+
+    /**
+     * 페이지네이션 UI 업데이트
+     */
+    function updatePagination() {
+        currentPageSpan.textContent = currentPage;
+        totalPagesSpan.textContent = totalPages;
+        totalCountSpan.textContent = totalCount;
+
+        // 이전 버튼 활성화/비활성화
+        prevBtn.disabled = currentPage <= 1;
+
+        // 다음 버튼 활성화/비활성화
+        nextBtn.disabled = currentPage >= totalPages;
+
+        // 페이지네이션 표시
+        paginationContainer.style.display = 'flex';
+    }
+
+    /**
+     * Space 목록 로드
+     */
+    async function loadSpaces() {
+        hideError();
+        showLoading();
+
+        try {
+            const response = await API.getSpaces(currentPage, currentPageSize);
+
+            // 상태 업데이트
+            currentPage = response.currentPage;
+            currentPageSize = response.pageSize;
+            totalPages = response.totalPages;
+            totalCount = response.totalCount;
+
+            // 테이블 렌더링
+            renderSpacesTable(response.spaces);
+
+            // 페이지네이션 업데이트
+            updatePagination();
+
+        } catch (error) {
+            console.error('Failed to load spaces:', error);
+            showError(error.message || 'Failed to load spaces. Please try again.');
+        } finally {
+            hideLoading();
+        }
+    }
+
+    /**
+     * 페이지 이동
+     * @param {number} page - 이동할 페이지 번호
+     */
+    function goToPage(page) {
+        if (page < 1 || page > totalPages) {
+            return;
+        }
+        currentPage = page;
+        loadSpaces();
+    }
+
+    /**
+     * 이전 페이지로 이동
+     */
+    window.goToPreviousPage = function() {
+        goToPage(currentPage - 1);
+    };
+
+    /**
+     * 다음 페이지로 이동
+     */
+    window.goToNextPage = function() {
+        goToPage(currentPage + 1);
+    };
+
+    /**
+     * HTML 이스케이프 (XSS 방지)
+     * @param {string} text - 이스케이프할 텍스트
+     * @returns {string} 이스케이프된 텍스트
+     */
+    function escapeHtml(text) {
+        const map = {
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            '"': '&quot;',
+            "'": '&#039;'
+        };
+        return text.toString().replace(/[&<>"']/g, m => map[m]);
+    }
+
+    /**
+     * 페이지 크기 변경 핸들러
+     */
+    function handlePageSizeChange() {
+        currentPageSize = parseInt(pageSizeSelect.value);
+        currentPage = 1; // 첫 페이지로 리셋
+        loadSpaces();
+    }
+
+    /**
+     * 로그아웃 핸들러
+     */
+    function handleLogout() {
+        if (confirm('Are you sure you want to logout?')) {
+            Auth.logout();
+        }
+    }
+
+    // 이벤트 리스너 등록
+    pageSizeSelect.addEventListener('change', handlePageSizeChange);
+    logoutBtn.addEventListener('click', handleLogout);
+
+    // 키보드 네비게이션
+    document.addEventListener('keydown', function(event) {
+        // 좌측 화살표: 이전 페이지
+        if (event.key === 'ArrowLeft' && currentPage > 1) {
+            event.preventDefault();
+            goToPreviousPage();
+        }
+        // 우측 화살표: 다음 페이지
+        else if (event.key === 'ArrowRight' && currentPage < totalPages) {
+            event.preventDefault();
+            goToNextPage();
+        }
+    });
+
+    // ==========================================================================
+    // Modal Logic - Space Detail
+    // ==========================================================================
+
+    /**
+     * 모달 관련 DOM 요소 참조
+     * - 한 번만 querySelector로 찾아서 재사용 (성능 최적화)
+     */
+    const modal = document.getElementById('spaceDetailModal');
+    const modalLoading = document.getElementById('modalLoading');
+    const modalError = document.getElementById('modalError');
+    const modalContent = document.getElementById('modalContent');
+    const closeModalBtn = document.getElementById('closeModalBtn');
+    const visitSpaceBtn = document.getElementById('visitSpaceBtn');
+
+    // 모달 내 데이터 표시 요소들
+    const modalSpaceId = document.getElementById('modalSpaceId');
+    const modalSpaceCode = document.getElementById('modalSpaceCode');
+    const modalSpaceName = document.getElementById('modalSpaceName');
+    const modalSpacePublic = document.getElementById('modalSpacePublic');
+    const modalHasProduct = document.getElementById('modalHasProduct');
+    const modalGuestBookCount = document.getElementById('modalGuestBookCount');
+
+    /**
+     * 현재 열려있는 스페이스 코드를 저장
+     * - Visit Space Page 버튼 클릭 시 사용
+     * - null이면 모달이 닫혀있음을 의미
+     */
+    let currentOpenSpaceCode = null;
+
+    /**
+     * 모달 열기
+     * - CSS의 .show 클래스를 추가하여 페이드 인 애니메이션 실행
+     * - body에 modal-open 클래스를 추가하여 배경 스크롤 방지
+     */
+    function openModal() {
+        modal.style.display = 'flex';
+        // 다음 프레임에서 show 클래스 추가 (CSS 애니메이션을 위함)
+        requestAnimationFrame(() => {
+            modal.classList.add('show');
+        });
+        document.body.classList.add('modal-open');
+    }
+
+    /**
+     * 모달 닫기
+     * - CSS의 .show 클래스를 제거하여 페이드 아웃 애니메이션 실행
+     * - 애니메이션 완료 후 display: none 처리
+     * - body의 modal-open 클래스 제거하여 배경 스크롤 복원
+     */
+    function closeModal() {
+        modal.classList.remove('show');
+        document.body.classList.remove('modal-open');
+        currentOpenSpaceCode = null;
+
+        // 애니메이션 완료 후 display: none (300ms는 CSS transition과 동일)
+        setTimeout(() => {
+            modal.style.display = 'none';
+            // 모달 내용 초기화
+            resetModalContent();
+        }, 300);
+    }
+
+    /**
+     * 모달 내용 초기화
+     * - 다음에 모달을 열 때 이전 데이터가 보이지 않도록 숨김 처리
+     */
+    function resetModalContent() {
+        modalLoading.style.display = 'none';
+        modalError.style.display = 'none';
+        modalContent.style.display = 'none';
+        visitSpaceBtn.style.display = 'none';
+    }
+
+    /**
+     * 모달에 로딩 상태 표시
+     */
+    function showModalLoading() {
+        resetModalContent();
+        modalLoading.style.display = 'flex';
+    }
+
+    /**
+     * 모달에 에러 메시지 표시
+     * @param {string} message - 표시할 에러 메시지
+     */
+    function showModalError(message) {
+        resetModalContent();
+        modalError.textContent = message;
+        modalError.style.display = 'block';
+    }
+
+    /**
+     * 모달에 스페이스 상세 정보 표시
+     * @param {object} data - API 응답 데이터 (space, hasProduct, guestBookCount)
+     */
+    function showModalContent(data) {
+        resetModalContent();
+
+        // 스페이스 기본 정보 표시
+        modalSpaceId.textContent = data.space.id;
+        modalSpaceCode.textContent = data.space.code;
+        modalSpaceName.textContent = data.space.name;
+
+        // Public 상태를 Badge로 표시
+        const publicBadge = data.space.isPublic
+            ? '<span class="badge badge-success">Public</span>'
+            : '<span class="badge badge-danger">Private</span>';
+        modalSpacePublic.innerHTML = publicBadge;
+
+        // 작품 소개 등록 여부 표시
+        const hasProductText = data.hasProduct
+            ? '<span style="color: var(--success-color); font-weight: 600;">Registered</span>'
+            : '<span style="color: var(--text-muted);">Not Registered</span>';
+        modalHasProduct.innerHTML = hasProductText;
+
+        // 방명록 개수 표시 (숫자 포맷팅)
+        modalGuestBookCount.textContent = data.guestBookCount.toLocaleString();
+
+        // 콘텐츠와 버튼 표시
+        modalContent.style.display = 'flex';
+        visitSpaceBtn.style.display = 'block';
+    }
+
+    /**
+     * 스페이스 상세 정보 로드
+     *
+     * @param {string} spaceCode - 조회할 스페이스 코드
+     *
+     * 동작 흐름:
+     * 1. 모달 열기 및 로딩 표시
+     * 2. API 호출
+     * 3. 성공 시 데이터 표시, 실패 시 에러 표시
+     *
+     * 주의:
+     * - 비동기 함수이므로 await 필요
+     * - API 에러는 try-catch로 처리하여 사용자에게 친절한 메시지 표시
+     */
+    async function loadSpaceDetail(spaceCode) {
+        currentOpenSpaceCode = spaceCode;
+        openModal();
+        showModalLoading();
+
+        try {
+            const data = await API.getSpaceDetail(spaceCode);
+            showModalContent(data);
+        } catch (error) {
+            console.error('Failed to load space detail:', error);
+            showModalError(error.message || 'Failed to load space details. Please try again.');
+        }
+    }
+
+    /**
+     * 스페이스 페이지 방문 URL 생성
+     *
+     * @param {string} spaceCode - 스페이스 코드
+     * @returns {string} 스페이스 페이지 URL
+     *
+     * 도메인 판별 로직:
+     * - window.location.hostname을 확인하여 현재 도메인 파악
+     * - forgather.app이 포함되어 있으면 해당 도메인 사용 (운영/개발 구분)
+     * - 그 외의 경우 (localhost 등) dev.forgather.app으로 고정
+     *
+     * URL 형식: https://{domain}/host/{spaceCode}/home
+     */
+    function getSpacePageUrl(spaceCode) {
+        const hostname = window.location.hostname;
+
+        // 도메인 판별: forgather.app이 있으면 그대로 사용, 없으면 dev.forgather.app
+        const targetDomain = hostname.includes('forgather.app')
+            ? hostname
+            : 'dev.forgather.app';
+
+        return `https://${targetDomain}/host/${spaceCode}/home`;
+    }
+
+    /**
+     * Code 컬럼 클릭 이벤트 핸들러 (이벤트 위임 패턴)
+     *
+     * 이벤트 위임 패턴을 사용하는 이유:
+     * - 테이블 행이 동적으로 생성되므로 각 행에 개별 이벤트 리스너를 달면 메모리 낭비
+     * - tbody에 한 번만 이벤트 리스너를 등록하고, 클릭된 요소가 Code 컬럼인지 확인
+     * - 페이징으로 DOM이 재생성되어도 이벤트 리스너를 다시 등록할 필요 없음
+     *
+     * 동작 과정:
+     * 1. tbody의 어딘가를 클릭하면 이 핸들러가 실행됨
+     * 2. 클릭된 요소(event.target)가 Code 컬럼(td:nth-child(2))인지 확인
+     * 3. Code 컬럼이면 data-space-code 속성에서 spaceCode를 읽어옴
+     * 4. loadSpaceDetail 함수를 호출하여 모달 표시
+     */
+    spacesTableBody.addEventListener('click', function(event) {
+        // 클릭된 요소가 td인지, 그리고 두 번째 컬럼(Code)인지 확인
+        const target = event.target;
+
+        // td가 아니거나 data-space-code 속성이 없으면 무시
+        if (target.tagName !== 'TD' || !target.hasAttribute('data-space-code')) {
+            return;
+        }
+
+        const spaceCode = target.getAttribute('data-space-code');
+        if (spaceCode) {
+            loadSpaceDetail(spaceCode);
+        }
+    });
+
+    /**
+     * Visit Space Page 버튼 클릭 핸들러
+     * - 현재 열려있는 스페이스의 페이지를 새 탭에서 열기
+     * - window.open의 두 번째 인자 '_blank'로 새 탭 열기
+     * - noopener, noreferrer 옵션으로 보안 강화 (타 사이트가 원본 페이지에 접근하지 못하도록)
+     */
+    visitSpaceBtn.addEventListener('click', function() {
+        if (currentOpenSpaceCode) {
+            const url = getSpacePageUrl(currentOpenSpaceCode);
+            window.open(url, '_blank', 'noopener,noreferrer');
+        }
+    });
+
+    /**
+     * 모달 닫기 버튼 클릭 핸들러
+     */
+    closeModalBtn.addEventListener('click', function() {
+        closeModal();
+    });
+
+    /**
+     * 모달 오버레이 클릭 시 닫기
+     * - 모달 배경(검은색 반투명 영역)을 클릭하면 모달 닫기
+     * - 모달 내용 영역(.modal-container)을 클릭하면 닫히지 않도록 처리
+     *
+     * event.target vs event.currentTarget:
+     * - event.target: 실제 클릭된 요소 (모달 내용 또는 오버레이)
+     * - event.currentTarget: 이벤트 리스너가 등록된 요소 (항상 modal)
+     * - 둘이 같다는 것은 오버레이를 직접 클릭했다는 의미
+     */
+    modal.addEventListener('click', function(event) {
+        if (event.target === modal) {
+            closeModal();
+        }
+    });
+
+    /**
+     * ESC 키로 모달 닫기
+     * - 키보드 접근성 향상
+     * - 모달이 열려있을 때만 동작 (modal.classList.contains('show'))
+     */
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape' && modal.classList.contains('show')) {
+            closeModal();
+        }
+    });
+
+    // 초기 로드
+    loadSpaces();
+});

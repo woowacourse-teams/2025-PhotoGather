@@ -30,3 +30,14 @@ export const checkInstagramUsernameForm = (value: string) => {
     throw new Error('영어, 숫자, _, . 만 입력할 수 있습니다.');
   }
 };
+
+export const checkYoutubeUrlForm = (value: string) => {
+  if (!value) return;
+
+  const youtubeRegex = /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\//;
+
+  const isValid = youtubeRegex.test(value);
+  if (!isValid) {
+    throw new Error('유효한 유튜브 링크 형식이 아닙니다.');
+  }
+};

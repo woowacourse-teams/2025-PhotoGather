@@ -1,0 +1,18 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 20
+    commands:
+      - cd frontend
+      - npm ci
+
+  build:
+    commands:
+      - npm run build:dev
+
+artifacts:
+  base-directory: frontend/dist
+  files:
+    - '**/*'

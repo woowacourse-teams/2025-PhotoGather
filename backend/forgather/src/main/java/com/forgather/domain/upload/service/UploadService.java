@@ -25,15 +25,23 @@ public class UploadService {
     private final ContentsStorage contentsStorage;
     private final SignedUrlIssuer signedUrlIssuer;
 
-    private String upload(String spaceCode, MultipartFile multipartFile) {
+    public String upload(String spaceCode, MultipartFile file) {
         try {
-            log.atInfo()
-                .addKeyValue("spaceCode", spaceCode)
-                .addKeyValue("originalName", multipartFile.getOriginalFilename())
-                .log("파일 업로드 시작 {}, {}", spaceCode, multipartFile.getSize());
-            return contentsStorage.upload(spaceCode, multipartFile);
+            long startMillis = System.currentTimeMillis();
+            log.info("파일 업로드 시작 spaceCode: {}, originalName: {}, size: {}",
+                spaceCode, file.getOriginalFilename(), file.getSize());
+
+            String path = contentsStorage.upload(spaceCode, file);
+
+            long durationMillis = System.currentTimeMillis() - startMillis;
+            log.info("파일 업로드 완료 spaceCode: {}, originalName: {}, size: {}, path: {}, duration: {}",
+                spaceCode, file.getOriginalFilename(), file.getSize(), path, durationMillis + "ms");
+
+            return path;
         } catch (IOException e) {
-            throw new FileUploadException("파일 업로드에 실패했습니다. 파일 이름: " + multipartFile.getOriginalFilename(), e);
+            throw new FileUploadException("파일 업로드 실패 spaceCode: %s, originalName: %s, size: %d".formatted(
+                spaceCode, file.getOriginalFilename(), file.getSize()
+            ), e);
         }
     }
 

@@ -7,6 +7,9 @@ import com.forgather.domain.product.model.ProductPhoto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
+/**
+ * TODO 영상 임베드 버전으로 마이그레이션 이후 제거
+ */
 public record ProductResponse(
 
     @Schema(description = "작품 id", example = "1")

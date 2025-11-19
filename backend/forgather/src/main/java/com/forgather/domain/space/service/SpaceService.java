@@ -1,6 +1,5 @@
 package com.forgather.domain.space.service;
 
-import java.io.IOException;
 import java.util.Comparator;
 import java.util.List;
 
@@ -23,14 +22,13 @@ import com.forgather.domain.space.model.Space;
 import com.forgather.domain.space.model.SpacePhoto;
 import com.forgather.domain.space.repository.SpacePhotoRepository;
 import com.forgather.domain.space.repository.SpaceRepository;
-import com.forgather.domain.upload.domain.ContentsStorage;
 import com.forgather.domain.upload.event.DeletePhotoEvent;
+import com.forgather.domain.upload.service.UploadService;
 import com.forgather.global.auth.model.Host;
 import com.forgather.global.auth.model.SpaceHostMap;
 import com.forgather.global.auth.repository.SpaceHostMapRepository;
 import com.forgather.global.exception.BaseException;
 import com.forgather.global.exception.BaseNullPointerException;
-import com.forgather.global.exception.FileUploadException;
 import com.forgather.global.exception.ForbiddenException;
 import com.forgather.global.exception.UnauthorizedException;
 import com.forgather.global.util.RandomCodeGenerator;
@@ -50,7 +48,7 @@ public class SpaceService {
     private final SpaceHostMapRepository spaceHostMapRepository;
     private final GuestBookCardRepository guestBookCardRepository;
     private final RandomCodeGenerator codeGenerator;
-    private final ContentsStorage contentsStorage;
+    private final UploadService uploadService;
     private final ApplicationEventPublisher eventPublisher;
 
     @Transactional
@@ -62,22 +60,9 @@ public class SpaceService {
         if (file == null || file.isEmpty()) {
             return CreateSpaceResponse.from(space);
         }
-        String path = uploadSpacePicture(file, spaceCode);
+        String path = uploadService.upload(spaceCode, file);
         spacePhotoRepository.save(new SpacePhoto(space, file.getOriginalFilename(), path, file.getSize()));
         return CreateSpaceResponse.from(space);
-    }
-
-    // TODO: 외부 API -> 트랜잭션 분리
-    private String uploadSpacePicture(MultipartFile file, String spaceCode) {
-        try {
-            log.atInfo()
-                .addKeyValue("spaceCode", spaceCode)
-                .addKeyValue("originalName", file.getOriginalFilename())
-                .log("파일 업로드 시작 {}, {}", spaceCode, file.getSize());
-            return contentsStorage.upload(spaceCode, file);
-        } catch (IOException e) {
-            throw new FileUploadException("파일 업로드에 실패했습니다. 파일 이름: " + file.getOriginalFilename(), e);
-        }
     }
 
     @Transactional(readOnly = true)
@@ -137,7 +122,7 @@ public class SpaceService {
                 throw new BaseException("스페이스 사진이 이미 존재합니다. 기존 스페이스 사진을 삭제 해주세요.");
             });
 
-        String path = uploadSpacePicture(file, spaceCode);
+        String path = uploadService.upload(spaceCode, file);
         spacePhotoRepository.save(new SpacePhoto(space, file.getOriginalFilename(), path, file.getSize()));
     }
 

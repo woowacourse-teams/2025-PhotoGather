@@ -7,6 +7,9 @@ import com.forgather.domain.space.model.Space;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
+/**
+ * TODO 영상 임베드 버전으로 마이그레이션 이후 제거
+ */
 public record RegisterProductRequest(
     @Schema(description = "작품명", example = "고귀한 의자", maxLength = 50)
     String title,

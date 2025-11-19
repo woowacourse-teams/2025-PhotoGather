@@ -1,0 +1,109 @@
+/* ==========================================================================
+   Login Page Styles
+   ========================================================================== */
+
+.login-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: var(--spacing-lg);
+}
+
+.login-container {
+    width: 100%;
+    max-width: 450px;
+}
+
+.login-box {
+    background-color: var(--surface-color);
+    border-radius: var(--radius-lg);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    padding: var(--spacing-2xl);
+}
+
+.login-header {
+    text-align: center;
+    margin-bottom: var(--spacing-2xl);
+}
+
+.login-header h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    margin-bottom: var(--spacing-sm);
+}
+
+.login-header p {
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+}
+
+.login-form {
+    margin-bottom: var(--spacing-xl);
+}
+
+.login-form .form-group:last-of-type {
+    margin-bottom: var(--spacing-lg);
+}
+
+.login-form .error-message {
+    margin-top: var(--spacing-md);
+    margin-bottom: 0;
+}
+
+.login-form .btn-primary {
+    padding: 0.875rem 1.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.login-footer {
+    text-align: center;
+    padding-top: var(--spacing-lg);
+    border-top: 1px solid var(--border-color);
+}
+
+.login-footer p {
+    color: var(--text-muted);
+    font-size: 0.75rem;
+}
+
+/* Focus styles for better accessibility */
+.login-form .form-control:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+}
+
+/* Loading state for login button */
+.login-form .btn-primary:disabled {
+    position: relative;
+    color: transparent;
+}
+
+.login-form .btn-primary:disabled::after {
+    content: '';
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    top: 50%;
+    left: 50%;
+    margin-left: -8px;
+    margin-top: -8px;
+    border: 2px solid white;
+    border-top-color: transparent;
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+    .login-box {
+        padding: var(--spacing-xl);
+    }
+
+    .login-header h1 {
+        font-size: 1.5rem;
+    }
+}

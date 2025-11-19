@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spaces Management - Forgather Admin</title>
+
+    <!-- Common CSS -->
+    <link rel="stylesheet" th:href="@{/css/admin/common.css}">
+    <!-- Spaces CSS -->
+    <link rel="stylesheet" th:href="@{/css/admin/spaces.css}">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-container">
+            <div class="header-left">
+                <h1 class="logo">
+                    <a th:href="@{/view/admin/spaces}">Forgather Admin</a>
+                </h1>
+            </div>
+            <nav class="header-nav">
+                <ul class="nav-list">
+                    <li class="nav-item">
+                        <a th:href="@{/view/admin/spaces}" class="nav-link active">Spaces</a>
+                    </li>
+                    <li class="nav-item">
+                        <a th:href="@{/view/admin/hosts}" class="nav-link">Hosts</a>
+                    </li>
+                    <li class="nav-item">
+                        <button id="logoutBtn" class="btn btn-secondary">Logout</button>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Page Header -->
+            <div class="page-header">
+                <h2>스페이스 관리 페이지</h2>
+                <p>전체 스페이스 조회 및 관리 페이지</p>
+            </div>
+
+            <!-- Controls -->
+            <div class="controls">
+                <div class="page-size-selector">
+                    <label for="pageSize">Items per page:</label>
+                    <select id="pageSize" class="form-select">
+                        <option value="15" selected>15</option>
+                        <option value="30">30</option>
+                        <option value="50">50</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Loading Spinner -->
+            <div id="loadingSpinner" class="loading-spinner" style="display: none;">
+                <div class="spinner"></div>
+                <p>Loading...</p>
+            </div>
+
+            <!-- Error Message -->
+            <div id="errorMessage" class="error-message" style="display: none;"></div>
+
+            <!-- Spaces Table -->
+            <div class="table-container">
+                <table class="data-table" id="spacesTable">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Code</th>
+                            <th>Name</th>
+                            <th>Public</th>
+                        </tr>
+                    </thead>
+                    <tbody id="spacesTableBody">
+                        <!-- Data will be populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination -->
+            <div class="pagination" id="pagination" style="display: none;">
+                <button class="pagination-btn" id="prevBtn" onclick="goToPreviousPage()">
+                    Previous
+                </button>
+
+                <span class="pagination-info">
+                    Page <span id="currentPage">1</span> of <span id="totalPages">1</span>
+                    (Total: <span id="totalCount">0</span> items)
+                </span>
+
+                <button class="pagination-btn" id="nextBtn" onclick="goToNextPage()">
+                    Next
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <p>&copy; 2025 Forgather. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast"></div>
+
+    <!--
+        스페이스 상세 정보 모달
+        - 기본적으로 숨김 상태 (display: none)
+        - JavaScript에서 spaceCode 클릭 시 표시
+        - ESC 키 또는 오버레이 클릭 시 닫힘
+        - 모달이 열렸을 때 body의 스크롤 방지
+    -->
+    <div id="spaceDetailModal" class="modal-overlay" style="display: none;" role="dialog" aria-labelledby="modalTitle" aria-modal="true">
+        <div class="modal-container">
+            <!-- 모달 헤더 -->
+            <div class="modal-header">
+                <h3 id="modalTitle" class="modal-title">Space Details</h3>
+                <button id="closeModalBtn" class="modal-close-btn" aria-label="Close modal">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <!-- 모달 내용 -->
+            <div class="modal-body">
+                <!-- 로딩 상태 표시 -->
+                <div id="modalLoading" class="modal-loading" style="display: none;">
+                    <div class="spinner-small"></div>
+                    <p>Loading space details...</p>
+                </div>
+
+                <!-- 에러 상태 표시 -->
+                <div id="modalError" class="modal-error" style="display: none;"></div>
+
+                <!-- 스페이스 상세 정보 (데이터가 로드되면 JavaScript로 채워짐) -->
+                <div id="modalContent" class="modal-content" style="display: none;">
+                    <div class="modal-info-group">
+                        <label class="modal-info-label">스페이스 ID</label>
+                        <div id="modalSpaceId" class="modal-info-value"></div>
+                    </div>
+
+                    <div class="modal-info-group">
+                        <label class="modal-info-label">스페이스 코드</label>
+                        <div id="modalSpaceCode" class="modal-info-value modal-code"></div>
+                    </div>
+
+                    <div class="modal-info-group">
+                        <label class="modal-info-label">스페이스 이름</label>
+                        <div id="modalSpaceName" class="modal-info-value"></div>
+                    </div>
+
+                    <div class="modal-info-group">
+                        <label class="modal-info-label">스페이스 공개 여부</label>
+                        <div id="modalSpacePublic" class="modal-info-value"></div>
+                    </div>
+
+                    <div class="modal-info-group">
+                        <label class="modal-info-label">작품 소개 등록 여부</label>
+                        <div id="modalHasProduct" class="modal-info-value"></div>
+                    </div>
+
+                    <div class="modal-info-group">
+                        <label class="modal-info-label">방명록 개수</label>
+                        <div id="modalGuestBookCount" class="modal-info-value"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 모달 푸터 (스페이스 페이지 이동 버튼) -->
+            <div class="modal-footer">
+                <button id="visitSpaceBtn" class="btn btn-primary" style="display: none;">
+                    호스트 스페이스 이동
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script th:src="@{/js/admin/auth.js}"></script>
+    <script th:src="@{/js/admin/api.js}"></script>
+    <script th:src="@{/js/admin/spaces.js}"></script>
+</body>
+</html>

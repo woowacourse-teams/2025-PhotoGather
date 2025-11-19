@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${title} ?: 'Forgather Admin'">Forgather Admin</title>
+
+    <!-- Common CSS -->
+    <link rel="stylesheet" th:href="@{/css/admin/common.css}">
+
+    <!-- Page specific CSS -->
+    <th:block th:replace="${styles}"></th:block>
+</head>
+<body>
+    <!-- Header -->
+    <header th:replace="~{admin/layout/fragments :: header}"></header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <th:block th:replace="${content}"></th:block>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer th:replace="~{admin/layout/fragments :: footer}"></footer>
+
+    <!-- Common Scripts -->
+    <script th:src="@{/js/admin/auth.js}"></script>
+    <script th:src="@{/js/admin/api.js}"></script>
+
+    <!-- Page specific scripts -->
+    <th:block th:replace="${scripts}"></th:block>
+</body>
+</html>

@@ -15,8 +15,8 @@ export const Wrapper = styled.div`
 export const ContentContainer = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 300px;
-  padding: 120px 0px;
+  gap: 250px;
+  padding: 20px 0px;
 `;
 
 export const Section = styled.section`
@@ -44,6 +44,7 @@ export const SmallTitle = styled.p`
   ${({ theme }) => theme.typography.header03}
   color: ${({ theme }) => theme.colors.white};
   white-space: pre-wrap;
+  text-align: center;
 `;
 
 export const SubTitle = styled.h2`
@@ -145,7 +146,7 @@ export const ScrollTopContainer = styled.div`
   position: fixed;
   right: calc(
     (100vw - ${({ theme }) => theme.layout.width}) / 2 +
-      ${({ theme }) => theme.layout.padding.leftRight} * 2
+      (${({ theme }) => theme.layout.padding.leftRight} * 2)
   );
   bottom: ${({ theme }) => theme.layout.padding.topBottom};
   z-index: ${({ theme }) => theme.zIndex.fixedButton};

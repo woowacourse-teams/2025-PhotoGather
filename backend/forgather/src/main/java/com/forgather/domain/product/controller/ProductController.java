@@ -13,8 +13,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.forgather.domain.product.dto.ProductResponse;
+import com.forgather.domain.product.dto.ProductResponseV2;
 import com.forgather.domain.product.dto.RegisterProductRequest;
+import com.forgather.domain.product.dto.RegisterProductRequestV2;
 import com.forgather.domain.product.dto.UpdateProductRequest;
+import com.forgather.domain.product.dto.UpdateProductRequestV2;
 import com.forgather.domain.product.service.ProductService;
 import com.forgather.global.auth.annotation.LoginHost;
 import com.forgather.global.auth.model.Host;
@@ -34,19 +37,26 @@ public class ProductController {
 
     private final ProductService productService;
 
-    @Operation(summary = "작품 조회")
+    /**
+     * TODO 영상 임베드 버전으로 마이그레이션 이후 제거
+     */
     @GetMapping
     public ResponseEntity<ProductResponse> get(@PathVariable(value = "spaceCode") String spaceCode) {
         var response = productService.get(spaceCode);
         return ResponseEntity.ok().body(response);
     }
 
+    @Operation(summary = "작품 조회", description = "임베드 영상이 반영된 api는 version 2로 호출")
+    @GetMapping(headers = "X-API-Version=2")
+    public ResponseEntity<ProductResponseV2> getV2(@PathVariable(value = "spaceCode") String spaceCode) {
+        var response = productService.getV2(spaceCode);
+        return ResponseEntity.ok().body(response);
+    }
+
     /**
-     * TODO
-     * 검증 걸릴 시 업로드 사진 삭제
+     * TODO 영상 임베드 버전으로 마이그레이션 이후 제거
      */
     @SecurityRequirement(name = "bearerAuth")
-    @Operation(summary = "작품 등록")
     @PostMapping
     public ResponseEntity<ProductResponse> register(
         @PathVariable(value = "spaceCode") String spaceCode,
@@ -58,11 +68,38 @@ public class ProductController {
     }
 
     @SecurityRequirement(name = "bearerAuth")
-    @Operation(summary = "작품 수정", description = "변경 사항이 없는 데이터는 json에 포함하지 않거나 null로 요청한다.")
+    @Operation(summary = "작품 등록", description = "임베드 영상이 반영된 api는 version 2로 호출")
+    @PostMapping(headers = "X-API-Version=2")
+    public ResponseEntity<ProductResponseV2> registerV2(
+        @PathVariable(value = "spaceCode") String spaceCode,
+        @RequestBody RegisterProductRequestV2 request,
+        @LoginHost(required = true) Host host
+    ) {
+        var response = productService.register(host, spaceCode, request);
+        return ResponseEntity.status(CREATED).body(response);
+    }
+
+    /**
+     * TODO 영상 임베드 버전으로 마이그레이션 이후 제거
+     */
+    @SecurityRequirement(name = "bearerAuth")
     @PatchMapping
     public ResponseEntity<ProductResponse> update(
         @PathVariable(value = "spaceCode") String spaceCode,
         @RequestBody UpdateProductRequest request,
+        @LoginHost(required = true) Host host
+    ) {
+        var response = productService.update(host, spaceCode, request);
+        return ResponseEntity.ok().body(response);
+    }
+
+    @SecurityRequirement(name = "bearerAuth")
+    @Operation(summary = "작품 수정",
+        description = "변경 사항이 없는 데이터는 json에 포함하지 않거나 null로 요청한다.  임베드 영상이 반영된 api는 version 2로 호출")
+    @PatchMapping(headers = "X-API-Version=2")
+    public ResponseEntity<ProductResponseV2> updateV2(
+        @PathVariable(value = "spaceCode") String spaceCode,
+        @RequestBody UpdateProductRequestV2 request,
         @LoginHost(required = true) Host host
     ) {
         var response = productService.update(host, spaceCode, request);

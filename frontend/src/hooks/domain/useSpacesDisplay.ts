@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import type { MySpace } from '../../types/domain/space.type';
 
-type SortType = 'latest' | 'guestCount';
+export type SortType = 'latest' | 'guestCount' | 'name';
 
 interface UseSpacesDisplayProps {
   mySpaces: MySpace[];
@@ -17,7 +17,9 @@ const useSpacesDisplay = ({ mySpaces }: UseSpacesDisplayProps) => {
   const sortSpaces = () => {
     return [...mySpaces].sort((a: MySpace, b: MySpace) => {
       if (sortType === 'latest') {
-        return b.id - a.id; // ID가 높을수록 최신
+        return b.id - a.id;
+      } else if (sortType === 'name') {
+        return a.name.localeCompare(b.name);
       } else {
         return b.guestBookCardCount - a.guestBookCardCount;
       }

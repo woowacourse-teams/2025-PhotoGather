@@ -141,7 +141,9 @@ public class GuestBookService {
 
     private void deleteGuestBookCardPhotos(GuestBookCard guestBookCard) {
         List<GuestBookCardPhoto> photos = guestBookCardPhotoRepository.findAllByGuestBookCard(guestBookCard);
-        deleteGuestBookCardPhotos(photos);
+        if (!photos.isEmpty()) {
+            deleteGuestBookCardPhotos(photos);
+        }
     }
 
     @Transactional

@@ -40,6 +40,10 @@ import com.forgather.global.auth.util.JwtTokenProvider;
 import io.restassured.http.ContentType;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
 
+/**
+ * TODO 영상 임베드 버전으로 마이그레이션 이후 제거
+ * - 제거 이전에 생성, 수정, 조회 외 테스트 마이그레이션
+ */
 @AutoConfigureMockMvc
 class ProductAcceptanceTest extends AcceptanceTest {
 

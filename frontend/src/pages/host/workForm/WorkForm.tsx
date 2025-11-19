@@ -4,9 +4,11 @@ import { IoClose } from 'react-icons/io5';
 import { useNavigate, useParams } from 'react-router-dom';
 import { workService } from '../../../apis/services/work/work.service';
 import Button from '../../../components/@common/buttons/button/Button';
+import Checkbox from '../../../components/@common/checkBox/CheckBox';
 import TextareaInput from '../../../components/@common/inputs/textareaInput/TextareaInput';
 import TextInput from '../../../components/@common/inputs/textInput/TextInput';
 import DeleteModal from '../../../components/@common/modal/deleteModal/DeleteModal';
+import LoadingModal from '../../../components/specific/modal/loadingModal/LoadingModal';
 import PhotoUploadButton from '../../../components/specific/photoUploadButton/PhotoUploadButton';
 import { CONSTRAINTS } from '../../../constants/constraints';
 import useButtonTracking from '../../../hooks/@common/useButtonTracking';
@@ -37,6 +39,7 @@ const WorkForm = () => {
     handleSubmit,
     watch,
     reset,
+    setValue,
     formState: { errors, isValid: isAllValid },
   } = useForm<WorkFormData>({
     mode: 'onChange',
@@ -45,8 +48,18 @@ const WorkForm = () => {
       category: '',
       designer: '',
       description: '',
+      videoUrl: '',
+      isVideoAfterPhoto: false,
     },
   });
+
+  const {
+    isEditMode,
+    existingPhotos,
+    deleteExistingPhoto,
+    submitWork,
+    isSubmitting,
+  } = useWorkForm({ spaceCode, reset });
 
   const {
     localFiles,
@@ -54,10 +67,10 @@ const WorkForm = () => {
     deleteFile,
     handleFilesUploadClick,
     handleFilesDrop,
-  } = useLocalFile({ fileType: 'image', maxFileCount: 10 });
-
-  const { isEditMode, existingPhotos, deleteExistingPhoto, submitWork } =
-    useWorkForm({ spaceCode, reset });
+  } = useLocalFile({
+    fileType: 'image',
+    maxFileCount: Math.max(0, 10 - existingPhotos.length),
+  });
 
   const onValid = async (data: WorkFormData) => {
     trackClick(
@@ -143,10 +156,14 @@ const WorkForm = () => {
   };
 
   const totalPhotos = existingPhotos.length + previewFiles.length;
-  const remainingSlots = 10 - totalPhotos;
+  const isVideoAfterPhoto = watch('isVideoAfterPhoto');
 
   return (
     <>
+      <LoadingModal
+        isOpen={isSubmitting}
+        text={isEditMode ? '수정중 ...' : '등록중 ...'}
+      />
       <DeleteModal
         isOpen={isDeleteModalOpen}
         onCloseModal={() => {
@@ -224,6 +241,34 @@ const WorkForm = () => {
           </S.FormLabelContainer>
 
           <S.FormLabelContainer>
+            <TextInput
+              {...register('videoUrl', {
+                validate: workFormValidators.videoUrl,
+              })}
+              label="작품 영상"
+              subLabel="공개 업로드 된 유튜브 영상의 링크를 첨부해주세요"
+              placeholder="유튜브 링크를 입력하세요"
+              maxCount={CONSTRAINTS.MAX_LENGTH.WORK.VIDEO_URL}
+              validLength={calculateValidLength(watch('videoUrl'))}
+              errorMessage={errors.videoUrl?.message}
+            />
+          </S.FormLabelContainer>
+
+          <S.FormLabelContainer>
+            <S.LabelContainer>미디어 배치 순서</S.LabelContainer>
+            <Checkbox
+              label="영상이 사진보다 앞에 노출되도록 설정"
+              checked={Boolean(isVideoAfterPhoto)}
+              onChange={() =>
+                setValue('isVideoAfterPhoto', !isVideoAfterPhoto, {
+                  shouldValidate: true,
+                  shouldDirty: true,
+                })
+              }
+            />
+          </S.FormLabelContainer>
+
+          <S.FormLabelContainer>
             <S.LabelContainer>작품 사진</S.LabelContainer>
             <PhotoUploadButton
               mainText="사진을 선택해주세요"
@@ -231,6 +276,7 @@ const WorkForm = () => {
               onChange={handlePhotoUploadClick}
               onDrop={handlePhotoUploadDrop}
             />
+            <S.ImageCount>{`${totalPhotos}/10`}</S.ImageCount>
             <S.ImageGridContainer>
               {existingPhotos.map((photo, index) => (
                 <S.ImageGridItem key={`existing-${photo.id}`}>
@@ -266,12 +312,6 @@ const WorkForm = () => {
                   </S.ImageDeleteButton>
                 </S.ImageGridItem>
               ))}
-              {Array.from({ length: remainingSlots }).map((_, index) => (
-                // biome-ignore lint/suspicious/noArrayIndexKey: index is used as a key
-                <S.ImageGridItem key={`empty-${index}`}>
-                  <S.EmptyGridItem>{totalPhotos + index + 1}</S.EmptyGridItem>
-                </S.ImageGridItem>
-              ))}
             </S.ImageGridContainer>
           </S.FormLabelContainer>
           <S.ButtonContainer>
@@ -279,7 +319,7 @@ const WorkForm = () => {
               type="submit"
               text={isEditMode ? '수정하기' : '등록하기'}
               variant="fixed"
-              disabled={!isAllValid}
+              disabled={!isAllValid || isSubmitting}
             />
           </S.ButtonContainer>
         </S.FormContainer>

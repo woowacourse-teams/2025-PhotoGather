@@ -107,3 +107,9 @@ export const TopContainer = styled.div`
   display: flex;
   justify-content: space-between;
 `;
+
+export const ImageCount = styled.p`
+  color: ${({ theme }) => theme.colors.gray03};
+  ${({ theme }) => ({ ...theme.typography.captionSmall })};
+  align-self: flex-end;
+`;

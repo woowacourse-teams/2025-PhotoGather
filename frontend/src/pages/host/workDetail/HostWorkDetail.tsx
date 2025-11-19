@@ -2,11 +2,13 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { workService } from '../../../apis/services/work/work.service';
 import Button from '../../../components/@common/buttons/button/Button';
+import VideoPlayer from '../../../components/@common/videoPlayer/VideoPlayer';
 import { createWorkEditRoute } from '../../../constants/routes';
 import useButtonTracking from '../../../hooks/@common/useButtonTracking';
 import { useToast } from '../../../hooks/@common/useToast';
 import type { WorkDetail } from '../../../types/domain/work.type';
 import { buildThumbnailUrl } from '../../../utils/buildImageUrl';
+import { buildYoutubeEmbedLink } from '../../../utils/buildYoutubeEmbedLink';
 import * as C from '../../WorkDetail.common.styles';
 import * as S from './HostWorkDetail.styles';
 
@@ -74,7 +76,15 @@ const HostWorkDetail = () => {
     );
   }
 
-  const { title, category, authorName, description, photos } = workDetail;
+  const {
+    title,
+    category,
+    authorName,
+    description,
+    photos,
+    videoUrl,
+    isVideoAfterPhoto,
+  } = workDetail;
 
   return (
     <S.Wrapper>
@@ -90,17 +100,20 @@ const HostWorkDetail = () => {
           <C.DesignerContainer>{authorName}</C.DesignerContainer>
         </C.TitleRowContainer>
         <C.DescriptionContainer>{description}</C.DescriptionContainer>
-        {photos.map((photo, index) => (
-          <C.ImageContainer
-            key={photo.id}
-            src={buildThumbnailUrl({
-              path: photo.path,
-              replacePath: 'product',
-              preset: '800',
-            })}
-            alt={`work-detail-${index}`}
-          />
-        ))}
+        <C.MediaContainer isVideoAfterPhoto={isVideoAfterPhoto}>
+          {videoUrl && <VideoPlayer src={buildYoutubeEmbedLink(videoUrl)} />}
+          {photos.map((photo, index) => (
+            <C.ImageContainer
+              key={photo.id}
+              src={buildThumbnailUrl({
+                path: photo.path,
+                replacePath: 'product',
+                preset: '800',
+              })}
+              alt={`work-detail-${index}`}
+            />
+          ))}
+        </C.MediaContainer>
       </C.WorkContainer>
     </S.Wrapper>
   );

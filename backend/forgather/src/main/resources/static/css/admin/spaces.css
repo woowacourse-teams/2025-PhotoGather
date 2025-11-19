@@ -1,0 +1,449 @@
+/* ==========================================================================
+   Spaces Page Styles
+   ========================================================================== */
+
+.page-header {
+    margin-bottom: var(--spacing-xl);
+    padding-bottom: var(--spacing-lg);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.page-header h2 {
+    font-size: 1.875rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: var(--spacing-xs);
+}
+
+.page-header p {
+    color: var(--text-secondary);
+    font-size: 1rem;
+}
+
+/* ==========================================================================
+   Controls
+   ========================================================================== */
+
+.controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-lg);
+    padding: var(--spacing-lg);
+    background-color: var(--surface-color);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+}
+
+.page-size-selector {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.page-size-selector label {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    white-space: nowrap;
+}
+
+.page-size-selector .form-select {
+    width: auto;
+    min-width: 80px;
+}
+
+/* ==========================================================================
+   Spaces Table Specific
+   ========================================================================== */
+
+.data-table th:nth-child(1),
+.data-table td:nth-child(1) {
+    width: 10%;
+}
+
+.data-table th:nth-child(2),
+.data-table td:nth-child(2) {
+    width: 25%;
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+}
+
+.data-table th:nth-child(3),
+.data-table td:nth-child(3) {
+    width: 50%;
+}
+
+.data-table th:nth-child(4),
+.data-table td:nth-child(4) {
+    width: 15%;
+    text-align: center;
+}
+
+/* Public/Private Badge */
+.badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.75rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    border-radius: 9999px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.badge-success {
+    background-color: #d1fae5;
+    color: #065f46;
+}
+
+.badge-danger {
+    background-color: #fee2e2;
+    color: #991b1b;
+}
+
+/* ==========================================================================
+   Empty State
+   ========================================================================== */
+
+.empty-state {
+    text-align: center;
+    padding: var(--spacing-2xl);
+    color: var(--text-secondary);
+}
+
+.empty-state-icon {
+    font-size: 3rem;
+    margin-bottom: var(--spacing-md);
+    opacity: 0.5;
+}
+
+.empty-state h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: var(--spacing-sm);
+}
+
+.empty-state p {
+    font-size: 0.875rem;
+}
+
+/* ==========================================================================
+   Clickable Code Column
+   ========================================================================== */
+
+/**
+ * Code 컬럼을 클릭 가능하도록 스타일 추가
+ * - cursor: pointer로 클릭 가능함을 시각적으로 표시
+ * - hover 시 색상 변경과 밑줄로 인터랙티브함을 강조
+ */
+.data-table td:nth-child(2) {
+    cursor: pointer;
+    color: var(--primary-color);
+    transition: all 0.2s;
+}
+
+.data-table td:nth-child(2):hover {
+    color: var(--primary-hover);
+    text-decoration: underline;
+}
+
+/* ==========================================================================
+   Modal Overlay & Container
+   ========================================================================== */
+
+/**
+ * 모달 오버레이
+ * - position: fixed로 화면 전체를 덮음
+ * - z-index: 10000으로 다른 요소들 위에 표시 (toast는 10000이므로 동일 레벨)
+ * - 반투명 검은색 배경으로 뒤의 내용을 흐리게 표시
+ * - flexbox로 모달을 중앙에 배치
+ */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10000;
+    /*
+        페이드 인/아웃 애니메이션 적용
+        opacity와 visibility를 함께 사용해 부드러운 전환 효과
+    */
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+/**
+ * 모달이 표시될 때 적용되는 클래스
+ * JavaScript에서 이 클래스를 추가/제거하여 모달을 열고 닫음
+ */
+.modal-overlay.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+/**
+ * 모달 컨테이너 (실제 내용이 들어가는 영역)
+ * - 최대 너비 600px로 제한
+ * - transform으로 열릴 때 아래에서 위로 살짝 올라오는 애니메이션
+ */
+.modal-container {
+    background-color: var(--surface-color);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    max-width: 600px;
+    width: 90%;
+    max-height: 85vh;
+    display: flex;
+    flex-direction: column;
+    /* 모달이 열릴 때 아래에서 위로 살짝 올라오는 효과 */
+    transform: translateY(20px);
+    transition: transform 0.3s ease;
+}
+
+.modal-overlay.show .modal-container {
+    transform: translateY(0);
+}
+
+/* ==========================================================================
+   Modal Header
+   ========================================================================== */
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-lg);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.modal-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0;
+}
+
+/**
+ * 모달 닫기 버튼 (X 아이콘)
+ * - 테두리와 배경 없이 깔끔한 디자인
+ * - hover 시 배경색 변경으로 피드백 제공
+ */
+.modal-close-btn {
+    background: none;
+    border: none;
+    font-size: 1.75rem;
+    color: var(--text-secondary);
+    cursor: pointer;
+    width: 2rem;
+    height: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-md);
+    transition: all 0.2s;
+}
+
+.modal-close-btn:hover {
+    background-color: var(--bg-color);
+    color: var(--text-primary);
+}
+
+/* ==========================================================================
+   Modal Body
+   ========================================================================== */
+
+/**
+ * 모달 본문
+ * - 스크롤 가능하도록 overflow-y: auto 설정
+ * - max-height로 내용이 많을 때 스크롤 표시
+ */
+.modal-body {
+    padding: var(--spacing-lg);
+    overflow-y: auto;
+    flex: 1;
+}
+
+/* 모달 내 로딩 상태 */
+.modal-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-2xl);
+    color: var(--text-secondary);
+}
+
+/**
+ * 작은 스피너 (모달 내부용)
+ * - 전체 화면 스피너보다 작은 크기 (40px)
+ * - 기존 스피너 애니메이션 재사용
+ */
+.spinner-small {
+    width: 40px;
+    height: 40px;
+    border: 3px solid var(--border-color);
+    border-top-color: var(--primary-color);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+.modal-loading p {
+    margin-top: var(--spacing-md);
+    font-size: 0.875rem;
+}
+
+/* 모달 내 에러 메시지 */
+.modal-error {
+    padding: var(--spacing-md);
+    background-color: #fef2f2;
+    border: 1px solid #fecaca;
+    border-radius: var(--radius-md);
+    color: var(--danger-color);
+    font-size: 0.875rem;
+    text-align: center;
+}
+
+/* 모달 실제 콘텐츠 */
+.modal-content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-lg);
+}
+
+/**
+ * 정보 그룹 (라벨 + 값 쌍)
+ * - 각 필드를 구분하는 기본 단위
+ */
+.modal-info-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+}
+
+.modal-info-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.modal-info-value {
+    font-size: 1rem;
+    color: var(--text-primary);
+    padding: var(--spacing-sm) var(--spacing-md);
+    background-color: var(--bg-color);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-color);
+}
+
+/**
+ * Code 값에 monospace 폰트 적용
+ * - 코드 가독성 향상
+ */
+.modal-code {
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+}
+
+/* ==========================================================================
+   Modal Footer
+   ========================================================================== */
+
+.modal-footer {
+    padding: var(--spacing-lg);
+    border-top: 1px solid var(--border-color);
+    display: flex;
+    justify-content: flex-end;
+}
+
+.modal-footer .btn {
+    min-width: 150px;
+}
+
+/* ==========================================================================
+   Body Scroll Lock (모달 열렸을 때 body 스크롤 방지)
+   ========================================================================== */
+
+/**
+ * JavaScript에서 모달이 열릴 때 body에 이 클래스 추가
+ * - 배경 페이지의 스크롤을 방지하여 모달에만 집중하도록 함
+ */
+body.modal-open {
+    overflow: hidden;
+}
+
+/* ==========================================================================
+   Responsive Adjustments
+   ========================================================================== */
+
+@media (max-width: 768px) {
+    .page-header h2 {
+        font-size: 1.5rem;
+    }
+
+    .controls {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--spacing-md);
+    }
+
+    .page-size-selector {
+        width: 100%;
+    }
+
+    .page-size-selector .form-select {
+        flex: 1;
+    }
+
+    /* Make table scrollable on mobile */
+    .data-table th:nth-child(1),
+    .data-table td:nth-child(1),
+    .data-table th:nth-child(2),
+    .data-table td:nth-child(2),
+    .data-table th:nth-child(3),
+    .data-table td:nth-child(3),
+    .data-table th:nth-child(4),
+    .data-table td:nth-child(4) {
+        width: auto;
+    }
+
+    .data-table th,
+    .data-table td {
+        padding: var(--spacing-sm) var(--spacing-md);
+        font-size: 0.8125rem;
+    }
+
+    /**
+     * 모바일에서 모달을 전체 화면으로 표시
+     * - 작은 화면에서 더 나은 UX 제공
+     * - max-height를 95vh로 늘려 더 많은 공간 활용
+     */
+    .modal-container {
+        width: 95%;
+        max-height: 95vh;
+        border-radius: var(--radius-md);
+    }
+
+    .modal-header,
+    .modal-body,
+    .modal-footer {
+        padding: var(--spacing-md);
+    }
+
+    .modal-title {
+        font-size: 1.125rem;
+    }
+
+    .modal-footer .btn {
+        width: 100%;
+    }
+}

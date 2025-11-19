@@ -57,3 +57,14 @@ export const NICKNAME = {
     '잠',
   ],
 };
+
+export const EVENT_FORM_URL = 'https://forms.gle/WbpuZxrdshT4Lgtf8';
+export const EVENT_MODAL_HIDE_KEY = 'eventModalHideUntil';
+export const KAKAO_TEMPLATE_ID = {
+  DEV: 125656,
+  PROD: 125655,
+};
+export const TRY_IT_NOW_SPACE_CODE = {
+  DEV: '05993e02d3',
+  PROD: '1d4cc97597',
+};

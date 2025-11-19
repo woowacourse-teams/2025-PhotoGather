@@ -3,6 +3,7 @@ import { CONSTRAINTS } from '../../constants/constraints';
 import type { LocalFile, PreviewFile } from '../../types/file.type';
 import { heicToJpegBlob, isHeic } from '../../utils/heic';
 import {
+  checkFileCapacity,
   checkInvalidFileType,
   checkUploadLimit,
   isValidFileType,
@@ -109,7 +110,7 @@ const useLocalFile = ({
   const splitValidFilesByType = (files: File[], type: string) => {
     return files.reduce(
       (acc, file) => {
-        if (isValidFileType(file, type)) {
+        if (isValidFileType(file, type, CONSTRAINTS.ALLOWED_FILE_TYPES)) {
           acc.validFiles.push(file);
         } else {
           acc.invalidFiles.push(file);
@@ -128,6 +129,7 @@ const useLocalFile = ({
       );
 
       checkInvalidFileType(invalidFiles);
+      checkFileCapacity(validFiles);
 
       if (validFiles.length === 0) return;
 

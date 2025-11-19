@@ -16,6 +16,8 @@ export interface WorkFormData {
   category: string;
   designer: string;
   description: string;
+  videoUrl: string;
+  isVideoAfterPhoto: boolean;
 }
 
 interface UseWorkFormParams {
@@ -32,6 +34,7 @@ export const useWorkForm = ({ spaceCode, reset }: UseWorkFormParams) => {
   const [initialWorkData, setInitialWorkData] = useState<WorkFormData | null>(
     null,
   );
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: showToast is stable
   useEffect(() => {
@@ -49,6 +52,8 @@ export const useWorkForm = ({ spaceCode, reset }: UseWorkFormParams) => {
             category: response.data.category,
             designer: response.data.authorName,
             description: response.data.description,
+            videoUrl: response.data.videoUrl,
+            isVideoAfterPhoto: response.data.isVideoAfterPhoto,
           };
           setInitialWorkData(formData);
           reset(formData);
@@ -96,6 +101,15 @@ export const useWorkForm = ({ spaceCode, reset }: UseWorkFormParams) => {
     if (initialWorkData && data.description !== initialWorkData.description) {
       updateData.description = data.description;
     }
+    if (initialWorkData && data.videoUrl !== initialWorkData.videoUrl) {
+      updateData.videoUrl = data.videoUrl;
+    }
+    if (
+      initialWorkData &&
+      data.isVideoAfterPhoto !== initialWorkData.isVideoAfterPhoto
+    ) {
+      updateData.isVideoAfterPhoto = data.isVideoAfterPhoto;
+    }
 
     return updateData;
   };
@@ -130,6 +144,8 @@ export const useWorkForm = ({ spaceCode, reset }: UseWorkFormParams) => {
       authorName: data.designer,
       description: data.description,
       photos: newPhotos,
+      videoUrl: data.videoUrl,
+      isVideoAfterPhoto: data.isVideoAfterPhoto,
     });
 
     if (response.success) {
@@ -148,6 +164,7 @@ export const useWorkForm = ({ spaceCode, reset }: UseWorkFormParams) => {
     }
 
     try {
+      setIsSubmitting(true);
       const newPhotos = await uploadNewPhotos(files);
 
       if (isEditMode) {
@@ -158,6 +175,8 @@ export const useWorkForm = ({ spaceCode, reset }: UseWorkFormParams) => {
     } catch (error) {
       console.error(error);
       showToast({ text: '작품 저장에 실패했습니다.' });
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -166,5 +185,6 @@ export const useWorkForm = ({ spaceCode, reset }: UseWorkFormParams) => {
     existingPhotos,
     deleteExistingPhoto,
     submitWork,
+    isSubmitting,
   };
 };

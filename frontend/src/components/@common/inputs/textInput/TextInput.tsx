@@ -3,6 +3,7 @@ import * as S from './TextInput.styles';
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label: string;
+  subLabel?: string;
   errorMessage?: string;
   maxCount?: number;
   validLength?: number;
@@ -11,6 +12,7 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
 
 const TextInput = ({
   label,
+  subLabel,
   errorMessage,
   maxCount,
   validLength,
@@ -23,6 +25,7 @@ const TextInput = ({
         {label}
         <C.requiredDot>{isRequired && '*'}</C.requiredDot>
       </C.Label>
+      <S.SubLabel>{subLabel}</S.SubLabel>
       <S.InputField
         {...inputProps}
         id={inputProps.id}

@@ -1,0 +1,184 @@
+/* ==========================================================================
+   Hosts Page Styles
+   호스트 목록 페이지 전용 스타일
+   ========================================================================== */
+
+/**
+ * Page Header
+ * - 페이지 상단의 제목과 설명 영역
+ * - 하단에 보더를 두어 본문과 구분
+ */
+.page-header {
+    margin-bottom: var(--spacing-xl);
+    padding-bottom: var(--spacing-lg);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.page-header h2 {
+    font-size: 1.875rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: var(--spacing-xs);
+}
+
+.page-header p {
+    color: var(--text-secondary);
+    font-size: 1rem;
+}
+
+/* ==========================================================================
+   Controls
+   페이지 크기 선택기 등의 컨트롤 영역
+   ========================================================================== */
+
+.controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-lg);
+    padding: var(--spacing-lg);
+    background-color: var(--surface-color);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+}
+
+.page-size-selector {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.page-size-selector label {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    white-space: nowrap;
+}
+
+.page-size-selector .form-select {
+    width: auto;
+    min-width: 80px;
+}
+
+/* ==========================================================================
+   Hosts Table Specific Styles
+   호스트 테이블 컬럼별 너비와 스타일
+   ========================================================================== */
+
+/**
+ * 테이블 컬럼 너비 설정
+ * - ID: 10% (좁은 컬럼, 숫자만 표시)
+ * - 호스트명: 40% (가장 중요한 정보, 넓게 할당)
+ * - 스페이스 개수: 20% (숫자 정보, 중앙 정렬)
+ * - 생성일: 30% (날짜 정보, YYYY-MM-DD HH:mm 형식)
+ */
+.data-table th:nth-child(1),
+.data-table td:nth-child(1) {
+    width: 10%;
+}
+
+.data-table th:nth-child(2),
+.data-table td:nth-child(2) {
+    width: 40%;
+}
+
+.data-table th:nth-child(3),
+.data-table td:nth-child(3) {
+    width: 20%;
+    text-align: center;
+}
+
+.data-table th:nth-child(4),
+.data-table td:nth-child(4) {
+    width: 30%;
+}
+
+/* ==========================================================================
+   Empty State
+   데이터가 없을 때 표시되는 빈 상태 메시지
+   ========================================================================== */
+
+/**
+ * 빈 상태 스타일
+ * - 데이터가 없을 때 사용자 친화적인 메시지 표시
+ * - 아이콘, 제목, 설명으로 구성
+ */
+.empty-state {
+    text-align: center;
+    padding: var(--spacing-2xl);
+    color: var(--text-secondary);
+}
+
+.empty-state-icon {
+    font-size: 3rem;
+    margin-bottom: var(--spacing-md);
+    opacity: 0.5;
+}
+
+.empty-state h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: var(--spacing-sm);
+}
+
+.empty-state p {
+    font-size: 0.875rem;
+}
+
+/* ==========================================================================
+   Responsive Design
+   반응형 디자인: 모바일 환경(768px 이하)에서의 레이아웃 조정
+   ========================================================================== */
+
+@media (max-width: 768px) {
+    /**
+     * 페이지 헤더 반응형
+     * - 모바일에서는 제목 크기를 줄여 가독성 유지
+     */
+    .page-header h2 {
+        font-size: 1.5rem;
+    }
+
+    /**
+     * 컨트롤 영역 반응형
+     * - 모바일에서는 세로로 쌓이도록 flex-direction: column
+     * - 페이지 크기 선택기가 전체 너비를 차지
+     */
+    .controls {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--spacing-md);
+    }
+
+    .page-size-selector {
+        width: 100%;
+    }
+
+    .page-size-selector .form-select {
+        flex: 1;
+    }
+
+    /**
+     * 테이블 반응형
+     * - 모바일에서는 테이블 너비를 auto로 변경
+     * - 테이블 컨테이너가 가로 스크롤 가능 (common.css에서 설정)
+     * - 패딩과 폰트 크기를 줄여 공간 절약
+     */
+    .data-table th:nth-child(1),
+    .data-table td:nth-child(1),
+    .data-table th:nth-child(2),
+    .data-table td:nth-child(2),
+    .data-table th:nth-child(3),
+    .data-table td:nth-child(3),
+    .data-table th:nth-child(4),
+    .data-table td:nth-child(4) {
+        width: auto;
+    }
+
+    .data-table th,
+    .data-table td {
+        padding: var(--spacing-sm) var(--spacing-md);
+        font-size: 0.8125rem;
+    }
+}

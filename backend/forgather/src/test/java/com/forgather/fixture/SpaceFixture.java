@@ -11,4 +11,8 @@ public class SpaceFixture {
     public static Space createPrivateSpace() {
         return new Space("0987654321", "name", "description", false, "instagramUsername", "email@forgather.me");
     }
+
+    public static Space createSpaceWithCode(String code) {
+        return new Space(code, "name", "description", true, "instagramUsername", "email@forgather.me");
+    }
 }

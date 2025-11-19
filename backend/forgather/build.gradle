@@ -63,6 +63,10 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 	implementation 'io.micrometer:micrometer-registry-prometheus'
 	implementation 'io.opentelemetry:opentelemetry-exporter-otlp'
+
+    // thymeleaf
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
 }
 
 tasks.named('test') {
