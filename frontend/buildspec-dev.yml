@@ -16,6 +16,3 @@ artifacts:
   base-directory: frontend/dist
   files:
     - '**/*'
-  encryptionDisabled: false
-  s3Encryption:
-    - encryptionMode: SSE_S3
