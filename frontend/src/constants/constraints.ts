@@ -18,6 +18,7 @@ export const CONSTRAINTS = {
     },
   },
   MAX_FILE_COUNT: 20,
+  MAX_FILE_CAPACITY: 90 * 1024 * 1024,
   NOT_ALLOWED_FILE_TYPES: ['image/gif', 'image/svg', 'image/svg+xml'],
   INSTAGRAM_USERNAME_REGEX: /^[a-zA-Z0-9_.]+$/,
   GUESTBOOK_PAGINATION_UNIT: 15,
