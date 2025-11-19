@@ -4,6 +4,7 @@ export interface WorkDetail {
   authorName: string;
   description: string;
   photos: WorkPhoto[];
+  videoUrl: string;
 }
 
 export interface WorkPhoto {
@@ -24,6 +25,7 @@ export interface CreateWorkRequest {
   authorName: string;
   description: string;
   photos: PhotoUpload[];
+  videoUrl?: string;
 }
 
 export interface UpdateWorkRequest {
@@ -33,4 +35,5 @@ export interface UpdateWorkRequest {
   description?: string;
   deletePhotoIds: number[];
   newPhotos: PhotoUpload[];
+  videoUrl?: string;
 }
