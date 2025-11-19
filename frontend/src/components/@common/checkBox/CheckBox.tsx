@@ -1,13 +1,13 @@
 import { MdCheck } from 'react-icons/md';
 import * as S from './CheckBox.styles';
 
-interface CheckBoxProps {
+interface CheckboxProps {
   label: string;
   checked: boolean;
-  onChange: () => void;
+  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-const Checkbox = ({ label, checked, onChange }: CheckBoxProps) => {
+const Checkbox = ({ label, checked, onChange }: CheckboxProps) => {
   return (
     <S.CheckboxWrapper>
       <S.CheckboxContainer>
