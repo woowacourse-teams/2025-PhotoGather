@@ -8,11 +8,13 @@ import { http } from '../../http';
 
 export const guestbookService = {
   createGuestbook: (spaceCode: string, data: GuestbookForm) => {
-    return http.post(`/spaces/${spaceCode}/guestbook`, data);
+    return http.post(`/spaces/${spaceCode}/guestbook`, { body: data });
   },
 
   getList: (spaceCode: string, query?: GuestbookListQuery) =>
-    http.get<GuestbookList>(`/spaces/${spaceCode}/guestbook`, { ...query }),
+    http.get<GuestbookList>(`/spaces/${spaceCode}/guestbook`, {
+      params: { ...query },
+    }),
 
   getDetail: (spaceCode: string, guestbookCardId: number | string) =>
     http.get<GuestbookCard>(
@@ -29,7 +31,9 @@ export const guestbookService = {
   ) => {
     return http.delete(
       `/spaces/${spaceCode}/guestbook/${guestBookCardId}/photos`,
-      { deletePhotoIds },
+      {
+        body: { deletePhotoIds },
+      },
     );
   },
 };

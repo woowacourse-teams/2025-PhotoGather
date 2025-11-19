@@ -5,33 +5,45 @@ import type {
 } from '../../../types/domain/work.type';
 import { http } from '../../http';
 
+const API_VERSION_HEADERS = { 'X-API-Version': '2' };
+
 export const workService = {
   getWork: (spaceCode: string) =>
-    http.get<WorkDetail>(`/spaces/${spaceCode}/products`),
+    http.get<WorkDetail>(`/spaces/${spaceCode}/products`, {
+      headers: API_VERSION_HEADERS,
+    }),
 
   deleteWork: (spaceCode: string) =>
     http.delete<WorkDetail>(`/spaces/${spaceCode}/products`),
 
   createWork: (spaceCode: string, data: CreateWorkRequest) => {
     return http.post(`/spaces/${spaceCode}/products`, {
-      title: data.title,
-      category: data.category,
-      authorName: data.authorName,
-      description: data.description,
-      photos: data.photos,
-      videoUrl: data.videoUrl,
+      body: {
+        title: data.title,
+        category: data.category,
+        authorName: data.authorName,
+        description: data.description,
+        photos: data.photos,
+        videoUrl: data.videoUrl,
+        isVideoAfterPhoto: data.isVideoAfterPhoto,
+      },
+      headers: API_VERSION_HEADERS,
     });
   },
 
   updateWork: (spaceCode: string, data: UpdateWorkRequest) => {
     return http.patch(`/spaces/${spaceCode}/products`, {
-      title: data.title,
-      category: data.category,
-      authorName: data.authorName,
-      description: data.description,
-      deletePhotoIds: data.deletePhotoIds,
-      newPhotos: data.newPhotos,
-      videoUrl: data.videoUrl,
+      body: {
+        title: data.title,
+        category: data.category,
+        authorName: data.authorName,
+        description: data.description,
+        deletePhotoIds: data.deletePhotoIds,
+        newPhotos: data.newPhotos,
+        videoUrl: data.videoUrl,
+        isVideoAfterPhoto: data.isVideoAfterPhoto,
+      },
+      headers: API_VERSION_HEADERS,
     });
   },
 };

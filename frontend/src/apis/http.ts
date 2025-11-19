@@ -6,6 +6,12 @@ import { BASE_URL } from './config';
 import { matchBody, matchHeaders } from './helper';
 import { retryAuth } from './refresh';
 
+type RequestOptionsWithoutMethod = Omit<RequestOptions, 'method'>;
+type RequestOptionsWithoutMethodAndBody = Omit<
+  RequestOptionsWithoutMethod,
+  'body'
+>;
+
 const request = async <T>(
   endpoint: string,
   options: RequestOptions,
@@ -120,21 +126,18 @@ const request = async <T>(
 };
 
 export const http = {
-  get: <T>(
-    endpoint: string,
-    params?: Record<string, unknown>,
-    token?: string | undefined,
-  ) => request<T>(endpoint, { method: 'GET', params, token }),
+  get: <T>(endpoint: string, options?: RequestOptionsWithoutMethodAndBody) =>
+    request<T>(endpoint, { method: 'GET', ...(options ?? {}) }),
 
-  post: <T>(endpoint: string, body?: unknown, token?: string) =>
-    request<T>(endpoint, { method: 'POST', body, token }),
+  post: <T>(endpoint: string, options?: RequestOptionsWithoutMethod) =>
+    request<T>(endpoint, { method: 'POST', ...(options ?? {}) }),
 
-  put: <T>(endpoint: string, body?: unknown, token?: string) =>
-    request<T>(endpoint, { method: 'PUT', body, token }),
+  put: <T>(endpoint: string, options?: RequestOptionsWithoutMethod) =>
+    request<T>(endpoint, { method: 'PUT', ...(options ?? {}) }),
 
-  patch: <T>(endpoint: string, body?: unknown, token?: string) =>
-    request<T>(endpoint, { method: 'PATCH', body, token }),
+  patch: <T>(endpoint: string, options?: RequestOptionsWithoutMethod) =>
+    request<T>(endpoint, { method: 'PATCH', ...(options ?? {}) }),
 
-  delete: <T>(endpoint: string, body?: unknown, token?: string) =>
-    request<T>(endpoint, { method: 'DELETE', body, token }),
+  delete: <T>(endpoint: string, options?: RequestOptionsWithoutMethod) =>
+    request<T>(endpoint, { method: 'DELETE', ...(options ?? {}) }),
 };

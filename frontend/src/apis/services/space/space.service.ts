@@ -8,7 +8,8 @@ import { http } from '../../http';
 export const spaceService = {
   getSpaceStats: () => http.get<SpaceStats>('/stats/landing'),
 
-  create: (data: FormData) => http.post<{ spaceCode: string }>('/spaces', data),
+  create: (data: FormData) =>
+    http.post<{ spaceCode: string }>('/spaces', { body: data }),
 
   getSpaceInfo: (spaceCode: string) =>
     http.get<SpaceInfo>(`/spaces/${spaceCode}`),
@@ -16,7 +17,7 @@ export const spaceService = {
   deleteSpace: (spaceCode: string) => http.delete(`/spaces/${spaceCode}`),
 
   patchSpaceInfo: (spaceCode: string, data: FormData) =>
-    http.patch(`/spaces/${spaceCode}`, data),
+    http.patch(`/spaces/${spaceCode}`, { body: data }),
 
   getMySpaces: () => http.get<{ spaces: MySpace[] }>('/spaces/me'),
 

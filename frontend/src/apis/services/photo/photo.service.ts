@@ -7,10 +7,15 @@ export const photoService = {
     category: string,
     uploadFileNames: string[],
   ) =>
-    http.post<PresignedUrlResponse>(`/spaces/${spaceCode}/upload/signed-urls`, {
-      category,
-      uploadFileNames,
-    }),
+    http.post<PresignedUrlResponse>(
+      `/spaces/${spaceCode}/upload/signed-urls`,
+      {
+        body: {
+          category,
+          uploadFileNames,
+        },
+      },
+    ),
 
   uploadPhotoToS3: async (presignedUrl: string, file: File) => {
     const response = await fetch(presignedUrl, {
