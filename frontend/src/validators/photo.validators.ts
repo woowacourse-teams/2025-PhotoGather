@@ -25,7 +25,7 @@ export const checkFileCapacity = (files: File[]) => {
   const hasInvalidCapacity = files.some((file) => !isValidCapacity(file));
   if (hasInvalidCapacity) {
     throw new Error(
-      `사진은 최대 ${MAX_FILE_CAPACITY_IN_MB}MB 이하만 업로드할 수 있어요.`,
+      `빈 파일은 업로드할 수 없으며, 최대 ${MAX_FILE_CAPACITY_IN_MB}MB 이하만 업로드할 수 있어요.`,
     );
   }
 };
@@ -45,5 +45,5 @@ export const isValidCapacity = (
   file: File,
   maxCapacity: number = CONSTRAINTS.MAX_FILE_CAPACITY,
 ): boolean => {
-  return file.size <= maxCapacity;
+  return file.size <= maxCapacity && file.size > 0;
 };
