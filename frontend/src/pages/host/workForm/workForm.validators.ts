@@ -28,4 +28,9 @@ export const workFormValidators = {
     ),
     inputEmpty: createSafeValidator((value: string) => checkInputEmpty(value)),
   },
+  videoUrl: {
+    maxLength: createSafeValidator((value: string) =>
+      checkMaxLength(value, CONSTRAINTS.MAX_LENGTH.WORK.VIDEO_URL),
+    ),
+  },
 };

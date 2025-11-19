@@ -46,6 +46,7 @@ const WorkForm = () => {
       category: '',
       designer: '',
       description: '',
+      videoUrl: '',
     },
   });
 
@@ -232,6 +233,20 @@ const WorkForm = () => {
               rows={6}
               validLength={calculateValidLength(watch('description'))}
               errorMessage={errors.description?.message}
+            />
+          </S.FormLabelContainer>
+
+          <S.FormLabelContainer>
+            <TextInput
+              {...register('videoUrl', {
+                validate: workFormValidators.videoUrl,
+              })}
+              label="작품 영상"
+              subLabel="공개 업로드 된 유튜브 영상의 링크를 첨부해주세요"
+              placeholder="유튜브 링크를 입력하세요"
+              maxCount={CONSTRAINTS.MAX_LENGTH.WORK.VIDEO_URL}
+              validLength={calculateValidLength(watch('videoUrl'))}
+              errorMessage={errors.videoUrl?.message}
             />
           </S.FormLabelContainer>
 

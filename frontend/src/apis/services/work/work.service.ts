@@ -19,6 +19,7 @@ export const workService = {
       authorName: data.authorName,
       description: data.description,
       photos: data.photos,
+      videoUrl: data.videoUrl,
     });
   },
 
@@ -30,6 +31,7 @@ export const workService = {
       description: data.description,
       deletePhotoIds: data.deletePhotoIds,
       newPhotos: data.newPhotos,
+      videoUrl: data.videoUrl,
     });
   },
 };

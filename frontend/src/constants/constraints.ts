@@ -11,6 +11,7 @@ export const CONSTRAINTS = {
       CATEGORY: 20,
       DESIGNER: 20,
       DESCRIPTION: 1000,
+      VIDEO_URL: 500,
     },
     GUESTBOOK: {
       MESSAGE: 400,

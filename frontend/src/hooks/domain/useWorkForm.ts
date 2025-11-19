@@ -16,6 +16,7 @@ export interface WorkFormData {
   category: string;
   designer: string;
   description: string;
+  videoUrl: string;
 }
 
 interface UseWorkFormParams {
@@ -50,6 +51,7 @@ export const useWorkForm = ({ spaceCode, reset }: UseWorkFormParams) => {
             category: response.data.category,
             designer: response.data.authorName,
             description: response.data.description,
+            videoUrl: response.data.videoUrl,
           };
           setInitialWorkData(formData);
           reset(formData);
@@ -97,6 +99,9 @@ export const useWorkForm = ({ spaceCode, reset }: UseWorkFormParams) => {
     if (initialWorkData && data.description !== initialWorkData.description) {
       updateData.description = data.description;
     }
+    if (initialWorkData && data.videoUrl !== initialWorkData.videoUrl) {
+      updateData.videoUrl = data.videoUrl;
+    }
 
     return updateData;
   };
@@ -131,6 +136,7 @@ export const useWorkForm = ({ spaceCode, reset }: UseWorkFormParams) => {
       authorName: data.designer,
       description: data.description,
       photos: newPhotos,
+      videoUrl: data.videoUrl,
     });
 
     if (response.success) {
