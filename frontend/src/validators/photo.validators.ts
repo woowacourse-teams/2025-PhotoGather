@@ -33,11 +33,10 @@ export const checkFileCapacity = (files: File[]) => {
 export const isValidFileType = (
   file: File,
   expectedType: string,
-  disallowedTypes: readonly string[] = [],
+  allowedTypes: readonly string[] = [],
 ): boolean => {
   return (
-    file.type.startsWith(`${expectedType}/`) &&
-    !disallowedTypes.includes(file.type)
+    file.type.startsWith(`${expectedType}/`) && allowedTypes.includes(file.type)
   );
 };
 

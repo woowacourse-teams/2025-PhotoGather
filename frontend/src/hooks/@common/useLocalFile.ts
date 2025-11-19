@@ -110,7 +110,7 @@ const useLocalFile = ({
   const splitValidFilesByType = (files: File[], type: string) => {
     return files.reduce(
       (acc, file) => {
-        if (isValidFileType(file, type)) {
+        if (isValidFileType(file, type, CONSTRAINTS.ALLOWED_FILE_TYPES)) {
           acc.validFiles.push(file);
         } else {
           acc.invalidFiles.push(file);
