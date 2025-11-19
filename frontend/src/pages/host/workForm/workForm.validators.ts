@@ -3,6 +3,7 @@ import { createSafeValidator } from '../../../utils/validateForm';
 import {
   checkInputEmpty,
   checkMaxLength,
+  checkYoutubeUrlForm,
 } from '../../../validators/form.validators';
 
 export const workFormValidators = {
@@ -32,5 +33,8 @@ export const workFormValidators = {
     maxLength: createSafeValidator((value: string) =>
       checkMaxLength(value, CONSTRAINTS.MAX_LENGTH.WORK.VIDEO_URL),
     ),
+    isYoutubeUrl: createSafeValidator((value: string) => {
+      checkYoutubeUrlForm(value);
+    }),
   },
 };
