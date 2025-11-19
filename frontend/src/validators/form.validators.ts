@@ -32,7 +32,7 @@ export const checkInstagramUsernameForm = (value: string) => {
 };
 
 export const checkYoutubeUrlForm = (value: string) => {
-  if (!value) return true;
+  if (!value) return;
 
   const youtubeRegex = /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\//;
 
