@@ -5,6 +5,7 @@ export interface WorkDetail {
   description: string;
   photos: WorkPhoto[];
   videoUrl: string;
+  isVideoAfterPhoto: boolean;
 }
 
 export interface WorkPhoto {
@@ -26,6 +27,7 @@ export interface CreateWorkRequest {
   description: string;
   photos: PhotoUpload[];
   videoUrl?: string;
+  isVideoAfterPhoto: boolean;
 }
 
 export interface UpdateWorkRequest {
@@ -36,4 +38,5 @@ export interface UpdateWorkRequest {
   deletePhotoIds: number[];
   newPhotos: PhotoUpload[];
   videoUrl?: string;
+  isVideoAfterPhoto?: boolean;
 }

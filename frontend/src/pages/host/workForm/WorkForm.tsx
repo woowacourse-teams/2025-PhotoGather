@@ -4,6 +4,7 @@ import { IoClose } from 'react-icons/io5';
 import { useNavigate, useParams } from 'react-router-dom';
 import { workService } from '../../../apis/services/work/work.service';
 import Button from '../../../components/@common/buttons/button/Button';
+import Checkbox from '../../../components/@common/checkBox/CheckBox';
 import TextareaInput from '../../../components/@common/inputs/textareaInput/TextareaInput';
 import TextInput from '../../../components/@common/inputs/textInput/TextInput';
 import DeleteModal from '../../../components/@common/modal/deleteModal/DeleteModal';
@@ -38,6 +39,7 @@ const WorkForm = () => {
     handleSubmit,
     watch,
     reset,
+    setValue,
     formState: { errors, isValid: isAllValid },
   } = useForm<WorkFormData>({
     mode: 'onChange',
@@ -47,6 +49,7 @@ const WorkForm = () => {
       designer: '',
       description: '',
       videoUrl: '',
+      isVideoAfterPhoto: false,
     },
   });
 
@@ -153,6 +156,7 @@ const WorkForm = () => {
   };
 
   const totalPhotos = existingPhotos.length + previewFiles.length;
+  const isVideoAfterPhoto = watch('isVideoAfterPhoto');
 
   return (
     <>
@@ -247,6 +251,20 @@ const WorkForm = () => {
               maxCount={CONSTRAINTS.MAX_LENGTH.WORK.VIDEO_URL}
               validLength={calculateValidLength(watch('videoUrl'))}
               errorMessage={errors.videoUrl?.message}
+            />
+          </S.FormLabelContainer>
+
+          <S.FormLabelContainer>
+            <S.LabelContainer>미디어 배치 순서</S.LabelContainer>
+            <Checkbox
+              label="영상이 사진보다 앞에 노출되도록 설정"
+              checked={Boolean(isVideoAfterPhoto)}
+              onChange={() =>
+                setValue('isVideoAfterPhoto', !isVideoAfterPhoto, {
+                  shouldValidate: true,
+                  shouldDirty: true,
+                })
+              }
             />
           </S.FormLabelContainer>
 
