@@ -1,3 +1,4 @@
+import { KAKAO_CHANNEL_URL } from '../../../../constants/constants';
 import {
   createCreateGuestbookRoute,
   createGuestGuestbookRoute,
@@ -15,6 +16,10 @@ export const hostNavigateInfo = (): NavigateInfo[] => [
     path: ROUTES.HOST.MY_PAGE,
     name: '마이 페이지',
   },
+  {
+    path: KAKAO_CHANNEL_URL,
+    name: '문의하기',
+  },
 ];
 
 export const guestNavigateInfo = (spaceCode: string): NavigateInfo[] => [
@@ -29,5 +34,9 @@ export const guestNavigateInfo = (spaceCode: string): NavigateInfo[] => [
   {
     path: createGuestGuestbookRoute(spaceCode),
     name: '방명록 구경하기',
+  },
+  {
+    path: KAKAO_CHANNEL_URL,
+    name: '문의하기',
   },
 ];
