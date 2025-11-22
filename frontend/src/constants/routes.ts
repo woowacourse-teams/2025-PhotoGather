@@ -29,11 +29,11 @@ export const createSpaceInfoEditRoute = (spaceCode: string) => {
   return `/host/${spaceCode}/space-info/edit`;
 };
 
-export const createWorkDetailRoute = (spaceCode: string, workId: number) => {
+export const createWorkDetailRoute = (spaceCode: string, workId: string) => {
   return `/host/${spaceCode}/work-detail/${workId}`;
 };
 
-export const createWorkEditRoute = (spaceCode: string, workId: number) => {
+export const createWorkEditRoute = (spaceCode: string, workId: string) => {
   return `/host/${spaceCode}/work-detail/${workId}/edit`;
 };
 

@@ -13,7 +13,10 @@ import * as C from '../../WorkDetail.common.styles';
 import * as S from './HostWorkDetail.styles';
 
 const HostWorkDetail = () => {
-  const { spaceCode } = useParams<{ spaceCode: string }>();
+  const { spaceCode, workId } = useParams<{
+    spaceCode: string;
+    workId: string;
+  }>();
   const navigate = useNavigate();
   const [workDetail, setWorkDetail] = useState<WorkDetail | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -23,10 +26,10 @@ const HostWorkDetail = () => {
   // biome-ignore lint/correctness/useExhaustiveDependencies: showToast is stable
   useEffect(() => {
     const fetchWorkDetail = async () => {
-      if (!spaceCode) return;
+      if (!spaceCode || !workId) return;
 
       try {
-        const response = await workService.getWork(spaceCode);
+        const response = await workService.getWork(spaceCode, workId);
 
         if (response.success) {
           setWorkDetail(response.data);
@@ -51,14 +54,14 @@ const HostWorkDetail = () => {
 
   const handleCreateWorkButtonClick = () => {
     trackClick('host_work_detail_create_click');
-    if (!spaceCode) return;
-    navigate(createWorkEditRoute(spaceCode));
+    if (!spaceCode || !workId) return;
+    navigate(createWorkEditRoute(spaceCode, workId));
   };
 
   const handleEditWorkButtonClick = () => {
     trackClick('host_work_detail_edit_click');
-    if (!spaceCode) return;
-    navigate(createWorkEditRoute(spaceCode));
+    if (!spaceCode || !workId) return;
+    navigate(createWorkEditRoute(spaceCode, workId));
   };
 
   if (!workDetail || !spaceCode) {

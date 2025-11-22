@@ -11,6 +11,7 @@ import DeleteModal from '../../../components/@common/modal/deleteModal/DeleteMod
 import LoadingModal from '../../../components/specific/modal/loadingModal/LoadingModal';
 import PhotoUploadButton from '../../../components/specific/photoUploadButton/PhotoUploadButton';
 import { CONSTRAINTS } from '../../../constants/constraints';
+import { createWorkListRoute } from '../../../constants/routes';
 import useButtonTracking from '../../../hooks/@common/useButtonTracking';
 import useLocalFile from '../../../hooks/@common/useLocalFile';
 import { useToast } from '../../../hooks/@common/useToast';
@@ -24,7 +25,10 @@ import * as S from './WorkForm.styles';
 import { workFormValidators } from './workForm.validators';
 
 const WorkForm = () => {
-  const { spaceCode } = useParams<{ spaceCode: string }>();
+  const { spaceCode, workId } = useParams<{
+    spaceCode: string;
+    workId: string;
+  }>();
   const navigate = useNavigate();
   const { showToast } = useToast();
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -59,7 +63,7 @@ const WorkForm = () => {
     deleteExistingPhoto,
     submitWork,
     isSubmitting,
-  } = useWorkForm({ spaceCode, reset });
+  } = useWorkForm({ spaceCode, workId, reset });
 
   const {
     localFiles,
@@ -87,7 +91,7 @@ const WorkForm = () => {
   };
 
   const handleDeleteWork = async () => {
-    if (!spaceCode) return;
+    if (!spaceCode || !workId) return;
 
     trackClick('work_form_confirm_delete', {
       page: '/work/form',
@@ -95,12 +99,12 @@ const WorkForm = () => {
 
     try {
       setIsDeleting(true);
-      const response = await workService.deleteWork(spaceCode);
+      const response = await workService.deleteWork(spaceCode, workId);
 
       if (response.success) {
         setIsDeleteModalOpen(false);
         showToast({ text: '작품을 삭제했습니다.', type: 'info' });
-        navigate(-1);
+        navigate(createWorkListRoute(spaceCode));
       } else {
         console.error(response.error);
         showToast({ text: '작품 삭제에 실패했습니다.' });

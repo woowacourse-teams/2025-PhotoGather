@@ -8,7 +8,9 @@ interface WorkBase {
   isVideoAfterPhoto: boolean;
 }
 
-export interface WorkDetail extends WorkBase {}
+export interface WorkDetail extends WorkBase {
+  id: number;
+}
 
 export interface WorkSummary {
   id: number;
