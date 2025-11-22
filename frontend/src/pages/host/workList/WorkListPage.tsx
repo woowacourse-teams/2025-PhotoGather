@@ -3,11 +3,16 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { workService } from '../../../apis/services/work/work.service';
 import Button from '../../../components/@common/buttons/button/Button';
 import WorkCard from '../../../components/specific/workCard/WorkCard';
-import { createWorkDetailRoute } from '../../../constants/routes';
+import {
+  createWorkDetailRoute,
+  createWorkEditRoute,
+} from '../../../constants/routes';
 import useButtonTracking from '../../../hooks/@common/useButtonTracking';
 import { useToast } from '../../../hooks/@common/useToast';
 import type { WorkSummary } from '../../../types/domain/work.type';
 import { buildThumbnailUrl } from '../../../utils/buildImageUrl';
+import { buildYoutubeThumbnail } from '../../../utils/buildYoutubeThumbnail';
+import { checkIsYoutube } from '../../../utils/checkIsYoutube';
 import * as S from './WorkListPage.styles';
 
 const WorkListPage = () => {
@@ -35,7 +40,7 @@ const WorkListPage = () => {
 
   const canAddMoreWorks = works.length < 3;
 
-  const handleWorkCardClick = (workId: number) => {
+  const handleWorkCardClick = (workId: string) => {
     if (!spaceCode) return;
 
     trackClick('host_work_list_work_card', {
@@ -43,6 +48,26 @@ const WorkListPage = () => {
     });
 
     navigate(createWorkDetailRoute(spaceCode, workId));
+  };
+
+  const handleAddWorkButtonClick = () => {
+    trackClick('host_work_list_add_work_button');
+    if (!spaceCode) return;
+    navigate(createWorkEditRoute(spaceCode, 'new'));
+  };
+
+  const createWorkCardThumbnailUrl = (imgUrl: string, videoUrl: string) => {
+    if (imgUrl)
+      return buildThumbnailUrl({
+        path: imgUrl,
+        replacePath: 'product',
+        preset: '800',
+      });
+    if (videoUrl && checkIsYoutube(videoUrl)) {
+      console.log('videoUrl', videoUrl);
+      return buildYoutubeThumbnail(videoUrl);
+    }
+    return '';
   };
 
   return (
@@ -60,21 +85,16 @@ const WorkListPage = () => {
         )}
         {!isLoading &&
           works.map((work) => {
-            const thumbnailUrl = work.firstPhoto?.path
-              ? buildThumbnailUrl({
-                  path: work.firstPhoto.path,
-                  replacePath: 'product',
-                  preset: '800',
-                })
-              : undefined;
-
             return (
               <WorkCard
                 key={work.id}
                 title={work.title}
                 category={work.category}
-                thumbnailUrl={thumbnailUrl}
-                onClick={() => handleWorkCardClick(work.id)}
+                thumbnailUrl={createWorkCardThumbnailUrl(
+                  work.firstPhoto?.path || '',
+                  work.videoUrl || '',
+                )}
+                onClick={() => handleWorkCardClick(work.id.toString())}
               />
             );
           })}
@@ -82,7 +102,7 @@ const WorkListPage = () => {
       <S.BottomSectionContainer>
         <Button
           text="작품 추가하기"
-          onClick={() => {}}
+          onClick={handleAddWorkButtonClick}
           disabled={!canAddMoreWorks}
         />
       </S.BottomSectionContainer>

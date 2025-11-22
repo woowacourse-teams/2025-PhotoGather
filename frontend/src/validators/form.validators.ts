@@ -1,4 +1,5 @@
 import { CONSTRAINTS } from '../constants/constraints';
+import { checkIsYoutube } from '../utils/checkIsYoutube';
 import { calculateValidLength } from '../utils/grapheme';
 
 export const checkInputEmpty = (value: string) => {
@@ -34,9 +35,7 @@ export const checkInstagramUsernameForm = (value: string) => {
 export const checkYoutubeUrlForm = (value: string) => {
   if (!value) return;
 
-  const youtubeRegex = /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\//;
-
-  const isValid = youtubeRegex.test(value);
+  const isValid = checkIsYoutube(value);
   if (!isValid) {
     throw new Error('유효한 유튜브 링크 형식이 아닙니다.');
   }
