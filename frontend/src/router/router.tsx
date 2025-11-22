@@ -11,6 +11,7 @@ import GuestBookFunnel from '../pages/guest/guestbookPage/funnel/GuestbookFunnel
 import GuestGuestbookListPage from '../pages/guest/guestbookPage/list/GuestGuestbookListPage';
 import GuestSpaceHomePage from '../pages/guest/spaceHomePage/GuestSpaceHomePage';
 import GuestWorkDetail from '../pages/guest/workDetail/GuestWorkDetail';
+import WorkListPage from '../pages/host/\bworkList/WorkListPage';
 import GuestbookCardPage from '../pages/host/guestbook/card/GuestbookCardPage';
 import GuestbookListPage from '../pages/host/guestbook/list/GuestbookListPage';
 import MainPage from '../pages/host/mainPage/MainPage';
@@ -127,7 +128,7 @@ const routes: AppRouteObject[] = [
                         },
                       },
                       {
-                        path: ':spaceCode/work-detail',
+                        path: ':spaceCode/work-detail/:workId',
                         element: <HostWorkDetail />,
                         handle: {
                           headerIcon: {
@@ -136,7 +137,7 @@ const routes: AppRouteObject[] = [
                         },
                       },
                       {
-                        path: ':spaceCode/work-detail/edit',
+                        path: ':spaceCode/work-detail/:workId/edit',
                         element: <WorkForm />,
                         handle: {
                           noFooter: true,
@@ -157,6 +158,15 @@ const routes: AppRouteObject[] = [
                       {
                         path: ':spaceCode/guestbook/:guestbookCardId',
                         element: <GuestbookCardPage />,
+                        handle: {
+                          headerIcon: {
+                            leftIcon: 'profile',
+                          },
+                        },
+                      },
+                      {
+                        path: ':spaceCode/work-list',
+                        element: <WorkListPage />,
                         handle: {
                           headerIcon: {
                             leftIcon: 'profile',

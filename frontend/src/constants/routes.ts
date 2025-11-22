@@ -10,6 +10,7 @@ export const ROUTES = {
     MY_PAGE: '/host/my-page',
     CREATE_SPACE: '/host/create-space',
     SHARE: '/host/share',
+    WORK_LIST: '/host/work-list',
   },
   GUEST: {
     CREATE_GUESTBOOK_COMPLETE: '/guest/create-guestbook-complete',
@@ -28,12 +29,16 @@ export const createSpaceInfoEditRoute = (spaceCode: string) => {
   return `/host/${spaceCode}/space-info/edit`;
 };
 
-export const createWorkDetailRoute = (spaceCode: string) => {
-  return `/host/${spaceCode}/work-detail`;
+export const createWorkDetailRoute = (spaceCode: string, workId: number) => {
+  return `/host/${spaceCode}/work-detail/${workId}`;
 };
 
-export const createWorkEditRoute = (spaceCode: string) => {
-  return `/host/${spaceCode}/work-detail/edit`;
+export const createWorkEditRoute = (spaceCode: string, workId: number) => {
+  return `/host/${spaceCode}/work-detail/${workId}/edit`;
+};
+
+export const createWorkListRoute = (spaceCode: string) => {
+  return `/host/${spaceCode}/work-list`;
 };
 
 export const createGuestWorkDetailRoute = (spaceCode: string) => {
