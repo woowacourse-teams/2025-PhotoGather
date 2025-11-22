@@ -15,7 +15,7 @@ import SpaceShareModal from '../../../components/specific/modal/spaceShareModal/
 import {
   createGuestbookRoute,
   createSpaceInfoRoute,
-  createWorkDetailRoute,
+  createWorkListRoute,
 } from '../../../constants/routes';
 import useButtonTracking from '../../../hooks/@common/useButtonTracking';
 import useUserInfoContext from '../../../hooks/context/userInfoContext';
@@ -69,9 +69,9 @@ const HostSpaceHomePage = () => {
     window.open(`mailto:${spaceInfo.email}`, '_blank');
   };
 
-  const handleWorkDetailClick = () => {
-    trackClick('host_space_work_detail_button');
-    navigate(createWorkDetailRoute(spaceCode));
+  const handleWorkListButtonClick = () => {
+    trackClick('host_space_work_list_button');
+    navigate(createWorkListRoute(spaceCode));
   };
 
   const handleGuestbookClick = () => {
@@ -164,8 +164,8 @@ const HostSpaceHomePage = () => {
         <MainPageStyles.ButtonContainer>
           <Button
             variant="elevated"
-            text="작품 소개 관리"
-            onClick={handleWorkDetailClick}
+            text="작품 목록 관리"
+            onClick={handleWorkListButtonClick}
           />
           <Button
             variant="elevated"
