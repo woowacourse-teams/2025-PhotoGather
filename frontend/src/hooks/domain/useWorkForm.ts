@@ -44,7 +44,7 @@ export const useWorkForm = ({
   // biome-ignore lint/correctness/useExhaustiveDependencies: showToast is stable
   useEffect(() => {
     const fetchWorkData = async () => {
-      if (!spaceCode || !workId) return;
+      if (!spaceCode || !workId || workId === 'new') return;
 
       try {
         const response = await workService.getWork(spaceCode, workId);
@@ -70,7 +70,7 @@ export const useWorkForm = ({
     };
 
     fetchWorkData();
-  }, [spaceCode, reset]);
+  }, [spaceCode, reset, workId]);
 
   const deleteExistingPhoto = (photoId: number) => {
     setDeletedPhotoIds((prev) => [...prev, photoId]);
