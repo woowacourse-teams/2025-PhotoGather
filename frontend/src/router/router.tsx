@@ -11,7 +11,7 @@ import GuestBookFunnel from '../pages/guest/guestbookPage/funnel/GuestbookFunnel
 import GuestGuestbookListPage from '../pages/guest/guestbookPage/list/GuestGuestbookListPage';
 import GuestSpaceHomePage from '../pages/guest/spaceHomePage/GuestSpaceHomePage';
 import GuestWorkDetail from '../pages/guest/workDetail/GuestWorkDetail';
-import GuestWorkListPage from '../pages/guest/workList/WorkListPage';
+import GuestWorkListPage from '../pages/guest/workList/GuestWorkListPage';
 import GuestbookCardPage from '../pages/host/guestbook/card/GuestbookCardPage';
 import GuestbookListPage from '../pages/host/guestbook/list/GuestbookListPage';
 import MainPage from '../pages/host/mainPage/MainPage';
