@@ -12,6 +12,7 @@ export const buildYoutubeThumbnail = (
   videoUrl: string,
   quality: Quality = 'medium',
 ): string => {
+  if (!videoUrl) return '';
   const videoId = extractYoutubeVideoId(videoUrl);
   return `https://img.youtube.com/vi/${videoId}/${QualityMap[quality]}.jpg`;
 };

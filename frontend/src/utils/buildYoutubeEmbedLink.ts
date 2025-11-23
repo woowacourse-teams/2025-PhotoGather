@@ -1,12 +1,10 @@
-// https://www.youtube.com/embed/KsGBitYXn3M?si=Cd6nxQpAKrVpCe4E
-// https://youtu.be/embed/KsGBitYXn3M?si=vEtbIFtzQ9srNwa3
+import { extractYoutubeVideoId } from './extractYoutubVideoId';
 
 export const buildYoutubeEmbedLink = (youtubeUrl: string) => {
   if (youtubeUrl.includes('embed')) {
     return youtubeUrl;
   }
-  const parsedUrl = youtubeUrl
-    .replace('youtu.be/', 'www.youtube.com/embed/')
-    .replace('watch?v=', 'embed/');
-  return parsedUrl;
+
+  const videoId = extractYoutubeVideoId(youtubeUrl);
+  return `https://www.youtube.com/embed/${videoId}`;
 };
