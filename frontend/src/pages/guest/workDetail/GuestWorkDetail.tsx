@@ -1,9 +1,13 @@
 import { useEffect, useState } from 'react';
+import { MdArrowBack } from 'react-icons/md';
 import { useNavigate, useParams } from 'react-router-dom';
 import { workService } from '../../../apis/services/work/work.service';
 import Button from '../../../components/@common/buttons/button/Button';
 import VideoPlayer from '../../../components/@common/videoPlayer/VideoPlayer';
-import { createCreateGuestbookRoute } from '../../../constants/routes';
+import {
+  createCreateGuestbookRoute,
+  createGuestWorkListRoute,
+} from '../../../constants/routes';
 import useButtonTracking from '../../../hooks/@common/useButtonTracking';
 import { useToast } from '../../../hooks/@common/useToast';
 import { DividerLine } from '../../../styles/@common/DividerLine.styles';
@@ -14,7 +18,10 @@ import * as C from '../../WorkDetail.common.styles';
 import * as S from './GuestWorkDetail.styles';
 
 const GuestWorkDetail = () => {
-  const { spaceCode } = useParams<{ spaceCode: string }>();
+  const { spaceCode, workId } = useParams<{
+    spaceCode: string;
+    workId: string;
+  }>();
   const [workDetail, setWorkDetail] = useState<WorkDetail | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const { showToast } = useToast();
@@ -27,10 +34,10 @@ const GuestWorkDetail = () => {
   // biome-ignore lint/correctness/useExhaustiveDependencies: showToast is stable
   useEffect(() => {
     const fetchWorkDetail = async () => {
-      if (!spaceCode) return;
+      if (!spaceCode || !workId) return;
 
       try {
-        const response = await workService.getWork(spaceCode);
+        const response = await workService.getWork(spaceCode, workId);
 
         if (response.success) {
           setWorkDetail(response.data);
@@ -73,9 +80,25 @@ const GuestWorkDetail = () => {
     isVideoAfterPhoto,
   } = workDetail;
 
+  const handleBackMove = () => {
+    trackClick('guest_work_detail_back_button');
+    navigate(createGuestWorkListRoute(spaceCode));
+  };
+
   return (
     <S.Wrapper>
       <C.WorkContainer>
+        <Button
+          type="button"
+          variant="fit"
+          text={
+            <>
+              <MdArrowBack />
+              <p>목록</p>
+            </>
+          }
+          onClick={handleBackMove}
+        />
         <C.TitleRowContainer>
           <C.TitleContainer>{title}</C.TitleContainer>
           <C.CategoryContainer>{category}</C.CategoryContainer>
@@ -108,7 +131,7 @@ const GuestWorkDetail = () => {
         text="방명록 작성하기"
         onClick={() => {
           trackClick('guest_work_detail_guestbook_create_button', {
-            page: '/work/detail',
+            page: '/work-detail',
           });
           navigate(createCreateGuestbookRoute(spaceCode));
         }}

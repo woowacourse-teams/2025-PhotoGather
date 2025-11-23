@@ -1,4 +1,5 @@
 import FooterLogo from '../../../@assets/logo/footer-logo.svg?react';
+import { KAKAO_CHANNEL_URL } from '../../../constants/constants';
 import { DividerLine } from '../../../styles/@common/DividerLine.styles';
 import { theme } from '../../../styles/theme';
 import type { FooterMode } from '../../../types/uiMode.type';
@@ -21,7 +22,7 @@ const Footer = ({ mode = 'light' }: FooterProps) => {
           © 2025 Forgather. All rights reserved.
         </S.Copyright>
         <S.ContactLink
-          href="https://pf.kakao.com/_rHNtn"
+          href={KAKAO_CHANNEL_URL}
           target="_blank"
           rel="noopener noreferrer"
           $mode={mode}

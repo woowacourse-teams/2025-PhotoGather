@@ -22,10 +22,15 @@ export interface WorkFormData {
 
 interface UseWorkFormParams {
   spaceCode: string | undefined;
+  workId: string | undefined;
   reset: UseFormReset<WorkFormData>;
 }
 
-export const useWorkForm = ({ spaceCode, reset }: UseWorkFormParams) => {
+export const useWorkForm = ({
+  spaceCode,
+  workId,
+  reset,
+}: UseWorkFormParams) => {
   const navigate = useNavigate();
   const { showToast } = useToast();
   const [isEditMode, setIsEditMode] = useState(false);
@@ -39,10 +44,10 @@ export const useWorkForm = ({ spaceCode, reset }: UseWorkFormParams) => {
   // biome-ignore lint/correctness/useExhaustiveDependencies: showToast is stable
   useEffect(() => {
     const fetchWorkData = async () => {
-      if (!spaceCode) return;
+      if (!spaceCode || !workId || workId === 'new') return;
 
       try {
-        const response = await workService.getWork(spaceCode);
+        const response = await workService.getWork(spaceCode, workId);
 
         if (response.success && response.data) {
           setIsEditMode(true);
@@ -65,7 +70,7 @@ export const useWorkForm = ({ spaceCode, reset }: UseWorkFormParams) => {
     };
 
     fetchWorkData();
-  }, [spaceCode, reset]);
+  }, [spaceCode, reset, workId]);
 
   const deleteExistingPhoto = (photoId: number) => {
     setDeletedPhotoIds((prev) => [...prev, photoId]);
@@ -118,14 +123,18 @@ export const useWorkForm = ({ spaceCode, reset }: UseWorkFormParams) => {
     data: WorkFormData,
     newPhotos: PhotoUpload[],
   ) => {
-    if (!spaceCode) return;
+    if (!spaceCode || !workId) return;
 
     const updateData = buildUpdateRequest(data, newPhotos);
-    const response = await workService.updateWork(spaceCode, updateData);
+    const response = await workService.updateWork(
+      spaceCode,
+      workId,
+      updateData,
+    );
 
     if (response.success) {
       showToast({ text: '작품을 수정했습니다.', type: 'info' });
-      navigate(createWorkDetailRoute(spaceCode));
+      navigate(createWorkDetailRoute(spaceCode, workId));
     } else {
       console.error(response.error);
       showToast({ text: '작품 수정에 실패했습니다.' });
@@ -148,11 +157,11 @@ export const useWorkForm = ({ spaceCode, reset }: UseWorkFormParams) => {
       isVideoAfterPhoto: data.isVideoAfterPhoto,
     });
 
-    if (response.success) {
+    if (response.success && response.data) {
+      const createdWorkId = String(response.data.id);
       showToast({ text: '작품을 등록했습니다.', type: 'info' });
-      navigate(createWorkDetailRoute(spaceCode));
+      navigate(createWorkDetailRoute(spaceCode, createdWorkId));
     } else {
-      console.error(response.error);
       showToast({ text: '작품 등록에 실패했습니다.' });
     }
   };

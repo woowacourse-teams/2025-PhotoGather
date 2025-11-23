@@ -62,9 +62,20 @@ const Hamburger = ({ isOpen, onClose, navigateInfo }: HamburgerProps) => {
             {navigateInfo.map((info) => (
               <S.ItemContainer key={info.name} variants={itemVariants}>
                 <S.Item>
-                  <Link to={info.path} onClick={handleNavigateInfoClock}>
-                    {info.name}
-                  </Link>
+                  {info.external ? (
+                    <a
+                      href={info.path}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={handleNavigateInfoClock}
+                    >
+                      {info.name}
+                    </a>
+                  ) : (
+                    <Link to={info.path} onClick={handleNavigateInfoClock}>
+                      {info.name}
+                    </Link>
+                  )}
                 </S.Item>
               </S.ItemContainer>
             ))}

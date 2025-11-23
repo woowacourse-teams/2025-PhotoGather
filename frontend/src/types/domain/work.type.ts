@@ -1,4 +1,4 @@
-export interface WorkDetail {
+interface WorkBase {
   title: string;
   category: string;
   authorName: string;
@@ -8,10 +8,27 @@ export interface WorkDetail {
   isVideoAfterPhoto: boolean;
 }
 
+export interface WorkDetail extends WorkBase {
+  id: number;
+}
+
+export interface WorkSummary {
+  id: number;
+  title: string;
+  category: string;
+  videoUrl?: string;
+  firstPhoto?: WorkPhoto | null;
+}
+
+export interface WorkListResponse {
+  products: WorkSummary[];
+}
+
 export interface WorkPhoto {
   id: number;
   path: string;
   originalName: string;
+  order?: number;
 }
 
 export interface PhotoUpload {

@@ -68,3 +68,4 @@ export const TRY_IT_NOW_SPACE_CODE = {
   DEV: '05993e02d3',
   PROD: '1d4cc97597',
 };
+export const KAKAO_CHANNEL_URL = 'https://pf.kakao.com/_rHNtn';

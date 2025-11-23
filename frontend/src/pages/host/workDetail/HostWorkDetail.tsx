@@ -1,9 +1,13 @@
 import { useEffect, useState } from 'react';
+import { MdArrowBack } from 'react-icons/md';
 import { useNavigate, useParams } from 'react-router-dom';
 import { workService } from '../../../apis/services/work/work.service';
 import Button from '../../../components/@common/buttons/button/Button';
 import VideoPlayer from '../../../components/@common/videoPlayer/VideoPlayer';
-import { createWorkEditRoute } from '../../../constants/routes';
+import {
+  createWorkEditRoute,
+  createWorkListRoute,
+} from '../../../constants/routes';
 import useButtonTracking from '../../../hooks/@common/useButtonTracking';
 import { useToast } from '../../../hooks/@common/useToast';
 import type { WorkDetail } from '../../../types/domain/work.type';
@@ -13,7 +17,10 @@ import * as C from '../../WorkDetail.common.styles';
 import * as S from './HostWorkDetail.styles';
 
 const HostWorkDetail = () => {
-  const { spaceCode } = useParams<{ spaceCode: string }>();
+  const { spaceCode, workId } = useParams<{
+    spaceCode: string;
+    workId: string;
+  }>();
   const navigate = useNavigate();
   const [workDetail, setWorkDetail] = useState<WorkDetail | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -23,10 +30,10 @@ const HostWorkDetail = () => {
   // biome-ignore lint/correctness/useExhaustiveDependencies: showToast is stable
   useEffect(() => {
     const fetchWorkDetail = async () => {
-      if (!spaceCode) return;
+      if (!spaceCode || !workId) return;
 
       try {
-        const response = await workService.getWork(spaceCode);
+        const response = await workService.getWork(spaceCode, workId);
 
         if (response.success) {
           setWorkDetail(response.data);
@@ -49,16 +56,10 @@ const HostWorkDetail = () => {
     return null;
   }
 
-  const handleCreateWorkButtonClick = () => {
-    trackClick('host_work_detail_create_click');
-    if (!spaceCode) return;
-    navigate(createWorkEditRoute(spaceCode));
-  };
-
   const handleEditWorkButtonClick = () => {
     trackClick('host_work_detail_edit_click');
-    if (!spaceCode) return;
-    navigate(createWorkEditRoute(spaceCode));
+    if (!spaceCode || !workId) return;
+    navigate(createWorkEditRoute(spaceCode, workId));
   };
 
   if (!workDetail || !spaceCode) {
@@ -67,11 +68,6 @@ const HostWorkDetail = () => {
         <S.EmptyStateContainer>
           <S.EmptyMessage>아직 작품 소개를 등록하지 않았어요</S.EmptyMessage>
         </S.EmptyStateContainer>
-        {spaceCode && (
-          <S.BottomSectionContainer>
-            <Button text="등록하기" onClick={handleCreateWorkButtonClick} />
-          </S.BottomSectionContainer>
-        )}
       </S.Wrapper>
     );
   }
@@ -86,9 +82,25 @@ const HostWorkDetail = () => {
     isVideoAfterPhoto,
   } = workDetail;
 
+  const handleBackMove = () => {
+    trackClick('host_work_detail_back_button');
+    navigate(createWorkListRoute(spaceCode));
+  };
+
   return (
     <S.Wrapper>
       <C.WorkContainer>
+        <Button
+          type="button"
+          variant="fit"
+          text={
+            <>
+              <MdArrowBack />
+              <p>목록</p>
+            </>
+          }
+          onClick={handleBackMove}
+        />
         <C.TitleRowContainer>
           <S.TopButtonContainer>
             <C.TitleContainer>{title}</C.TitleContainer>
