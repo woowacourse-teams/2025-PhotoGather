@@ -9,7 +9,7 @@ import { TRY_IT_NOW_SPACE_CODE } from '../../../constants/constants';
 import {
   createCreateGuestbookRoute,
   createGuestGuestbookRoute,
-  createGuestWorkDetailRoute,
+  createGuestWorkListRoute,
   ROUTES,
 } from '../../../constants/routes';
 import useButtonTracking from '../../../hooks/@common/useButtonTracking';
@@ -111,10 +111,10 @@ const GuestSpaceHomePage = () => {
         <MainPageStyles.ButtonContainer>
           <Button
             variant="elevated"
-            text="작품 소개"
+            text="작품 목록"
             onClick={() => {
               trackClick('guest_space_work_intro_button');
-              navigate(createGuestWorkDetailRoute(spaceCode ?? ''));
+              navigate(createGuestWorkListRoute(spaceCode ?? ''));
             }}
             disabled={!mockAccess.introduce}
           />
