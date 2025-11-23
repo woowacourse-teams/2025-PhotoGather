@@ -280,7 +280,7 @@ class SpaceAcceptanceTest extends AcceptanceTest {
             () -> assertThat(response.statusCode()).isEqualTo(204),
             () -> assertThat(spaceRepository.findByCode(space.getCode())).isEmpty(),
             () -> assertThat(spacePhotoRepository.findBySpace(space)).isEmpty(),
-            () -> assertThat(productRepository.findBySpace(space)).isEmpty(),
+            () -> assertThat(productRepository.findAllBySpace(space)).isEmpty(),
             () -> assertThat(productPhotoRepository.findAllByProduct(product)).isEmpty(),
             () -> assertThat(guestBookCardRepository.findAllBySpace(space)).isEmpty(),
             () -> assertThat(guestBookCardPhotoRepository.findAllByGuestBookCard(guestBookCard)).isEmpty(),

@@ -82,20 +82,23 @@ const GuestWorkDetail = () => {
           <C.DesignerContainer>{authorName}</C.DesignerContainer>
         </C.TitleRowContainer>
         <C.DescriptionContainer>{description}</C.DescriptionContainer>
-        <C.MediaContainer isVideoAfterPhoto={isVideoAfterPhoto}>
-          {videoUrl && <VideoPlayer src={buildYoutubeEmbedLink(videoUrl)} />}
-          {photos.map((photo, index) => (
-            <C.ImageContainer
-              key={photo.id}
-              src={buildThumbnailUrl({
-                path: photo.path,
-                replacePath: 'product',
-                preset: '800',
-              })}
-              alt={`work-detail-${index}`}
-            />
-          ))}
-        </C.MediaContainer>
+        {isVideoAfterPhoto && videoUrl && (
+          <VideoPlayer src={buildYoutubeEmbedLink(videoUrl)} />
+        )}
+        {photos.map((photo, index) => (
+          <C.ImageContainer
+            key={photo.id}
+            src={buildThumbnailUrl({
+              path: photo.path,
+              replacePath: 'product',
+              preset: '800',
+            })}
+            alt={`work-detail-${index}`}
+          />
+        ))}
+        {!isVideoAfterPhoto && videoUrl && (
+          <VideoPlayer src={buildYoutubeEmbedLink(videoUrl)} />
+        )}
         <S.DividerLineContainer>
           <DividerLine width="60%" />
         </S.DividerLineContainer>

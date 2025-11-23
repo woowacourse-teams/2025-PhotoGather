@@ -33,8 +33,8 @@ public class AdminSpaceService {
     @Transactional(readOnly = true)
     public SpaceDetailResponse getSpaceDetail(String spaceCode, AdminUser adminUser) {
         Space space = spaceRepository.getByCodeOrThrow(spaceCode);
-        boolean hasProduct = productRepository.findBySpace(space)
-            .isPresent();
+        boolean hasProduct = !productRepository.findAllBySpace(space)
+            .isEmpty();
         Long guestBookCardCount = guestBookCardRepository.countBySpace(space);
 
         return SpaceDetailResponse.of(space, hasProduct, guestBookCardCount);
