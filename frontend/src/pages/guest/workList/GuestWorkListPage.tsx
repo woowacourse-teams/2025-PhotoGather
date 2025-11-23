@@ -49,7 +49,7 @@ const GuestWorkListPage = () => {
   };
 
   const handleNavigateToGuestbook = () => {
-    trackClick('guest_work_detail_guestbook_create_button', {
+    trackClick('guest_work_list_guestbook_create_button', {
       page: '/work-list',
     });
     if (!spaceCode) return;
