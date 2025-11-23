@@ -14,7 +14,10 @@ import * as C from '../../WorkDetail.common.styles';
 import * as S from './GuestWorkDetail.styles';
 
 const GuestWorkDetail = () => {
-  const { spaceCode } = useParams<{ spaceCode: string }>();
+  const { spaceCode, workId } = useParams<{
+    spaceCode: string;
+    workId: string;
+  }>();
   const [workDetail, setWorkDetail] = useState<WorkDetail | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const { showToast } = useToast();
@@ -27,10 +30,10 @@ const GuestWorkDetail = () => {
   // biome-ignore lint/correctness/useExhaustiveDependencies: showToast is stable
   useEffect(() => {
     const fetchWorkDetail = async () => {
-      if (!spaceCode) return;
+      if (!spaceCode || !workId) return;
 
       try {
-        const response = await workService.getWork(spaceCode);
+        const response = await workService.getWork(spaceCode, workId);
 
         if (response.success) {
           setWorkDetail(response.data);
@@ -108,7 +111,7 @@ const GuestWorkDetail = () => {
         text="방명록 작성하기"
         onClick={() => {
           trackClick('guest_work_detail_guestbook_create_button', {
-            page: '/work/detail',
+            page: '/work-detail',
           });
           navigate(createCreateGuestbookRoute(spaceCode));
         }}
