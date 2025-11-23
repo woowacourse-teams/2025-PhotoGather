@@ -80,14 +80,73 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     /**
+     * 날짜/시간 포맷팅 함수
+     *
+     * @param {string} dateTimeString - ISO 8601 형식의 날짜/시간 문자열 (예: "2025-01-15T10:30:45")
+     * @returns {string} 포맷된 날짜/시간 문자열 (예: "2025-01-15 10:30:45")
+     *
+     * 동작:
+     * - LocalDateTime을 yyyy-MM-dd HH:mm:ss 형식으로 변환
+     * - 입력값이 없거나 유효하지 않으면 "-" 반환 (fallback)
+     * - 서버 타임존 그대로 표시 (별도 변환 없음)
+     *
+     * 사용 예시:
+     * formatDateTime("2025-01-15T10:30:45") → "2025-01-15 10:30:45"
+     * formatDateTime(null) → "-"
+     */
+    function formatDateTime(dateTimeString) {
+        if (!dateTimeString) {
+            return '-';
+        }
+
+        try {
+            // LocalDateTime 형식: "2025-01-15T10:30:45"를 파싱
+            const date = new Date(dateTimeString);
+
+            // 유효한 날짜인지 확인
+            if (isNaN(date.getTime())) {
+                return '-';
+            }
+
+            // yyyy-MM-dd HH:mm:ss 형식으로 변환
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            const hours = String(date.getHours()).padStart(2, '0');
+            const minutes = String(date.getMinutes()).padStart(2, '0');
+            const seconds = String(date.getSeconds()).padStart(2, '0');
+
+            return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+        } catch (error) {
+            console.error('Date formatting error:', error);
+            return '-';
+        }
+    }
+
+    /**
      * Space 테이블 렌더링
-     * @param {Array} spaces - Space 목록
+     *
+     * @param {Array} spaces - Space 목록 (SimpleSpaceResponse[] 형태)
+     *
+     * SimpleSpaceResponse 구조:
+     * - id: 스페이스 ID (숫자)
+     * - code: 스페이스 코드 (문자열, 예: "e3f6b97f19")
+     * - name: 스페이스 이름 (문자열)
+     * - isPublic: 공개 여부 (boolean)
+     * - createdAt: 생성 시간 (ISO 8601 문자열)
+     * - updatedAt: 수정 시간 (ISO 8601 문자열)
+     *
+     * 동작:
+     * - 데이터가 없으면 Empty State 표시
+     * - 각 행을 동적으로 생성하여 tbody에 삽입
+     * - XSS 방지를 위해 escapeHtml 적용
+     * - 날짜/시간은 formatDateTime 함수로 포맷팅
      */
     function renderSpacesTable(spaces) {
         if (!spaces || spaces.length === 0) {
             spacesTableBody.innerHTML = `
                 <tr>
-                    <td colspan="4" style="text-align: center; padding: 3rem; color: var(--text-secondary);">
+                    <td colspan="6" style="text-align: center; padding: 3rem; color: var(--text-secondary);">
                         <div class="empty-state">
                             <div class="empty-state-icon">📭</div>
                             <h3>No Spaces Found</h3>
@@ -100,6 +159,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         const rows = spaces.map(space => {
+            // Public/Private 상태를 Badge로 표시
             const publicBadge = space.isPublic
                 ? '<span class="badge badge-success">Public</span>'
                 : '<span class="badge badge-danger">Private</span>';
@@ -115,6 +175,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     <td data-space-code="${escapeHtml(space.code)}">${escapeHtml(space.code)}</td>
                     <td>${escapeHtml(space.name)}</td>
                     <td style="text-align: center;">${publicBadge}</td>
+                    <td>${formatDateTime(space.createdAt)}</td>
+                    <td>${formatDateTime(space.updatedAt)}</td>
                 </tr>
             `;
         }).join('');
@@ -401,27 +463,47 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     /**
-     * 스페이스 페이지 방문 URL 생성
+     * 게스트 페이지 방문 URL 생성
      *
      * @param {string} spaceCode - 스페이스 코드
-     * @returns {string} 스페이스 페이지 URL
+     * @returns {string} 게스트 페이지 URL
      *
-     * 도메인 판별 로직:
-     * - window.location.hostname을 확인하여 현재 도메인 파악
-     * - forgather.app이 포함되어 있으면 해당 도메인 사용 (운영/개발 구분)
-     * - 그 외의 경우 (localhost 등) dev.forgather.app으로 고정
+     * 환경별 도메인 매핑:
+     * - API 호출 도메인 (현재 페이지 hostname 기준)
+     *   - localhost:8080 → 로컬 환경
+     *   - api.dev.forgather.app → 개발 환경
+     *   - api.forgather.app → 운영 환경
      *
-     * URL 형식: https://{domain}/host/{spaceCode}/home
+     * - 게스트 페이지 도메인 (api. 접두사 제거)
+     *   - 로컬 환경 → dev.forgather.app (개발 환경과 동일)
+     *   - 개발 환경 → dev.forgather.app
+     *   - 운영 환경 → forgather.app
+     *
+     * URL 형식: https://{guestDomain}/guest/{spaceCode}/home
+     *
+     * 주의:
+     * - 백오피스는 항상 api. 서브도메인에서 실행됨
+     * - 게스트 페이지는 api. 없이 메인 도메인에서 실행됨
+     * - 로컬 개발 시에는 개발 환경으로 리다이렉트
      */
     function getSpacePageUrl(spaceCode) {
         const hostname = window.location.hostname;
 
-        // 도메인 판별: forgather.app이 있으면 그대로 사용, 없으면 dev.forgather.app
-        const targetDomain = hostname.includes('forgather.app')
-            ? hostname
-            : 'dev.forgather.app';
+        let guestDomain;
 
-        return `https://${targetDomain}/host/${spaceCode}/home`;
+        // 환경별 게스트 페이지 도메인 결정
+        if (hostname === 'api.forgather.app') {
+            // 운영 환경: api.forgather.app → forgather.app
+            guestDomain = 'forgather.app';
+        } else if (hostname === 'api.dev.forgather.app') {
+            // 개발 환경: api.dev.forgather.app → dev.forgather.app
+            guestDomain = 'dev.forgather.app';
+        } else {
+            // 로컬 환경 (localhost 등): 개발 환경으로 고정
+            guestDomain = 'dev.forgather.app';
+        }
+
+        return `https://${guestDomain}/guest/${spaceCode}/home`;
     }
 
     /**
@@ -454,10 +536,17 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     /**
-     * Visit Space Page 버튼 클릭 핸들러
-     * - 현재 열려있는 스페이스의 페이지를 새 탭에서 열기
+     * 게스트 페이지로 이동 버튼 클릭 핸들러
+     *
+     * 동작:
+     * - 현재 모달에 표시된 스페이스의 게스트 페이지를 새 탭에서 열기
      * - window.open의 두 번째 인자 '_blank'로 새 탭 열기
-     * - noopener, noreferrer 옵션으로 보안 강화 (타 사이트가 원본 페이지에 접근하지 못하도록)
+     * - noopener, noreferrer 옵션으로 보안 강화
+     *   (새 탭이 원본 페이지에 접근하지 못하도록 window.opener 차단)
+     *
+     * 참고:
+     * - currentOpenSpaceCode는 모달을 열 때 설정됨 (loadSpaceDetail 함수)
+     * - URL 생성은 getSpacePageUrl 함수가 담당 (환경별 도메인 처리)
      */
     visitSpaceBtn.addEventListener('click', function() {
         if (currentOpenSpaceCode) {
