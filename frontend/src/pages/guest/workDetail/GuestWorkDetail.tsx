@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { MdArrowBack } from 'react-icons/md';
 import { useNavigate, useParams } from 'react-router-dom';
 import { workService } from '../../../apis/services/work/work.service';
 import Button from '../../../components/@common/buttons/button/Button';
@@ -76,9 +77,25 @@ const GuestWorkDetail = () => {
     isVideoAfterPhoto,
   } = workDetail;
 
+  const handleBackMove = () => {
+    trackClick('guest_work_detail_back_button');
+    navigate(-1);
+  };
+
   return (
     <S.Wrapper>
       <C.WorkContainer>
+        <Button
+          type="button"
+          variant="fit"
+          text={
+            <>
+              <MdArrowBack />
+              <p>목록</p>
+            </>
+          }
+          onClick={handleBackMove}
+        />
         <C.TitleRowContainer>
           <C.TitleContainer>{title}</C.TitleContainer>
           <C.CategoryContainer>{category}</C.CategoryContainer>
