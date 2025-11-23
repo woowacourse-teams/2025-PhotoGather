@@ -1,24 +1,45 @@
 import defaultImage from '../../../@assets/images/default-forgather-image.png';
+import { buildThumbnailUrl } from '../../../utils/buildImageUrl';
+import { buildYoutubeThumbnail } from '../../../utils/buildYoutubeThumbnail';
+import { checkIsYoutube } from '../../../utils/checkIsYoutube';
 import { createImageErrorHandler } from '../../../utils/createImageErrorHandler';
 import * as S from './WorkCard.styles';
 
 interface WorkCardProps {
-  thumbnailUrl?: string;
   title: string;
   category: string;
+  thumbnailUrl?: string;
+  firstPhotoPath?: string;
+  videoUrl?: string;
   onClick?: () => void;
 }
 
 const WorkCard = ({
-  thumbnailUrl,
   title,
   category,
+  thumbnailUrl,
+  firstPhotoPath,
+  videoUrl,
   onClick,
 }: WorkCardProps) => {
+  const resolvedThumbnailUrl = (() => {
+    if (thumbnailUrl) return thumbnailUrl;
+    if (firstPhotoPath)
+      return buildThumbnailUrl({
+        path: firstPhotoPath,
+        replacePath: 'product',
+        preset: '800',
+      });
+    if (videoUrl && checkIsYoutube(videoUrl)) {
+      return buildYoutubeThumbnail(videoUrl);
+    }
+    return '';
+  })();
+
   return (
     <S.Wrapper onClick={onClick}>
       <S.Thumbnail
-        src={thumbnailUrl || defaultImage}
+        src={resolvedThumbnailUrl || defaultImage}
         alt={title}
         onError={createImageErrorHandler(defaultImage)}
       />

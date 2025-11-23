@@ -10,9 +10,6 @@ import {
 import useButtonTracking from '../../../hooks/@common/useButtonTracking';
 import { useToast } from '../../../hooks/@common/useToast';
 import type { WorkSummary } from '../../../types/domain/work.type';
-import { buildThumbnailUrl } from '../../../utils/buildImageUrl';
-import { buildYoutubeThumbnail } from '../../../utils/buildYoutubeThumbnail';
-import { checkIsYoutube } from '../../../utils/checkIsYoutube';
 import * as S from './GuestWorkListPage.styles';
 
 const GuestWorkListPage = () => {
@@ -56,19 +53,6 @@ const GuestWorkListPage = () => {
     navigate(createCreateGuestbookRoute(spaceCode));
   };
 
-  const createWorkCardThumbnailUrl = (imgUrl: string, videoUrl: string) => {
-    if (imgUrl)
-      return buildThumbnailUrl({
-        path: imgUrl,
-        replacePath: 'product',
-        preset: '800',
-      });
-    if (videoUrl && checkIsYoutube(videoUrl)) {
-      return buildYoutubeThumbnail(videoUrl);
-    }
-    return '';
-  };
-
   return (
     <S.Wrapper>
       <S.Header>
@@ -91,10 +75,8 @@ const GuestWorkListPage = () => {
                 key={work.id}
                 title={work.title}
                 category={work.category}
-                thumbnailUrl={createWorkCardThumbnailUrl(
-                  work.firstPhoto?.path || '',
-                  work.videoUrl || '',
-                )}
+                firstPhotoPath={work.firstPhoto?.path}
+                videoUrl={work.videoUrl}
                 onClick={() => handleWorkCardClick(work.id.toString())}
               />
             );
