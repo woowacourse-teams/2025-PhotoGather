@@ -19,9 +19,7 @@ export const Thumbnail = styled.img`
 export const InfoContainer = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 6px;
   padding: 8px;
-  min-height: 70px;
 `;
 
 export const Title = styled.h3`

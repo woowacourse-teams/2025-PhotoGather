@@ -4,7 +4,10 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { workService } from '../../../apis/services/work/work.service';
 import Button from '../../../components/@common/buttons/button/Button';
 import VideoPlayer from '../../../components/@common/videoPlayer/VideoPlayer';
-import { createCreateGuestbookRoute } from '../../../constants/routes';
+import {
+  createCreateGuestbookRoute,
+  createGuestWorkListRoute,
+} from '../../../constants/routes';
 import useButtonTracking from '../../../hooks/@common/useButtonTracking';
 import { useToast } from '../../../hooks/@common/useToast';
 import { DividerLine } from '../../../styles/@common/DividerLine.styles';
@@ -79,7 +82,7 @@ const GuestWorkDetail = () => {
 
   const handleBackMove = () => {
     trackClick('guest_work_detail_back_button');
-    navigate(-1);
+    navigate(createGuestWorkListRoute(spaceCode));
   };
 
   return (
