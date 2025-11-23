@@ -56,12 +56,6 @@ const HostWorkDetail = () => {
     return null;
   }
 
-  const handleCreateWorkButtonClick = () => {
-    trackClick('host_work_detail_create_click');
-    if (!spaceCode || !workId) return;
-    navigate(createWorkEditRoute(spaceCode, workId));
-  };
-
   const handleEditWorkButtonClick = () => {
     trackClick('host_work_detail_edit_click');
     if (!spaceCode || !workId) return;
