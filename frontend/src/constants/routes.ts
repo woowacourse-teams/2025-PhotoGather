@@ -41,8 +41,15 @@ export const createWorkListRoute = (spaceCode: string) => {
   return `/host/${spaceCode}/work-list`;
 };
 
-export const createGuestWorkDetailRoute = (spaceCode: string) => {
-  return `/guest/${spaceCode}/work-detail`;
+export const createGuestWorkListRoute = (spaceCode: string) => {
+  return `/guest/${spaceCode}/work-list`;
+};
+
+export const createGuestWorkDetailRoute = (
+  spaceCode: string,
+  workId: string,
+) => {
+  return `/guest/${spaceCode}/work-detail/${workId}`;
 };
 
 export const createGuestbookRoute = (spaceCode: string) => {

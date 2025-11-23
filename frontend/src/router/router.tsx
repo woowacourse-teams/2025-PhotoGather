@@ -11,6 +11,7 @@ import GuestBookFunnel from '../pages/guest/guestbookPage/funnel/GuestbookFunnel
 import GuestGuestbookListPage from '../pages/guest/guestbookPage/list/GuestGuestbookListPage';
 import GuestSpaceHomePage from '../pages/guest/spaceHomePage/GuestSpaceHomePage';
 import GuestWorkDetail from '../pages/guest/workDetail/GuestWorkDetail';
+import GuestWorkListPage from '../pages/guest/workList/WorkListPage';
 import GuestbookCardPage from '../pages/host/guestbook/card/GuestbookCardPage';
 import GuestbookListPage from '../pages/host/guestbook/list/GuestbookListPage';
 import MainPage from '../pages/host/mainPage/MainPage';
@@ -248,8 +249,17 @@ const routes: AppRouteObject[] = [
                 },
               },
               {
-                path: ':spaceCode/work-detail',
+                path: ':spaceCode/work-detail/:workId',
                 element: <GuestWorkDetail />,
+                handle: {
+                  headerIcon: {
+                    leftIcon: 'profile',
+                  },
+                },
+              },
+              {
+                path: ':spaceCode/work-list',
+                element: <GuestWorkListPage />,
                 handle: {
                   headerIcon: {
                     leftIcon: 'profile',
