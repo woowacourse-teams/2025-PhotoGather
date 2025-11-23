@@ -64,7 +64,6 @@ const WorkListPage = () => {
         preset: '800',
       });
     if (videoUrl && checkIsYoutube(videoUrl)) {
-      console.log('videoUrl', videoUrl);
       return buildYoutubeThumbnail(videoUrl);
     }
     return '';

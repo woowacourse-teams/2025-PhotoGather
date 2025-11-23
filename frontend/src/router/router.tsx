@@ -11,7 +11,6 @@ import GuestBookFunnel from '../pages/guest/guestbookPage/funnel/GuestbookFunnel
 import GuestGuestbookListPage from '../pages/guest/guestbookPage/list/GuestGuestbookListPage';
 import GuestSpaceHomePage from '../pages/guest/spaceHomePage/GuestSpaceHomePage';
 import GuestWorkDetail from '../pages/guest/workDetail/GuestWorkDetail';
-import WorkListPage from '../pages/host/\bworkList/WorkListPage';
 import GuestbookCardPage from '../pages/host/guestbook/card/GuestbookCardPage';
 import GuestbookListPage from '../pages/host/guestbook/list/GuestbookListPage';
 import MainPage from '../pages/host/mainPage/MainPage';
@@ -23,6 +22,7 @@ import HostSpaceHomePage from '../pages/host/spaceHomePage/HostSpaceHomePage';
 import SpaceInfoPage from '../pages/host/spaceInfoPage/SpaceInfoPage';
 import HostWorkDetail from '../pages/host/workDetail/HostWorkDetail';
 import WorkForm from '../pages/host/workForm/WorkForm';
+import WorkListPage from '../pages/host/workList/WorkListPage';
 import InAppRedirectPage from '../pages/inapp/InAppRedirectPage';
 import LandingPage from '../pages/landing/LandingPage';
 import LoginPage from '../pages/login/LoginPage';

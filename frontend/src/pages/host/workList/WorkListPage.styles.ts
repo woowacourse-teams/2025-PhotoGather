@@ -31,7 +31,6 @@ export const WorkCardsContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 20px;
-  /* grid-template-columns: repeat(2, 1fr); */
 `;
 
 export const StateMessage = styled.p`
@@ -39,7 +38,6 @@ export const StateMessage = styled.p`
   color: ${({ theme }) => theme.colors.gray05};
   text-align: center;
   margin: 40px 0 0;
-  grid-column: 1 / -1;
 `;
 
 export const BottomSectionContainer = styled.div`
