@@ -73,7 +73,7 @@ const WorkListPage = () => {
     <S.Wrapper>
       <S.Header>
         <S.Title>작품 목록</S.Title>
-        <S.Description>등록한 작품 정보를 한눈에 확인하세요.</S.Description>
+        <S.Description>작품은 최대 3개까지 등록 가능합니다</S.Description>
       </S.Header>
       <S.WorkCardsContainer>
         {isLoading && (

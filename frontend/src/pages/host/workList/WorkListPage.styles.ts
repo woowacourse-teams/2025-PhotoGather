@@ -23,7 +23,7 @@ export const Title = styled.h1`
 
 export const Description = styled.p`
   ${({ theme }) => theme.typography.bodyRegular};
-  color: ${({ theme }) => theme.colors.gray06};
+  color: ${({ theme }) => theme.colors.gray05};
   margin: 0;
 `;
 
