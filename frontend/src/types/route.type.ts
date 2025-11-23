@@ -14,6 +14,7 @@ export interface IconAction {
 export interface NavigateInfo {
   path: string;
   name: string;
+  external?: boolean;
 }
 
 export type AppRouteObject = RouteObject & {

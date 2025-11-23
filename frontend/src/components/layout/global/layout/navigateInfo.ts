@@ -2,7 +2,7 @@ import { KAKAO_CHANNEL_URL } from '../../../../constants/constants';
 import {
   createCreateGuestbookRoute,
   createGuestGuestbookRoute,
-  createGuestWorkDetailRoute,
+  createGuestWorkListRoute,
   ROUTES,
 } from '../../../../constants/routes';
 import type { NavigateInfo } from '../../../../types/route.type';
@@ -19,13 +19,14 @@ export const hostNavigateInfo = (): NavigateInfo[] => [
   {
     path: KAKAO_CHANNEL_URL,
     name: '문의하기',
+    external: true,
   },
 ];
 
 export const guestNavigateInfo = (spaceCode: string): NavigateInfo[] => [
   {
-    path: createGuestWorkDetailRoute(spaceCode),
-    name: '작품 소개',
+    path: createGuestWorkListRoute(spaceCode),
+    name: '작품 목록',
   },
   {
     path: createCreateGuestbookRoute(spaceCode),
@@ -38,5 +39,6 @@ export const guestNavigateInfo = (spaceCode: string): NavigateInfo[] => [
   {
     path: KAKAO_CHANNEL_URL,
     name: '문의하기',
+    external: true,
   },
 ];
