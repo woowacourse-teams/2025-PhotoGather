@@ -15,7 +15,6 @@ const SinglePhotoModal = ({
   isOpen,
   imgSrc,
 }: SinglePhotoModalProps) => {
-  console.log('imgSrc', imgSrc);
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <Modal.Backdrop />
