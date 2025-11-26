@@ -55,29 +55,53 @@
 
 /* ==========================================================================
    Spaces Table Specific
+   스페이스 목록 테이블의 컬럼별 스타일 정의
+   총 6개 컬럼: ID, 코드, 이름, 공개여부, 생성시간, 수정시간
    ========================================================================== */
 
+/* ID 컬럼 */
 .data-table th:nth-child(1),
 .data-table td:nth-child(1) {
-    width: 10%;
+    width: 7%;
 }
 
+/* 스페이스 코드 컬럼 */
 .data-table th:nth-child(2),
 .data-table td:nth-child(2) {
-    width: 25%;
+    width: 15%;
     font-family: var(--font-mono);
     font-size: 0.8125rem;
 }
 
+/* 스페이스 이름 컬럼 */
 .data-table th:nth-child(3),
 .data-table td:nth-child(3) {
-    width: 50%;
+    width: 25%;
 }
 
+/* 공개 여부 컬럼 */
 .data-table th:nth-child(4),
 .data-table td:nth-child(4) {
-    width: 15%;
+    width: 10%;
     text-align: center;
+}
+
+/* 생성 시간 컬럼 */
+.data-table th:nth-child(5),
+.data-table td:nth-child(5) {
+    width: 18%;
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    color: var(--text-secondary);
+}
+
+/* 수정 시간 컬럼 */
+.data-table th:nth-child(6),
+.data-table td:nth-child(6) {
+    width: 18%;
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    color: var(--text-secondary);
 }
 
 /* Public/Private Badge */
@@ -405,6 +429,7 @@ body.modal-open {
     }
 
     /* Make table scrollable on mobile */
+    /* 모바일에서는 고정 너비를 해제하여 자동 조정 */
     .data-table th:nth-child(1),
     .data-table td:nth-child(1),
     .data-table th:nth-child(2),
@@ -412,7 +437,11 @@ body.modal-open {
     .data-table th:nth-child(3),
     .data-table td:nth-child(3),
     .data-table th:nth-child(4),
-    .data-table td:nth-child(4) {
+    .data-table td:nth-child(4),
+    .data-table th:nth-child(5),
+    .data-table td:nth-child(5),
+    .data-table th:nth-child(6),
+    .data-table td:nth-child(6) {
         width: auto;
     }
 

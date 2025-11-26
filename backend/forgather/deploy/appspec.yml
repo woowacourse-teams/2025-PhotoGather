@@ -3,6 +3,8 @@ os: linux
 files:
   - source: /forgather-0.0.1-SNAPSHOT.jar
     destination: /home/ubuntu/2025-PhotoGather
+file_exists_behavior: OVERWRITE  # 이것만 추가!
+
 hooks:
   AfterInstall:
     - location: /deploy.sh

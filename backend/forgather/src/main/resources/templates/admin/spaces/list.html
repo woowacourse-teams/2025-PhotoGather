@@ -71,9 +71,11 @@
                     <thead>
                         <tr>
                             <th>ID</th>
-                            <th>Code</th>
-                            <th>Name</th>
-                            <th>Public</th>
+                            <th>스페이스 코드</th>
+                            <th>스페이스 이름</th>
+                            <th>스페이스 공개 여부</th>
+                            <th>생성 시간</th>
+                            <th>수정 시간</th>
                         </tr>
                     </thead>
                     <tbody id="spacesTableBody">
@@ -172,10 +174,10 @@
                 </div>
             </div>
 
-            <!-- 모달 푸터 (스페이스 페이지 이동 버튼) -->
+            <!-- 모달 푸터 (게스트 페이지 이동 버튼) -->
             <div class="modal-footer">
-                <button id="visitSpaceBtn" class="btn btn-primary" style="display: none;">
-                    호스트 스페이스 이동
+                <button id="visitSpaceBtn" class="btn btn-primary" style="display: none;" aria-label="게스트 페이지로 이동">
+                    게스트 페이지로 이동
                 </button>
             </div>
         </div>

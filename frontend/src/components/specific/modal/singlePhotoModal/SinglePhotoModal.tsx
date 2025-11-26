@@ -1,3 +1,6 @@
+import defaultImage from '../../../../@assets/images/default-forgather-image.png';
+import { createImageErrorHandler } from '../../../../utils/createImageErrorHandler';
+
 import Modal from '../../../@common/modal/Modal';
 import * as S from './SinglePhotoModal.style';
 
@@ -17,7 +20,11 @@ const SinglePhotoModal = ({
       <Modal.Backdrop />
       <S.Wrapper>
         <S.ImageWrapper>
-          <S.Image src={imgSrc} alt="사진" />
+          <S.Image
+            src={imgSrc}
+            alt="사진"
+            onError={createImageErrorHandler(defaultImage)}
+          />
         </S.ImageWrapper>
       </S.Wrapper>
     </Modal>

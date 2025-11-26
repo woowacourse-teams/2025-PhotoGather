@@ -17,15 +17,18 @@ import useButtonTracking from '../../../../hooks/@common/useButtonTracking';
 import useInAppRedirect from '../../../../hooks/@common/useInAppRedirect';
 import usePageTracking from '../../../../hooks/@common/usePageTracking';
 import type { AppRouteObject, IconAction } from '../../../../types/route.type';
+import { canOpenEventModal } from '../../../../utils/canOpenEventModal';
 import Footer from '../../../@common/footer/Footer';
 import Hamburger from '../../../@common/hamburger/Hamburger';
 import Header from '../../../@common/header/Header';
 import ScrollToTop from '../../../@common/scrollToTop/ScrollToTop';
+import EventModal from '../../../specific/modal/eventModadl/EventModal';
 import * as S from './Layout.styles';
 import { guestNavigateInfo, hostNavigateInfo } from './navigateInfo';
 
 const Layout = () => {
   const [isHamburgerOpen, setIsHamburgerOpen] = useState(false);
+  const [isEventModalOpen, setIsEventModalOpen] = useState(false);
 
   usePageTracking();
 
@@ -98,7 +101,15 @@ const Layout = () => {
   //biome-ignore lint/correctness/useExhaustiveDependencies: 페이지 접속 시 처음 한 번만 실행
   useEffect(() => {
     redirectToExternalBrowser(window.location.href);
+    setIsEventModalOpen(
+      canOpenEventModal({ eventModalKey: 'maintenance-modal-20241127' }),
+    );
   }, []);
+
+  const handleCloseEventModal = () => {
+    trackClick('close_maintenance_event_modal');
+    setIsEventModalOpen(false);
+  };
 
   return (
     <>
@@ -121,6 +132,14 @@ const Layout = () => {
             onClick: openHamburger,
             disabled: isNoHamburger,
           }}
+        />
+      )}
+      {isEventModalOpen && (
+        <EventModal
+          isOpen={isEventModalOpen}
+          onClose={handleCloseEventModal}
+          spaceCode={spaceCode}
+          eventHideKey="maintenance-modal-20241127"
         />
       )}
       <S.Container $isDarkPage={isDarkPage}>
