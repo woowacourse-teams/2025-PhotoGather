@@ -37,7 +37,9 @@ const HostSpaceHomePage = () => {
   const userInfo = useUserInfoContext();
 
   useEffect(() => {
-    setIsEventModalOpen(canOpenEventModal());
+    setIsEventModalOpen(
+      canOpenEventModal({ endDate: '2025-11-20T00:00:00+09:00' }),
+    );
   }, []);
 
   const { trackClick } = useButtonTracking({
