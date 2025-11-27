@@ -35,15 +35,6 @@ public class ProductController {
 
     private final ProductService productService;
 
-    /**
-     * TODO 작품 복수 등록 마이그레이션 이후 제거
-     */
-    @GetMapping(headers = "X-API-Version=2")
-    public ResponseEntity<ProductResponse> getV2(@PathVariable(value = "spaceCode") String spaceCode) {
-        var response = productService.getV2(spaceCode);
-        return ResponseEntity.ok().body(response);
-    }
-
     @Operation(summary = "작품 목록 조회", description = "작품 목록 조회가 반영된 api는 version 3으로 호출")
     @GetMapping(headers = "X-API-Version=3")
     public ResponseEntity<ProductsResponse> getV3(@PathVariable(value = "spaceCode") String spaceCode) {
@@ -61,21 +52,6 @@ public class ProductController {
         return ResponseEntity.ok().body(response);
     }
 
-    /**
-     * TODO 작품 복수 등록 마이그레이션 이후 제거
-     */
-    @SecurityRequirement(name = "bearerAuth")
-    @Operation(summary = "작품 등록", description = "복수 작품 등록이 반영된 api는 version 3으로 호출")
-    @PostMapping(headers = "X-API-Version=2")
-    public ResponseEntity<ProductResponse> registerV2(
-        @PathVariable(value = "spaceCode") String spaceCode,
-        @RequestBody RegisterProductRequest request,
-        @LoginHost(required = true) Host host
-    ) {
-        var response = productService.register(host, spaceCode, request);
-        return ResponseEntity.status(CREATED).body(response);
-    }
-
     @SecurityRequirement(name = "bearerAuth")
     @Operation(summary = "작품 등록", description = "복수 작품 등록이 반영된 api는 version 3으로 호출")
     @PostMapping(headers = "X-API-Version=3")
@@ -86,22 +62,6 @@ public class ProductController {
     ) {
         var response = productService.registerV3(host, spaceCode, request);
         return ResponseEntity.status(CREATED).body(response);
-    }
-
-    /**
-     * TODO 작품 복수 등록 마이그레이션 이후 제거
-     */
-    @SecurityRequirement(name = "bearerAuth")
-    @Operation(summary = "작품 수정",
-        description = "변경 사항이 없는 데이터는 json에 포함하지 않거나 null로 요청한다.  복수 작품 등록이 반영된 api는 version 1로 호출")
-    @PatchMapping(headers = "X-API-Version=2")
-    public ResponseEntity<ProductResponse> updateV2(
-        @PathVariable(value = "spaceCode") String spaceCode,
-        @RequestBody UpdateProductRequest request,
-        @LoginHost(required = true) Host host
-    ) {
-        var response = productService.update(host, spaceCode, request);
-        return ResponseEntity.ok().body(response);
     }
 
     @SecurityRequirement(name = "bearerAuth")
@@ -116,20 +76,6 @@ public class ProductController {
     ) {
         var response = productService.updateV3(host, spaceCode, productId, request);
         return ResponseEntity.ok().body(response);
-    }
-
-    /**
-     * TODO 작품 복수 등록 마이그레이션 이후 제거
-     */
-    @SecurityRequirement(name = "bearerAuth")
-    @Operation(summary = "작품 삭제")
-    @DeleteMapping
-    public ResponseEntity<Void> delete(
-        @PathVariable(value = "spaceCode") String spaceCode,
-        @LoginHost(required = true) Host host
-    ) {
-        productService.delete(host, spaceCode);
-        return ResponseEntity.noContent().build();
     }
 
     @SecurityRequirement(name = "bearerAuth")

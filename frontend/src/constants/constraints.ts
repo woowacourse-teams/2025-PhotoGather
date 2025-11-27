@@ -10,7 +10,7 @@ export const CONSTRAINTS = {
       TITLE: 50,
       CATEGORY: 20,
       DESIGNER: 20,
-      DESCRIPTION: 1000,
+      DESCRIPTION: 2000,
       VIDEO_URL: 500,
     },
     GUESTBOOK: {

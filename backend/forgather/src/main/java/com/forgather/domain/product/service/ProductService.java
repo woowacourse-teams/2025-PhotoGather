@@ -46,17 +46,6 @@ public class ProductService {
     private final ContentsStorage contentsStorage;
 
     /**
-     * TODO 작품 복수 등록 마이그레이션 이후 제거
-     */
-    @Transactional(readOnly = true)
-    public ProductResponse getV2(String spaceCode) {
-        Space space = spaceRepository.getByCodeOrThrow(spaceCode);
-        Product product = productRepository.getBySpaceOrThrow(space);
-        ProductPhotos productPhotos = new ProductPhotos(productPhotoRepository.findAllByProduct(product));
-        return new ProductResponse(product, productPhotos.getAll());
-    }
-
-    /**
      * 스페이스에 등록된 작품 목록을 조회합니다.
      */
     @Transactional(readOnly = true)
@@ -77,40 +66,6 @@ public class ProductService {
         Product product = productRepository.getBySpaceAndIdOrThrow(space, productId);
         ProductPhotos productPhotos = new ProductPhotos(productPhotoRepository.findAllByProduct(product));
         return new ProductResponse(product, productPhotos.getAll());
-    }
-
-    /**
-     * TODO 작품 복수 등록 마이그레이션 이후 제거
-     */
-    @Transactional
-    public ProductResponse register(Host host, String spaceCode, RegisterProductRequest request) {
-        Space space = spaceRepository.getByCodeOrThrow(spaceCode);
-        validateSpaceHost(host, space);
-        validateProductAlreadyExists(space);
-        Product product = productRepository.save(request.toEntity(space));
-
-        ProductPhotos productPhotos = new ProductPhotos();
-        for (var photoRequest : request.photos()) { // TODO NPE
-            String path = generateContentsFilePath(
-                contentsStorage.getRootDirectory(),
-                spaceCode,
-                PRODUCT,
-                photoRequest.uploadFileName()
-            );
-            productPhotos.add(photoRequest.toEntity(product, path));
-        }
-        productPhotoRepository.saveAll(productPhotos.getAll());
-        return new ProductResponse(product, productPhotos.getAll());
-    }
-
-    /**
-     * TODO 작품 복수 등록 마이그레이션 이후 제거
-     */
-    private void validateProductAlreadyExists(Space space) {
-        List<Product> products = productRepository.findAllBySpace(space);
-        if (!products.isEmpty()) {
-            throw new BaseException("이미 등록된 작품이 존재합니다. spaceCode: " + space.getCode());
-        }
     }
 
     @Transactional
@@ -139,40 +94,6 @@ public class ProductService {
         if (counts >= PRODUCTS_MAX_COUNT) {
             throw new BaseException("작품은 3개까지만 등록 가능합니다. spaceCode: " + space.getCode());
         }
-    }
-
-    /**
-     * TODO 작품 복수 등록 마이그레이션 이후 제거
-     */
-    @Transactional
-    public ProductResponse update(Host host, String spaceCode, UpdateProductRequest request) {
-        // Product 정보 수정
-        Space space = spaceRepository.getByCodeOrThrow(spaceCode);
-        validateSpaceHost(host, space);
-        Product product = productRepository.getBySpaceOrThrow(space);
-        product.update(request.title(), request.category(), request.authorName(), request.description(),
-            request.videoUrl(), request.isVideoAfterPhoto());
-
-        // 삭제 사진 db 및 클라우드 삭제
-        ProductPhotos photos = new ProductPhotos(productPhotoRepository.findAllByProduct(product));
-        List<ProductPhoto> deletedPhotos = photos.deleteByIds(request.deletePhotoIds());
-        deleteProductPhotos(deletedPhotos);
-
-        // 새로운 사진 추가 및 db 저장
-        List<ProductPhoto> newPhotos = new ArrayList<>();
-        for (var photoRequest : request.newPhotos()) {
-            String path = generateContentsFilePath(
-                contentsStorage.getRootDirectory(),
-                spaceCode,
-                PRODUCT,
-                photoRequest.uploadFileName()
-            );
-            newPhotos.add(photoRequest.toEntity(product, path));
-        }
-        photos.add(newPhotos);
-        productPhotoRepository.saveAll(newPhotos);
-
-        return new ProductResponse(product, photos.getAll());
     }
 
     @Transactional
@@ -204,15 +125,6 @@ public class ProductService {
         productPhotoRepository.saveAll(newPhotos);
 
         return new ProductResponse(product, photos.getAll());
-    }
-
-    @Transactional
-    public void delete(Host host, String spaceCode) {
-        Space space = spaceRepository.getByCodeOrThrow(spaceCode);
-        validateSpaceHost(host, space);
-        Product product = productRepository.getBySpaceOrThrow(space);
-        deleteAllProductPhotos(product);
-        productRepository.delete(product);
     }
 
     @Transactional

@@ -21,20 +21,6 @@ public interface ProductRepository {
 
     Long countBySpace(Space space);
 
-    /**
-     * TODO 작품 복수 등록 마이그레이션 이후 제거
-     */
-    default Product getBySpaceOrThrow(Space space) {
-        if (space == null) {
-            throw new BaseNullPointerException("스페이스는 null일 수 없습니다.", HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-        List<Product> products = findAllBySpace(space);
-        if (products.isEmpty()) {
-            throw new NotFoundException("해당 스페이스에 등록된 작품이 없습니다. spaceCode: " + space.getCode());
-        }
-        return products.getFirst();
-    }
-
     default Product getBySpaceAndIdOrThrow(Space space, Long id) {
         if (space == null) {
             throw new BaseNullPointerException("스페이스는 null일 수 없습니다.", HttpStatus.INTERNAL_SERVER_ERROR);
