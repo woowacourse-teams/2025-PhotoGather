@@ -1,0 +1,2 @@
+ALTER TABLE `space`
+    MODIFY COLUMN `code` VARCHAR(10) NOT NULL;
