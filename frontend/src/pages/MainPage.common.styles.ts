@@ -30,6 +30,7 @@ export const InfoContainer = styled.div`
 
 export const Name = styled.h1`
   ${({ theme }) => theme.typography.header02}
+  white-space: pre-line;
 `;
 
 export const Introduction = styled.p`
