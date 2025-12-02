@@ -1,7 +1,7 @@
 export const CONSTRAINTS = {
   MAX_LENGTH: {
     SPACE: {
-      NAME: 15,
+      NAME: 30,
       DESCRIPTION: 200,
       EMAIL: 50,
       INSTAGRAM_USERNAME: 30,
@@ -9,7 +9,7 @@ export const CONSTRAINTS = {
     WORK: {
       TITLE: 50,
       CATEGORY: 20,
-      DESIGNER: 20,
+      DESIGNER: 35,
       DESCRIPTION: 2000,
       VIDEO_URL: 500,
     },

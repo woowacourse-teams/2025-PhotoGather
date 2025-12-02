@@ -144,11 +144,11 @@ class ProductTest {
         assertThat(result.getAuthorName()).isEqualTo("");
     }
 
-    @DisplayName("작가명의 길이가 20자를 초과하면 예외를 던진다")
+    @DisplayName("작가명의 길이가 35자를 초과하면 예외를 던진다")
     @Test
     void throwExceptionWhenExceedAuthorNameLength() {
         // given
-        String authorName = "0123456789".repeat(2) + 1;
+        String authorName = "0123456789".repeat(3) + "123456";
 
         // when, then
         assertThatThrownBy(() -> createProductWithAuthorName(authorName))
@@ -156,12 +156,12 @@ class ProductTest {
             .hasMessageContaining("작가명은 최대");
     }
 
-    @DisplayName("작가명은 이모지를 한 글자로 간주해 20자까지 입력 가능하다")
+    @DisplayName("작가명은 이모지를 한 글자로 간주해 35자까지 입력 가능하다")
     @ValueSource(strings = {"😀", "👦", "👨", "‍👩‍", "‍👦", "‍👩‍👧‍", "👨‍👩‍👧", "👨‍👩‍👧‍👦"})
     @ParameterizedTest
     void countEmojiAsOneCharAtAuthorName(String emoji) {
         // given
-        String authorName = emoji.repeat(19) + "c";
+        String authorName = emoji.repeat(34) + "c";
 
         // when, then
         assertThatCode(() -> createProductWithAuthorName(authorName)).doesNotThrowAnyException();

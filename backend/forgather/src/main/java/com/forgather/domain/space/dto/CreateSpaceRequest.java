@@ -8,7 +8,7 @@ import jakarta.validation.constraints.NotBlank;
 
 public record CreateSpaceRequest(
 
-    @Schema(description = "스페이스 이름", example = "졸업 전시", maxLength = 15)
+    @Schema(description = "스페이스 이름", example = "졸업 전시", maxLength = 30)
     @NotBlank
     String name,
 

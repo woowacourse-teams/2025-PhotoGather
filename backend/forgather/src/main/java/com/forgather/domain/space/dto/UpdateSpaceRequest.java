@@ -5,7 +5,7 @@ import jakarta.validation.constraints.Email;
 
 public record UpdateSpaceRequest(
 
-    @Schema(description = "새로운 스페이스 이름", example = "나의 졸업전시", maxLength = 15, nullable = true)
+    @Schema(description = "새로운 스페이스 이름", example = "나의 졸업전시", maxLength = 30, nullable = true)
     String name,
 
     @Schema(description = "새로운 스페이스 설명", example = "졸업전시 스페이스입니다.", maxLength = 200, nullable = true)

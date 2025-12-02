@@ -144,12 +144,13 @@ const EditForm = () => {
         }}
         deleteImage={handleDeleteImage}
       />
-      <TextInput
+      <TextareaInput
         {...register('name', {
           validate: editFormValidators.name,
         })}
         isRequired
         validLength={calculateValidLength(watch('name'))}
+        style={{ minHeight: '50px' }}
         label="스페이스 이름"
         placeholder="전시명"
         errorMessage={errors.name?.message}

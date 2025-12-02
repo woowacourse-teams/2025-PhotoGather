@@ -190,12 +190,13 @@ const WorkForm = () => {
         </S.TopContainer>
         <S.FormContainer onSubmit={handleSubmit(onValid)}>
           <S.FormLabelContainer>
-            <TextInput
+            <TextareaInput
               {...register('title', {
                 validate: workFormValidators.title,
               })}
               label="작품명"
               isRequired
+              style={{ minHeight: '94px' }}
               validLength={calculateValidLength(watch('title'))}
               maxCount={CONSTRAINTS.MAX_LENGTH.WORK.TITLE}
               placeholder="작품명을 입력하세요"

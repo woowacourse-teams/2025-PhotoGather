@@ -90,24 +90,22 @@ const HostWorkDetail = () => {
   return (
     <S.Wrapper>
       <C.WorkContainer>
-        <Button
-          type="button"
-          variant="fit"
-          text={
-            <>
-              <MdArrowBack />
-              <p>목록</p>
-            </>
-          }
-          onClick={handleBackMove}
-        />
+        <S.TopButtonContainer>
+          <Button
+            type="button"
+            variant="fit"
+            text={
+              <>
+                <MdArrowBack />
+                <p>목록</p>
+              </>
+            }
+            onClick={handleBackMove}
+          />
+          <S.EditButton onClick={handleEditWorkButtonClick}>수정</S.EditButton>
+        </S.TopButtonContainer>
         <C.TitleRowContainer>
-          <S.TopButtonContainer>
-            <C.TitleContainer>{title}</C.TitleContainer>
-            <S.EditButton onClick={handleEditWorkButtonClick}>
-              수정
-            </S.EditButton>
-          </S.TopButtonContainer>
+          <C.TitleContainer>{title}</C.TitleContainer>
           <C.CategoryContainer>{category}</C.CategoryContainer>
           <C.DesignerContainer>{authorName}</C.DesignerContainer>
         </C.TitleRowContainer>

@@ -57,7 +57,7 @@ public class Product extends BaseTimeEntity {
      * @param space       작품이 속한 스페이스 (필수)
      * @param title       작품명 (필수, 최대 50자)
      * @param category    카테고리 (선택, 최대 20자)
-     * @param authorName  작가명 (선택, 최대 20자)
+     * @param authorName  작가명 (선택, 최대 35자)
      * @param description 작품 설명 (필수, 최대 2000자)
      * @param videoUrl 임베드 영상 링크 (선택, 최대 255자)
      * @param isVideoAfterPhoto 영상이 사진 뒤에 오는지 여부 (선택)
@@ -171,8 +171,8 @@ public class Product extends BaseTimeEntity {
     }
 
     private void validateAuthorName(String authorName) {
-        if (TextLengthCounter.count(authorName) > 20) {
-            throw new BaseException("작가명은 최대 20자까지 입력 가능합니다.");
+        if (TextLengthCounter.count(authorName) > 35) {
+            throw new BaseException("작가명은 최대 35자까지 입력 가능합니다.");
         }
     }
 

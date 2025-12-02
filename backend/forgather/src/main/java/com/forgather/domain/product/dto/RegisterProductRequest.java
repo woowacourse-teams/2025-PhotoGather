@@ -14,7 +14,7 @@ public record RegisterProductRequest(
     @Schema(description = "작품 카테고리", example = "Chair", maxLength = 20)
     String category,
 
-    @Schema(description = "작가명", example = "검은수염", maxLength = 20)
+    @Schema(description = "작가명", example = "검은수염", maxLength = 35)
     String authorName,
 
     @Schema(description = "작품 설명", example = "150 x 200 x 200\n\n매우 고귀한 의자입니다.\n조심해서 다뤄주세요.", maxLength = 2000)
