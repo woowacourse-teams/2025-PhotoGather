@@ -79,8 +79,8 @@ class SpaceTest {
     void createSpaceWithEmoji() {
         // given
         String spaceCode = "1234567890";
-        String emoji = "\uD83D\uDC68\u200D\uD83D\uDC69\u200D\uD83D\uDC67\u200D\uD83D\uDC66"; // // 가족 이모지, length 11
-        String name = "우리의 모임12345678" + emoji; // 스페이스 이름에 이모지 포함
+        // 가족 이모지, length 11
+        String name = "\uD83D\uDC68\u200D\uD83D\uDC69\u200D\uD83D\uDC67\u200D\uD83D\uDC66".repeat(30);
         String description = "스페이스 설명";
         String instagramUsername = "forgather_official";
         String email = "forgather@forgather.me";
@@ -91,10 +91,10 @@ class SpaceTest {
         ).doesNotThrowAnyException();
     }
 
-    @DisplayName("스페이스 이름이 비어있거나, 15자 초과면 예외를 던진다")
+    @DisplayName("스페이스 이름이 비어있거나, 30자 초과면 예외를 던진다")
     @NullAndEmptySource
     @ParameterizedTest
-    @ValueSource(strings = {" ", "abcde12345678901"})
+    @ValueSource(strings = {" ", "a123456789012345678901234567890"})
     void spaceNameValidationTest(String invalidName) {
         // given
         String description = "스페이스 설명";

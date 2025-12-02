@@ -25,7 +25,7 @@ import lombok.NoArgsConstructor;
 public class Space extends BaseTimeEntity {
 
     private static final int CODE_LENGTH = 10;
-    private static final int MAX_NAME_LENGTH = 15;
+    private static final int MAX_NAME_LENGTH = 30;
     private static final int MAX_DESCRIPTION_LENGTH = 200;
     private static final int MAX_INSTAGRAM_USERNAME_LENGTH = 30;
     private static final int MAX_EMAIL_LENGTH = 50;
@@ -59,7 +59,7 @@ public class Space extends BaseTimeEntity {
      * 스페이스를 생성한다.
      *
      * @param code              스페이스 코드 (필수, 10자)
-     * @param name              스페이스 이름 (필수, 최대 15자)
+     * @param name              스페이스 이름 (필수, 최대 30자)
      * @param description       스페이스 설명 (필수, 최대 200자)
      * @param isPublic          스페이스 공개 여부 (필수)
      * @param instagramUsername 인스타그램 아이디 (필수, 최대 30자)
