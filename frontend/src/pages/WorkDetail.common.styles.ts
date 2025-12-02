@@ -27,6 +27,7 @@ export const TitleRowContainer = styled.div`
 export const TitleContainer = styled.h1`
   ${({ theme }) => theme.typography.header01}
   color: ${({ theme }) => theme.colors.gray06};
+  white-space: pre-line;
 `;
 
 export const CategoryContainer = styled.p`
