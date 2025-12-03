@@ -4,6 +4,9 @@ import java.security.SecureRandom;
 
 import org.springframework.stereotype.Component;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Component
 public class RandomCodeGenerator {
 
@@ -11,6 +14,7 @@ public class RandomCodeGenerator {
     private static final SecureRandom SECURE_RANDOM = new SecureRandom();
 
     public String generate(int length) {
+        long startMillis = System.currentTimeMillis();
         if (length <= 0) {
             return "";
         }
@@ -19,6 +23,10 @@ public class RandomCodeGenerator {
             int randomPosition = SECURE_RANDOM.nextInt(NUMBER_AND_ALPHABET.length());
             randomString.append(NUMBER_AND_ALPHABET.charAt(randomPosition));
         }
+
+        long durationMillis = System.currentTimeMillis() - startMillis;
+        log.debug("랜덤 코드 생성 완료 생성 시간: {}ms", durationMillis);
+
         return randomString.toString();
     }
 }
