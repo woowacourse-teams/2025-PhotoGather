@@ -73,12 +73,6 @@ public class AwsS3Cloud implements ContentsStorage {
     }
 
     @Override
-    public void deleteContent(String contentPath) {
-        List<String> deletePaths = getPathWithThumbnails(contentPath);
-        executeBatchDeletion(deletePaths);
-    }
-
-    @Override
     public void deleteContents(List<String> contentPaths) {
         List<String> deletePaths = contentPaths.stream()
             .flatMap(path -> getPathWithThumbnails(path).stream())
