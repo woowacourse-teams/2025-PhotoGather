@@ -1,5 +1,7 @@
 package com.forgather.domain.space.dto;
 
+import com.forgather.domain.space.model.SpacePhoto;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 
 public record SpacePhotoResponse(
@@ -11,11 +13,11 @@ public record SpacePhotoResponse(
     String path
 ) {
 
-    public static SpacePhotoResponse exists(String path) {
-        return new SpacePhotoResponse(true, path);
+    public static SpacePhotoResponse exists(SpacePhoto spacePhoto) {
+        return new SpacePhotoResponse(true, spacePhoto.getPath());
     }
 
-    public static SpacePhotoResponse notExists() {
-        return new SpacePhotoResponse(false, "");
+    public static SpacePhotoResponse notExists(SpacePhoto spacePhoto) {
+        return new SpacePhotoResponse(false, spacePhoto.getPath());
     }
 }

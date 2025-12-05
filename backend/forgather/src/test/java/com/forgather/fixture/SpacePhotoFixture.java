@@ -11,7 +11,15 @@ public class SpacePhotoFixture {
         return createSpacePhotoWithSpace(createSpace());
     }
 
+    public static SpacePhoto createEmptySpacePhoto() {
+        return createEmptySpacePhotoWithSpace(createSpace());
+    }
+
     public static SpacePhoto createSpacePhotoWithSpace(Space space) {
         return new SpacePhoto(space, "originalName", "path", 1024L);
+    }
+
+    public static SpacePhoto createEmptySpacePhotoWithSpace(Space space) {
+        return SpacePhoto.empty(space);
     }
 }
