@@ -31,6 +31,6 @@ public class SpacePhoto extends Photo {
     }
 
     public boolean isExists() {
-        return !path.isBlank();
+        return path != null && !path.isBlank();
     }
 }
