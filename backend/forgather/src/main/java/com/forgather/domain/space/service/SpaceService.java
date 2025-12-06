@@ -129,6 +129,10 @@ public class SpaceService {
     private SpaceResponse createSpaceResponse(Space space) {
         Long guestBookCardCount = guestBookCardRepository.countBySpace(space);
         SpacePhoto spacePhoto = spacePhotoRepository.getBySpaceOrEmpty(space);
+        return toSpaceResponse(space, guestBookCardCount, spacePhoto);
+    }
+
+    private SpaceResponse toSpaceResponse(Space space, Long guestBookCardCount, SpacePhoto spacePhoto) {
         if (spacePhoto.isExists()) {
             return SpaceResponse.from(space, SpacePhotoResponse.exists(spacePhoto), guestBookCardCount);
         }
@@ -163,23 +167,20 @@ public class SpaceService {
         if (spaceHostMaps.isEmpty()) {
             return new HostSpaceResponse(Collections.emptyList());
         }
-        List<SpaceResponse> spaceResponses = getSpaceResponses(spaceHostMaps);
+        List<SpaceResponse> spaceResponses = createSpaceResponses(spaceHostMaps);
         return new HostSpaceResponse(spaceResponses);
     }
 
-    private List<SpaceResponse> getSpaceResponses(List<SpaceHostMap> spaceHostMaps) {
+    private List<SpaceResponse> createSpaceResponses(List<SpaceHostMap> spaceHostMaps) {
         List<Space> spaces = spaceHostMaps.stream()
             .map(SpaceHostMap::getSpace)
             .toList();
 
-        List<SpaceGuestBookCountDto> spaceGuestBookCardCounts = guestBookCardRepository.countBySpaceIn(spaces);
-        Map<Long, Long> guestBookCardCounts = spaceGuestBookCardCounts.stream()
-            .collect(Collectors.toMap(
-                SpaceGuestBookCountDto::spaceId,
-                SpaceGuestBookCountDto::guestBookCount
-            ));
+        Map<Long, Long> guestBookCardCounts = guestBookCardRepository.countBySpaceIn(spaces)
+            .stream()
+            .collect(Collectors.toMap(SpaceGuestBookCountDto::spaceId, SpaceGuestBookCountDto::guestBookCount));
 
-        Map<Space, SpacePhoto> spacePhotoMap = spacePhotoRepository.findAllBySpaceIn(spaces)
+        Map<Space, SpacePhoto> spacePhotos = spacePhotoRepository.findAllBySpaceIn(spaces)
             .stream()
             .collect(Collectors.toMap(SpacePhoto::getSpace, spacePhoto -> spacePhoto));
 
@@ -187,12 +188,8 @@ public class SpaceService {
             .map(spaceHostMap -> {
                 Space space = spaceHostMap.getSpace();
                 Long guestBookCardCount = guestBookCardCounts.getOrDefault(space.getId(), 0L);
-                SpacePhoto spacePhoto = spacePhotoMap.getOrDefault(space, SpacePhoto.empty(space));
-
-                if (spacePhoto.isExists()) {
-                    return SpaceResponse.from(space, SpacePhotoResponse.exists(spacePhoto), guestBookCardCount);
-                }
-                return SpaceResponse.from(space, SpacePhotoResponse.notExists(spacePhoto), guestBookCardCount);
+                SpacePhoto spacePhoto = spacePhotos.getOrDefault(space, SpacePhoto.empty(space));
+                return toSpaceResponse(space, guestBookCardCount, spacePhoto);
             })
             .toList();
     }
