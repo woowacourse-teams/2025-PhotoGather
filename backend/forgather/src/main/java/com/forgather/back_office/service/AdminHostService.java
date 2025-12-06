@@ -27,7 +27,7 @@ public class AdminHostService {
     public AdminHostResponse getAllHosts(Pageable pageable, AdminUser adminUser) {
         Page<Host> hosts = hostRepository.findAll(pageable);
         return AdminHostResponse.from(hosts.map(host -> {
-            List<Long> spaceIds = spaceHostMapRepository.findAllByHost(host)
+            List<Long> spaceIds = spaceHostMapRepository.findAllByHostWithSpaceOrderByCreatedAtDesc(host)
                 .stream()
                 .map(spaceHostMap -> spaceHostMap.getSpace().getId())
                 .toList();

@@ -1,8 +1,9 @@
 package com.forgather.domain.space.service;
 
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
@@ -10,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.forgather.domain.guestbook.repository.GuestBookCardRepository;
+import com.forgather.domain.guestbook.repository.dto.SpaceGuestBookCountDto;
 import com.forgather.domain.guestbook.service.GuestBookService;
 import com.forgather.domain.product.service.ProductService;
 import com.forgather.domain.space.dto.CheckSpaceHostResponse;
@@ -124,6 +126,15 @@ public class SpaceService {
         deleteSpacePhoto(existingPhoto);
     }
 
+    private SpaceResponse createSpaceResponse(Space space) {
+        Long guestBookCardCount = guestBookCardRepository.countBySpace(space);
+        SpacePhoto spacePhoto = spacePhotoRepository.getBySpaceOrEmpty(space);
+        if (spacePhoto.isExists()) {
+            return SpaceResponse.from(space, SpacePhotoResponse.exists(spacePhoto), guestBookCardCount);
+        }
+        return SpaceResponse.from(space, SpacePhotoResponse.notExists(spacePhoto), guestBookCardCount);
+    }
+
     @Transactional
     public void delete(String spaceCode, Host host) {
         Space space = spaceRepository.getByCodeOrThrow(spaceCode);
@@ -148,31 +159,42 @@ public class SpaceService {
 
     @Transactional(readOnly = true)
     public HostSpaceResponse getSpacesInformation(Host host) {
-        List<SpaceHostMap> spaceHostMaps = spaceHostMapRepository.findAllByHost(host);
+        List<SpaceHostMap> spaceHostMaps = spaceHostMapRepository.findAllByHostWithSpaceOrderByCreatedAtDesc(host);
         if (spaceHostMaps.isEmpty()) {
             return new HostSpaceResponse(Collections.emptyList());
         }
-        List<SpaceResponse> spaceResponses = getRecentSpaceResponses(spaceHostMaps);
+        List<SpaceResponse> spaceResponses = getSpaceResponses(spaceHostMaps);
         return new HostSpaceResponse(spaceResponses);
     }
 
-    private List<SpaceResponse> getRecentSpaceResponses(List<SpaceHostMap> spaceHostMaps) {
+    private List<SpaceResponse> getSpaceResponses(List<SpaceHostMap> spaceHostMaps) {
+        List<Space> spaces = spaceHostMaps.stream()
+            .map(SpaceHostMap::getSpace)
+            .toList();
+
+        List<SpaceGuestBookCountDto> spaceGuestBookCardCounts = guestBookCardRepository.countBySpaceIn(spaces);
+        Map<Long, Long> guestBookCardCounts = spaceGuestBookCardCounts.stream()
+            .collect(Collectors.toMap(
+                SpaceGuestBookCountDto::spaceId,
+                SpaceGuestBookCountDto::guestBookCount
+            ));
+
+        Map<Space, SpacePhoto> spacePhotoMap = spacePhotoRepository.findAllBySpaceIn(spaces)
+            .stream()
+            .collect(Collectors.toMap(SpacePhoto::getSpace, spacePhoto -> spacePhoto));
+
         return spaceHostMaps.stream()
             .map(spaceHostMap -> {
                 Space space = spaceHostMap.getSpace();
-                return createSpaceResponse(space);
-            })
-            .sorted(Comparator.comparingLong(SpaceResponse::id).reversed())
-            .toList();
-    }
+                Long guestBookCardCount = guestBookCardCounts.getOrDefault(space.getId(), 0L);
+                SpacePhoto spacePhoto = spacePhotoMap.getOrDefault(space, SpacePhoto.empty(space));
 
-    private SpaceResponse createSpaceResponse(Space space) {
-        Long guestBookCardCount = guestBookCardRepository.countBySpace(space);
-        SpacePhoto spacePhoto = spacePhotoRepository.getBySpaceOrEmpty(space);
-        if (spacePhoto.isExists()) {
-            return SpaceResponse.from(space, SpacePhotoResponse.exists(spacePhoto), guestBookCardCount);
-        }
-        return SpaceResponse.from(space, SpacePhotoResponse.notExists(spacePhoto), guestBookCardCount);
+                if (spacePhoto.isExists()) {
+                    return SpaceResponse.from(space, SpacePhotoResponse.exists(spacePhoto), guestBookCardCount);
+                }
+                return SpaceResponse.from(space, SpacePhotoResponse.notExists(spacePhoto), guestBookCardCount);
+            })
+            .toList();
     }
 
     @Transactional(readOnly = true)

@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 
 import com.forgather.domain.guestbook.model.GuestBookCard;
 import com.forgather.domain.guestbook.repository.dto.GuestBookCardListDto;
+import com.forgather.domain.guestbook.repository.dto.SpaceGuestBookCountDto;
 import com.forgather.domain.space.model.Space;
 import com.forgather.global.exception.BaseNullPointerException;
 import com.forgather.global.exception.NotFoundException;
@@ -26,18 +27,29 @@ public interface GuestBookCardRepository {
     Long countBySpace(Space space);
 
     @Query("""
-        SELECT new com.forgather.domain.guestbook.repository.dto.GuestBookCardListDto(
-            g.id,
-            guest.nickname,
-            g.isRead,
-            CASE WHEN (
-                SELECT COUNT(p) FROM GuestBookCardPhoto p WHERE p.guestBookCard = g
-            ) > 0 THEN true ELSE false END
+        SELECT new com.forgather.domain.guestbook.repository.dto.SpaceGuestBookCountDto(
+            g.space.id,
+            COUNT(g)
         )
         FROM GuestBookCard g
-        JOIN g.guest guest
-        WHERE g.space = :space
-    """)
+        WHERE g.space IN :spaces
+        GROUP BY g.space.id
+        """)
+    List<SpaceGuestBookCountDto> countBySpaceIn(@Param("spaces") List<Space> spaces);
+
+    @Query("""
+            SELECT new com.forgather.domain.guestbook.repository.dto.GuestBookCardListDto(
+                g.id,
+                guest.nickname,
+                g.isRead,
+                CASE WHEN (
+                    SELECT COUNT(p) FROM GuestBookCardPhoto p WHERE p.guestBookCard = g
+                ) > 0 THEN true ELSE false END
+            )
+            FROM GuestBookCard g
+            JOIN g.guest guest
+            WHERE g.space = :space
+        """)
     Page<GuestBookCardListDto> findAllDtoBySpace(@Param("space") Space space, Pageable pageable);
 
     List<GuestBookCard> findAllBySpace(Space space);
