@@ -1,18 +1,8 @@
 import { useEffect, useState } from 'react';
 import { MdChevronLeft, MdHome, MdMenu } from 'react-icons/md';
-import {
-  Outlet,
-  useLocation,
-  useMatches,
-  useNavigate,
-  useParams,
-} from 'react-router-dom';
+import { Outlet, useLocation, useMatches, useNavigate, useParams } from 'react-router-dom';
 import LogoSvg from '../../../../@assets/logo/logo.svg?react';
-import {
-  createGuestHomeRoute,
-  createSpaceMainRoute,
-  ROUTES,
-} from '../../../../constants/routes';
+import { createGuestHomeRoute, createSpaceMainRoute, ROUTES } from '../../../../constants/routes';
 import useButtonTracking from '../../../../hooks/@common/useButtonTracking';
 import useInAppRedirect from '../../../../hooks/@common/useInAppRedirect';
 import usePageTracking from '../../../../hooks/@common/usePageTracking';
@@ -106,9 +96,7 @@ const Layout = () => {
         <Hamburger
           isOpen={isHamburgerOpen}
           onClose={closeHamburger}
-          navigateInfo={
-            isHost ? hostNavigateInfo() : guestNavigateInfo(spaceCode ?? '')
-          }
+          navigateInfo={isHost ? hostNavigateInfo() : guestNavigateInfo(spaceCode ?? '')}
         />
       )}
       <ScrollToTop />
