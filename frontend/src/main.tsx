@@ -32,9 +32,15 @@ if (import.meta.env.VITE_ENVIRONMENT === 'production') {
 }
 
 const JAVASCRIPT_KEY = import.meta.env.VITE_APP_JAVASCRIPT_KEY;
-window.Kakao.init(JAVASCRIPT_KEY);
-window.Kakao.isInitialized();
 
+const initializeKakao = () => {
+  if (!window.Kakao) return;
+
+  window.Kakao.init(JAVASCRIPT_KEY);
+  window.Kakao.isInitialized();
+};
+
+document.addEventListener('DOMContentLoaded', initializeKakao);
 // biome-ignore lint/style/noNonNullAssertion : 루트에서 non-null 무시
 createRoot(document.getElementById('root')!).render(
   // <StrictMode>
