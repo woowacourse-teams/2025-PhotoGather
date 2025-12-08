@@ -7,6 +7,7 @@ import Layout from '../components/layout/global/layout/Layout';
 import GuestbookAccessGuard from '../components/layout/guestbookAccessGuard/GuestbookAccessGuard';
 import HostPageAccessGuard from '../components/layout/hostPageAccessGuard/HostPageAccessGuard';
 import type { AppRouteObject } from '../types/route.type';
+import { Spinner } from '../styles/@common/Spinner.styles';
 
 const KakaoAuthPage = lazy(() => import('../pages/auth/KakaoAuthPage'));
 const CompletePage = lazy(
@@ -68,7 +69,24 @@ interface SuspenseWrapperProps {
 }
 
 const SuspenseWrapper = ({ element }: SuspenseWrapperProps) => {
-  return <Suspense fallback={<div></div>}>{element}</Suspense>;
+  return (
+    <Suspense
+      fallback={
+        <div
+          style={{
+            display: 'flex',
+            width: '100%',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          <Spinner />
+        </div>
+      }
+    >
+      {element}
+    </Suspense>
+  );
 };
 
 const routes: AppRouteObject[] = [
