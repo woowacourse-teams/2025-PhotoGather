@@ -34,7 +34,7 @@ if (import.meta.env.VITE_ENVIRONMENT === 'production') {
 const JAVASCRIPT_KEY = import.meta.env.VITE_APP_JAVASCRIPT_KEY;
 
 const initializeKakao = () => {
-  if (!window.Kakao) return;
+  if (!window.Kakao || window.Kakao.isInitialized()) return;
 
   window.Kakao.init(JAVASCRIPT_KEY);
   window.Kakao.isInitialized();
