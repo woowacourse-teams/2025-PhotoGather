@@ -46,18 +46,18 @@ public class SpaceService {
 
     private final ProductService productService;
     private final GuestBookService guestBookService;
+    private final UploadService uploadService;
     private final SpaceRepository spaceRepository;
     private final SpacePhotoRepository spacePhotoRepository;
     private final SpaceHostMapRepository spaceHostMapRepository;
     private final GuestBookCardRepository guestBookCardRepository;
     private final RandomCodeGenerator codeGenerator;
-    private final UploadService uploadService;
     private final ApplicationEventPublisher eventPublisher;
 
     @Transactional
     public CreateSpaceResponse create(CreateSpaceRequest request, MultipartFile file, Host host) {
-        String spaceCode = codeGenerator.generate(10);
         validateHostNull(host);
+        String spaceCode = codeGenerator.generate(10);
         Space space = spaceRepository.save(request.toEntity(spaceCode));
         spaceHostMapRepository.save(new SpaceHostMap(space, host));
         if (file == null || file.isEmpty()) {
