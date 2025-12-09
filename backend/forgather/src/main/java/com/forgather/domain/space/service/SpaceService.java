@@ -176,23 +176,29 @@ public class SpaceService {
     }
 
     private List<SpaceResponse> createSpaceResponses(List<SpaceHostMap> spaceHostMaps) {
-        List<Space> spaces = spaceHostMaps.stream()
-            .map(SpaceHostMap::getSpace)
+        List<Long> spaceIds = spaceHostMaps.stream()
+            .map(spaceHostMap -> spaceHostMap.getSpace().getId())
             .toList();
 
-        Map<Long, Long> guestBookCardCounts = guestBookCardRepository.countBySpaceIn(spaces)
+        Map<Long, Long> guestBookCardCounts = guestBookCardRepository.countBySpaceIdIn(spaceIds)
             .stream()
-            .collect(Collectors.toMap(SpaceGuestBookCountDto::spaceId, SpaceGuestBookCountDto::guestBookCount));
+            .collect(Collectors.toMap(
+                SpaceGuestBookCountDto::spaceId,
+                SpaceGuestBookCountDto::guestBookCount)
+            );
 
-        Map<Space, SpacePhoto> spacePhotos = spacePhotoRepository.findAllBySpaceIn(spaces)
+        Map<Long, SpacePhoto> spacePhotos = spacePhotoRepository.findAllBySpaceIdIn(spaceIds)
             .stream()
-            .collect(Collectors.toMap(SpacePhoto::getSpace, spacePhoto -> spacePhoto));
+            .collect(Collectors.toMap(
+                spacePhoto -> spacePhoto.getSpace().getId(),
+                spacePhoto -> spacePhoto)
+            );
 
         return spaceHostMaps.stream()
             .map(spaceHostMap -> {
                 Space space = spaceHostMap.getSpace();
                 Long guestBookCardCount = guestBookCardCounts.getOrDefault(space.getId(), 0L);
-                SpacePhoto spacePhoto = spacePhotos.getOrDefault(space, SpacePhoto.empty(space));
+                SpacePhoto spacePhoto = spacePhotos.getOrDefault(space.getId(), SpacePhoto.empty(space));
                 return toSpaceResponse(space, guestBookCardCount, spacePhoto);
             })
             .toList();

@@ -18,9 +18,9 @@ public interface SpacePhotoRepository {
     @Query("""
         SELECT sp
         FROM SpacePhoto sp
-        WHERE sp.space IN :spaces
+        WHERE sp.space.id IN :spaceIds
         """)
-    List<SpacePhoto> findAllBySpaceIn(@Param("spaces") List<Space> spaces);
+    List<SpacePhoto> findAllBySpaceIdIn(@Param("spaceIds") List<Long> spaceIds);
 
     void delete(SpacePhoto spacePhoto);
 

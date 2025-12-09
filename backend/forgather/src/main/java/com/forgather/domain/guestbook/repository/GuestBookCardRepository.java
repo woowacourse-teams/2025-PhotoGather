@@ -32,10 +32,10 @@ public interface GuestBookCardRepository {
             COUNT(g)
         )
         FROM GuestBookCard g
-        WHERE g.space IN :spaces
+        WHERE g.space.id IN :spaceIds
         GROUP BY g.space.id
         """)
-    List<SpaceGuestBookCountDto> countBySpaceIn(@Param("spaces") List<Space> spaces);
+    List<SpaceGuestBookCountDto> countBySpaceIdIn(@Param("spaceIds") List<Long> spaceIds);
 
     @Query("""
             SELECT new com.forgather.domain.guestbook.repository.dto.GuestBookCardListDto(
