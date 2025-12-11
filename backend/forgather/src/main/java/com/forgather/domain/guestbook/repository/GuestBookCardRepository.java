@@ -29,7 +29,7 @@ public interface GuestBookCardRepository {
     @Query("""
         SELECT new com.forgather.domain.guestbook.repository.dto.SpaceGuestBookCountDto(
             g.space.id,
-            COUNT(g)
+            COUNT(g.id)
         )
         FROM GuestBookCard g
         WHERE g.space.id IN :spaceIds
