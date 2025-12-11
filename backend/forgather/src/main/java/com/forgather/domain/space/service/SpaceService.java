@@ -82,16 +82,12 @@ public class SpaceService {
         space.update(request.name(), request.description(), request.isPublic(), request.instagramUsername(),
             request.email());
 
-        if (isNotDeletingPhoto(request)) {
-            handlePhotoWithoutDeleteRequest(space, file, spaceCode);
-        } else {
+        if (request.isDeletingPhoto()) {
             handlePhotoWithDeleteRequest(space, file, spaceCode);
+        } else {
+            handlePhotoWithoutDeleteRequest(space, file, spaceCode);
         }
         return createSpaceResponse(space);
-    }
-
-    private boolean isNotDeletingPhoto(UpdateSpaceRequest request) {
-        return request.isDeletePhoto() == null || !request.isDeletePhoto();
     }
 
     /**

@@ -24,4 +24,8 @@ public record UpdateSpaceRequest(
     @Schema(description = "스페이스 사진 삭제 여부", example = "true")
     Boolean isDeletePhoto
 ) {
+
+    public boolean isDeletingPhoto() {
+        return isDeletePhoto != null && isDeletePhoto;
+    }
 }
