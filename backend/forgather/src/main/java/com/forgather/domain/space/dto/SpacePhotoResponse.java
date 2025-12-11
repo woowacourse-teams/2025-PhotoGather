@@ -13,11 +13,7 @@ public record SpacePhotoResponse(
     String path
 ) {
 
-    public static SpacePhotoResponse exists(SpacePhoto spacePhoto) {
-        return new SpacePhotoResponse(true, spacePhoto.getPath());
-    }
-
-    public static SpacePhotoResponse notExists(SpacePhoto spacePhoto) {
-        return new SpacePhotoResponse(false, spacePhoto.getPath());
+    public static SpacePhotoResponse from(SpacePhoto spacePhoto) {
+        return new SpacePhotoResponse(spacePhoto.isExists(), spacePhoto.getPath());
     }
 }

@@ -18,7 +18,6 @@ import com.forgather.domain.space.dto.CheckSpaceHostResponse;
 import com.forgather.domain.space.dto.CreateSpaceRequest;
 import com.forgather.domain.space.dto.CreateSpaceResponse;
 import com.forgather.domain.space.dto.HostSpaceResponse;
-import com.forgather.domain.space.dto.SpacePhotoResponse;
 import com.forgather.domain.space.dto.SpaceResponse;
 import com.forgather.domain.space.dto.UpdateSpaceRequest;
 import com.forgather.domain.space.model.Space;
@@ -129,14 +128,7 @@ public class SpaceService {
     private SpaceResponse createSpaceResponse(Space space) {
         Long guestBookCardCount = guestBookCardRepository.countBySpace(space);
         SpacePhoto spacePhoto = spacePhotoRepository.getBySpaceOrEmpty(space);
-        return toSpaceResponse(space, guestBookCardCount, spacePhoto);
-    }
-
-    private SpaceResponse toSpaceResponse(Space space, Long guestBookCardCount, SpacePhoto spacePhoto) {
-        if (spacePhoto.isExists()) {
-            return SpaceResponse.from(space, SpacePhotoResponse.exists(spacePhoto), guestBookCardCount);
-        }
-        return SpaceResponse.from(space, SpacePhotoResponse.notExists(spacePhoto), guestBookCardCount);
+        return SpaceResponse.from(space, spacePhoto, guestBookCardCount);
     }
 
     @Transactional
@@ -195,7 +187,7 @@ public class SpaceService {
                 Space space = spaceHostMap.getSpace();
                 Long guestBookCardCount = guestBookCardCounts.getOrDefault(space.getId(), 0L);
                 SpacePhoto spacePhoto = spacePhotos.getOrDefault(space.getId(), SpacePhoto.empty(space));
-                return toSpaceResponse(space, guestBookCardCount, spacePhoto);
+                return SpaceResponse.from(space, spacePhoto, guestBookCardCount);
             })
             .toList();
     }

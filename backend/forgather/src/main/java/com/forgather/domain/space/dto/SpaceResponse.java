@@ -1,6 +1,7 @@
 package com.forgather.domain.space.dto;
 
 import com.forgather.domain.space.model.Space;
+import com.forgather.domain.space.model.SpacePhoto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
@@ -39,7 +40,7 @@ public record SpaceResponse(
     Long guestBookCardCount
 ) {
 
-    public static SpaceResponse from(Space space, SpacePhotoResponse spacePhoto, Long guestBookCardCount) {
+    public static SpaceResponse from(Space space, SpacePhoto spacePhoto, Long guestBookCardCount) {
         return new SpaceResponse(
             space.getId(),
             space.getCode(),
@@ -48,7 +49,7 @@ public record SpaceResponse(
             space.isPublic(),
             space.getInstagramUsername(),
             space.getEmail(),
-            spacePhoto,
+            SpacePhotoResponse.from(spacePhoto),
             guestBookCardCount
         );
     }
