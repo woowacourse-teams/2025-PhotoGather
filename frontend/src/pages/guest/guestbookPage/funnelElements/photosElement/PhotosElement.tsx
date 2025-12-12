@@ -1,5 +1,7 @@
+import { useState } from 'react';
 import { MdAddAPhoto, MdDeleteOutline } from 'react-icons/md';
 import ImageSwiperActions from '../../../../../components/specific/imageSwiperActions/ImageSwiperActions';
+import TextModal from '../../../../../components/specific/modal/textModal/TextModal';
 import PhotoUploadButton from '../../../../../components/specific/photoUploadButton/PhotoUploadButton';
 import { INFORMATION } from '../../../../../constants/messages';
 import useButtonTracking from '../../../../../hooks/@common/useButtonTracking';
@@ -21,6 +23,7 @@ const PhotosElement = ({
   onNextButtonClick,
   initialLocalFiles,
 }: PhotosElementProps) => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const { trackClick } = useButtonTracking({
     userType: 'guest',
   });
@@ -64,6 +67,15 @@ const PhotosElement = ({
     deleteFile(localFiles[currentIndex].id);
   };
 
+  const toggleIsModalOpen = () => {
+    setIsModalOpen((prev) => !prev);
+  };
+
+  const handleConfirmTextModal = () => {
+    toggleIsModalOpen();
+    onNextButtonClick(localFiles);
+  };
+
   const swiperActions = [
     {
       icon: <MdDeleteOutline fill={theme.colors.error} size={24} />,
@@ -88,31 +100,40 @@ const PhotosElement = ({
   ];
 
   return (
-    <FunnelBasePage
-      isOptional
-      prompt={INFORMATION.GUESTBOOK.PHOTOS.PROMPT}
-      receiver={receiver}
-      element={
-        previewFiles.length === 0 ? (
-          <PhotoUploadButton
-            mainText={INFORMATION.GUESTBOOK.PHOTOS.PROMPT}
-            onChange={handlePhotoUpload}
-            onDrop={handlePhotoDrop}
-            disabled={false}
-          />
-        ) : (
-          <ImageSwiperActions
-            imageInfo={previewFiles}
-            initialIndex={0}
-            updateCurrentIndex={updateCurrentIndex}
-            actions={swiperActions}
-            spaceBetween={-30}
-          />
-        )
-      }
-      buttonText="전송"
-      onNextButtonClick={() => onNextButtonClick(localFiles)}
-    />
+    <>
+      <TextModal
+        text={INFORMATION.GUESTBOOK.MODAL.TEXT}
+        description={INFORMATION.GUESTBOOK.MODAL.DESCRIPTION}
+        isOpen={isModalOpen}
+        onClose={toggleIsModalOpen}
+        onConfirm={handleConfirmTextModal}
+      />
+      <FunnelBasePage
+        isOptional
+        prompt={INFORMATION.GUESTBOOK.PHOTOS.PROMPT}
+        receiver={receiver}
+        element={
+          previewFiles.length === 0 ? (
+            <PhotoUploadButton
+              mainText={INFORMATION.GUESTBOOK.PHOTOS.PROMPT}
+              onChange={handlePhotoUpload}
+              onDrop={handlePhotoDrop}
+              disabled={false}
+            />
+          ) : (
+            <ImageSwiperActions
+              imageInfo={previewFiles}
+              initialIndex={0}
+              updateCurrentIndex={updateCurrentIndex}
+              actions={swiperActions}
+              spaceBetween={-30}
+            />
+          )
+        }
+        buttonText="전송"
+        onNextButtonClick={toggleIsModalOpen}
+      />
+    </>
   );
 };
 
