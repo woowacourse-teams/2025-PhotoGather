@@ -24,7 +24,9 @@ const TextModal = ({
         <S.TextModalContainer>
           <S.TextModalMessageContainer>
             <S.TextConfirmComment>{text}</S.TextConfirmComment>
-            <S.TextConfirmDescription>{description}</S.TextConfirmDescription>
+            {description && (
+              <S.TextConfirmDescription>{description}</S.TextConfirmDescription>
+            )}
           </S.TextModalMessageContainer>
           <S.ButtonContainer>
             <Button variant="secondary" text="취소" onClick={onClose} />
