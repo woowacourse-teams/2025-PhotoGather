@@ -48,7 +48,7 @@ export const INFORMATION = {
     },
     MODAL: {
       TEXT: '방명록을 전송할까요?',
-      DESCRIPTION: `전송한 방명록은 작성자가 직접 수정, 삭제 할 수 없어요.`,
+      DESCRIPTION: `전송한 방명록은 작성자가 직접 수정, 삭제할 수 없어요.`,
     },
   },
 } as const;
