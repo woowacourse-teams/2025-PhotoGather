@@ -67,12 +67,16 @@ const PhotosElement = ({
     deleteFile(localFiles[currentIndex].id);
   };
 
-  const toggleIsModalOpen = () => {
-    setIsModalOpen((prev) => !prev);
+  const openConfirmModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeConfirmModal = () => {
+    setIsModalOpen(false);
   };
 
   const handleConfirmTextModal = () => {
-    toggleIsModalOpen();
+    closeConfirmModal();
     onNextButtonClick(localFiles);
   };
 
@@ -105,7 +109,7 @@ const PhotosElement = ({
         text={INFORMATION.GUESTBOOK.MODAL.TEXT}
         description={INFORMATION.GUESTBOOK.MODAL.DESCRIPTION}
         isOpen={isModalOpen}
-        onClose={toggleIsModalOpen}
+        onClose={closeConfirmModal}
         onConfirm={handleConfirmTextModal}
       />
       <FunnelBasePage
@@ -131,7 +135,7 @@ const PhotosElement = ({
           )
         }
         buttonText="전송"
-        onNextButtonClick={toggleIsModalOpen}
+        onNextButtonClick={openConfirmModal}
       />
     </>
   );
