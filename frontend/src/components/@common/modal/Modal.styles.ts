@@ -10,7 +10,7 @@ export const ModalSize = {
 export const ModalContent = styled.div<{
   $size: keyof typeof ModalSize;
 }>`
-  min-height: 216px;
+  min-height: 156px;
   width: 100%;
   max-width: min(${({ $size }) => ModalSize[$size]}px, 90vw);
   max-height: 90vh;
