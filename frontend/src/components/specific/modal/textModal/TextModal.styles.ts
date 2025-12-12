@@ -6,12 +6,6 @@ export const TextModalContainer = styled.div`
   align-items: center;
   justify-content: center;
   gap: 24px;
-
-  svg {
-    width: 24px;
-    height: 24px;
-    color: ${({ theme }) => theme.colors.error};
-  }
 `;
 
 export const TextModalMessageContainer = styled.div`
