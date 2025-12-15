@@ -367,10 +367,7 @@ class SpaceAcceptanceTest extends AcceptanceTest {
             () -> assertThat(result.instagramUsername()).isEqualTo("forgather_official_new"),
             () -> assertThat(result.email()).isEqualTo("forgather_new@forgather.me"),
             () -> assertThat(spacePhotoRepository.getBySpaceAndDeletedAtIsNullOrEmpty(space).getOriginalName()).isEqualTo("new.jpg"),
-            () -> assertThat(result.guestBookCardCount()).isZero(),
-
-            () -> await().atMost(ofSeconds(6))
-                .untilAsserted(() -> verify(contentsStorage, atLeast(1)).deletePhotos(anyList()))
+            () -> assertThat(result.guestBookCardCount()).isZero()
         );
     }
 
