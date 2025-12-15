@@ -5,6 +5,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.forgather.back_office.dto.AdminSpaceFilterRequest;
 import com.forgather.back_office.dto.AdminSpaceResponse;
 import com.forgather.back_office.dto.SpaceDetailResponse;
 import com.forgather.domain.guestbook.repository.GuestBookCardRepository;
@@ -36,5 +37,17 @@ public class AdminSpaceService {
         Long guestBookCardCount = guestBookCardRepository.countBySpace(space);
 
         return SpaceDetailResponse.of(space, hasProduct, guestBookCardCount);
+    }
+    
+    @Transactional(readOnly = true)
+    public AdminSpaceResponse getSpacesByFilters(AdminSpaceFilterRequest request, Pageable pageable) {
+        Page<Space> spaces;
+        if (request.hasProduct() == null) {
+            spaces = spaceRepository.findAllByDeletedAtIsNull(pageable);
+            return AdminSpaceResponse.from(spaces);
+        }
+
+        spaces = spaceRepository.findAllByDeletedAtIsNullAndProductFilter(request.hasProduct(), pageable);
+        return AdminSpaceResponse.from(spaces);
     }
 }

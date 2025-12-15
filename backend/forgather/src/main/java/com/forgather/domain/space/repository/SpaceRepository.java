@@ -5,6 +5,8 @@ import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import com.forgather.domain.space.model.Space;
 import com.forgather.global.exception.BaseException;
@@ -19,6 +21,21 @@ public interface SpaceRepository {
     List<Space> findAllByDeletedAtIsNull();
 
     Page<Space> findAllByDeletedAtIsNull(Pageable pageable);
+
+    @Query("""
+        SELECT DISTINCT s
+        FROM Space s
+                LEFT JOIN Product p ON p.space = s AND p.deletedAt IS NULL
+        WHERE s.deletedAt IS NULL AND (
+                (:hasProduct = true AND p.id IS NOT NULL) OR
+                        (:hasProduct = false AND p.id IS NULL)
+        )
+        ORDER BY s.createdAt DESC
+        """)
+    Page<Space> findAllByDeletedAtIsNullAndProductFilter(
+        @Param("hasProduct") boolean hasProduct,
+        Pageable pageable
+    );
 
     long count();
 

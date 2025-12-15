@@ -12,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.forgather.back_office.dto.AdminSpaceFilterRequest;
 import com.forgather.back_office.dto.AdminSpaceResponse;
 import com.forgather.back_office.dto.SpaceDetailResponse;
 import com.forgather.back_office.repository.AdminUserRepository;
@@ -88,6 +89,47 @@ class AdminSpaceServiceTest {
             () -> assertThat(result.space().code()).isEqualTo("1234567890"),
             () -> assertThat(result.hasProduct()).isTrue(),
             () -> assertThat(result.guestBookCount()).isEqualTo(2)
+        );
+    }
+
+    @DisplayName("작품 소개가 등록된 스페이스 목록을 조회한다.")
+    @Test
+    void getSpacesHasProduct() {
+        // given
+        Space space1 = spaceRepository.save(SpaceFixture.createSpaceWithCode("3333333333"));
+        Space space2 = spaceRepository.save(SpaceFixture.createSpaceWithCode("4444444444"));
+        Space space3 = spaceRepository.save(SpaceFixture.createSpaceWithCode("5555555555"));
+        productRepository.save(ProductFixture.createProductWithSpace(space1));
+        productRepository.save(ProductFixture.createProductWithSpace(space2));
+        AdminSpaceFilterRequest request = new AdminSpaceFilterRequest(true);
+
+        // when
+        AdminSpaceResponse result = adminSpaceService.getSpacesByFilters(request, PageRequest.of(0, 10));
+
+        // then
+        assertAll(
+            () -> assertThat(result.spaces()).hasSize(2),
+            () -> assertThat(result.spaces().get(0).code()).isEqualTo(space2.getCode()),
+            () -> assertThat(result.spaces().get(1).code()).isEqualTo(space1.getCode())
+        );
+    }
+
+    @DisplayName("작품 소개가 등록되지 않은 스페이스 목록을 조회한다.")
+    @Test
+    void getSpacesHasNoProduct() {
+        // given
+        Space space1 = spaceRepository.save(SpaceFixture.createSpaceWithCode("6666666666"));
+        Space space2 = spaceRepository.save(SpaceFixture.createSpaceWithCode("7777777777"));
+        productRepository.save(ProductFixture.createProductWithSpace(space1));
+        AdminSpaceFilterRequest request = new AdminSpaceFilterRequest(false);
+
+        // when
+        AdminSpaceResponse result = adminSpaceService.getSpacesByFilters(request, PageRequest.of(0, 10));
+
+        // then
+        assertAll(
+            () -> assertThat(result.spaces()).hasSize(1),
+            () -> assertThat(result.spaces().get(0).code()).isEqualTo(space2.getCode())
         );
     }
 }
