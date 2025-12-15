@@ -13,7 +13,7 @@ import com.forgather.container.TestOnContainer;
 import io.restassured.RestAssured;
 
 @ActiveProfiles("test")
-@Sql(scripts = "/cleanup.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+@Sql(scripts = "/cleanup.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class AcceptanceTest extends TestOnContainer {
 
