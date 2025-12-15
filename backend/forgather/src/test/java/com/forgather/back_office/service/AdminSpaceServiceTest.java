@@ -14,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.forgather.back_office.dto.AdminSpaceResponse;
 import com.forgather.back_office.dto.SpaceDetailResponse;
-import com.forgather.back_office.model.AdminUser;
 import com.forgather.back_office.repository.AdminUserRepository;
 import com.forgather.domain.guestbook.model.Guest;
 import com.forgather.domain.guestbook.repository.GuestBookCardRepository;
@@ -22,7 +21,6 @@ import com.forgather.domain.guestbook.repository.GuestRepository;
 import com.forgather.domain.product.repository.ProductRepository;
 import com.forgather.domain.space.model.Space;
 import com.forgather.domain.space.repository.SpaceRepository;
-import com.forgather.fixture.AdminUserFixture;
 import com.forgather.fixture.GuestBookCardFixture;
 import com.forgather.fixture.GuestFixture;
 import com.forgather.fixture.ProductFixture;
@@ -55,13 +53,12 @@ class AdminSpaceServiceTest {
     @Test
     void getAllSpaces() {
         // given
-        AdminUser adminUser = adminUserRepository.save(AdminUserFixture.createAdminUser());
         spaceRepository.save(SpaceFixture.createSpaceWithCode("1111111111"));
         spaceRepository.save(SpaceFixture.createSpaceWithCode("2222222222"));
         Pageable pageable = PageRequest.of(0, 10);
 
         // when
-        AdminSpaceResponse result = adminSpaceService.getAllSpaces(pageable, adminUser);
+        AdminSpaceResponse result = adminSpaceService.getAllSpaces(pageable);
 
         // then
         assertAll(
@@ -77,7 +74,6 @@ class AdminSpaceServiceTest {
     @Test
     void getSpaceDetail() {
         // given
-        AdminUser adminUser = adminUserRepository.save(AdminUserFixture.createAdminUser());
         Space space = spaceRepository.save(SpaceFixture.createSpaceWithCode("1234567890"));
         productRepository.save(ProductFixture.createProductWithSpace(space));
         Guest guest = guestRepository.save(GuestFixture.createGuest());
@@ -85,7 +81,7 @@ class AdminSpaceServiceTest {
         guestBookCardRepository.save(GuestBookCardFixture.createGuestBookCard(space, guest, "메시지2"));
 
         // when
-        SpaceDetailResponse result = adminSpaceService.getSpaceDetail("1234567890", adminUser);
+        SpaceDetailResponse result = adminSpaceService.getSpaceDetail("1234567890");
 
         // then
         assertAll(

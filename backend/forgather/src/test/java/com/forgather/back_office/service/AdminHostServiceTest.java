@@ -13,12 +13,10 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.forgather.back_office.dto.AdminHostResponse;
-import com.forgather.back_office.model.AdminUser;
 import com.forgather.back_office.repository.AdminUserRepository;
 import com.forgather.domain.space.model.Space;
 import com.forgather.domain.space.repository.HostRepository;
 import com.forgather.domain.space.repository.SpaceRepository;
-import com.forgather.fixture.AdminUserFixture;
 import com.forgather.fixture.HostFixture;
 import com.forgather.fixture.SpaceFixture;
 import com.forgather.global.auth.model.Host;
@@ -49,7 +47,6 @@ class AdminHostServiceTest {
     @Test
     void getAllHosts() {
         // given
-        AdminUser adminUser = adminUserRepository.save(AdminUserFixture.createAdminUser());
         Host host1 = hostRepository.save(HostFixture.createHost());
         Host host2 = hostRepository.save(HostFixture.createHost());
         Space space1 = spaceRepository.save(SpaceFixture.createSpaceWithCode("1111111111"));
@@ -59,7 +56,7 @@ class AdminHostServiceTest {
         Pageable pageable = PageRequest.of(0, 10);
 
         // when
-        AdminHostResponse result = adminHostService.getAllHosts(pageable, adminUser);
+        AdminHostResponse result = adminHostService.getAllHosts(pageable);
 
         // then
         assertAll(

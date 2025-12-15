@@ -9,7 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.forgather.back_office.dto.AdminHostResponse;
 import com.forgather.back_office.dto.HostDetailResponse;
-import com.forgather.back_office.model.AdminUser;
 import com.forgather.domain.space.repository.HostRepository;
 import com.forgather.global.auth.model.Host;
 import com.forgather.global.auth.repository.SpaceHostMapRepository;
@@ -24,7 +23,7 @@ public class AdminHostService {
     private final SpaceHostMapRepository spaceHostMapRepository;
 
     @Transactional(readOnly = true)
-    public AdminHostResponse getAllHosts(Pageable pageable, AdminUser adminUser) {
+    public AdminHostResponse getAllHosts(Pageable pageable) {
         Page<Host> hosts = hostRepository.findAll(pageable);
         return AdminHostResponse.from(hosts.map(host -> {
             List<Long> spaceIds = spaceHostMapRepository.findAllByHostAndDeletedAtIsNullWithSpaceOrderByCreatedAtDesc(host)

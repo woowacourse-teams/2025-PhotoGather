@@ -30,7 +30,7 @@ public class AdminSpaceController {
         Pageable pageable,
         @Admin AdminUser adminUser
     ) {
-        var response = adminSpaceService.getAllSpaces(pageable, adminUser);
+        var response = adminSpaceService.getAllSpaces(pageable);
         return ResponseEntity.ok(response);
     }
 
@@ -39,7 +39,7 @@ public class AdminSpaceController {
         @PathVariable(name = "spaceCode") String spaceCode,
         @Admin AdminUser adminUser
     ) {
-        var response = adminSpaceService.getSpaceDetail(spaceCode, adminUser);
+        var response = adminSpaceService.getSpaceDetail(spaceCode);
         return ResponseEntity.ok(response);
     }
 }
