@@ -10,7 +10,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: none
+      ddl-auto: create-drop
     show-sql: true
     properties:
       hibernate:
@@ -21,10 +21,7 @@ spring:
       mode: never
 
   flyway:
-    enabled: true
-    baseline-on-migrate: true
-    validate-on-migrate: true
-    locations: classpath:db/migration
+    enabled: false
 
   servlet:
     multipart:

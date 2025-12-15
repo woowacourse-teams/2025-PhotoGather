@@ -22,5 +22,12 @@ public class TestOnContainer {
         registry.add("spring.datasource.username", mysql::getUsername);
         registry.add("spring.datasource.password", mysql::getPassword);
         registry.add("spring.datasource.driverClassName", mysql::getDriverClassName);
+
+        registry.add("spring.jpa.hibernate.ddl-auto", () -> "none");
+
+        registry.add("spring.flyway.enabled", () -> true);
+        registry.add("spring.flyway.baseline-on-migrate", () -> true);
+        registry.add("spring.flyway.validate-on-migrate", () -> true);
+        registry.add("spring.flyway.location", () -> "classpath:db/migration");
     }
 }

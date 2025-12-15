@@ -14,10 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.task.TaskExecutor;
 
-import com.forgather.container.TestOnContainer;
-
 @SpringBootTest
-class LoggingTaskDecoratorTest extends TestOnContainer {
+class LoggingTaskDecoratorTest {
 
     @Autowired
     private TaskExecutor taskExecutor;
