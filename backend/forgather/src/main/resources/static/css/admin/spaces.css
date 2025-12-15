@@ -33,6 +33,7 @@
     background-color: var(--surface-color);
     border-radius: var(--radius-lg);
     box-shadow: var(--shadow-sm);
+    gap: var(--spacing-lg);
 }
 
 .page-size-selector {
@@ -51,6 +52,114 @@
 .page-size-selector .form-select {
     width: auto;
     min-width: 80px;
+}
+
+/* ==========================================================================
+   Filter Section
+   - 스페이스 필터링 UI 영역
+   - 향후 필터 조건 추가 시 이 영역에 filter-group을 추가하면 됨
+   ========================================================================== */
+
+/**
+ * 필터 섹션 컨테이너
+ * - controls 영역의 왼쪽에 배치
+ * - 여러 필터 그룹과 검색 버튼을 포함
+ */
+.filter-section {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-lg);
+    flex: 1;
+}
+
+/**
+ * 개별 필터 그룹 (라벨 + 입력 요소)
+ * - 하나의 필터 조건을 담는 컨테이너
+ * - 예: 작품 소개 등록 여부 필터
+ * - 향후 확장: 공개 여부 필터, 날짜 필터 등을 추가할 때 이 클래스 재사용
+ */
+.filter-group {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    flex-wrap: wrap;
+}
+
+/**
+ * 필터 라벨
+ * - 필터 조건의 제목을 표시
+ * - 진하게 표시하여 입력 요소와 구분
+ */
+.filter-label {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    white-space: nowrap;
+}
+
+/**
+ * Radio 버튼 라벨
+ * - radio input과 텍스트를 감싸는 라벨
+ * - cursor: pointer로 클릭 가능함을 표시
+ * - hover 시 배경색 변경으로 인터랙티브함 강조
+ */
+.filter-radio-label {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    cursor: pointer;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-radius: var(--radius-md);
+    transition: background-color 0.2s;
+    font-size: 0.875rem;
+    color: var(--text-primary);
+    font-weight: 400;
+}
+
+.filter-radio-label:hover {
+    background-color: var(--bg-color);
+}
+
+/**
+ * Radio 버튼 스타일
+ * - 브라우저 기본 스타일 사용 (간결함 유지)
+ * - cursor: pointer로 클릭 가능함 명시
+ */
+.filter-radio-label input[type="radio"] {
+    cursor: pointer;
+    width: 16px;
+    height: 16px;
+    margin: 0;
+}
+
+/**
+ * 검색 버튼
+ * - 필터 선택 후 이 버튼을 클릭해야 필터가 적용됨
+ * - 기존 프로젝트의 primary 버튼 스타일 재사용
+ */
+.btn-filter {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.625rem 1.5rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    line-height: 1.5;
+    border-radius: var(--radius-md);
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+    background-color: var(--primary-color);
+    color: white;
+    white-space: nowrap;
+}
+
+.btn-filter:hover {
+    background-color: var(--primary-hover);
+}
+
+.btn-filter:active {
+    transform: scale(0.98);
 }
 
 /* ==========================================================================
@@ -414,10 +523,43 @@ body.modal-open {
         font-size: 1.5rem;
     }
 
+    /**
+     * 모바일에서 controls 영역 세로 배치
+     * - 필터 섹션이 위, 페이지 크기 선택이 아래
+     */
     .controls {
         flex-direction: column;
-        align-items: flex-start;
+        align-items: stretch;
         gap: var(--spacing-md);
+    }
+
+    /**
+     * 모바일에서 필터 섹션 세로 배치
+     * - 필터 그룹과 검색 버튼을 세로로 배치하여 가독성 향상
+     */
+    .filter-section {
+        flex-direction: column;
+        align-items: stretch;
+        gap: var(--spacing-md);
+    }
+
+    /**
+     * 모바일에서 필터 그룹도 세로 배치
+     * - 라벨과 radio 버튼들을 세로로 배치
+     */
+    .filter-group {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--spacing-sm);
+    }
+
+    /**
+     * 모바일에서 검색 버튼 전체 너비
+     * - 터치하기 쉽도록 버튼 크기 확대
+     */
+    .btn-filter {
+        width: 100%;
+        padding: 0.75rem 1.5rem;
     }
 
     .page-size-selector {

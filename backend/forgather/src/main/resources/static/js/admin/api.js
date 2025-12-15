@@ -255,13 +255,61 @@ const API = {
     },
 
     /**
-     * Space 목록 조회 API
+     * Space 목록 조회 API (전체 - 필터 없음)
      * @param {number} page - 페이지 번호 (1부터 시작)
      * @param {number} size - 페이지 크기
      * @returns {Promise<object>} Space 목록 응답
      */
     async getSpaces(page = 1, size = 15) {
         return this.get('/spaces', { page, size }, true);
+    },
+
+    /**
+     * Space 목록 조회 API (필터링)
+     *
+     * @param {number} page - 페이지 번호 (1부터 시작)
+     * @param {number} size - 페이지 크기
+     * @param {object} filters - 필터 조건 객체
+     * @param {boolean|null} filters.hasProduct - 작품 소개 등록 여부 (true: 등록함, false: 미등록, null: 전체)
+     * @returns {Promise<object>} Space 목록 응답
+     *
+     * 엔드포인트: GET /admin/spaces/search
+     *
+     * 쿼리 파라미터:
+     * - page: 페이지 번호 (필수)
+     * - size: 페이지 크기 (필수)
+     * - hasProduct: 작품 소개 등록 여부 (선택)
+     *
+     * 응답 구조:
+     * - spaces: Space 목록 배열
+     * - currentPage: 현재 페이지 번호 (1부터 시작)
+     * - pageSize: 페이지 크기
+     * - totalCount: 전체 Space 개수
+     * - totalPages: 전체 페이지 수
+     *
+     * 사용 예시:
+     * ```javascript
+     * // 작품 소개 등록한 스페이스만 조회
+     * const response = await API.getSpacesByFilters(1, 15, { hasProduct: true });
+     *
+     * // 작품 소개 미등록 스페이스만 조회
+     * const response = await API.getSpacesByFilters(1, 15, { hasProduct: false });
+     * ```
+     *
+     * 주의:
+     * - filters.hasProduct가 null이면 해당 파라미터는 쿼리에 포함되지 않음
+     * - 필터 조건이 없으면 getSpaces() 함수를 사용하는 것이 더 적합
+     * - 향후 다른 필터 추가 시 filters 객체에 프로퍼티 추가
+     */
+    async getSpacesByFilters(page = 1, size = 15, filters = {}) {
+        const params = { page, size };
+
+        // hasProduct 필터가 명시적으로 true 또는 false인 경우에만 파라미터에 추가
+        if (filters.hasProduct !== null && filters.hasProduct !== undefined) {
+            params.hasProduct = filters.hasProduct;
+        }
+
+        return this.get('/spaces/search', params, true);
     },
 
     /**

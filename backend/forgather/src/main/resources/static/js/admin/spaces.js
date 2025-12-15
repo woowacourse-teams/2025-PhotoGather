@@ -9,6 +9,23 @@ let currentPageSize = 15;
 let totalPages = 1;
 let totalCount = 0;
 
+/**
+ * 현재 선택된 필터 상태를 관리하는 객체
+ *
+ * 필터 조건 확장 가이드:
+ * - 새로운 필터를 추가할 때는 이 객체에 프로퍼티를 추가한다.
+ * - 예: { hasProduct: true, isPublic: true, hostName: '홍길동' }
+ * - 각 프로퍼티의 초기값은 null 또는 적절한 기본값으로 설정
+ *
+ * hasProduct 필터 값:
+ * - null: 전체 (필터 없음)
+ * - true: 작품 소개 등록함
+ * - false: 작품 소개 등록하지 않음
+ */
+const filterState = {
+    hasProduct: null
+};
+
 document.addEventListener('DOMContentLoaded', function() {
     // 인증 확인
     if (!Auth.requireAuth()) {
@@ -197,14 +214,59 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     /**
+     * 필터 조건 유무를 확인한다
+     *
+     * @returns {boolean} 필터 조건이 하나라도 있으면 true, 모두 없으면 false
+     *
+     * 동작:
+     * - filterState 객체의 모든 프로퍼티를 확인
+     * - null이 아닌 값이 하나라도 있으면 필터가 설정된 것으로 판단
+     * - 모든 값이 null이면 필터 없음 (전체 조회)
+     *
+     * 확장 포인트:
+     * - 새로운 필터를 추가해도 이 함수는 수정할 필요 없음
+     * - filterState 객체만 업데이트하면 자동으로 처리됨
+     */
+    function hasActiveFilters() {
+        return Object.values(filterState).some(value => value !== null);
+    }
+
+    /**
      * Space 목록 로드
+     *
+     * 호출 시점:
+     * - 페이지 최초 로드 (DOMContentLoaded)
+     * - 필터 검색 버튼 클릭 (applyFilter)
+     * - 페이지 크기 변경 (handlePageSizeChange)
+     * - 페이지네이션 버튼 클릭 (goToPage)
+     *
+     * API 엔드포인트 분기 규칙:
+     * - 필터 조건이 하나라도 있으면 → /admin/spaces/search
+     * - 필터 조건이 없으면 (전체) → /admin/spaces
+     *
+     * 동작 흐름:
+     * 1. 필터 조건 유무 확인 (hasActiveFilters)
+     * 2. 조건에 따라 적절한 API 호출
+     * 3. 응답 데이터로 테이블 렌더링
+     * 4. 페이지네이션 UI 업데이트
      */
     async function loadSpaces() {
         hideError();
         showLoading();
 
         try {
-            const response = await API.getSpaces(currentPage, currentPageSize);
+            let response;
+
+            // 필터 조건이 있는지 확인
+            if (hasActiveFilters()) {
+                // 필터링 API 호출 (/admin/spaces/search)
+                console.log('[Filter] 필터 조건 적용:', filterState);
+                response = await API.getSpacesByFilters(currentPage, currentPageSize, filterState);
+            } else {
+                // 전체 조회 API 호출 (/admin/spaces)
+                console.log('[Filter] 필터 없음 - 전체 조회');
+                response = await API.getSpaces(currentPage, currentPageSize);
+            }
 
             // 상태 업데이트
             currentPage = response.currentPage;
@@ -278,9 +340,60 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
+    /**
+     * 필터 적용 함수
+     *
+     * 호출 시점:
+     * - 사용자가 필터를 선택하고 [검색] 버튼을 클릭했을 때
+     *
+     * 동작 흐름:
+     * 1. HTML에서 선택된 radio 버튼의 value를 읽어온다
+     * 2. value를 적절한 타입으로 변환 ('all' → null, 'true' → true, 'false' → false)
+     * 3. filterState 객체에 저장
+     * 4. 페이지를 1페이지로 초기화 (필터 변경 시 항상 첫 페이지부터 시작)
+     * 5. loadSpaces() 호출하여 목록 갱신
+     *
+     * 확장 포인트:
+     * - 새로운 필터를 추가할 때 이 함수에서 해당 필터 값을 읽어서 filterState에 추가
+     * - 예시:
+     *   ```javascript
+     *   const isPublic = document.querySelector('input[name="isPublic"]:checked').value;
+     *   filterState.isPublic = isPublic === 'all' ? null : isPublic === 'true';
+     *   ```
+     */
+    function applyFilter() {
+        // hasProduct 필터 값 읽기
+        const hasProductValue = document.querySelector('input[name="hasProduct"]:checked').value;
+
+        // 값 변환 및 filterState 업데이트
+        if (hasProductValue === 'all') {
+            filterState.hasProduct = null; // 전체
+        } else if (hasProductValue === 'true') {
+            filterState.hasProduct = true; // 등록함
+        } else if (hasProductValue === 'false') {
+            filterState.hasProduct = false; // 등록하지 않음
+        }
+
+        // 필터 변경 시 페이지를 1페이지로 초기화
+        currentPage = 1;
+
+        // 목록 갱신
+        loadSpaces();
+
+        // 디버깅 로그
+        console.log('[Filter] 필터 적용됨:', filterState);
+    }
+
     // 이벤트 리스너 등록
     pageSizeSelect.addEventListener('change', handlePageSizeChange);
     logoutBtn.addEventListener('click', handleLogout);
+
+    /**
+     * 필터 검색 버튼 클릭 이벤트 리스너
+     * - [검색] 버튼 클릭 시 필터 적용 함수 호출
+     */
+    const applyFilterBtn = document.getElementById('applyFilterBtn');
+    applyFilterBtn.addEventListener('click', applyFilter);
 
     /**
      * 키보드 네비게이션
