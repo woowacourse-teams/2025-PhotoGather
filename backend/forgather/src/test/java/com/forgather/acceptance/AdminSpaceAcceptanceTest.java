@@ -234,7 +234,11 @@ class AdminSpaceAcceptanceTest extends AcceptanceTest {
 
     private void createSpaces(int count) {
         for (int i = 0; i < count; i++) {
-            Space space = spaceRepository.save(SpaceFixture.createSpace());
+            String spaceCode = String.valueOf(i);
+            while (spaceCode.length() != 10) {
+                spaceCode = spaceCode + "a";
+            }
+            Space space = spaceRepository.save(SpaceFixture.createSpaceWithCode(spaceCode));
             spaceHostMapRepository.save(new SpaceHostMap(space, host));
         }
     }
