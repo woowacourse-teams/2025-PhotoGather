@@ -16,11 +16,12 @@ import com.forgather.domain.space.repository.HostRepository;
 import com.forgather.global.auth.repository.SpaceHostMapRepository;
 import com.forgather.domain.space.repository.SpaceRepository;
 import com.forgather.global.auth.model.Host;
+import com.forgather.container.TestOnContainer;
 
 @ActiveProfiles("test")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource(properties = "spring.aop.auto=false")
-class SpaceServiceTest {
+class SpaceServiceTest extends TestOnContainer {
 
     private final SpaceService spaceService;
     private final SpaceRepository spaceRepository;

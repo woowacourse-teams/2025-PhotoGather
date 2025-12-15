@@ -27,11 +27,12 @@ import com.forgather.fixture.GuestBookCardFixture;
 import com.forgather.fixture.GuestFixture;
 import com.forgather.fixture.ProductFixture;
 import com.forgather.fixture.SpaceFixture;
+import com.forgather.container.TestOnContainer;
 
 @Transactional
 @ActiveProfiles("test")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
-class AdminSpaceServiceTest {
+class AdminSpaceServiceTest extends TestOnContainer {
 
     @Autowired
     private AdminSpaceService adminSpaceService;

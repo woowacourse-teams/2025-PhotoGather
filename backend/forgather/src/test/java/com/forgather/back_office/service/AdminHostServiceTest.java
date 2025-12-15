@@ -12,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.forgather.container.TestOnContainer;
 import com.forgather.back_office.dto.AdminHostResponse;
 import com.forgather.back_office.model.AdminUser;
 import com.forgather.back_office.repository.AdminUserRepository;
@@ -28,7 +29,7 @@ import com.forgather.global.auth.repository.SpaceHostMapRepository;
 @Transactional
 @ActiveProfiles("test")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
-class AdminHostServiceTest {
+class AdminHostServiceTest extends TestOnContainer {
 
     @Autowired
     private AdminHostService adminHostService;
