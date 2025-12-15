@@ -73,11 +73,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const errorMessage = document.getElementById('errorMessage');
     const pageSizeSelect = document.getElementById('pageSize');
     const paginationContainer = document.getElementById('pagination');
-    const currentPageSpan = document.getElementById('currentPage');
-    const totalPagesSpan = document.getElementById('totalPages');
-    const totalCountSpan = document.getElementById('totalCount');
-    const prevBtn = document.getElementById('prevBtn');
-    const nextBtn = document.getElementById('nextBtn');
     const logoutBtn = document.getElementById('logoutBtn');
 
     // ======================================================================
@@ -268,29 +263,19 @@ document.addEventListener('DOMContentLoaded', function() {
     /**
      * 페이지네이션 UI 업데이트
      *
-     * 동작:
-     * 1. 현재 페이지, 전체 페이지, 전체 아이템 개수 표시
-     * 2. 이전 버튼 활성화/비활성화 (currentPage <= 1이면 비활성화)
-     * 3. 다음 버튼 활성화/비활성화 (currentPage >= totalPages이면 비활성화)
-     * 4. 페이지네이션 컨테이너 표시
-     *
-     * 버튼 비활성화 시:
-     * - disabled 속성 추가
-     * - CSS에서 투명도 낮추고 cursor: not-allowed 적용
+     * PaginationUtil을 사용하여 숫자 페이지 네비게이션을 렌더링합니다.
+     * - 현재 페이지, 전체 페이지, 전체 아이템 개수를 표시
+     * - 페이지 클릭 시 goToPage 함수 호출
+     * - « ‹ 1 2 3 4 5 › » 형태의 버튼 렌더링
      */
     function updatePagination() {
-        currentPageSpan.textContent = currentPage;
-        totalPagesSpan.textContent = totalPages;
-        totalCountSpan.textContent = totalCount;
-
-        // 이전 버튼 활성화/비활성화
-        prevBtn.disabled = currentPage <= 1;
-
-        // 다음 버튼 활성화/비활성화
-        nextBtn.disabled = currentPage >= totalPages;
-
-        // 페이지네이션 표시
-        paginationContainer.style.display = 'flex';
+        PaginationUtil.render(
+            paginationContainer,
+            currentPage,
+            totalPages,
+            totalCount,
+            goToPage
+        );
     }
 
     // ======================================================================
@@ -348,11 +333,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
     /**
      * 페이지 이동
+     *
      * @param {number} page - 이동할 페이지 번호
      *
+     * 동작:
      * - 유효성 검사: page가 1 ~ totalPages 범위 내인지 확인
      * - 범위를 벗어나면 무시 (아무 동작도 하지 않음)
      * - 유효한 경우 currentPage를 업데이트하고 데이터 재로드
+     * - PaginationUtil에서 페이지 버튼 클릭 시 이 함수가 호출됨
      */
     function goToPage(page) {
         if (page < 1 || page > totalPages) {
@@ -361,24 +349,6 @@ document.addEventListener('DOMContentLoaded', function() {
         currentPage = page;
         loadHosts();
     }
-
-    /**
-     * 이전 페이지로 이동
-     * - window 객체에 할당하여 HTML의 onclick에서 호출 가능하게 함
-     * - 현재 페이지 - 1로 이동
-     */
-    window.goToPreviousPage = function() {
-        goToPage(currentPage - 1);
-    };
-
-    /**
-     * 다음 페이지로 이동
-     * - window 객체에 할당하여 HTML의 onclick에서 호출 가능하게 함
-     * - 현재 페이지 + 1로 이동
-     */
-    window.goToNextPage = function() {
-        goToPage(currentPage + 1);
-    };
 
     // ======================================================================
     // 유틸리티 함수
@@ -453,12 +423,12 @@ document.addEventListener('DOMContentLoaded', function() {
         // 좌측 화살표: 이전 페이지
         if (event.key === 'ArrowLeft' && currentPage > 1) {
             event.preventDefault();
-            goToPreviousPage();
+            goToPage(currentPage - 1);
         }
         // 우측 화살표: 다음 페이지
         else if (event.key === 'ArrowRight' && currentPage < totalPages) {
             event.preventDefault();
-            goToNextPage();
+            goToPage(currentPage + 1);
         }
     });
 

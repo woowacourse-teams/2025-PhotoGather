@@ -21,11 +21,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const errorMessage = document.getElementById('errorMessage');
     const pageSizeSelect = document.getElementById('pageSize');
     const paginationContainer = document.getElementById('pagination');
-    const currentPageSpan = document.getElementById('currentPage');
-    const totalPagesSpan = document.getElementById('totalPages');
-    const totalCountSpan = document.getElementById('totalCount');
-    const prevBtn = document.getElementById('prevBtn');
-    const nextBtn = document.getElementById('nextBtn');
     const logoutBtn = document.getElementById('logoutBtn');
 
     /**
@@ -186,20 +181,19 @@ document.addEventListener('DOMContentLoaded', function() {
 
     /**
      * 페이지네이션 UI 업데이트
+     *
+     * PaginationUtil을 사용하여 숫자 페이지 네비게이션을 렌더링합니다.
+     * - 현재 페이지, 전체 페이지, 전체 아이템 개수를 표시
+     * - 페이지 클릭 시 goToPage 함수 호출
      */
     function updatePagination() {
-        currentPageSpan.textContent = currentPage;
-        totalPagesSpan.textContent = totalPages;
-        totalCountSpan.textContent = totalCount;
-
-        // 이전 버튼 활성화/비활성화
-        prevBtn.disabled = currentPage <= 1;
-
-        // 다음 버튼 활성화/비활성화
-        nextBtn.disabled = currentPage >= totalPages;
-
-        // 페이지네이션 표시
-        paginationContainer.style.display = 'flex';
+        PaginationUtil.render(
+            paginationContainer,
+            currentPage,
+            totalPages,
+            totalCount,
+            goToPage
+        );
     }
 
     /**
@@ -234,7 +228,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
     /**
      * 페이지 이동
+     *
      * @param {number} page - 이동할 페이지 번호
+     *
+     * 동작:
+     * - 유효한 페이지 범위인지 확인 (1 ~ totalPages)
+     * - 유효하면 currentPage를 업데이트하고 데이터 재로드
+     * - PaginationUtil에서 페이지 버튼 클릭 시 이 함수가 호출됨
      */
     function goToPage(page) {
         if (page < 1 || page > totalPages) {
@@ -243,20 +243,6 @@ document.addEventListener('DOMContentLoaded', function() {
         currentPage = page;
         loadSpaces();
     }
-
-    /**
-     * 이전 페이지로 이동
-     */
-    window.goToPreviousPage = function() {
-        goToPage(currentPage - 1);
-    };
-
-    /**
-     * 다음 페이지로 이동
-     */
-    window.goToNextPage = function() {
-        goToPage(currentPage + 1);
-    };
 
     /**
      * HTML 이스케이프 (XSS 방지)
@@ -296,17 +282,23 @@ document.addEventListener('DOMContentLoaded', function() {
     pageSizeSelect.addEventListener('change', handlePageSizeChange);
     logoutBtn.addEventListener('click', handleLogout);
 
-    // 키보드 네비게이션
+    /**
+     * 키보드 네비게이션
+     * - 좌측 화살표: 이전 페이지
+     * - 우측 화살표: 다음 페이지
+     *
+     * 접근성 향상을 위한 기능
+     */
     document.addEventListener('keydown', function(event) {
         // 좌측 화살표: 이전 페이지
         if (event.key === 'ArrowLeft' && currentPage > 1) {
             event.preventDefault();
-            goToPreviousPage();
+            goToPage(currentPage - 1);
         }
         // 우측 화살표: 다음 페이지
         else if (event.key === 'ArrowRight' && currentPage < totalPages) {
             event.preventDefault();
-            goToNextPage();
+            goToPage(currentPage + 1);
         }
     });
 
