@@ -509,7 +509,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
     /**
      * 모달에 스페이스 상세 정보 표시
-     * @param {object} data - API 응답 데이터 (space, hasProduct, guestBookCount)
+     *
+     * API: GET /admin/spaces/{spaceCode}
+     * @param {object} data - API 응답 데이터 (SpaceDetailResponse)
+     * @param {object} data.space - 스페이스 기본 정보 (SimpleSpaceResponse)
+     * @param {number} data.productCount - 등록한 작품 소개 개수
+     * @param {number} data.guestBookCount - 방명록 개수
      */
     function showModalContent(data) {
         resetModalContent();
@@ -525,11 +530,15 @@ document.addEventListener('DOMContentLoaded', function() {
             : '<span class="badge badge-danger">Private</span>';
         modalSpacePublic.innerHTML = publicBadge;
 
-        // 작품 소개 등록 여부 표시
-        const hasProductText = data.hasProduct
-            ? '<span style="color: var(--success-color); font-weight: 600;">Registered</span>'
-            : '<span style="color: var(--text-muted);">Not Registered</span>';
-        modalHasProduct.innerHTML = hasProductText;
+        /**
+         * 작품 소개 등록 상태 표시
+         * - productCount가 0: "작품 소개를 등록하지 않음" (회색 텍스트)
+         * - productCount가 1 이상: "등록한 작품 소개 N개" (녹색 텍스트, 숫자 포맷팅 적용)
+         */
+        const productStatusText = data.productCount === 0
+            ? '<span style="color: var(--text-muted);">작품 소개를 등록하지 않음</span>'
+            : `<span style="color: var(--success-color); font-weight: 600;">${data.productCount.toLocaleString()}개</span>`;
+        modalHasProduct.innerHTML = productStatusText;
 
         // 방명록 개수 표시 (숫자 포맷팅)
         modalGuestBookCount.textContent = data.guestBookCount.toLocaleString();
