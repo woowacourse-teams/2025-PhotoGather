@@ -2,11 +2,11 @@ package com.forgather.container;
 
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
-import org.testcontainers.containers.MySQLContainer;
+import org.testcontainers.mysql.MySQLContainer;
 
 public class TestOnContainer {
 
-    protected static final MySQLContainer<?> mysql = new MySQLContainer<>("mysql:8.0.42")
+    protected static final MySQLContainer mysql = new MySQLContainer("mysql:8.0.42")
         .withDatabaseName("testdb")
         .withUsername("test")
         .withPassword("test");
