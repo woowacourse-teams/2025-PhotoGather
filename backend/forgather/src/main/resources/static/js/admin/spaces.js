@@ -387,7 +387,9 @@ document.addEventListener('DOMContentLoaded', function () {
      * - [검색] 버튼 클릭 시 필터 적용 함수 호출
      */
     const applyFilterBtn = document.getElementById('applyFilterBtn');
-    applyFilterBtn.addEventListener('click', applyFilter);
+    if (applyFilterBtn) {
+        applyFilterBtn.addEventListener('click', applyFilter);
+    }
 
     /**
      * 키보드 네비게이션
