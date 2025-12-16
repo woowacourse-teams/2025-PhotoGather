@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.forgather.back_office.dto.AdminSpaceFilterRequest;
 import com.forgather.back_office.dto.AdminSpaceResponse;
 import com.forgather.back_office.dto.SpaceDetailResponse;
-import com.forgather.back_office.repository.AdminUserRepository;
+import com.forgather.container.TestOnContainer;
 import com.forgather.domain.guestbook.model.Guest;
 import com.forgather.domain.guestbook.repository.GuestBookCardRepository;
 import com.forgather.domain.guestbook.repository.GuestRepository;
@@ -26,7 +26,6 @@ import com.forgather.fixture.GuestBookCardFixture;
 import com.forgather.fixture.GuestFixture;
 import com.forgather.fixture.ProductFixture;
 import com.forgather.fixture.SpaceFixture;
-import com.forgather.container.TestOnContainer;
 
 @Transactional
 @ActiveProfiles("test")
@@ -35,9 +34,6 @@ class AdminSpaceServiceTest extends TestOnContainer {
 
     @Autowired
     private AdminSpaceService adminSpaceService;
-
-    @Autowired
-    private AdminUserRepository adminUserRepository;
 
     @Autowired
     private SpaceRepository spaceRepository;
@@ -76,18 +72,18 @@ class AdminSpaceServiceTest extends TestOnContainer {
     @Test
     void getSpaceDetail() {
         // given
-        Space space = spaceRepository.save(SpaceFixture.createSpaceWithCode("1234567890"));
+        Space space = spaceRepository.save(SpaceFixture.createSpace());
         productRepository.save(ProductFixture.createProductWithSpace(space));
         Guest guest = guestRepository.save(GuestFixture.createGuest());
         guestBookCardRepository.save(GuestBookCardFixture.createGuestBookCard(space, guest, "메시지1"));
         guestBookCardRepository.save(GuestBookCardFixture.createGuestBookCard(space, guest, "메시지2"));
 
         // when
-        SpaceDetailResponse result = adminSpaceService.getSpaceDetail("1234567890");
+        SpaceDetailResponse result = adminSpaceService.getSpaceDetail(space.getCode());
 
         // then
         assertAll(
-            () -> assertThat(result.space().code()).isEqualTo("1234567890"),
+            () -> assertThat(result.space().code()).isEqualTo(space.getCode()),
             () -> assertThat(result.hasProduct()).isTrue(),
             () -> assertThat(result.guestBookCount()).isEqualTo(2)
         );
@@ -97,9 +93,9 @@ class AdminSpaceServiceTest extends TestOnContainer {
     @Test
     void getSpacesHasProduct() {
         // given
-        Space space1 = spaceRepository.save(SpaceFixture.createSpaceWithCode("3333333333"));
-        Space space2 = spaceRepository.save(SpaceFixture.createSpaceWithCode("4444444444"));
-        Space space3 = spaceRepository.save(SpaceFixture.createSpaceWithCode("5555555555"));
+        Space space1 = spaceRepository.save(SpaceFixture.createSpaceWithCode("1111111111"));
+        Space space2 = spaceRepository.save(SpaceFixture.createSpaceWithCode("2222222222"));
+        spaceRepository.save(SpaceFixture.createSpaceWithCode("3333333333"));
         productRepository.save(ProductFixture.createProductWithSpace(space1));
         productRepository.save(ProductFixture.createProductWithSpace(space2));
         AdminSpaceFilterRequest request = new AdminSpaceFilterRequest(true);
@@ -110,8 +106,9 @@ class AdminSpaceServiceTest extends TestOnContainer {
         // then
         assertAll(
             () -> assertThat(result.spaces()).hasSize(2),
-            () -> assertThat(result.spaces().get(0).code()).isEqualTo(space2.getCode()),
-            () -> assertThat(result.spaces().get(1).code()).isEqualTo(space1.getCode())
+            () -> assertThat(result.spaces())
+                .extracting("code")
+                .containsExactlyInAnyOrder(space1.getCode(), space2.getCode())
         );
     }
 
@@ -119,8 +116,8 @@ class AdminSpaceServiceTest extends TestOnContainer {
     @Test
     void getSpacesHasNoProduct() {
         // given
-        Space space1 = spaceRepository.save(SpaceFixture.createSpaceWithCode("6666666666"));
-        Space space2 = spaceRepository.save(SpaceFixture.createSpaceWithCode("7777777777"));
+        Space space1 = spaceRepository.save(SpaceFixture.createSpaceWithCode("1111111111"));
+        Space space2 = spaceRepository.save(SpaceFixture.createSpaceWithCode("2222222222"));
         productRepository.save(ProductFixture.createProductWithSpace(space1));
         AdminSpaceFilterRequest request = new AdminSpaceFilterRequest(false);
 

@@ -32,6 +32,7 @@ import com.forgather.global.auth.model.Host;
 import com.forgather.global.auth.model.SpaceHostMap;
 import com.forgather.global.auth.repository.SpaceHostMapRepository;
 import com.forgather.global.auth.util.JwtTokenProvider;
+import com.forgather.global.util.RandomCodeGenerator;
 
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
 
@@ -64,6 +65,9 @@ class AdminSpaceAcceptanceTest extends AcceptanceTest {
 
     @Autowired
     private JwtTokenProvider jwtTokenProvider;
+
+    @Autowired
+    private RandomCodeGenerator randomCodeGenerator;
 
     private AdminUser adminUser;
     private String accessToken;
@@ -311,10 +315,7 @@ class AdminSpaceAcceptanceTest extends AcceptanceTest {
 
     private void createSpaces(int count) {
         for (int i = 0; i < count; i++) {
-            String spaceCode = String.valueOf(i);
-            while (spaceCode.length() != 10) {
-                spaceCode = spaceCode + "a";
-            }
+            String spaceCode = randomCodeGenerator.generate(10);
             Space space = spaceRepository.save(SpaceFixture.createSpaceWithCode(spaceCode));
             spaceHostMapRepository.save(new SpaceHostMap(space, host));
         }
@@ -322,7 +323,8 @@ class AdminSpaceAcceptanceTest extends AcceptanceTest {
 
     private void createSpacesWithProduct(int count) {
         for (int i = 0; i < count; i++) {
-            Space space = spaceRepository.save(SpaceFixture.createSpace());
+            String spaceCode = randomCodeGenerator.generate(10);
+            Space space = spaceRepository.save(SpaceFixture.createSpaceWithCode(spaceCode));
             spaceHostMapRepository.save(new SpaceHostMap(space, host));
             productRepository.save(ProductFixture.createProductWithSpace(space));
         }
