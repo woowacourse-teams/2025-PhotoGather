@@ -175,8 +175,6 @@ const Auth = {
         }
 
         try {
-            console.log('[Auth] Access Token 갱신 시도 중...');
-
             // 주의: 여기서는 API.request()를 사용하면 안 됨 (무한 루프)
             // 직접 fetch를 사용하여 Refresh Token API 호출
             const response = await fetch('/admin/refresh', {
@@ -184,7 +182,7 @@ const Auth = {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ refreshToken })
+                body: JSON.stringify({refreshToken})
             });
 
             // 401/404: Refresh Token 만료 또는 유효하지 않음
@@ -210,7 +208,6 @@ const Auth = {
                 this.setRefreshToken(data.refreshToken);
             }
 
-            console.log('[Auth] Access Token이 성공적으로 갱신되었습니다.');
             return data.accessToken;
 
         } catch (error) {

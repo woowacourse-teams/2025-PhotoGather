@@ -104,8 +104,6 @@ const API = {
 
                 // Token Refresh 시도
                 try {
-                    console.log('[API] Access Token 갱신 시도...');
-
                     // 동시 다중 401 에러 처리: tokenRefreshPromise 캐싱
                     // 이미 갱신 중이면 기존 Promise 재사용, 아니면 새로 시작
                     if (!tokenRefreshPromise) {
@@ -117,8 +115,6 @@ const API = {
 
                     // 갱신 완료 후 캐시 리셋 (다음 401 에러를 위해)
                     tokenRefreshPromise = null;
-
-                    console.log('[API] Access Token 갱신 완료. 원래 요청 재시도:', url);
 
                     // 새 Access Token으로 Authorization 헤더 업데이트
                     if (options.headers && options.headers['Authorization']) {
@@ -251,7 +247,7 @@ const API = {
      * @returns {Promise<object>} 로그인 응답 (accessToken, refreshToken)
      */
     async login(username, password) {
-        return this.post('/login', { username, password }, false);
+        return this.post('/login', {username, password}, false);
     },
 
     /**
@@ -261,7 +257,7 @@ const API = {
      * @returns {Promise<object>} Space 목록 응답
      */
     async getSpaces(page = 1, size = 15) {
-        return this.get('/spaces', { page, size }, true);
+        return this.get('/spaces', {page, size}, true);
     },
 
     /**
@@ -302,7 +298,7 @@ const API = {
      * - 향후 다른 필터 추가 시 filters 객체에 프로퍼티 추가
      */
     async getSpacesByFilters(page = 1, size = 15, filters = {}) {
-        const params = { page, size };
+        const params = {page, size};
 
         // hasProduct 필터가 명시적으로 true 또는 false인 경우에만 파라미터에 추가
         if (filters.hasProduct !== null && filters.hasProduct !== undefined) {
@@ -379,7 +375,7 @@ const API = {
      * - 페이지 번호는 1부터 시작 (서버에서 0-based를 1-based로 변환하여 반환)
      */
     async getHosts(page = 1, size = 15) {
-        return this.get('/hosts', { page, size }, true);
+        return this.get('/hosts', {page, size}, true);
     }
 };
 

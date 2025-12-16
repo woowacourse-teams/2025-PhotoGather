@@ -26,7 +26,7 @@ const filterState = {
     hasProduct: null
 };
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     // 인증 확인
     if (!Auth.requireAuth()) {
         return;
@@ -260,11 +260,9 @@ document.addEventListener('DOMContentLoaded', function() {
             // 필터 조건이 있는지 확인
             if (hasActiveFilters()) {
                 // 필터링 API 호출 (/admin/spaces/search)
-                console.log('[Filter] 필터 조건 적용:', filterState);
                 response = await API.getSpacesByFilters(currentPage, currentPageSize, filterState);
             } else {
                 // 전체 조회 API 호출 (/admin/spaces)
-                console.log('[Filter] 필터 없음 - 전체 조회');
                 response = await API.getSpaces(currentPage, currentPageSize);
             }
 
@@ -379,9 +377,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // 목록 갱신
         loadSpaces();
-
-        // 디버깅 로그
-        console.log('[Filter] 필터 적용됨:', filterState);
     }
 
     // 이벤트 리스너 등록
@@ -402,7 +397,7 @@ document.addEventListener('DOMContentLoaded', function() {
      *
      * 접근성 향상을 위한 기능
      */
-    document.addEventListener('keydown', function(event) {
+    document.addEventListener('keydown', function (event) {
         // 좌측 화살표: 이전 페이지
         if (event.key === 'ArrowLeft' && currentPage > 1) {
             event.preventDefault();
@@ -634,7 +629,7 @@ document.addEventListener('DOMContentLoaded', function() {
      * 3. Code 컬럼이면 data-space-code 속성에서 spaceCode를 읽어옴
      * 4. loadSpaceDetail 함수를 호출하여 모달 표시
      */
-    spacesTableBody.addEventListener('click', function(event) {
+    spacesTableBody.addEventListener('click', function (event) {
         // 클릭된 요소가 td인지, 그리고 두 번째 컬럼(Code)인지 확인
         const target = event.target;
 
@@ -662,7 +657,7 @@ document.addEventListener('DOMContentLoaded', function() {
      * - currentOpenSpaceCode는 모달을 열 때 설정됨 (loadSpaceDetail 함수)
      * - URL 생성은 getSpacePageUrl 함수가 담당 (환경별 도메인 처리)
      */
-    visitSpaceBtn.addEventListener('click', function() {
+    visitSpaceBtn.addEventListener('click', function () {
         if (currentOpenSpaceCode) {
             const url = getSpacePageUrl(currentOpenSpaceCode);
             window.open(url, '_blank', 'noopener,noreferrer');
@@ -672,7 +667,7 @@ document.addEventListener('DOMContentLoaded', function() {
     /**
      * 모달 닫기 버튼 클릭 핸들러
      */
-    closeModalBtn.addEventListener('click', function() {
+    closeModalBtn.addEventListener('click', function () {
         closeModal();
     });
 
@@ -686,7 +681,7 @@ document.addEventListener('DOMContentLoaded', function() {
      * - event.currentTarget: 이벤트 리스너가 등록된 요소 (항상 modal)
      * - 둘이 같다는 것은 오버레이를 직접 클릭했다는 의미
      */
-    modal.addEventListener('click', function(event) {
+    modal.addEventListener('click', function (event) {
         if (event.target === modal) {
             closeModal();
         }
@@ -697,7 +692,7 @@ document.addEventListener('DOMContentLoaded', function() {
      * - 키보드 접근성 향상
      * - 모달이 열려있을 때만 동작 (modal.classList.contains('show'))
      */
-    document.addEventListener('keydown', function(event) {
+    document.addEventListener('keydown', function (event) {
         if (event.key === 'Escape' && modal.classList.contains('show')) {
             closeModal();
         }
