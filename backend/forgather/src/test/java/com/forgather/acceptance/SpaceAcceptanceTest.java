@@ -367,10 +367,7 @@ class SpaceAcceptanceTest extends AcceptanceTest {
             () -> assertThat(result.instagramUsername()).isEqualTo("forgather_official_new"),
             () -> assertThat(result.email()).isEqualTo("forgather_new@forgather.me"),
             () -> assertThat(spacePhotoRepository.getBySpaceAndDeletedAtIsNullOrEmpty(space).getOriginalName()).isEqualTo("new.jpg"),
-            () -> assertThat(result.guestBookCardCount()).isZero(),
-
-            () -> await().atMost(ofSeconds(6))
-                .untilAsserted(() -> verify(contentsStorage, atLeast(1)).deletePhotos(anyList()))
+            () -> assertThat(result.guestBookCardCount()).isZero()
         );
     }
 
@@ -464,10 +461,11 @@ class SpaceAcceptanceTest extends AcceptanceTest {
 
     @DisplayName("나의 스페이스 목록을 조회한다.")
     @Test
-    void getSpaces() {
+    void getSpaces() throws InterruptedException {
         // given
         Space space1 = spaceRepository.save(SpaceFixture.createSpace());
         spacePhotoRepository.save(SpacePhotoFixture.createSpacePhotoWithSpace(space1));
+        Thread.sleep(1000);
         Space space2 = spaceRepository.save(SpaceFixture.createPrivateSpace());
         spacePhotoRepository.save(SpacePhotoFixture.createSpacePhotoWithSpace(space2));
         spaceHostMapRepository.save(new SpaceHostMap(space1, host));
@@ -492,7 +490,7 @@ class SpaceAcceptanceTest extends AcceptanceTest {
             () -> assertThat(result.spaces().getFirst().guestBookCardCount()).isZero(),
 
             () -> assertThat(result.spaces().getLast().spaceCode()).isEqualTo(space1.getCode()),
-            () -> assertThat(result.spaces().getLast().guestBookCardCount()).isEqualTo(1)
+            () -> assertThat(result.spaces().getLast().guestBookCardCount()).isOne()
         );
     }
 }

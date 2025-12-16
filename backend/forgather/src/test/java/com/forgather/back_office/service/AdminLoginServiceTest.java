@@ -11,6 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.forgather.container.TestOnContainer;
 import com.forgather.back_office.dto.AdminLoginRequest;
 import com.forgather.back_office.dto.AdminLoginResponse;
 import com.forgather.back_office.repository.AdminUserRepository;
@@ -20,7 +21,7 @@ import com.forgather.global.exception.BaseException;
 @Transactional
 @ActiveProfiles("test")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
-class AdminLoginServiceTest {
+class AdminLoginServiceTest extends TestOnContainer {
 
     @Autowired
     private AdminLoginService adminLoginService;

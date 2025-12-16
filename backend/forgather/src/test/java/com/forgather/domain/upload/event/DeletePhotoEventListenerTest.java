@@ -20,13 +20,14 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 
+import com.forgather.container.TestOnContainer;
 import com.forgather.domain.guestbook.model.GuestBookCardPhoto;
 import com.forgather.domain.upload.domain.ContentsStorage;
 
 import software.amazon.awssdk.core.exception.SdkClientException;
 
 @SpringBootTest
-class DeletePhotoEventListenerTest {
+class DeletePhotoEventListenerTest extends TestOnContainer {
 
     @Autowired
     private ApplicationEventPublisher applicationEventPublisher;
