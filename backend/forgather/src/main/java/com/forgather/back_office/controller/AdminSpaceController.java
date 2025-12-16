@@ -28,7 +28,7 @@ public class AdminSpaceController {
 
     @GetMapping
     public ResponseEntity<AdminSpaceResponse> getAllSpaces(
-        @PageableDefault(size = 15, sort = {"id"}, direction = Sort.Direction.DESC)
+        @PageableDefault(size = 15, sort = {"createdAt"}, direction = Sort.Direction.DESC)
         Pageable pageable,
         @Admin AdminUser adminUser
     ) {
