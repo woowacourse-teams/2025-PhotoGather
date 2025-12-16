@@ -30,7 +30,6 @@ public interface SpaceRepository {
                 (:hasProduct = true AND p.id IS NOT NULL) OR
                         (:hasProduct = false AND p.id IS NULL)
         )
-        ORDER BY s.createdAt DESC
         """)
     Page<Space> findAllByDeletedAtIsNullAndProductFilter(
         @Param("hasProduct") boolean hasProduct,
