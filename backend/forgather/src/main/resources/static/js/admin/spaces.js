@@ -360,17 +360,16 @@ document.addEventListener('DOMContentLoaded', function () {
      *   ```
      */
     function applyFilter() {
-        // hasProduct 필터 값 읽기
-        const hasProductValue = document.querySelector('input[name="hasProduct"]:checked').value;
+        // Optional Chaining (?.)으로 안전하게 접근 후, Nullish Coalescing (??)으로 기본값 설정
+        const hasProductValue = document.querySelector('input[name="hasProduct"]:checked')?.value ?? 'all';
 
-        // 값 변환 및 filterState 업데이트
-        if (hasProductValue === 'all') {
-            filterState.hasProduct = null; // 전체
-        } else if (hasProductValue === 'true') {
-            filterState.hasProduct = true; // 등록함
-        } else if (hasProductValue === 'false') {
-            filterState.hasProduct = false; // 등록하지 않음
-        }
+        // 매핑 로직 개선 (객체 리터럴 활용으로 if-else 제거)
+        const filterMap = {
+            'all': null,
+            'true': true,
+            'false': false
+        };
+        filterState.hasProduct = filterMap[hasProductValue];
 
         // 필터 변경 시 페이지를 1페이지로 초기화
         currentPage = 1;
