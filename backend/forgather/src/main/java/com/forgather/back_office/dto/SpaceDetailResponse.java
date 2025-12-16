@@ -4,11 +4,11 @@ import com.forgather.domain.space.model.Space;
 
 public record SpaceDetailResponse(
     SimpleSpaceResponse space,
-    Boolean hasProduct,
+    Long productCount,
     Long guestBookCount
 ) {
 
-    public static SpaceDetailResponse of(Space space, Boolean hasProduct, Long guestBookCount) {
-        return new SpaceDetailResponse(SimpleSpaceResponse.from(space), hasProduct, guestBookCount);
+    public static SpaceDetailResponse of(Space space, Long productCount, Long guestBookCount) {
+        return new SpaceDetailResponse(SimpleSpaceResponse.from(space), productCount, guestBookCount);
     }
 }

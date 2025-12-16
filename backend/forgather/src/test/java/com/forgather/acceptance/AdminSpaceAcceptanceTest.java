@@ -155,7 +155,7 @@ class AdminSpaceAcceptanceTest extends AcceptanceTest {
         // then
         assertAll(
             () -> assertThat(result.space().code()).isEqualTo(space.getCode()),
-            () -> assertThat(result.hasProduct()).isTrue(),
+            () -> assertThat(result.productCount()).isOne(),
             () -> assertThat(result.guestBookCount()).isEqualTo(2)
         );
     }
@@ -185,7 +185,7 @@ class AdminSpaceAcceptanceTest extends AcceptanceTest {
         // then
         assertAll(
             () -> assertThat(result.space().code()).isEqualTo(space.getCode()),
-            () -> assertThat(result.hasProduct()).isFalse(),
+            () -> assertThat(result.productCount()).isZero(),
             () -> assertThat(result.guestBookCount()).isEqualTo(2)
         );
     }
@@ -211,7 +211,7 @@ class AdminSpaceAcceptanceTest extends AcceptanceTest {
         // then
         assertAll(
             () -> assertThat(result.space().code()).isEqualTo(space.getCode()),
-            () -> assertThat(result.hasProduct()).isFalse(),
+            () -> assertThat(result.productCount()).isZero(),
             () -> assertThat(result.guestBookCount()).isZero()
         );
     }

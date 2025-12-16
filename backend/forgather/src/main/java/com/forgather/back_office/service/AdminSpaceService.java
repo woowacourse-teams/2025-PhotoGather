@@ -32,13 +32,12 @@ public class AdminSpaceService {
     @Transactional(readOnly = true)
     public SpaceDetailResponse getSpaceDetail(String spaceCode) {
         Space space = spaceRepository.getByCodeAndDeletedAtIsNullOrThrow(spaceCode);
-        boolean hasProduct = !productRepository.findAllBySpace(space)
-            .isEmpty();
+        Long productCount = productRepository.countBySpace(space);
         Long guestBookCardCount = guestBookCardRepository.countBySpace(space);
 
-        return SpaceDetailResponse.of(space, hasProduct, guestBookCardCount);
+        return SpaceDetailResponse.of(space, productCount, guestBookCardCount);
     }
-    
+
     @Transactional(readOnly = true)
     public AdminSpaceResponse getSpacesByFilters(AdminSpaceFilterRequest request, Pageable pageable) {
         Page<Space> spaces;

@@ -84,7 +84,7 @@ class AdminSpaceServiceTest extends TestOnContainer {
         // then
         assertAll(
             () -> assertThat(result.space().code()).isEqualTo(space.getCode()),
-            () -> assertThat(result.hasProduct()).isTrue(),
+            () -> assertThat(result.productCount()).isOne(),
             () -> assertThat(result.guestBookCount()).isEqualTo(2)
         );
     }
