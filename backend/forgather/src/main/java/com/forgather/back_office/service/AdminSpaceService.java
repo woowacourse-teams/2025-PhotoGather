@@ -17,19 +17,18 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class AdminSpaceService {
 
     private final SpaceRepository spaceRepository;
     private final ProductRepository productRepository;
     private final GuestBookCardRepository guestBookCardRepository;
 
-    @Transactional(readOnly = true)
     public AdminSpaceResponse getAllSpaces(Pageable pageable) {
         Page<Space> spaces = spaceRepository.findAllByDeletedAtIsNull(pageable);
         return AdminSpaceResponse.from(spaces);
     }
 
-    @Transactional(readOnly = true)
     public SpaceDetailResponse getSpaceDetail(String spaceCode) {
         Space space = spaceRepository.getByCodeAndDeletedAtIsNullOrThrow(spaceCode);
         Long productCount = productRepository.countBySpace(space);
@@ -38,7 +37,6 @@ public class AdminSpaceService {
         return SpaceDetailResponse.of(space, productCount, guestBookCardCount);
     }
 
-    @Transactional(readOnly = true)
     public AdminSpaceResponse getSpacesByFilters(AdminSpaceFilterRequest request, Pageable pageable) {
         Page<Space> spaces;
         if (request.hasProduct() == null) {
