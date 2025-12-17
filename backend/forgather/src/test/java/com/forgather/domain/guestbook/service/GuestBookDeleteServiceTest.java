@@ -96,7 +96,11 @@ public class GuestBookDeleteServiceTest {
             () -> assertThat(guestBookCard3.getDeletedAt()).isNotNull(),
 
             () -> assertThat(guestBookCardPhoto1.getDeletedAt()).isNotNull(),
-            () -> assertThat(guestBookCardPhoto2.getDeletedAt()).isNotNull()
+            () -> assertThat(guestBookCardPhoto2.getDeletedAt()).isNotNull(),
+
+            () -> assertThat(guestBookCardRepository.findAllBySpaceAndDeletedAtIsNull(space))
+                .extracting(GuestBookCard::getId)
+                .containsExactly(guestBookCard2.getId())
         );
     }
 
@@ -116,7 +120,9 @@ public class GuestBookDeleteServiceTest {
             () -> assertThat(guestBookCardRepository.count()).isEqualTo(3),
             () -> assertThat(guestBookCard1.getDeletedAt()).isNotNull(),
             () -> assertThat(guestBookCard2.getDeletedAt()).isNotNull(),
-            () -> assertThat(guestBookCard3.getDeletedAt()).isNotNull()
+            () -> assertThat(guestBookCard3.getDeletedAt()).isNotNull(),
+
+            () -> assertThat(guestBookCardRepository.findAllBySpaceAndDeletedAtIsNull(space)).isEmpty()
         );
     }
 }
