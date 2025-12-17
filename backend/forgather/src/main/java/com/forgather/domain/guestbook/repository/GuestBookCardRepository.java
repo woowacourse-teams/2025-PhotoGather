@@ -22,8 +22,6 @@ public interface GuestBookCardRepository {
 
     Optional<GuestBookCard> findByIdAndDeletedAtIsNull(Long id);
 
-    void delete(GuestBookCard guestBookCard);
-
     Long countBySpaceAndDeletedAtIsNull(Space space);
 
     @Query("""

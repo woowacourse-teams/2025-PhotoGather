@@ -9,8 +9,4 @@ public interface GuestBookCardPhotoRepository {
     <S extends GuestBookCardPhoto> List<S> saveAll(Iterable<S> photos);
 
     List<GuestBookCardPhoto> findAllByGuestBookCardAndDeletedAtIsNull(GuestBookCard guestBookCard);
-
-    void deleteAll(Iterable<? extends GuestBookCardPhoto> photos);
-
-    Boolean existsByGuestBookCard(GuestBookCard guestBookCard);
 }
