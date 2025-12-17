@@ -102,7 +102,7 @@ public class GuestBookDeleteServiceTest {
 
     @DisplayName("주어진 스페이스에 속하는 모든 방명록을 논리 삭제한다")
     @Test
-    void aaa() {
+    void softDeleteGuestBookBySpace() {
         // given
         GuestBookCard guestBookCard1 = guestBookCardRepository.save(new GuestBookCard(space, guest, "test1"));
         GuestBookCard guestBookCard2 = guestBookCardRepository.save(new GuestBookCard(space, guest, "test2"));
