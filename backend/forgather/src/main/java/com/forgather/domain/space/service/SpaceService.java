@@ -123,7 +123,7 @@ public class SpaceService {
     }
 
     private SpaceResponse createSpaceResponse(Space space) {
-        Long guestBookCardCount = guestBookCardRepository.countBySpace(space);
+        Long guestBookCardCount = guestBookCardRepository.countBySpaceAndDeletedAtIsNull(space);
         SpacePhoto spacePhoto = spacePhotoRepository.getBySpaceAndDeletedAtIsNullOrEmpty(space);
         return SpaceResponse.from(space, spacePhoto, guestBookCardCount);
     }
@@ -183,7 +183,7 @@ public class SpaceService {
             .map(spaceHostMap -> spaceHostMap.getSpace().getId())
             .toList();
 
-        Map<Long, Long> guestBookCardCounts = guestBookCardRepository.countBySpaceIdIn(spaceIds)
+        Map<Long, Long> guestBookCardCounts = guestBookCardRepository.countBySpaceIdAndDeletedAtIsNullIn(spaceIds)
             .stream()
             .collect(Collectors.toMap(
                 SpaceGuestBookCountDto::spaceId,

@@ -20,11 +20,11 @@ public interface GuestBookCardRepository {
 
     GuestBookCard save(GuestBookCard guestBookCard);
 
-    Optional<GuestBookCard> findById(Long id);
+    Optional<GuestBookCard> findByIdAndDeletedAtIsNull(Long id);
 
     void delete(GuestBookCard guestBookCard);
 
-    Long countBySpace(Space space);
+    Long countBySpaceAndDeletedAtIsNull(Space space);
 
     @Query("""
         SELECT new com.forgather.domain.guestbook.repository.dto.SpaceGuestBookCountDto(
@@ -32,10 +32,10 @@ public interface GuestBookCardRepository {
             COUNT(g.id)
         )
         FROM GuestBookCard g
-        WHERE g.space.id IN :spaceIds
+        WHERE g.space.id IN :spaceIds AND g.deletedAt IS NULL
         GROUP BY g.space.id
         """)
-    List<SpaceGuestBookCountDto> countBySpaceIdIn(@Param("spaceIds") List<Long> spaceIds);
+    List<SpaceGuestBookCountDto> countBySpaceIdAndDeletedAtIsNullIn(@Param("spaceIds") List<Long> spaceIds);
 
     @Query("""
             SELECT new com.forgather.domain.guestbook.repository.dto.GuestBookCardListDto(
@@ -48,19 +48,19 @@ public interface GuestBookCardRepository {
             )
             FROM GuestBookCard g
             JOIN g.guest guest
-            WHERE g.space = :space
+            WHERE g.space = :space AND g.deletedAt IS NULL
         """)
-    Page<GuestBookCardListDto> findAllDtoBySpace(@Param("space") Space space, Pageable pageable);
+    Page<GuestBookCardListDto> findAllDtoBySpaceAndDeletedAtIsNull(@Param("space") Space space, Pageable pageable);
 
-    List<GuestBookCard> findAllBySpace(Space space);
+    List<GuestBookCard> findAllBySpaceAndDeletedAtIsNull(Space space);
 
     long count();
 
-    default GuestBookCard getByIdOrThrow(Long id) {
+    default GuestBookCard getByIdAndDeletedAtIsNullOrThrow(Long id) {
         if (id == null) {
             throw new BaseNullPointerException("방명록 카드의 id는 null일 수 없습니다.", HttpStatus.BAD_REQUEST);
         }
-        return findById(id)
+        return findByIdAndDeletedAtIsNull(id)
             .orElseThrow(() -> new NotFoundException("존재하지 않는 방명록 카드입니다. id: " + id));
     }
 }

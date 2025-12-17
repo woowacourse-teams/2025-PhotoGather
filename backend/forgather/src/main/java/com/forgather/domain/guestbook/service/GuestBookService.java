@@ -88,7 +88,7 @@ public class GuestBookService {
         Space space = spaceRepository.getByCodeAndDeletedAtIsNullOrThrow(spaceCode);
         validateCanRead(space, host);
         boolean isHost = host != null && isSpaceHost(space, host);
-        Page<GuestBookCardListDto> guestBookCardDtos = guestBookCardRepository.findAllDtoBySpace(space, pageable);
+        Page<GuestBookCardListDto> guestBookCardDtos = guestBookCardRepository.findAllDtoBySpaceAndDeletedAtIsNull(space, pageable);
         Page<GuestBookCardSimpleResponse> simpleResponses = guestBookCardDtos.map(
             guestBookCardDto -> new GuestBookCardSimpleResponse(
                 guestBookCardDto.id(),
@@ -127,7 +127,7 @@ public class GuestBookService {
     @Transactional
     public void deleteAllCardsBySpace(Host host, Space space) {
         validateSpaceHost(host, space);
-        for (GuestBookCard guestBookCard : guestBookCardRepository.findAllBySpace(space)) {
+        for (GuestBookCard guestBookCard : guestBookCardRepository.findAllBySpaceAndDeletedAtIsNull(space)) {
             deleteCard(host, space.getCode(), guestBookCard.getId());
         }
     }
@@ -168,7 +168,7 @@ public class GuestBookService {
     }
 
     private GuestBookCard getGuestBookCard(Long guestBookCardId, Space space) {
-        GuestBookCard guestBookCard = guestBookCardRepository.getByIdOrThrow(guestBookCardId);
+        GuestBookCard guestBookCard = guestBookCardRepository.getByIdAndDeletedAtIsNullOrThrow(guestBookCardId);
         if (guestBookCard.equalsSpace(space)) {
             return guestBookCard;
         }

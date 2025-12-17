@@ -32,7 +32,7 @@ public class AdminSpaceService {
     public SpaceDetailResponse getSpaceDetail(String spaceCode) {
         Space space = spaceRepository.getByCodeAndDeletedAtIsNullOrThrow(spaceCode);
         Long productCount = productRepository.countBySpace(space);
-        Long guestBookCardCount = guestBookCardRepository.countBySpace(space);
+        Long guestBookCardCount = guestBookCardRepository.countBySpaceAndDeletedAtIsNull(space);
 
         return SpaceDetailResponse.of(space, productCount, guestBookCardCount);
     }
