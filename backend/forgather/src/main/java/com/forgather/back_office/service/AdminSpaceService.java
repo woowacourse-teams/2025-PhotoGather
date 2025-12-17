@@ -38,13 +38,14 @@ public class AdminSpaceService {
     }
 
     public AdminSpaceResponse getSpacesByFilters(AdminSpaceFilterRequest request, Pageable pageable) {
-        Page<Space> spaces;
         if (request.hasProduct() == null) {
-            spaces = spaceRepository.findAllByDeletedAtIsNull(pageable);
-            return AdminSpaceResponse.from(spaces);
+            Page<Space> allSpaces = spaceRepository.findAllByDeletedAtIsNull(pageable);
+            return AdminSpaceResponse.from(allSpaces);
         }
 
-        spaces = spaceRepository.findAllByDeletedAtIsNullAndProductFilter(request.hasProduct(), pageable);
-        return AdminSpaceResponse.from(spaces);
+        Page<Space> filteredSpaces = spaceRepository.findAllByDeletedAtIsNullAndProductFilter(
+            request.hasProduct(), pageable
+        );
+        return AdminSpaceResponse.from(filteredSpaces);
     }
 }
