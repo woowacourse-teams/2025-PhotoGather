@@ -8,7 +8,7 @@ import com.forgather.domain.guestbook.model.GuestBookCardPhoto;
 public interface GuestBookCardPhotoRepository {
     <S extends GuestBookCardPhoto> List<S> saveAll(Iterable<S> photos);
 
-    List<GuestBookCardPhoto> findAllByGuestBookCard(GuestBookCard guestBookCard);
+    List<GuestBookCardPhoto> findAllByGuestBookCardAndDeletedAtIsNull(GuestBookCard guestBookCard);
 
     void deleteAll(Iterable<? extends GuestBookCardPhoto> photos);
 

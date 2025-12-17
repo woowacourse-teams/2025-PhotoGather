@@ -110,7 +110,7 @@ public class GuestBookService {
             guestBookCard.read();
         }
 
-        List<GuestBookCardPhoto> photos = guestBookCardPhotoRepository.findAllByGuestBookCard(guestBookCard);
+        List<GuestBookCardPhoto> photos = guestBookCardPhotoRepository.findAllByGuestBookCardAndDeletedAtIsNull(guestBookCard);
         return new GuestBookCardResponse(guestBookCard, photos);
     }
 
@@ -142,7 +142,7 @@ public class GuestBookService {
     }
 
     private void deleteGuestBookCardPhotos(GuestBookCard guestBookCard) {
-        List<GuestBookCardPhoto> photos = guestBookCardPhotoRepository.findAllByGuestBookCard(guestBookCard);
+        List<GuestBookCardPhoto> photos = guestBookCardPhotoRepository.findAllByGuestBookCardAndDeletedAtIsNull(guestBookCard);
         if (!photos.isEmpty()) {
             deleteGuestBookCardPhotos(photos);
         }
@@ -164,7 +164,7 @@ public class GuestBookService {
 
     private GuestBookCardPhotos getGuestBookCardPhotos(Space space, Long guestBookCardId) {
         GuestBookCard guestBookCard = getGuestBookCard(guestBookCardId, space);
-        return new GuestBookCardPhotos(guestBookCardPhotoRepository.findAllByGuestBookCard(guestBookCard));
+        return new GuestBookCardPhotos(guestBookCardPhotoRepository.findAllByGuestBookCardAndDeletedAtIsNull(guestBookCard));
     }
 
     private GuestBookCard getGuestBookCard(Long guestBookCardId, Space space) {
