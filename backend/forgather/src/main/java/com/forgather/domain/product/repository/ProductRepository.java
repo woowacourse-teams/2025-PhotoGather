@@ -17,7 +17,7 @@ public interface ProductRepository {
 
     Optional<Product> findBySpaceAndIdAndDeletedAtIsNull(Space space, Long id);
 
-    Long countBySpace(Space space);
+    Long countBySpaceAndDeletedAtIsNull(Space space);
 
     default Product getBySpaceAndIdAndDeletedAtIsNullOrThrow(Space space, Long id) {
         if (space == null) {

@@ -87,7 +87,7 @@ public class ProductService {
     }
 
     private void validateExceedProductMaxCount(Space space) {
-        Long counts = productRepository.countBySpace(space);
+        Long counts = productRepository.countBySpaceAndDeletedAtIsNull(space);
         if (counts >= PRODUCTS_MAX_COUNT) {
             throw new BaseException("작품은 3개까지만 등록 가능합니다. spaceCode: " + space.getCode());
         }
