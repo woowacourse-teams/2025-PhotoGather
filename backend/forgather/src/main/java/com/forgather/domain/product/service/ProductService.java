@@ -6,7 +6,6 @@ import static com.forgather.domain.upload.domain.UploadCategory.PRODUCT;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,7 +22,6 @@ import com.forgather.domain.product.repository.ProductRepository;
 import com.forgather.domain.space.model.Space;
 import com.forgather.domain.space.repository.SpaceRepository;
 import com.forgather.domain.upload.domain.ContentsStorage;
-import com.forgather.domain.upload.event.DeletePhotoEvent;
 import com.forgather.global.auth.model.Host;
 import com.forgather.global.auth.repository.SpaceHostMapRepository;
 import com.forgather.global.exception.BaseException;
@@ -38,7 +36,6 @@ public class ProductService {
 
     private static final int PRODUCTS_MAX_COUNT = 3;
 
-    private final ApplicationEventPublisher eventPublisher;
     private final ProductRepository productRepository;
     private final ProductPhotoRepository productPhotoRepository;
     private final SpaceRepository spaceRepository;
@@ -133,7 +130,7 @@ public class ProductService {
         validateSpaceHost(host, space);
         Product product = productRepository.getBySpaceAndIdOrThrow(space, productId);
         deleteAllProductPhotos(product);
-        productRepository.delete(product);
+        product.delete();
     }
 
     /**
@@ -144,7 +141,7 @@ public class ProductService {
         validateSpaceHost(host, space);
         for (Product product : productRepository.findAllBySpace(space)) {
             deleteAllProductPhotos(product);
-            productRepository.delete(product);
+            product.delete();
         }
     }
 
@@ -162,8 +159,9 @@ public class ProductService {
      * productPhotos만 삭제
      */
     private void deleteProductPhotos(List<ProductPhoto> productPhotos) {
-        productPhotoRepository.deleteAll(productPhotos);
-        eventPublisher.publishEvent(new DeletePhotoEvent(this, productPhotos)); // 클라우드 삭제 이벤트 발행
+        for (ProductPhoto productPhoto : productPhotos) {
+            productPhoto.delete();
+        }
     }
 
     private void validateSpaceHost(Host host, Space space) {

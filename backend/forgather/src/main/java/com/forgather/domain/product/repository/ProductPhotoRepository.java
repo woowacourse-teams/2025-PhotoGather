@@ -14,8 +14,6 @@ public interface ProductPhotoRepository {
 
     List<ProductPhoto> findAllByProduct(Product product);
 
-    void deleteAll(Iterable<? extends ProductPhoto> photos);
-
     <S extends ProductPhoto> List<S> saveAll(Iterable<S> photos);
 
 }

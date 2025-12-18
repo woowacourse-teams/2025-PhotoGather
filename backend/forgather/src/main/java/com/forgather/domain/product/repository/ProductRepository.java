@@ -13,8 +13,6 @@ import com.forgather.global.exception.NotFoundException;
 public interface ProductRepository {
     Product save(Product product);
 
-    void delete(Product product);
-
     List<Product> findAllBySpace(Space space);
 
     Optional<Product> findBySpaceAndId(Space space, Long id);
