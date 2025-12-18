@@ -25,7 +25,7 @@ interface HostPhotoListModalProps {
   onDelete?: (photoId: number) => void;
 }
 
-const HostPhotoModal = ({
+const HostPhotoListModal = ({
   isOpen,
   photoList,
   initialPhotoIndex,
@@ -163,4 +163,4 @@ const HostPhotoModal = ({
   );
 };
 
-export default HostPhotoModal;
+export default HostPhotoListModal;
