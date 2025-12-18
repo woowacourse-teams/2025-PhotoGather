@@ -1,4 +1,4 @@
-package com.forgather.domain.product.model;
+package com.forgather.domain.product.service;
 
 import static com.forgather.fixture.ProductFixture.createProductWithSpace;
 import static com.forgather.fixture.ProductPhotoFixture.createProductPhotoWithProduct;
@@ -14,9 +14,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 
+import com.forgather.domain.product.model.Product;
+import com.forgather.domain.product.model.ProductPhoto;
 import com.forgather.domain.product.repository.ProductPhotoRepository;
 import com.forgather.domain.product.repository.ProductRepository;
-import com.forgather.domain.product.service.ProductService;
 import com.forgather.domain.space.model.Space;
 import com.forgather.domain.space.repository.HostRepository;
 import com.forgather.domain.space.repository.SpaceRepository;
