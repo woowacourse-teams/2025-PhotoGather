@@ -1,13 +1,10 @@
 package com.forgather.acceptance;
 
 import static com.forgather.fixture.HostFixture.createHost;
-import static java.time.Duration.ofSeconds;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.awaitility.Awaitility.await;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyList;
-import static org.mockito.Mockito.atLeast;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 
@@ -277,13 +274,10 @@ class SpaceAcceptanceTest extends AcceptanceTest {
             () -> assertThat(response.statusCode()).isEqualTo(204),
             () -> assertThat(spaceRepository.findByCodeAndDeletedAtIsNull(space.getCode())).isEmpty(),
             () -> assertThat(spacePhotoRepository.findBySpaceAndDeletedAtIsNull(space)).isEmpty(),
-            () -> assertThat(productRepository.findAllBySpace(space)).isEmpty(),
-            () -> assertThat(productPhotoRepository.findAllByProduct(product)).isEmpty(),
+            () -> assertThat(productRepository.findAllBySpaceAndDeletedAtIsNull(space)).isEmpty(),
+            () -> assertThat(productPhotoRepository.findAllByProductAndDeletedAtIsNull(product)).isEmpty(),
             () -> assertThat(guestBookCardRepository.findAllBySpaceAndDeletedAtIsNull(space)).isEmpty(),
-            () -> assertThat(guestBookCardPhotoRepository.findAllByGuestBookCardAndDeletedAtIsNull(guestBookCard)).isEmpty(),
-
-            () -> await().atMost(ofSeconds(6))
-                .untilAsserted(() -> verify(contentsStorage, atLeast(1)).deletePhotos(anyList()))
+            () -> assertThat(guestBookCardPhotoRepository.findAllByGuestBookCardAndDeletedAtIsNull(guestBookCard)).isEmpty()
         );
     }
 

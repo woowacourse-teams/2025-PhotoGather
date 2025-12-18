@@ -48,11 +48,11 @@ public class ProductService {
     @Transactional(readOnly = true)
     public ProductsResponse getAll(String spaceCode) {
         Space space = spaceRepository.getByCodeAndDeletedAtIsNullOrThrow(spaceCode);
-        List<Product> products = productRepository.findAllBySpace(space);
+        List<Product> products = productRepository.findAllBySpaceAndDeletedAtIsNull(space);
         List<SimpleProductResponse> productResponses = products.stream()
             .map(product -> new SimpleProductResponse(
                 product,
-                productPhotoRepository.findFirstByProduct(product).orElse(null))
+                productPhotoRepository.findFirstByProductAndDeletedAtIsNull(product).orElse(null))
             ).toList();
         return new ProductsResponse(productResponses);
     }
@@ -60,8 +60,8 @@ public class ProductService {
     @Transactional(readOnly = true)
     public ProductResponse get(String spaceCode, Long productId) {
         Space space = spaceRepository.getByCodeAndDeletedAtIsNullOrThrow(spaceCode);
-        Product product = productRepository.getBySpaceAndIdOrThrow(space, productId);
-        ProductPhotos productPhotos = new ProductPhotos(productPhotoRepository.findAllByProduct(product));
+        Product product = productRepository.getBySpaceAndIdAndDeletedAtIsNullOrThrow(space, productId);
+        ProductPhotos productPhotos = new ProductPhotos(productPhotoRepository.findAllByProductAndDeletedAtIsNull(product));
         return new ProductResponse(product, productPhotos.getAll());
     }
 
@@ -98,12 +98,12 @@ public class ProductService {
         // Product 정보 수정
         Space space = spaceRepository.getByCodeAndDeletedAtIsNullOrThrow(spaceCode);
         validateSpaceHost(host, space);
-        Product product = productRepository.getBySpaceAndIdOrThrow(space, productId);
+        Product product = productRepository.getBySpaceAndIdAndDeletedAtIsNullOrThrow(space, productId);
         product.update(request.title(), request.category(), request.authorName(), request.description(),
             request.videoUrl(), request.isVideoAfterPhoto());
 
         // 삭제 사진 db 및 클라우드 삭제
-        ProductPhotos photos = new ProductPhotos(productPhotoRepository.findAllByProduct(product));
+        ProductPhotos photos = new ProductPhotos(productPhotoRepository.findAllByProductAndDeletedAtIsNull(product));
         List<ProductPhoto> deletedPhotos = photos.deleteByIds(request.deletePhotoIds());
         deleteProductPhotos(deletedPhotos);
 
@@ -128,7 +128,7 @@ public class ProductService {
     public void deleteV2(Host host, String spaceCode, Long productId) {
         Space space = spaceRepository.getByCodeAndDeletedAtIsNullOrThrow(spaceCode);
         validateSpaceHost(host, space);
-        Product product = productRepository.getBySpaceAndIdOrThrow(space, productId);
+        Product product = productRepository.getBySpaceAndIdAndDeletedAtIsNullOrThrow(space, productId);
         deleteAllProductPhotos(product);
         product.delete();
     }
@@ -139,7 +139,7 @@ public class ProductService {
     @Transactional
     public void deleteIfExists(Host host, Space space) {
         validateSpaceHost(host, space);
-        for (Product product : productRepository.findAllBySpace(space)) {
+        for (Product product : productRepository.findAllBySpaceAndDeletedAtIsNull(space)) {
             deleteAllProductPhotos(product);
             product.delete();
         }
@@ -149,7 +149,7 @@ public class ProductService {
      * product와 연관된 모든 ProductPhoto 삭제
      */
     private void deleteAllProductPhotos(Product product) {
-        List<ProductPhoto> photos = productPhotoRepository.findAllByProduct(product);
+        List<ProductPhoto> photos = productPhotoRepository.findAllByProductAndDeletedAtIsNull(product);
         if (!photos.isEmpty()) {
             deleteProductPhotos(photos);
         }
