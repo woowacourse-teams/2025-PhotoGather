@@ -14,15 +14,14 @@ export const Wrapper = styled.div`
 `;
 
 export const ImageWrapper = styled.div`
-  max-width: ${({ theme }) => `calc(${theme.layout.width} - 20px)`};
   display: flex;
   justify-content: center;
   align-items: center;
-`;
+  `;
 
 export const Image = styled.img`
-  width: 100%;
-  height: 100%;
+max-width: ${({ theme }) => `calc(${theme.layout.width} - 40px)`};
+  max-height: 70vh;
   object-fit: contain;
   border-radius: 8px;
 `;
