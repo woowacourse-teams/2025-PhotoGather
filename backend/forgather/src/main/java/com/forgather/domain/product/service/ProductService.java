@@ -66,7 +66,7 @@ public class ProductService {
     }
 
     @Transactional
-    public ProductResponse registerV3(Host host, String spaceCode, RegisterProductRequest request) {
+    public ProductResponse register(Host host, String spaceCode, RegisterProductRequest request) {
         Space space = spaceRepository.getByCodeAndDeletedAtIsNullOrThrow(spaceCode);
         validateSpaceHost(host, space);
         validateExceedProductMaxCount(space);
@@ -94,7 +94,7 @@ public class ProductService {
     }
 
     @Transactional
-    public ProductResponse updateV3(Host host, String spaceCode, Long productId, UpdateProductRequest request) {
+    public ProductResponse update(Host host, String spaceCode, Long productId, UpdateProductRequest request) {
         // Product 정보 수정
         Space space = spaceRepository.getByCodeAndDeletedAtIsNullOrThrow(spaceCode);
         validateSpaceHost(host, space);
@@ -125,7 +125,7 @@ public class ProductService {
     }
 
     @Transactional
-    public void deleteV2(Host host, String spaceCode, Long productId) {
+    public void delete(Host host, String spaceCode, Long productId) {
         Space space = spaceRepository.getByCodeAndDeletedAtIsNullOrThrow(spaceCode);
         validateSpaceHost(host, space);
         Product product = productRepository.getBySpaceAndIdAndDeletedAtIsNullOrThrow(space, productId);

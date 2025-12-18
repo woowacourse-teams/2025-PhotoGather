@@ -60,7 +60,7 @@ public class ProductController {
         @RequestBody RegisterProductRequest request,
         @LoginHost(required = true) Host host
     ) {
-        var response = productService.registerV3(host, spaceCode, request);
+        var response = productService.register(host, spaceCode, request);
         return ResponseEntity.status(CREATED).body(response);
     }
 
@@ -74,7 +74,7 @@ public class ProductController {
         @RequestBody UpdateProductRequest request,
         @LoginHost(required = true) Host host
     ) {
-        var response = productService.updateV3(host, spaceCode, productId, request);
+        var response = productService.update(host, spaceCode, productId, request);
         return ResponseEntity.ok().body(response);
     }
 
@@ -86,7 +86,7 @@ public class ProductController {
         @PathVariable(value = "productId") Long productId,
         @LoginHost(required = true) Host host
     ) {
-        productService.deleteV2(host, spaceCode, productId);
+        productService.delete(host, spaceCode, productId);
         return ResponseEntity.noContent().build();
     }
 }
