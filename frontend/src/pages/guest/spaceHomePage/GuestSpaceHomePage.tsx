@@ -19,7 +19,6 @@ import { DividerLine } from '../../../styles/@common/DividerLine.styles';
 import { buildThumbnailUrl } from '../../../utils/buildImageUrl';
 import { createInstagramUrl } from '../../../utils/createExternalLinks';
 import * as MainPageStyles from '../../MainPage.common.styles';
-import { mockAccess } from '../../mockData';
 
 const GuestSpaceHomePage = () => {
   const navigate = useNavigate();
@@ -116,7 +115,6 @@ const GuestSpaceHomePage = () => {
               trackClick('guest_space_work_intro_button');
               navigate(createGuestWorkListRoute(spaceCode ?? ''));
             }}
-            disabled={!mockAccess.introduce}
           />
           <Button
             variant="elevated"
