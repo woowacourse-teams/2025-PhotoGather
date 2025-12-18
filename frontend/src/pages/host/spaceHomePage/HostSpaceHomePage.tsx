@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import {
   IoLogoInstagram,
   IoMailOutline,
@@ -9,7 +9,6 @@ import { useNavigate, useParams } from 'react-router-dom';
 import Button from '../../../components/@common/buttons/button/Button';
 import IconButton from '../../../components/@common/buttons/iconButton/IconButton';
 import Thumbnail from '../../../components/@common/thumbnail/Thumbnail';
-import EventModal from '../../../components/specific/modal/eventModadl/EventModal';
 import SinglePhotoModal from '../../../components/specific/modal/singlePhotoModal/SinglePhotoModal';
 import SpaceShareModal from '../../../components/specific/modal/spaceShareModal/SpaceShareModal';
 import {
@@ -22,7 +21,6 @@ import useUserInfoContext from '../../../hooks/context/userInfoContext';
 import useSpaceInfoContext from '../../../hooks/context/useSpaceInfoContext';
 import { DividerLine } from '../../../styles/@common/DividerLine.styles';
 import { buildThumbnailUrl } from '../../../utils/buildImageUrl';
-import { canOpenEventModal } from '../../../utils/canOpenEventModal';
 import { createInstagramUrl } from '../../../utils/createExternalLinks';
 import * as MainPageStyles from '../../MainPage.common.styles';
 import * as S from './HostSpaceHomePage.styles';
@@ -31,16 +29,9 @@ const HostSpaceHomePage = () => {
   const navigate = useNavigate();
   const { spaceCode = '' } = useParams();
   const { spaceInfo } = useSpaceInfoContext();
-  const [isEventModalOpen, setIsEventModalOpen] = useState(false);
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const [isSpaceImageModalOpen, setIsSpaceImageModalOpen] = useState(false);
   const userInfo = useUserInfoContext();
-
-  useEffect(() => {
-    setIsEventModalOpen(
-      canOpenEventModal({ endDate: '2025-11-20T00:00:00+09:00' }),
-    );
-  }, []);
 
   const { trackClick } = useButtonTracking({
     userType: 'host',
@@ -81,18 +72,8 @@ const HostSpaceHomePage = () => {
     navigate(createGuestbookRoute(spaceCode));
   };
 
-  const handleCloseEventModal = () => {
-    trackClick('close_event_modal');
-    setIsEventModalOpen(false);
-  };
-
   return (
     <>
-      <EventModal
-        isOpen={isEventModalOpen}
-        onClose={handleCloseEventModal}
-        spaceCode={spaceCode}
-      />
       <SpaceShareModal
         isOpen={isShareModalOpen}
         onClose={closeShareModal}
