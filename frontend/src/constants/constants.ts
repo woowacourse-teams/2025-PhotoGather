@@ -69,3 +69,11 @@ export const TRY_IT_NOW_SPACE_CODE = {
   PROD: '1d4cc97597',
 };
 export const KAKAO_CHANNEL_URL = 'https://pf.kakao.com/_rHNtn';
+
+export const EVENT_MODAL_CONTENT_1127 = {
+  TITLE: '[서비스 중단] 11/27 새벽 인프라 이전 작업 공지',
+  DESCRIPTION: `더 안정적인 서비스 제공을 위해\n11/27(수) 00:00–06:00 동안 인프라 이전 작업이 진행됩니다. \n\n해당 시간 동안 서비스 이용이 불가능합니다.
+(방명록 작성 및 수정, 작품 등록 및 편집 등 전체 기능 일시 중단) \n\n최대한 빠르게 작업을 마칠 수 있도록 하겠습니다.
+이용에 불편을 드려 죄송합니다.`,
+  END_DATE: '2025-11-20T00:00:00+09:00',
+};
