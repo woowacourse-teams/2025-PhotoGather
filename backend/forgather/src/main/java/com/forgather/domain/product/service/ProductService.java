@@ -6,7 +6,6 @@ import static com.forgather.domain.upload.domain.UploadCategory.PRODUCT;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,7 +22,6 @@ import com.forgather.domain.product.repository.ProductRepository;
 import com.forgather.domain.space.model.Space;
 import com.forgather.domain.space.repository.SpaceRepository;
 import com.forgather.domain.upload.domain.ContentsStorage;
-import com.forgather.domain.upload.event.DeletePhotoEvent;
 import com.forgather.global.auth.model.Host;
 import com.forgather.global.auth.repository.SpaceHostMapRepository;
 import com.forgather.global.exception.BaseException;
@@ -38,7 +36,6 @@ public class ProductService {
 
     private static final int PRODUCTS_MAX_COUNT = 3;
 
-    private final ApplicationEventPublisher eventPublisher;
     private final ProductRepository productRepository;
     private final ProductPhotoRepository productPhotoRepository;
     private final SpaceRepository spaceRepository;
@@ -50,27 +47,27 @@ public class ProductService {
      */
     @Transactional(readOnly = true)
     public ProductsResponse getAll(String spaceCode) {
-        Space space = spaceRepository.getByCodeOrThrow(spaceCode);
-        List<Product> products = productRepository.findAllBySpace(space);
+        Space space = spaceRepository.getByCodeAndDeletedAtIsNullOrThrow(spaceCode);
+        List<Product> products = productRepository.findAllBySpaceAndDeletedAtIsNull(space);
         List<SimpleProductResponse> productResponses = products.stream()
             .map(product -> new SimpleProductResponse(
                 product,
-                productPhotoRepository.findFirstByProduct(product).orElse(null))
+                productPhotoRepository.findFirstByProductAndDeletedAtIsNull(product).orElse(null))
             ).toList();
         return new ProductsResponse(productResponses);
     }
 
     @Transactional(readOnly = true)
     public ProductResponse get(String spaceCode, Long productId) {
-        Space space = spaceRepository.getByCodeOrThrow(spaceCode);
-        Product product = productRepository.getBySpaceAndIdOrThrow(space, productId);
-        ProductPhotos productPhotos = new ProductPhotos(productPhotoRepository.findAllByProduct(product));
+        Space space = spaceRepository.getByCodeAndDeletedAtIsNullOrThrow(spaceCode);
+        Product product = productRepository.getBySpaceAndIdAndDeletedAtIsNullOrThrow(space, productId);
+        ProductPhotos productPhotos = new ProductPhotos(productPhotoRepository.findAllByProductAndDeletedAtIsNull(product));
         return new ProductResponse(product, productPhotos.getAll());
     }
 
     @Transactional
-    public ProductResponse registerV3(Host host, String spaceCode, RegisterProductRequest request) {
-        Space space = spaceRepository.getByCodeOrThrow(spaceCode);
+    public ProductResponse register(Host host, String spaceCode, RegisterProductRequest request) {
+        Space space = spaceRepository.getByCodeAndDeletedAtIsNullOrThrow(spaceCode);
         validateSpaceHost(host, space);
         validateExceedProductMaxCount(space);
         Product product = productRepository.save(request.toEntity(space));
@@ -90,23 +87,23 @@ public class ProductService {
     }
 
     private void validateExceedProductMaxCount(Space space) {
-        Long counts = productRepository.countBySpace(space);
-        if (counts >= PRODUCTS_MAX_COUNT) {
+        Long count = productRepository.countBySpaceAndDeletedAtIsNull(space);
+        if (count >= PRODUCTS_MAX_COUNT) {
             throw new BaseException("작품은 3개까지만 등록 가능합니다. spaceCode: " + space.getCode());
         }
     }
 
     @Transactional
-    public ProductResponse updateV3(Host host, String spaceCode, Long productId, UpdateProductRequest request) {
+    public ProductResponse update(Host host, String spaceCode, Long productId, UpdateProductRequest request) {
         // Product 정보 수정
-        Space space = spaceRepository.getByCodeOrThrow(spaceCode);
+        Space space = spaceRepository.getByCodeAndDeletedAtIsNullOrThrow(spaceCode);
         validateSpaceHost(host, space);
-        Product product = productRepository.getBySpaceAndIdOrThrow(space, productId);
+        Product product = productRepository.getBySpaceAndIdAndDeletedAtIsNullOrThrow(space, productId);
         product.update(request.title(), request.category(), request.authorName(), request.description(),
             request.videoUrl(), request.isVideoAfterPhoto());
 
         // 삭제 사진 db 및 클라우드 삭제
-        ProductPhotos photos = new ProductPhotos(productPhotoRepository.findAllByProduct(product));
+        ProductPhotos photos = new ProductPhotos(productPhotoRepository.findAllByProductAndDeletedAtIsNull(product));
         List<ProductPhoto> deletedPhotos = photos.deleteByIds(request.deletePhotoIds());
         deleteProductPhotos(deletedPhotos);
 
@@ -128,12 +125,12 @@ public class ProductService {
     }
 
     @Transactional
-    public void deleteV2(Host host, String spaceCode, Long productId) {
-        Space space = spaceRepository.getByCodeOrThrow(spaceCode);
+    public void delete(Host host, String spaceCode, Long productId) {
+        Space space = spaceRepository.getByCodeAndDeletedAtIsNullOrThrow(spaceCode);
         validateSpaceHost(host, space);
-        Product product = productRepository.getBySpaceAndIdOrThrow(space, productId);
+        Product product = productRepository.getBySpaceAndIdAndDeletedAtIsNullOrThrow(space, productId);
         deleteAllProductPhotos(product);
-        productRepository.delete(product);
+        product.delete();
     }
 
     /**
@@ -142,9 +139,9 @@ public class ProductService {
     @Transactional
     public void deleteIfExists(Host host, Space space) {
         validateSpaceHost(host, space);
-        for (Product product : productRepository.findAllBySpace(space)) {
+        for (Product product : productRepository.findAllBySpaceAndDeletedAtIsNull(space)) {
             deleteAllProductPhotos(product);
-            productRepository.delete(product);
+            product.delete();
         }
     }
 
@@ -152,7 +149,7 @@ public class ProductService {
      * product와 연관된 모든 ProductPhoto 삭제
      */
     private void deleteAllProductPhotos(Product product) {
-        List<ProductPhoto> photos = productPhotoRepository.findAllByProduct(product);
+        List<ProductPhoto> photos = productPhotoRepository.findAllByProductAndDeletedAtIsNull(product);
         if (!photos.isEmpty()) {
             deleteProductPhotos(photos);
         }
@@ -162,8 +159,9 @@ public class ProductService {
      * productPhotos만 삭제
      */
     private void deleteProductPhotos(List<ProductPhoto> productPhotos) {
-        productPhotoRepository.deleteAll(productPhotos);
-        eventPublisher.publishEvent(new DeletePhotoEvent(this, productPhotos)); // 클라우드 삭제 이벤트 발행
+        for (ProductPhoto productPhoto : productPhotos) {
+            productPhoto.delete();
+        }
     }
 
     private void validateSpaceHost(Host host, Space space) {
@@ -179,6 +177,6 @@ public class ProductService {
         if (space == null || host == null) {
             throw new BaseNullPointerException("스페이스와 호스트는 null일 수 없습니다.");
         }
-        return spaceHostMapRepository.findBySpaceAndHost(space, host).isPresent();
+        return spaceHostMapRepository.findBySpaceAndHostAndDeletedAtIsNull(space, host).isPresent();
     }
 }

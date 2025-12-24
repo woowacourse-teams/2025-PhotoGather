@@ -11,8 +11,6 @@ public interface ContentsStorage {
 
     String upload(String spaceCode, MultipartFile file) throws IOException;
 
-    void deleteContent(String contentPath);
-
     void deleteContents(List<String> contentPaths);
 
     String issueSignedUrl(String path);

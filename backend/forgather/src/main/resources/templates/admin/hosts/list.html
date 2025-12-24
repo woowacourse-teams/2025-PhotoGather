@@ -110,25 +110,11 @@
 
             <!--
                 Pagination
-                - 페이지네이션 컨트롤을 제공합니다.
-                - 이전/다음 버튼과 현재 페이지 정보를 표시합니다.
-                - JavaScript에서 버튼 활성화/비활성화를 제어합니다.
+                - 숫자 페이지 네비게이션을 제공합니다.
+                - JavaScript의 PaginationUtil을 사용하여 동적으로 렌더링됩니다.
                 - 기본적으로 숨김 상태이며, 데이터 로드 후 표시됩니다.
             -->
-            <div class="pagination" id="pagination" style="display: none;">
-                <button class="pagination-btn" id="prevBtn" onclick="goToPreviousPage()">
-                    Previous
-                </button>
-
-                <span class="pagination-info">
-                    Page <span id="currentPage">1</span> of <span id="totalPages">1</span>
-                    (Total: <span id="totalCount">0</span> items)
-                </span>
-
-                <button class="pagination-btn" id="nextBtn" onclick="goToNextPage()">
-                    Next
-                </button>
-            </div>
+            <div class="pagination" id="pagination" style="display: none;"></div>
         </div>
     </main>
 
@@ -151,15 +137,18 @@
         Scripts
         - auth.js: 인증 관련 유틸리티 (토큰 관리, 로그인 체크)
         - api.js: API 호출 유틸리티 (fetch 래퍼, 401 자동 처리)
+        - pagination.js: 페이지네이션 렌더링 유틸리티
         - hosts.js: 호스트 목록 페이지 로직 (데이터 로딩, 테이블 렌더링, 페이지네이션)
 
         순서가 중요합니다:
         1. auth.js가 먼저 로드되어 Auth 전역 객체 생성
         2. api.js가 Auth를 사용하여 API 전역 객체 생성
-        3. hosts.js가 API를 사용하여 데이터 로드
+        3. pagination.js가 PaginationUtil 전역 객체 생성
+        4. hosts.js가 API와 PaginationUtil을 사용하여 데이터 로드 및 렌더링
     -->
     <script th:src="@{/js/admin/auth.js}"></script>
     <script th:src="@{/js/admin/api.js}"></script>
+    <script th:src="@{/js/admin/pagination.js}"></script>
     <script th:src="@{/js/admin/hosts.js}"></script>
 </body>
 </html>

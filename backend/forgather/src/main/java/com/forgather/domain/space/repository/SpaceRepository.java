@@ -5,6 +5,8 @@ import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import com.forgather.domain.space.model.Space;
 import com.forgather.global.exception.BaseException;
@@ -12,23 +14,35 @@ import com.forgather.global.exception.NotFoundException;
 
 public interface SpaceRepository {
 
-    void delete(Space space);
-
     Space save(Space space);
 
-    Optional<Space> findByCode(String spaceCode);
+    Optional<Space> findByCodeAndDeletedAtIsNull(String spaceCode);
 
-    List<Space> findAll();
+    List<Space> findAllByDeletedAtIsNull();
 
-    Page<Space> findAll(Pageable pageable);
+    Page<Space> findAllByDeletedAtIsNull(Pageable pageable);
+
+    @Query("""
+        SELECT DISTINCT s
+        FROM Space s
+                LEFT JOIN Product p ON p.space = s AND p.deletedAt IS NULL
+        WHERE s.deletedAt IS NULL AND (
+                (:hasProduct = true AND p.id IS NOT NULL) OR
+                        (:hasProduct = false AND p.id IS NULL)
+        )
+        """)
+    Page<Space> findAllByDeletedAtIsNullAndProductFilter(
+        @Param("hasProduct") boolean hasProduct,
+        Pageable pageable
+    );
 
     long count();
 
-    default Space getByCodeOrThrow(String spaceCode) {
+    default Space getByCodeAndDeletedAtIsNullOrThrow(String spaceCode) {
         if (spaceCode == null) {
             throw new BaseException("스페이스 코드는 null일 수 없습니다. code: " + spaceCode);
         }
-        return findByCode(spaceCode)
+        return findByCodeAndDeletedAtIsNull(spaceCode)
             .orElseThrow(() -> new NotFoundException("존재하지 않는 스페이스입니다. spaceCode: " + spaceCode));
     }
 }

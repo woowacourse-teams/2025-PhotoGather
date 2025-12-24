@@ -13,22 +13,20 @@ import com.forgather.global.exception.NotFoundException;
 public interface ProductRepository {
     Product save(Product product);
 
-    void delete(Product product);
+    List<Product> findAllBySpaceAndDeletedAtIsNull(Space space);
 
-    List<Product> findAllBySpace(Space space);
+    Optional<Product> findBySpaceAndIdAndDeletedAtIsNull(Space space, Long id);
 
-    Optional<Product> findBySpaceAndId(Space space, Long id);
+    Long countBySpaceAndDeletedAtIsNull(Space space);
 
-    Long countBySpace(Space space);
-
-    default Product getBySpaceAndIdOrThrow(Space space, Long id) {
+    default Product getBySpaceAndIdAndDeletedAtIsNullOrThrow(Space space, Long id) {
         if (space == null) {
             throw new BaseNullPointerException("스페이스는 null일 수 없습니다.", HttpStatus.INTERNAL_SERVER_ERROR);
         }
         if (id == null) {
             throw new BaseNullPointerException("작품의 id는 null일 수 없습니다.", HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return findBySpaceAndId(space, id)
+        return findBySpaceAndIdAndDeletedAtIsNull(space, id)
             .orElseThrow(() -> new NotFoundException("해당 스페이스에 존재하지 않는 작품입니다. spaceCode: %s, productId: %d"
                 .formatted(space.getCode(), id)));
     }

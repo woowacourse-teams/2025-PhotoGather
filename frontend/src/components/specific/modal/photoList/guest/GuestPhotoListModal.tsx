@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
-import useButtonTracking from '../../../../hooks/@common/useButtonTracking';
-import type { Photo } from '../../../../types/photo.type';
-import { buildThumbnailUrl } from '../../../../utils/buildImageUrl';
-import ImageSwiper from '../../../@common/imageSwiper/ImageSwiper';
-import Modal from '../../../@common/modal/Modal';
-import * as S from './GuestPhotoModal.styles';
+import useButtonTracking from '../../../../../hooks/@common/useButtonTracking';
+import type { Photo } from '../../../../../types/photo.type';
+import { buildThumbnailUrl } from '../../../../../utils/buildImageUrl';
+import ImageSwiper from '../../../../@common/imageSwiper/ImageSwiper';
+import Modal from '../../../../@common/modal/Modal';
+import * as S from './GuestPhotoListModal.styles';
 
-interface PhotoModalProps {
+interface GuestPhotoListModalProps {
   isOpen: boolean;
   photoList: Photo[];
   initialPhotoIndex: number;
@@ -16,13 +16,13 @@ interface PhotoModalProps {
   onDelete?: (photoId: number) => void;
 }
 
-const GuestPhotoModal = ({
+const GuestPhotoListModal = ({
   isOpen,
   photoList,
   initialPhotoIndex,
   spaceCode,
   onClose,
-}: PhotoModalProps) => {
+}: GuestPhotoListModalProps) => {
   const [currentIndex, setCurrentIndex] = useState(initialPhotoIndex);
   const { trackClick } = useButtonTracking({ userType: 'guest', spaceCode });
 
@@ -69,4 +69,4 @@ const GuestPhotoModal = ({
   );
 };
 
-export default GuestPhotoModal;
+export default GuestPhotoListModal;

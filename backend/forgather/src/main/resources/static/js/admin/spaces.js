@@ -9,7 +9,24 @@ let currentPageSize = 15;
 let totalPages = 1;
 let totalCount = 0;
 
-document.addEventListener('DOMContentLoaded', function() {
+/**
+ * 현재 선택된 필터 상태를 관리하는 객체
+ *
+ * 필터 조건 확장 가이드:
+ * - 새로운 필터를 추가할 때는 이 객체에 프로퍼티를 추가한다.
+ * - 예: { hasProduct: true, isPublic: true, hostName: '홍길동' }
+ * - 각 프로퍼티의 초기값은 null 또는 적절한 기본값으로 설정
+ *
+ * hasProduct 필터 값:
+ * - null: 전체 (필터 없음)
+ * - true: 작품 소개 등록함
+ * - false: 작품 소개 등록하지 않음
+ */
+const filterState = {
+    hasProduct: null
+};
+
+document.addEventListener('DOMContentLoaded', function () {
     // 인증 확인
     if (!Auth.requireAuth()) {
         return;
@@ -21,11 +38,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const errorMessage = document.getElementById('errorMessage');
     const pageSizeSelect = document.getElementById('pageSize');
     const paginationContainer = document.getElementById('pagination');
-    const currentPageSpan = document.getElementById('currentPage');
-    const totalPagesSpan = document.getElementById('totalPages');
-    const totalCountSpan = document.getElementById('totalCount');
-    const prevBtn = document.getElementById('prevBtn');
-    const nextBtn = document.getElementById('nextBtn');
     const logoutBtn = document.getElementById('logoutBtn');
 
     /**
@@ -186,31 +198,73 @@ document.addEventListener('DOMContentLoaded', function() {
 
     /**
      * 페이지네이션 UI 업데이트
+     *
+     * PaginationUtil을 사용하여 숫자 페이지 네비게이션을 렌더링합니다.
+     * - 현재 페이지, 전체 페이지, 전체 아이템 개수를 표시
+     * - 페이지 클릭 시 goToPage 함수 호출
      */
     function updatePagination() {
-        currentPageSpan.textContent = currentPage;
-        totalPagesSpan.textContent = totalPages;
-        totalCountSpan.textContent = totalCount;
+        PaginationUtil.render(
+            paginationContainer,
+            currentPage,
+            totalPages,
+            totalCount,
+            goToPage
+        );
+    }
 
-        // 이전 버튼 활성화/비활성화
-        prevBtn.disabled = currentPage <= 1;
-
-        // 다음 버튼 활성화/비활성화
-        nextBtn.disabled = currentPage >= totalPages;
-
-        // 페이지네이션 표시
-        paginationContainer.style.display = 'flex';
+    /**
+     * 필터 조건 유무를 확인한다
+     *
+     * @returns {boolean} 필터 조건이 하나라도 있으면 true, 모두 없으면 false
+     *
+     * 동작:
+     * - filterState 객체의 모든 프로퍼티를 확인
+     * - null이 아닌 값이 하나라도 있으면 필터가 설정된 것으로 판단
+     * - 모든 값이 null이면 필터 없음 (전체 조회)
+     *
+     * 확장 포인트:
+     * - 새로운 필터를 추가해도 이 함수는 수정할 필요 없음
+     * - filterState 객체만 업데이트하면 자동으로 처리됨
+     */
+    function hasActiveFilters() {
+        return Object.values(filterState).some(value => value !== null);
     }
 
     /**
      * Space 목록 로드
+     *
+     * 호출 시점:
+     * - 페이지 최초 로드 (DOMContentLoaded)
+     * - 필터 검색 버튼 클릭 (applyFilter)
+     * - 페이지 크기 변경 (handlePageSizeChange)
+     * - 페이지네이션 버튼 클릭 (goToPage)
+     *
+     * API 엔드포인트 분기 규칙:
+     * - 필터 조건이 하나라도 있으면 → /admin/spaces/search
+     * - 필터 조건이 없으면 (전체) → /admin/spaces
+     *
+     * 동작 흐름:
+     * 1. 필터 조건 유무 확인 (hasActiveFilters)
+     * 2. 조건에 따라 적절한 API 호출
+     * 3. 응답 데이터로 테이블 렌더링
+     * 4. 페이지네이션 UI 업데이트
      */
     async function loadSpaces() {
         hideError();
         showLoading();
 
         try {
-            const response = await API.getSpaces(currentPage, currentPageSize);
+            let response;
+
+            // 필터 조건이 있는지 확인
+            if (hasActiveFilters()) {
+                // 필터링 API 호출 (/admin/spaces/search)
+                response = await API.getSpacesByFilters(currentPage, currentPageSize, filterState);
+            } else {
+                // 전체 조회 API 호출 (/admin/spaces)
+                response = await API.getSpaces(currentPage, currentPageSize);
+            }
 
             // 상태 업데이트
             currentPage = response.currentPage;
@@ -234,7 +288,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
     /**
      * 페이지 이동
+     *
      * @param {number} page - 이동할 페이지 번호
+     *
+     * 동작:
+     * - 유효한 페이지 범위인지 확인 (1 ~ totalPages)
+     * - 유효하면 currentPage를 업데이트하고 데이터 재로드
+     * - PaginationUtil에서 페이지 버튼 클릭 시 이 함수가 호출됨
      */
     function goToPage(page) {
         if (page < 1 || page > totalPages) {
@@ -243,20 +303,6 @@ document.addEventListener('DOMContentLoaded', function() {
         currentPage = page;
         loadSpaces();
     }
-
-    /**
-     * 이전 페이지로 이동
-     */
-    window.goToPreviousPage = function() {
-        goToPage(currentPage - 1);
-    };
-
-    /**
-     * 다음 페이지로 이동
-     */
-    window.goToNextPage = function() {
-        goToPage(currentPage + 1);
-    };
 
     /**
      * HTML 이스케이프 (XSS 방지)
@@ -292,21 +338,76 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
+    /**
+     * 필터 적용 함수
+     *
+     * 호출 시점:
+     * - 사용자가 필터를 선택하고 [검색] 버튼을 클릭했을 때
+     *
+     * 동작 흐름:
+     * 1. HTML에서 선택된 radio 버튼의 value를 읽어온다
+     * 2. value를 적절한 타입으로 변환 ('all' → null, 'true' → true, 'false' → false)
+     * 3. filterState 객체에 저장
+     * 4. 페이지를 1페이지로 초기화 (필터 변경 시 항상 첫 페이지부터 시작)
+     * 5. loadSpaces() 호출하여 목록 갱신
+     *
+     * 확장 포인트:
+     * - 새로운 필터를 추가할 때 이 함수에서 해당 필터 값을 읽어서 filterState에 추가
+     * - 예시:
+     *   ```javascript
+     *   const isPublic = document.querySelector('input[name="isPublic"]:checked').value;
+     *   filterState.isPublic = isPublic === 'all' ? null : isPublic === 'true';
+     *   ```
+     */
+    function applyFilter() {
+        // Optional Chaining (?.)으로 안전하게 접근 후, Nullish Coalescing (??)으로 기본값 설정
+        const hasProductValue = document.querySelector('input[name="hasProduct"]:checked')?.value ?? 'all';
+
+        // 매핑 로직 개선 (객체 리터럴 활용으로 if-else 제거)
+        const filterMap = {
+            'all': null,
+            'true': true,
+            'false': false
+        };
+        filterState.hasProduct = filterMap[hasProductValue];
+
+        // 필터 변경 시 페이지를 1페이지로 초기화
+        currentPage = 1;
+
+        // 목록 갱신
+        loadSpaces();
+    }
+
     // 이벤트 리스너 등록
     pageSizeSelect.addEventListener('change', handlePageSizeChange);
     logoutBtn.addEventListener('click', handleLogout);
 
-    // 키보드 네비게이션
-    document.addEventListener('keydown', function(event) {
+    /**
+     * 필터 검색 버튼 클릭 이벤트 리스너
+     * - [검색] 버튼 클릭 시 필터 적용 함수 호출
+     */
+    const applyFilterBtn = document.getElementById('applyFilterBtn');
+    if (applyFilterBtn) {
+        applyFilterBtn.addEventListener('click', applyFilter);
+    }
+
+    /**
+     * 키보드 네비게이션
+     * - 좌측 화살표: 이전 페이지
+     * - 우측 화살표: 다음 페이지
+     *
+     * 접근성 향상을 위한 기능
+     */
+    document.addEventListener('keydown', function (event) {
         // 좌측 화살표: 이전 페이지
         if (event.key === 'ArrowLeft' && currentPage > 1) {
             event.preventDefault();
-            goToPreviousPage();
+            goToPage(currentPage - 1);
         }
         // 우측 화살표: 다음 페이지
         else if (event.key === 'ArrowRight' && currentPage < totalPages) {
             event.preventDefault();
-            goToNextPage();
+            goToPage(currentPage + 1);
         }
     });
 
@@ -404,7 +505,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
     /**
      * 모달에 스페이스 상세 정보 표시
-     * @param {object} data - API 응답 데이터 (space, hasProduct, guestBookCount)
+     *
+     * API: GET /admin/spaces/{spaceCode}
+     * @param {object} data - API 응답 데이터 (SpaceDetailResponse)
+     * @param {object} data.space - 스페이스 기본 정보 (SimpleSpaceResponse)
+     * @param {number} data.productCount - 등록한 작품 소개 개수
+     * @param {number} data.guestBookCount - 방명록 개수
      */
     function showModalContent(data) {
         resetModalContent();
@@ -420,11 +526,15 @@ document.addEventListener('DOMContentLoaded', function() {
             : '<span class="badge badge-danger">Private</span>';
         modalSpacePublic.innerHTML = publicBadge;
 
-        // 작품 소개 등록 여부 표시
-        const hasProductText = data.hasProduct
-            ? '<span style="color: var(--success-color); font-weight: 600;">Registered</span>'
-            : '<span style="color: var(--text-muted);">Not Registered</span>';
-        modalHasProduct.innerHTML = hasProductText;
+        /**
+         * 작품 소개 등록 상태 표시
+         * - productCount가 0: "작품 소개를 등록하지 않음" (회색 텍스트)
+         * - productCount가 1 이상: "등록한 작품 소개 N개" (녹색 텍스트, 숫자 포맷팅 적용)
+         */
+        const productStatusText = data.productCount === 0
+            ? '<span style="color: var(--text-muted);">작품 소개를 등록하지 않음</span>'
+            : `<span style="color: var(--success-color); font-weight: 600;">${data.productCount.toLocaleString()}개</span>`;
+        modalHasProduct.innerHTML = productStatusText;
 
         // 방명록 개수 표시 (숫자 포맷팅)
         modalGuestBookCount.textContent = data.guestBookCount.toLocaleString();
@@ -520,7 +630,7 @@ document.addEventListener('DOMContentLoaded', function() {
      * 3. Code 컬럼이면 data-space-code 속성에서 spaceCode를 읽어옴
      * 4. loadSpaceDetail 함수를 호출하여 모달 표시
      */
-    spacesTableBody.addEventListener('click', function(event) {
+    spacesTableBody.addEventListener('click', function (event) {
         // 클릭된 요소가 td인지, 그리고 두 번째 컬럼(Code)인지 확인
         const target = event.target;
 
@@ -548,7 +658,7 @@ document.addEventListener('DOMContentLoaded', function() {
      * - currentOpenSpaceCode는 모달을 열 때 설정됨 (loadSpaceDetail 함수)
      * - URL 생성은 getSpacePageUrl 함수가 담당 (환경별 도메인 처리)
      */
-    visitSpaceBtn.addEventListener('click', function() {
+    visitSpaceBtn.addEventListener('click', function () {
         if (currentOpenSpaceCode) {
             const url = getSpacePageUrl(currentOpenSpaceCode);
             window.open(url, '_blank', 'noopener,noreferrer');
@@ -558,7 +668,7 @@ document.addEventListener('DOMContentLoaded', function() {
     /**
      * 모달 닫기 버튼 클릭 핸들러
      */
-    closeModalBtn.addEventListener('click', function() {
+    closeModalBtn.addEventListener('click', function () {
         closeModal();
     });
 
@@ -572,7 +682,7 @@ document.addEventListener('DOMContentLoaded', function() {
      * - event.currentTarget: 이벤트 리스너가 등록된 요소 (항상 modal)
      * - 둘이 같다는 것은 오버레이를 직접 클릭했다는 의미
      */
-    modal.addEventListener('click', function(event) {
+    modal.addEventListener('click', function (event) {
         if (event.target === modal) {
             closeModal();
         }
@@ -583,7 +693,7 @@ document.addEventListener('DOMContentLoaded', function() {
      * - 키보드 접근성 향상
      * - 모달이 열려있을 때만 동작 (modal.classList.contains('show'))
      */
-    document.addEventListener('keydown', function(event) {
+    document.addEventListener('keydown', function (event) {
         if (event.key === 'Escape' && modal.classList.contains('show')) {
             closeModal();
         }

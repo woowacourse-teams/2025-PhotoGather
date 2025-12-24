@@ -3,7 +3,7 @@
  * 로그인 폼 처리 및 인증 로직
  */
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     // 이미 로그인된 경우 spaces 페이지로 리다이렉트
     if (Auth.isAuthenticated() && !Auth.isAccessTokenExpired()) {
         window.location.href = '/view/admin/spaces';
@@ -116,8 +116,6 @@ document.addEventListener('DOMContentLoaded', function() {
             Auth.setAccessToken(response.accessToken);
             Auth.setRefreshToken(response.refreshToken);
 
-            console.log('Login successful');
-
             // Spaces 페이지로 리다이렉트
             window.location.href = '/view/admin/spaces';
 
@@ -140,7 +138,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Enter 키 처리
     [usernameInput, passwordInput].forEach(input => {
-        input.addEventListener('keypress', function(event) {
+        input.addEventListener('keypress', function (event) {
             if (event.key === 'Enter') {
                 event.preventDefault();
                 loginForm.dispatchEvent(new Event('submit'));

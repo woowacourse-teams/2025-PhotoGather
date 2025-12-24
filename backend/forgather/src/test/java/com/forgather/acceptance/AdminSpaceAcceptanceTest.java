@@ -32,6 +32,7 @@ import com.forgather.global.auth.model.Host;
 import com.forgather.global.auth.model.SpaceHostMap;
 import com.forgather.global.auth.repository.SpaceHostMapRepository;
 import com.forgather.global.auth.util.JwtTokenProvider;
+import com.forgather.global.util.RandomCodeGenerator;
 
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
 
@@ -64,6 +65,9 @@ class AdminSpaceAcceptanceTest extends AcceptanceTest {
 
     @Autowired
     private JwtTokenProvider jwtTokenProvider;
+
+    @Autowired
+    private RandomCodeGenerator randomCodeGenerator;
 
     private AdminUser adminUser;
     private String accessToken;
@@ -151,7 +155,7 @@ class AdminSpaceAcceptanceTest extends AcceptanceTest {
         // then
         assertAll(
             () -> assertThat(result.space().code()).isEqualTo(space.getCode()),
-            () -> assertThat(result.hasProduct()).isTrue(),
+            () -> assertThat(result.productCount()).isOne(),
             () -> assertThat(result.guestBookCount()).isEqualTo(2)
         );
     }
@@ -181,7 +185,7 @@ class AdminSpaceAcceptanceTest extends AcceptanceTest {
         // then
         assertAll(
             () -> assertThat(result.space().code()).isEqualTo(space.getCode()),
-            () -> assertThat(result.hasProduct()).isFalse(),
+            () -> assertThat(result.productCount()).isZero(),
             () -> assertThat(result.guestBookCount()).isEqualTo(2)
         );
     }
@@ -207,7 +211,7 @@ class AdminSpaceAcceptanceTest extends AcceptanceTest {
         // then
         assertAll(
             () -> assertThat(result.space().code()).isEqualTo(space.getCode()),
-            () -> assertThat(result.hasProduct()).isFalse(),
+            () -> assertThat(result.productCount()).isZero(),
             () -> assertThat(result.guestBookCount()).isZero()
         );
     }
@@ -232,10 +236,97 @@ class AdminSpaceAcceptanceTest extends AcceptanceTest {
         assertThat(result.statusCode()).isEqualTo(HttpStatus.FORBIDDEN.value());
     }
 
+    @DisplayName("작품 소개가 등록된 모든 스페이스를 조회한다.")
+    @Test
+    void getSpacesHasProduct() {
+        // given
+        createSpacesWithProduct(16);
+        createSpaces(4);
+
+        // when
+        AdminSpaceResponse result = RestAssuredMockMvc.given()
+            .headers("Authorization", "Bearer " + accessToken)
+            .queryParam("hasProduct", true)
+            .when()
+            .get("/admin/spaces/search")
+            .then()
+            .statusCode(HttpStatus.OK.value())
+            .extract()
+            .body()
+            .as(AdminSpaceResponse.class);
+
+        // then
+        assertAll(
+            () -> assertThat(result.spaces()).hasSize(15),
+            () -> assertThat(result.currentPage()).isEqualTo(1),
+            () -> assertThat(result.pageSize()).isEqualTo(15),
+            () -> assertThat(result.totalCount()).isEqualTo(16),
+            () -> assertThat(result.totalPages()).isEqualTo(2)
+        );
+    }
+
+    @DisplayName("작품 소개가 등록되지 않은 모든 스페이스를 조회한다.")
+    @Test
+    void getSpacesHasNoProduct() {
+        // given
+        createSpaces(16);
+        createSpacesWithProduct(4);
+
+        // when
+        AdminSpaceResponse result = RestAssuredMockMvc.given()
+            .headers("Authorization", "Bearer " + accessToken)
+            .queryParam("hasProduct", false)
+            .when()
+            .get("/admin/spaces/search")
+            .then()
+            .statusCode(HttpStatus.OK.value())
+            .extract()
+            .body()
+            .as(AdminSpaceResponse.class);
+
+        // then
+        assertAll(
+            () -> assertThat(result.spaces()).hasSize(15),
+            () -> assertThat(result.currentPage()).isEqualTo(1),
+            () -> assertThat(result.pageSize()).isEqualTo(15),
+            () -> assertThat(result.totalCount()).isEqualTo(16),
+            () -> assertThat(result.totalPages()).isEqualTo(2)
+        );
+    }
+
+    @DisplayName("어드민 유저가 아니면 필터링된 스페이스 목록을 조회할 수 없다.")
+    @Test
+    void getSpacesByFilterWithNonAdminUser() {
+        // given
+        String hostAccessToken = jwtTokenProvider.generateAccessToken(host.getId());
+
+        // when
+        var result = RestAssuredMockMvc.given()
+            .headers("Authorization", "Bearer " + hostAccessToken)
+            .queryParam("hasProduct", true)
+            .when()
+            .get("/admin/spaces/search")
+            .then()
+            .extract();
+
+        // then
+        assertThat(result.statusCode()).isEqualTo(HttpStatus.FORBIDDEN.value());
+    }
+
     private void createSpaces(int count) {
         for (int i = 0; i < count; i++) {
-            Space space = spaceRepository.save(SpaceFixture.createSpace());
+            String spaceCode = randomCodeGenerator.generate(10);
+            Space space = spaceRepository.save(SpaceFixture.createSpaceWithCode(spaceCode));
             spaceHostMapRepository.save(new SpaceHostMap(space, host));
+        }
+    }
+
+    private void createSpacesWithProduct(int count) {
+        for (int i = 0; i < count; i++) {
+            String spaceCode = randomCodeGenerator.generate(10);
+            Space space = spaceRepository.save(SpaceFixture.createSpaceWithCode(spaceCode));
+            spaceHostMapRepository.save(new SpaceHostMap(space, host));
+            productRepository.save(ProductFixture.createProductWithSpace(space));
         }
     }
 }

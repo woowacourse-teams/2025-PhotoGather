@@ -28,7 +28,7 @@ public class AdminHostController {
         Pageable pageable,
         @Admin AdminUser adminUser
     ) {
-        var response = adminHostService.getAllHosts(pageable, adminUser);
+        var response = adminHostService.getAllHosts(pageable);
         return ResponseEntity.ok(response);
     }
 }

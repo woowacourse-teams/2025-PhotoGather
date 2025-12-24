@@ -5,7 +5,7 @@ import java.util.regex.Pattern;
 
 import org.springframework.http.HttpStatus;
 
-import com.forgather.domain.model.BaseTimeEntity;
+import com.forgather.domain.model.SoftDeleteEntity;
 import com.forgather.global.exception.BaseException;
 import com.forgather.global.exception.BaseNullPointerException;
 import com.forgather.global.util.TextLengthCounter;
@@ -22,7 +22,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Space extends BaseTimeEntity {
+public class Space extends SoftDeleteEntity {
 
     private static final int CODE_LENGTH = 10;
     private static final int MAX_NAME_LENGTH = 30;

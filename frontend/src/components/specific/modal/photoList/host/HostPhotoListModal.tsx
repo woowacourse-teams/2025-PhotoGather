@@ -1,21 +1,21 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { MdDeleteOutline, MdDownload } from 'react-icons/md';
-import { guestbookService } from '../../../../apis/services/guestbook/guestbook.service';
-import useButtonTracking from '../../../../hooks/@common/useButtonTracking';
-import { useToast } from '../../../../hooks/@common/useToast';
-import { theme } from '../../../../styles/theme';
-import type { Photo } from '../../../../types/photo.type';
+import { guestbookService } from '../../../../../apis/services/guestbook/guestbook.service';
+import useButtonTracking from '../../../../../hooks/@common/useButtonTracking';
+import { useToast } from '../../../../../hooks/@common/useToast';
+import { theme } from '../../../../../styles/theme';
+import type { Photo } from '../../../../../types/photo.type';
 import {
   buildOriginalImageUrl,
   buildThumbnailUrl,
-} from '../../../../utils/buildImageUrl';
-import { downloadByAnchor, saveImage } from '../../../../utils/saveImage';
-import Modal from '../../../@common/modal/Modal';
-import ImageSwiperActions from '../../imageSwiperActions/ImageSwiperActions';
-import * as S from './PhotoModal.style';
+} from '../../../../../utils/buildImageUrl';
+import { downloadByAnchor, saveImage } from '../../../../../utils/saveImage';
+import Modal from '../../../../@common/modal/Modal';
+import ImageSwiperActions from '../../../imageSwiperActions/ImageSwiperActions';
+import * as S from './HostPhotoListModal.styles';
 
-interface PhotoModalProps {
+interface HostPhotoListModalProps {
   isOpen: boolean;
   photoList: Photo[];
   initialPhotoIndex: number;
@@ -25,7 +25,7 @@ interface PhotoModalProps {
   onDelete?: (photoId: number) => void;
 }
 
-const PhotoModal = ({
+const HostPhotoListModal = ({
   isOpen,
   photoList,
   initialPhotoIndex,
@@ -33,7 +33,7 @@ const PhotoModal = ({
   guestbookCardId,
   onClose,
   onDelete,
-}: PhotoModalProps) => {
+}: HostPhotoListModalProps) => {
   const [currentIndex, setCurrentIndex] = useState(initialPhotoIndex);
   const queryClient = useQueryClient();
   const { showToast } = useToast();
@@ -163,4 +163,4 @@ const PhotoModal = ({
   );
 };
 
-export default PhotoModal;
+export default HostPhotoListModal;

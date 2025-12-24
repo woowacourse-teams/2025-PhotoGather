@@ -2,7 +2,7 @@ package com.forgather.domain.product.model;
 
 import org.springframework.http.HttpStatus;
 
-import com.forgather.domain.model.BaseTimeEntity;
+import com.forgather.domain.model.SoftDeleteEntity;
 import com.forgather.domain.space.model.Space;
 import com.forgather.global.exception.BaseException;
 import com.forgather.global.exception.BaseNullPointerException;
@@ -23,7 +23,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Product extends BaseTimeEntity {
+public class Product extends SoftDeleteEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

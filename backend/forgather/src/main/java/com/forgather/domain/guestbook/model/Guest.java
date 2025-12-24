@@ -2,7 +2,7 @@ package com.forgather.domain.guestbook.model;
 
 import org.springframework.http.HttpStatus;
 
-import com.forgather.domain.model.BaseTimeEntity;
+import com.forgather.domain.model.SoftDeleteEntity;
 import com.forgather.global.exception.BaseException;
 import com.forgather.global.exception.BaseNullPointerException;
 import com.forgather.global.util.TextLengthCounter;
@@ -19,7 +19,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Guest extends BaseTimeEntity {
+public class Guest extends SoftDeleteEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -1,5 +1,6 @@
 package com.forgather.domain.space.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import com.forgather.domain.space.model.Space;
@@ -9,12 +10,12 @@ public interface SpacePhotoRepository {
 
     SpacePhoto save(SpacePhoto spacePhoto);
 
-    Optional<SpacePhoto> findBySpace(Space space);
+    Optional<SpacePhoto> findBySpaceAndDeletedAtIsNull(Space space);
 
-    void delete(SpacePhoto spacePhoto);
+    List<SpacePhoto> findAllBySpaceIdInAndDeletedAtIsNull(List<Long> spaceIds);
 
-    default SpacePhoto getBySpaceOrEmpty(Space space) {
-        return findBySpace(space)
+    default SpacePhoto getBySpaceAndDeletedAtIsNullOrEmpty(Space space) {
+        return findBySpaceAndDeletedAtIsNull(space)
             .orElse(SpacePhoto.empty(space));
     }
 }

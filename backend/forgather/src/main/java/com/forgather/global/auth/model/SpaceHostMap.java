@@ -1,6 +1,6 @@
 package com.forgather.global.auth.model;
 
-import com.forgather.domain.model.BaseTimeEntity;
+import com.forgather.domain.model.SoftDeleteEntity;
 import com.forgather.domain.space.model.Space;
 
 import jakarta.persistence.Entity;
@@ -19,7 +19,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "space_host_map")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class SpaceHostMap extends BaseTimeEntity {
+public class SpaceHostMap extends SoftDeleteEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

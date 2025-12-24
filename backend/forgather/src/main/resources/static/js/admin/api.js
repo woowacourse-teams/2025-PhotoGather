@@ -104,8 +104,6 @@ const API = {
 
                 // Token Refresh 시도
                 try {
-                    console.log('[API] Access Token 갱신 시도...');
-
                     // 동시 다중 401 에러 처리: tokenRefreshPromise 캐싱
                     // 이미 갱신 중이면 기존 Promise 재사용, 아니면 새로 시작
                     if (!tokenRefreshPromise) {
@@ -117,8 +115,6 @@ const API = {
 
                     // 갱신 완료 후 캐시 리셋 (다음 401 에러를 위해)
                     tokenRefreshPromise = null;
-
-                    console.log('[API] Access Token 갱신 완료. 원래 요청 재시도:', url);
 
                     // 새 Access Token으로 Authorization 헤더 업데이트
                     if (options.headers && options.headers['Authorization']) {
@@ -251,26 +247,74 @@ const API = {
      * @returns {Promise<object>} 로그인 응답 (accessToken, refreshToken)
      */
     async login(username, password) {
-        return this.post('/login', { username, password }, false);
+        return this.post('/login', {username, password}, false);
     },
 
     /**
-     * Space 목록 조회 API
+     * Space 목록 조회 API (전체 - 필터 없음)
      * @param {number} page - 페이지 번호 (1부터 시작)
      * @param {number} size - 페이지 크기
      * @returns {Promise<object>} Space 목록 응답
      */
     async getSpaces(page = 1, size = 15) {
-        return this.get('/spaces', { page, size }, true);
+        return this.get('/spaces', {page, size}, true);
+    },
+
+    /**
+     * Space 목록 조회 API (필터링)
+     *
+     * @param {number} page - 페이지 번호 (1부터 시작)
+     * @param {number} size - 페이지 크기
+     * @param {object} filters - 필터 조건 객체
+     * @param {boolean|null} filters.hasProduct - 작품 소개 등록 여부 (true: 등록함, false: 미등록, null: 전체)
+     * @returns {Promise<object>} Space 목록 응답
+     *
+     * 엔드포인트: GET /admin/spaces/search
+     *
+     * 쿼리 파라미터:
+     * - page: 페이지 번호 (필수)
+     * - size: 페이지 크기 (필수)
+     * - hasProduct: 작품 소개 등록 여부 (선택)
+     *
+     * 응답 구조:
+     * - spaces: Space 목록 배열
+     * - currentPage: 현재 페이지 번호 (1부터 시작)
+     * - pageSize: 페이지 크기
+     * - totalCount: 전체 Space 개수
+     * - totalPages: 전체 페이지 수
+     *
+     * 사용 예시:
+     * ```javascript
+     * // 작품 소개 등록한 스페이스만 조회
+     * const response = await API.getSpacesByFilters(1, 15, { hasProduct: true });
+     *
+     * // 작품 소개 미등록 스페이스만 조회
+     * const response = await API.getSpacesByFilters(1, 15, { hasProduct: false });
+     * ```
+     *
+     * 주의:
+     * - filters.hasProduct가 null이면 해당 파라미터는 쿼리에 포함되지 않음
+     * - 필터 조건이 없으면 getSpaces() 함수를 사용하는 것이 더 적합
+     * - 향후 다른 필터 추가 시 filters 객체에 프로퍼티 추가
+     */
+    async getSpacesByFilters(page = 1, size = 15, filters = {}) {
+        const params = {page, size};
+
+        // hasProduct 필터가 명시적으로 true 또는 false인 경우에만 파라미터에 추가
+        if (filters.hasProduct !== null && filters.hasProduct !== undefined) {
+            params.hasProduct = filters.hasProduct;
+        }
+
+        return this.get('/spaces/search', params, true);
     },
 
     /**
      * Space 상세 정보 조회 API
      *
      * @param {string} spaceCode - 조회할 스페이스 코드 (예: "e3f6b97f19")
-     * @returns {Promise<object>} 스페이스 상세 정보 응답
+     * @returns {Promise<object>} 스페이스 상세 정보 응답 (SpaceDetailResponse)
      * @returns {object} response.space - 스페이스 기본 정보 (id, code, name, isPublic)
-     * @returns {boolean} response.hasProduct - 작품 소개 등록 여부
+     * @returns {number} response.productCount - 등록한 작품 소개 개수 (0 이상의 정수)
      * @returns {number} response.guestBookCount - 방명록 개수
      * @throws {Error} API 호출 실패 시 에러 (404: 존재하지 않는 스페이스, 401: 인증 실패 등)
      *
@@ -279,6 +323,7 @@ const API = {
      * try {
      *     const detail = await API.getSpaceDetail('e3f6b97f19');
      *     console.log(detail.space.name); // "졸업 전시"
+     *     console.log(detail.productCount); // 5 (등록한 작품 소개 개수)
      *     console.log(detail.guestBookCount); // 42
      * } catch (error) {
      *     console.error('Failed to load space detail:', error);
@@ -330,7 +375,7 @@ const API = {
      * - 페이지 번호는 1부터 시작 (서버에서 0-based를 1-based로 변환하여 반환)
      */
     async getHosts(page = 1, size = 15) {
-        return this.get('/hosts', { page, size }, true);
+        return this.get('/hosts', {page, size}, true);
     }
 };
 

@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @MappedSuperclass
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public abstract class Photo extends BaseTimeEntity {
+public abstract class Photo extends SoftDeleteEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

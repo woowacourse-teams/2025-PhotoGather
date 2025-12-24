@@ -52,7 +52,7 @@ public class StatsAcceptanceTest extends AcceptanceTest{
     public void landing() {
         // given
         Space space1 = spaceRepository.save(SpaceFixture.createSpace());
-        Space space2 = spaceRepository.save(SpaceFixture.createSpace());
+        Space space2 = spaceRepository.save(SpaceFixture.createSpaceWithCode("0123456789"));
         guestBookCardRepository.save(GuestBookCardFixture.createGuestBookCardWithSpaceAndGuest(space1, guest));
         guestBookCardRepository.save(GuestBookCardFixture.createGuestBookCardWithSpaceAndGuest(space1, guest));
         guestBookCardRepository.save(GuestBookCardFixture.createGuestBookCardWithSpaceAndGuest(space2, guest));

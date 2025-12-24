@@ -18,11 +18,6 @@ public class FakeContentStorage implements ContentsStorage {
     }
 
     @Override
-    public void deleteContent(String contentPath) {
-
-    }
-
-    @Override
     public void deleteContents(List<String> contentPaths) {
 
     }

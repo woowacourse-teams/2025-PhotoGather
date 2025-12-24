@@ -11,17 +11,6 @@ const spin = keyframes`
   }
 `;
 
-export const Backdrop = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: ${({ theme }) => theme.colors.black};
-  opacity: 0.8;
-  z-index: 9999;
-`;
-
 export const Wrapper = styled.div`
   display: flex;
   flex-direction: column;

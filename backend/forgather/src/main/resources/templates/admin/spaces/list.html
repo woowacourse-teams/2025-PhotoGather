@@ -46,6 +46,43 @@
 
             <!-- Controls -->
             <div class="controls">
+                <!--
+                    필터 영역
+                    - 작품 소개 등록 여부에 따른 필터링 기능
+                    - radio 버튼으로 단일 선택 제공
+                    - 향후 다른 필터 조건 추가 시 filter-group을 복사하여 확장
+                -->
+                <div class="filter-section">
+                    <!--
+                        작품 소개 등록 여부 필터 그룹
+                        - name 속성을 동일하게 하여 radio 그룹화
+                        - value: 'all' (전체), 'true' (등록함), 'false' (미등록)
+                        - 기본값은 'all' (checked 속성)
+                    -->
+                    <div class="filter-group">
+                        <label class="filter-label">작품 소개 등록 여부:</label>
+                        <label class="filter-radio-label">
+                            <input type="radio" name="hasProduct" value="all" checked>
+                            <span>전체</span>
+                        </label>
+                        <label class="filter-radio-label">
+                            <input type="radio" name="hasProduct" value="true">
+                            <span>등록함</span>
+                        </label>
+                        <label class="filter-radio-label">
+                            <input type="radio" name="hasProduct" value="false">
+                            <span>등록하지 않음</span>
+                        </label>
+                    </div>
+
+                    <!--
+                        검색 버튼
+                        - 필터 선택 후 이 버튼을 클릭해야 필터가 적용됨
+                        - JavaScript의 applyFilter() 함수 호출
+                    -->
+                    <button type="button" class="btn-filter" id="applyFilterBtn">검색</button>
+                </div>
+
                 <div class="page-size-selector">
                     <label for="pageSize">Items per page:</label>
                     <select id="pageSize" class="form-select">
@@ -84,21 +121,8 @@
                 </table>
             </div>
 
-            <!-- Pagination -->
-            <div class="pagination" id="pagination" style="display: none;">
-                <button class="pagination-btn" id="prevBtn" onclick="goToPreviousPage()">
-                    Previous
-                </button>
-
-                <span class="pagination-info">
-                    Page <span id="currentPage">1</span> of <span id="totalPages">1</span>
-                    (Total: <span id="totalCount">0</span> items)
-                </span>
-
-                <button class="pagination-btn" id="nextBtn" onclick="goToNextPage()">
-                    Next
-                </button>
-            </div>
+            <!-- Pagination: JavaScript에서 숫자 버튼들을 동적으로 생성 -->
+            <div class="pagination" id="pagination" style="display: none;"></div>
         </div>
     </main>
 
@@ -163,7 +187,7 @@
                     </div>
 
                     <div class="modal-info-group">
-                        <label class="modal-info-label">작품 소개 등록 여부</label>
+                        <label class="modal-info-label">등록한 작품 소개</label>
                         <div id="modalHasProduct" class="modal-info-value"></div>
                     </div>
 
@@ -186,6 +210,7 @@
     <!-- Scripts -->
     <script th:src="@{/js/admin/auth.js}"></script>
     <script th:src="@{/js/admin/api.js}"></script>
+    <script th:src="@{/js/admin/pagination.js}"></script>
     <script th:src="@{/js/admin/spaces.js}"></script>
 </body>
 </html>

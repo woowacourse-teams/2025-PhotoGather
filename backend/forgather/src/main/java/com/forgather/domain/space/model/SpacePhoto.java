@@ -29,4 +29,8 @@ public class SpacePhoto extends Photo {
     public static SpacePhoto empty(Space space) {
         return new SpacePhoto(space, "", "", 0L);
     }
+
+    public boolean isExists() {
+        return path != null && !path.isBlank();
+    }
 }

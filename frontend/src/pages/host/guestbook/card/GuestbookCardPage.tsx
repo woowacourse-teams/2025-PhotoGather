@@ -9,7 +9,7 @@ import Button from '../../../../components/@common/buttons/button/Button';
 import IconButton from '../../../../components/@common/buttons/iconButton/IconButton';
 import Line from '../../../../components/@common/line/Line';
 import DeleteModal from '../../../../components/@common/modal/deleteModal/DeleteModal';
-import PhotoModal from '../../../../components/specific/modal/photoModal/PhotoModal';
+import HostPhotoListModal from '../../../../components/specific/modal/photoList/host/HostPhotoListModal';
 import {
   createGuestbookCardRoute,
   createGuestbookRoute,
@@ -155,7 +155,7 @@ const GuestbookCardPage = () => {
       />
       <S.Wrapper>
         <Activity mode={isPhotoModalOpen ? 'visible' : 'hidden'}>
-          <PhotoModal
+          <HostPhotoListModal
             isOpen={isPhotoModalOpen}
             photoList={localPhotoList}
             initialPhotoIndex={selectedPhotoIndex}

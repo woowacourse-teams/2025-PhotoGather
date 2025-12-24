@@ -46,5 +46,9 @@ export const INFORMATION = {
       PROMPT: '함께 전달할 사진을 선택해주세요',
       UPLOAD_LIMIT_TEXT: '20장까지 선택할 수 있어요',
     },
+    MODAL: {
+      TEXT: '방명록을 전송할까요?',
+      DESCRIPTION: `전송한 방명록은 직접 수정, 삭제할 수 없어요.`,
+    },
   },
 } as const;

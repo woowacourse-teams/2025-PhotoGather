@@ -8,7 +8,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import Button from '../../../../components/@common/buttons/button/Button';
 import IconButton from '../../../../components/@common/buttons/iconButton/IconButton';
 import Line from '../../../../components/@common/line/Line';
-import GuestPhotoModal from '../../../../components/specific/modal/guestPhotoModal/GuestPhotoModal';
+import GuestPhotoListModal from '../../../../components/specific/modal/photoList/guest/GuestPhotoListModal';
 import {
   createGuestGuestbookCardRoute,
   createGuestGuestbookRoute,
@@ -113,7 +113,7 @@ const GuestGuestbookCardPage = () => {
   return (
     <S.Wrapper>
       <Activity mode={isPhotoModalOpen ? 'visible' : 'hidden'}>
-        <GuestPhotoModal
+        <GuestPhotoListModal
           isOpen={isPhotoModalOpen}
           photoList={localPhotoList}
           initialPhotoIndex={selectedPhotoIndex}

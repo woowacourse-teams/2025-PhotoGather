@@ -1,13 +1,10 @@
 package com.forgather.acceptance;
 
 import static com.forgather.fixture.HostFixture.createHost;
-import static java.time.Duration.ofSeconds;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.awaitility.Awaitility.await;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyList;
-import static org.mockito.Mockito.atLeast;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 
@@ -244,11 +241,8 @@ class SpaceAcceptanceTest extends AcceptanceTest {
         // then
         assertAll(
             () -> assertThat(response.statusCode()).isEqualTo(204),
-            () -> assertThat(spaceRepository.findByCode(space.getCode())).isEmpty(),
-            () -> assertThat(spacePhotoRepository.findBySpace(space)).isEmpty(),
-
-            () -> await().atMost(ofSeconds(6))
-                .untilAsserted(() -> verify(contentsStorage, atLeast(1)).deletePhotos(anyList()))
+            () -> assertThat(spaceRepository.findByCodeAndDeletedAtIsNull(space.getCode())).isEmpty(),
+            () -> assertThat(spacePhotoRepository.findBySpaceAndDeletedAtIsNull(space)).isEmpty()
         );
     }
 
@@ -278,15 +272,12 @@ class SpaceAcceptanceTest extends AcceptanceTest {
         // then
         assertAll(
             () -> assertThat(response.statusCode()).isEqualTo(204),
-            () -> assertThat(spaceRepository.findByCode(space.getCode())).isEmpty(),
-            () -> assertThat(spacePhotoRepository.findBySpace(space)).isEmpty(),
-            () -> assertThat(productRepository.findAllBySpace(space)).isEmpty(),
-            () -> assertThat(productPhotoRepository.findAllByProduct(product)).isEmpty(),
-            () -> assertThat(guestBookCardRepository.findAllBySpace(space)).isEmpty(),
-            () -> assertThat(guestBookCardPhotoRepository.findAllByGuestBookCard(guestBookCard)).isEmpty(),
-
-            () -> await().atMost(ofSeconds(6))
-                .untilAsserted(() -> verify(contentsStorage, atLeast(1)).deletePhotos(anyList()))
+            () -> assertThat(spaceRepository.findByCodeAndDeletedAtIsNull(space.getCode())).isEmpty(),
+            () -> assertThat(spacePhotoRepository.findBySpaceAndDeletedAtIsNull(space)).isEmpty(),
+            () -> assertThat(productRepository.findAllBySpaceAndDeletedAtIsNull(space)).isEmpty(),
+            () -> assertThat(productPhotoRepository.findAllByProductAndDeletedAtIsNull(product)).isEmpty(),
+            () -> assertThat(guestBookCardRepository.findAllBySpaceAndDeletedAtIsNull(space)).isEmpty(),
+            () -> assertThat(guestBookCardPhotoRepository.findAllByGuestBookCardAndDeletedAtIsNull(guestBookCard)).isEmpty()
         );
     }
 
@@ -369,11 +360,8 @@ class SpaceAcceptanceTest extends AcceptanceTest {
             () -> assertThat(result.isPublic()).isFalse(),
             () -> assertThat(result.instagramUsername()).isEqualTo("forgather_official_new"),
             () -> assertThat(result.email()).isEqualTo("forgather_new@forgather.me"),
-            () -> assertThat(spacePhotoRepository.getBySpaceOrEmpty(space).getOriginalName()).isEqualTo("new.jpg"),
-            () -> assertThat(result.guestBookCardCount()).isZero(),
-
-            () -> await().atMost(ofSeconds(6))
-                .untilAsserted(() -> verify(contentsStorage, atLeast(1)).deletePhotos(anyList()))
+            () -> assertThat(spacePhotoRepository.getBySpaceAndDeletedAtIsNullOrEmpty(space).getOriginalName()).isEqualTo("new.jpg"),
+            () -> assertThat(result.guestBookCardCount()).isZero()
         );
     }
 
@@ -467,10 +455,11 @@ class SpaceAcceptanceTest extends AcceptanceTest {
 
     @DisplayName("나의 스페이스 목록을 조회한다.")
     @Test
-    void getSpaces() {
+    void getSpaces() throws InterruptedException {
         // given
         Space space1 = spaceRepository.save(SpaceFixture.createSpace());
         spacePhotoRepository.save(SpacePhotoFixture.createSpacePhotoWithSpace(space1));
+        Thread.sleep(1000);
         Space space2 = spaceRepository.save(SpaceFixture.createPrivateSpace());
         spacePhotoRepository.save(SpacePhotoFixture.createSpacePhotoWithSpace(space2));
         spaceHostMapRepository.save(new SpaceHostMap(space1, host));
@@ -495,7 +484,7 @@ class SpaceAcceptanceTest extends AcceptanceTest {
             () -> assertThat(result.spaces().getFirst().guestBookCardCount()).isZero(),
 
             () -> assertThat(result.spaces().getLast().spaceCode()).isEqualTo(space1.getCode()),
-            () -> assertThat(result.spaces().getLast().guestBookCardCount()).isEqualTo(1)
+            () -> assertThat(result.spaces().getLast().guestBookCardCount()).isOne()
         );
     }
 }

@@ -46,7 +46,7 @@ public class UploadService {
     }
 
     public IssueSignedUrlResponse issueSignedUrls(String spaceCode, IssueSignedUrlRequest request) {
-        spaceRepository.getByCodeOrThrow(spaceCode);
+        spaceRepository.getByCodeAndDeletedAtIsNullOrThrow(spaceCode);
         Map<String, String> signedUrls = signedUrlIssuer.issueSignedUrls(
             request.uploadFileNames(),
             spaceCode,
