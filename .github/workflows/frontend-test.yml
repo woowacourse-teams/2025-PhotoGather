@@ -5,6 +5,8 @@ on:
     branches:
       - main
       - develop
+      - v2/main
+      - v2/develop
     paths:
       - 'frontend/**'
       - '.github/workflows/frontend-test.yml'
@@ -18,7 +20,7 @@ on:
 
 jobs:
   frontend-test:
-    name: Frontend Test
+    name: CI
     runs-on: ubuntu-latest
 
     defaults:
