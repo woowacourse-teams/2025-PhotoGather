@@ -1,3 +1,4 @@
+import { Spinner } from '../../../../styles/@common/Spinner.styles';
 import Modal from '../../../@common/modal/Modal';
 import * as S from './LoadingModal.style';
 
@@ -11,7 +12,7 @@ const LoadingModal = ({ isOpen, text = '전송 중...' }: LoadingModalProps) => 
     <Modal isOpen={isOpen} onClose={() => {}} closeOnEscape={false}>
       <Modal.Backdrop />
       <S.Wrapper>
-        <S.Spinner />
+        <Spinner />
         <S.TextContainer>{text}</S.TextContainer>
       </S.Wrapper>
     </Modal>

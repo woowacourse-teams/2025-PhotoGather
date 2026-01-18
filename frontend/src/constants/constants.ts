@@ -77,3 +77,5 @@ export const EVENT_MODAL_CONTENT_1127 = {
 이용에 불편을 드려 죄송합니다.`,
   END_DATE: '2025-11-20T00:00:00+09:00',
 };
+
+export const SUSPENSE_DELAY = 300;

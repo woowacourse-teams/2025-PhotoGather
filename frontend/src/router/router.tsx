@@ -1,43 +1,59 @@
+import { lazy, Suspense } from 'react';
 import { createBrowserRouter } from 'react-router-dom';
+
 import { PrivateRoute } from '../components/context/privateRoute/PrivateRoute';
 import SpaceInfoLayout from '../components/context/spaceInfoLayout/SpaceInfoLayout';
-import Layout from '../components/layout/global/layout/Layout';
 import GuestbookAccessGuard from '../components/layout/guestbookAccessGuard/GuestbookAccessGuard';
 import HostPageAccessGuard from '../components/layout/hostPageAccessGuard/HostPageAccessGuard';
-import KakaoAuthPage from '../pages/auth/KakaoAuthPage';
-import CompletePage from '../pages/guest/completePage/CompletePage';
-import GuestGuestbookCardPage from '../pages/guest/guestbookPage/card/GuestGuestbookCardPage';
-import GuestBookFunnel from '../pages/guest/guestbookPage/funnel/GuestbookFunnel';
-import GuestGuestbookListPage from '../pages/guest/guestbookPage/list/GuestGuestbookListPage';
-import GuestSpaceHomePage from '../pages/guest/spaceHomePage/GuestSpaceHomePage';
-import GuestWorkDetail from '../pages/guest/workDetail/GuestWorkDetail';
-import GuestWorkListPage from '../pages/guest/workList/GuestWorkListPage';
-import GuestbookCardPage from '../pages/host/guestbook/card/GuestbookCardPage';
-import GuestbookListPage from '../pages/host/guestbook/list/GuestbookListPage';
-import MainPage from '../pages/host/mainPage/MainPage';
-import MyPage from '../pages/host/mypage/MyPage';
-import SharePage from '../pages/host/share/SharePage';
-import SpaceCreateFunnel from '../pages/host/spaceCreate/funnel/SpaceCreateFunnel';
-import SpaceEditPage from '../pages/host/spaceEditPage/SpaceEditPage';
-import HostSpaceHomePage from '../pages/host/spaceHomePage/HostSpaceHomePage';
-import SpaceInfoPage from '../pages/host/spaceInfoPage/SpaceInfoPage';
-import HostWorkDetail from '../pages/host/workDetail/HostWorkDetail';
-import WorkForm from '../pages/host/workForm/WorkForm';
-import WorkListPage from '../pages/host/workList/WorkListPage';
-import InAppRedirectPage from '../pages/inapp/InAppRedirectPage';
-import LandingPage from '../pages/landing/LandingPage';
-import LoginPage from '../pages/login/LoginPage';
-import NotFound from '../pages/notFound/NotFound';
 import type { AppRouteObject } from '../types/route.type';
+import DelayedSpinner from '../components/layout/delayedSpinner/DelayedSpinner';
+import GuestSpaceHomePage from '../pages/guest/spaceHomePage/GuestSpaceHomePage';
+import MainPage from '../pages/host/mainPage/MainPage';
+import HostSpaceHomePage from '../pages/host/spaceHomePage/HostSpaceHomePage';
+
+const Layout = lazy(() => import('../components/layout/global/layout/Layout'));
+const KakaoAuthPage = lazy(() => import('../pages/auth/KakaoAuthPage'));
+const CompletePage = lazy(() => import('../pages/guest/completePage/CompletePage'));
+const GuestGuestbookCardPage = lazy(
+  () => import('../pages/guest/guestbookPage/card/GuestGuestbookCardPage'),
+);
+const GuestBookFunnel = lazy(() => import('../pages/guest/guestbookPage/funnel/GuestbookFunnel'));
+const GuestGuestbookListPage = lazy(
+  () => import('../pages/guest/guestbookPage/list/GuestGuestbookListPage'),
+);
+const GuestWorkDetail = lazy(() => import('../pages/guest/workDetail/GuestWorkDetail'));
+const GuestWorkListPage = lazy(() => import('../pages/guest/workList/GuestWorkListPage'));
+const GuestbookCardPage = lazy(() => import('../pages/host/guestbook/card/GuestbookCardPage'));
+const GuestbookListPage = lazy(() => import('../pages/host/guestbook/list/GuestbookListPage'));
+const MyPage = lazy(() => import('../pages/host/mypage/MyPage'));
+const SharePage = lazy(() => import('../pages/host/share/SharePage'));
+const SpaceCreateFunnel = lazy(() => import('../pages/host/spaceCreate/funnel/SpaceCreateFunnel'));
+const SpaceEditPage = lazy(() => import('../pages/host/spaceEditPage/SpaceEditPage'));
+const SpaceInfoPage = lazy(() => import('../pages/host/spaceInfoPage/SpaceInfoPage'));
+const HostWorkDetail = lazy(() => import('../pages/host/workDetail/HostWorkDetail'));
+const WorkForm = lazy(() => import('../pages/host/workForm/WorkForm'));
+const WorkListPage = lazy(() => import('../pages/host/workList/WorkListPage'));
+const InAppRedirectPage = lazy(() => import('../pages/inapp/InAppRedirectPage'));
+const LandingPage = lazy(() => import('../pages/landing/LandingPage'));
+const LoginPage = lazy(() => import('../pages/login/LoginPage'));
+const NotFound = lazy(() => import('../pages/notFound/NotFound'));
+
+interface SuspenseWrapperProps {
+  element: React.ReactNode;
+}
+
+const SuspenseWrapper = ({ element }: SuspenseWrapperProps) => {
+  return <Suspense fallback={<DelayedSpinner />}>{element}</Suspense>;
+};
 
 const routes: AppRouteObject[] = [
   {
     path: '/',
-    element: <Layout />,
+    element: <SuspenseWrapper element={<Layout />} />,
     children: [
       {
         path: '/',
-        element: <LandingPage />,
+        element: <SuspenseWrapper element={<LandingPage />} />,
         handle: {
           noHamburger: true,
           highlight: true,
@@ -48,7 +64,7 @@ const routes: AppRouteObject[] = [
       },
       {
         path: '/login',
-        element: <LoginPage />,
+        element: <SuspenseWrapper element={<LoginPage />} />,
         handle: {
           noHamburger: true,
           headerIcon: {
@@ -58,11 +74,11 @@ const routes: AppRouteObject[] = [
       },
       {
         path: '/inapp',
-        element: <InAppRedirectPage />,
+        element: <SuspenseWrapper element={<InAppRedirectPage />} />,
       },
       {
         path: '/auth/login/kakao',
-        element: <KakaoAuthPage />,
+        element: <SuspenseWrapper element={<KakaoAuthPage />} />,
         handle: {
           headerIcon: {
             leftIcon: 'logo',
@@ -112,7 +128,7 @@ const routes: AppRouteObject[] = [
                       },
                       {
                         path: ':spaceCode/space-info',
-                        element: <SpaceInfoPage />,
+                        element: <SuspenseWrapper element={<SpaceInfoPage />} />,
                         handle: {
                           headerIcon: {
                             leftIcon: 'profile',
@@ -121,7 +137,7 @@ const routes: AppRouteObject[] = [
                       },
                       {
                         path: ':spaceCode/space-info/edit',
-                        element: <SpaceEditPage />,
+                        element: <SuspenseWrapper element={<SpaceEditPage />} />,
                         handle: {
                           headerIcon: {
                             leftIcon: 'profile',
@@ -130,7 +146,7 @@ const routes: AppRouteObject[] = [
                       },
                       {
                         path: ':spaceCode/work-detail/:workId',
-                        element: <HostWorkDetail />,
+                        element: <SuspenseWrapper element={<HostWorkDetail />} />,
                         handle: {
                           headerIcon: {
                             leftIcon: 'profile',
@@ -139,7 +155,7 @@ const routes: AppRouteObject[] = [
                       },
                       {
                         path: ':spaceCode/work-detail/:workId/edit',
-                        element: <WorkForm />,
+                        element: <SuspenseWrapper element={<WorkForm />} />,
                         handle: {
                           noFooter: true,
                           headerIcon: {
@@ -149,7 +165,7 @@ const routes: AppRouteObject[] = [
                       },
                       {
                         path: ':spaceCode/guestbook',
-                        element: <GuestbookListPage />,
+                        element: <SuspenseWrapper element={<GuestbookListPage />} />,
                         handle: {
                           headerIcon: {
                             leftIcon: 'profile',
@@ -158,7 +174,7 @@ const routes: AppRouteObject[] = [
                       },
                       {
                         path: ':spaceCode/guestbook/:guestbookCardId',
-                        element: <GuestbookCardPage />,
+                        element: <SuspenseWrapper element={<GuestbookCardPage />} />,
                         handle: {
                           headerIcon: {
                             leftIcon: 'profile',
@@ -167,7 +183,7 @@ const routes: AppRouteObject[] = [
                       },
                       {
                         path: ':spaceCode/work-list',
-                        element: <WorkListPage />,
+                        element: <SuspenseWrapper element={<WorkListPage />} />,
                         handle: {
                           headerIcon: {
                             leftIcon: 'profile',
@@ -181,7 +197,7 @@ const routes: AppRouteObject[] = [
 
               {
                 path: 'my-page',
-                element: <MyPage />,
+                element: <SuspenseWrapper element={<MyPage />} />,
                 handle: {
                   headerIcon: {
                     leftIcon: 'logo',
@@ -190,7 +206,7 @@ const routes: AppRouteObject[] = [
               },
               {
                 path: 'create-space',
-                element: <SpaceCreateFunnel />,
+                element: <SuspenseWrapper element={<SpaceCreateFunnel />} />,
                 handle: {
                   noFooter: true,
                   headerIcon: {
@@ -201,7 +217,7 @@ const routes: AppRouteObject[] = [
 
               {
                 path: 'share',
-                element: <SharePage />,
+                element: <SuspenseWrapper element={<SharePage />} />,
                 handle: {
                   noFooter: true,
                   headerIcon: {
@@ -231,7 +247,7 @@ const routes: AppRouteObject[] = [
               },
               {
                 path: ':spaceCode/create-guestbook',
-                element: <GuestBookFunnel />,
+                element: <SuspenseWrapper element={<GuestBookFunnel />} />,
                 handle: {
                   noFooter: true,
                   headerIcon: {
@@ -241,7 +257,7 @@ const routes: AppRouteObject[] = [
               },
               {
                 path: ':spaceCode/create-guestbook-complete',
-                element: <CompletePage />,
+                element: <SuspenseWrapper element={<CompletePage />} />,
                 handle: {
                   headerIcon: {
                     leftIcon: 'profile',
@@ -250,7 +266,7 @@ const routes: AppRouteObject[] = [
               },
               {
                 path: ':spaceCode/work-detail/:workId',
-                element: <GuestWorkDetail />,
+                element: <SuspenseWrapper element={<GuestWorkDetail />} />,
                 handle: {
                   headerIcon: {
                     leftIcon: 'profile',
@@ -259,7 +275,7 @@ const routes: AppRouteObject[] = [
               },
               {
                 path: ':spaceCode/work-list',
-                element: <GuestWorkListPage />,
+                element: <SuspenseWrapper element={<GuestWorkListPage />} />,
                 handle: {
                   headerIcon: {
                     leftIcon: 'profile',
@@ -277,7 +293,7 @@ const routes: AppRouteObject[] = [
                 children: [
                   {
                     path: ':spaceCode/guestbook',
-                    element: <GuestGuestbookListPage />,
+                    element: <SuspenseWrapper element={<GuestGuestbookListPage />} />,
                     handle: {
                       headerIcon: {
                         leftIcon: 'profile',
@@ -286,7 +302,7 @@ const routes: AppRouteObject[] = [
                   },
                   {
                     path: ':spaceCode/guestbook/:guestbookCardId',
-                    element: <GuestGuestbookCardPage />,
+                    element: <SuspenseWrapper element={<GuestGuestbookCardPage />} />,
                     handle: {
                       headerIcon: {
                         leftIcon: 'profile',
@@ -301,7 +317,7 @@ const routes: AppRouteObject[] = [
       },
       {
         path: '*',
-        element: <NotFound />,
+        element: <SuspenseWrapper element={<NotFound />} />,
         handle: {
           noHamburger: true,
           noFooter: true,
