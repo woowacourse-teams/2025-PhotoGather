@@ -3,63 +3,37 @@ import { createBrowserRouter } from 'react-router-dom';
 
 import { PrivateRoute } from '../components/context/privateRoute/PrivateRoute';
 import SpaceInfoLayout from '../components/context/spaceInfoLayout/SpaceInfoLayout';
-import Layout from '../components/layout/global/layout/Layout';
 import GuestbookAccessGuard from '../components/layout/guestbookAccessGuard/GuestbookAccessGuard';
 import HostPageAccessGuard from '../components/layout/hostPageAccessGuard/HostPageAccessGuard';
 import type { AppRouteObject } from '../types/route.type';
-import { Spinner } from '../styles/@common/Spinner.styles';
+import DelayedSpinner from '../components/layout/delayedSpinner/DelayedSpinner';
+import GuestSpaceHomePage from '../pages/guest/spaceHomePage/GuestSpaceHomePage';
+import MainPage from '../pages/host/mainPage/MainPage';
+import HostSpaceHomePage from '../pages/host/spaceHomePage/HostSpaceHomePage';
 
+const Layout = lazy(() => import('../components/layout/global/layout/Layout'));
 const KakaoAuthPage = lazy(() => import('../pages/auth/KakaoAuthPage'));
-const CompletePage = lazy(
-  () => import('../pages/guest/completePage/CompletePage'),
-);
+const CompletePage = lazy(() => import('../pages/guest/completePage/CompletePage'));
 const GuestGuestbookCardPage = lazy(
   () => import('../pages/guest/guestbookPage/card/GuestGuestbookCardPage'),
 );
-const GuestBookFunnel = lazy(
-  () => import('../pages/guest/guestbookPage/funnel/GuestbookFunnel'),
-);
+const GuestBookFunnel = lazy(() => import('../pages/guest/guestbookPage/funnel/GuestbookFunnel'));
 const GuestGuestbookListPage = lazy(
   () => import('../pages/guest/guestbookPage/list/GuestGuestbookListPage'),
 );
-const GuestSpaceHomePage = lazy(
-  () => import('../pages/guest/spaceHomePage/GuestSpaceHomePage'),
-);
-const GuestWorkDetail = lazy(
-  () => import('../pages/guest/workDetail/GuestWorkDetail'),
-);
-const GuestWorkListPage = lazy(
-  () => import('../pages/guest/workList/GuestWorkListPage'),
-);
-const GuestbookCardPage = lazy(
-  () => import('../pages/host/guestbook/card/GuestbookCardPage'),
-);
-const GuestbookListPage = lazy(
-  () => import('../pages/host/guestbook/list/GuestbookListPage'),
-);
-const MainPage = lazy(() => import('../pages/host/mainPage/MainPage'));
+const GuestWorkDetail = lazy(() => import('../pages/guest/workDetail/GuestWorkDetail'));
+const GuestWorkListPage = lazy(() => import('../pages/guest/workList/GuestWorkListPage'));
+const GuestbookCardPage = lazy(() => import('../pages/host/guestbook/card/GuestbookCardPage'));
+const GuestbookListPage = lazy(() => import('../pages/host/guestbook/list/GuestbookListPage'));
 const MyPage = lazy(() => import('../pages/host/mypage/MyPage'));
 const SharePage = lazy(() => import('../pages/host/share/SharePage'));
-const SpaceCreateFunnel = lazy(
-  () => import('../pages/host/spaceCreate/funnel/SpaceCreateFunnel'),
-);
-const SpaceEditPage = lazy(
-  () => import('../pages/host/spaceEditPage/SpaceEditPage'),
-);
-const HostSpaceHomePage = lazy(
-  () => import('../pages/host/spaceHomePage/HostSpaceHomePage'),
-);
-const SpaceInfoPage = lazy(
-  () => import('../pages/host/spaceInfoPage/SpaceInfoPage'),
-);
-const HostWorkDetail = lazy(
-  () => import('../pages/host/workDetail/HostWorkDetail'),
-);
+const SpaceCreateFunnel = lazy(() => import('../pages/host/spaceCreate/funnel/SpaceCreateFunnel'));
+const SpaceEditPage = lazy(() => import('../pages/host/spaceEditPage/SpaceEditPage'));
+const SpaceInfoPage = lazy(() => import('../pages/host/spaceInfoPage/SpaceInfoPage'));
+const HostWorkDetail = lazy(() => import('../pages/host/workDetail/HostWorkDetail'));
 const WorkForm = lazy(() => import('../pages/host/workForm/WorkForm'));
 const WorkListPage = lazy(() => import('../pages/host/workList/WorkListPage'));
-const InAppRedirectPage = lazy(
-  () => import('../pages/inapp/InAppRedirectPage'),
-);
+const InAppRedirectPage = lazy(() => import('../pages/inapp/InAppRedirectPage'));
 const LandingPage = lazy(() => import('../pages/landing/LandingPage'));
 const LoginPage = lazy(() => import('../pages/login/LoginPage'));
 const NotFound = lazy(() => import('../pages/notFound/NotFound'));
@@ -69,30 +43,13 @@ interface SuspenseWrapperProps {
 }
 
 const SuspenseWrapper = ({ element }: SuspenseWrapperProps) => {
-  return (
-    <Suspense
-      fallback={
-        <div
-          style={{
-            display: 'flex',
-            width: '100%',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
-        >
-          <Spinner />
-        </div>
-      }
-    >
-      {element}
-    </Suspense>
-  );
+  return <Suspense fallback={<DelayedSpinner />}>{element}</Suspense>;
 };
 
 const routes: AppRouteObject[] = [
   {
     path: '/',
-    element: <Layout />,
+    element: <SuspenseWrapper element={<Layout />} />,
     children: [
       {
         path: '/',
@@ -137,7 +94,7 @@ const routes: AppRouteObject[] = [
             children: [
               {
                 path: 'main',
-                element: <SuspenseWrapper element={<MainPage />} />,
+                element: <MainPage />,
                 handle: {
                   highlight: true,
                   headerIcon: {
@@ -161,9 +118,7 @@ const routes: AppRouteObject[] = [
                     children: [
                       {
                         path: ':spaceCode/home',
-                        element: (
-                          <SuspenseWrapper element={<HostSpaceHomePage />} />
-                        ),
+                        element: <HostSpaceHomePage />,
                         handle: {
                           // TODO : default를 logo와 hamburger로 변경 필요
                           headerIcon: {
@@ -173,9 +128,7 @@ const routes: AppRouteObject[] = [
                       },
                       {
                         path: ':spaceCode/space-info',
-                        element: (
-                          <SuspenseWrapper element={<SpaceInfoPage />} />
-                        ),
+                        element: <SuspenseWrapper element={<SpaceInfoPage />} />,
                         handle: {
                           headerIcon: {
                             leftIcon: 'profile',
@@ -184,9 +137,7 @@ const routes: AppRouteObject[] = [
                       },
                       {
                         path: ':spaceCode/space-info/edit',
-                        element: (
-                          <SuspenseWrapper element={<SpaceEditPage />} />
-                        ),
+                        element: <SuspenseWrapper element={<SpaceEditPage />} />,
                         handle: {
                           headerIcon: {
                             leftIcon: 'profile',
@@ -195,9 +146,7 @@ const routes: AppRouteObject[] = [
                       },
                       {
                         path: ':spaceCode/work-detail/:workId',
-                        element: (
-                          <SuspenseWrapper element={<HostWorkDetail />} />
-                        ),
+                        element: <SuspenseWrapper element={<HostWorkDetail />} />,
                         handle: {
                           headerIcon: {
                             leftIcon: 'profile',
@@ -216,9 +165,7 @@ const routes: AppRouteObject[] = [
                       },
                       {
                         path: ':spaceCode/guestbook',
-                        element: (
-                          <SuspenseWrapper element={<GuestbookListPage />} />
-                        ),
+                        element: <SuspenseWrapper element={<GuestbookListPage />} />,
                         handle: {
                           headerIcon: {
                             leftIcon: 'profile',
@@ -227,9 +174,7 @@ const routes: AppRouteObject[] = [
                       },
                       {
                         path: ':spaceCode/guestbook/:guestbookCardId',
-                        element: (
-                          <SuspenseWrapper element={<GuestbookCardPage />} />
-                        ),
+                        element: <SuspenseWrapper element={<GuestbookCardPage />} />,
                         handle: {
                           headerIcon: {
                             leftIcon: 'profile',
@@ -293,7 +238,7 @@ const routes: AppRouteObject[] = [
             children: [
               {
                 path: ':spaceCode/home',
-                element: <SuspenseWrapper element={<GuestSpaceHomePage />} />,
+                element: <GuestSpaceHomePage />,
                 handle: {
                   headerIcon: {
                     leftIcon: 'profile',
@@ -348,9 +293,7 @@ const routes: AppRouteObject[] = [
                 children: [
                   {
                     path: ':spaceCode/guestbook',
-                    element: (
-                      <SuspenseWrapper element={<GuestGuestbookListPage />} />
-                    ),
+                    element: <SuspenseWrapper element={<GuestGuestbookListPage />} />,
                     handle: {
                       headerIcon: {
                         leftIcon: 'profile',
@@ -359,9 +302,7 @@ const routes: AppRouteObject[] = [
                   },
                   {
                     path: ':spaceCode/guestbook/:guestbookCardId',
-                    element: (
-                      <SuspenseWrapper element={<GuestGuestbookCardPage />} />
-                    ),
+                    element: <SuspenseWrapper element={<GuestGuestbookCardPage />} />,
                     handle: {
                       headerIcon: {
                         leftIcon: 'profile',
