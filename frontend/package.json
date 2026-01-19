@@ -51,6 +51,7 @@
     "storybook": "^9.1.10",
     "typescript": "~5.9.3",
     "vite": "^7.1.7",
+    "vite-imagetools": "^9.0.2",
     "vite-plugin-svgr": "^4.5.0"
   }
 }
