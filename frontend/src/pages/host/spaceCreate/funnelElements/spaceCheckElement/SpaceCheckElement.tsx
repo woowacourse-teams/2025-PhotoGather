@@ -1,4 +1,4 @@
-import defaultImage from '../../../../../@assets/images/default-forgather-image.png?w=600&format=webp&srcset';
+import defaultImage from '../../../../../@assets/images/default-forgather-image.png';
 import InfoRow from '../../../../../components/specific/infoRow/InfoRow';
 import { INFORMATION } from '../../../../../constants/messages';
 import useButtonTracking from '../../../../../hooks/@common/useButtonTracking';

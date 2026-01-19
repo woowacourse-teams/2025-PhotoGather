@@ -1,6 +1,6 @@
 import { IoGlobeOutline, IoLockClosedOutline } from 'react-icons/io5';
 import { MdCelebration } from 'react-icons/md';
-import defaultImage from '../../../@assets/images/default-forgather-image.png?w=600&format=webp&srcset';
+import defaultImage from '../../../@assets/images/default-forgather-image.png';
 import type { MySpace } from '../../../types/domain/space.type';
 import { buildOriginalImageUrl } from '../../../utils/buildImageUrl';
 import { createImageErrorHandler } from '../../../utils/createImageErrorHandler';

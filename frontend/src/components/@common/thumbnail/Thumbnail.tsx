@@ -1,4 +1,4 @@
-import defaultThumbnail from '../../../@assets/images/default-forgather-image.png?w=600&format=webp&srcset';
+import defaultThumbnail from '../../../@assets/images/default-forgather-image.png';
 import { createImageErrorHandler } from '../../../utils/createImageErrorHandler';
 import * as S from './Thumbnail.styles';
 

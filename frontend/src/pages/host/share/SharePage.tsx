@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react';
 import { MdDownload, MdLink } from 'react-icons/md';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Kakao from '../../../@assets/icons/kakaotalk.svg?react';
-import CompleteImage from '../../../@assets/images/space-create.png?w=300&format=webp&srcset';
+import CompleteImage from '../../../@assets/images/space-create.png';
 import Button from '../../../components/@common/buttons/button/Button';
 import IconButton from '../../../components/@common/buttons/iconButton/IconButton';
 import QRCode from '../../../components/@common/qrCode/QRCode';
